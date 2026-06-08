@@ -1,0 +1,8 @@
+{
+  "name": "t3-labs-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  }
+}
