@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>T3 Labs | Product Studio</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
     <meta
       name="description"
       content="T3 Labs uses the best available technology to create solutions to real problems."
@@ -28,7 +32,8 @@
       <nav class="site-nav" aria-label="Primary navigation">
         <a href="#positioning">Approach</a>
         <a href="#work">Work</a>
-        <a href="#contact">Contact</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#send-message">Contact</a>
       </nav>
       <a class="header-cta" href="#contact">Build with T3 Labs</a>
     </header>
@@ -54,7 +59,6 @@
           <div class="proof-row" aria-label="T3 Labs proof points">
             <span>Software</span>
             <span>Automation</span>
-            <span>AI</span>
             <span>Game tech</span>
             <span>Product systems</span>
           </div>
@@ -86,7 +90,7 @@
         <div>
           <h2>We do not start with a fixed service list.<br />We start with the problem.</h2>
           <p>
-            Some problems need software. Some need automation. Some need AI. Some
+            Some problems need software. Some need automation. Some need AI solutions. Some
             need a game system, a smart contract, a dashboard, or a completely
             custom product.
           </p>
@@ -114,7 +118,7 @@
             <span>02</span>
             <h3>Business Audit Tool</h3>
             <p>A simple diagnostic product that helps business owners spot the real bottleneck slowing growth and decide what to fix next.</p>
-            <a class="card-link" href="https://business-audit-chi.vercel.app/" target="_blank" rel="noreferrer">View Audit Tool <span>&rarr;</span></a>
+
           </article>
           <article>
             <span>03</span>
@@ -124,22 +128,120 @@
         </div>
       </section>
 
+      <section class="section-shell testimonials-section" id="testimonials">
+        <div class="section-heading">
+          <p class="eyebrow">What people say</p>
+          <h2>Real results, real people.</h2>
+        </div>
+        <div class="testimonial-grid">
+          <article class="testimonial-card reveal-card">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-quote">&ldquo;I&rsquo;m terrible with tech so I jumped on a call, and within 15 minutes they built and showed me a solution we&rsquo;ve been trying to solve for years. We now hand any tech-related problem to T3 Labs with full confidence - pricing is incredibly affordable!&rdquo;</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">JR</div>
+              <div>
+                <strong>James R.</strong>
+                <span>Operations Manager, UK</span>
+              </div>
+            </div>
+          </article>
+          <article class="testimonial-card reveal-card">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-quote">&ldquo;I was nervous about getting on a call because I thought it would be a hard sell. It was the complete opposite - super friendly, no pressure at all. They listened, understood the problem fast, and came back with something that actually worked. Can&rsquo;t believe how quick it was.&rdquo;</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">SK</div>
+              <div>
+                <strong>Sarah K.</strong>
+                <span>Small Business Owner, Manchester</span>
+              </div>
+            </div>
+          </article>
+          <article class="testimonial-card reveal-card">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-quote">&ldquo;We&rsquo;d been quoted thousands by other agencies. T3 Labs solved our problem in a fraction of the time and cost. The team is approachable, fast, and they don&rsquo;t overcomplicate things. Wish we&rsquo;d found them sooner.&rdquo;</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">DM</div>
+              <div>
+                <strong>David M.</strong>
+                <span>Founder, London</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="section-shell cta" id="contact">
         <div>
           <p class="eyebrow">Build with T3 Labs</p>
           <h2>Got a problem that needs to be solved?</h2>
           <p>
-            T3 Labs works with owners, operators, and teams who need ideas turned
-            into working products.
+            T3 Labs works directly with owners, operators, and teams who need cost efficient and highly effective solutions for all kinds of problems.
           </p>
         </div>
-        <a class="button button-primary" href="mailto:hello@t3labs.com">Build with T3 Labs <span>&rarr;</span></a>
+        <a class="button button-primary" href="#send-message">Get in touch <span>&rarr;</span></a>
+      </section>
+
+      <section class="section-shell send-message-section" id="send-message">
+        <div class="send-message-inner">
+          <div class="send-message-copy">
+            <p class="eyebrow">Not ready for a call?</p>
+            <h2 class="send-message-heading">Tell us about your problem.</h2>
+            <p class="send-message-body">Not everyone wants to jump straight onto a call - and that&rsquo;s fine. Send us a message about what you&rsquo;re dealing with and we&rsquo;ll come back to you with thoughts on what might be possible. No pressure, no commitment.</p>
+            <ul class="send-message-perks">
+              <li>&#9679; We reply within 24 hours</li>
+              <li>&#9679; No jargon, no sales pitch</li>
+              <li>&#9679; Free initial advice</li>
+            </ul>
+          </div>
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-row">
+              <label for="cf-name">Your name <span class="req">*</span></label>
+              <input type="text" id="cf-name" name="name" placeholder="First name or full name" required />
+            </div>
+            <div class="form-row">
+              <label for="cf-email">Email address <span class="req">*</span></label>
+              <input type="email" id="cf-email" name="email" placeholder="you@company.com" required />
+            </div>
+            <div class="form-row">
+              <label for="cf-btype">Business type <span class="opt">(optional)</span></label>
+              <input type="text" id="cf-btype" name="businessType" placeholder="e.g. Construction, Retail, Agency" />
+            </div>
+            <div class="form-row">
+              <label for="cf-url">Business website <span class="opt">(optional)</span></label>
+              <input type="url" id="cf-url" name="website" placeholder="https://yourwebsite.com" />
+            </div>
+            <div class="form-row">
+              <label for="cf-message">Tell us about your problem <span class="req">*</span></label>
+              <textarea id="cf-message" name="message" rows="5" placeholder="Describe what you&rsquo;re trying to solve. The more detail the better - there are no wrong answers." required></textarea>
+            </div>
+            <div class="form-footer">
+              <button type="submit" class="button button-primary form-submit">Send message <span>&rarr;</span></button>
+              <p class="form-note">We&rsquo;ll reply within 24 hours. No spam, ever.</p>
+            </div>
+            <div class="form-success" id="formSuccess" hidden>
+              <div class="form-success-icon">&#10003;</div>
+              <strong>Message sent!</strong>
+              <p>We&rsquo;ll be in touch within 24 hours.</p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="section-shell call-strip" id="book-call">
+        <div class="call-strip-inner">
+          <div class="call-strip-copy">
+            <p class="eyebrow">Free discovery call</p>
+            <h2 class="call-strip-heading">Let&rsquo;s talk about your business.</h2>
+            <p class="call-strip-body">Book a free 20-minute call and we&rsquo;ll explore how new technology could solve your biggest operational challenge. No pitch, no obligation - just a straight conversation about what&rsquo;s possible for your business.</p>
+            <a class="button button-primary call-strip-btn" href="https://calendly.com/insights-t3labs/20-minute-meeting" target="_blank" rel="noopener noreferrer">Book a free call <span>&rarr;</span></a>
+          </div>
+        </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <span>T3 Labs</span>
-      <span>T3 Labs - building useful products with the best available technology.</span>
+      <span>&copy; 2026 T3 Labs - building useful products with the best available technology.</span>
     </footer>
 
     <script src="script.js"></script>
