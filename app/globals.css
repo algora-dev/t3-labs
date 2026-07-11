@@ -65,8 +65,8 @@ textarea {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(18, 25, 28, 0.82), rgba(18, 25, 28, 0.36) 58%, rgba(18, 25, 28, 0.08)),
-    linear-gradient(0deg, rgba(18, 25, 28, 0.34), rgba(18, 25, 28, 0.08));
+    linear-gradient(90deg, rgba(18, 25, 28, 0.92) 0%, rgba(18, 25, 28, 0.68) 36%, rgba(18, 25, 28, 0.16) 72%, rgba(18, 25, 28, 0.04) 100%),
+    linear-gradient(0deg, rgba(18, 25, 28, 0.18), rgba(18, 25, 28, 0.04));
 }
 
 .button-base {

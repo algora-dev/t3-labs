@@ -97,14 +97,14 @@ function SectionIntro({
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const phoneHref = `tel:${falcon.telephone.replace(/\s+/g, "")}`;
+  const phoneHref = falcon.telephoneHref;
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[#f7f5ef]/96 backdrop-blur">
       <div className="site-shell flex min-h-20 items-center justify-between gap-5">
         <a className="flex items-center gap-3" href="#top" aria-label="Falcon Contracting home">
-          <span className="relative block h-12 w-44 overflow-hidden rounded-[8px] bg-white sm:w-48">
-            <Image src="/assets/falcon/falcon-wordmark.png" alt="Falcon logo" fill sizes="192px" className="object-contain p-1.5" priority />
+          <span className="relative block h-12 w-40 overflow-hidden rounded-[8px] bg-white sm:w-44">
+            <Image src="/assets/falcon/falcon-wordmark.png" alt="Falcon logo" fill sizes="176px" className="scale-125 object-contain" priority />
           </span>
         </a>
         <nav className="hidden items-center gap-7 text-sm font-bold uppercase tracking-[0.08em] text-[#394348] lg:flex" aria-label="Main navigation">
@@ -146,7 +146,7 @@ export function Header() {
             <div className="grid gap-3 pt-3 sm:grid-cols-2">
               <ButtonLink href={phoneHref} variant="line">
                 <PhoneIcon />
-                {falcon.ctas.call}
+                Call now
               </ButtonLink>
               <ButtonLink href="#contact">
                 {falcon.ctas.quote}
@@ -177,20 +177,20 @@ export function Hero() {
           <div className="relative z-10 flex min-h-[620px] items-end p-5 sm:min-h-[680px] sm:p-10 lg:p-14">
             <div className="max-w-3xl">
               <p className="inline-flex rounded-[8px] border border-white/35 bg-black/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white/90">
-                Roofing and construction across Essex
+                Falcon Contracting Ltd
               </p>
-              <h1 className="mt-5 text-4xl font-bold leading-tight sm:text-5xl lg:text-7xl">
-                New roofs and building work handled with care.
+              <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl lg:text-5xl">
+                New roofs, repairs and construction across Essex.
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-white/88 sm:text-xl">
-                Falcon Contracting Ltd works on roofing, refurbishment and construction projects across Essex and surrounding areas.
+                Roofing, refurbishment and construction work for homes and commercial properties across Essex and surrounding areas.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <ButtonLink href="#contact" variant="light">
                   {falcon.ctas.quote}
                   <ArrowIcon />
                 </ButtonLink>
-                <ButtonLink href={`tel:${falcon.telephone.replace(/\s+/g, "")}`} variant="heroLine">
+                <ButtonLink href={falcon.telephoneHref} variant="heroLine">
                   <PhoneIcon />
                   {falcon.ctas.call}
                 </ButtonLink>
@@ -218,7 +218,7 @@ export function Intro() {
             Based in the Essex area, Falcon Contracting Ltd undertakes new roofs, roof repairs, flat roofing, refurbishment, extensions and wider construction work.
           </p>
           <p>
-            Recent project photography helps customers quickly understand the type of work Falcon handles and how to start a conversation.
+            From smaller repairs to larger roofing and construction projects, Falcon provides a straightforward route from the first enquiry through to quotation and completed work.
           </p>
         </div>
       </div>
@@ -231,9 +231,9 @@ export function Services() {
     <section id="services" className="section-pad bg-[#f7f5ef]">
       <div className="site-shell">
         <SectionIntro eyebrow="Services" title="Roofing and construction services, clearly laid out.">
-          <p>From new roofs and repairs through to larger construction work, each service is presented in plain language with a direct route to enquire.</p>
+          <p>Roofing and construction services for homes, commercial properties and refurbishment projects.</p>
         </SectionIntro>
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {falcon.services.map((service) => (
             <article key={service.title} className="group overflow-hidden rounded-[12px] border border-[#d8dedc] bg-white transition hover:-translate-y-0.5">
               <div className="relative aspect-[4/3] overflow-hidden">
@@ -262,7 +262,7 @@ export function Projects() {
     <section id="projects" className="section-pad bg-[#1d2529] text-white">
       <div className="site-shell">
         <SectionIntro eyebrow="Recent work" title="Recent roofing and construction work" light>
-          <p>Large, genuine project images give customers a quick sense of finish, scale and site experience before they make contact.</p>
+          <p>Explore a selection of recent roofing, refurbishment and construction work completed by Falcon Contracting.</p>
         </SectionIntro>
         <div className="mt-10 grid gap-4 md:grid-cols-6">
           {falcon.projectImages.map((project, index) => {
@@ -296,10 +296,11 @@ export function WhyChoose() {
     <section className="section-pad bg-white">
       <div className="site-shell grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
         <div>
-          <p className="section-eyebrow text-[#a95537]">Why choose Falcon Contracting?</p>
-          <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">
-            A calm, capable choice for roof and building projects.
-          </h2>
+          <p className="section-eyebrow text-[#a95537]">Why Falcon</p>
+          <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">Why choose Falcon Contracting?</h2>
+          <p className="mt-5 max-w-xl text-lg leading-8 text-[#566267]">
+            Practical roofing and construction experience for residential and commercial projects.
+          </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {falcon.whyChoose.map((item, index) => (
@@ -319,7 +320,7 @@ export function Feedback() {
     <section className="section-pad bg-[#eee9df]">
       <div className="site-shell">
         <SectionIntro eyebrow="Customer feedback" title="What customers say">
-          <p>Simple customer feedback summaries from Falcon&apos;s Checkatrade profile, presented without badges or rating claims.</p>
+          <p>Feedback from customers who have worked with Falcon Contracting.</p>
         </SectionIntro>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {falcon.reviews.map((review) => (
@@ -352,7 +353,10 @@ export function ProcessAndAreas() {
         </div>
         <div className="rounded-[16px] bg-[#223036] p-6 text-white sm:p-8">
           <p className="section-eyebrow text-[#f1c59f]">Areas covered</p>
-          <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">Based around Long Green and working across Essex and surrounding areas.</h2>
+          <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">Based around Long Green, serving Essex and surrounding areas.</h2>
+          <p className="mt-5 leading-8 text-white/76">
+            Falcon Contracting works across Long Green, Colchester and Essex, with projects extending into London, the East of England and the Home Counties.
+          </p>
           <div className="mt-8 flex flex-wrap gap-3">
             {falcon.coverage.map((area) => (
               <span key={area} className="rounded-[8px] border border-white/25 bg-white/5 px-4 py-3 text-sm font-bold uppercase tracking-[0.08em]">
@@ -371,7 +375,7 @@ export function Contact() {
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus(`Thanks. Please call ${falcon.telephone} to continue your enquiry.`);
+    setStatus(`Please call ${falcon.telephone} to continue your enquiry.`);
   }
 
   return (
@@ -384,7 +388,7 @@ export function Contact() {
             Share the basics of the job, or call Falcon directly to discuss new roofs, repairs, refurbishment or construction work.
           </p>
           <div className="mt-8 grid gap-3 sm:max-w-sm">
-            <ButtonLink href={`tel:${falcon.telephone.replace(/\s+/g, "")}`} variant="dark">
+            <ButtonLink href={falcon.telephoneHref} variant="dark">
               <PhoneIcon />
               {falcon.telephone}
             </ButtonLink>
@@ -435,7 +439,7 @@ export function MobileActions() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-[#f7f5ef]/96 p-3 backdrop-blur lg:hidden">
       <div className="grid grid-cols-2 gap-3">
-        <ButtonLink href={`tel:${falcon.telephone.replace(/\s+/g, "")}`} variant="line" className="px-3 text-xs">
+        <ButtonLink href={falcon.telephoneHref} variant="line" className="px-3 text-xs">
           <PhoneIcon />
           Call
         </ButtonLink>
@@ -456,7 +460,7 @@ export function Footer() {
           <Image src="/assets/falcon/falcon-wordmark.png" alt="Falcon logo" width={190} height={70} className="rounded-[8px] bg-white p-2" />
           <p className="mt-5 font-bold">{falcon.companyName}</p>
           <p className="mt-1 text-white/70">{falcon.location}</p>
-          <a className="mt-4 inline-flex font-bold text-white hover:text-[#f1c59f]" href={`tel:${falcon.telephone.replace(/\s+/g, "")}`}>
+          <a className="mt-4 inline-flex font-bold text-white hover:text-[#f1c59f]" href={falcon.telephoneHref}>
             {falcon.telephone}
           </a>
         </div>

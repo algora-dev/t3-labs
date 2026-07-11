@@ -1,7 +1,8 @@
 export const falcon = {
   companyName: "Falcon Contracting Ltd",
   location: "Long Green, Essex, United Kingdom",
-  telephone: "+44 792 191 4875",
+  telephone: "07921 914875",
+  telephoneHref: "tel:+447921914875",
   email: "",
   linkedinUrl: "https://www.linkedin.com/company/falconcontracting/",
   checkatradeUrl: "https://www.checkatrade.com/trades/falconcontractingltd987912",
@@ -21,43 +22,33 @@ export const falcon = {
   ],
   services: [
     {
-      title: "New Roofs",
-      summary: "Durable new roof installations for ageing structures, replacement projects and build-from-scratch roofing work.",
+      title: "New Roofs & Reroofing",
+      summary: "New roof installations and replacement roof coverings for residential and commercial properties.",
       image: "/assets/falcon/tiled-roof-valley.png",
     },
     {
       title: "Roof Repairs",
-      summary: "Practical repair work, roof window detailing, leadwork and weathering details where a focused roofing fix is needed.",
+      summary: "Repairs for leaks, damaged roof coverings and general roofing defects.",
       image: "/assets/falcon/roof-window-flashing.png",
     },
     {
       title: "Flat Roofing",
-      summary: "Flat roof coverings and perimeter detailing for extensions, terraces and refurbishment work.",
+      summary: "Flat roofing for extensions, refurbishment projects and other suitable properties.",
       image: "/assets/falcon/flat-roof-detailing.png",
     },
     {
-      title: "Reroofing",
-      summary: "Replacement roof coverings and upgraded roof finishes, presented with clear staging and practical site planning.",
+      title: "Refurbishment",
+      summary: "Roofing and external refurbishment work for existing buildings.",
       image: "/assets/falcon/new-tiled-roof-brickwork.png",
     },
     {
-      title: "Refurbishment",
-      summary: "Building fabric improvements and exterior refurbishment work alongside roofing and construction packages.",
+      title: "Extensions & Loft Conversions",
+      summary: "Roofing and construction support for extension and loft-conversion projects.",
       image: "/assets/falcon/residential-build-roofing.png",
     },
     {
-      title: "Extensions and Loft Conversions",
-      summary: "Construction-led home improvement projects where roofing, structure and finish need to work together.",
-      image: "/assets/falcon/dormer-roof-construction.png",
-    },
-    {
-      title: "Residential Construction",
-      summary: "Domestic construction projects, roof structures, dormers and external works for homes across the region.",
-      image: "/assets/falcon/slate-roof-dormer.png",
-    },
-    {
-      title: "Commercial Work",
-      summary: "Larger-scale roofing and construction capability for commercial and community buildings.",
+      title: "Commercial Roofing & Construction",
+      summary: "Roofing and construction work for commercial properties and larger projects.",
       image: "/assets/falcon/large-commercial-metal-roof.png",
     },
   ],
@@ -104,10 +95,10 @@ export const falcon = {
     },
   ],
   whyChoose: [
-    "Roofing and construction handled with a practical, site-led approach.",
-    "Experience across residential, commercial, refurbishment and new build work.",
-    "Clear conversations around scope, quotation, scheduling and next steps.",
-    "Recent project photography showing real roof finishes, detailing and construction work.",
+    "Roofing and construction services from one contractor.",
+    "Experience across residential, commercial and refurbishment work.",
+    "Clear communication around quotations, scheduling and next steps.",
+    "Genuine examples of recent Falcon projects.",
   ],
   process: [
     "Discuss the project",
@@ -119,15 +110,15 @@ export const falcon = {
   reviews: [
     {
       summary: "Professional, punctual and tidy, with the work completed to a high standard.",
-      source: "Customer feedback published on Checkatrade",
+      source: "Customer feedback via Checkatrade",
     },
     {
       summary: "Clear communication throughout the job and a good finish on the completed work.",
-      source: "Customer feedback published on Checkatrade",
+      source: "Customer feedback via Checkatrade",
     },
     {
       summary: "Helpful advice, reliable attendance and care taken around the property.",
-      source: "Customer feedback published on Checkatrade",
+      source: "Customer feedback via Checkatrade",
     },
   ],
 };
