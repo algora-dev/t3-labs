@@ -11,10 +11,13 @@ export const falcon = {
     call: "Call Falcon",
     email: "Email Falcon",
   },
-  sourceNotes: [
+  requiresConfirmation: [
     "LinkedIn public profile: Colchester, Essex; construction; 18 years' experience; London, East of England and Home Counties coverage.",
     "Provided business wording: Long Green base and new roofs positioning.",
     "Checkatrade public profile: Falcon Contracting Ltd profile in Colchester with customer feedback excerpts.",
+    "Review summaries should be approved by Falcon before public launch.",
+    "Email address and any registered trading address should be confirmed before adding them.",
+    "Form delivery needs a real provider before the enquiry form can send messages.",
   ],
   services: [
     {
@@ -101,10 +104,10 @@ export const falcon = {
     },
   ],
   whyChoose: [
-    "New roofs, roofing and construction capability from one Essex-based business.",
+    "Roofing and construction handled with a practical, site-led approach.",
     "Experience across residential, commercial, refurbishment and new build work.",
-    "A practical approach to site visits, scope, quotation and project scheduling.",
-    "Project photography showing real roof finishes, detailing and construction work.",
+    "Clear conversations around scope, quotation, scheduling and next steps.",
+    "Recent project photography showing real roof finishes, detailing and construction work.",
   ],
   process: [
     "Discuss the project",
@@ -115,16 +118,16 @@ export const falcon = {
   ],
   reviews: [
     {
-      quote: "Professional, punctual and tidy, with the work completed to a high standard.",
-      date: "Published on Checkatrade",
+      summary: "Professional, punctual and tidy, with the work completed to a high standard.",
+      source: "Customer feedback published on Checkatrade",
     },
     {
-      quote: "Clear communication throughout the job and a good finish on the completed work.",
-      date: "Published on Checkatrade",
+      summary: "Clear communication throughout the job and a good finish on the completed work.",
+      source: "Customer feedback published on Checkatrade",
     },
     {
-      quote: "Helpful advice, reliable attendance and care taken around the property.",
-      date: "Published on Checkatrade",
+      summary: "Helpful advice, reliable attendance and care taken around the property.",
+      source: "Customer feedback published on Checkatrade",
     },
   ],
 };

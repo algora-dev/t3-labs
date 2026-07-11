@@ -1,4 +1,4 @@
-import { Contact, Feedback, Footer, Header, Hero, Intro, ProcessAndAreas, Projects, Services, WhyChoose } from "./components";
+import { Contact, Feedback, Footer, Header, Hero, Intro, MobileActions, ProcessAndAreas, Projects, Services, WhyChoose } from "./components";
 
 export default function Home() {
   return (
@@ -15,6 +15,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <MobileActions />
     </>
   );
 }
