@@ -2,21 +2,7 @@
 
 import Image from "next/image";
 import { FormEvent, useState } from "react";
-import { falcon } from "./content/falcon";
-
-const navItems = [
-  ["Services", "#services"],
-  ["Projects", "#projects"],
-  ["Contact", "#contact"],
-] as const;
-
-const mobileNavItems = [
-  ["Services", "#services"],
-  ["Projects", "#projects"],
-  ["About", "#about"],
-  ["Areas", "#areas"],
-  ["Contact", "#contact"],
-] as const;
+import type { ProspectSiteConfig } from "@/sites/types";
 
 function ArrowIcon() {
   return (
@@ -95,20 +81,20 @@ function SectionIntro({
   );
 }
 
-export function Header() {
+export function Header({ site }: { site: ProspectSiteConfig }) {
   const [open, setOpen] = useState(false);
-  const phoneHref = falcon.telephoneHref;
+  const phoneHref = site.contact.telephoneHref;
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[#f7f5ef]/96 backdrop-blur">
       <div className="site-shell flex min-h-20 items-center justify-between gap-5">
         <a className="flex items-center gap-3" href="#top" aria-label="Falcon Contracting home">
           <span className="relative block h-12 w-40 overflow-hidden rounded-[8px] bg-white sm:w-44">
-            <Image src="/assets/falcon/falcon-wordmark.png" alt="Falcon logo" fill sizes="176px" className="scale-125 object-contain" priority />
+            <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="176px" className="scale-125 object-contain" priority />
           </span>
         </a>
         <nav className="hidden items-center gap-7 text-sm font-bold uppercase tracking-[0.08em] text-[#394348] lg:flex" aria-label="Main navigation">
-          {navItems.map(([label, href]) => (
+          {site.navigation.map(({ label, href }) => (
             <a key={label} className="transition hover:text-[#a95537]" href={href}>
               {label}
             </a>
@@ -120,7 +106,7 @@ export function Header() {
             Call now
           </ButtonLink>
           <ButtonLink href="#contact">
-            {falcon.ctas.quote}
+            {site.callsToAction.quote}
             <ArrowIcon />
           </ButtonLink>
         </div>
@@ -138,7 +124,7 @@ export function Header() {
       {open ? (
         <div id="mobile-menu" className="border-t border-black/10 bg-[#f7f5ef] lg:hidden">
           <nav className="site-shell grid gap-2 py-5 text-sm font-bold uppercase tracking-[0.08em]" aria-label="Mobile navigation">
-            {mobileNavItems.map(([label, href]) => (
+            {site.mobileNavigation.map(({ label, href }) => (
               <a key={label} className="rounded-[8px] border border-black/10 bg-white px-4 py-3" href={href} onClick={() => setOpen(false)}>
                 {label}
               </a>
@@ -149,7 +135,7 @@ export function Header() {
                 Call now
               </ButtonLink>
               <ButtonLink href="#contact">
-                {falcon.ctas.quote}
+                {site.callsToAction.quote}
                 <ArrowIcon />
               </ButtonLink>
             </div>
@@ -160,14 +146,14 @@ export function Header() {
   );
 }
 
-export function Hero() {
+export function Hero({ site }: { site: ProspectSiteConfig }) {
   return (
     <section id="top" className="bg-[#182226] py-4 text-white sm:py-5">
       <div className="site-shell">
         <div className="relative isolate min-h-[620px] overflow-hidden rounded-[16px] bg-[#1d2529] sm:min-h-[680px]">
           <Image
-            src="/assets/falcon/new-tiled-roof-brickwork.png"
-            alt="Completed tiled roof and brickwork by Falcon Contracting"
+            src={site.hero.image.src}
+            alt={site.hero.image.alt}
             fill
             sizes="100vw"
             className="object-cover"
@@ -177,22 +163,22 @@ export function Hero() {
           <div className="relative z-10 flex min-h-[620px] items-end p-5 sm:min-h-[680px] sm:p-10 lg:p-14">
             <div className="max-w-3xl">
               <p className="inline-flex rounded-[8px] border border-white/35 bg-black/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white/90">
-                Falcon Contracting Ltd
+                {site.hero.eyebrow}
               </p>
               <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl lg:text-5xl">
-                New roofs, repairs and construction across Essex.
+                {site.hero.title}
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-white/88 sm:text-xl">
-                Roofing, refurbishment and construction work for homes and commercial properties across Essex and surrounding areas.
+                {site.hero.description}
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <ButtonLink href="#contact" variant="light">
-                  {falcon.ctas.quote}
+                  {site.callsToAction.quote}
                   <ArrowIcon />
                 </ButtonLink>
-                <ButtonLink href={falcon.telephoneHref} variant="heroLine">
+                <ButtonLink href={site.contact.telephoneHref} variant="heroLine">
                   <PhoneIcon />
-                  {falcon.ctas.call}
+                  {site.callsToAction.call}
                 </ButtonLink>
               </div>
             </div>
@@ -203,43 +189,38 @@ export function Hero() {
   );
 }
 
-export function Intro() {
+export function Intro({ site }: { site: ProspectSiteConfig }) {
   return (
     <section id="about" className="section-pad bg-white">
       <div className="site-shell grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
         <div>
-          <p className="section-eyebrow text-[#a95537]">About Falcon Contracting</p>
+          <p className="section-eyebrow text-[#a95537]">{site.about.eyebrow}</p>
           <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">
-            Practical roofing and construction support from first conversation to finished work.
+            {site.about.title}
           </h2>
         </div>
         <div className="grid gap-5 text-lg leading-8 text-[#566267]">
-          <p>
-            Based in the Essex area, Falcon Contracting Ltd undertakes new roofs, roof repairs, flat roofing, refurbishment, extensions and wider construction work.
-          </p>
-          <p>
-            From smaller repairs to larger roofing and construction projects, Falcon provides a straightforward route from the first enquiry through to quotation and completed work.
-          </p>
+          {site.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </div>
       </div>
     </section>
   );
 }
 
-export function Services() {
+export function Services({ site }: { site: ProspectSiteConfig }) {
   return (
     <section id="services" className="section-pad bg-[#f7f5ef]">
       <div className="site-shell">
-        <SectionIntro eyebrow="Services" title="Roofing and construction services, clearly laid out.">
-          <p>Roofing and construction services for homes, commercial properties and refurbishment projects.</p>
+        <SectionIntro eyebrow={site.servicesIntro.eyebrow} title={site.servicesIntro.title}>
+          <p>{site.servicesIntro.description}</p>
         </SectionIntro>
         <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {falcon.services.map((service) => (
+          {site.services.map((service) => (
             <article key={service.title} className="group overflow-hidden rounded-[12px] border border-[#d8dedc] bg-white transition hover:-translate-y-0.5">
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src={service.image}
-                  alt={`${service.title} by Falcon Contracting`}
+                  src={service.image.src}
+                  alt={service.image.alt}
                   fill
                   sizes="(min-width: 1024px) 25vw, 50vw"
                   className="object-cover transition duration-300 group-hover:scale-[1.025]"
@@ -257,15 +238,15 @@ export function Services() {
   );
 }
 
-export function Projects() {
+export function Projects({ site }: { site: ProspectSiteConfig }) {
   return (
     <section id="projects" className="section-pad bg-[#1d2529] text-white">
       <div className="site-shell">
-        <SectionIntro eyebrow="Recent work" title="Recent roofing and construction work" light>
-          <p>Explore a selection of recent roofing, refurbishment and construction work completed by Falcon Contracting.</p>
+        <SectionIntro eyebrow={site.projectsIntro.eyebrow} title={site.projectsIntro.title} light>
+          <p>{site.projectsIntro.description}</p>
         </SectionIntro>
         <div className="mt-10 grid gap-4 md:grid-cols-6">
-          {falcon.projectImages.map((project, index) => {
+          {site.projects.map((project, index) => {
             const featured = index === 0 || index === 1;
             return (
               <figure
@@ -291,19 +272,19 @@ export function Projects() {
   );
 }
 
-export function WhyChoose() {
+export function WhyChoose({ site }: { site: ProspectSiteConfig }) {
   return (
     <section className="section-pad bg-white">
       <div className="site-shell grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
         <div>
-          <p className="section-eyebrow text-[#a95537]">Why Falcon</p>
-          <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">Why choose Falcon Contracting?</h2>
+          <p className="section-eyebrow text-[#a95537]">{site.whyChoose.eyebrow}</p>
+          <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">{site.whyChoose.title}</h2>
           <p className="mt-5 max-w-xl text-lg leading-8 text-[#566267]">
-            Practical roofing and construction experience for residential and commercial projects.
+            {site.whyChoose.description}
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          {falcon.whyChoose.map((item, index) => (
+          {site.whyChoose.items.map((item, index) => (
             <div key={item} className="rounded-[16px] border border-[#d8dedc] bg-[#fbfaf7] p-6">
               <span className="text-sm font-bold uppercase tracking-[0.14em] text-[#a95537]">{String(index + 1).padStart(2, "0")}</span>
               <p className="mt-4 text-lg font-bold leading-7 text-[#29353a]">{item}</p>
@@ -315,15 +296,15 @@ export function WhyChoose() {
   );
 }
 
-export function Feedback() {
+export function Feedback({ site }: { site: ProspectSiteConfig }) {
   return (
     <section className="section-pad bg-[#eee9df]">
       <div className="site-shell">
-        <SectionIntro eyebrow="Customer feedback" title="What customers say">
-          <p>Feedback from customers who have worked with Falcon Contracting.</p>
+        <SectionIntro eyebrow={site.testimonials.eyebrow} title={site.testimonials.title}>
+          <p>{site.testimonials.description}</p>
         </SectionIntro>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {falcon.reviews.map((review) => (
+          {site.testimonials.items.map((review) => (
             <article key={review.summary} className="rounded-[16px] border border-[#d8dedc] bg-white p-7">
               <p className="text-lg font-bold leading-8 text-[#29353a]">{review.summary}</p>
               <p className="mt-6 text-sm font-bold uppercase tracking-[0.08em] text-[#6a7478]">{review.source}</p>
@@ -335,15 +316,15 @@ export function Feedback() {
   );
 }
 
-export function ProcessAndAreas() {
+export function ProcessAndAreas({ site }: { site: ProspectSiteConfig }) {
   return (
     <section id="areas" className="section-pad bg-white">
       <div className="site-shell grid gap-5 lg:grid-cols-[1fr_0.9fr]">
         <div className="rounded-[16px] border border-[#d8dedc] bg-[#fbfaf7] p-6 sm:p-8">
-          <p className="section-eyebrow text-[#a95537]">Process</p>
-          <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl">A straightforward route from enquiry to completed work.</h2>
+          <p className="section-eyebrow text-[#a95537]">{site.process.eyebrow}</p>
+          <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl">{site.process.title}</h2>
           <ol className="mt-8 grid gap-3">
-            {falcon.process.map((step, index) => (
+            {site.process.steps.map((step, index) => (
               <li key={step} className="flex items-center gap-4 rounded-[12px] border border-[#d8dedc] bg-white p-4">
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[8px] bg-[#223036] text-sm font-bold text-white">{index + 1}</span>
                 <span className="text-lg font-bold text-[#29353a]">{step}</span>
@@ -352,13 +333,13 @@ export function ProcessAndAreas() {
           </ol>
         </div>
         <div className="rounded-[16px] bg-[#223036] p-6 text-white sm:p-8">
-          <p className="section-eyebrow text-[#f1c59f]">Areas covered</p>
-          <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">Based around Long Green, serving Essex and surrounding areas.</h2>
+          <p className="section-eyebrow text-[#f1c59f]">{site.coverage.eyebrow}</p>
+          <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">{site.coverage.title}</h2>
           <p className="mt-5 leading-8 text-white/76">
-            Falcon Contracting works across Long Green, Colchester and Essex, with projects extending into London, the East of England and the Home Counties.
+            {site.coverage.description}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            {falcon.coverage.map((area) => (
+            {site.coverage.areas.map((area) => (
               <span key={area} className="rounded-[8px] border border-white/25 bg-white/5 px-4 py-3 text-sm font-bold uppercase tracking-[0.08em]">
                 {area}
               </span>
@@ -370,27 +351,27 @@ export function ProcessAndAreas() {
   );
 }
 
-export function Contact() {
+export function Contact({ site }: { site: ProspectSiteConfig }) {
   const [status, setStatus] = useState("");
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus(`Please call ${falcon.telephone} to continue your enquiry.`);
+    setStatus(site.contactSection.formStatus);
   }
 
   return (
     <section id="contact" className="section-pad bg-[#f7f5ef]">
       <div className="site-shell grid gap-8 lg:grid-cols-[0.82fr_1.18fr]">
         <div>
-          <p className="section-eyebrow text-[#a95537]">Contact</p>
-          <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">Tell us about your upcoming project.</h2>
+          <p className="section-eyebrow text-[#a95537]">{site.contactSection.eyebrow}</p>
+          <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">{site.contactSection.title}</h2>
           <p className="mt-5 text-lg leading-8 text-[#566267]">
-            Share the basics of the job, or call Falcon directly to discuss new roofs, repairs, refurbishment or construction work.
+            {site.contactSection.description}
           </p>
           <div className="mt-8 grid gap-3 sm:max-w-sm">
-            <ButtonLink href={falcon.telephoneHref} variant="dark">
+            <ButtonLink href={site.contact.telephoneHref} variant="dark">
               <PhoneIcon />
-              {falcon.telephone}
+              {site.contact.telephone}
             </ButtonLink>
           </div>
         </div>
@@ -415,7 +396,7 @@ export function Contact() {
               <option value="" disabled>
                 Select a service
               </option>
-              {falcon.services.map((service) => (
+              {site.services.map((service) => (
                 <option key={service.title}>{service.title}</option>
               ))}
             </select>
@@ -435,11 +416,11 @@ export function Contact() {
   );
 }
 
-export function MobileActions() {
+export function MobileActions({ site }: { site: ProspectSiteConfig }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-[#f7f5ef]/96 p-3 backdrop-blur lg:hidden">
       <div className="grid grid-cols-2 gap-3">
-        <ButtonLink href={falcon.telephoneHref} variant="line" className="px-3 text-xs">
+        <ButtonLink href={site.contact.telephoneHref} variant="line" className="px-3 text-xs">
           <PhoneIcon />
           Call
         </ButtonLink>
@@ -452,26 +433,26 @@ export function MobileActions() {
   );
 }
 
-export function Footer() {
+export function Footer({ site }: { site: ProspectSiteConfig }) {
   return (
     <footer className="bg-[#1d2529] pb-24 pt-10 text-white lg:pb-10">
       <div className="site-shell grid gap-8 md:grid-cols-[1fr_auto]">
         <div>
-          <Image src="/assets/falcon/falcon-wordmark.png" alt="Falcon logo" width={190} height={70} className="rounded-[8px] bg-white p-2" />
-          <p className="mt-5 font-bold">{falcon.companyName}</p>
-          <p className="mt-1 text-white/70">{falcon.location}</p>
-          <a className="mt-4 inline-flex font-bold text-white hover:text-[#f1c59f]" href={falcon.telephoneHref}>
-            {falcon.telephone}
+          <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} width={190} height={70} className="rounded-[8px] bg-white p-2" />
+          <p className="mt-5 font-bold">{site.companyName}</p>
+          <p className="mt-1 text-white/70">{site.footer.location}</p>
+          <a className="mt-4 inline-flex font-bold text-white hover:text-[#f1c59f]" href={site.contact.telephoneHref}>
+            {site.contact.telephone}
           </a>
         </div>
         <nav className="grid gap-3 text-sm font-bold uppercase tracking-[0.08em]" aria-label="Footer navigation">
-          {navItems.map(([label, href]) => (
+          {site.navigation.map(({ label, href }) => (
             <a key={label} className="hover:text-[#f1c59f]" href={href}>
               {label}
             </a>
           ))}
-          <a className="hover:text-[#f1c59f]" href={falcon.linkedinUrl}>
-            LinkedIn
+          <a className="hover:text-[#f1c59f]" href={site.contact.linkedinUrl}>
+            {site.footer.socialLabel}
           </a>
         </nav>
       </div>
