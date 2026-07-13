@@ -1,14 +1,7 @@
 {
-  "outputDirectory": ".",
-  "buildCommand": null,
-  "installCommand": null,
-  "framework": null,
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
   "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/proposal/:path*",
-      "destination": "https://falcon-contracting.vercel.app/proposal/:path*"
-    }
-  ]
+  "trailingSlash": false
 }
