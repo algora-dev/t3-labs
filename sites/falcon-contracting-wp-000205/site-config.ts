@@ -1,9 +1,9 @@
 import type { ProspectSiteConfig } from "../types";
 
-const asset = (name: string) => `/assets/falcon-contracting/${name}`;
+const asset = (name: string) => `/assets/falcon-contracting-wp-000205/${name}`;
 
 export const falconContracting = {
-  slug: "falcon-contracting",
+  slug: "falcon-contracting-wp-000205",
   companyName: "Falcon Contracting Ltd",
   seo: {
     title: "Falcon Contracting Ltd | New Roofs and Construction in Essex",

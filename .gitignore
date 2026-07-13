@@ -8,6 +8,9 @@ dist/
 
 .npm-cache/
 .playwright-browsers/
+.tools/
+.tmp-t3-labs-inspect/
+.tmp-t3-labs-connect/
 .vercel/
 
 *.tsbuildinfo

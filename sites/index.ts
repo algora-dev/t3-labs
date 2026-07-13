@@ -1,4 +1,4 @@
-import { falconContracting } from "./falcon-contracting/site-config";
+import { falconContracting } from "./falcon-contracting-wp-000205/site-config";
 import type { ProspectSiteConfig } from "./types";
 
 export const sites = { [falconContracting.slug]: falconContracting } satisfies Record<string, ProspectSiteConfig>;
