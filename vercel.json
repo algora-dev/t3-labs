@@ -4,5 +4,11 @@
   "installCommand": null,
   "framework": null,
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/proposal/:path*",
+      "destination": "https://falcon-contracting.vercel.app/proposal/:path*"
+    }
+  ]
 }
