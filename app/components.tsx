@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import type { ProspectSiteConfig } from "@/sites/types";
 
 function ArrowIcon() {
@@ -105,7 +105,7 @@ export function Header({ site }: { site: ProspectSiteConfig }) {
             <PhoneIcon />
             Call now
           </ButtonLink>
-          <ButtonLink href="#contact">
+          <ButtonLink href="#quote-request">
             {site.callsToAction.quote}
             <ArrowIcon />
           </ButtonLink>
@@ -134,7 +134,7 @@ export function Header({ site }: { site: ProspectSiteConfig }) {
                 <PhoneIcon />
                 Call now
               </ButtonLink>
-              <ButtonLink href="#contact">
+              <ButtonLink href="#quote-request">
                 {site.callsToAction.quote}
                 <ArrowIcon />
               </ButtonLink>
@@ -172,7 +172,7 @@ export function Hero({ site }: { site: ProspectSiteConfig }) {
                 {site.hero.description}
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="#contact" variant="light">
+                <ButtonLink href="#quote-request" variant="light">
                   {site.callsToAction.quote}
                   <ArrowIcon />
                 </ButtonLink>
@@ -353,11 +353,46 @@ export function ProcessAndAreas({ site }: { site: ProspectSiteConfig }) {
 
 export function Contact({ site }: { site: ProspectSiteConfig }) {
   const [status, setStatus] = useState("");
+  const [quoteOpen, setQuoteOpen] = useState(false);
   const quoteTypes = ["Re-roof", "New Roof", "Extension", "Repairs", "Spouting/Downpipes", "Solar", "Other"];
+
+  useEffect(() => {
+    function syncQuoteModal() {
+      setQuoteOpen(window.location.hash === "#quote-request");
+    }
+
+    syncQuoteModal();
+    window.addEventListener("hashchange", syncQuoteModal);
+    return () => window.removeEventListener("hashchange", syncQuoteModal);
+  }, []);
+
+  useEffect(() => {
+    if (!quoteOpen) return;
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") closeQuoteModal();
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [quoteOpen]);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus(site.contactSection.formStatus);
+  }
+
+  function closeQuoteModal() {
+    setQuoteOpen(false);
+    if (window.location.hash === "#quote-request") {
+      history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+    }
   }
 
   return (
@@ -374,74 +409,105 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
               <PhoneIcon />
               {site.contact.telephone}
             </ButtonLink>
+            <ButtonLink href="#quote-request" variant="line">
+              Request a Quote
+              <ArrowIcon />
+            </ButtonLink>
           </div>
         </div>
-        <form className="grid gap-5 rounded-[16px] border border-[#d8dedc] bg-white p-6 sm:p-8" onSubmit={onSubmit}>
-          <div>
-            <p className="section-eyebrow text-[#a95537]">Quote request form</p>
-            <h3 className="mt-3 text-2xl font-bold leading-tight text-[#1d2529]">Request a quote</h3>
-          </div>
-          <div className="grid gap-5 md:grid-cols-2">
-            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-              Name
-              <input className="form-field" name="name" required />
-            </label>
-            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-              Phone
-              <input className="form-field" name="phone" inputMode="tel" required />
-            </label>
-          </div>
-          <div className="grid gap-5 md:grid-cols-2">
-            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-              Email
-              <input className="form-field" name="email" type="email" required />
-            </label>
-            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-              Start date
-              <input className="form-field" name="start-date" type="date" />
-            </label>
-          </div>
-          <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-            Address
-            <input className="form-field" name="address" required />
-          </label>
-          <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-            Project type
-            <select className="form-field bg-white" name="project" required defaultValue="">
-              <option value="" disabled>
-                Select project type
-              </option>
-              {quoteTypes.map((type) => (
-                <option key={type}>{type}</option>
-              ))}
-            </select>
-          </label>
-          <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-            Attach plans/photos
-            <input className="form-field file:mr-4 file:rounded-[8px] file:border-0 file:bg-[#223036] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white" name="attachments" type="file" accept="image/*,.pdf" multiple />
-          </label>
-          <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-            Message
-            <textarea className="form-field min-h-36 resize-y p-4" name="message" required />
-          </label>
-          <fieldset className="grid gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4">
-            <legend className="px-1 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Before quote</legend>
-            <label className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
-              <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value="call" />
-              Request call before quote
-            </label>
-            <label className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
-              <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value="email" />
-              Request email before quote
-            </label>
-          </fieldset>
-          <button className="button-base rounded-[8px] bg-[#223036] text-white hover:bg-[#a95537]" type="submit">
-            Send
+        <div className="rounded-[16px] border border-[#d8dedc] bg-white p-6 sm:p-8">
+          <p className="section-eyebrow text-[#a95537]">Quote request</p>
+          <h3 className="mt-3 text-2xl font-bold leading-tight text-[#1d2529]">Ready to price the work?</h3>
+          <p className="mt-4 leading-7 text-[#566267]">
+            Send the details through the quote form and Falcon can review the job information before coming back to you.
+          </p>
+          <a className="button-base mt-7 rounded-[8px] bg-[#223036] text-white hover:bg-[#a95537]" href="#quote-request">
+            Open quote form
             <ArrowIcon />
-          </button>
-          {status ? <p className="rounded-[8px] bg-[#f7f5ef] p-3 text-sm font-bold text-[#4f5a5f]" role="status">{status}</p> : null}
-        </form>
+          </a>
+        </div>
       </div>
+      {quoteOpen ? (
+        <div className="fixed inset-0 z-[80] overflow-y-auto bg-[#12191c]/72 px-4 py-6 backdrop-blur-sm sm:py-10" role="dialog" aria-modal="true" aria-labelledby="quote-modal-title">
+          <button className="fixed inset-0 h-full w-full cursor-default" type="button" aria-label="Close quote form" onClick={closeQuoteModal} />
+          <div className="relative mx-auto max-w-3xl rounded-[16px] border border-[#d8dedc] bg-white p-5 shadow-2xl sm:p-8">
+            <div className="flex items-start justify-between gap-5">
+              <div>
+                <p className="section-eyebrow text-[#a95537]">Quote request form</p>
+                <h3 id="quote-modal-title" className="mt-3 text-2xl font-bold leading-tight text-[#1d2529] sm:text-3xl">Request a quote</h3>
+                <p className="mt-3 text-sm italic leading-6 text-[#7b8588]">
+                  The more info you can provide us now the faster we can get a quote back to you
+                </p>
+              </div>
+              <button className="grid h-10 w-10 shrink-0 place-items-center rounded-[8px] border border-[#d8dedc] text-[#1d2529] transition hover:border-[#1d2529] hover:bg-[#f7f5ef]" type="button" onClick={closeQuoteModal}>
+                <span className="sr-only">Close quote form</span>
+                <MenuIcon open />
+              </button>
+            </div>
+            <form className="mt-6 grid gap-5" onSubmit={onSubmit}>
+              <div className="grid gap-5 md:grid-cols-2">
+                <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                  Name
+                  <input className="form-field" name="name" required />
+                </label>
+                <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                  Phone
+                  <input className="form-field" name="phone" inputMode="tel" required />
+                </label>
+              </div>
+              <div className="grid gap-5 md:grid-cols-2">
+                <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                  Email
+                  <input className="form-field" name="email" type="email" required />
+                </label>
+                <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                  Start date
+                  <input className="form-field" name="start-date" type="date" />
+                </label>
+              </div>
+              <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                Address
+                <input className="form-field" name="address" required />
+              </label>
+              <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                Project type
+                <select className="form-field bg-white" name="project" required defaultValue="">
+                  <option value="" disabled>
+                    Select project type
+                  </option>
+                  {quoteTypes.map((type) => (
+                    <option key={type}>{type}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                Attach plans/photos
+                <input className="form-field file:mr-4 file:rounded-[8px] file:border-0 file:bg-[#223036] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white" name="attachments" type="file" accept="image/*,.pdf" multiple />
+              </label>
+              <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                Message
+                <textarea className="form-field min-h-36 resize-y p-4" name="message" required />
+              </label>
+              <fieldset className="grid gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4">
+                <legend className="px-1 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Before quote</legend>
+                <label className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
+                  <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value="call" />
+                  Request call before quote
+                </label>
+                <label className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
+                  <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value="email" />
+                  Request email before quote
+                </label>
+              </fieldset>
+              <button className="button-base rounded-[8px] bg-[#223036] text-white hover:bg-[#a95537]" type="submit">
+                Send
+                <ArrowIcon />
+              </button>
+              {status ? <p className="rounded-[8px] bg-[#f7f5ef] p-3 text-sm font-bold text-[#4f5a5f]" role="status">{status}</p> : null}
+            </form>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -454,7 +520,7 @@ export function MobileActions({ site }: { site: ProspectSiteConfig }) {
           <PhoneIcon />
           Call
         </ButtonLink>
-        <ButtonLink href="#contact" className="px-3 text-xs">
+        <ButtonLink href="#quote-request" className="px-3 text-xs">
           Quote
           <ArrowIcon />
         </ButtonLink>
