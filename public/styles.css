@@ -87,14 +87,17 @@ img {
 }
 
 .site-nav a {
-  transition: color 180ms ease, transform 220ms ease, text-shadow 220ms ease;
+  transition: color 200ms ease, background 200ms ease, box-shadow 200ms ease, transform 240ms ease;
   display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
 }
 
 .site-nav a:hover {
   color: var(--ink);
-  transform: scale(1.03);
-  text-shadow: 0 0 12px rgba(215, 255, 0, 0.5);
+  background: rgba(215, 255, 0, 0.08);
+  box-shadow: 0 0 12px rgba(215, 255, 0, 0.15);
+  transform: scale(1.02);
 }
 
 .header-cta {
@@ -110,9 +113,9 @@ img {
 }
 
 .header-cta:hover {
-  transform: scale(1.02);
-  border-color: rgba(215, 255, 0, 0.4);
-  box-shadow: 0 0 16px rgba(215, 255, 0, 0.25), 0 8px 20px rgba(215, 255, 0, 0.06);
+  transform: scale(1.01);
+  border-color: rgba(215, 255, 0, 0.25);
+  box-shadow: 0 0 10px rgba(215, 255, 0, 0.15), 0 6px 16px rgba(215, 255, 0, 0.04);
 }
 
 .nav-toggle {
@@ -211,10 +214,10 @@ h3 {
 }
 
 .button:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 0 16px rgba(215, 255, 0, 0.3), 0 10px 24px rgba(215, 255, 0, 0.08);
-  border-color: rgba(215, 255, 0, 0.35);
-  transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease;
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 0 10px rgba(215, 255, 0, 0.18), 0 8px 20px rgba(215, 255, 0, 0.04);
+  border-color: rgba(215, 255, 0, 0.2);
+  transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
 }
 
 .button-primary {
@@ -224,7 +227,7 @@ h3 {
 }
 
 .button-primary:hover {
-  box-shadow: 0 0 18px rgba(215, 255, 0, 0.35), 0 12px 32px rgba(215, 255, 0, 0.1);
+  box-shadow: 0 0 12px rgba(215, 255, 0, 0.22), 0 10px 24px rgba(215, 255, 0, 0.06);
 }
 
 .button-secondary {
@@ -234,8 +237,8 @@ h3 {
 }
 
 .button-secondary:hover {
-  border-color: rgba(215, 255, 0, 0.4);
-  box-shadow: 0 0 16px rgba(215, 255, 0, 0.22), 0 10px 24px rgba(215, 255, 0, 0.06);
+  border-color: rgba(215, 255, 0, 0.25);
+  box-shadow: 0 0 10px rgba(215, 255, 0, 0.14), 0 8px 20px rgba(215, 255, 0, 0.03);
 }
 
 .proof-row {
@@ -1228,10 +1231,10 @@ h3 {
 }
 
 .card-link:hover {
-  transform: translateY(-1px) scale(1.02);
-  border-color: rgba(215, 255, 0, 0.4);
+  transform: translateY(-1px) scale(1.01);
+  border-color: rgba(215, 255, 0, 0.25);
   color: #000;
-  box-shadow: 0 0 14px rgba(215, 255, 0, 0.22), 0 10px 20px rgba(215, 255, 0, 0.06);
+  box-shadow: 0 0 8px rgba(215, 255, 0, 0.14), 0 8px 16px rgba(215, 255, 0, 0.03);
 }
 
 .section-heading {
@@ -2006,8 +2009,8 @@ h3 {
 }
 
 .popup-cta:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 0 18px rgba(215, 255, 0, 0.35), 0 18px 42px rgba(215, 255, 0, 0.1);
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 0 12px rgba(215, 255, 0, 0.22), 0 14px 32px rgba(215, 255, 0, 0.06);
 }
 
 .popup-cta svg {
@@ -2116,9 +2119,9 @@ h3 {
 }
 
 .built-card-grid article:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 0 18px rgba(215, 255, 0, 0.12), 0 24px 60px rgba(21, 28, 44, 0.1);
-  border-color: rgba(215, 255, 0, 0.2);
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 0 12px rgba(215, 255, 0, 0.08), 0 20px 50px rgba(21, 28, 44, 0.1);
+  border-color: rgba(215, 255, 0, 0.12);
 }
 
 /* ── Intro strip hover ── */
@@ -2127,9 +2130,9 @@ h3 {
 }
 
 .intro-strip:hover {
-  box-shadow: 0 0 18px rgba(215, 255, 0, 0.08), 0 24px 64px rgba(10, 11, 16, 0.08);
-  transform: translateY(-2px) scale(1.005);
-  border-color: rgba(215, 255, 0, 0.12);
+  box-shadow: 0 0 12px rgba(215, 255, 0, 0.05), 0 20px 52px rgba(10, 11, 16, 0.08);
+  transform: translateY(-1px);
+  border-color: rgba(215, 255, 0, 0.08);
 }
 
 /* ── Testimonials ── */
@@ -2156,9 +2159,9 @@ h3 {
 }
 
 .testimonial-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 0 16px rgba(215, 255, 0, 0.1), 0 20px 52px rgba(10, 11, 16, 0.1);
-  border-color: rgba(215, 255, 0, 0.15);
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 0 10px rgba(215, 255, 0, 0.06), 0 16px 44px rgba(10, 11, 16, 0.1);
+  border-color: rgba(215, 255, 0, 0.1);
 }
 
 .testimonial-stars {
@@ -2392,8 +2395,8 @@ h3 {
 .popup-not-now:hover {
   background: var(--soft);
   color: var(--ink);
-  transform: scale(1.01);
-  box-shadow: 0 0 10px rgba(215, 255, 0, 0.15);
+  transform: scale(1.005);
+  box-shadow: 0 0 6px rgba(215, 255, 0, 0.1);
 }
 
 /* ── Responsive: testimonials + form ── */
