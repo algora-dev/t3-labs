@@ -353,6 +353,7 @@ export function ProcessAndAreas({ site }: { site: ProspectSiteConfig }) {
 
 export function Contact({ site }: { site: ProspectSiteConfig }) {
   const [status, setStatus] = useState("");
+  const quoteTypes = ["Re-roof", "New Roof", "Extension", "Repairs", "Spouting/Downpipes", "Solar", "Other"];
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -376,37 +377,66 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
           </div>
         </div>
         <form className="grid gap-5 rounded-[16px] border border-[#d8dedc] bg-white p-6 sm:p-8" onSubmit={onSubmit}>
+          <div>
+            <p className="section-eyebrow text-[#a95537]">Quote request form</p>
+            <h3 className="mt-3 text-2xl font-bold leading-tight text-[#1d2529]">Request a quote</h3>
+          </div>
           <div className="grid gap-5 md:grid-cols-2">
             <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
               Name
               <input className="form-field" name="name" required />
             </label>
             <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-              Telephone
+              Phone
               <input className="form-field" name="phone" inputMode="tel" required />
             </label>
           </div>
+          <div className="grid gap-5 md:grid-cols-2">
+            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+              Email
+              <input className="form-field" name="email" type="email" required />
+            </label>
+            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+              Start date
+              <input className="form-field" name="start-date" type="date" />
+            </label>
+          </div>
           <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-            Email
-            <input className="form-field" name="email" type="email" />
+            Address
+            <input className="form-field" name="address" required />
           </label>
           <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
             Project type
             <select className="form-field bg-white" name="project" required defaultValue="">
               <option value="" disabled>
-                Select a service
+                Select project type
               </option>
-              {site.services.map((service) => (
-                <option key={service.title}>{service.title}</option>
+              {quoteTypes.map((type) => (
+                <option key={type}>{type}</option>
               ))}
             </select>
           </label>
           <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-            Project details
+            Attach plans/photos
+            <input className="form-field file:mr-4 file:rounded-[8px] file:border-0 file:bg-[#223036] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white" name="attachments" type="file" accept="image/*,.pdf" multiple />
+          </label>
+          <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+            Message
             <textarea className="form-field min-h-36 resize-y p-4" name="message" required />
           </label>
+          <fieldset className="grid gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4">
+            <legend className="px-1 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Before quote</legend>
+            <label className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
+              <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value="call" />
+              Request call before quote
+            </label>
+            <label className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
+              <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value="email" />
+              Request email before quote
+            </label>
+          </fieldset>
           <button className="button-base rounded-[8px] bg-[#223036] text-white hover:bg-[#a95537]" type="submit">
-            Send Enquiry
+            Send
             <ArrowIcon />
           </button>
           {status ? <p className="rounded-[8px] bg-[#f7f5ef] p-3 text-sm font-bold text-[#4f5a5f]" role="status">{status}</p> : null}
