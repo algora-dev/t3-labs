@@ -103,6 +103,13 @@ img {
   font-size: 14px;
   font-weight: 700;
   box-shadow: 0 8px 20px rgba(16, 24, 40, 0.05);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.header-cta:hover {
+  transform: scale(1.04);
+  border-color: rgba(215, 255, 0, 0.6);
+  box-shadow: 0 0 24px rgba(215, 255, 0, 0.4), 0 10px 28px rgba(215, 255, 0, 0.12);
 }
 
 .nav-toggle {
@@ -201,7 +208,9 @@ h3 {
 }
 
 .button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 0 24px rgba(215, 255, 0, 0.45), 0 12px 32px rgba(215, 255, 0, 0.15);
+  border-color: rgba(215, 255, 0, 0.5);
 }
 
 .button-primary {
@@ -210,10 +219,19 @@ h3 {
   box-shadow: 0 18px 42px rgba(10, 11, 16, 0.18);
 }
 
+.button-primary:hover {
+  box-shadow: 0 0 28px rgba(215, 255, 0, 0.55), 0 14px 40px rgba(215, 255, 0, 0.18);
+}
+
 .button-secondary {
   border: 1px solid var(--line);
   background: #fff;
   color: var(--ink);
+}
+
+.button-secondary:hover {
+  border-color: rgba(215, 255, 0, 0.6);
+  box-shadow: 0 0 24px rgba(215, 255, 0, 0.35), 0 12px 28px rgba(215, 255, 0, 0.1);
 }
 
 .proof-row {
@@ -1206,10 +1224,10 @@ h3 {
 }
 
 .card-link:hover {
-  transform: translateY(-1px);
-  border-color: rgba(10, 11, 16, 0.24);
+  transform: translateY(-1px) scale(1.04);
+  border-color: rgba(215, 255, 0, 0.6);
   color: #000;
-  box-shadow: 0 12px 24px rgba(16, 24, 40, 0.07);
+  box-shadow: 0 0 20px rgba(215, 255, 0, 0.35), 0 12px 24px rgba(215, 255, 0, 0.1);
 }
 
 .section-heading {
@@ -1984,8 +2002,8 @@ h3 {
 }
 
 .popup-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 22px 52px rgba(10, 11, 16, 0.24);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 0 28px rgba(215, 255, 0, 0.5), 0 22px 52px rgba(215, 255, 0, 0.15);
 }
 
 .popup-cta svg {
@@ -2094,8 +2112,9 @@ h3 {
 }
 
 .built-card-grid article:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 60px rgba(21, 28, 44, 0.1);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 0 28px rgba(215, 255, 0, 0.2), 0 24px 60px rgba(21, 28, 44, 0.1);
+  border-color: rgba(215, 255, 0, 0.3);
 }
 
 /* ── Intro strip hover ── */
@@ -2104,8 +2123,9 @@ h3 {
 }
 
 .intro-strip:hover {
-  box-shadow: 0 24px 64px rgba(10, 11, 16, 0.08);
-  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(215, 255, 0, 0.12), 0 24px 64px rgba(10, 11, 16, 0.08);
+  transform: translateY(-2px) scale(1.01);
+  border-color: rgba(215, 255, 0, 0.2);
 }
 
 /* ── Testimonials ── */
@@ -2132,8 +2152,9 @@ h3 {
 }
 
 .testimonial-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 52px rgba(10, 11, 16, 0.1);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 0 24px rgba(215, 255, 0, 0.18), 0 20px 52px rgba(10, 11, 16, 0.1);
+  border-color: rgba(215, 255, 0, 0.25);
 }
 
 .testimonial-stars {
@@ -2367,6 +2388,8 @@ h3 {
 .popup-not-now:hover {
   background: var(--soft);
   color: var(--ink);
+  transform: scale(1.02);
+  box-shadow: 0 0 16px rgba(215, 255, 0, 0.25);
 }
 
 /* ── Responsive: testimonials + form ── */
