@@ -1,3 +1,4 @@
+import { websitePackageTerms } from "@/lib/website-package-terms";
 import type { ProposalConfig } from "../types";
 
 const asset = (name: string) => `/proposal-assets/falcon-contracting-wp-000205/${name}`;
@@ -53,9 +54,9 @@ export const falconContractingProposal = {
       alt: "Proposed Falcon Contracting website concept",
     },
     currentPoints: [
-      "The presentation does not fully reflect the range of work Falcon can show today.",
-      "Project proof and customer feedback could be easier to find.",
-      "The current quotation journey collects limited project detail.",
+      "At the time of capture, the website could not be reached by prospective customers.",
+      "Falcon's online presence does not fully showcase the quality and range of work the business delivers.",
+      "A clearer website journey could help customers explore services, view completed projects and request a quote with confidence.",
     ],
     proposedPoints: [
       "A calm, professional presentation designed around Falcon's work.",
@@ -89,16 +90,16 @@ export const falconContractingProposal = {
     { title: "Better enquiry quality", description: "More context before the first conversation, with no guarantees or inflated claims." },
   ],
   package: {
-    priceLabel: "\u00a3399",
-    vatLabel: "\u00a3399 total - no separate UK VAT or New Zealand GST amount added",
-    revisionRounds: 1,
-    includedHostingMonths: 3,
-    monthlyHostingPrice: "\u00a310",
-    handoverMinutes: 20,
-    deliveryWorkingDaysMin: 7,
-    deliveryWorkingDaysMax: 10,
+    priceLabel: websitePackageTerms.packagePrice,
+    vatLabel: websitePackageTerms.vatStatus,
+    revisionRounds: websitePackageTerms.revisionRounds,
+    includedHostingMonths: websitePackageTerms.includedHostingMonths,
+    monthlyHostingPrice: websitePackageTerms.monthlyHostingPrice,
+    handoverMinutes: websitePackageTerms.handoverMinutes,
+    deliveryWorkingDaysMin: websitePackageTerms.estimatedDeliveryWorkingDaysMin,
+    deliveryWorkingDaysMax: websitePackageTerms.estimatedDeliveryWorkingDaysMax,
     intro:
-      "The website shown in your walkthrough has already been built as a working concept for Falcon Contracting. If you decide to proceed, we will restore the project, apply the agreed changes, connect your domain and enquiry form, and prepare the website for launch.",
+      "The concept shown in your walkthrough has already been built as a working one-page website for Falcon Contracting. If you choose to proceed, we will apply the agreed revisions, connect your domain and enquiry form, complete the final checks and prepare the website for launch.",
     includedItems: [
       "The one-page website shown",
       "Desktop, tablet and mobile optimisation",
@@ -113,39 +114,27 @@ export const falconContractingProposal = {
   faq: [
     {
       question: "What happens after the included hosting period?",
-      answer: "Managed website hosting and technical support are included for the first three months from launch. After that, you can continue hosting with T3 Labs for \u00a310 per month. There is no long-term commitment, and T3 Labs will contact you before the included period ends. The monthly service begins only after you agree to continue.",
+      answer: `Managed website hosting and technical support are included for the first ${websitePackageTerms.includedHostingMonths} months from launch. After that, you can continue hosting with T3 Labs for ${websitePackageTerms.monthlyHostingPrice} per month. There is no long-term commitment, and T3 Labs will contact you before the included period ends. The monthly service begins only after you agree to continue.`,
     },
     {
       question: "What does the hosting and technical support include?",
-      answer: "It includes secure website hosting, SSL, routine backups, technical maintenance, security updates and assistance with genuine website faults. It does not include routine content changes, additional pages, new features, ongoing SEO, marketing work, domain renewal or third-party subscriptions. Support requests normally receive an initial response within two working days.",
+      answer: `It includes secure website hosting, SSL, routine backups, technical maintenance, security updates and assistance with genuine website faults. It does not include routine content changes, additional pages, new features, ongoing SEO, marketing work, domain renewal or third-party subscriptions. Support requests normally receive an initial response within ${websitePackageTerms.supportResponseWorkingDays} working days.`,
     },
     {
       question: "How many revision rounds are included?",
-      answer: "The agreed number of revision rounds will be written into the final scope before any payment is requested.",
+      answer: `${websitePackageTerms.revisionRounds} consolidated revision round is included. One revision round means one complete list of reasonable changes submitted together.`,
     },
     {
       question: "Can additional pages be added later?",
-      answer: "Yes. Additional pages can be scoped separately if the business needs them after the initial launch.",
-    },
-    {
-      question: "Can logo or brand-colour changes be included?",
-      answer: "Small visual refinements can be discussed during scoping. A larger identity project would be quoted separately.",
+      answer: `Yes. The ${websitePackageTerms.packagePrice} package covers the one-page website shown in the walkthrough. Additional pages can be scoped and quoted separately.`,
     },
     {
       question: "Does this guarantee Google rankings?",
-      answer: "No. The package includes foundational on-page SEO improvements. It does not guarantee rankings, traffic or a specific number of enquiries.",
-    },
-    {
-      question: "Can the existing domain be used?",
-      answer: "Yes. The existing domain can normally be connected once access and the launch plan have been agreed.",
-    },
-    {
-      question: "Who owns the finished website?",
-      answer: "Ownership and code-transfer terms will be set out clearly in the final package terms before you proceed.",
+      answer: "No. The package includes foundational on-page SEO work. Search rankings, traffic, enquiries, sales and revenue are not guaranteed.",
     },
     {
       question: "What happens after I click the launch button?",
-      answer: "It records your interest only. No payment is taken. T3 Labs will confirm the scope, final terms and next steps with you first.",
+      answer: "Clicking records interest only. No payment is taken and no binding order is created. Work begins only after scope, terms and payment schedule are confirmed.",
     },
   ],
   actions: {
