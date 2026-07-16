@@ -58,10 +58,6 @@ export const falconContractingProposal = {
         src: asset("concept-gallery-sections.png"),
         alt: "Falcon Contracting concept showing recent work, why Falcon and customer feedback sections",
       },
-      {
-        src: asset("concept-process-contact.png"),
-        alt: "Falcon Contracting concept showing process, areas covered and contact sections",
-      },
     ],
     currentBadge: "When we checked",
     currentPoints: [
