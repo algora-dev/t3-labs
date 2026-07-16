@@ -18,7 +18,7 @@ export const falconContractingProposal = {
     overline: "A private concept created for",
     headline: "Hi Daniel - we created a private website concept for Falcon Contracting.",
     supportingCopy:
-      "This recorded walkthrough shows a working website concept designed to help Falcon Contracting look more professional online, attract the right local visitors, build trust with reviews and completed work, and generate better-quality quote requests.",
+      "Falcon has been roofing and building across Essex for 22 years, but the current website does not really show the experience, services or quality of work behind the business. We created this private concept to show how Falcon could be presented more clearly online and make it easier for local customers to get in touch.",
     privacyNote: "This concept is private and is not publicly listed.",
   },
   video: {
@@ -29,10 +29,10 @@ export const falconContractingProposal = {
     },
   },
   outcomes: [
-    "Stronger local-search foundations",
-    "Reviews and project proof",
-    "Higher-quality quote requests",
-    "Less back-and-forth",
+    "22 years of experience brought forward",
+    "Services and completed work made easier to see",
+    "A clearer way for customers to request a quote",
+    "Built to work properly on mobile",
   ],
   conceptImages: {
     desktopHero: {
@@ -53,41 +53,42 @@ export const falconContractingProposal = {
       src: asset("concept-desktop-home.png"),
       alt: "Proposed Falcon Contracting website concept",
     },
+    currentBadge: "When we checked",
     currentPoints: [
-      "At the time of capture, the website could not be reached by prospective customers.",
-      "Falcon's online presence does not fully showcase the quality and range of work the business delivers.",
-      "A clearer website journey could help customers explore services, view completed projects and request a quote with confidence.",
+      "At the time we checked, the website could not be reached by prospective customers.",
+      "The current online presence does not really show off Falcon's 22 years of experience or the range of work you take on.",
+      "Customers should be able to quickly see what you do, look through completed work and get in touch without having to search around.",
     ],
     proposedPoints: [
-      "A calm, professional presentation designed around Falcon's work.",
-      "Mobile-first project proof and service information.",
-      "A structured quote journey for useful project details and images.",
+      "Falcon's experience, services and family-run background are much clearer.",
+      "Completed work and customer feedback are easier to find.",
+      "Customers have a simple way to explain the job and request a quote.",
     ],
   },
   findings: [
     {
-      title: "Presentation does not reflect the business",
+      title: "Falcon's experience should be much clearer",
       description:
-        "The current site does not fully reflect the quality, experience and range of work Falcon Contracting can show customers today.",
+        "Being family-run and having 22 years of roofing and construction experience are two of Falcon's strongest trust points. They should be obvious as soon as someone lands on the website, rather than easy to miss.",
     },
     {
-      title: "Project proof could work harder",
+      title: "The work should do more of the selling",
       description:
-        "Completed projects and customer reviews can be brought forward so visitors see evidence of the workmanship before making contact.",
+        "Falcon covers everything from roof repairs and replacements to chimney work, external refurbishment and larger construction projects. Showing those services alongside real completed work gives customers a much better reason to get in touch.",
     },
     {
-      title: "The quote journey could collect better information",
+      title: "Getting a quote should be easier",
       description:
-        "A more detailed quotation form can collect the service, location, timeframe and project images before the first conversation.",
+        "A simple form can let customers explain what they need, where the job is and upload a few photos before you speak to them. That gives you a better idea of the job from the start.",
     },
   ],
   improvements: [
-    { title: "Professional presentation", description: "A modern, credible first impression that reflects the work." },
-    { title: "Local-search foundations", description: "Clear service and location wording, headings and page structure." },
-    { title: "Reviews and completed work", description: "Customer proof is easier to see before someone gets in touch." },
-    { title: "Better mobile experience", description: "A focused journey built for visitors using their phone." },
-    { title: "Clear quotation journey", description: "A simple route from interest to a useful project enquiry." },
-    { title: "Better enquiry quality", description: "More context before the first conversation, with no guarantees or inflated claims." },
+    { title: "Stronger first impression", description: "A clearer, more modern website that better reflects the experience behind Falcon Contracting." },
+    { title: "Clearer local presence", description: "Makes it obvious that Falcon is a family-run Essex business serving Colchester and the surrounding area." },
+    { title: "More proof of the work", description: "Services, completed projects and customer feedback are easier to see before someone gets in touch." },
+    { title: "Easier to use on mobile", description: "Customers can quickly browse the work, check services and contact Falcon from their phone." },
+    { title: "Simpler quote requests", description: "A straightforward form helps customers explain the job and send photos without a long email chain." },
+    { title: "Better information from the start", description: "You receive useful job details before the first call, making it easier to decide what needs to happen next." },
   ],
   package: {
     priceLabel: websitePackageTerms.packagePrice,
@@ -101,11 +102,11 @@ export const falconContractingProposal = {
     intro:
       "The concept shown in your walkthrough has already been built as a working one-page website for Falcon Contracting. If you choose to proceed, we will apply the agreed revisions, connect your domain and enquiry form, complete the final checks and prepare the website for launch.",
     includedItems: [
-      "The one-page website shown",
+      "The one-page Falcon Contracting website shown in the walkthrough",
       "Desktop, tablet and mobile optimisation",
-      "Services, service areas and contact details",
-      "Project gallery and trust content",
-      "Detailed quote-request form",
+      "Falcon's services, service areas and contact details",
+      "Project gallery, reviews and trust content",
+      "Detailed quote-request form with image uploads",
       "Foundational on-page SEO",
       "Domain connection and launch",
     ],
@@ -139,6 +140,23 @@ export const falconContractingProposal = {
   ],
   actions: {
     calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
+  },
+  pageCopy: {
+    conceptHeading: "Take a look at the website we built for Falcon",
+    comparisonHeading: "Falcon's current website compared with the new concept",
+    comparisonIntro:
+      "The current website does not show Falcon at its best. The new concept gives the business a clearer, more modern online presence while keeping the focus on the work itself.",
+    findingsHeading: "Three opportunities we noticed",
+    improvementsHeading: "What the new website improves",
+    packageLabel: "Finishing and launching the website",
+    packageHeading: "Launch Falcon's new website for",
+    packageIntro:
+      "The website shown in the walkthrough has already been built around Falcon Contracting. If you decide to go ahead, we will make the agreed changes, add the final business details, connect the domain and enquiry form, test everything and prepare it for launch.",
+    launchButtonLabel: "I'd like to launch the website",
+    finalEyebrow: "Like the direction?",
+    finalHeading: "Ready to put the new Falcon website live?",
+    finalBody:
+      "We will make the agreed changes, connect your domain and enquiry form, complete the final checks and get the website ready to launch.",
   },
   status: "draft",
 } satisfies ProposalConfig;

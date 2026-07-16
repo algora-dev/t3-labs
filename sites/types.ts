@@ -72,6 +72,10 @@ export type ProposalConfig = {
   comparison?: {
     currentSiteImage?: SiteImage;
     proposedImage: SiteImage;
+    currentLabel?: string;
+    currentBadge?: string;
+    proposedLabel?: string;
+    proposedBadge?: string;
     currentPoints: string[];
     proposedPoints: string[];
   };
@@ -116,6 +120,22 @@ export type ProposalConfig = {
     launchEmailUrl?: string;
     interactivePreviewRequestUrl?: string;
     removalUrl?: string;
+  };
+  pageCopy?: {
+    conceptHeading?: string;
+    comparisonHeading?: string;
+    comparisonIntro?: string;
+    supportingViewsHeading?: string;
+    supportingViewsNote?: string;
+    findingsHeading?: string;
+    improvementsHeading?: string;
+    packageLabel?: string;
+    packageHeading?: string;
+    packageIntro?: string;
+    launchButtonLabel?: string;
+    finalEyebrow?: string;
+    finalHeading?: string;
+    finalBody?: string;
   };
   status: "draft" | "active" | "closed" | "expired";
   expiresAt?: string;
