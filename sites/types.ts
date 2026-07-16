@@ -76,6 +76,7 @@ export type ProposalConfig = {
     currentBadge?: string;
     proposedLabel?: string;
     proposedBadge?: string;
+    proposedSupportingImages?: SiteImage[];
     currentPoints: string[];
     proposedPoints: string[];
   };
