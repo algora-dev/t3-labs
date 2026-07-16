@@ -1,5 +1,9 @@
-export type SiteImage = { src: string; alt: string };
+export type SiteImage = {
+  src: string;
+  alt: string;
+};
 
+// Kept for the archived/restorable concept source. Public proposal routes use ProposalConfig.
 export type ProspectSiteConfig = {
   slug: string;
   companyName: string;
@@ -18,8 +22,132 @@ export type ProspectSiteConfig = {
   testimonials: { eyebrow: string; title: string; description: string; items: Array<{ summary: string; source: string }> };
   process: { eyebrow: string; title: string; steps: string[] };
   coverage: { eyebrow: string; title: string; description: string; areas: string[] };
-  contactSection: { eyebrow: string; title: string; description: string; formStatus: string };
+  contactSection: { eyebrow: string; title: string; description: string; formStatus: string; generalFormTitle?: string };
+  quoteRequest?: {
+    eyebrow?: string;
+    title?: string;
+    helperText?: string;
+    projectTypes: string[];
+    beforeQuoteOptions?: string[];
+    fileLabel?: string;
+    fileButtonText?: string;
+    fileEmptyText?: string;
+  };
   callsToAction: { quote: string; call: string; email: string };
   footer: { location: string; socialLabel: string };
   requiresConfirmation: string[];
 };
+
+export type ProposalConfig = {
+  slug: string;
+  prospectId: string;
+  companyName: string;
+  contactFirstName: string;
+  location?: string;
+  existingWebsiteUrl?: string;
+  hasExistingWebsite: boolean;
+  seo: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    overline: string;
+    headline: string;
+    supportingCopy: string;
+    privacyNote: string;
+  };
+  video: {
+    provider: "loom" | "vimeo" | "youtube" | "self-hosted";
+    url?: string;
+    posterImage: SiteImage;
+    durationLabel?: string;
+    transcriptUrl?: string;
+  };
+  outcomes: string[];
+  conceptImages: {
+    desktopHero: SiteImage;
+    mobileHero: SiteImage;
+    supporting?: SiteImage[];
+  };
+  comparison?: {
+    currentSiteImage?: SiteImage;
+    proposedImage: SiteImage;
+    currentPoints: string[];
+    proposedPoints: string[];
+  };
+  findings: Array<{
+    title: string;
+    description: string;
+  }>;
+  improvements: Array<{
+    title: string;
+    description: string;
+  }>;
+  brandDirection?: {
+    enabled: boolean;
+    heading?: string;
+    copy?: string;
+    images?: SiteImage[];
+  };
+  package: {
+    priceLabel: string;
+    intro: string;
+    includedItems: string[];
+    vatLabel?: string;
+    validityNote?: string;
+    revisionRounds?: number;
+    includedHostingMonths?: number;
+    monthlyHostingPrice?: string;
+    annualHostingPrice?: string;
+    handoverMinutes?: number;
+    deliveryWorkingDaysMin?: number;
+    deliveryWorkingDaysMax?: number;
+    ownershipSummary?: string;
+    domainProcessSummary?: string;
+    paymentSummary: string;
+  };
+  faq: Array<{
+    question: string;
+    answer: string;
+  }>;
+  actions: {
+    calendlyUrl: string;
+    launchActionUrl?: string;
+    launchEmailUrl?: string;
+    interactivePreviewRequestUrl?: string;
+    removalUrl?: string;
+  };
+  status: "draft" | "active" | "closed" | "expired";
+  expiresAt?: string;
+};
+
+const unresolvedMarkers = ["[PLACEHOLDER]", "TODO"];
+
+export function validateProposalForProduction(proposal: ProposalConfig) {
+  if (process.env.VERCEL_ENV !== "production") return;
+
+  const values = [
+    proposal.video.url,
+    proposal.video.transcriptUrl,
+    proposal.package.vatLabel,
+    proposal.package.revisionRounds,
+    proposal.package.includedHostingMonths,
+    proposal.package.monthlyHostingPrice,
+    proposal.package.ownershipSummary,
+    proposal.package.domainProcessSummary,
+    proposal.actions.launchActionUrl,
+    proposal.actions.removalUrl,
+  ];
+  const hasUnresolvedValue = values.some(
+    (value) =>
+      value === undefined ||
+      value === "" ||
+      (typeof value === "string" && unresolvedMarkers.some((marker) => value.includes(marker))),
+  );
+
+  if (proposal.status !== "active" || hasUnresolvedValue) {
+    throw new Error(
+      `Proposal ${proposal.prospectId} is not ready for production. Complete the video, transcript, commercial terms, launch action and removal workflow, then set status to active.`,
+    );
+  }
+}

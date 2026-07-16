@@ -1,0 +1,10 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1000" fill="#2c383b"/>
+  <rect x="120" y="120" width="1360" height="760" rx="18" fill="#415055"/>
+  <path d="M210 660L800 310L1390 660V780H210V660Z" fill="#728184"/>
+  <path d="M800 310L1390 660H210L800 310Z" fill="#9aa6a7"/>
+  <path d="M260 680H1340" stroke="#d8dedc" stroke-width="16"/>
+  <path d="M350 725H1250" stroke="#d8dedc" stroke-width="10" opacity=".75"/>
+  <text x="800" y="160" text-anchor="middle" fill="#f7f5ef" font-family="Arial, sans-serif" font-size="46" font-weight="700">HERO PROJECT PHOTO</text>
+  <text x="800" y="222" text-anchor="middle" fill="#d8dedc" font-family="Arial, sans-serif" font-size="26">Replace with the prospect's strongest completed work</text>
+</svg>

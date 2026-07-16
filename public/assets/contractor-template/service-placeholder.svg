@@ -1,0 +1,8 @@
+<svg width="900" height="675" viewBox="0 0 900 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="675" fill="#edf0ed"/>
+  <rect x="72" y="96" width="756" height="460" rx="14" fill="#cfd7d4"/>
+  <path d="M150 395L450 210L750 395V500H150V395Z" fill="#7b8989"/>
+  <path d="M450 210L750 395H150L450 210Z" fill="#a95537"/>
+  <path d="M208 422H692" stroke="#f7f5ef" stroke-width="10"/>
+  <text x="450" y="610" text-anchor="middle" fill="#29353a" font-family="Arial, sans-serif" font-size="34" font-weight="700">SERVICE IMAGE</text>
+</svg>

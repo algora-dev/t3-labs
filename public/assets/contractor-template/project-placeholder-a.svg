@@ -1,0 +1,7 @@
+<svg width="1000" height="750" viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="750" fill="#223036"/>
+  <rect x="80" y="82" width="840" height="586" rx="16" fill="#d8dedc"/>
+  <path d="M150 455L500 235L850 455V595H150V455Z" fill="#566267"/>
+  <path d="M500 235L850 455H150L500 235Z" fill="#a95537"/>
+  <text x="500" y="140" text-anchor="middle" fill="#29353a" font-family="Arial, sans-serif" font-size="42" font-weight="700">PROJECT PHOTO</text>
+</svg>

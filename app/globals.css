@@ -2,13 +2,11 @@
 
 :root {
   color-scheme: light;
-  --ink: #1d2529;
-  --muted: #5e696f;
-  --line: #d8dedc;
-  --paper: #f7f5ef;
-  --steel: #6e7c83;
-  --falcon: #9b8f77;
-  --clay: #a95537;
+  --ink: #0a0b10;
+  --muted: #606575;
+  --line: #e7e9ef;
+  --paper: #fbfcff;
+  --lime: #d7ff00;
 }
 
 * {
@@ -23,7 +21,9 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
 }
 
@@ -41,7 +41,7 @@ textarea {
 }
 
 :focus-visible {
-  outline: 2px solid var(--clay);
+  outline: 2px solid var(--ink);
 }
 
 .site-shell {
@@ -107,4 +107,89 @@ textarea {
 
 .form-field:focus {
   border-color: var(--clay);
+}
+
+.proposal-package-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.proposal-page {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+.proposal-page h1,
+.proposal-page h2,
+.proposal-page h3,
+.proposal-page p {
+  margin-top: 0;
+}
+
+.proposal-page h1,
+.proposal-page h2,
+.proposal-page h3 {
+  letter-spacing: 0;
+}
+
+.proposal-page .proposal-display {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(2.45rem, 4.1vw, 3.25rem);
+  font-weight: 500 !important;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+@media (max-width: 640px) {
+  .proposal-page .proposal-display {
+    font-size: clamp(2.15rem, 12vw, 3rem);
+  }
+}
+
+.proposal-section-title {
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: 0;
+}
+
+.proposal-card-title {
+  font-size: clamp(1.15rem, 1.5vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.proposal-body {
+  color: #4a5060;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.proposal-privacy-note {
+  margin-top: 2.25rem !important;
+}
+
+.proposal-package-heading {
+  font-size: clamp(1.55rem, 2.4vw, 2rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.proposal-package-price {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: clamp(3.5rem, 5vw, 4.9rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+@media (min-width: 820px) {
+  .proposal-package-grid {
+    grid-template-columns: 0.9fr 1.35fr 0.9fr;
+    align-items: stretch;
+  }
 }
