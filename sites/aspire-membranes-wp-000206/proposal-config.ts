@@ -62,6 +62,12 @@ export const aspireMembranesProposal = {
       src: asset("concept-desktop.png"),
       alt: "Proposed Aspire Membranes website concept on desktop",
     },
+    proposedSupportingImages: [
+      {
+        src: asset("concept-comparison-overlay.png"),
+        alt: "Aspire Membranes website concept showing the specialist knowledge and roofing services sections",
+      },
+    ],
     currentPoints: [
       "Specialist services can be made easier for visitors to identify and compare.",
       "Completed roofing work can have a clearer role in building confidence before contact.",
