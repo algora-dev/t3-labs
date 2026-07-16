@@ -37,11 +37,13 @@ function ButtonLink({
   children,
   variant = "dark",
   className = "",
+  onClick,
 }: {
   href: string;
   children: React.ReactNode;
   variant?: "dark" | "light" | "line" | "heroLine";
   className?: string;
+  onClick?: () => void;
 }) {
   const style =
     variant === "dark"
@@ -53,10 +55,14 @@ function ButtonLink({
           : "border-[#a7b0ae] text-[#1d2529] hover:border-[#1d2529] hover:bg-white";
 
   return (
-    <a className={`button-base rounded-[8px] ${style} ${className}`} href={href}>
+    <a className={`button-base rounded-[8px] ${style} ${className}`} href={href} onClick={onClick}>
       {children}
     </a>
   );
+}
+
+function openQuoteRequest() {
+  window.dispatchEvent(new CustomEvent("contractor:open-quote-request"));
 }
 
 function SectionIntro({
@@ -88,7 +94,7 @@ export function Header({ site }: { site: ProspectSiteConfig }) {
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[#f7f5ef]/96 backdrop-blur">
       <div className="site-shell flex min-h-20 items-center justify-between gap-5">
-        <a className="flex items-center gap-3" href="#top" aria-label="Falcon Contracting home">
+        <a className="flex items-center gap-3" href="#top" aria-label={`${site.companyName} home`}>
           <span className="relative block h-12 w-40 overflow-hidden rounded-[8px] bg-white sm:w-44">
             <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="176px" className="scale-125 object-contain" priority />
           </span>
@@ -105,7 +111,7 @@ export function Header({ site }: { site: ProspectSiteConfig }) {
             <PhoneIcon />
             Call now
           </ButtonLink>
-          <ButtonLink href="#quote-request">
+          <ButtonLink href="#quote-request" onClick={openQuoteRequest}>
             {site.callsToAction.quote}
             <ArrowIcon />
           </ButtonLink>
@@ -134,7 +140,7 @@ export function Header({ site }: { site: ProspectSiteConfig }) {
                 <PhoneIcon />
                 Call now
               </ButtonLink>
-              <ButtonLink href="#quote-request">
+              <ButtonLink href="#quote-request" onClick={openQuoteRequest}>
                 {site.callsToAction.quote}
                 <ArrowIcon />
               </ButtonLink>
@@ -172,7 +178,7 @@ export function Hero({ site }: { site: ProspectSiteConfig }) {
                 {site.hero.description}
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="#quote-request" variant="light">
+                <ButtonLink href="#quote-request" variant="light" onClick={openQuoteRequest}>
                   {site.callsToAction.quote}
                   <ArrowIcon />
                 </ButtonLink>
@@ -354,16 +360,28 @@ export function ProcessAndAreas({ site }: { site: ProspectSiteConfig }) {
 export function Contact({ site }: { site: ProspectSiteConfig }) {
   const [status, setStatus] = useState("");
   const [quoteOpen, setQuoteOpen] = useState(false);
-  const quoteTypes = ["Re-roof", "New Roof", "Extension", "Repairs", "Spouting/Downpipes", "Solar", "Other"];
+  const [attachmentLabel, setAttachmentLabel] = useState(site.quoteRequest?.fileEmptyText ?? "No file chosen");
+  const quoteRequest = site.quoteRequest ?? {
+    projectTypes: ["Re-roof", "New Roof", "Extension", "Repairs", "Spouting/Downpipes", "Solar", "Other"],
+  };
+  const beforeQuoteOptions = quoteRequest.beforeQuoteOptions ?? ["Request call before quote", "Request email before quote"];
 
   useEffect(() => {
     function syncQuoteModal() {
-      setQuoteOpen(window.location.hash === "#quote-request");
+      if (window.location.hash === "#quote-request") setQuoteOpen(true);
+    }
+
+    function openQuoteModal() {
+      setQuoteOpen(true);
     }
 
     syncQuoteModal();
+    window.addEventListener("contractor:open-quote-request", openQuoteModal);
     window.addEventListener("hashchange", syncQuoteModal);
-    return () => window.removeEventListener("hashchange", syncQuoteModal);
+    return () => {
+      window.removeEventListener("contractor:open-quote-request", openQuoteModal);
+      window.removeEventListener("hashchange", syncQuoteModal);
+    };
   }, []);
 
   useEffect(() => {
@@ -409,22 +427,45 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
               <PhoneIcon />
               {site.contact.telephone}
             </ButtonLink>
-            <ButtonLink href="#quote-request" variant="line">
+            <ButtonLink href="#quote-request" variant="line" className="bg-white" onClick={openQuoteRequest}>
               Request a Quote
               <ArrowIcon />
             </ButtonLink>
           </div>
         </div>
         <div className="rounded-[16px] border border-[#d8dedc] bg-white p-6 sm:p-8">
-          <p className="section-eyebrow text-[#a95537]">Quote request</p>
-          <h3 className="mt-3 text-2xl font-bold leading-tight text-[#1d2529]">Ready to price the work?</h3>
-          <p className="mt-4 leading-7 text-[#566267]">
-            Send the details through the quote form and Falcon can review the job information before coming back to you.
-          </p>
-          <a className="button-base mt-7 rounded-[8px] bg-[#223036] text-white hover:bg-[#a95537]" href="#quote-request">
-            Open quote form
-            <ArrowIcon />
-          </a>
+          <p className="section-eyebrow text-[#a95537]">General enquiry</p>
+          <h3 className="mt-3 text-2xl font-bold leading-tight text-[#1d2529]">{site.contactSection.generalFormTitle ?? `Send ${site.companyName} a message`}</h3>
+          <form className="mt-6 grid gap-5" onSubmit={onSubmit}>
+            <div className="grid gap-5 md:grid-cols-2">
+              <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                Name
+                <input className="form-field" name="contact-name" required />
+              </label>
+              <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                Phone
+                <input className="form-field" name="contact-phone" inputMode="tel" required />
+              </label>
+            </div>
+            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+              Email
+              <input className="form-field" name="contact-email" type="email" />
+            </label>
+            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+              Message
+              <textarea className="form-field min-h-32 resize-y p-4" name="contact-message" required />
+            </label>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <button className="button-base rounded-[8px] bg-[#223036] text-white hover:bg-[#a95537]" type="submit">
+                Send message
+                <ArrowIcon />
+              </button>
+              <a className="button-base rounded-[8px] border-[#cbd3d2] bg-[#f7f5ef] text-[#1d2529] hover:border-[#1d2529] hover:bg-[#eee9df]" href="#quote-request" onClick={openQuoteRequest}>
+                Request a quote
+              </a>
+            </div>
+            {status ? <p className="rounded-[8px] bg-[#f7f5ef] p-3 text-sm font-bold text-[#4f5a5f]" role="status">{status}</p> : null}
+          </form>
         </div>
       </div>
       {quoteOpen ? (
@@ -433,10 +474,10 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
           <div className="relative mx-auto max-w-3xl rounded-[16px] border border-[#d8dedc] bg-white p-5 shadow-2xl sm:p-8">
             <div className="flex items-start justify-between gap-5">
               <div>
-                <p className="section-eyebrow text-[#a95537]">Quote request form</p>
-                <h3 id="quote-modal-title" className="mt-3 text-2xl font-bold leading-tight text-[#1d2529] sm:text-3xl">Request a quote</h3>
+                <p className="section-eyebrow text-[#a95537]">{quoteRequest.eyebrow ?? "Quote request form"}</p>
+                <h3 id="quote-modal-title" className="mt-3 text-2xl font-bold leading-tight text-[#1d2529] sm:text-3xl">{quoteRequest.title ?? "Request a quote"}</h3>
                 <p className="mt-3 text-sm italic leading-6 text-[#7b8588]">
-                  The more info you can provide us now the faster we can get a quote back to you
+                  {quoteRequest.helperText ?? "The more info you can provide us now the faster we can get a quote back to you"}
                 </p>
               </div>
               <button className="grid h-10 w-10 shrink-0 place-items-center rounded-[8px] border border-[#d8dedc] text-[#1d2529] transition hover:border-[#1d2529] hover:bg-[#f7f5ef]" type="button" onClick={closeQuoteModal}>
@@ -475,14 +516,34 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
                   <option value="" disabled>
                     Select project type
                   </option>
-                  {quoteTypes.map((type) => (
+                  {quoteRequest.projectTypes.map((type) => (
                     <option key={type}>{type}</option>
                   ))}
                 </select>
               </label>
               <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-                Attach plans/photos
-                <input className="form-field file:mr-4 file:rounded-[8px] file:border-0 file:bg-[#223036] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white" name="attachments" type="file" accept="image/*,.pdf" multiple />
+                {quoteRequest.fileLabel ?? "Attach plans/photos"}
+                <span className="flex min-h-12 items-center justify-between gap-3 rounded-[8px] border border-[#cbd3d2] bg-white px-3 py-2 text-base font-normal normal-case tracking-normal text-[#1d2529]">
+                  <span className="rounded-[8px] bg-[#223036] px-4 py-2 text-sm font-bold text-white">
+                    {quoteRequest.fileButtonText ?? "Choose files"}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[#566267]">{attachmentLabel}</span>
+                </span>
+                <input
+                  className="sr-only"
+                  name="attachments"
+                  type="file"
+                  accept="image/*,.pdf"
+                  multiple
+                  onChange={(event) => {
+                    const files = event.currentTarget.files;
+                    if (!files?.length) {
+                      setAttachmentLabel(quoteRequest.fileEmptyText ?? "No file chosen");
+                      return;
+                    }
+                    setAttachmentLabel(files.length === 1 ? files[0].name : `${files.length} files selected`);
+                  }}
+                />
               </label>
               <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
                 Message
@@ -490,14 +551,12 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
               </label>
               <fieldset className="grid gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4">
                 <legend className="px-1 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Before quote</legend>
-                <label className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
-                  <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value="call" />
-                  Request call before quote
-                </label>
-                <label className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
-                  <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value="email" />
-                  Request email before quote
-                </label>
+                {beforeQuoteOptions.map((option) => (
+                  <label key={option} className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
+                    <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value={option} />
+                    {option}
+                  </label>
+                ))}
               </fieldset>
               <button className="button-base rounded-[8px] bg-[#223036] text-white hover:bg-[#a95537]" type="submit">
                 Send
@@ -520,7 +579,7 @@ export function MobileActions({ site }: { site: ProspectSiteConfig }) {
           <PhoneIcon />
           Call
         </ButtonLink>
-        <ButtonLink href="#quote-request" className="px-3 text-xs">
+        <ButtonLink href="#quote-request" className="px-3 text-xs" onClick={openQuoteRequest}>
           Quote
           <ArrowIcon />
         </ButtonLink>

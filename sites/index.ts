@@ -1,11 +1,17 @@
-import { falconContracting } from "./falcon-contracting-wp-000205/site-config";
-import { t3LabsWebsiteTemplate } from "./t3labs-website-template-1993/site-config";
-import type { ProspectSiteConfig } from "./types";
+import { falconContractingProposal } from "./falcon-contracting-wp-000205/proposal-config";
+import { aspireMembranesProposal } from "./aspire-membranes-wp-000206/proposal-config";
+import { proposalTemplate } from "./proposal-template-wp-000000/proposal-config";
+import type { ProposalConfig } from "./types";
 
 export const sites = {
-  [falconContracting.slug]: falconContracting,
-  [t3LabsWebsiteTemplate.slug]: t3LabsWebsiteTemplate,
-} satisfies Record<string, ProspectSiteConfig>;
+  [falconContractingProposal.slug]: falconContractingProposal,
+  [aspireMembranesProposal.slug]: aspireMembranesProposal,
+  [proposalTemplate.slug]: proposalTemplate,
+} satisfies Record<string, ProposalConfig>;
+
 export type SiteSlug = keyof typeof sites;
 export const siteSlugs = Object.keys(sites) as SiteSlug[];
-export function getSite(slug: string): ProspectSiteConfig | undefined { return sites[slug as SiteSlug]; }
+
+export function getSite(slug: string): ProposalConfig | undefined {
+  return sites[slug as SiteSlug];
+}
