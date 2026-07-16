@@ -125,6 +125,7 @@ const unresolvedMarkers = ["[PLACEHOLDER]", "TODO"];
 
 export function validateProposalForProduction(proposal: ProposalConfig) {
   if (process.env.VERCEL_ENV !== "production") return;
+  if (proposal.status !== "active") return;
 
   const values = [
     proposal.video.url,
@@ -145,7 +146,7 @@ export function validateProposalForProduction(proposal: ProposalConfig) {
       (typeof value === "string" && unresolvedMarkers.some((marker) => value.includes(marker))),
   );
 
-  if (proposal.status !== "active" || hasUnresolvedValue) {
+  if (hasUnresolvedValue) {
     throw new Error(
       `Proposal ${proposal.prospectId} is not ready for production. Complete the video, transcript, commercial terms, launch action and removal workflow, then set status to active.`,
     );
