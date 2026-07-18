@@ -41,6 +41,12 @@ export const proposalTemplate = {
   comparison: {
     currentSiteImage: { src: asset("project-placeholder-b.svg"), alt: "Current website screenshot placeholder" },
     proposedImage: { src: asset("hero-placeholder.svg"), alt: "Proposed website concept placeholder" },
+    proposedSupportingImages: [
+      {
+        src: asset("project-placeholder-a.svg"),
+        alt: "Additional proposed website section placeholder",
+      },
+    ],
     currentPoints: [
       "Replace this with a fair observation about the current website.",
       "Replace this with a customer-proof, mobile or enquiry-flow observation.",
@@ -56,6 +62,11 @@ export const proposalTemplate = {
     { title: "Presentation opportunity", description: "Replace with a specific, fair observation about how the current website could present the business more clearly." },
     { title: "Project proof opportunity", description: "Replace with a note about reviews, completed work, accreditations or trust material that could work harder." },
     { title: "Enquiry quality opportunity", description: "Replace with a note about how the quote journey can collect better project information." },
+  ],
+  strengths: [
+    { title: "Real business substance", description: "Replace with something the prospect is already doing well, such as experience, specialist services or visible trade knowledge." },
+    { title: "Useful proof to build from", description: "Replace with a positive note about existing reviews, project photos, accreditations or customer trust signals." },
+    { title: "Clear local relevance", description: "Replace with a strength around location, service area, customer base or the type of work they are already known for." },
   ],
   improvements: [
     { title: "Professional presentation", description: "A credible first impression using genuine business material." },

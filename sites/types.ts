@@ -9,7 +9,15 @@ export type ProspectSiteConfig = {
   companyName: string;
   seo: { title: string; description: string };
   brand: { logo: SiteImage; wordmark: SiteImage; colors: { ink: string; paper: string; accent: string } };
-  contact: { location: string; telephone: string; telephoneHref: string; email: string; linkedinUrl: string; checkatradeUrl: string };
+  contact: {
+    location: string;
+    telephone: string;
+    telephoneHref: string;
+    email: string;
+    linkedinUrl: string;
+    checkatradeUrl: string;
+    socialLinks?: Array<{ label: string; url: string }>;
+  };
   navigation: ReadonlyArray<{ label: string; href: string }>;
   mobileNavigation: ReadonlyArray<{ label: string; href: string }>;
   hero: { eyebrow: string; title: string; description: string; image: SiteImage };
@@ -18,7 +26,7 @@ export type ProspectSiteConfig = {
   services: Array<{ title: string; summary: string; image: SiteImage }>;
   projectsIntro: { eyebrow: string; title: string; description: string };
   projects: Array<SiteImage & { label: string }>;
-  whyChoose: { eyebrow: string; title: string; description: string; items: string[] };
+  whyChoose: { eyebrow: string; title: string; description: string; image?: SiteImage; items: string[] };
   testimonials: { eyebrow: string; title: string; description: string; items: Array<{ summary: string; source: string }> };
   process: { eyebrow: string; title: string; steps: string[] };
   coverage: { eyebrow: string; title: string; description: string; areas: string[] };
@@ -28,6 +36,8 @@ export type ProspectSiteConfig = {
     title?: string;
     helperText?: string;
     projectTypes: string[];
+    preferredTimeframes?: string[];
+    preferredContactMethods?: string[];
     beforeQuoteOptions?: string[];
     fileLabel?: string;
     fileButtonText?: string;
@@ -76,11 +86,15 @@ export type ProposalConfig = {
     currentBadge?: string;
     proposedLabel?: string;
     proposedBadge?: string;
-    proposedSupportingImages?: SiteImage[];
+    proposedSupportingImages?: Array<SiteImage & { presentation?: "portrait" | "natural" }>;
     currentPoints: string[];
     proposedPoints: string[];
   };
   findings: Array<{
+    title: string;
+    description: string;
+  }>;
+  strengths?: Array<{
     title: string;
     description: string;
   }>;
