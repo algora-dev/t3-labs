@@ -88,6 +88,23 @@ export const falconContractingProposal = {
         "A simple form can let customers explain what they need, where the job is and upload a few photos before you speak to them. That gives you a better idea of the job from the start.",
     },
   ],
+  strengths: [
+    {
+      title: "Established roofing experience",
+      description:
+        "Falcon already has a strong story to tell, with 22 years of roofing and construction experience behind the business.",
+    },
+    {
+      title: "Real project proof",
+      description:
+        "The business has genuine completed work across new roofs, repairs, flat roofing, refurbishment and wider construction projects.",
+    },
+    {
+      title: "Useful customer trust signals",
+      description:
+        "Customer feedback, family-run positioning and local Essex service coverage give the new website strong material to build from.",
+    },
+  ],
   improvements: [
     { title: "Stronger first impression", description: "A clearer, more modern website that better reflects the experience behind Falcon Contracting." },
     { title: "Clearer local presence", description: "Makes it obvious that Falcon is a family-run Essex business serving Colchester and the surrounding area." },
