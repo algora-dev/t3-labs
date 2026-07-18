@@ -8,8 +8,14 @@
   --cyan: #b9c0cc;
   --lime: #d7ff00;
   --orange: #ff7417;
+  --paper: #fbfcff;
+  --t3-green: var(--lime);
+  --t3-green-soft: #fbfff0;
+  --t3-green-line: #e3e8bc;
   --radius: 8px;
   --shadow: 0 26px 80px rgba(24, 31, 51, 0.12);
+  --surface-shadow: 0 10px 32px rgba(24, 31, 51, 0.05);
+  --button-shadow: 0 14px 30px rgba(10, 11, 16, 0.16);
 }
 
 * {
@@ -25,7 +31,7 @@ body {
   background:
     radial-gradient(circle at 76% 6%, rgba(17, 19, 24, 0.05), transparent 24rem),
     radial-gradient(circle at 14% 36%, rgba(180, 185, 194, 0.08), transparent 20rem),
-    #fbfcff;
+    var(--paper);
   color: var(--ink);
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 16px;
@@ -39,6 +45,15 @@ body.nav-open {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--t3-green);
+  outline-offset: 3px;
 }
 
 img {
@@ -107,15 +122,16 @@ img {
   border-radius: 8px;
   background: #fff;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   box-shadow: 0 8px 20px rgba(16, 24, 40, 0.05);
   transition: transform 280ms ease, box-shadow 280ms ease, border-color 280ms ease;
 }
 
 .header-cta:hover {
-  transform: scale(1.01);
-  border-color: rgba(215, 255, 0, 0.25);
-  box-shadow: 0 0 10px rgba(215, 255, 0, 0.15), 0 6px 16px rgba(215, 255, 0, 0.04);
+  transform: translateY(-1px);
+  border-color: var(--t3-green-line);
+  background: var(--t3-green-soft);
+  box-shadow: 0 5px 16px rgba(20, 25, 40, 0.04);
 }
 
 .nav-toggle {
@@ -140,7 +156,7 @@ img {
   margin: 0 0 14px;
   color: #515763;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
@@ -163,7 +179,7 @@ h1 {
   max-width: 760px;
   margin-bottom: 28px;
   font-size: clamp(3.1rem, 5vw, 4rem);
-  font-weight: 900;
+  font-weight: 600;
   line-height: 1;
 }
 
@@ -171,12 +187,13 @@ h2 {
   max-width: 780px;
   margin-bottom: 18px;
   font-size: clamp(2.25rem, 4.5vw, 4.4rem);
-  font-weight: 900;
+  font-weight: 600;
 }
 
 h3 {
   margin-bottom: 10px;
   font-size: 1.25rem;
+  font-weight: 600;
   line-height: 1.15;
 }
 
@@ -206,7 +223,7 @@ h3 {
   gap: 12px;
   padding: 14px 22px;
   border-radius: 8px;
-  font-weight: 800;
+  font-weight: 600;
   transition:
     transform 180ms ease,
     box-shadow 180ms ease,
@@ -214,31 +231,32 @@ h3 {
 }
 
 .button:hover {
-  transform: translateY(-1px) scale(1.01);
-  box-shadow: 0 0 10px rgba(215, 255, 0, 0.18), 0 8px 20px rgba(215, 255, 0, 0.04);
-  border-color: rgba(215, 255, 0, 0.2);
+  transform: translateY(-2px);
+  border-color: var(--t3-green-line);
   transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
 }
 
 .button-primary {
   background: linear-gradient(135deg, #050608, #242832);
   color: #fff;
-  box-shadow: 0 18px 42px rgba(10, 11, 16, 0.18);
+  box-shadow: var(--button-shadow);
 }
 
 .button-primary:hover {
-  box-shadow: 0 0 12px rgba(215, 255, 0, 0.22), 0 10px 24px rgba(215, 255, 0, 0.06);
+  box-shadow: 0 16px 34px rgba(10, 11, 16, 0.2);
 }
 
 .button-secondary {
   border: 1px solid var(--line);
   background: #fff;
   color: var(--ink);
+  box-shadow: 0 5px 16px rgba(20, 25, 40, 0.04);
 }
 
 .button-secondary:hover {
-  border-color: rgba(215, 255, 0, 0.25);
-  box-shadow: 0 0 10px rgba(215, 255, 0, 0.14), 0 8px 20px rgba(215, 255, 0, 0.03);
+  border-color: var(--t3-green-line);
+  background: var(--t3-green-soft);
+  box-shadow: 0 8px 20px rgba(20, 25, 40, 0.06);
 }
 
 .proof-row {
@@ -254,7 +272,7 @@ h3 {
   background: rgba(255, 255, 255, 0.72);
   color: #4f5567;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .product-stage {
@@ -1127,7 +1145,7 @@ h3 {
 .intro-strip span {
   color: var(--blue);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1147,7 +1165,18 @@ h3 {
 }
 
 .built-work .work-heading .eyebrow {
-  color: #515763;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+}
+
+.built-work .work-heading .eyebrow::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--t3-green);
+  content: "";
 }
 
 .built-card-grid {
@@ -1164,9 +1193,9 @@ h3 {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at 84% 14%, rgba(17, 19, 24, 0.04), transparent 11rem),
-    rgba(255, 255, 255, 0.88);
-  box-shadow: 0 16px 45px rgba(21, 28, 44, 0.05);
+    radial-gradient(circle at 84% 14%, rgba(215, 255, 0, 0.055), transparent 11rem),
+    rgba(255, 255, 255, 0.92);
+  box-shadow: var(--surface-shadow);
 }
 
 .built-card-grid article > span {
@@ -1175,11 +1204,13 @@ h3 {
   height: 42px;
   margin-bottom: 42px;
   place-items: center;
+  border: 1px solid var(--t3-green);
   border-radius: 8px;
-  background: var(--soft);
-  color: var(--blue);
+  background: var(--t3-green);
+  color: var(--ink);
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
+  box-shadow: 0 5px 16px rgba(20, 25, 40, 0.04);
 }
 
 .built-card-grid h3 {
@@ -1207,7 +1238,7 @@ h3 {
   background: #fff;
   color: var(--ink);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0;
   box-shadow: 0 8px 18px rgba(16, 24, 40, 0.04);
   transition:
@@ -1218,23 +1249,25 @@ h3 {
 }
 
 .card-link span {
-  display: inline;
-  width: auto;
-  height: auto;
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
   margin: 0;
   padding: 0;
-  border-radius: 0;
-  background: transparent;
-  color: inherit;
-  font-size: inherit;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--t3-green);
+  color: var(--ink);
+  font-size: 10px;
   font-weight: inherit;
 }
 
 .card-link:hover {
-  transform: translateY(-1px) scale(1.01);
-  border-color: rgba(215, 255, 0, 0.25);
+  transform: translateY(-1px);
+  border-color: var(--t3-green-line);
+  background: var(--t3-green-soft);
   color: #000;
-  box-shadow: 0 0 8px rgba(215, 255, 0, 0.14), 0 8px 16px rgba(215, 255, 0, 0.03);
+  box-shadow: 0 8px 20px rgba(20, 25, 40, 0.06);
 }
 
 .section-heading {
@@ -1962,7 +1995,7 @@ h3 {
   margin: 0 0 10px;
   color: #515763;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
@@ -1970,7 +2003,7 @@ h3 {
 .popup-heading {
   margin: 0 0 12px;
   font-size: clamp(1.7rem, 4vw, 2.25rem);
-  font-weight: 900;
+  font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -2115,13 +2148,20 @@ h3 {
 
 /* ── Card hover lift ── */
 .built-card-grid article {
-  transition: transform 260ms ease, box-shadow 260ms ease;
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    background 260ms ease,
+    box-shadow 260ms ease;
 }
 
 .built-card-grid article:hover {
-  transform: translateY(-3px) scale(1.005);
-  box-shadow: 0 0 12px rgba(215, 255, 0, 0.08), 0 20px 50px rgba(21, 28, 44, 0.1);
-  border-color: rgba(215, 255, 0, 0.12);
+  transform: translateY(-2px);
+  border-color: var(--t3-green-line);
+  background:
+    radial-gradient(circle at 84% 14%, rgba(215, 255, 0, 0.11), transparent 11rem),
+    var(--t3-green-soft);
+  box-shadow: 0 14px 34px rgba(24, 31, 51, 0.07);
 }
 
 /* ── Intro strip hover ── */
@@ -2273,7 +2313,7 @@ h3 {
 
 .form-row label {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--ink);
 }
 
@@ -2305,9 +2345,15 @@ h3 {
 
 .form-row input:focus,
 .form-row textarea:focus {
-  border-color: rgba(10, 11, 16, 0.4);
-  box-shadow: 0 0 0 3px rgba(10, 11, 16, 0.06);
+  border-color: var(--t3-green-line);
+  box-shadow: 0 0 0 3px rgba(215, 255, 0, 0.14);
   background: #fff;
+}
+
+.form-row input:focus-visible,
+.form-row textarea:focus-visible {
+  outline: 2px solid var(--t3-green);
+  outline-offset: 2px;
 }
 
 .form-footer {
@@ -2432,7 +2478,7 @@ h3 {
 
 .site-footer span:first-child {
   color: var(--ink);
-  font-weight: 900;
+  font-weight: 600;
 }
 
 @media (max-width: 980px) {
