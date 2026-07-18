@@ -5,3 +5,5 @@
 @media(prefers-reduced-motion:reduce){.site *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
 .mobileMenu[hidden]{display:none}
 .quotePageGrid>*{min-width:0}.contactPanel a{overflow-wrap:anywhere}
+.heroContent .eyebrow{color:var(--premium-hero-accent)}
+.servicePreviewCopy>span,.callout .eyebrow,.footerGrid strong,.splitGrid span,.quoteIntro .eyebrow,.quoteIntroGrid>div strong,.mobileMenu a:last-child{color:var(--premium-accent-light)}

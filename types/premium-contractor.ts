@@ -16,6 +16,7 @@ export type PremiumService = {
 };
 
 export type PremiumContractorConfig = {
+  basePath: string;
   company: {
     name: string;
     shortName: string;
@@ -28,6 +29,8 @@ export type PremiumContractorConfig = {
   branding: {
     primaryColour: string;
     accentColour: string;
+    accentLightColour: string;
+    heroAccentColour: string;
     backgroundColour: string;
     textColour: string;
     mutedColour: string;
@@ -104,6 +107,20 @@ export type PremiumContractorConfig = {
     heading: string;
     description: string;
     note: string;
+  };
+  presentation: {
+    servicesPreview: { eyebrow: string; heading: string; description: string };
+    projects: { eyebrow: string; heading: string; description: string };
+    reasons: { eyebrow: string; heading: string; description: string };
+    process: { eyebrow: string; heading: string };
+    reviews: { eyebrow: string; heading: string; description: string };
+    serviceAreas: { eyebrow: string; heading: string; description: string };
+    servicesHero: { eyebrow: string; heading: string; description: string };
+    capability: { eyebrow: string; heading: string };
+    servicesProcess: { eyebrow: string; heading: string; description: string };
+    relatedProjects: { eyebrow: string; heading: string };
+    footerNote: string;
+    footerLegalItems: string[];
   };
   visibility: {
     trustStrip: boolean;
