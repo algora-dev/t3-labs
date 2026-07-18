@@ -76,11 +76,15 @@ export type ProposalConfig = {
     currentBadge?: string;
     proposedLabel?: string;
     proposedBadge?: string;
-    proposedSupportingImages?: SiteImage[];
+    proposedSupportingImages?: Array<SiteImage & { presentation?: "portrait" | "natural" }>;
     currentPoints: string[];
     proposedPoints: string[];
   };
   findings: Array<{
+    title: string;
+    description: string;
+  }>;
+  strengths?: Array<{
     title: string;
     description: string;
   }>;
