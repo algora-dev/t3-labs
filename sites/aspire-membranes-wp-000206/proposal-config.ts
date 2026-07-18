@@ -96,6 +96,23 @@ export const aspireMembranesProposal = {
         "A structured route for service, postcode, timeframe and project photos or plans can make the first conversation more useful.",
     },
   ],
+  strengths: [
+    {
+      title: "Specialist roofing knowledge",
+      description:
+        "Aspire already covers a broad range of membrane, flat, pitched and industrial roofing systems, giving the new website genuine specialist substance to present.",
+    },
+    {
+      title: "Real completed work to show",
+      description:
+        "The approved Aspire project photography gives prospective customers useful visual proof of the type and quality of work the team carries out.",
+    },
+    {
+      title: "A clear base with national reach",
+      description:
+        "Being based in Leven while working with clients throughout the United Kingdom provides a clear location story and broad service relevance.",
+    },
+  ],
   improvements: [
     { title: "Professional presentation", description: "A credible first impression for a specialist roofing contractor." },
     { title: "Local-search foundations", description: "Clear service, location and coverage wording in a logical page structure." },
