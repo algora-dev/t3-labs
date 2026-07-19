@@ -10,8 +10,8 @@ export const threeARoofingPremiumSite = {
     legalName: "3A Roofing Ltd",
     tagline: "Roofing Our Heritage",
     description: "Heritage roofing, traditional craft and complete reroofing from Copdock, near Ipswich.",
-    logo: { src: asset("3a-roofing-wordmark.png"), alt: "3A Roofing Ltd — Roofing Our Heritage" },
-    logoLight: { src: asset("3a-roofing-wordmark.png"), alt: "3A Roofing Ltd — Roofing Our Heritage" },
+    logo: { src: asset("3a-roofing-logo-white.png"), alt: "3A Roofing Ltd — Roofing Our Heritage" },
+    logoLight: { src: asset("3a-roofing-logo-white.png"), alt: "3A Roofing Ltd — Roofing Our Heritage" },
   },
   branding: {
     primaryColour: "#171A18",
