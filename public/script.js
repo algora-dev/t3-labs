@@ -56,7 +56,7 @@ contactForm?.addEventListener("submit", async (event) => {
       throw new Error(data.error || "Something went wrong.");
     }
 
-    // Success
+    // Success - hide form fields, show confirmation
     contactForm.style.display = "none";
     if (formSuccess) {
       formSuccess.hidden = false;
