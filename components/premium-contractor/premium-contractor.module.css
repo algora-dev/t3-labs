@@ -6,4 +6,7 @@
 .mobileMenu[hidden]{display:none}
 .quotePageGrid>*{min-width:0}.contactPanel a{overflow-wrap:anywhere}
 .heroContent .eyebrow{color:var(--premium-hero-accent)}
-.servicePreviewCopy>span,.callout .eyebrow,.footerGrid strong,.splitGrid span,.quoteIntro .eyebrow,.quoteIntroGrid>div strong,.mobileMenu a:last-child{color:var(--premium-accent-light)}
+.servicePreviewCopy>span,.callout .eyebrow,.footerGrid strong,.splitGrid span,.quoteIntro .eyebrow,.quoteIntroGrid>div strong,.mobileMenu a:last-child{color:var(--premium-accent)}
+.darkSection .sectionHeading .eyebrow{display:inline-flex;width:fit-content;border:2px solid var(--premium-accent);padding:5px 16px}
+.darkSection .sectionHeading .lightTextLink{border:2px solid var(--premium-accent);padding:12px 15px;margin-top:0}
+.servicePreviewCopy h3{width:fit-content;border:2px solid var(--premium-accent);padding:10px 13px}

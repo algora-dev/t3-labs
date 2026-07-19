@@ -14,7 +14,7 @@ export const threeARoofingPremiumSite = {
     logoLight: { src: asset("3a-roofing-wordmark.png"), alt: "3A Roofing Ltd — Roofing Our Heritage" },
   },
   branding: {
-    primaryColour: "#3F6393",
+    primaryColour: "#171A18",
     accentColour: "#3F6393",
     accentLightColour: "#D7DEE8",
     heroAccentColour: "#EBEBEB",
