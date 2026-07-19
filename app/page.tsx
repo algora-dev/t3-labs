@@ -13,7 +13,7 @@ export default function Home() {
     <>
       {/* The legacy homepage CSS is page-scoped here so it does not leak into proposal pages. */}
       {/* eslint-disable-next-line @next/next/no-css-tags */}
-      <link rel="stylesheet" href="/styles.css?v=20260719-typography-live" />
+      <link rel="stylesheet" href="/styles.css?v=20260719-legal-pages" />
       <div dangerouslySetInnerHTML={{ __html: getHomepageBody() }} />
       <Script src="/script.js" strategy="afterInteractive" />
     </>

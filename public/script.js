@@ -46,7 +46,7 @@ contactForm?.addEventListener("submit", (event) => {
 
   const subject = encodeURIComponent("New T3 Labs enquiry from " + name);
   const encodedBody = encodeURIComponent(body);
-  window.location.href = "mailto:hello@t3labs.tech?subject=" + subject + "&body=" + encodedBody;
+  window.location.href = "mailto:insights@t3labs.co.uk?subject=" + subject + "&body=" + encodedBody;
 
   if (formSuccess) {
     formSuccess.hidden = false;

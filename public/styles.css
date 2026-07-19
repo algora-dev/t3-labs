@@ -2124,6 +2124,21 @@ h3 {
   font-size: var(--text-xs);
 }
 
+.form-privacy {
+  max-width: 620px;
+  margin: 0;
+  color: #6f7584;
+  font-size: var(--text-xs);
+  line-height: 1.55;
+}
+
+.form-privacy a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .form-success[hidden] {
   display: none !important;
 }
@@ -2206,9 +2221,8 @@ h3 {
 }
 
 .site-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
+  display: grid;
+  gap: 8px;
   width: min(1180px, calc(100% - 40px));
   margin: 0 auto;
   padding: 28px 0 42px;
@@ -2216,9 +2230,19 @@ h3 {
   font-size: var(--text-sm);
 }
 
-.site-footer span:first-child {
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer a {
   color: var(--ink);
   font-weight: 600;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 @media (max-width: 980px) {

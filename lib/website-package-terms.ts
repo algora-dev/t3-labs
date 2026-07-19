@@ -1,7 +1,7 @@
 export const websitePackageTerms = {
   legalEntityName: "T3 Play Limited",
   tradingName: "T3 Labs",
-  companyNumber: "",
+  companyNumber: "9148617",
   nzbn: "",
   registeredOffice: "",
   registeredJurisdiction: "New Zealand",
@@ -32,12 +32,12 @@ export const websitePackageTerms = {
   formHostingModel: "[FORM HOSTING MODEL]",
   formRetentionPeriod: "[RETENTION PERIOD]",
   callMinutes: 20,
-  termsVersion: "2026-07-15",
-  privacyVersion: "2026-07-15",
-  cookieVersion: "2026-07-15",
-  cookiePolicyVersion: "2026-07-15",
-  consentVersion: "2026-07-15",
-  lastUpdated: "2026-07-15",
+  termsVersion: "2026-07-19",
+  privacyVersion: "2026-07-19",
+  cookieVersion: "2026-07-19",
+  cookiePolicyVersion: "2026-07-19",
+  consentVersion: "2026-07-19",
+  lastUpdated: "2026-07-19",
 } as const;
 
 export function pluralise(count: number, singular: string, plural = `${singular}s`) {
@@ -46,9 +46,9 @@ export function pluralise(count: number, singular: string, plural = `${singular}
 
 export const proposalLegalLinks = [
   { label: "Website Package Terms", href: "/website-package-terms" },
+  { label: "Client Service Terms", href: "/service-terms" },
   { label: "Privacy Notice", href: "/privacy" },
   { label: "Cookie Policy", href: "/cookies" },
-  { label: "Cookie Settings", href: "#cookie-settings" },
   { label: "Request Removal", href: "#request-removal" },
   { label: "Contact T3 Labs", href: "#contact-t3-labs" },
 ] as const;
