@@ -15,8 +15,9 @@ navLinks.forEach((link) => {
 
 const contactForm = document.getElementById("contactForm");
 const formSuccess = document.getElementById("formSuccess");
+const formSubmitBtn = contactForm?.querySelector(".form-submit");
 
-contactForm?.addEventListener("submit", (event) => {
+contactForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const name = contactForm.querySelector("#cf-name").value.trim();
@@ -34,21 +35,40 @@ contactForm?.addEventListener("submit", (event) => {
     return;
   }
 
-  const body = [
-    "Name: " + name,
-    "Email: " + email,
-    businessType ? "Business type: " + businessType : "",
-    website ? "Website: " + website : "",
-    "",
-    "Problem:",
-    message,
-  ].filter(Boolean).join("\n");
+  // Disable button and show loading state
+  if (formSubmitBtn) {
+    formSubmitBtn.disabled = true;
+    formSubmitBtn.style.opacity = "0.6";
+    const originalText = formSubmitBtn.innerHTML;
+    formSubmitBtn.innerHTML = "Sending...";
+  }
 
-  const subject = encodeURIComponent("New T3 Labs enquiry from " + name);
-  const encodedBody = encodeURIComponent(body);
-  window.location.href = "mailto:insights@t3labs.co.uk?subject=" + subject + "&body=" + encodedBody;
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, businessType, website, message }),
+    });
 
-  if (formSuccess) {
-    formSuccess.hidden = false;
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Something went wrong.");
+    }
+
+    // Success
+    contactForm.style.display = "none";
+    if (formSuccess) {
+      formSuccess.hidden = false;
+      formSuccess.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  } catch (err) {
+    alert(err.message || "Something went wrong. Please email us directly at insights@t3labs.co.uk");
+    // Re-enable button
+    if (formSubmitBtn) {
+      formSubmitBtn.disabled = false;
+      formSubmitBtn.style.opacity = "1";
+      formSubmitBtn.innerHTML = 'Send message <span>&rarr;</span>';
+    }
   }
 });
