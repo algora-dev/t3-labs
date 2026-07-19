@@ -25,6 +25,7 @@ contactForm?.addEventListener("submit", async (event) => {
   const businessType = contactForm.querySelector("#cf-btype").value.trim();
   const website = contactForm.querySelector("#cf-url").value.trim();
   const message = contactForm.querySelector("#cf-message").value.trim();
+  const consent = contactForm.querySelector("#cf-consent").checked;
 
   if (!name || !email || !message) {
     const missing = [];
@@ -35,11 +36,15 @@ contactForm?.addEventListener("submit", async (event) => {
     return;
   }
 
+  if (!consent) {
+    alert("Please agree to be contacted before sending your message.");
+    return;
+  }
+
   // Disable button and show loading state
   if (formSubmitBtn) {
     formSubmitBtn.disabled = true;
     formSubmitBtn.style.opacity = "0.6";
-    const originalText = formSubmitBtn.innerHTML;
     formSubmitBtn.innerHTML = "Sending...";
   }
 
@@ -47,7 +52,7 @@ contactForm?.addEventListener("submit", async (event) => {
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, businessType, website, message }),
+      body: JSON.stringify({ name, email, businessType, website, message, consent }),
     });
 
     const data = await res.json();

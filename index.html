@@ -212,10 +212,15 @@
               <label for="cf-message">Tell us about your problem <span class="req">*</span></label>
               <textarea id="cf-message" name="message" rows="5" placeholder="Describe what you&rsquo;re trying to solve. The more detail the better - there are no wrong answers." required></textarea>
             </div>
+            <div class="form-row form-consent-row">
+              <label class="form-consent">
+                <input type="checkbox" id="cf-consent" name="consent" required />
+                <span>I agree to be contacted by T3 Labs about my enquiry. See our <a href="/privacy">Privacy Notice</a>.</span>
+              </label>
+            </div>
             <div class="form-footer">
               <button type="submit" class="button button-primary form-submit">Send message <span>&rarr;</span></button>
               <p class="form-note">We&rsquo;ll reply within 24 hours. No spam, ever.</p>
-              <p class="form-privacy">We&rsquo;ll use the information you provide to respond to your enquiry and, where relevant, prepare a proposal. We won&rsquo;t add you to marketing emails unless you opt in. Read our <a href="/privacy">Privacy Notice</a>.</p>
             </div>
           </form>
             <div class="form-success" id="formSuccess" hidden>

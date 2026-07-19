@@ -2112,6 +2112,38 @@ h3 {
   gap: 10px;
 }
 
+.form-consent-row {
+  margin-bottom: 4px;
+}
+
+.form-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: var(--text-base);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.form-consent input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--t3-green);
+  cursor: pointer;
+}
+
+.form-consent span {
+  user-select: none;
+}
+
+.form-consent a {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
 .form-submit {
   align-self: flex-start;
   border: 0;
