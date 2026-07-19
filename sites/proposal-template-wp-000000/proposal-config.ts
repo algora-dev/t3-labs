@@ -78,7 +78,6 @@ export const proposalTemplate = {
   ],
   package: {
     priceLabel: websitePackageTerms.packagePrice,
-    vatLabel: websitePackageTerms.vatStatus,
     revisionRounds: websitePackageTerms.revisionRounds,
     includedHostingMonths: websitePackageTerms.includedHostingMonths,
     monthlyHostingPrice: websitePackageTerms.monthlyHostingPrice,
