@@ -68,7 +68,6 @@ export const atkinsonBuildingServicesProposal = {
       {
         src: asset("concept-why-reviews.png"),
         alt: "Proposed Atkinson Building Services why choose us and Trustpilot review sections",
-        presentation: "natural",
       },
     ],
     currentPoints: [
