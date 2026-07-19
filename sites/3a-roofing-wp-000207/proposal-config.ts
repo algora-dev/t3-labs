@@ -50,8 +50,8 @@ export const threeARoofingProposal = {
         alt: "3A Roofing concept page showing specialist roofing services",
       },
       {
-        src: asset("concept-feature-section-black.png"),
-        alt: "3A Roofing concept page showing project work and heritage roof details",
+        src: asset("concept-services-desktop-black.png"),
+        alt: "3A Roofing concept page showing specialist roofing services",
       },
     ],
   },
