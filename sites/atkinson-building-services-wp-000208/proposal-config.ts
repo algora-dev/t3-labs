@@ -26,8 +26,8 @@ export const atkinsonBuildingServicesProposal = {
     provider: "self-hosted",
     url: asset("video-for-proposal.mp4"),
     posterImage: {
-      src: asset("concept-desktop.png"),
-      alt: "Desktop view of the Atkinson Building Services website concept",
+      src: asset("video-thumbnail.jpg"),
+      alt: "Atkinson Building Services website concept video thumbnail",
     },
   },
   outcomes: [
