@@ -41,7 +41,7 @@ function ButtonLink({
 }: {
   href: string;
   children: React.ReactNode;
-  variant?: "dark" | "light" | "line" | "heroLine";
+  variant?: "dark" | "light" | "line" | "heroGreen";
   className?: string;
   onClick?: () => void;
 }) {
@@ -50,8 +50,8 @@ function ButtonLink({
       ? "bg-[#223036] text-white hover:bg-[#a95537]"
       : variant === "light"
         ? "bg-white text-[#1d2529] hover:bg-[#f1e7dc]"
-        : variant === "heroLine"
-          ? "border-white/55 text-white hover:border-white hover:bg-white hover:text-[#1d2529]"
+        : variant === "heroGreen"
+          ? "bg-[#a5d52f] text-[#1d2529] hover:bg-[#b6e342]"
           : "border-[#a7b0ae] text-[#1d2529] hover:border-[#1d2529] hover:bg-white";
 
   return (
@@ -79,7 +79,7 @@ function SectionIntro({
   return (
     <div className="grid gap-6 lg:grid-cols-[0.85fr_1fr] lg:items-end">
       <div>
-        <p className={`section-eyebrow ${light ? "text-[#f1c59f]" : "text-[#a95537]"}`}>{eyebrow}</p>
+        <p className={`section-eyebrow ${light ? "text-[#cfd3d2]" : "text-[#6f7377]"}`}>{eyebrow}</p>
         <h2 className={`mt-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl ${light ? "text-white" : "text-[#1d2529]"}`}>{title}</h2>
       </div>
       {children ? <div className={`max-w-2xl text-base leading-8 sm:text-lg ${light ? "text-white/76" : "text-[#566267]"}`}>{children}</div> : null}
@@ -95,23 +95,23 @@ export function Header({ site }: { site: ProspectSiteConfig }) {
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[#f7f5ef]/96 backdrop-blur">
       <div className="site-shell flex min-h-20 items-center justify-between gap-5">
         <a className="flex items-center gap-3" href="#top" aria-label={`${site.companyName} home`}>
-          <span className="relative block h-12 w-40 overflow-hidden rounded-[8px] bg-white sm:w-44">
-            <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="176px" className="scale-125 object-contain" priority />
+          <span className="relative block h-14 w-44 sm:w-48">
+            <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="192px" className="object-contain" priority />
           </span>
         </a>
-        <nav className="hidden items-center gap-7 text-sm font-bold uppercase tracking-[0.08em] text-[#394348] lg:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-7 text-sm font-bold uppercase tracking-[0.08em] text-[#5f666a] lg:flex" aria-label="Main navigation">
           {site.navigation.map(({ label, href }) => (
-            <a key={label} className="transition hover:text-[#a95537]" href={href}>
+            <a key={label} className="transition hover:text-[#2f383d]" href={href}>
               {label}
             </a>
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-          <ButtonLink href={phoneHref} variant="line" className="px-4">
+          <ButtonLink href={phoneHref} variant="line" className="border-[#cfd3d2] bg-white px-4 text-[#6f7377] hover:border-[#9da3a6] hover:bg-[#f8f8f6]">
             <PhoneIcon />
             Call now
           </ButtonLink>
-          <ButtonLink href="#quote-request" onClick={openQuoteRequest}>
+          <ButtonLink href="#quote-request" className="header-quote-button" onClick={openQuoteRequest}>
             {site.callsToAction.quote}
             <ArrowIcon />
           </ButtonLink>
@@ -136,7 +136,7 @@ export function Header({ site }: { site: ProspectSiteConfig }) {
               </a>
             ))}
             <div className="grid gap-3 pt-3 sm:grid-cols-2">
-              <ButtonLink href={phoneHref} variant="line">
+              <ButtonLink href={phoneHref} variant="line" className="border-[#cfd3d2] bg-white text-[#6f7377] hover:border-[#9da3a6] hover:bg-[#f8f8f6]">
                 <PhoneIcon />
                 Call now
               </ButtonLink>
@@ -164,6 +164,7 @@ export function Hero({ site }: { site: ProspectSiteConfig }) {
             sizes="100vw"
             className="object-cover"
             priority
+            loading="eager"
           />
           <div className="image-shade absolute inset-0" />
           <div className="relative z-10 flex min-h-[620px] items-end p-5 sm:min-h-[680px] sm:p-10 lg:p-14">
@@ -182,7 +183,7 @@ export function Hero({ site }: { site: ProspectSiteConfig }) {
                   {site.callsToAction.quote}
                   <ArrowIcon />
                 </ButtonLink>
-                <ButtonLink href={site.contact.telephoneHref} variant="heroLine">
+                <ButtonLink href={site.contact.telephoneHref} variant="dark">
                   <PhoneIcon />
                   {site.callsToAction.call}
                 </ButtonLink>
@@ -200,7 +201,7 @@ export function Intro({ site }: { site: ProspectSiteConfig }) {
     <section id="about" className="section-pad bg-white">
       <div className="site-shell grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
         <div>
-          <p className="section-eyebrow text-[#a95537]">{site.about.eyebrow}</p>
+          <p className="section-eyebrow text-[#6f7377]">{site.about.eyebrow}</p>
           <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">
             {site.about.title}
           </h2>
@@ -283,16 +284,21 @@ export function WhyChoose({ site }: { site: ProspectSiteConfig }) {
     <section className="section-pad bg-white">
       <div className="site-shell grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
         <div>
-          <p className="section-eyebrow text-[#a95537]">{site.whyChoose.eyebrow}</p>
+          <p className="section-eyebrow text-[#6f7377]">{site.whyChoose.eyebrow}</p>
           <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">{site.whyChoose.title}</h2>
           <p className="mt-5 max-w-xl text-lg leading-8 text-[#566267]">
             {site.whyChoose.description}
           </p>
+          {site.whyChoose.image ? (
+            <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-[16px] bg-[#1d2529]">
+              <Image src={site.whyChoose.image.src} alt={site.whyChoose.image.alt} fill sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover" />
+            </div>
+          ) : null}
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {site.whyChoose.items.map((item, index) => (
             <div key={item} className="rounded-[16px] border border-[#d8dedc] bg-[#fbfaf7] p-6">
-              <span className="text-sm font-bold uppercase tracking-[0.14em] text-[#a95537]">{String(index + 1).padStart(2, "0")}</span>
+              <span className="text-sm font-bold uppercase tracking-[0.14em] text-[#6f7377]">{String(index + 1).padStart(2, "0")}</span>
               <p className="mt-4 text-lg font-bold leading-7 text-[#29353a]">{item}</p>
             </div>
           ))}
@@ -304,7 +310,7 @@ export function WhyChoose({ site }: { site: ProspectSiteConfig }) {
 
 export function Feedback({ site }: { site: ProspectSiteConfig }) {
   return (
-    <section className="section-pad bg-[#eee9df]">
+    <section id="reviews" className="section-pad bg-[#eee9df]">
       <div className="site-shell">
         <SectionIntro eyebrow={site.testimonials.eyebrow} title={site.testimonials.title}>
           <p>{site.testimonials.description}</p>
@@ -327,7 +333,7 @@ export function ProcessAndAreas({ site }: { site: ProspectSiteConfig }) {
     <section id="areas" className="section-pad bg-white">
       <div className="site-shell grid gap-5 lg:grid-cols-[1fr_0.9fr]">
         <div className="rounded-[16px] border border-[#d8dedc] bg-[#fbfaf7] p-6 sm:p-8">
-          <p className="section-eyebrow text-[#a95537]">{site.process.eyebrow}</p>
+          <p className="section-eyebrow text-[#6f7377]">{site.process.eyebrow}</p>
           <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl">{site.process.title}</h2>
           <ol className="mt-8 grid gap-3">
             {site.process.steps.map((step, index) => (
@@ -339,7 +345,7 @@ export function ProcessAndAreas({ site }: { site: ProspectSiteConfig }) {
           </ol>
         </div>
         <div className="rounded-[16px] bg-[#223036] p-6 text-white sm:p-8">
-          <p className="section-eyebrow text-[#f1c59f]">{site.coverage.eyebrow}</p>
+          <p className="section-eyebrow text-[#cfd3d2]">{site.coverage.eyebrow}</p>
           <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">{site.coverage.title}</h2>
           <p className="mt-5 leading-8 text-white/76">
             {site.coverage.description}
@@ -365,6 +371,8 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
     projectTypes: ["Re-roof", "New Roof", "Extension", "Repairs", "Spouting/Downpipes", "Solar", "Other"],
   };
   const beforeQuoteOptions = quoteRequest.beforeQuoteOptions ?? ["Request call before quote", "Request email before quote"];
+  const preferredTimeframes = quoteRequest.preferredTimeframes ?? ["As soon as practical", "Within 1–3 months", "Within 3–6 months", "More than 6 months away", "Just researching"];
+  const preferredContactMethods = quoteRequest.preferredContactMethods ?? ["Phone", "Email"];
 
   useEffect(() => {
     function syncQuoteModal() {
@@ -417,7 +425,7 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
     <section id="contact" className="section-pad bg-[#f7f5ef]">
       <div className="site-shell grid gap-8 lg:grid-cols-[0.82fr_1.18fr]">
         <div>
-          <p className="section-eyebrow text-[#a95537]">{site.contactSection.eyebrow}</p>
+          <p className="section-eyebrow text-[#6f7377]">{site.contactSection.eyebrow}</p>
           <h2 className="mt-4 text-3xl font-bold leading-tight text-[#1d2529] sm:text-4xl lg:text-5xl">{site.contactSection.title}</h2>
           <p className="mt-5 text-lg leading-8 text-[#566267]">
             {site.contactSection.description}
@@ -431,10 +439,13 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
               Request a Quote
               <ArrowIcon />
             </ButtonLink>
+            <ButtonLink href={`mailto:${site.contact.email}`} variant="line" className="bg-white">
+              {site.callsToAction.email}
+            </ButtonLink>
           </div>
         </div>
         <div className="rounded-[16px] border border-[#d8dedc] bg-white p-6 sm:p-8">
-          <p className="section-eyebrow text-[#a95537]">General enquiry</p>
+          <p className="section-eyebrow text-[#6f7377]">General enquiry</p>
           <h3 className="mt-3 text-2xl font-bold leading-tight text-[#1d2529]">{site.contactSection.generalFormTitle ?? `Send ${site.companyName} a message`}</h3>
           <form className="mt-6 grid gap-5" onSubmit={onSubmit}>
             <div className="grid gap-5 md:grid-cols-2">
@@ -474,7 +485,7 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
           <div className="relative mx-auto max-w-3xl rounded-[16px] border border-[#d8dedc] bg-white p-5 shadow-2xl sm:p-8">
             <div className="flex items-start justify-between gap-5">
               <div>
-                <p className="section-eyebrow text-[#a95537]">{quoteRequest.eyebrow ?? "Quote request form"}</p>
+                <p className="section-eyebrow text-[#6f7377]">{quoteRequest.eyebrow ?? "Quote request form"}</p>
                 <h3 id="quote-modal-title" className="mt-3 text-2xl font-bold leading-tight text-[#1d2529] sm:text-3xl">{quoteRequest.title ?? "Request a quote"}</h3>
                 <p className="mt-3 text-sm italic leading-6 text-[#7b8588]">
                   {quoteRequest.helperText ?? "The more info you can provide us now the faster we can get a quote back to you"}
@@ -502,25 +513,26 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
                   <input className="form-field" name="email" type="email" required />
                 </label>
                 <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-                  Start date
-                  <input className="form-field" name="start-date" type="date" />
+                  Postcode
+                  <input className="form-field" name="postcode" autoComplete="postal-code" required />
                 </label>
               </div>
-              <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-                Address
-                <input className="form-field" name="address" required />
-              </label>
-              <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-                Project type
-                <select className="form-field bg-white" name="project" required defaultValue="">
-                  <option value="" disabled>
-                    Select project type
-                  </option>
-                  {quoteRequest.projectTypes.map((type) => (
-                    <option key={type}>{type}</option>
-                  ))}
-                </select>
-              </label>
+              <div className="grid gap-5 md:grid-cols-2">
+                <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                  Service required
+                  <select className="form-field bg-white" name="project" required defaultValue="">
+                    <option value="" disabled>Select a service</option>
+                    {quoteRequest.projectTypes.map((type) => <option key={type}>{type}</option>)}
+                  </select>
+                </label>
+                <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
+                  Preferred timeframe
+                  <select className="form-field bg-white" name="timeframe" required defaultValue="">
+                    <option value="" disabled>Select a timeframe</option>
+                    {preferredTimeframes.map((timeframe) => <option key={timeframe}>{timeframe}</option>)}
+                  </select>
+                </label>
+              </div>
               <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
                 {quoteRequest.fileLabel ?? "Attach plans/photos"}
                 <span className="flex min-h-12 items-center justify-between gap-3 rounded-[8px] border border-[#cbd3d2] bg-white px-3 py-2 text-base font-normal normal-case tracking-normal text-[#1d2529]">
@@ -546,18 +558,33 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
                 />
               </label>
               <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">
-                Message
-                <textarea className="form-field min-h-36 resize-y p-4" name="message" required />
+                Project description
+                <textarea className="form-field min-h-36 resize-y p-4" name="message" placeholder="Tell us about the property, the work you have in mind and anything that may affect the project." required />
               </label>
-              <fieldset className="grid gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4">
-                <legend className="px-1 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Before quote</legend>
-                {beforeQuoteOptions.map((option) => (
-                  <label key={option} className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
-                    <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value={option} />
-                    {option}
-                  </label>
-                ))}
-              </fieldset>
+              <div className="grid gap-5 md:grid-cols-2">
+                <fieldset className="grid gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4">
+                  <legend className="px-1 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Preferred contact method</legend>
+                  {preferredContactMethods.map((method) => (
+                    <label key={method} className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
+                      <input className="mt-1 h-4 w-4 accent-[#a95537]" name="preferred-contact" type="radio" value={method} required />
+                      {method}
+                    </label>
+                  ))}
+                </fieldset>
+                <fieldset className="grid gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4">
+                  <legend className="px-1 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Before a quote</legend>
+                  {beforeQuoteOptions.map((option) => (
+                    <label key={option} className="flex items-start gap-3 text-sm font-bold text-[#29353a]">
+                      <input className="mt-1 h-4 w-4 accent-[#a95537]" name="contact-before-quote" type="checkbox" value={option} />
+                      {option}
+                    </label>
+                  ))}
+                </fieldset>
+              </div>
+              <label className="flex items-start gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4 text-sm leading-6 text-[#29353a]">
+                <input className="mt-1 h-4 w-4 shrink-0 accent-[#a95537]" name="consent" type="checkbox" required />
+                I agree that the details entered may be used to respond to this enquiry. This demonstration does not send or store information.
+              </label>
               <button className="button-base rounded-[8px] bg-[#223036] text-white hover:bg-[#a95537]" type="submit">
                 Send
                 <ArrowIcon />
@@ -599,6 +626,11 @@ export function Footer({ site }: { site: ProspectSiteConfig }) {
           <a className="mt-4 inline-flex font-bold text-white hover:text-[#f1c59f]" href={site.contact.telephoneHref}>
             {site.contact.telephone}
           </a>
+          {site.contact.email ? (
+            <a className="mt-2 block font-bold text-white/80 hover:text-[#f1c59f]" href={`mailto:${site.contact.email}`}>
+              {site.contact.email}
+            </a>
+          ) : null}
         </div>
         <nav className="grid gap-3 text-sm font-bold uppercase tracking-[0.08em]" aria-label="Footer navigation">
           {site.navigation.map(({ label, href }) => (
@@ -606,9 +638,11 @@ export function Footer({ site }: { site: ProspectSiteConfig }) {
               {label}
             </a>
           ))}
-          <a className="hover:text-[#f1c59f]" href={site.contact.linkedinUrl}>
-            {site.footer.socialLabel}
-          </a>
+          {(site.contact.socialLinks ?? [{ label: site.footer.socialLabel, url: site.contact.linkedinUrl }]).map((social) => (
+            <a key={social.label} className="hover:text-[#f1c59f]" href={social.url} target="_blank" rel="noreferrer">
+              {social.label}
+            </a>
+          ))}
         </nav>
       </div>
     </footer>
