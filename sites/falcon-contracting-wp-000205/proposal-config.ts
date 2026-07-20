@@ -23,9 +23,10 @@ export const falconContractingProposal = {
   },
   video: {
     provider: "self-hosted",
+    url: asset("falcon-walkthrough.mp4"),
     posterImage: {
-      src: asset("concept-desktop-home.png"),
-      alt: "Falcon Contracting website concept shown on desktop",
+      src: asset("walkthrough-thumbnail.png"),
+      alt: "Falcon Contracting website walkthrough thumbnail",
     },
   },
   outcomes: [

@@ -109,6 +109,41 @@ textarea {
   border-color: var(--clay);
 }
 
+.contractor-site [class*="text-[#a95537]"] {
+  color: color-mix(in srgb, var(--brand-accent) 58%, #263126);
+}
+
+.contractor-site [class*="bg-[#223036]"],
+.contractor-site [class*="bg-[#1d2529]"],
+.contractor-site [class*="bg-[#182226]"] {
+  background-color: var(--brand-ink);
+}
+
+.contractor-site [class*="bg-[#f7f5ef]"] {
+  background-color: var(--brand-paper);
+}
+
+.contractor-site [class*="text-[#1d2529]"] {
+  color: var(--brand-ink);
+}
+
+.contractor-site [class*="hover:bg-[#a95537]"]:hover {
+  border-color: #d7d7d2;
+  background-color: #ecebe6;
+  color: var(--brand-ink);
+}
+
+.contractor-site .header-quote-button:hover {
+  border-color: #d7d7d2;
+  background-color: #ecebe6;
+  color: #1d2529;
+}
+
+.contractor-site input[type="checkbox"],
+.contractor-site input[type="radio"] {
+  accent-color: var(--brand-accent);
+}
+
 .proposal-package-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -144,7 +179,7 @@ textarea {
 
 @media (max-width: 640px) {
   .proposal-page .proposal-display {
-    font-size: clamp(2.15rem, 12vw, 3rem);
+    font-size: clamp(2.15rem, 9.5vw, 3rem);
   }
 }
 
