@@ -22,9 +22,10 @@ export const aspireMembranesProposal = {
   },
   video: {
     provider: "self-hosted",
+    url: asset("aspire-walkthrough.mp4"),
     posterImage: {
-      src: asset("concept-desktop.png"),
-      alt: "Desktop view of the Aspire Membranes website concept",
+      src: asset("walkthrough-thumbnail.png"),
+      alt: "Thumbnail for the Aspire Membranes website concept walkthrough",
     },
   },
   outcomes: [
