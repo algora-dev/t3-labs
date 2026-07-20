@@ -1,7 +1,7 @@
 import { websitePackageTerms } from "@/lib/website-package-terms";
 import type { ProposalConfig } from "../types";
 
-const asset = (name: string) => `/proposal-assets/atkinson-building-services-wp-000208/${name}`;
+const asset = (name: string) => `/assets/atkinson-building-services-wp-000208/${name}`;
 
 export const atkinsonBuildingServicesProposal = {
   slug: "atkinson-building-services-wp-000208",
@@ -24,6 +24,7 @@ export const atkinsonBuildingServicesProposal = {
   },
   video: {
     provider: "self-hosted",
+    url: asset("video-for-proposal.mp4"),
     posterImage: {
       src: asset("concept-desktop.png"),
       alt: "Desktop view of the Atkinson Building Services website concept",
