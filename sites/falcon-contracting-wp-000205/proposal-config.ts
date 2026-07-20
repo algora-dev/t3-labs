@@ -44,6 +44,16 @@ export const falconContractingProposal = {
       src: asset("concept-mobile-home.png"),
       alt: "Mobile view of the Falcon Contracting website concept",
     },
+    supporting: [
+      {
+        src: asset("concept-recent-work.png"),
+        alt: "Falcon Contracting concept showing the recent roofing and construction work section",
+      },
+      {
+        src: asset("concept-why-reviews.png"),
+        alt: "Falcon Contracting concept showing why Falcon and customer feedback sections",
+      },
+    ],
   },
   comparison: {
     currentSiteImage: {
@@ -169,6 +179,8 @@ export const falconContractingProposal = {
     comparisonHeading: "Falcon's current website compared with the new concept",
     comparisonIntro:
       "The current website does not show Falcon at its best. The new concept gives the business a clearer, more modern online presence while keeping the focus on the work itself.",
+    supportingViewsHeading: "Completed work and clearer trust content",
+    supportingViewsNote: "Private concept views, not a public website.",
     findingsHeading: "Three opportunities we noticed",
     improvementsHeading: "What the new website improves",
     packageLabel: "Finishing and launching the website",
