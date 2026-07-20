@@ -24,9 +24,10 @@ export const threeARoofingProposal = {
   },
   video: {
     provider: "self-hosted",
+    url: asset("3a-roofing-walkthrough.mp4"),
     posterImage: {
-      src: asset("concept-home-desktop-black.png"),
-      alt: "Desktop view of the private 3A Roofing website concept",
+      src: asset("3a-roofing-walkthrough-thumbnail.png"),
+      alt: "Thumbnail for the 3A Roofing private website walkthrough video",
     },
   },
   outcomes: [
