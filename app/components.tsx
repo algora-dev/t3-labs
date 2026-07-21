@@ -221,9 +221,9 @@ export function Services({ site }: { site: ProspectSiteConfig }) {
   return (
     <section id="services" className="section-pad bg-[var(--site-paper)]">
       <div className="site-shell">
-        <div className="max-w-3xl">
+        <div className="max-w-5xl">
           <p className="section-eyebrow text-[var(--site-accent)]">{site.servicesIntro.eyebrow}</p>
-          <h2 className="mt-4 text-3xl font-bold leading-tight text-[var(--site-ink)] sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 max-w-[40ch] text-3xl font-bold leading-tight text-[var(--site-ink)] sm:text-4xl lg:text-5xl">
             {renderHeading(site.servicesIntro.title)}
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-8 text-[#566267] sm:text-lg">{site.servicesIntro.description}</p>
@@ -256,9 +256,9 @@ export function Projects({ site }: { site: ProspectSiteConfig }) {
   return (
     <section id="projects" className="section-pad bg-[var(--site-ink)] text-white">
       <div className="site-shell">
-        <div className="max-w-3xl">
+        <div className="max-w-5xl">
           <p className="section-eyebrow text-white/70">{site.projectsIntro.eyebrow}</p>
-          <h2 className="mt-4 max-w-[14ch] text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 max-w-[28ch] text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
             {renderHeading(site.projectsIntro.title)}
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-8 text-white/76 sm:text-lg">{site.projectsIntro.description}</p>

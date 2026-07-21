@@ -56,7 +56,7 @@ export const blenheimRoofing = {
   },
   servicesIntro: {
     eyebrow: "Services",
-    title: "Roofing systems and support work for\nindustrial and commercial sites.",
+    title: "Roofing systems and support work for industrial and commercial sites.",
     description:
       "A concise overview of the verified services Blenheim offers, from roof removal and replacement through to maintenance and access support.",
   },
@@ -94,7 +94,7 @@ export const blenheimRoofing = {
   ],
   projectsIntro: {
     eyebrow: "Project examples",
-    title: "A small selection of recent-looking work\nexamples.",
+    title: "A small selection of recent-looking work examples.",
     description:
       "The gallery uses the supplied imagery to show the scale and type of project Blenheim handles on occupied industrial and commercial buildings.",
   },
