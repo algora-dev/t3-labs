@@ -77,8 +77,8 @@ export function Header({ site }: { site: ProspectSiteConfig }) {
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[color:var(--site-paper)]/96 backdrop-blur">
       <div className="site-shell flex min-h-20 items-center justify-between gap-5">
         <a className="flex items-center gap-3" href="#top" aria-label={`${site.companyName} home`}>
-          <span className="relative block h-14 w-44 overflow-hidden rounded-[8px] bg-white sm:w-52">
-            <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="208px" className="object-contain p-1" priority />
+          <span className="relative block h-16 w-52 overflow-hidden rounded-[8px] bg-white sm:h-18 sm:w-60">
+            <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="240px" className="object-contain p-0.5 sm:p-0" priority />
           </span>
         </a>
         <nav className="hidden items-center gap-7 text-sm font-bold uppercase tracking-[0.08em] text-[#394348] lg:flex" aria-label="Main navigation">
