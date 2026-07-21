@@ -7,11 +7,10 @@ import { useState } from "react";
 import type { PremiumContractorConfig } from "@/types/premium-contractor";
 import styles from "./premium-contractor.module.css";
 
-const base = "/contractor-template-premium";
-
 export function PremiumHeader({ site }: { site: PremiumContractorConfig }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const base = site.basePath;
 
   const links = [
     { label: "Home", href: base, active: pathname === base },
@@ -53,7 +52,7 @@ export function MobileContactBar({ site }: { site: PremiumContractorConfig }) {
   return (
     <div className={styles.mobileContactBar} aria-label="Contact actions">
       <a href={site.contact.phoneHref}>Call</a>
-      <Link href={`${base}/quote-request`}>Request a quote</Link>
+      <Link href={`${site.basePath}/quote-request`}>Request a quote</Link>
       {site.visibility.whatsapp && site.contact.whatsapp ? <a href={site.contact.whatsapp}>WhatsApp</a> : null}
     </div>
   );

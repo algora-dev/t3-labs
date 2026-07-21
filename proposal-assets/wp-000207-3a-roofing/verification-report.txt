@@ -1,0 +1,74 @@
+PASS /3a-roofing returns 200
+PASS /3a-roofing renders expected content
+PASS /3a-roofing has no framework error overlay
+PASS /3a-roofing has no horizontal overflow
+PASS /3a-roofing has no broken images
+PASS /3a-roofing is noindex and nofollow
+PASS prospect homepage contains no master-template company or location copy
+PASS prospect homepage contains no links back to the premium master
+PASS /3a-roofing/services returns 200
+PASS /3a-roofing/services renders expected content
+PASS /3a-roofing/services has no framework error overlay
+PASS /3a-roofing/services has no horizontal overflow
+PASS /3a-roofing/services has no broken images
+PASS /3a-roofing/services is noindex and nofollow
+PASS services page exposes stable service anchors
+PASS /3a-roofing/quote-request returns 200
+PASS /3a-roofing/quote-request renders expected content
+PASS /3a-roofing/quote-request has no framework error overlay
+PASS /3a-roofing/quote-request has no horizontal overflow
+PASS /3a-roofing/quote-request has no broken images
+PASS /3a-roofing/quote-request is noindex and nofollow
+PASS empty quote form shows accessible validation summary
+PASS valid quote form reaches the local-only success state
+PASS prospect pages have no console errors
+PASS /contractor-template-premium returns 200
+PASS /contractor-template-premium renders expected content
+PASS /contractor-template-premium has no framework error overlay
+PASS /contractor-template-premium has no horizontal overflow
+PASS /contractor-template-premium has no broken images
+PASS /contractor-template-premium is noindex and nofollow
+PASS premium master still shows its demonstration identity
+PASS premium master navigation remains on master routes
+PASS /contractor-template-premium/services returns 200
+PASS /contractor-template-premium/services renders expected content
+PASS /contractor-template-premium/services has no framework error overlay
+PASS /contractor-template-premium/services has no horizontal overflow
+PASS /contractor-template-premium/services has no broken images
+PASS /contractor-template-premium/services is noindex and nofollow
+PASS /contractor-template-premium/quote-request returns 200
+PASS /contractor-template-premium/quote-request renders expected content
+PASS /contractor-template-premium/quote-request has no framework error overlay
+PASS /contractor-template-premium/quote-request has no horizontal overflow
+PASS /contractor-template-premium/quote-request has no broken images
+PASS /contractor-template-premium/quote-request is noindex and nofollow
+PASS /proposal/3a-roofing-wp-000207 returns 200
+PASS /proposal/3a-roofing-wp-000207 renders expected content
+PASS /proposal/3a-roofing-wp-000207 has no framework error overlay
+PASS /proposal/3a-roofing-wp-000207 has no horizontal overflow
+PASS /proposal/3a-roofing-wp-000207 has no broken images
+PASS /proposal/3a-roofing-wp-000207 is noindex and nofollow
+PASS /3a-roofing returns 200
+PASS /3a-roofing renders expected content
+PASS /3a-roofing has no framework error overlay
+PASS /3a-roofing has no horizontal overflow
+PASS /3a-roofing has no broken images
+PASS /3a-roofing is noindex and nofollow
+PASS mobile navigation opens
+PASS mobile navigation includes Services
+PASS /3a-roofing/services returns 200
+PASS /3a-roofing/services renders expected content
+PASS /3a-roofing/services has no framework error overlay
+PASS /3a-roofing/services has no horizontal overflow
+PASS /3a-roofing/services has no broken images
+PASS /3a-roofing/services is noindex and nofollow
+PASS /3a-roofing/quote-request returns 200
+PASS /3a-roofing/quote-request renders expected content
+PASS /3a-roofing/quote-request has no framework error overlay
+PASS /3a-roofing/quote-request has no horizontal overflow
+PASS /3a-roofing/quote-request has no broken images
+PASS /3a-roofing/quote-request is noindex and nofollow
+PASS mobile form shows the selected filename without uploading it
+PASS mobile prospect pages have no console errors
+PASS current-site desktop and mobile comparison captures are present
+SUMMARY 73 passed, 0 failed

@@ -3,6 +3,7 @@ import type { PremiumContractorConfig } from "@/types/premium-contractor";
 const asset = (name: string) => `/assets/contractor-template-premium/${name}`;
 
 export const premiumContractorSite = {
+  basePath: "/contractor-template-premium",
   company: {
     name: "Alder & Stone Projects",
     shortName: "Alder & Stone",
@@ -15,6 +16,8 @@ export const premiumContractorSite = {
   branding: {
     primaryColour: "#171a18",
     accentColour: "#b56f43",
+    accentLightColour: "#d9976e",
+    heroAccentColour: "#f0b28c",
     backgroundColour: "#f3f0e8",
     textColour: "#20231f",
     mutedColour: "#6d7069",
@@ -153,6 +156,20 @@ export const premiumContractorSite = {
     heading: "Start with the scope. We’ll help make the next step clear.",
     description: "Tell us what you are considering, where the project is and what information you already have.",
     note: "Photographs, sketches or plans can be added on the quotation page.",
+  },
+  presentation: {
+    servicesPreview: { eyebrow: "What we do", heading: "Defined services. One coordinated standard.", description: "The template adapts across construction sectors while keeping each service easy to understand and easy to enquire about." },
+    projects: { eyebrow: "Selected work", heading: "Projects made clear through the details.", description: "A flexible gallery for genuine residential, commercial and specialist project photography." },
+    reasons: { eyebrow: "Why the approach matters", heading: "Less uncertainty. Better decisions. A more controlled project.", description: "Good workmanship matters, but so does knowing what has been agreed and what happens next." },
+    process: { eyebrow: "The project journey", heading: "A straightforward route from first conversation to handover." },
+    reviews: { eyebrow: "Demonstration feedback", heading: "A review format that works with genuine words, not invented totals.", description: "Replace or hide this section when approved customer feedback is not available." },
+    serviceAreas: { eyebrow: "Where we work", heading: "Local knowledge, with a sensible project radius.", description: "Service areas should always be replaced with verified locations for the real contractor." },
+    servicesHero: { eyebrow: "Services", heading: "The right service, clearly scoped around the project.", description: "From larger residential work to commercial exteriors and specialist packages, each service can be configured around the contractor’s genuine capabilities." },
+    capability: { eyebrow: "Project capability", heading: "A clear distinction between residential and commercial delivery." },
+    servicesProcess: { eyebrow: "From enquiry to scope", heading: "Useful information first. A site visit where it adds value.", description: "Share what you know, including photographs and drawings. The next conversation can then focus on the details that matter rather than covering the basics again." },
+    relatedProjects: { eyebrow: "Relevant work", heading: "Different sectors. The same attention to scope and finish." },
+    footerNote: "Fictional demonstration template by T3 Labs",
+    footerLegalItems: ["Privacy placeholder", "Cookie placeholder"],
   },
   visibility: { trustStrip: true, projects: true, reviews: true, serviceAreas: true, commercialResidentialSplit: true, whatsapp: false },
   seo: {
