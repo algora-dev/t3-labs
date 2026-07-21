@@ -26,7 +26,7 @@ export const threeARoofingProposal = {
     provider: "self-hosted",
     url: asset("3a-roofing-walkthrough.mp4"),
     posterImage: {
-      src: asset("3a-roofing-walkthrough-thumbnail.png"),
+      src: asset("3a-roofing-walkthrough-thumbnail-local-v2.png"),
       alt: "Thumbnail for the 3A Roofing private website walkthrough video",
     },
   },
@@ -38,31 +38,31 @@ export const threeARoofingProposal = {
   ],
   conceptImages: {
     desktopHero: {
-      src: asset("concept-home-desktop-black.png"),
+      src: asset("concept-home-desktop-local-v2.png"),
       alt: "Desktop homepage view of the 3A Roofing website concept",
     },
     mobileHero: {
-      src: asset("concept-home-mobile-black.png"),
+      src: asset("concept-home-mobile-local-v2.png"),
       alt: "Mobile homepage view of the 3A Roofing website concept",
     },
     supporting: [
       {
-        src: asset("concept-services-desktop-black.png"),
-        alt: "3A Roofing concept page showing specialist roofing services",
+        src: asset("concept-quote-desktop-local-v2.png"),
+        alt: "3A Roofing concept quote request form showing useful project details",
       },
       {
-        src: asset("concept-services-desktop-black.png"),
+        src: asset("concept-services-desktop-local-v2.png"),
         alt: "3A Roofing concept page showing specialist roofing services",
       },
     ],
   },
   comparison: {
     currentSiteImage: {
-      src: asset("current-site-desktop.png"),
+      src: asset("current-site-desktop-local-v2.png"),
       alt: "Current 3A Roofing website homepage captured for this private comparison",
     },
     proposedImage: {
-      src: asset("concept-feature-section-black.png"),
+      src: asset("concept-feature-section-local-v2.png"),
       alt: "Proposed 3A Roofing website concept showing selected project work",
     },
     currentLabel: "Current website",
