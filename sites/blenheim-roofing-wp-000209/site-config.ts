@@ -11,8 +11,8 @@ export const blenheimRoofing = {
       "Industrial and commercial roofing refurbishment specialists in Surrey, covering asbestos cement removal, cladding, sheeting, felting, single ply, liquid waterproofing, rooflight replacement and maintenance.",
   },
   brand: {
-    logo: { src: asset("logo.jpg"), alt: "Blenheim Roofing Services Limited logo" },
-    wordmark: { src: asset("logo.jpg"), alt: "Blenheim Roofing Services Limited logo" },
+    logo: { src: asset("logo-refresh.jpg"), alt: "Blenheim Roofing Services Limited logo" },
+    wordmark: { src: asset("logo-refresh.jpg"), alt: "Blenheim Roofing Services Limited logo" },
     colors: { ink: "#17315f", paper: "#f6f8fc", accent: "#3958a5" },
   },
   contact: {
