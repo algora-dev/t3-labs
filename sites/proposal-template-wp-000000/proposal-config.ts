@@ -1,7 +1,7 @@
 import { websitePackageTerms } from "@/lib/website-package-terms";
 import type { ProposalConfig } from "../types";
 
-const asset = (name: string) => `/assets/contractor-template/${name}`;
+const asset = (name: string) => `/proposal-assets/proposal-template-wp-000000/${name}`;
 
 export const proposalTemplate = {
   slug: "proposal-template-wp-000000",
@@ -24,27 +24,29 @@ export const proposalTemplate = {
   },
   video: {
     provider: "self-hosted",
+    url: asset("walkthrough-video.mp4"),
     posterImage: {
-      src: asset("hero-placeholder.svg"),
+      src: asset("walkthrough-thumbnail.png"),
       alt: "Website concept walkthrough poster placeholder",
     },
   },
   outcomes: ["Stronger local-search foundations", "Project proof and trust signals", "Higher-quality quote requests", "Clearer mobile journey"],
   conceptImages: {
-    desktopHero: { src: asset("hero-placeholder.svg"), alt: "Desktop concept placeholder" },
-    mobileHero: { src: asset("service-placeholder.svg"), alt: "Mobile concept placeholder" },
+    desktopHero: { src: asset("concept-home-desktop.png"), alt: "Desktop concept placeholder" },
+    mobileHero: { src: asset("concept-home-mobile.png"), alt: "Mobile concept placeholder" },
     supporting: [
-      { src: asset("project-placeholder-a.svg"), alt: "Supporting concept placeholder" },
-      { src: asset("project-placeholder-b.svg"), alt: "Supporting mobile concept placeholder" },
+      { src: asset("concept-feature-section.png"), alt: "Feature section concept placeholder" },
+      { src: asset("concept-quote-form.png"), alt: "Quote form concept placeholder" },
     ],
   },
   comparison: {
-    currentSiteImage: { src: asset("project-placeholder-b.svg"), alt: "Current website screenshot placeholder" },
-    proposedImage: { src: asset("hero-placeholder.svg"), alt: "Proposed website concept placeholder" },
+    currentSiteImage: { src: asset("current-site-desktop.png"), alt: "Current website screenshot placeholder" },
+    proposedImage: { src: asset("concept-home-desktop.png"), alt: "Proposed website concept placeholder" },
     proposedSupportingImages: [
       {
-        src: asset("project-placeholder-a.svg"),
-        alt: "Additional proposed website section placeholder",
+        src: asset("concept-home-tablet.png"),
+        alt: "Tablet website concept placeholder",
+        presentation: "natural",
       },
     ],
     currentPoints: [
@@ -84,6 +86,7 @@ export const proposalTemplate = {
     handoverMinutes: websitePackageTerms.handoverMinutes,
     deliveryWorkingDaysMin: websitePackageTerms.estimatedDeliveryWorkingDaysMin,
     deliveryWorkingDaysMax: websitePackageTerms.estimatedDeliveryWorkingDaysMax,
+    // Required commercial summary. The visible package introduction is pageCopy.packageIntro when provided.
     intro:
       "The concept shown in your walkthrough has already been built as a working one-page website for [COMPANY NAME]. If you choose to proceed, we will apply the agreed revisions, connect your domain and enquiry form, complete the final checks and prepare the website for launch.",
     includedItems: [

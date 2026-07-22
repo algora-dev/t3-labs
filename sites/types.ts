@@ -55,6 +55,7 @@ export type ProposalConfig = {
   contactFirstName: string;
   location?: string;
   existingWebsiteUrl?: string;
+  /** Factual website status. The optional comparison object independently controls comparison visibility. */
   hasExistingWebsite: boolean;
   seo: {
     title: string;
@@ -110,6 +111,7 @@ export type ProposalConfig = {
   };
   package: {
     priceLabel: string;
+    /** Required commercial summary. The renderer uses pageCopy.packageIntro for prospect-facing override copy. */
     intro: string;
     includedItems: string[];
     vatLabel?: string;
@@ -146,6 +148,7 @@ export type ProposalConfig = {
     improvementsHeading?: string;
     packageLabel?: string;
     packageHeading?: string;
+    /** Visible package introduction. Keep this consistent with package.intro when both are supplied. */
     packageIntro?: string;
     launchButtonLabel?: string;
     finalEyebrow?: string;
@@ -157,6 +160,41 @@ export type ProposalConfig = {
 };
 
 const unresolvedMarkers = ["[PLACEHOLDER]", "TODO"];
+
+function proposalMediaErrors(proposal: ProposalConfig) {
+  const errors: string[] = [];
+  const requiredMedia: Array<readonly [string, string | undefined]> = [
+    ["walkthrough thumbnail", proposal.video.posterImage.src],
+    ["walkthrough video", proposal.video.url],
+    ["desktop concept image", proposal.conceptImages.desktopHero.src],
+    ["mobile concept image", proposal.conceptImages.mobileHero.src],
+    ["feature concept image", proposal.conceptImages.supporting?.[0]?.src],
+    ["quote-form concept image", proposal.conceptImages.supporting?.[1]?.src],
+  ];
+
+  if (proposal.comparison) {
+    requiredMedia.push(
+      ["current-site image", proposal.comparison.currentSiteImage?.src],
+      ["proposed desktop image", proposal.comparison.proposedImage.src],
+      ["tablet concept image", proposal.comparison.proposedSupportingImages?.[0]?.src],
+    );
+
+    if (proposal.comparison.proposedImage.src !== proposal.conceptImages.desktopHero.src) {
+      errors.push("the proposed comparison image must reuse the desktop concept image");
+    }
+
+    if (proposal.comparison.proposedSupportingImages?.[0]?.presentation !== "natural") {
+      errors.push("the tablet concept image must use natural presentation");
+    }
+  }
+
+  for (const [label, value] of requiredMedia) {
+    if (!value) errors.push(`${label} is missing`);
+    else if (/placeholder|\[.+\]|todo/i.test(value)) errors.push(`${label} still uses a development placeholder`);
+  }
+
+  return errors;
+}
 
 export function validateProposalForProduction(proposal: ProposalConfig) {
   if (process.env.VERCEL_ENV !== "production") return;
@@ -180,10 +218,23 @@ export function validateProposalForProduction(proposal: ProposalConfig) {
       value === "" ||
       (typeof value === "string" && unresolvedMarkers.some((marker) => value.includes(marker))),
   );
+  const hasDevelopmentPlaceholder = /placeholder|todo|\[[A-Z][A-Z\s_-]+\]/i.test(JSON.stringify(proposal));
 
-  if (hasUnresolvedValue) {
+  const mediaErrors = proposalMediaErrors(proposal);
+  const strengthsAreInvalid =
+    (proposal.strengths?.length ?? 0) > 3 ||
+    proposal.strengths?.some((strength) => !strength.title.trim() || !strength.description.trim());
+
+  if (hasUnresolvedValue || hasDevelopmentPlaceholder || mediaErrors.length || strengthsAreInvalid) {
+    const details = [
+      hasUnresolvedValue ? "complete the video, transcript, commercial terms, launch action and removal workflow" : "",
+      hasDevelopmentPlaceholder ? "remove all development placeholders" : "",
+      ...mediaErrors,
+      strengthsAreInvalid ? "strengths must contain one to three complete, verified entries" : "",
+    ].filter(Boolean);
+
     throw new Error(
-      `Proposal ${proposal.prospectId} is not ready for production. Complete the video, transcript, commercial terms, launch action and removal workflow, then set status to active.`,
+      `Proposal ${proposal.prospectId} is not ready for production: ${details.join("; ")}.`,
     );
   }
 }
