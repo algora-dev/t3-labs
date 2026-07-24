@@ -1,6 +1,6 @@
 import type { ProspectSiteConfig } from "../types";
 
-const asset = (name: string) => `/assets/falcon-contracting-wp-000205/${name}`;
+const asset = (name: string) => `/proposal-assets/falcon-contracting-wp-000205/${name}`;
 
 export const falconContracting = {
   slug: "falcon-contracting-wp-000205",

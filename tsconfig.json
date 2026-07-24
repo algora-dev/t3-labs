@@ -29,5 +29,15 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    ".worktrees",
+    "archives",
+    "3A-Roofing-website-local-backup",
+    "Atkinson website archive",
+    "proposal-assets",
+    "t3-labs-main-sync",
+    "t3-labs-private-atkinson-live",
+    "t3-labs-private"
+  ]
 }

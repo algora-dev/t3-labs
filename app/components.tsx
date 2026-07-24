@@ -402,6 +402,7 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
   const [contactStatus, setContactStatus] = useState("");
   const [quoteStatus, setQuoteStatus] = useState("");
   const [attachmentLabel, setAttachmentLabel] = useState(site.quoteRequest?.fileEmptyText ?? "No files selected");
+  const shortCompanyName = site.companyName.replace(/\s+(?:Limited|Ltd)\.?$/, "");
 
   useEffect(() => {
     function syncModal() {
@@ -508,7 +509,7 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
             </div>
             <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Email<input className="form-field" name="contact-email" type="email" required /></label>
             <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Preferred contact<select className="form-field bg-white" name="contact-method" required defaultValue=""><option value="" disabled>Select a method</option><option>Phone</option><option>Email</option><option>Either</option></select></label>
-            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">How can Aspire help?<textarea className="form-field min-h-32 resize-y p-4" name="contact-message" required /></label>
+            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">How can {shortCompanyName} help?<textarea className="form-field min-h-32 resize-y p-4" name="contact-message" required /></label>
             <label className="flex items-start gap-3 text-sm leading-6 text-[#4f5a5f]"><input className="mt-1 h-5 w-5 shrink-0 accent-[var(--site-accent)]" name="contact-consent" type="checkbox" required /><span>I agree that these details may be used to respond to this enquiry. This demonstration does not send or store information.</span></label>
             <button className="button-base rounded-[8px] bg-[var(--site-ink)] text-white hover:bg-[var(--site-accent)]" type="submit">Send Contact Request<ArrowIcon /></button>
             {contactStatus ? <p className="rounded-[8px] bg-[var(--site-paper)] p-4 text-sm font-bold text-[#4f5a5f]" role="status">{contactStatus}</p> : null}
@@ -517,7 +518,7 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
       ) : null}
 
       {activeModal === "quote" ? (
-        <ModalFrame eyebrow={quoteRequest.eyebrow ?? "Quote request"} title={quoteRequest.title ?? "Tell Aspire what the roof needs"} description={quoteRequest.helperText ?? "The more useful detail you can provide now, the better prepared the team can be for the first conversation. This demonstration does not send data."} closeLabel="Close quote form" onClose={closeModal}>
+        <ModalFrame eyebrow={quoteRequest.eyebrow ?? "Quote request"} title={quoteRequest.title ?? `Tell ${shortCompanyName} what the roof needs`} description={quoteRequest.helperText ?? "The more useful detail you can provide now, the better prepared the team can be for the first conversation. This demonstration does not send data."} closeLabel="Close quote form" onClose={closeModal}>
           <form className="mt-6 grid gap-5" onSubmit={onQuoteSubmit}>
             <div className="grid gap-5 md:grid-cols-2">
               <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Name<input className="form-field" name="quote-name" autoFocus required /></label>
@@ -553,7 +554,7 @@ export function Contact({ site }: { site: ProspectSiteConfig }) {
                 }}
               />
             </label>
-            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Project details<textarea className="form-field min-h-36 resize-y p-4" name="quote-message" placeholder="Tell Aspire about the property, roof type, issue, timescale and anything that may affect access." required /></label>
+            <label className="grid gap-2 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Project details<textarea className="form-field min-h-36 resize-y p-4" name="quote-message" placeholder={`Tell ${shortCompanyName} about the property, roof type, issue, timescale and anything that may affect access.`} required /></label>
             <div className="grid gap-5 md:grid-cols-2">
               <fieldset className="grid gap-3 rounded-[12px] border border-[#d8dedc] bg-[#fbfaf7] p-4">
                 <legend className="px-1 text-sm font-bold uppercase tracking-[0.08em] text-[#29353a]">Preferred contact method</legend>

@@ -1,0 +1,50 @@
+export const websitePackageTerms = {
+  legalEntityName: "T3 Play Limited",
+  tradingName: "T3 Labs",
+  companyNumber: "9148617",
+  nzbn: "",
+  registeredOffice: "",
+  registeredJurisdiction: "New Zealand",
+  businessEmail: "insights@t3labs.co.uk",
+  businessPhone: "",
+  privacyOfficerEmail: "insights@t3labs.co.uk",
+  packagePrice: "£399",
+  taxTreatment: "£399 total - no separate UK VAT or New Zealand GST amount added",
+  vatStatus: "£399 total - no separate UK VAT or New Zealand GST amount added",
+  invoiceCurrency: "GBP",
+  proposalValidityDays: 30,
+  depositPercentage: 50,
+  depositAmount: "£199.50",
+  finalPaymentAmount: "£199.50",
+  invoicePaymentDays: 7,
+  revisionRounds: 1,
+  handoverMinutes: 20,
+  includedHostingMonths: 3,
+  monthlyHostingPrice: "£10",
+  hostingReminderDays: 14,
+  supportResponseWorkingDays: 2,
+  estimatedDeliveryWorkingDaysMin: 7,
+  estimatedDeliveryWorkingDaysMax: 10,
+  governingLaw: "New Zealand",
+  courts: "the courts of New Zealand",
+  sourceCodeTransferPolicy: "[CONFIRMED POLICY]",
+  ownershipPolicy: "[CONFIRMED POLICY]",
+  formHostingModel: "[FORM HOSTING MODEL]",
+  formRetentionPeriod: "[RETENTION PERIOD]",
+  callMinutes: 20,
+  termsVersion: "2026-07-19",
+  privacyVersion: "2026-07-19",
+  cookieVersion: "2026-07-19",
+  cookiePolicyVersion: "2026-07-19",
+  consentVersion: "2026-07-19",
+  lastUpdated: "2026-07-19",
+} as const;
+
+export function pluralise(count: number, singular: string, plural = `${singular}s`) {
+  return count === 1 ? singular : plural;
+}
+
+export const proposalLegalLinks: Array<{ label: string; href: string }> = [
+  { label: "Request Removal", href: "#request-removal" },
+  { label: "Contact T3 Labs", href: "#contact-t3-labs" },
+];
