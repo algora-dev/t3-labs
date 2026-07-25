@@ -134,7 +134,6 @@ function ProgressShell({
         )}
         <div className="progress-wrap">
           <div className="progress-top">
-            <span>Step {currentStep} of {totalSteps}</span>
             <span>{progress}% complete</span>
           </div>
           <div className="progress-bar">
