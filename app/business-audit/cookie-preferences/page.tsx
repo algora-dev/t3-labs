@@ -157,34 +157,34 @@ export default function CookiePreferencesPage() {
         html, body {
           margin: 0; padding: 0;
           font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          background: #f5f5f2; color: #111111;
+          background: #fbfcff; color: #0a0b10;
         }
-        .pref-shell { min-height: 100vh; background: #f5f5f2; }
+        .pref-shell { min-height: 100vh; background: radial-gradient(circle at 76% 6%, rgba(17, 19, 24, 0.05), transparent 24rem), radial-gradient(circle at 14% 36%, rgba(180, 185, 194, 0.08), transparent 20rem), #fbfcff; }
         .pref-container { max-width: 820px; margin: 0 auto; padding: 32px 20px; }
         .pref-back { margin-bottom: 24px; }
-        .pref-back a { color: #666; text-decoration: none; font-size: 14px; }
-        .pref-back a:hover { color: #111; text-decoration: underline; }
+        .pref-back a { color: #606575; text-decoration: none; font-size: 14px; }
+        .pref-back a:hover { color: #0a0b10; text-decoration: underline; }
         .pref-card {
-          background: #ffffff; border: 1px solid #e6e6e1;
-          border-radius: 28px; padding: 40px; box-shadow: 0 18px 60px rgba(22,22,18,0.06);
+          background: #ffffff; border: 1px solid #e7e9ef;
+          border-radius: 18px; padding: 40px; box-shadow: 0 10px 32px rgba(24, 31, 51, 0.05);
         }
         .pref-card h1 {
           font-size: 42px; line-height: 1.08; letter-spacing: -0.04em; margin: 0 0 16px;
         }
         .pref-card > p {
-          font-size: 15px; line-height: 1.9; color: #555; margin: 0 0 32px;
+          font-size: 15px; line-height: 1.9; color: #3e4352; margin: 0 0 32px;
         }
         .pref-section {
-          border: 1px solid #e6e6e1; border-radius: 20px; padding: 20px; margin-bottom: 16px;
+          border: 1px solid #e7e9ef; border-radius: 18px; padding: 20px; margin-bottom: 16px;
         }
         .pref-row {
           display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;
         }
         .pref-info { flex: 1; }
         .pref-info h2 { font-size: 18px; line-height: 1.3; margin: 0 0 6px; }
-        .pref-info p { font-size: 14px; line-height: 1.7; color: #666; margin: 0; }
+        .pref-info p { font-size: 14px; line-height: 1.7; color: #606575; margin: 0; }
         .always-on {
-          font-size: 13px; color: #888; font-weight: 500; white-space: nowrap;
+          font-size: 13px; color: #606575; font-weight: 500; white-space: nowrap;
           padding-top: 2px;
         }
         .pref-toggle-btn {
@@ -192,28 +192,28 @@ export default function CookiePreferencesPage() {
           font-size: 14px; font-weight: 500; cursor: pointer;
           transition: 0.15s ease; white-space: nowrap; border: none;
         }
-        .pref-toggle-btn.on { background: #111111; color: #ffffff; }
-        .pref-toggle-btn.off { background: #e8e8e2; color: #444; }
-        .pref-toggle-btn.on:hover { background: #333; }
-        .pref-toggle-btn.off:hover { background: #d8d8d0; }
+        .pref-toggle-btn.on { background: linear-gradient(135deg, #050608, #242832); color: #ffffff; }
+        .pref-toggle-btn.off { background: #e7e9ef; color: #3e4352; }
+        .pref-toggle-btn.on:hover { transform: translateY(-2px); }
+        .pref-toggle-btn.off:hover { background: #d7dce6; }
         .save-notice {
-          background: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32;
-          border-radius: 12px; padding: 12px 16px; font-size: 14px; margin: 16px 0;
+          background: #fbfff0; border: 1px solid #e3e8bc; color: #0a0b10;
+          border-radius: 8px; padding: 12px 16px; font-size: 14px; margin: 16px 0;
         }
         .pref-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
         .pref-btn {
-          height: 48px; border-radius: 16px; font-size: 15px; padding: 0 20px;
+          height: 48px; border-radius: 8px; font-size: 15px; padding: 0 20px;
           cursor: pointer; font-weight: 500; transition: 0.15s ease;
         }
-        .pref-btn.primary { background: #111111; color: #ffffff; border: none; }
-        .pref-btn.primary:hover { background: #333; }
-        .pref-btn.secondary { background: #ffffff; color: #111111; border: 1px solid #e3e3dc; }
-        .pref-btn.secondary:hover { background: #f5f5f2; }
-        .pref-more { font-size: 13px; color: #888; margin-top: 20px; }
-        .pref-more a { color: #111; }
+        .pref-btn.primary { background: linear-gradient(135deg, #050608, #242832); color: #ffffff; border: none; box-shadow: 0 14px 30px rgba(10, 11, 16, 0.16); }
+        .pref-btn.primary:hover { transform: translateY(-2px); }
+        .pref-btn.secondary { background: #ffffff; color: #0a0b10; border: 1px solid #e7e9ef; }
+        .pref-btn.secondary:hover { background: #fbfff0; border-color: #e3e8bc; }
+        .pref-more { font-size: 13px; color: #606575; margin-top: 20px; }
+        .pref-more a { color: #0a0b10; }
         @media (max-width: 640px) {
           .pref-container { padding: 16px; }
-          .pref-card { padding: 24px; border-radius: 24px; }
+          .pref-card { padding: 24px; border-radius: 14px; }
           .pref-card h1 { font-size: 32px; }
           .pref-row { flex-direction: column; }
         }

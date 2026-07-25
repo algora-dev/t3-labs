@@ -12,7 +12,7 @@ export default function BusinessAuditLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div style={{ margin: 0, padding: 0, background: "#f5f5f2", minHeight: "100vh" }}>
+    <div style={{ margin: 0, padding: 0, background: "radial-gradient(circle at 76% 6%, rgba(17, 19, 24, 0.05), transparent 24rem), radial-gradient(circle at 14% 36%, rgba(180, 185, 194, 0.08), transparent 20rem), #fbfcff", minHeight: "100vh" }}>
       {children}
     </div>
   );

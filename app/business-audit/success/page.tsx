@@ -198,27 +198,27 @@ function Styles() {
       html, body {
         margin: 0; padding: 0;
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: #f5f5f2; color: #111111;
+        background: #fbfcff; color: #0a0b10;
       }
       body { min-height: 100vh; }
-      .app-shell { min-height: 100vh; background: #f5f5f2; }
+      .app-shell { min-height: 100vh; background: radial-gradient(circle at 76% 6%, rgba(17, 19, 24, 0.05), transparent 24rem), radial-gradient(circle at 14% 36%, rgba(180, 185, 194, 0.08), transparent 20rem), #fbfcff; }
       .center-wrap {
         max-width: 820px; margin: 0 auto; min-height: 100vh;
         display: flex; align-items: center; padding: 32px 20px;
       }
       .intro-card, .loading-card {
-        width: 100%; background: #ffffff; border: 1px solid #e6e6e1;
-        border-radius: 28px; padding: 36px; box-shadow: 0 18px 60px rgba(22,22,18,.06);
+        width: 100%; background: #ffffff; border: 1px solid #e7e9ef;
+        border-radius: 18px; padding: 36px; box-shadow: 0 10px 32px rgba(24, 31, 51, 0.05);
       }
       .intro-card h1, .loading-card h1 {
         font-size: 46px; line-height: 1.06; letter-spacing: -0.04em; margin: 0;
       }
       .intro-card p, .loading-card p {
-        margin: 18px 0 0; font-size: 17px; line-height: 1.9; color: #66665e;
+        margin: 18px 0 0; font-size: 1.08rem; line-height: 1.9; color: #3e4352;
       }
       .spinner {
         width: 48px; height: 48px; border-radius: 999px;
-        border: 4px solid #e6e6e1; border-top-color: #111111;
+        border: 4px solid #e7e9ef; border-top-color: #d7ff00;
         animation: spin .9s linear infinite; margin: 0 auto 22px;
       }
       @keyframes spin { to { transform: rotate(360deg); } }
@@ -226,47 +226,47 @@ function Styles() {
       @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
       .button-row { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
       .primary-button, .secondary-button {
-        height: 52px; border-radius: 18px; font-size: 15px; padding: 0 22px;
+        height: 52px; border-radius: 8px; font-size: 15px; padding: 0 22px;
         cursor: pointer; transition: .2s ease; font-weight: 500;
       }
-      .primary-button { border: 0; background: #111111; color: #ffffff; }
-      .primary-button:hover { background: #1e1e1e; }
-      .secondary-button { border: 1px solid #e3e3dc; background: #ffffff; color: #111111; }
-      .secondary-button:hover { background: #fafafa; }
+      .primary-button { border: 0; background: linear-gradient(135deg, #050608, #242832); color: #ffffff; box-shadow: 0 14px 30px rgba(10, 11, 16, 0.16); }
+      .primary-button:hover { transform: translateY(-2px); }
+      .secondary-button { border: 1px solid #e7e9ef; background: #ffffff; color: #0a0b10; }
+      .secondary-button:hover { border-color: #e3e8bc; background: #fbfff0; }
       .plan-wrap { max-width: 1020px; margin: 0 auto; padding: 36px 20px; }
       .plan-head {
         display: flex; justify-content: space-between; align-items: flex-end;
         gap: 20px; flex-wrap: wrap;
       }
       .plan-head h1 { margin: 14px 0 0; font-size: 48px; line-height: 1.06; letter-spacing: -0.04em; }
-      .plan-head p { margin: 14px 0 0; font-size: 17px; line-height: 1.9; color: #66665e; max-width: 720px; }
+      .plan-head p { margin: 14px 0 0; font-size: 1.08rem; line-height: 1.9; color: #3e4352; max-width: 720px; }
       .pill {
-        display: inline-flex; align-items: center; border: 1px solid #e6e6e1;
-        background: #ffffff; color: #6c6c64; border-radius: 999px; padding: 8px 14px; font-size: 14px;
+        display: inline-flex; align-items: center; border: 1px solid #e7e9ef;
+        background: rgba(255,255,255,0.72); color: #4f5567; border-radius: 999px; padding: 8px 14px; font-size: 0.75rem; font-weight: 500;
       }
       .plan-list { display: grid; gap: 18px; margin-top: 24px; }
       .plan-card {
-        background: #ffffff; border: 1px solid #e6e6e1;
-        border-radius: 28px; padding: 28px; box-shadow: 0 18px 60px rgba(22,22,18,.06);
+        background: #ffffff; border: 1px solid #e7e9ef;
+        border-radius: 18px; padding: 28px; box-shadow: 0 10px 32px rgba(24, 31, 51, 0.05);
       }
-      .small-label { font-size: 14px; color: #6c6c64; margin-bottom: 10px; }
+      .small-label { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #515763; margin-bottom: 10px; }
       .plan-card h2 { margin: 0; font-size: 29px; line-height: 1.18; letter-spacing: -0.03em; }
-      .plan-card p { margin: 14px 0 0; font-size: 16px; line-height: 1.9; color: #43433d; }
+      .plan-card p { margin: 14px 0 0; font-size: 16px; line-height: 1.9; color: #0a0b10; }
 
       /* Calendly CTA */
       .calendly-cta {
         margin-top: 32px;
-        background: #111111;
-        border-radius: 28px;
+        background: #0a0b10;
+        border-radius: 18px;
         padding: 36px;
         color: #ffffff;
       }
       .calendly-cta-inner { max-width: 680px; }
       .calendly-badge {
         display: inline-flex; align-items: center;
-        background: rgba(255,255,255,0.15); color: #e0e0d8;
+        background: rgba(215, 255, 0, 0.15); color: #d7ff00;
         border-radius: 999px; padding: 6px 14px; font-size: 13px;
-        margin-bottom: 16px;
+        margin-bottom: 16px; font-weight: 600;
       }
       .calendly-cta h2 {
         font-size: 32px; line-height: 1.15; letter-spacing: -0.03em;
@@ -277,20 +277,20 @@ function Styles() {
       }
       .calendly-btn {
         display: inline-flex; align-items: center; text-decoration: none;
-        margin-top: 8px; background: #ffffff; color: #111111;
-        height: 52px; border-radius: 18px; font-size: 15px; padding: 0 22px;
-        font-weight: 500; transition: 0.2s ease;
+        margin-top: 8px; background: linear-gradient(135deg, #050608, #242832); color: #ffffff;
+        height: 52px; border-radius: 8px; font-size: 15px; padding: 0 22px;
+        font-weight: 500; transition: 0.2s ease; box-shadow: 0 14px 30px rgba(10, 11, 16, 0.16);
       }
-      .calendly-btn:hover { background: #f0f0f0; }
+      .calendly-btn:hover { transform: translateY(-2px); }
       .calendly-notice {
-        font-size: 12px; color: #888; margin-top: 12px !important;
+        font-size: 12px; color: #606575; margin-top: 12px !important;
       }
 
       @media (max-width: 640px) {
         .plan-wrap, .center-wrap { padding-left: 16px; padding-right: 16px; }
         .plan-head h1, .intro-card h1, .loading-card h1 { font-size: 34px; }
-        .plan-card { padding: 22px; border-radius: 24px; }
-        .calendly-cta { padding: 24px; border-radius: 24px; }
+        .plan-card { padding: 22px; border-radius: 14px; }
+        .calendly-cta { padding: 24px; border-radius: 14px; }
         .calendly-cta h2 { font-size: 26px; }
       }
     `}</style>
