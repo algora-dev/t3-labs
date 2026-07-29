@@ -30,7 +30,7 @@ A contract is formed when:
 
 1. T3 Labs sends the customer a written proposal or order summary;
 2. the customer accepts it in writing or through the stated acceptance process; and
-3. T3 Labs receives the required initial payment.
+3. the customer accepts the payment terms.
 
 The contract consists of:
 
@@ -122,12 +122,9 @@ Additional revisions or scope changes may be quoted separately.
 
 Prices and payment stages are stated in the order summary.
 
-Unless the order summary says otherwise, the standard website package uses:
+Unless the order summary says otherwise, the total website package price of £399 is payable in full once the website is ready for final handover and before it is published live.
 
-- A 50% initial payment before client-specific work begins.
-- A 50% final payment before launch or handover.
-
-For a £399 package, the two payments are £199.50 each.
+The full outstanding balance must be received in cleared funds before T3 Labs is required to publish the website, connect it to the customer's live domain, provide website files or administrative access, hand over the completed website, or transfer any associated rights.
 
 Payments are processed through Stripe or another method stated in the order summary.
 
@@ -149,11 +146,11 @@ Ownership and usage rights do not transfer until all amounts due for the relevan
 
 ## 11. Cancellation and refunds
 
-The initial payment is refundable if the customer cancels **before** T3 Labs begins client-specific work.
+If the customer cancels before T3 Labs begins client-specific work, any amount paid is refundable.
 
 Once client-specific work begins:
 
-- The initial payment becomes non-refundable.
+- Any amount paid becomes non-refundable.
 - The customer must pay for completed work and non-cancellable third-party costs.
 - T3 Labs is not required to launch or transfer the website while money remains unpaid.
 - Rights in unpaid deliverables do not transfer to the customer.

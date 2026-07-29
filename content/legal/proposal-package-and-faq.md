@@ -212,7 +212,7 @@ Clicking records your interest only. No payment is taken.
 
 We will contact you to confirm the final scope, revision allowance, hosting,
 domain access and payment schedule. Work begins only after you approve the
-scope and the required initial payment has been received.
+scope and the payment terms have been confirmed.
 ```
 
 ---

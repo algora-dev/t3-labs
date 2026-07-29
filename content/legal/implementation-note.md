@@ -16,8 +16,7 @@ Use the accompanying Markdown documents as the page copy.
 2. Use New Zealand law for the Website Package Terms.
 3. Show the £399 package as a total price with no separate VAT/GST amount added.
 4. Use:
-   - 50% before client-specific work;
-   - 50% before launch;
+   - £399 payable in full before launch/handover;
    - one consolidated revision round;
    - three months of hosting and technical support included;
    - £10 per month after the included period;

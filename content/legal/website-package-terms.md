@@ -14,7 +14,7 @@ A binding agreement is formed when:
 
 1. T3 Labs sends the customer a written order summary confirming the final scope, price and any agreed variations;
 2. the customer accepts the order summary and these Terms in writing; and
-3. T3 Labs receives the initial payment.
+3. the customer accepts the payment terms.
 
 The order summary and these Terms form the agreement. If they conflict, the order summary takes priority only to the extent that it expressly changes these Terms.
 
@@ -67,16 +67,11 @@ T3 Labs will quote additional work before starting it.
 
 ## 4. Payment
 
-The standard payment schedule is:
+The total website package price of £399 is payable in full once the website is ready for final handover and before it is published live.
 
-- **£199.50 before client-specific revisions, configuration and launch work begin; and**
-- **£199.50 before the website is launched.**
+Invoices are payable within seven days. However, the full outstanding balance must be received in cleared funds before T3 Labs is required to publish the website, connect it to the customer's live domain, provide website files or administrative access, hand over the completed website, or transfer any associated rights.
 
-Invoices are payable within seven days.
-
-T3 Labs is not required to begin client-specific work until the initial payment is received. T3 Labs is not required to launch the website or transfer any rights while an invoice is overdue.
-
-The initial payment is refundable if the customer cancels before T3 Labs begins client-specific work. Once T3 Labs begins revisions, content changes, form configuration, domain work or other customer-specific implementation, the initial payment becomes non-refundable except where T3 Labs materially fails to provide the agreed services and does not remedy the failure within a reasonable period.
+T3 Labs may pause work or withhold the website and associated deliverables while an invoice remains overdue.
 
 Any late-payment charge must be stated in the order summary and comply with New Zealand law. T3 Labs may also recover reasonable costs of collecting an undisputed overdue debt where the law permits.
 
@@ -148,7 +143,6 @@ T3 Labs will provide a quote before carrying out additional revisions or scope c
 
 T3 Labs will normally aim to launch the website within **7–10 working days** after receiving:
 
-- the initial payment;
 - all required content;
 - all required approvals;
 - domain access;
@@ -319,11 +313,11 @@ Publicly available business information does not become confidential merely beca
 
 ## 17. Cancellation and termination
 
-The customer may cancel before client-specific work begins and receive a refund of the initial payment.
+The customer may cancel before client-specific work begins and receive a refund of any amount paid.
 
 After client-specific work begins:
 
-- the initial payment is normally non-refundable;
+- any amount paid is normally non-refundable;
 - the customer may cancel before launch;
 - the customer must pay for work completed beyond amounts already paid;
 - the website will not be launched; and
