@@ -602,7 +602,7 @@ function CallStrip() {
             Book a free 20-minute call and we&rsquo;ll explore how new technology could solve your biggest operational challenge. No pitch, no obligation - just a straight conversation about what&rsquo;s possible for your business.
           </p>
           <a
-            href="https://calendly.com/insights-t3labs/20-minute-meeting"
+            href="https://calendly.com/cece-t3labs/20min"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex min-h-[52px] min-w-[200px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform"

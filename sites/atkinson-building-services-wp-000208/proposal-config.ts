@@ -182,7 +182,7 @@ export const atkinsonBuildingServicesProposal = {
     },
   ],
   actions: {
-    calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
+    calendlyUrl: "https://calendly.com/cece-t3labs/20min",
     launchEmailUrl:
       "mailto:insights@t3labs.co.uk?subject=Atkinson%20Building%20Services%20website%20launch&body=Hi%20T3%20Labs%2C%0A%0AI%27d%20like%20to%20discuss%20launching%20the%20Atkinson%20Building%20Services%20website%20concept.%0A",
   },

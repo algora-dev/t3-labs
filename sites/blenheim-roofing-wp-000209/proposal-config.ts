@@ -196,7 +196,7 @@ export const blenheimRoofingProposal = {
     },
   ],
   actions: {
-    calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
+    calendlyUrl: "https://calendly.com/cece-t3labs/20min",
   },
   pageCopy: {
     conceptHeading: "See the concept in detail",
