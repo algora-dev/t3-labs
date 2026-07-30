@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, type FormEvent } from "react";
+import { useState, useRef, useEffect, type FormEvent } from "react";
 
 /* ------------------------------------------------------------------ */
 /*  T3 Labs Homepage - React/Tailwind conversion of legacy index.html */
@@ -34,6 +34,40 @@ const WORK_CARDS = [
     title: "Custom Systems",
     desc: "Websites, dashboards, analytics, SEO, marketing systems, automation workflows, internal tools, and custom builds designed around real business problems.",
   },
+];
+
+const CUSTOM_SOLUTIONS = [
+  {
+    img: "/assets/custom-solution-lead-gen.png",
+    title: "Lead Intelligence",
+    desc: "Automated lead discovery, scoring, and enrichment pipelines that find qualified prospects before your competitors do.",
+  },
+  {
+    img: "/assets/custom-solution-automation.png",
+    title: "Workflow Automation",
+    desc: "Visual workflow builders that connect your tools, eliminate manual steps, and keep data flowing where it needs to.",
+  },
+  {
+    img: "/assets/custom-solution-crm.png",
+    title: "Custom CRM & Internal Tools",
+    desc: "Bespoke dashboards, job management systems, and internal tools built around how your team actually works.",
+  },
+  {
+    img: "/assets/custom-solution-seo.png",
+    title: "SEO & AI Search Platform",
+    desc: "Content optimisation and AI search indexing tools that track rankings across Google, Bing, and AI assistants.",
+  },
+];
+
+const CAPABILITY_TAGS = [
+  "Lead Generation",
+  "Workflow Automation",
+  "Internal Tools",
+  "CRM Systems",
+  "Dashboards & Analytics",
+  "API Integration",
+  "AI Search Optimisation",
+  "Custom Software",
 ];
 
 const TESTIMONIALS = [
@@ -135,6 +169,7 @@ export default function Home() {
         <Hero />
         <IntroStrip />
         <WorkSection />
+        <CustomSolutionsSection />
         <Testimonials />
         <CTASection />
         <ContactForm
@@ -366,6 +401,171 @@ function WorkSection() {
             )}
           </article>
         ))}
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Custom Solutions Section                                          */
+/* ------------------------------------------------------------------ */
+
+function CustomSolutionsSection() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  // Auto-advance carousel
+  useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % CUSTOM_SOLUTIONS.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [paused]);
+
+  return (
+    <section
+      id="custom-solutions"
+      className="mb-[104px] w-[min(1180px,calc(100%-40px))] mx-auto"
+    >
+      {/* Header */}
+      <div className="mb-8.5">
+        <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
+          What else we build
+        </p>
+        <h2 className="max-w-[920px] mb-4.5 text-[#050505] text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-[1.04]">
+          Custom software solutions for every business.
+        </h2>
+        <p className="max-w-[760px] mb-0 text-[#373c4c] text-[1.08rem] leading-[1.65]">
+          Beyond our productised tools, T3 Labs builds tailored software that solves
+          specific operational problems. From lead generation engines to workflow
+          automation, internal tools, and advanced integrations - if a process can be
+          improved with software, we can build it.
+        </p>
+      </div>
+
+      {/* Capability tags */}
+      <div className="flex flex-wrap gap-2 mb-8.5">
+        {CAPABILITY_TAGS.map((tag) => (
+          <span
+            key={tag}
+            className="px-3 py-1.5 border border-[var(--line)] rounded-full bg-white text-[#4f5567] text-xs font-medium"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      {/* Carousel */}
+      <div
+        className="relative overflow-hidden border border-[var(--line)] rounded-2xl bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.05),transparent_20rem),rgba(255,255,255,0.92)] shadow-[0_26px_80px_rgba(24,31,51,0.12)]"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        {/* Slides */}
+        <div className="relative h-[420px]">
+          {CUSTOM_SOLUTIONS.map((solution, i) => (
+            <div
+              key={solution.title}
+              className={`absolute inset-0 transition-opacity duration-500 ${
+                i === activeSlide ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+            >
+              <div
+                className="grid h-full"
+                style={{ gridTemplateColumns: "minmax(0,1fr) minmax(0,0.85fr)" }}
+              >
+                {/* Image side */}
+                <div className="relative overflow-hidden bg-[#0a0b10]">
+                  <img
+                    src={solution.img}
+                    alt={solution.title}
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Subtle gradient overlay for blend */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[rgba(10,11,16,0.3)]" />
+                </div>
+
+                {/* Text side */}
+                <div className="flex flex-col justify-center gap-4 p-8.5 bg-[radial-gradient(circle_at_80%_20%,rgba(215,255,0,0.06),transparent_16rem),white]">
+                  <div className="flex items-center gap-2.5">
+                    <span className="inline-grid w-[32px] h-[32px] place-items-center border border-[#d7ff00] rounded-lg bg-[#d7ff00] text-[var(--ink)] text-[11px] font-bold">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-[#515763] text-xs font-semibold tracking-[0.12em] uppercase">
+                      Custom Build
+                    </span>
+                  </div>
+                  <h3 className="text-[1.6rem] font-semibold leading-[1.15]">
+                    {solution.title}
+                  </h3>
+                  <p className="text-[var(--muted)] text-base leading-[1.65]">
+                    {solution.desc}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Slide indicators */}
+        <div className="absolute bottom-5 right-6 flex gap-2 z-10">
+          {CUSTOM_SOLUTIONS.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setActiveSlide(i)}
+              className={`h-2 rounded-full transition-all duration-200 ${
+                i === activeSlide
+                  ? "w-7 bg-[#d7ff00]"
+                  : "w-2 bg-[#c5c8d4] hover:bg-[#a5a9b8]"
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Prev/Next arrows */}
+        <button
+          type="button"
+          aria-label="Previous slide"
+          onClick={() => setActiveSlide((prev) => (prev - 1 + CUSTOM_SOLUTIONS.length) % CUSTOM_SOLUTIONS.length)}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex w-10 h-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[var(--line)] text-[var(--ink)] shadow-[0_5px_16px_rgba(20,25,40,0.08)] hover:bg-white hover:border-[#e3e8bc] transition-all duration-200"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+        </button>
+        <button
+          type="button"
+          aria-label="Next slide"
+          onClick={() => setActiveSlide((prev) => (prev + 1) % CUSTOM_SOLUTIONS.length)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex w-10 h-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[var(--line)] text-[var(--ink)] shadow-[0_5px_16px_rgba(20,25,40,0.08)] hover:bg-white hover:border-[#e3e8bc] transition-all duration-200"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+        </button>
+      </div>
+
+      {/* Positioning statement + CTA */}
+      <div
+        className="grid gap-7 items-center mt-6 p-8.5 border border-[var(--line)] rounded-xl bg-[radial-gradient(circle_at_12%_20%,rgba(17,19,24,0.04),transparent_20rem),radial-gradient(circle_at_82%_30%,rgba(215,255,0,0.06),transparent_16rem),white]"
+        style={{ gridTemplateColumns: "1fr auto" }}
+      >
+        <div>
+          <p className="block mb-3 text-[#373c4c] text-[1.05rem] leading-[1.65]">
+            T3 Labs is a rare breed. We move fast, keep costs practical, and build
+            software that actually works - not slide decks and promises. Most agencies
+            quote thousands and take months. We solve problems in days.
+          </p>
+          <p className="block m-0 text-[var(--muted)] text-sm leading-[1.6]">
+            Lead generation. Workflow automation. Internal tools. Advanced integrations.
+            If it can be built, we build it.
+          </p>
+        </div>
+        <a
+          href="#send-message"
+          className="inline-flex min-h-[48px] items-center justify-center gap-3 px-5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform whitespace-nowrap"
+        >
+          Start a project <span>&rarr;</span>
+        </a>
       </div>
     </section>
   );
