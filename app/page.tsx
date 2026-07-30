@@ -10,6 +10,7 @@ import { useState, useRef, useEffect, type FormEvent } from "react";
 const NAV_LINKS = [
   { href: "#positioning", label: "Approach" },
   { href: "#work", label: "Work" },
+  { href: "#custom-solutions", label: "Custom" },
   { href: "#testimonials", label: "Reviews" },
   { href: "#send-message", label: "Contact" },
 ];
