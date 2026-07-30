@@ -90,7 +90,7 @@ Example format:
 
     const client = getClient()
     const message = await client.messages.create({
-      model: 'claude-3-5-haiku-latest',
+      model: 'claude-haiku-4-5',
       max_tokens: 800,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userPrompt }],
@@ -128,6 +128,7 @@ Example format:
     })
   } catch (err) {
     console.error('Insight generation error:', err)
-    return NextResponse.json({ error: 'Generation failed' }, { status: 500 })
+    const errMsg = err instanceof Error ? err.message : String(err)
+    return NextResponse.json({ error: 'Generation failed', detail: errMsg }, { status: 500 })
   }
 }
