@@ -3,29 +3,38 @@
  import { useEffect, useState, useCallback } from "react";
  
  interface VisitorData {
-   date: string;
+   timestamp: string;
    visitors: number;
    pageviews: number;
  }
  
  interface TopPage {
-   path: string;
+   requestPath: string;
    visitors: number;
+   pageviews: number;
  }
  
  interface TopReferrer {
-   referrer: string;
+   referrerHostname: string;
    visitors: number;
+   pageviews: number;
  }
  
  interface TopCountry {
    country: string;
+   visitors: number;
+   pageviews: number;
+ }
+ 
+ interface Totals {
+   pageviews: number;
    visitors: number;
  }
  
  interface AnalyticsResponse {
    configured: boolean;
    error?: string;
+   totals?: Totals;
    visitors?: VisitorData[];
    topPages?: TopPage[];
    topReferrers?: TopReferrer[];
@@ -57,20 +66,16 @@
      fetchData();
    }, [fetchData]);
  
-   // Calculate totals
-   const totalVisitors = data?.visitors?.reduce((sum, v) => sum + v.visitors, 0) || 0;
-   const totalPageviews = data?.visitors?.reduce((sum, v) => sum + v.pageviews, 0) || 0;
+   const totalVisitors = data?.totals?.visitors || 0;
+   const totalPageviews = data?.totals?.pageviews || 0;
    const avgDailyVisitors = data?.visitors?.length ? Math.round(totalVisitors / data.visitors.length) : 0;
  
-   // Find max visitor count for bar chart scaling
    const maxVisitors = data?.visitors?.length
      ? Math.max(...data.visitors.map((v) => v.visitors))
      : 0;
- 
    const maxPageVisitors = data?.topPages?.length
      ? Math.max(...data.topPages.map((p) => p.visitors))
      : 0;
- 
    const maxReferrerVisitors = data?.topReferrers?.length
      ? Math.max(...data.topReferrers.map((r) => r.visitors))
      : 0;
@@ -88,7 +93,6 @@
  
    return (
      <div className="min-h-screen bg-[#050608] text-white">
-       {/* Header */}
        <header className="sticky top-0 z-10 border-b border-white/5 bg-[#050608]/90 backdrop-blur-md">
          <div className="max-w-[1100px] mx-auto px-6 py-4 flex items-center justify-between">
            <div className="flex items-center gap-3">
@@ -111,7 +115,6 @@
        </header>
  
        <main className="max-w-[1100px] mx-auto px-6 py-8">
-         {/* Not configured state */}
          {data && !data.configured && (
            <div className="rounded-xl border border-[#d7ff00]/20 bg-[#d7ff00]/5 p-8 text-center">
              <h2 className="text-lg font-semibold text-[#d7ff00] mb-2">Analytics Not Configured</h2>
@@ -121,17 +124,20 @@
            </div>
          )}
  
-         {/* Stats grid */}
          {data && data.configured && (
            <>
-             {/* Summary cards */}
+             {data.error && (
+               <div className="rounded-xl border border-[#e03e3e]/20 bg-[#e03e3e]/5 p-6 mb-6">
+                 <p className="text-[#e03e3e] text-sm">{data.error}</p>
+               </div>
+             )}
+ 
              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                <StatCard label="Total Visitors (30d)" value={totalVisitors.toLocaleString()} />
                <StatCard label="Total Page Views (30d)" value={totalPageviews.toLocaleString()} />
                <StatCard label="Avg Daily Visitors" value={avgDailyVisitors.toLocaleString()} />
              </div>
  
-             {/* Visitor chart */}
              <section className="mb-8">
                <h2 className="text-sm font-semibold text-[#7a7f8e] tracking-wide uppercase mb-4">
                  Visitors - Last 30 Days
@@ -145,7 +151,7 @@
                          <div
                            key={i}
                            className="flex-1 min-w-[2px] group relative"
-                           title={`${v.date}: ${v.visitors} visitors, ${v.pageviews} views`}
+                           title={`${v.timestamp}: ${v.visitors} visitors, ${v.pageviews} views`}
                          >
                            <div
                              className="w-full rounded-t-sm bg-gradient-to-t from-[#d7ff00]/30 to-[#d7ff00] transition-all duration-200 group-hover:from-[#d7ff00]/50 group-hover:to-[#d7ff00]"
@@ -161,9 +167,7 @@
                </div>
              </section>
  
-             {/* Two column: Top pages + Top referrers */}
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-               {/* Top Pages */}
                <section>
                  <h2 className="text-sm font-semibold text-[#7a7f8e] tracking-wide uppercase mb-4">
                    Top Pages
@@ -178,7 +182,7 @@
                              <span className="text-[#5a5f6e] text-xs w-6 text-right">{i + 1}</span>
                              <div className="flex-1 relative">
                                <div className="flex items-center justify-between mb-0.5">
-                                 <span className="text-white text-xs font-medium truncate">{page.path}</span>
+                                 <span className="text-white text-xs font-medium truncate">{page.requestPath}</span>
                                  <span className="text-[#7a7f8e] text-xs ml-2">{page.visitors}</span>
                                </div>
                                <div className="h-1 rounded-full bg-white/5 overflow-hidden">
@@ -198,7 +202,6 @@
                  </div>
                </section>
  
-               {/* Top Referrers */}
                <section>
                  <h2 className="text-sm font-semibold text-[#7a7f8e] tracking-wide uppercase mb-4">
                    Top Referrers
@@ -214,7 +217,7 @@
                              <div className="flex-1 relative">
                                <div className="flex items-center justify-between mb-0.5">
                                  <span className="text-white text-xs font-medium truncate">
-                                   {ref.referrer || "(direct)"}
+                                   {ref.referrerHostname || "(direct)"}
                                  </span>
                                  <span className="text-[#7a7f8e] text-xs ml-2">{ref.visitors}</span>
                                </div>
@@ -236,7 +239,6 @@
                </section>
              </div>
  
-             {/* Top Countries */}
              <section className="mb-8">
                <h2 className="text-sm font-semibold text-[#7a7f8e] tracking-wide uppercase mb-4">
                  Top Countries
@@ -260,7 +262,6 @@
                </div>
              </section>
  
-             {/* Footer */}
              <div className="text-center pt-4 border-t border-white/5">
                <p className="text-[#4a4f5e] text-xs">
                  Data from Vercel Web Analytics · Last updated {data.fetchedAt ? new Date(data.fetchedAt).toLocaleString("en-GB") : "never"}
