@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { supabase } from '@/app/business-audit/lib/supabase'
-import { generatePaidInsights } from '@/app/business-audit/lib/anthropic'
+import { generatePaidInsights } from '@/app/business-audit/lib/ai'
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!, {
