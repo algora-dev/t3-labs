@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 /* eslint-disable @next/next/no-page-custom-font -- This is the existing T3 Labs Inter source. */
@@ -16,13 +17,21 @@ export const metadata: Metadata = {
   keywords: [
     "T3 Labs",
     "product studio",
+    "custom software development",
     "software development",
     "automation",
     "AI",
     "custom software",
     "business solutions",
+    "lead generation software",
+    "workflow automation",
+    "internal tools",
+    "CRM systems",
+    "API integration",
+    "SEO tools",
     "QuoteCore+",
     "business audit",
+    "T3 Play",
   ],
   authors: [{ name: "T3 Labs" }],
   creator: "T3 Labs",
@@ -113,6 +122,25 @@ const websiteJsonLd = {
   },
 };
 
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Custom Software Solutions",
+  serviceType: "Custom Software Development",
+  provider: {
+    "@type": "Organization",
+    name: "T3 Labs",
+    url: BASE_URL,
+  },
+  description:
+    "T3 Labs builds tailored software solutions including lead generation tools, workflow automation, internal tools, CRM systems, dashboards, API integrations, and SEO platforms.",
+  areaServed: "Worldwide",
+  offers: {
+    "@type": "Offer",
+    description: "Custom software development - contact for pricing",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -135,8 +163,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+        />
       </head>
-      <body>{children}</body>
+      <body>{children}<Analytics /></body>
     </html>
   );
 }
