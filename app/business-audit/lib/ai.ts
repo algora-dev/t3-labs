@@ -103,8 +103,10 @@ Example format:
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       max_tokens: 800,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userPrompt }],
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: userPrompt },
+      ],
       response_format: { type: 'json_object' },
     }),
   })
@@ -188,8 +190,10 @@ Return format:
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       max_tokens: 2500,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userPrompt }],
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: userPrompt },
+      ],
       response_format: { type: 'json_object' },
     }),
   })
