@@ -67,7 +67,7 @@ Example format:
 
   const client = getClient()
   const message = await client.messages.create({
-    model: 'claude-haiku-4-5',
+    model: 'claude-3-5-haiku-latest',
     max_tokens: 2500,
     system: SYSTEM_PROMPT,
     messages: [
