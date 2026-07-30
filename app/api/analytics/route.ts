@@ -30,34 +30,36 @@
    since.setDate(since.getDate() - 30);
    const sinceMs = since.getTime();
    const untilMs = until.getTime();
+   const headers = { Authorization: `Bearer ${token}` };
  
    try {
      // Fetch all data points in parallel
+     // 'by' is an array param, so use by[]=dimension
      const [visitorsRes, topPagesRes, topReferrersRes, countriesRes, countRes] = await Promise.all([
        // Daily visitors over last 30 days
        fetch(
-         `${aggregateUrl}?projectId=${projectId}${teamParam}&by=day&since=${sinceMs}&until=${untilMs}&limit=30`,
-         { headers: { Authorization: `Bearer ${token}` } }
+         `${aggregateUrl}?projectId=${projectId}${teamParam}&by[]=day&since=${sinceMs}&until=${untilMs}&limit=30`,
+         { headers }
        ),
        // Top pages by requestPath
        fetch(
-         `${aggregateUrl}?projectId=${projectId}${teamParam}&by=requestPath&since=${sinceMs}&until=${untilMs}&limit=10`,
-         { headers: { Authorization: `Bearer ${token}` } }
+         `${aggregateUrl}?projectId=${projectId}${teamParam}&by[]=requestPath&since=${sinceMs}&until=${untilMs}&limit=10`,
+         { headers }
        ),
        // Top referrers
        fetch(
-         `${aggregateUrl}?projectId=${projectId}${teamParam}&by=referrerHostname&since=${sinceMs}&until=${untilMs}&limit=10`,
-         { headers: { Authorization: `Bearer ${token}` } }
+         `${aggregateUrl}?projectId=${projectId}${teamParam}&by[]=referrerHostname&since=${sinceMs}&until=${untilMs}&limit=10`,
+         { headers }
        ),
        // Top countries
        fetch(
-         `${aggregateUrl}?projectId=${projectId}${teamParam}&by=country&since=${sinceMs}&until=${untilMs}&limit=10`,
-         { headers: { Authorization: `Bearer ${token}` } }
+         `${aggregateUrl}?projectId=${projectId}${teamParam}&by[]=country&since=${sinceMs}&until=${untilMs}&limit=10`,
+         { headers }
        ),
        // Total counts
        fetch(
          `${countUrl}?projectId=${projectId}${teamParam}&since=${sinceMs}&until=${untilMs}`,
-         { headers: { Authorization: `Bearer ${token}` } }
+         { headers }
        ),
      ]);
  
@@ -65,7 +67,7 @@
        const errText = await visitorsRes.text();
        console.error("Vercel Analytics API error:", visitorsRes.status, errText);
        return NextResponse.json(
-         { error: `Analytics API error: ${visitorsRes.status}`, configured: true },
+         { error: `Analytics API error: ${visitorsRes.status} - ${errText}`, configured: true },
          { status: 502 }
        );
      }
