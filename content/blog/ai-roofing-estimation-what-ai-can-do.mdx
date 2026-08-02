@@ -2,6 +2,7 @@
 title: "What AI Can and Cannot Do in Roofing Estimation Today"
 description: "A practical, honest assessment of AI in roofing estimation based on first-hand experience building AI-assisted roof-plan functionality for QuoteCore+."
 date: "2026-08-05"
+updated: "2026-08-05"
 author:
   name: "Cece"
   role: "Founder, T3 Labs"
@@ -9,4 +10,113 @@ tags: ["AI", "roofing", "estimation", "digital takeoff"]
 draft: true
 ---
 
-_Draft placeholder - full article content coming soon._
+> T3 Labs develops QuoteCore+, including its AI-assisted roofing workflow. This article describes our own implementation experience and its limitations.
+
+## Why roofing estimation is difficult
+
+Roofing estimation is not just "measure the roof and multiply." A real roof has geometry that fights you at every step.
+
+A typical roof plan contains multiple planes, each with its own pitch, area, and edge type. You have ridges where two slopes meet at the top, hips where they meet at an external angle, valleys where they meet at an internal angle, and barges along the gable ends. Each of those edges needs different flashings, different materials, and different labour rates.
+
+Then there is scale. Plans arrive as PDFs, images, or satellite exports. Some are drawn to scale. Some are not. Some show measurements. Some expect you to work them out. A roofer looking at a plan has to interpret what they see, decide what materials and components each section needs, account for waste, factor in labour, and produce a price that is both accurate and competitive.
+
+The hard part is not any single calculation. The hard part is the volume of decisions, the risk of missing something, and the fact that the same work gets repeated from scratch on every new quote.
+
+## What AI can do
+
+At T3 Labs, we built AI Scan Assist for [QuoteCore+](https://quote-core.com/features/digital-roof-takeoff) to help with the most time-consuming part of estimation: getting from "I have a plan" to "I have measurements I can work with."
+
+Here is what we have verified AI can do reliably in this context:
+
+**Detect roof areas.** Given a clear roof plan, AI can identify and outline individual roof planes. This gives you a starting set of areas to work with rather than drawing each one manually.
+
+**Identify ridges, hips, valleys, and barges.** AI can classify the edges between roof planes. This matters because each edge type corresponds to a different component in a roofing quote - a ridge capping, a hip flashing, a valley tray, a barge cover.
+
+**Reduce manual drawing.** On a complex roof with 15 to 20 planes, manually tracing every edge is slow and error-prone. AI can produce a first pass in seconds that the user then reviews and corrects.
+
+**Create a starting point for review.** This is the key phrase. AI does not replace the estimator. It gives them a head start.
+
+## What AI cannot reliably do
+
+This section is more important than the one above.
+
+**AI cannot guarantee plan accuracy.** If the plan is wrong, scaled incorrectly, or missing detail, the AI output will reflect those problems. AI does not know what the building actually looks like.
+
+**AI cannot understand every unusual roof.** Complex roofs with unusual geometries, multiple levels, or non-standard construction can confuse detection. The AI might miss a plane, misclassify an edge, or merge two areas that should be separate.
+
+**AI cannot identify missing construction details.** A plan might not show a parapet, a box gutter, or a custom flashing detail. AI works with what is visible. It does not know what is missing.
+
+**AI cannot confirm site conditions.** The plan does not tell you whether the existing roof structure is sound, whether access is difficult, or whether there are obstructions. AI cannot assess any of this.
+
+**AI cannot replace user review.** Every AI-detected measurement must be verified by a human. This is not optional. If you skip review, you will eventually quote based on a wrong measurement.
+
+**AI cannot produce a final contractor quote without configuration.** The AI gives you measurements. It does not give you a price. To turn measurements into a quote, you need materials, labour rates, waste allowances, supplier pricing, and business rules - all of which come from the user, not the AI.
+
+## Why manual control remains necessary
+
+In the [QuoteCore+ workflow](https://quote-core.com/roofing-quoting-software), AI Scan Assist produces a first pass. The user then:
+
+1. **Reviews detected measurements.** Checks that areas, ridges, hips, valleys, and barges are correct.
+2. **Corrects or adds measurements.** Adds anything the AI missed, removes false detections, adjusts boundaries.
+3. **Selects components.** Chooses which [Smart Components](https://quote-core.com/features/smart-components) to apply to each measurement - what material for the roof area, what flashing for the ridge, what labour rate applies.
+4. **Confirms pricing.** Reviews the total, adjusts margins, and sends the quote.
+
+This is not a limitation of the AI. This is how it should work. The estimator's knowledge is the most valuable part of the process. AI just gets them to the starting line faster.
+
+## How QuoteCore+ uses AI
+
+The actual workflow in QuoteCore+ looks like this:
+
+1. **Upload a plan.** PDF or image.
+2. **Run AI Scan Assist.** The system analyses the plan and identifies roof areas, ridges, hips, valleys, and barges.
+3. **Review detected measurements.** The user sees the AI output overlaid on the plan and can edit, add, or remove any measurement.
+4. **Apply Smart Components.** Each measurement is linked to a reusable component that stores materials, labour, waste, pricing, and business rules.
+5. **Produce a quote.** The measurements and components combine into a priced, professional quote ready to send.
+
+Steps 1 and 2 are AI-assisted. Steps 3, 4, and 5 are user-controlled. The AI does the tedious part. The user does the important part.
+
+You can try this workflow yourself with the [free roof takeoff builder](https://quote-core.com/free-roofing-takeoff-builder) on the QuoteCore+ site.
+
+## AI versus automation
+
+One of the most common misunderstandings we encounter is the difference between AI and automation.
+
+**AI-assisted detection** is what we described above: the system analyses a plan and identifies measurements. It is probabilistic, benefits from human review, and works best as a starting point.
+
+**Rule-based calculations** are different. When QuoteCore+ calculates the area of a roof plane from its dimensions, that is not AI. It is a formula. When it applies a 10% waste allowance to a material quantity, that is a stored rule. When it multiplies a quantity by a supplier price, that is arithmetic.
+
+**Stored component logic** - the Smart Components system - is also not AI. It is a database of reusable business rules that the user configures once and applies many times. The value is in the reuse, not in any machine learning.
+
+The point is: most of the time savings in modern roofing estimation come from automation and reuse, not from AI. AI helps with the first step (getting measurements from a plan). Automation and Smart Components help with everything after that.
+
+A good system uses both, and is clear about which is which.
+
+## Questions buyers should ask
+
+If you are evaluating roofing software that claims AI capabilities, ask these questions:
+
+**Can I manually correct the result?** If the AI detects something wrong, can you fix it? If the answer is no, the tool is not ready for production use.
+
+**What happens when detection fails?** Does the system give you a clear error, or does it silently produce bad output? You need to know when it is not working.
+
+**How is scale handled?** Plans come at different scales. Does the system ask you to confirm scale, or does it assume? Wrong scale means wrong measurements.
+
+**What file types are supported?** PDF, image, CAD? Each has different challenges for AI processing.
+
+**Does the system explain its measurements?** Can you see why it classified an edge as a ridge rather than a hip? Transparency matters when you are quoting real money.
+
+**Does it connect to quoting and materials?** Detecting measurements is useless if you cannot turn them into a priced quote. The value is in the connection, not the detection.
+
+**What remains the user's responsibility?** A vendor that says "AI does everything" is not being honest. You need to know what you are still responsible for.
+
+## The honest summary
+
+AI in roofing estimation is real and useful. It saves time on the most tedious part of the process - getting from a plan to a set of measurements. It does not replace the estimator, it does not produce a finished quote, and it does not remove the need for human review.
+
+The bigger time savings in roofing quoting come from what happens after the measurements are captured: reusable pricing logic, connected workflows, and automation of the admin work between quoting, ordering, and invoicing.
+
+That is where [QuoteCore+](https://quote-core.com/roofing-quoting-software) focuses. AI Scan Assist is one tool in the workflow. Smart Components, digital takeoff, and the connected quote-to-invoice pipeline are the rest.
+
+---
+
+*This article was reviewed in August 2026. AI capabilities evolve quickly - we will update this article as our implementation and the broader landscape change.*
