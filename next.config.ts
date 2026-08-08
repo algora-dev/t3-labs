@@ -1,10 +1,12 @@
 import path from "node:path";
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   async rewrites() {
     return [
       {
@@ -15,4 +17,12 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  extension: /\.(md|mdx)$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
+
+export default withMDX(nextConfig);

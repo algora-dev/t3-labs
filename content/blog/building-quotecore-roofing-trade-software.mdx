@@ -1,0 +1,158 @@
+---
+title: "Building QuoteCore+: What Roofing Taught Us About Designing Trade Software"
+description: "How T3 Labs turned a real roofing workflow problem into QuoteCore+ - the product decisions, early attempts, and lessons learned from building trade software."
+date: "2026-08-08"
+updated: "2026-08-08"
+author:
+  name: "Cece"
+  role: "Founder, T3 Labs"
+tags: ["product development", "roofing", "Smart Components", "trade software"]
+draft: false
+---
+
+> T3 Labs is the product studio behind QuoteCore+.
+
+## The original problem
+
+Roofing contractors do not lose time because measuring roofs is hard. They lose time because the same job information gets rebuilt at every stage.
+
+Here is how a typical roofing job works without connected software:
+
+1. **Measurements** go into a notebook or a site visit notes app.
+2. **Pricing** lives in a spreadsheet that gets updated when someone remembers to update it.
+3. **The quote** gets typed into a Word document or a quote template, copying measurements and prices from the spreadsheet.
+4. **Customer approval** happens by email or phone. The roofer chases the customer manually.
+5. **Materials ordering** means rebuilding the job from the quote into a new document for the supplier.
+6. **Job management** happens in a folder, a notebook, or a whiteboard.
+7. **Invoicing** means copying the quote and order details into yet another document.
+
+Every handover creates admin. Every copy-and-paste creates a chance for something to be missed. A missed flashing means a reorder. A wrong price means a margin error. A forgotten follow-up means a lost job.
+
+This is not a technology problem. It is a workflow problem. The information exists at step 1 and gets manually recreated at every step after that. [McKinsey's research on construction productivity](https://www.mckinsey.com/capabilities/operations/our-insights/the-case-for-reinventing-construction) highlights exactly this pattern — fragmented workflows and disconnected tools are a primary reason the construction industry has lagged other sectors in productivity growth for decades.
+
+## Early attempts
+
+The first versions of solving this problem were, predictably, [spreadsheets](https://quote-core.com/blog/roofing-quoting-software-vs-spreadsheets).
+
+A spreadsheet can store materials, prices, and quantities. It can calculate totals. It can even produce something that looks like a quote if you format it carefully.
+
+But spreadsheets break down fast in roofing:
+
+- **Pitch and angle calculations** require formulas that are easy to get wrong and hard to audit.
+- **Waste allowances** vary by material and by roof section. A spreadsheet does not handle conditional logic well.
+- **Component reuse** means copying rows between sheets, which introduces errors.
+- **Customer-facing output** from a spreadsheet looks like a spreadsheet, not a professional quote.
+- **No connection to ordering or invoicing.** The spreadsheet is a dead end.
+
+We also tried generic quoting tools. They handle the quote document well but stop there. No measurements. No component reuse. No connection to materials ordering or invoicing. No understanding of roofing as a workflow.
+
+The gap was not in any single tool. The gap was between tools.
+
+## The product breakthrough
+
+The breakthrough came when we stopped trying to build a better quote template and started building a system that captures how a trade business actually works.
+
+### Smart Components™
+
+[Smart Components](https://quote-core.com/features/smart-components) were the turning point. Instead of typing materials, labour, and prices into every quote from scratch, a Smart Component™ stores all of that logic once.
+
+A roofing ridge component, for example, stores:
+- The material (ridge capping, specific product code)
+- The labour rate for installing it
+- The waste allowance
+- The formula for calculating quantity from ridge length
+- The supplier price
+- Any business rules (minimum charge, rounding, markup)
+
+Build it once. Use it on every future quote. The component becomes a reusable unit of business knowledge.
+
+### Measurement-based pricing
+
+Smart Components™ only work if measurements flow into them automatically. That is where digital takeoff comes in.
+
+Upload a plan. Measure digitally. AI Scan Assist identifies roof areas, ridges, hips, valleys, and barges. Those measurements link directly to Smart Components™. The ridge length feeds the ridge component. The roof area feeds the roof covering component. The quantity, price, labour, and waste are all calculated automatically.
+
+The measurement becomes a priced line item without any manual re-entry.
+
+### Connected quote-to-order workflow
+
+The quote is not the end. When a customer approves a quote, the same job data carries through to:
+- **Material orders** - one click turns the accepted quote into an order, editable before sending to the supplier
+- **Job tracking** - the job stays connected to the quote and order
+- **Invoicing** - the invoice pulls from the same data, no re-entry
+
+This is the connected workflow that spreadsheets and generic tools cannot provide.
+
+## Designing for roofing first
+
+We started with roofing because roofing is the hardest trade to quote.
+
+A roof has:
+- **Areas** - multiple planes, each with its own dimensions
+- **Pitches** - expressed as ratios or degrees, affecting material quantities
+- **Ridges** - horizontal edges at the top
+- **Hips** - angled edges on external corners
+- **Valleys** - angled edges on internal corners
+- **Barges** - edges along gable ends
+- **Cut lengths** - materials ordered in specific lengths
+- **Waste** - varies by material type and roof complexity
+- **Labour** - different rates for different tasks
+- **Supplier pricing** - changes frequently, needs to be updatable
+
+If you can handle roofing, you can handle most trades. The same component-based approach works for cladding, flooring, fencing, landscaping, and any trade that quotes from measurements.
+
+QuoteCore+ now supports all of these. But the core logic was built around roofing geometry first.
+
+## What T3 Labs learned
+
+### Trade software must match the actual workflow
+
+If the software forces a roofer to work differently from how they work on site, they will not use it. The software needs to fit the workflow, not the other way around.
+
+### Setup matters
+
+Smart Components™ need to be configured before they save time. The first quote takes longer because you are building the components. The tenth quote is dramatically faster. Users need to know this going in.
+
+### Flexibility cannot create unnecessary complexity
+
+Every trade business works slightly differently. The software needs to be flexible enough to handle that. But every option adds complexity. The balance is: flexible where it matters (pricing, materials, labour, waste rules), opinionated where it does not (quote layout, workflow order).
+
+### Product terminology must match industry language
+
+Roofers say "ridge," not "horizontal edge." They say "hip," not "external angle junction." The software must use the language of the trade, not the language of the developer.
+
+### AI must still allow manual review
+
+AI Scan Assist is useful because it produces a starting point. It would be dangerous if it produced a final result. The manual review step is the feature, not a limitation.
+
+### Speed claims must account for preconfiguration
+
+"Create a quote in 3 minutes" is true - after you have set up your Smart Components™. The first quote takes longer. Be honest about that.
+
+## What QuoteCore+ does today
+
+QuoteCore+ is quoting and job workflow software for roofing, construction, and trade businesses. It handles:
+
+- Digital takeoff with AI Scan Assist
+- Smart Components™ for reusable pricing, labour, waste, and business rules
+- Professional quote building and customer approval
+- Material ordering from accepted quotes
+- Job tracking and management
+- Invoicing connected to the same job data
+- Free tools including roofing calculators, a takeoff builder, and quote/invoice/PO generators
+
+Plans range from free to $59 per month, with a full-featured 14-day trial and no card required.
+
+## What comes next
+
+The roadmap focuses on:
+- Deeper supplier integration (supplier catalogs, branded component libraries)
+- More AI-assisted features (image-to-order, image-to-invoice)
+- Expanded trade-specific component libraries
+- Improved analytics and reporting
+
+We will share more as these ship.
+
+---
+
+*T3 Labs builds products from real workflow problems. QuoteCore+ is our flagship product for the trades industry.*
