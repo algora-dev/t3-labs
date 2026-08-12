@@ -53,6 +53,8 @@ export type ProposalConfig = {
   prospectId: string;
   companyName: string;
   contactFirstName: string;
+  /** Optional layout variant. Defaults to the full shared renderer when omitted. */
+  layout?: "short" | "full";
   location?: string;
   existingWebsiteUrl?: string;
   /** Factual website status. The optional comparison object independently controls comparison visibility. */
