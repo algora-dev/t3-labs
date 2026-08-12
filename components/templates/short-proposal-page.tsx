@@ -56,24 +56,6 @@ function Dialog({ title, children, onClose }: { title: string; children: React.R
   return <div className="fixed inset-0 z-[100] grid place-items-center bg-[#0a0b10]/65 p-4" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}><section role="dialog" aria-modal="true" aria-labelledby="proposal-dialog-title" className="w-full max-w-lg rounded-2xl border border-white/70 bg-white p-6 shadow-2xl sm:p-8"><div className="flex items-start justify-between gap-4"><h2 id="proposal-dialog-title" className="proposal-section-title">{title}</h2><button type="button" onClick={onClose} autoFocus className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-[#e7e9ef] text-xl" aria-label="Close dialog">{"\u00d7"}</button></div><div className="mt-5">{children}</div></section></div>;
 }
 
-function ShortWalkthrough({ proposal }: { proposal: ProposalConfig }) {
-  const [started, setStarted] = useState(false);
-  const { video } = proposal;
-
-  if (started && video.url) {
-    return <video className="aspect-video w-full rounded-lg bg-black" controls autoPlay poster={video.posterImage.src}><source src={video.url} /></video>;
-  }
-
-  return (
-    <button type="button" className="group relative block aspect-video w-full overflow-hidden rounded-lg bg-[#111318] text-left focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#d7ff00]" onClick={() => { if (video.url) { track(proposal, "video_started"); setStarted(true); } }} aria-label={`Play the ${proposal.companyName} website walkthrough`}>
-      <Image src={video.posterImage.src} alt={video.posterImage.alt} fill priority sizes="(min-width: 1024px) 56vw, 100vw" className="object-cover opacity-80 transition duration-500 group-hover:scale-[1.01]" />
-      <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-black/10" />
-      <span className="absolute inset-0 grid place-items-center"><span className="grid h-16 w-16 place-items-center rounded-full bg-white/95 pl-1 text-xl text-[#9caf00] shadow-xl transition group-hover:scale-105">{"\u25b6"}</span></span>
-      <span className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white"><span><span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-[#d7ff00]">Private walkthrough</span><span className="mt-1 block text-xs font-medium sm:text-sm">Play recorded concept tour</span></span></span>
-    </button>
-  );
-}
-
 export function ShortProposalPage({ proposal }: { proposal: ProposalConfig }) {
   const [dialog, setDialog] = useState<"launch" | "remove" | null>(null);
   const [removalChoice, setRemovalChoice] = useState<"remove" | "suppress" | null>(null);
@@ -134,12 +116,16 @@ export function ShortProposalPage({ proposal }: { proposal: ProposalConfig }) {
               <h1 className="proposal-display mt-5 max-w-xl">{proposal.hero.headline}</h1>
               <div className="mb-7 mt-7 h-1 w-8 rounded-full bg-[#d7ff00]" />
               <p className="max-w-xl text-[clamp(1.05rem,2vw,1.2rem)] leading-[1.65] text-[#3e4352]">{proposal.hero.supportingCopy}</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button href="#walkthrough">{"\u25b6"} Watch the quick walkthrough</Button></div>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row"><a href={proposal.existingWebsiteUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-lg px-[22px] py-3.5 text-[15px] font-semibold transition hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-3 bg-gradient-to-br from-[#050608] to-[#242832] text-white shadow-[0_14px_30px_rgba(10,11,16,0.16)]">Check your website here</a></div>
               <p className="flex items-center gap-2 text-xs font-medium text-[#707582]" style={{ marginTop: "2.25rem" }}><Lock />{proposal.hero.privacyNote}</p>
             </div>
-            <div id="walkthrough">
-              <div className="rounded-xl border border-[#e7e9ef] bg-white p-2 shadow-[0_18px_50px_rgba(24,31,51,0.12)]"><ShortWalkthrough proposal={proposal} /></div>
-              <p className="mt-4 text-xs leading-5 text-[#707582]">This is a recorded walkthrough of the working website concept we built for {proposal.companyName}. It is not live or publicly available.</p>
+            <div>
+              <a href={proposal.existingWebsiteUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the {proposal.companyName} website concept" className="group block overflow-hidden rounded-xl border border-[#e7e9ef] bg-white p-2 shadow-[0_18px_50px_rgba(24,31,51,0.12)] transition hover:-translate-y-0.5">
+                <div className="relative overflow-hidden rounded-lg border border-[#dfe2e9] bg-[#111318]">
+                  <Image src={proposal.conceptImages.desktopHero.src} alt={proposal.conceptImages.desktopHero.alt} width={1440} height={960} className="h-auto w-full object-cover object-top opacity-90 transition duration-500 group-hover:scale-[1.01]" />
+                  <span className="absolute inset-0 grid place-items-center"><span className="grid h-16 w-16 place-items-center rounded-full bg-white/95 text-xl text-[#9caf00] shadow-xl transition group-hover:scale-105">{"\u2197"}</span></span>
+                </div>
+              </a>
               <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 lg:grid-cols-3">{proposal.outcomes.map((outcome) => <div key={outcome} className="flex items-start gap-2 text-sm font-medium leading-5"><span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#d7ff00] text-[10px] font-black text-[#0a0b10]">{"\u2713"}</span>{outcome}</div>)}</div>
             </div>
           </section>
