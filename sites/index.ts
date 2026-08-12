@@ -5,6 +5,7 @@ import { blenheimRoofingProposal } from "./blenheim-roofing-wp-000209/proposal-c
 import { proposalTemplate } from "./proposal-template-wp-000000/proposal-config";
 import { threeARoofingProposal } from "./3a-roofing-wp-000207/proposal-config";
 import { shortProposalTemplate } from "./short-proposal-template-wp-000000/proposal-config";
+import { actRoofingProposal } from "./act-roofing-ltd/proposal-config";
 import type { ProposalConfig } from "./types";
 
 export const sites = {
@@ -15,6 +16,7 @@ export const sites = {
   [threeARoofingProposal.slug]: threeARoofingProposal,
   [proposalTemplate.slug]: proposalTemplate,
   [shortProposalTemplate.slug]: shortProposalTemplate,
+  [actRoofingProposal.slug]: actRoofingProposal,
 } satisfies Record<string, ProposalConfig>;
 
 export type SiteSlug = keyof typeof sites;
