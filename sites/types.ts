@@ -202,6 +202,40 @@ export function validateProposalForProduction(proposal: ProposalConfig) {
   if (process.env.VERCEL_ENV !== "production") return;
   if (proposal.status !== "active") return;
 
+  // Short proposals (hero + screenshot + website link only) have a much smaller
+  // production contract: company identified, a screenshot present, a working
+  // website link, and no placeholders. They intentionally omit video, the
+  // middle sections, commercial-terms extras and the full removal workflow.
+  if (proposal.layout === "short") {
+    const hasDevelopmentPlaceholder = /placeholder|todo|\[[A-Z][A-Z\s_-]+\]/i.test(JSON.stringify(proposal));
+    const screenshotMissing =
+      !proposal.conceptImages.desktopHero?.src ||
+      /placeholder|\[.+]|todo/i.test(proposal.conceptImages.desktopHero?.src ?? "");
+    const websiteLinkMissing =
+      !proposal.existingWebsiteUrl ||
+      /placeholder|\[.+]|todo/i.test(proposal.existingWebsiteUrl) ||
+      !/^https?:\/\//.test(proposal.existingWebsiteUrl);
+
+    const vatLabel = proposal.package.vatLabel;
+    const needsCommercial = ['revisionRounds', 'includedHostingMonths', 'monthlyHostingPrice']
+      .some((k) => {
+        const v = (proposal.package as Record<string, unknown>)[k];
+        return v === undefined || v === "" ||
+          (typeof v === "string" && unresolvedMarkers.some((m) => v.includes(m)));
+      });
+
+    if (hasDevelopmentPlaceholder || screenshotMissing || websiteLinkMissing || needsCommercial) {
+      const details = [
+        hasDevelopmentPlaceholder ? "remove all development placeholders" : "",
+        screenshotMissing ? "website screenshot is missing" : "",
+        websiteLinkMissing ? "website link is missing or invalid" : "",
+        needsCommercial ? "complete revision rounds, hosting months and monthly price" : "",
+      ].filter(Boolean);
+      throw new Error(`Proposal ${proposal.prospectId} is not ready for production: ${details.join("; ")}.`);
+    }
+    return;
+  }
+
   const values = [
     proposal.video.url,
     proposal.video.transcriptUrl,
