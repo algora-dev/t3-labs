@@ -144,6 +144,21 @@ export function ProposalPage({ proposal }: { proposal: ProposalConfig }) {
   const saveRemoval = (choice: "remove" | "suppress") => {
     track(proposal, choice === "suppress" ? "do_not_contact_selected" : "proposal_closed");
     localStorage.setItem(`t3-proposal:${proposal.prospectId}:suppression`, choice);
+    // Notify Cece so the closure is recorded server-side rather than lost in browser state
+    try {
+      fetch("/api/proposal-closed", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          companyName: proposal.companyName,
+          prospectId: proposal.prospectId,
+          choice,
+          proposalUrl: window.location.href,
+        }),
+      }).catch((err) => console.error("Proposal closed notification failed", err));
+    } catch (err) {
+      console.error("Proposal closed notification failed", err);
+    }
     setRemovalChoice(choice);
   };
 
@@ -213,7 +228,7 @@ export function ProposalPage({ proposal }: { proposal: ProposalConfig }) {
       </div>
 
       {dialog === "launch" ? <Dialog title="Ready to get this website live?" onClose={() => setDialog(null)}><p className="proposal-body">Nothing is charged when you click. Choose the easiest way to get in touch and we&apos;ll talk through the details and agree everything first.</p><div className="mt-6 grid gap-3"><Button href={emailHref} onClick={() => track(proposal, "launch_email_requested")}>Email T3 Labs about launch <Arrow /></Button><Button href={proposal.actions.calendlyUrl} secondary onClick={() => track(proposal, "calendly_clicked")}>Book a {callMinutes}-minute call <Arrow /></Button></div></Dialog> : null}
-      {dialog === "remove" ? <Dialog title="Close this private proposal" onClose={() => setDialog(null)}>{removalChoice ? <div role="status" className="rounded-xl bg-[#f6f8fc] p-5 leading-7 text-[#424657]">Your local preference has been saved. The live suppression workflow must be connected before this draft can be published.</div> : <><p className="leading-7 text-[#606575]">Choose how you would like this proposal handled. This local preview stores the choice only in this browser.</p><div className="mt-6 grid gap-3"><Button secondary onClick={() => saveRemoval("remove")}>Close and remove this proposal</Button><Button secondary onClick={() => saveRemoval("suppress")}>Please do not contact me again</Button></div></>}</Dialog> : null}
+      {dialog === "remove" ? <Dialog title="Close this private proposal" onClose={() => setDialog(null)}>{removalChoice ? <div role="status" className="rounded-xl bg-[#f6f8fc] p-5 leading-7 text-[#424657]">Thanks - we&apos;ve noted your choice and will close this proposal out. If you selected not to be contacted, we won&apos;t reach out again.</div> : <><p className="leading-7 text-[#606575]">Choose how you would like this proposal handled. We&apos;ll be notified and can close this out accordingly.</p><div className="mt-6 grid gap-3"><Button secondary onClick={() => saveRemoval("remove")}>Close and remove this proposal</Button><Button secondary onClick={() => saveRemoval("suppress")}>Please do not contact me again</Button></div></>}</Dialog> : null}
     </div>
   );
 }
