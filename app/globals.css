@@ -232,33 +232,12 @@ textarea {
 }
 
 /* ----------------------------------------------------------------- */
-/*  Homepage responsive - ported from legacy styles.css              */
+/*  Homepage responsive                                              */
 /* ----------------------------------------------------------------- */
 
 @media (max-width: 980px) {
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] {
-    grid-template-columns: 1fr !important;
-    min-height: 0 !important;
-    padding-top: 58px;
-  }
-
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] > div:last-child {
-    min-height: 580px;
-  }
-
-  main section[id="positioning"][style*="grid-template-columns: minmax(0,1fr) auto"],
-  main section[id="contact"][style*="grid-template-columns: 1fr auto"],
-  main section[id="send-message"] > div[style*="grid-template-columns: minmax(0,0.9fr) minmax(0,1.1fr)"] {
-    grid-template-columns: 1fr !important;
-  }
-
-  main section[id="send-message"] > div[style*="grid-template-columns: minmax(0,0.9fr) minmax(0,1.1fr)"] {
-    padding: 32px 28px;
-  }
-
-  main section[id="work"] > div:last-child,
-  main section[id="testimonials"] > div:last-child {
-    grid-template-columns: repeat(2, 1fr) !important;
+  main section[id="positioning"] span {
+    text-align: left;
   }
 }
 
@@ -272,64 +251,7 @@ textarea {
     width: min(100% - 28px, 1180px) !important;
   }
 
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] {
-    padding-top: 44px;
-    gap: 24px;
-  }
-
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] > div:first-child h1 {
-    font-size: clamp(3rem, 15vw, 4rem);
-    line-height: 0.95;
-  }
-
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] > div:first-child a[class*="inline-flex min-h"] {
-    width: 100%;
-  }
-
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] > div:last-child {
-    position: relative;
-    display: block;
-    min-height: 370px;
-    overflow: hidden;
-  }
-
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] > div:last-child img {
-    position: absolute;
-    max-width: none;
-  }
-
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] > div:last-child img:nth-child(2) {
-    top: 104px;
-    left: -12%;
-    right: auto;
-    z-index: 3;
-    width: 112%;
-  }
-
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] > div:last-child img:nth-child(3) {
-    top: 188px;
-    right: -4%;
-    z-index: 5;
-    width: 58%;
-  }
-
-  main section[style*="grid-template-columns: minmax(0,0.92fr)"] > div:last-child img:nth-child(4) {
-    top: 22px;
-    right: -16%;
-    z-index: 1;
-    width: 88%;
-  }
-
-  main section[id="positioning"] span {
-    text-align: left;
-  }
-
-  main section[id="work"] > div:last-child,
-  main section[id="testimonials"] > div:last-child {
-    grid-template-columns: 1fr !important;
-  }
-
-  main section[id="send-message"] > div[style*="grid-template-columns"] {
+  main section[id="send-message"] > div[class*="grid"] {
     padding: 24px 18px;
   }
 

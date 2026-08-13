@@ -202,10 +202,9 @@ function Header({
 }) {
   return (
     <header
-      className="sticky top-0 z-30 grid grid-cols-1fr-auto-1fr items-center gap-6 w-[min(1180px,calc(100%-40px))] mx-auto mt-3.5 px-3.5 py-3 border border-[rgba(231,233,239,0.9)] rounded-xl bg-[rgba(255,255,255,0.82)] shadow-[0_14px_50px_rgba(31,35,52,0.08)] backdrop-blur-[22px]"
-      style={{ gridTemplateColumns: "1fr auto 1fr" }}
+      className="sticky top-0 z-30 flex items-center justify-between gap-4 w-[min(1180px,calc(100%-40px))] mx-auto mt-3.5 px-3.5 py-3 border border-[rgba(231,233,239,0.9)] rounded-xl bg-[rgba(255,255,255,0.82)] shadow-[0_14px_50px_rgba(31,35,52,0.08)] backdrop-blur-[22px]"
     >
-      <a href="#top" aria-label="T3 Labs home" className="inline-flex items-center w-fit">
+      <a href="#top" aria-label="T3 Labs home" className="inline-flex items-center shrink-0">
         <img
           src="/assets/t3-labs-black.png"
           alt="T3 Labs"
@@ -229,7 +228,7 @@ function Header({
       <a
         href="#contact"
         onClick={onClose}
-        className="hidden md:inline-flex justify-self-end px-4.5 py-3 border border-[var(--line)] rounded-lg bg-white text-sm font-semibold shadow-[0_8px_20px_rgba(16,24,40,0.05)] hover:border-[#e3e8bc] hover:bg-[#fbfff0] transition-colors duration-200"
+        className="hidden md:inline-flex px-4.5 py-3 border border-[var(--line)] rounded-lg bg-white text-sm font-semibold shadow-[0_8px_20px_rgba(16,24,40,0.05)] hover:border-[#e3e8bc] hover:bg-[#fbfff0] transition-colors duration-200 whitespace-nowrap"
       >
         Build with T3 Labs
       </a>
@@ -239,7 +238,7 @@ function Header({
         aria-label="Open navigation"
         aria-expanded={navOpen}
         onClick={onToggle}
-        className="md:hidden flex w-[42px] h-[42px] flex-col items-center justify-center gap-1 border border-[var(--line)] rounded-lg bg-white"
+        className="md:hidden flex w-[42px] h-[42px] shrink-0 flex-col items-center justify-center gap-1 border border-[var(--line)] rounded-lg bg-white"
       >
         <span className="w-[18px] h-0.5 bg-[var(--ink)]" />
         <span className="w-[18px] h-0.5 bg-[var(--ink)]" />
@@ -255,12 +254,11 @@ function Header({
 function Hero() {
   return (
     <section
-      className="grid gap-12 items-center min-h-[760px] py-[78px] pb-[60px] w-[min(1180px,calc(100%-40px))] mx-auto"
-      style={{ gridTemplateColumns: "minmax(0,0.92fr) minmax(420px,1.08fr)" }}
+      className="grid gap-12 items-center min-h-[760px] py-[78px] pb-[60px] w-[min(1180px,calc(100%-40px))] mx-auto md:[grid-template-columns:minmax(0,0.92fr)_minmax(420px,1.08fr)] max-md:grid-cols-1 max-md:min-h-0 max-md:py-12 max-md:pb-8"
     >
       <div className="hero-copy">
         <p className="m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">T3 Labs</p>
-        <h1 className="max-w-[760px] mb-7 text-[clamp(3.1rem,5vw,4rem)] font-semibold leading-none">
+        <h1 className="max-w-[760px] mb-7 text-[clamp(2rem,5vw,4rem)] font-semibold leading-[1.05] max-md:text-[clamp(1.75rem,7vw,2.5rem)]">
           We build future-ready solutions for everyday problems.
         </h1>
         <p className="max-w-[580px] mb-4.5 text-[#3e4352] text-[1.08rem]">
@@ -299,7 +297,7 @@ function Hero() {
       </div>
 
       {/* Product showcase */}
-      <div className="relative min-h-[640px] isolate" aria-label="T3 Labs product showcase">
+      <div className="relative min-h-[640px] isolate hidden md:block" aria-label="T3 Labs product showcase">
         <div className="absolute z-[-2] rounded-full blur-[30px] opacity-85 top-[70px] right-[90px] w-[300px] h-[300px] bg-[rgba(17,19,24,0.08)]" />
         <div className="absolute z-[-2] rounded-full blur-[30px] opacity-85 right-[190px] bottom-[80px] w-[230px] h-[230px] bg-[rgba(215,255,0,0.18)]" />
 
@@ -331,8 +329,7 @@ function IntroStrip() {
   return (
     <section
       id="positioning"
-      className="grid gap-7 items-start mb-[104px] p-8.5 border border-[var(--line)] rounded-lg bg-white w-[min(1180px,calc(100%-40px))] mx-auto"
-      style={{ gridTemplateColumns: "minmax(0,1fr) auto" }}
+      className="grid gap-7 items-start mb-[104px] p-8.5 border border-[var(--line)] rounded-lg bg-white w-[min(1180px,calc(100%-40px))] mx-auto md:[grid-template-columns:minmax(0,1fr)_auto] max-md:grid-cols-1"
     >
       <div>
         <h2 className="max-w-[880px] mb-4.5 text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-none">
@@ -374,7 +371,7 @@ function WorkSection() {
         </h2>
       </div>
 
-      <div className="grid grid-cols-3 gap-4.5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4.5">
         {WORK_CARDS.map((card) => (
           <article
             key={card.num}
@@ -473,8 +470,7 @@ function CustomSolutionsSection() {
               }`}
             >
               <div
-                className="grid h-full"
-                style={{ gridTemplateColumns: "minmax(0,1fr) minmax(0,0.85fr)" }}
+                className="grid h-full md:[grid-template-columns:minmax(0,1fr)_minmax(0,0.85fr)] max-md:grid-cols-1"
               >
                 {/* Image side */}
                 <div className="relative overflow-hidden bg-[#0a0b10]">
@@ -547,8 +543,7 @@ function CustomSolutionsSection() {
 
       {/* Positioning statement + CTA */}
       <div
-        className="grid gap-7 items-center mt-6 p-8.5 border border-[var(--line)] rounded-xl bg-[radial-gradient(circle_at_12%_20%,rgba(17,19,24,0.04),transparent_20rem),radial-gradient(circle_at_82%_30%,rgba(215,255,0,0.06),transparent_16rem),white]"
-        style={{ gridTemplateColumns: "1fr auto" }}
+        className="grid gap-7 items-center mt-6 p-8.5 border border-[var(--line)] rounded-xl bg-[radial-gradient(circle_at_12%_20%,rgba(17,19,24,0.04),transparent_20rem),radial-gradient(circle_at_82%_30%,rgba(215,255,0,0.06),transparent_16rem),white] md:[grid-template-columns:1fr_auto] max-md:grid-cols-1"
       >
         <div>
           <p className="block mb-3 text-[#373c4c] text-[1.05rem] leading-[1.65]">
@@ -588,7 +583,7 @@ function Testimonials() {
         </h2>
       </div>
 
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {TESTIMONIALS.map((t) => (
           <article
             key={t.initials}
@@ -624,8 +619,7 @@ function CTASection() {
   return (
     <section
       id="contact"
-      className="grid gap-7 items-center mb-8.5 p-10.5 border border-[rgba(17,19,24,0.1)] rounded-2xl bg-[radial-gradient(circle_at_12%_20%,rgba(17,19,24,0.06),transparent_24rem),radial-gradient(circle_at_82%_30%,rgba(215,255,0,0.08),transparent_17rem),white] shadow-[0_26px_80px_rgba(24,31,51,0.12)] w-[min(1180px,calc(100%-40px))] mx-auto"
-      style={{ gridTemplateColumns: "1fr auto" }}
+      className="grid gap-7 items-center mb-8.5 p-10.5 border border-[rgba(17,19,24,0.1)] rounded-2xl bg-[radial-gradient(circle_at_12%_20%,rgba(17,19,24,0.06),transparent_24rem),radial-gradient(circle_at_82%_30%,rgba(215,255,0,0.08),transparent_17rem),white] shadow-[0_26px_80px_rgba(24,31,51,0.12)] w-[min(1180px,calc(100%-40px))] mx-auto md:[grid-template-columns:1fr_auto] max-md:grid-cols-1 max-md:p-7"
     >
       <div>
         <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
@@ -667,8 +661,7 @@ function ContactForm({
   return (
     <section id="send-message" className="mb-8.5 w-[min(1180px,calc(100%-40px))] mx-auto">
       <div
-        className="grid gap-13 items-start p-13 border border-[var(--line)] rounded-2xl bg-[radial-gradient(circle_at_8%_12%,rgba(215,255,0,0.05),transparent_20rem),white] shadow-[0_26px_80px_rgba(24,31,51,0.12)]"
-        style={{ gridTemplateColumns: "minmax(0,0.9fr) minmax(0,1.1fr)" }}
+        className="grid gap-13 items-start p-13 border border-[var(--line)] rounded-2xl bg-[radial-gradient(circle_at_8%_12%,rgba(215,255,0,0.05),transparent_20rem),white] shadow-[0_26px_80px_rgba(24,31,51,0.12)] md:[grid-template-columns:minmax(0,0.9fr)_minmax(0,1.1fr)] max-md:grid-cols-1 max-md:p-7 max-md:gap-8"
       >
         <div>
           <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
