@@ -7,7 +7,7 @@ export const blenheimRoofingProposal = {
   slug: "blenheim-roofing-wp-000209",
   prospectId: "WP-000209",
   companyName: "Blenheim Roofing Services Ltd",
-  contactFirstName: "David",
+  contactFirstName: "Bryn",
   location: "Surrey",
   existingWebsiteUrl: "https://blenheimroofing.co.uk/contact-us/",
   hasExistingWebsite: true,
@@ -18,7 +18,7 @@ export const blenheimRoofingProposal = {
   },
   hero: {
     overline: "A private concept created for",
-    headline: "Hi David, we created a private website concept for Blenheim Roofing Services Ltd.",
+    headline: "Hi Bryn, we created a private website concept for Blenheim Roofing Services Ltd.",
     supportingCopy:
       "This private walkthrough shows a working website concept designed to make the company easier to understand on mobile, bring completed work and trust material forward, and support better quote enquiries.",
     privacyNote: "This concept is private and is not publicly listed.",
