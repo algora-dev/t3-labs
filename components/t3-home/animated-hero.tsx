@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const HERO_SESSION_KEY = "t3HeroPlayed";
+const HERO_SESSION_KEY = "***";
 
 type Scene = {
   heading: string;
@@ -28,14 +28,14 @@ const SCENES: Scene[] = [
   },
 ];
 
-// Timeline (ms)
-const TYPE_SPEED = 55;
+// Timeline (ms) — heading 25% faster, service pulses 25% slower
+const TYPE_SPEED = 42; // was 55, sped up 25%
 const HEADING_EMPHASIS_DELAY = 150;
 const HEADING_EMPHASIS_HOLD = 900;
 const SERVICES_REVEAL_DELAY = 350;
-const SERVICE_PULSE_DURATION = 500; // each item pulses for 500ms
-const SERVICE_PULSE_OVERLAP = 150; // next item starts 150ms after previous (350ms visible overlap)
-const SERVICES_HOLD_AFTER_PULSE = 800; // hold after all pulses finish
+const SERVICE_PULSE_DURATION = 625; // was 500, slowed 25%
+const SERVICE_PULSE_OVERLAP = 190; // was 150, slowed 25%
+const SERVICES_HOLD_AFTER_PULSE = 800;
 const SCENE_EXIT_DURATION = 500;
 const BETWEEN_SCENE_DELAY = 200;
 const FINAL_REVEAL_DELAY = 400;
@@ -47,7 +47,7 @@ export default function AnimatedHero() {
   const [showServices, setShowServices] = useState(false);
   const [sceneExiting, setSceneExiting] = useState(false);
   const [headingEmphasis, setHeadingEmphasis] = useState(false);
-  const [pulsingService, setPulsingService] = useState(-1); // index of currently pulsing service item
+  const [pulsingService, setPulsingService] = useState(-1);
   const cancelRef = useRef(false);
 
   useEffect(() => {
@@ -75,7 +75,6 @@ export default function AnimatedHero() {
         if (cancelRef.current) return;
         const scene = SCENES[i];
 
-        // Reset state for this scene
         setTypedText("");
         setShowServices(false);
         setSceneExiting(false);
@@ -101,7 +100,7 @@ export default function AnimatedHero() {
         setShowServices(true);
 
         // Pulse each service item sequentially
-        await sleep(200); // brief pause after services appear
+        await sleep(200);
         for (let s = 0; s < scene.services.length; s++) {
           if (cancelRef.current) return;
           setPulsingService(s);
@@ -109,10 +108,8 @@ export default function AnimatedHero() {
         }
         setPulsingService(-1);
 
-        // Hold
         await sleep(SERVICES_HOLD_AFTER_PULSE);
 
-        // Exit scene
         setSceneExiting(true);
         await sleep(SCENE_EXIT_DURATION);
 
@@ -123,7 +120,6 @@ export default function AnimatedHero() {
 
       if (cancelRef.current) return;
 
-      // Reveal final hero
       await sleep(FINAL_REVEAL_DELAY);
       setPhase("final");
       sessionStorage.setItem(HERO_SESSION_KEY, "true");
@@ -137,7 +133,8 @@ export default function AnimatedHero() {
     };
   }, []);
 
-  // Split heading to wrap emphasis word — ensures spacing is preserved
+  // Render heading with emphasis word — uses inline (not inline-block) to prevent line jumps
+  // Spaces are explicitly preserved around the emphasis span
   function renderHeading(scene: Scene) {
     if (!scene.emphasisWord || !typedText.includes(scene.emphasisWord)) {
       return typedText;
@@ -148,22 +145,19 @@ export default function AnimatedHero() {
     const after = typedText.slice(idx + scene.emphasisWord.length);
     return (
       <>
-        {before}
-        <span
-          className={`t3-hero__emphasis${headingEmphasis ? " t3-hero__emphasis--active" : ""}`}
-          style={{ display: "inline-block" }}
-        >
+        <span>{before}</span>
+        <span className={`t3-hero__emphasis${headingEmphasis ? " t3-hero__emphasis--active" : ""}`}>
           {word}
         </span>
-        {after}
+        <span>{after}</span>
       </>
     );
   }
 
-  // Render services with pulse capability — uses middle dot separators
+  // Render services with pulse — middle dot separators, spaces preserved
   function renderServices(scene: Scene) {
     return scene.services.map((item, idx) => (
-      <span key={idx} className="t3-hero__service-item-wrap">
+      <span key={idx}>
         {idx > 0 && <span className="t3-hero__service-sep"> · </span>}
         <span
           className={`t3-hero__service-item${pulsingService === idx ? " t3-hero__service-item--active" : ""}`}
@@ -189,7 +183,7 @@ export default function AnimatedHero() {
                 className={`t3-hero__scene${sceneExiting ? " t3-hero__scene--exiting" : ""}`}
                 key={activeScene}
               >
-                <h2 className="t3-hero__category">
+                <h2 className="t3-hero__category" style={{ whiteSpace: "nowrap" }}>
                   {renderHeading(SCENES[activeScene])}
                   <span className="t3-hero__cursor" aria-hidden="true" />
                 </h2>
