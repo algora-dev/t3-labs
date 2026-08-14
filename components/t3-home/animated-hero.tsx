@@ -31,12 +31,12 @@ const TYPE_SPEED = 42;
 const HEADING_EMPHASIS_DELAY = 150;
 const HEADING_EMPHASIS_HOLD = 900;
 const SERVICES_REVEAL_DELAY = 350;
-const SERVICE_PULSE_DURATION = 550; // 25% slower
-const SERVICE_PULSE_OVERLAP = 150; // 25% slower
-const SERVICES_HOLD_AFTER_PULSE = 800;
-const SCENE_EXIT_DURATION = 500;
-const BETWEEN_SCENE_DELAY = 200;
-const FINAL_REVEAL_DELAY = 400;
+const SERVICE_PULSE_DURATION = 690; // 25% longer green hold
+const SERVICE_PULSE_OVERLAP = 150;
+const SERVICES_HOLD_AFTER_PULSE = 400; // 50% faster transition
+const SCENE_EXIT_DURATION = 250; // 50% faster
+const BETWEEN_SCENE_DELAY = 100; // 50% faster
+const FINAL_REVEAL_DELAY = 200; // 50% faster
 
 export default function AnimatedHero() {
   const [phase, setPhase] = useState<"intro" | "final">("intro");
@@ -67,7 +67,7 @@ export default function AnimatedHero() {
       });
 
     async function runSequence() {
-      await sleep(400);
+      await sleep(200);
 
       for (let i = 0; i < SCENES.length; i++) {
         if (cancelRef.current) return;
