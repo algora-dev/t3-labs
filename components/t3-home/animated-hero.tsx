@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const HERO_SESSION_KEY = "***";
-
 type Scene = {
   heading: string;
   emphasisWord: string;
@@ -28,13 +26,13 @@ const SCENES: Scene[] = [
   },
 ];
 
-// Timeline (ms) — heading 25% faster, service pulses 25% slower
-const TYPE_SPEED = 42; // was 55, sped up 25%
+// Timeline (ms)
+const TYPE_SPEED = 42;
 const HEADING_EMPHASIS_DELAY = 150;
 const HEADING_EMPHASIS_HOLD = 900;
 const SERVICES_REVEAL_DELAY = 350;
-const SERVICE_PULSE_DURATION = 625; // was 500, slowed 25%
-const SERVICE_PULSE_OVERLAP = 190; // was 150, slowed 25%
+const SERVICE_PULSE_DURATION = 625;
+const SERVICE_PULSE_OVERLAP = 190;
 const SERVICES_HOLD_AFTER_PULSE = 800;
 const SCENE_EXIT_DURATION = 500;
 const BETWEEN_SCENE_DELAY = 200;
@@ -52,9 +50,9 @@ export default function AnimatedHero() {
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const alreadyPlayed = sessionStorage.getItem(HERO_SESSION_KEY) === "true";
 
-    if (reducedMotion || alreadyPlayed) {
+    // Play every page load — no sessionStorage check
+    if (reducedMotion) {
       setPhase("final");
       return;
     }
@@ -122,7 +120,6 @@ export default function AnimatedHero() {
 
       await sleep(FINAL_REVEAL_DELAY);
       setPhase("final");
-      sessionStorage.setItem(HERO_SESSION_KEY, "true");
     }
 
     runSequence();
@@ -133,8 +130,7 @@ export default function AnimatedHero() {
     };
   }, []);
 
-  // Render heading with emphasis word — uses inline (not inline-block) to prevent line jumps
-  // Spaces are explicitly preserved around the emphasis span
+  // Render heading with emphasis word — inline display, spaces preserved
   function renderHeading(scene: Scene) {
     if (!scene.emphasisWord || !typedText.includes(scene.emphasisWord)) {
       return typedText;
@@ -154,7 +150,7 @@ export default function AnimatedHero() {
     );
   }
 
-  // Render services with pulse — middle dot separators, spaces preserved
+  // Render services with pulse
   function renderServices(scene: Scene) {
     return scene.services.map((item, idx) => (
       <span key={idx}>
@@ -183,7 +179,7 @@ export default function AnimatedHero() {
                 className={`t3-hero__scene${sceneExiting ? " t3-hero__scene--exiting" : ""}`}
                 key={activeScene}
               >
-                <h2 className="t3-hero__category" style={{ whiteSpace: "nowrap" }}>
+                <h2 className="t3-hero__category">
                   {renderHeading(SCENES[activeScene])}
                   <span className="t3-hero__cursor" aria-hidden="true" />
                 </h2>
@@ -205,11 +201,9 @@ export default function AnimatedHero() {
               You bring us the problem. We work out what needs to be built.
             </p>
             <div className="t3-hero__actions">
-              <a href="#send-message" className="t3-hero__button t3-hero__button--primary">
-                Tell us what you need <span aria-hidden="true">&rarr;</span>
-              </a>
-              <a href="#work" className="t3-hero__button t3-hero__button--secondary">
-                See what we&rsquo;ve built
+              <a href="#send-message" className="t3-hero__cta">
+                <span className="t3-hero__cta-text">Tell us your problem</span>
+                <span className="t3-hero__cta-arrow" aria-hidden="true">&rarr;</span>
               </a>
             </div>
           </div>
