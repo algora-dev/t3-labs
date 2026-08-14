@@ -188,17 +188,17 @@ textarea {
   transform: translateY(0);
 }
 
-/* Service item pulse */
+/* Service item pulse — soft fade in/out, not blinding */
 .t3-hero__service-item {
   display: inline;
   transition:
-    color 400ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    text-shadow 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    color 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-shadow 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .t3-hero__service-item--active {
-  color: var(--lime);
-  text-shadow: 0 0 24px rgba(215, 255, 0, 0.45), 0 0 10px rgba(215, 255, 0, 0.25);
+  color: #a8cc00;
+  text-shadow: 0 0 14px rgba(215, 255, 0, 0.25);
 }
 
 /* Final hero state */
@@ -248,7 +248,7 @@ textarea {
   line-height: 1.6;
 }
 
-/* CTA button — large, pulsing green, high visibility */
+/* CTA button — breathing, glossy, alive */
 .t3-hero__actions {
   display: flex;
   flex-wrap: wrap;
@@ -257,6 +257,7 @@ textarea {
 }
 
 .t3-hero__cta {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -271,20 +272,47 @@ textarea {
   text-decoration: none;
   background: linear-gradient(135deg, #050608, #242832);
   color: #fff;
-  box-shadow:
-    0 14px 40px rgba(10, 11, 16, 0.22),
-    0 0 0 0 rgba(215, 255, 0, 0.5);
-  transition:
-    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  animation: t3CtaPulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  overflow: hidden;
+  box-shadow: 0 14px 40px rgba(10, 11, 16, 0.22);
+  transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: t3CtaBreathe 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Glossy shine sweep — sits on top, slides across on hover */
+.t3-hero__cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(215, 255, 0, 0.15) 45%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(215, 255, 0, 0.15) 55%,
+    transparent 70%
+  );
+  transition: left 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
 }
 
 .t3-hero__cta:hover {
-  transform: translateY(-3px) scale(1.03);
+  transform: translateY(-4px);
   box-shadow:
-    0 18px 50px rgba(10, 11, 16, 0.28),
-    0 0 0 4px rgba(215, 255, 0, 0.25);
+    0 20px 50px rgba(10, 11, 16, 0.3),
+    0 0 0 3px rgba(215, 255, 0, 0.2);
+}
+
+.t3-hero__cta:hover::before {
+  left: 120%;
+}
+
+.t3-hero__cta-text,
+.t3-hero__cta-arrow {
+  position: relative;
+  z-index: 1;
 }
 
 .t3-hero__cta-arrow {
@@ -293,19 +321,18 @@ textarea {
 }
 
 .t3-hero__cta:hover .t3-hero__cta-arrow {
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
-@keyframes t3CtaPulse {
+/* Breathing — subtle scale up/down */
+@keyframes t3CtaBreathe {
   0%, 100% {
-    box-shadow:
-      0 14px 40px rgba(10, 11, 16, 0.22),
-      0 0 0 0 rgba(215, 255, 0, 0.4);
+    transform: scale(1);
+    box-shadow: 0 14px 40px rgba(10, 11, 16, 0.22), 0 0 0 0 rgba(215, 255, 0, 0.15);
   }
   50% {
-    box-shadow:
-      0 14px 40px rgba(10, 11, 16, 0.22),
-      0 0 0 10px rgba(215, 255, 0, 0);
+    transform: scale(1.035);
+    box-shadow: 0 16px 44px rgba(10, 11, 16, 0.24), 0 0 0 6px rgba(215, 255, 0, 0.08);
   }
 }
 
