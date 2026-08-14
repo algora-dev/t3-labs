@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateBrief } from "@/lib/intake/openai";
 import type { IntakeMessage, AnalysisResponse } from "@/lib/intake/types";
+import { parseIntakeMessages } from "@/lib/intake/validation";
 
 /**
  * POST /api/intake/finalise
@@ -14,9 +15,9 @@ export const maxDuration = 60;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { messages } = body;
+    const messages = parseIntakeMessages(body.messages);
 
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+    if (!messages) {
       return NextResponse.json(
         { error: "Messages array is required." },
         { status: 400 },

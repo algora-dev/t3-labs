@@ -19,6 +19,38 @@ interface IntakeModalProps {
   onClose: () => void;
 }
 
+type AnalyseApiResponse = AnalysisResponse & { stage: IntakeStage };
+type RecordingTarget = "intro" | "follow_up" | "final_question";
+
+async function readApiResponse<T>(response: Response, fallbackError: string): Promise<T> {
+  const rawBody = await response.text();
+  let data: unknown = null;
+
+  if (rawBody) {
+    try {
+      data = JSON.parse(rawBody);
+    } catch {
+      if (response.ok) {
+        throw new Error("The server returned an unreadable response. Please try again.");
+      }
+    }
+  }
+
+  if (!response.ok) {
+    const message =
+      typeof data === "object" && data !== null && "error" in data && typeof data.error === "string"
+        ? data.error
+        : fallbackError;
+    throw new Error(message);
+  }
+
+  if (data === null) {
+    throw new Error("The server returned an empty response. Please try again.");
+  }
+
+  return data as T;
+}
+
 export default function IntakeModal({ open, onClose }: IntakeModalProps) {
   const [stage, setStage] = useState<IntakeStage>("intro");
   const [textInput, setTextInput] = useState("");
@@ -49,6 +81,8 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const recordingTargetRef = useRef<RecordingTarget>("intro");
+  const recordingCancelledRef = useRef(false);
 
   // Close handler — defined early so it can be used in effects
   const handleClose = useCallback(() => {
@@ -158,12 +192,10 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong.");
-      }
-
-      const data = await res.json();
+      const data = await readApiResponse<AnalyseApiResponse>(
+        res,
+        "Something went wrong while processing that. Please try again.",
+      );
       setAnalysis(data);
 
       // Store assistant response in messages
@@ -181,13 +213,12 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ messages: [...updatedMessages, assistantMessage] }),
         });
-        if (briefRes.ok) {
-          const briefData = await briefRes.json();
-          setBrief(briefData);
-          setStage("brief");
-        } else {
-          setStage("follow_up");
-        }
+        const briefData = await readApiResponse<FinalBrief>(
+          briefRes,
+          "Something went wrong while creating your brief. Please try again.",
+        );
+        setBrief(briefData);
+        setStage("brief");
       } else {
         setStage("follow_up");
       }
@@ -222,12 +253,10 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong.");
-      }
-
-      const data = await res.json();
+      const data = await readApiResponse<AnalyseApiResponse>(
+        res,
+        "Something went wrong while processing that. Please try again.",
+      );
 
       const assistantMessage: IntakeMessage = {
         role: "assistant",
@@ -242,13 +271,12 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ messages: [...updatedMessages, assistantMessage] }),
         });
-        if (briefRes.ok) {
-          const briefData = await briefRes.json();
-          setBrief(briefData);
-          setStage("brief");
-        } else {
-          setStage("brief");
-        }
+        const briefData = await readApiResponse<FinalBrief>(
+          briefRes,
+          "Something went wrong while creating your brief. Please try again.",
+        );
+        setBrief(briefData);
+        setStage("brief");
       } else if (data.follow_up_question) {
         // Need a third question
         setAnalysis(data);
@@ -260,13 +288,12 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ messages: [...updatedMessages, assistantMessage] }),
         });
-        if (briefRes.ok) {
-          const briefData = await briefRes.json();
-          setBrief(briefData);
-          setStage("brief");
-        } else {
-          setStage("brief");
-        }
+        const briefData = await readApiResponse<FinalBrief>(
+          briefRes,
+          "Something went wrong while creating your brief. Please try again.",
+        );
+        setBrief(briefData);
+        setStage("brief");
       }
     } catch (err) {
       setError((err as Error).message || "Something went wrong. Your message is still here - please try again.");
@@ -296,15 +323,13 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         body: JSON.stringify({ messages: updatedMessages }),
       });
 
-      if (briefRes.ok) {
-        const briefData = await briefRes.json();
-        setBrief(briefData);
-        setMessages(updatedMessages);
-        setStage("brief");
-      } else {
-        const data = await briefRes.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong.");
-      }
+      const briefData = await readApiResponse<FinalBrief>(
+        briefRes,
+        "Something went wrong while creating your brief. Please try again.",
+      );
+      setBrief(briefData);
+      setMessages(updatedMessages);
+      setStage("brief");
     } catch (err) {
       setError((err as Error).message || "Something went wrong. Your message is still here - please try again.");
       setStage("final_question");
@@ -321,13 +346,18 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       const res = await fetch("/api/intake/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages, contact, original_input_type: transcript ? "voice" : "text" }),
+        body: JSON.stringify({
+          messages,
+          brief,
+          contact,
+          original_input_type: transcript ? "voice" : "text",
+        }),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "We couldn't send the brief yet. Your details haven't been lost. Please try again.");
-      }
+      await readApiResponse<{ success: true }>(
+        res,
+        "We couldn't send the brief yet. Your details haven't been lost. Please try again.",
+      );
 
       setSubmitting(false);
       setStage("submitted");
@@ -335,11 +365,14 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       setError((err as Error).message);
       setSubmitting(false);
     }
-  }, [contact, messages, transcript]);
+  }, [brief, contact, messages, transcript]);
 
   // ── Voice recording ────────────────────────────────────────────────
 
-  const startRecording = useCallback(async () => {
+  const startRecording = useCallback(async (target: RecordingTarget = "intro") => {
+    recordingTargetRef.current = target;
+    recordingCancelledRef.current = false;
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
@@ -351,6 +384,12 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
 
       recorder.onstop = async () => {
         stream.getTracks().forEach((t) => t.stop());
+
+        if (recordingCancelledRef.current) {
+          recordingCancelledRef.current = false;
+          return;
+        }
+
         setStage("transcribing");
 
         try {
@@ -363,18 +402,22 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
             body: formData,
           });
 
-          if (!res.ok) {
-            const data = await res.json().catch(() => ({}));
-            throw new Error(data.error || "Transcription failed.");
+          const data = await readApiResponse<{ transcript: string }>(
+            res,
+            "Transcription failed.",
+          );
+          if (target === "follow_up") {
+            setFollowUpAnswer(data.transcript);
+          } else if (target === "final_question") {
+            setFinalAnswer(data.transcript);
+          } else {
+            setTranscript(data.transcript);
+            setTextInput(data.transcript);
           }
-
-          const data = await res.json();
-          setTranscript(data.transcript);
-          setTextInput(data.transcript);
-          setStage("intro");
+          setStage(target);
         } catch (err) {
           setError((err as Error).message || "We couldn't transcribe that recording. Try again, or type your message instead.");
-          setStage("intro");
+          setStage(target);
         }
       };
 
@@ -384,7 +427,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       setStage("recording");
     } catch {
       setError("Microphone access is off. You can enable it in your browser or type your message instead.");
-      setStage("intro");
+      setStage(target);
     }
   }, []);
 
@@ -397,12 +440,13 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
   }, []);
 
   const cancelRecording = useCallback(() => {
+    recordingCancelledRef.current = true;
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
       mediaRecorderRef.current.stop();
     }
     setIsRecording(false);
     setRecordingTime(0);
-    setStage("intro");
+    setStage(recordingTargetRef.current);
   }, []);
 
   // ── Quick confirmation handlers ────────────────────────────────────
@@ -419,14 +463,12 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ messages }),
         });
-        if (briefRes.ok) {
-          const briefData = await briefRes.json();
-          setBrief(briefData);
-          setStage("brief");
-        } else {
-          const data = await briefRes.json().catch(() => ({}));
-          throw new Error(data.error || "Something went wrong.");
-        }
+        const briefData = await readApiResponse<FinalBrief>(
+          briefRes,
+          "Something went wrong while creating your brief. Please try again.",
+        );
+        setBrief(briefData);
+        setStage("brief");
       } catch (err) {
         setError((err as Error).message || "Something went wrong. Please try again.");
         setStage("follow_up");
@@ -468,7 +510,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         {error && (
           <div className="t3-intake-error" role="alert">
             <p>{error}</p>
-            <button onClick={() => { setError(null); setStage("intro"); }} type="button" className="t3-intake-error-dismiss">
+            <button onClick={() => setError(null)} type="button" className="t3-intake-error-dismiss">
               Dismiss
             </button>
           </div>
@@ -481,7 +523,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
             setTextInput={setTextInput}
             firstInputRef={firstInputRef}
             onSubmit={handleInitialSubmit}
-            onStartRecording={startRecording}
+            onStartRecording={() => startRecording("intro")}
             isTranscript={!!transcript}
           />
         )}
@@ -522,7 +564,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
             setFollowUpAnswer={setFollowUpAnswer}
             onSubmit={handleFollowUpSubmit}
             onQuickConfirm={handleQuickConfirm}
-            onStartRecording={startRecording}
+            onStartRecording={() => startRecording("follow_up")}
           />
         )}
 
@@ -533,7 +575,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
             finalAnswer={finalAnswer}
             setFinalAnswer={setFinalAnswer}
             onSubmit={handleFinalSubmit}
-            onStartRecording={startRecording}
+            onStartRecording={() => startRecording("final_question")}
           />
         )}
 

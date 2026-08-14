@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { IntakeMessage } from "@/lib/intake/types";
+import { parseFinalBrief, parseIntakeMessages } from "@/lib/intake/validation";
 
 /**
  * POST /api/intake/submit
@@ -12,15 +12,48 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const NOTIFY_EMAIL = process.env.CONTACT_EMAIL || "insights@t3labs.co.uk";
 const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
 
+async function sendEmail(payload: Record<string, unknown>, label: string): Promise<void> {
+  if (!RESEND_API_KEY) {
+    throw new Error("Email delivery is not configured.");
+  }
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    console.error(`Resend ${label} email failed`, {
+      status: response.status,
+      body: body.slice(0, 1000),
+    });
+    throw new Error(`Unable to send ${label} email.`);
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { messages, contact, original_input_type } = body;
+    const { contact, original_input_type } = body;
+    const typedMessages = parseIntakeMessages(body.messages);
+    const brief = parseFinalBrief(body.brief);
 
     // Validate
     if (!contact) {
       return NextResponse.json(
         { error: "Contact details are required." },
+        { status: 400 },
+      );
+    }
+
+    if (!typedMessages) {
+      return NextResponse.json(
+        { error: "A completed intake conversation is required." },
         { status: 400 },
       );
     }
@@ -47,7 +80,6 @@ export async function POST(req: NextRequest) {
     const cleanPhone = contact.phone ? String(contact.phone).trim().slice(0, 50) : null;
 
     // Extract analysis from the last assistant message
-    const typedMessages = (messages || []) as IntakeMessage[];
     const lastAssistant = [...typedMessages]
       .reverse()
       .find((m) => m.role === "assistant");
@@ -61,14 +93,14 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const problem = (analysisData.problem_summary as string) || "Not specified";
-    const outcome = (analysisData.desired_outcome as string) || "Not specified";
-    const areas = Array.isArray(analysisData.relevant_areas)
-      ? (analysisData.relevant_areas as string[]).join(", ")
-      : "";
-    const context = Array.isArray(analysisData.important_context)
-      ? (analysisData.important_context as string[]).join("; ")
-      : "";
+    const problem = brief?.problem || (analysisData.problem_summary as string) || "Not specified";
+    const outcome = brief?.desired_outcome || (analysisData.desired_outcome as string) || "Not specified";
+    const likelySolution = brief?.likely_solution || "Not specified";
+    const handoffSummary = brief?.internal_handoff_summary || "Not specified";
+    const relevantAreas = brief?.relevant_areas || analysisData.relevant_areas;
+    const importantContext = brief?.important_context || analysisData.important_context;
+    const areas = Array.isArray(relevantAreas) ? (relevantAreas as string[]).join(", ") : "";
+    const context = Array.isArray(importantContext) ? (importantContext as string[]).join("; ") : "";
 
     // Build original transcript from visitor messages
     const transcript = typedMessages
@@ -76,62 +108,57 @@ export async function POST(req: NextRequest) {
       .map((m, i: number) => `Input ${i + 1}: ${m.content}`)
       .join("\n\n");
 
-    // Send emails via Resend
-    if (RESEND_API_KEY) {
-      // 1. Email to T3 Labs team
-      const teamHtml = buildTeamEmail({
-        name: cleanName,
-        email: cleanEmail,
-        company: cleanCompany,
-        phone: cleanPhone,
-        problem,
-        outcome,
-        areas,
-        context,
-        transcript,
-        inputType: original_input_type || "text",
-      });
+    if (!RESEND_API_KEY) {
+      console.error("RESEND_API_KEY not set - intake delivery unavailable");
+      return NextResponse.json(
+        { error: "We couldn't send the brief yet. Your details haven't been lost. Please try again." },
+        { status: 503 },
+      );
+    }
 
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "T3 Labs <insights@t3labs.co.uk>",
-          to: [NOTIFY_EMAIL],
-          reply_to: cleanEmail,
-          subject: `New intake inquiry from ${cleanName} - t3labs.tech`,
-          html: teamHtml,
-        }),
-      }).catch((err) => console.error("Resend team email error:", err));
+    // Send the critical team notification first. Never report success unless it is accepted.
+    const teamHtml = buildTeamEmail({
+      name: cleanName,
+      email: cleanEmail,
+      company: cleanCompany,
+      phone: cleanPhone,
+      problem,
+      outcome,
+      likelySolution,
+      handoffSummary,
+      areas,
+      context,
+      transcript,
+      inputType: original_input_type || "text",
+    });
 
-      // 2. Copy email to visitor
-      const visitorHtml = buildVisitorEmail({
-        name: cleanName,
-        problem,
-        outcome,
-        areas,
-        bookingUrl: BOOKING_URL,
-      });
+    await sendEmail({
+      from: "T3 Labs <insights@t3labs.co.uk>",
+      to: [NOTIFY_EMAIL],
+      reply_to: cleanEmail,
+      subject: `New intake inquiry from ${cleanName} - t3labs.tech`,
+      html: teamHtml,
+    }, "team notification");
 
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "T3 Labs <insights@t3labs.co.uk>",
-          to: [cleanEmail],
-          reply_to: NOTIFY_EMAIL,
-          subject: "Your T3 Labs project brief",
-          html: visitorHtml,
-        }),
-      }).catch((err) => console.error("Resend visitor email error:", err));
-    } else {
-      console.warn("RESEND_API_KEY not set - email notification skipped");
+    // Send a confirmation copy after the team has safely received the inquiry.
+    const visitorHtml = buildVisitorEmail({
+      name: cleanName,
+      problem,
+      outcome,
+      areas,
+      bookingUrl: BOOKING_URL,
+    });
+
+    try {
+      await sendEmail({
+        from: "T3 Labs <insights@t3labs.co.uk>",
+        to: [cleanEmail],
+        reply_to: NOTIFY_EMAIL,
+        subject: "Your T3 Labs project brief",
+        html: visitorHtml,
+      }, "visitor confirmation");
+    } catch (error) {
+      console.error("Visitor confirmation email failed after team delivery", error);
     }
 
     return NextResponse.json({
@@ -164,6 +191,8 @@ function buildTeamEmail(data: {
   phone: string | null;
   problem: string;
   outcome: string;
+  likelySolution: string;
+  handoffSummary: string;
   areas: string;
   context: string;
   transcript: string;
@@ -194,9 +223,16 @@ function buildTeamEmail(data: {
               <p style="margin:0 0 16px;font-size:15px;line-height:1.85;color:#333;white-space:pre-wrap;">${escapeHtml(data.problem)}</p>
               <p style="margin:0 0 8px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:0.06em;">Desired outcome</p>
               <p style="margin:0 0 16px;font-size:15px;line-height:1.85;color:#333;white-space:pre-wrap;">${escapeHtml(data.outcome)}</p>
+              <p style="margin:0 0 8px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:0.06em;">Likely solution</p>
+              <p style="margin:0 0 16px;font-size:15px;line-height:1.85;color:#333;white-space:pre-wrap;">${escapeHtml(data.likelySolution)}</p>
               <p style="margin:0 0 8px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:0.06em;">Relevant areas</p>
               <p style="margin:0 0 16px;font-size:15px;line-height:1.85;color:#333;">${escapeHtml(data.areas)}</p>
               ${data.context ? `<p style="margin:0 0 8px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:0.06em;">Context</p><p style="margin:0;font-size:15px;line-height:1.85;color:#333;">${escapeHtml(data.context)}</p>` : ""}
+            </div>
+
+            <div style="background:#111;border-radius:16px;padding:22px;margin-top:16px;">
+              <p style="margin:0 0 8px;font-size:12px;color:#aaa;text-transform:uppercase;letter-spacing:0.06em;">Internal handoff</p>
+              <p style="margin:0;font-size:14px;line-height:1.85;color:#e8e8e0;white-space:pre-wrap;">${escapeHtml(data.handoffSummary)}</p>
             </div>
 
             <div style="background:#f8f8f5;border:1px solid #eaeae4;border-radius:16px;padding:22px;margin-top:16px;">
