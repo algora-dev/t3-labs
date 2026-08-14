@@ -112,39 +112,30 @@ export interface ContactDetails {
 
 // ── API request/response types ──────────────────────────────────────
 
-export interface CreateSessionResponse {
-  session_id: string;
-}
-
 export interface AnalyseRequest {
-  session_id: string;
-  message: string;
-  input_type: "text" | "voice";
+  messages: IntakeMessage[];
   turn_number: number;
 }
 
 export interface AnalyseResponse extends AnalysisResponse {
-  session_id: string;
   stage: IntakeStage;
 }
 
 export interface FinaliseRequest {
-  session_id: string;
+  messages: IntakeMessage[];
 }
 
-export interface FinaliseResponse extends FinalBrief {
-  session_id: string;
-  intake_id: string;
-}
+export type FinaliseResponse = FinalBrief;
 
 export interface SubmitRequest {
-  session_id: string;
+  messages: IntakeMessage[];
+  brief: FinalBrief;
   contact: ContactDetails;
+  original_input_type: "voice" | "text";
 }
 
 export interface SubmitResponse {
   success: boolean;
-  intake_id: string;
 }
 
 // ── Visible copy limits (enforced) ──────────────────────────────────
