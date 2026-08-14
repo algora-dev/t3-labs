@@ -9,11 +9,11 @@ const BASE_URL = "https://t3labs.tech";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "T3 Labs | Product Studio",
+    default: "T3 Labs | Custom Software, AI & Growth Solutions",
     template: "%s | T3 Labs",
   },
   description:
-    "T3 Labs builds future-ready solutions for everyday problems. We turn messy workflows, business bottlenecks, and rough ideas into useful products.",
+    "Technology built around your business. T3 Labs creates custom software, practical AI integrations, and growth solutions for real business problems.",
   keywords: [
     "T3 Labs",
     "product studio",
@@ -44,9 +44,9 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: BASE_URL,
     siteName: "T3 Labs",
-    title: "T3 Labs | Product Studio",
+    title: "T3 Labs | Custom Software, AI & Growth Solutions",
     description:
-      "We build future-ready solutions for everyday problems. Software, automation, AI, game tech, and product systems.",
+      "Technology built around your business. Custom software, practical AI integrations, and growth solutions designed around real business problems.",
     images: [
       {
         url: "/og-image.png",
@@ -58,9 +58,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "T3 Labs | Product Studio",
+    title: "T3 Labs | Custom Software, AI & Growth Solutions",
     description:
-      "We build future-ready solutions for everyday problems. Software, automation, AI, game tech, and product systems.",
+      "Technology built around your business. Custom software, practical AI integrations, and growth solutions designed around real business problems.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -89,7 +89,7 @@ const organizationJsonLd = {
   name: "T3 Labs",
   url: BASE_URL,
   description:
-    "T3 Labs builds future-ready solutions for everyday problems. We turn messy workflows, business bottlenecks, and rough ideas into useful products.",
+    "T3 Labs builds custom software, practical AI integrations, and growth solutions around real business problems.",
   foundingDate: "2025",
   address: {
     "@type": "PostalAddress",
@@ -104,6 +104,7 @@ const organizationJsonLd = {
     "Software Development",
     "Automation",
     "Artificial Intelligence",
+    "Business Growth Solutions",
     "Game Technology",
     "Product Systems",
   ],
@@ -115,7 +116,7 @@ const websiteJsonLd = {
   name: "T3 Labs",
   url: BASE_URL,
   description:
-    "T3 Labs builds future-ready solutions for everyday problems.",
+    "Technology built around your business through custom software, AI integrations, and growth solutions.",
   publisher: {
     "@type": "Organization",
     name: "T3 Labs",

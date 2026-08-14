@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
+import AnimatedHero from "@/components/t3-home/animated-hero";
 
 /* ------------------------------------------------------------------ */
 /*  T3 Labs Homepage - React/Tailwind conversion of legacy index.html */
@@ -14,8 +15,6 @@ const NAV_LINKS = [
   { href: "#testimonials", label: "Reviews" },
   { href: "#send-message", label: "Contact" },
 ];
-
-const PROOF_TAGS = ["Software", "Automation", "AI", "Game tech", "Product systems"];
 
 const WORK_CARDS = [
   {
@@ -167,7 +166,7 @@ export default function Home() {
       <Header navOpen={navOpen} onToggle={toggleNav} onClose={closeNav} />
 
       <main id="top">
-        <Hero />
+        <AnimatedHero />
         <IntroStrip />
         <WorkSection />
         <CustomSolutionsSection />
@@ -244,80 +243,6 @@ function Header({
         <span className="w-[18px] h-0.5 bg-[var(--ink)]" />
       </button>
     </header>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Hero                                                              */
-/* ------------------------------------------------------------------ */
-
-function Hero() {
-  return (
-    <section
-      className="grid gap-12 items-center min-h-[760px] py-[78px] pb-[60px] w-[min(1180px,calc(100%-40px))] mx-auto md:[grid-template-columns:minmax(0,0.92fr)_minmax(420px,1.08fr)] max-md:grid-cols-1 max-md:min-h-0 max-md:py-12 max-md:pb-8"
-    >
-      <div className="hero-copy">
-        <p className="m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">T3 Labs</p>
-        <h1 className="max-w-[760px] mb-7 text-[clamp(2rem,5vw,4rem)] font-semibold leading-[1.05] max-md:text-[clamp(1.75rem,7vw,2.5rem)]">
-          We build future-ready solutions for everyday problems.
-        </h1>
-        <p className="max-w-[580px] mb-4.5 text-[#3e4352] text-[1.08rem]">
-          T3 Labs builds future-ready solutions for everyday problems. We turn
-          messy workflows, business bottlenecks, and rough ideas into useful
-          products, using whatever technology fits the job.
-        </p>
-        <p className="max-w-[580px] mb-4.5 text-[#3e4352] text-[1.08rem]">
-          No fixed playbook. No buzzword-first approach. Just understand the
-          problem, build the right thing, and make it work.
-        </p>
-        <div className="flex flex-wrap gap-3.5 mb-7.5">
-          <a
-            href="#work"
-            className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform"
-          >
-            See what we&rsquo;ve built <span>&rarr;</span>
-          </a>
-          <a
-            href="#contact"
-            className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg border border-[var(--line)] bg-white text-[var(--ink)] text-sm font-semibold shadow-[0_5px_16px_rgba(20,25,40,0.04)] hover:-translate-y-0.5 transition-transform"
-          >
-            Build with T3 Labs <span>&rarr;</span>
-          </a>
-        </div>
-        <div className="flex flex-wrap gap-2" aria-label="T3 Labs proof points">
-          {PROOF_TAGS.map((tag) => (
-            <span
-              key={tag}
-              className="px-2.5 py-1.5 border border-[var(--line)] rounded-full bg-[rgba(255,255,255,0.72)] text-[#4f5567] text-xs font-medium"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Product showcase */}
-      <div className="relative min-h-[640px] isolate hidden md:block" aria-label="T3 Labs product showcase">
-        <div className="absolute z-[-2] rounded-full blur-[30px] opacity-85 top-[70px] right-[90px] w-[300px] h-[300px] bg-[rgba(17,19,24,0.08)]" />
-        <div className="absolute z-[-2] rounded-full blur-[30px] opacity-85 right-[190px] bottom-[80px] w-[230px] h-[230px] bg-[rgba(215,255,0,0.18)]" />
-
-        <img
-          src="/assets/hero-quotecore-desktop.png"
-          alt="QuoteCore+ product shown on a desktop monitor"
-          className="absolute top-[150px] right-[72px] z-[3] w-[700px] max-w-none object-contain [filter:drop-shadow(0_28px_70px_rgba(20,28,45,0.16))]"
-        />
-        <img
-          src="/assets/hero-audit-phone.png"
-          alt="Clarity Audit shown on a phone"
-          className="absolute top-[292px] right-[-20px] z-[5] w-[430px] max-w-none object-contain [filter:drop-shadow(0_28px_70px_rgba(20,28,45,0.16))]"
-        />
-        <img
-          src="/assets/hero-polygunnerz-laptop.png"
-          alt="Poly Gunnerz gameplay shown on a laptop"
-          className="absolute top-[18px] right-[-58px] z-[1] w-[540px] max-w-none object-contain [filter:drop-shadow(0_28px_70px_rgba(20,28,45,0.16))]"
-        />
-      </div>
-    </section>
   );
 }
 
