@@ -38,7 +38,11 @@ const SCENE_EXIT_DURATION = 250; // 50% faster
 const BETWEEN_SCENE_DELAY = 100; // 50% faster
 const FINAL_REVEAL_DELAY = 200; // 50% faster
 
-export default function AnimatedHero() {
+interface AnimatedHeroProps {
+  onCtaClick?: () => void;
+}
+
+export default function AnimatedHero({ onCtaClick }: AnimatedHeroProps) {
   const [phase, setPhase] = useState<"intro" | "final">("intro");
   const [activeScene, setActiveScene] = useState(0);
   const [typedText, setTypedText] = useState("");
@@ -201,10 +205,10 @@ export default function AnimatedHero() {
               You bring us the problem. We work out what needs to be built.
             </p>
             <div className="t3-hero__actions">
-              <a href="#send-message" className="t3-hero__cta">
-                <span className="t3-hero__cta-text">Tell us your problem</span>
+              <button type="button" onClick={onCtaClick} className="t3-hero__cta">
+                <span className="t3-hero__cta-text">Tell us what you need</span>
                 <span className="t3-hero__cta-arrow" aria-hidden="true">&rarr;</span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
