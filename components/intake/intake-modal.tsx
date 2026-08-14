@@ -6,6 +6,7 @@ import type {
   AnalysisResponse,
   FinalBrief,
   ContactDetails,
+  IntakeMessage,
 } from "@/lib/intake/types";
 import { SERVICE_LABELS } from "@/lib/intake/types";
 
@@ -33,7 +34,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<IntakeMessage[]>([]);
 
   // Voice recording state
   const [isRecording, setIsRecording] = useState(false);
@@ -128,44 +129,31 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
     setError(null);
     setTranscript("");
     setContact({ name: "", email: "", company: "", phone: "" });
-    setSessionId(null);
+    setMessages([]);
   }, []);
 
   // ── API handlers ──────────────────────────────────────────────────
-
-  const ensureSession = useCallback(async (): Promise<string | null> => {
-    if (sessionId) return sessionId;
-    try {
-      const res = await fetch("/api/intake/session", { method: "POST" });
-      if (!res.ok) throw new Error("Failed to create session");
-      const data = await res.json();
-      setSessionId(data.session_id);
-      return data.session_id;
-    } catch {
-      setError("Something went wrong. Please try again.");
-      return null;
-    }
-  }, [sessionId]);
 
   const handleInitialSubmit = useCallback(async () => {
     if (textInput.trim().length < 20) return;
     setStage("initial_processing");
     setError(null);
 
-    const sid = await ensureSession();
-    if (!sid) {
-      setStage("intro");
-      return;
-    }
+    const visitorMessage: IntakeMessage = {
+      role: "visitor",
+      content: textInput.trim(),
+      timestamp: new Date().toISOString(),
+      input_type: transcript ? "voice" : "text",
+    };
+
+    const updatedMessages = [...messages, visitorMessage];
 
     try {
       const res = await fetch("/api/intake/analyse", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          session_id: sid,
-          message: textInput,
-          input_type: "text",
+          messages: updatedMessages,
           turn_number: 1,
         }),
       });
@@ -178,12 +166,20 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       const data = await res.json();
       setAnalysis(data);
 
+      // Store assistant response in messages
+      const assistantMessage: IntakeMessage = {
+        role: "assistant",
+        content: JSON.stringify(data),
+        timestamp: new Date().toISOString(),
+      };
+      setMessages([...updatedMessages, assistantMessage]);
+
       if (data.status === "READY_FOR_BRIEF" || data.status === "OUT_OF_SCOPE") {
         // Generate the final brief
         const briefRes = await fetch("/api/intake/finalise", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session_id: sid }),
+          body: JSON.stringify({ messages: [...updatedMessages, assistantMessage] }),
         });
         if (briefRes.ok) {
           const briefData = await briefRes.json();
@@ -200,26 +196,28 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       setError((err as Error).message || "Something went wrong while processing that. Your message is still here - please try again.");
       setStage("intro");
     }
-  }, [textInput, ensureSession]);
+  }, [textInput, messages, transcript]);
 
   const handleFollowUpSubmit = useCallback(async () => {
     if (followUpAnswer.trim().length < 5) return;
     setStage("follow_up_processing");
     setError(null);
 
-    if (!sessionId) {
-      setStage("intro");
-      return;
-    }
+    const visitorMessage: IntakeMessage = {
+      role: "visitor",
+      content: followUpAnswer.trim(),
+      timestamp: new Date().toISOString(),
+      input_type: "text",
+    };
+
+    const updatedMessages = [...messages, visitorMessage];
 
     try {
       const res = await fetch("/api/intake/analyse", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          session_id: sessionId,
-          message: followUpAnswer,
-          input_type: "text",
+          messages: updatedMessages,
           turn_number: 2,
         }),
       });
@@ -231,11 +229,18 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
 
       const data = await res.json();
 
+      const assistantMessage: IntakeMessage = {
+        role: "assistant",
+        content: JSON.stringify(data),
+        timestamp: new Date().toISOString(),
+      };
+      setMessages([...updatedMessages, assistantMessage]);
+
       if (data.status === "READY_FOR_BRIEF" || data.status === "OUT_OF_SCOPE") {
         const briefRes = await fetch("/api/intake/finalise", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session_id: sessionId }),
+          body: JSON.stringify({ messages: [...updatedMessages, assistantMessage] }),
         });
         if (briefRes.ok) {
           const briefData = await briefRes.json();
@@ -253,7 +258,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         const briefRes = await fetch("/api/intake/finalise", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session_id: sessionId }),
+          body: JSON.stringify({ messages: [...updatedMessages, assistantMessage] }),
         });
         if (briefRes.ok) {
           const briefData = await briefRes.json();
@@ -267,54 +272,44 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       setError((err as Error).message || "Something went wrong. Your message is still here - please try again.");
       setStage("follow_up");
     }
-  }, [followUpAnswer, sessionId]);
+  }, [followUpAnswer, messages]);
 
   const handleFinalSubmit = useCallback(async () => {
     if (finalAnswer.trim().length < 5) return;
     setStage("final_processing");
     setError(null);
 
-    if (!sessionId) {
-      setStage("intro");
-      return;
-    }
+    const visitorMessage: IntakeMessage = {
+      role: "visitor",
+      content: finalAnswer.trim(),
+      timestamp: new Date().toISOString(),
+      input_type: "text",
+    };
+
+    const updatedMessages = [...messages, visitorMessage];
 
     try {
-      const res = await fetch("/api/intake/analyse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          session_id: sessionId,
-          message: finalAnswer,
-          input_type: "text",
-          turn_number: 3,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong.");
-      }
-
       // After turn 3, always go to brief
       const briefRes = await fetch("/api/intake/finalise", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId }),
+        body: JSON.stringify({ messages: updatedMessages }),
       });
 
       if (briefRes.ok) {
         const briefData = await briefRes.json();
         setBrief(briefData);
+        setMessages(updatedMessages);
         setStage("brief");
       } else {
-        setStage("brief");
+        const data = await briefRes.json().catch(() => ({}));
+        throw new Error(data.error || "Something went wrong.");
       }
     } catch (err) {
       setError((err as Error).message || "Something went wrong. Your message is still here - please try again.");
       setStage("final_question");
     }
-  }, [finalAnswer, sessionId]);
+  }, [finalAnswer, messages]);
 
   const handleSubmitInquiry = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -322,18 +317,11 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
     setSubmitting(true);
     setError(null);
 
-    if (!sessionId) {
-      setError("Session expired. Please start again.");
-      setStage("intro");
-      setSubmitting(false);
-      return;
-    }
-
     try {
       const res = await fetch("/api/intake/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId, contact }),
+        body: JSON.stringify({ messages, contact, original_input_type: transcript ? "voice" : "text" }),
       });
 
       if (!res.ok) {
@@ -347,7 +335,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       setError((err as Error).message);
       setSubmitting(false);
     }
-  }, [contact, sessionId]);
+  }, [contact, messages, transcript]);
 
   // ── Voice recording ────────────────────────────────────────────────
 
@@ -424,27 +412,23 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       setStage("follow_up_processing");
       setError(null);
 
-      if (!sessionId) {
-        setStage("intro");
-        return;
-      }
-
       try {
         // No additional input, just finalise
         const briefRes = await fetch("/api/intake/finalise", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session_id: sessionId }),
+          body: JSON.stringify({ messages }),
         });
         if (briefRes.ok) {
           const briefData = await briefRes.json();
           setBrief(briefData);
           setStage("brief");
         } else {
-          setStage("brief");
+          const data = await briefRes.json().catch(() => ({}));
+          throw new Error(data.error || "Something went wrong.");
         }
-      } catch {
-        setError("Something went wrong. Please try again.");
+      } catch (err) {
+        setError((err as Error).message || "Something went wrong. Please try again.");
         setStage("follow_up");
       }
     } else if (choice === "add") {
@@ -454,7 +438,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       setFollowUpAnswer("");
       // Keep on follow_up to re-explain
     }
-  }, [sessionId]);
+  }, [messages]);
 
   if (!open) return null;
 

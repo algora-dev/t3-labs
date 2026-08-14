@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession, updateSession } from "../session/route";
 import { generateBrief } from "@/lib/intake/openai";
+import type { IntakeMessage, AnalysisResponse } from "@/lib/intake/types";
 
 /**
  * POST /api/intake/finalise
  * Generates the final project brief from the conversation.
+ * Stateless — receives full conversation context from the client.
  */
 
 // Vercel function timeout — GPT-5.6 reasoning models can take 20-30s
@@ -13,64 +14,41 @@ export const maxDuration = 60;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { session_id } = body;
+    const { messages } = body;
 
-    if (!session_id) {
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
-        { error: "session_id is required." },
+        { error: "Messages array is required." },
         { status: 400 },
       );
     }
 
-    const session = getSession(session_id);
-    if (!session) {
-      return NextResponse.json(
-        { error: "Session not found. Please start again." },
-        { status: 404 },
-      );
-    }
+    // Extract analysis from the last assistant message
+    const lastAssistant = [...messages]
+      .reverse()
+      .find((m: IntakeMessage) => m.role === "assistant");
 
-    // Build a synthetic analysis from the session if we don't have one
-    const lastAnalysis = session.messages
-      .filter((m) => m.role === "assistant")
-      .pop();
-
-    let analysisData;
-    try {
-      analysisData = lastAnalysis ? JSON.parse(lastAnalysis.content) : {
-        problem_summary: session.problem_summary || "",
-        desired_outcome: session.desired_outcome || "",
-        relevant_areas: session.relevant_areas || [],
-        important_context: session.important_context || [],
-      };
-    } catch {
-      analysisData = {
-        problem_summary: session.problem_summary || "",
-        desired_outcome: session.desired_outcome || "",
-        relevant_areas: session.relevant_areas || [],
-        important_context: session.important_context || [],
-      };
+    let analysisData: Partial<AnalysisResponse> = {};
+    if (lastAssistant) {
+      try {
+        analysisData = JSON.parse(lastAssistant.content);
+      } catch {
+        // Use empty defaults
+      }
     }
 
     // Generate the final brief
-    const brief = await generateBrief(session.messages, analysisData);
+    const brief = await generateBrief(
+      messages as IntakeMessage[],
+      analysisData as AnalysisResponse,
+    );
 
-    // Update session
-    updateSession(session_id, {
-      status: "brief_ready",
-      likely_solution: brief.likely_solution,
-      current_stage: "brief",
-    });
-
-    return NextResponse.json({
-      ...brief,
-      session_id,
-      intake_id: session_id,
-    });
+    return NextResponse.json(brief);
   } catch (err) {
     console.error("Intake finalise error:", err);
+    const message = err instanceof Error ? err.message : "Something went wrong while creating your brief. Please try again.";
     return NextResponse.json(
-      { error: "Something went wrong while creating your brief. Please try again." },
+      { error: message },
       { status: 500 },
     );
   }

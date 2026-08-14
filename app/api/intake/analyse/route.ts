@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession, updateSession } from "../session/route";
 import { analyseInput } from "@/lib/intake/openai";
-import type { IntakeMessage, AnalysisResponse } from "@/lib/intake/types";
+import type { IntakeMessage } from "@/lib/intake/types";
 import { VALIDATION } from "@/lib/intake/types";
 
 /**
  * POST /api/intake/analyse
  * Analyses visitor input and returns structured interpretation.
+ * Stateless — receives full conversation context from the client.
  */
 
 // Vercel function timeout — GPT-5.6 reasoning models can take 20-30s
@@ -15,17 +15,26 @@ export const maxDuration = 60;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { session_id, message, input_type, turn_number } = body;
+    const { messages, turn_number } = body;
 
     // Validate
-    if (!session_id || !message) {
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json(
-        { error: "session_id and message are required." },
+        { error: "Messages array is required." },
         { status: 400 },
       );
     }
 
-    const text = String(message).trim();
+    // Get the last visitor message
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage || lastMessage.role !== "visitor") {
+      return NextResponse.json(
+        { error: "Last message must be from the visitor." },
+        { status: 400 },
+      );
+    }
+
+    const text = String(lastMessage.content).trim();
     if (text.length < VALIDATION.MIN_TEXT_LENGTH) {
       return NextResponse.json(
         { error: "A little more detail will help us understand what you need." },
@@ -40,71 +49,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (turn_number > VALIDATION.MAX_TURNS) {
+    const turn = Number(turn_number) || 1;
+    if (turn > VALIDATION.MAX_TURNS) {
       return NextResponse.json(
         { error: "Maximum number of questions reached." },
         { status: 400 },
       );
     }
 
-    const session = getSession(session_id);
-    if (!session) {
-      return NextResponse.json(
-        { error: "Session not found. Please start again." },
-        { status: 404 },
-      );
-    }
-
-    // Add visitor message to context
-    const visitorMessage: IntakeMessage = {
-      role: "visitor",
-      content: text,
-      timestamp: new Date().toISOString(),
-      input_type: input_type || "text",
-    };
-
-    const messages = [...session.messages, visitorMessage];
-
-    // Update session
-    updateSession(session_id, {
-      messages,
-      turn_count: turn_number,
-      original_input_type: session.original_input_type || input_type,
-      original_transcript: session.original_transcript || text,
-    });
-
-    // Call OpenAI
-    const analysis: AnalysisResponse = await analyseInput(messages, turn_number);
-
-    // Add assistant response to context
-    const assistantMessage: IntakeMessage = {
-      role: "assistant",
-      content: JSON.stringify(analysis),
-      timestamp: new Date().toISOString(),
-    };
-
-    updateSession(session_id, {
-      messages: [...messages, assistantMessage],
-      problem_summary: analysis.problem_summary,
-      desired_outcome: analysis.desired_outcome,
-      relevant_areas: analysis.relevant_areas,
-      important_context: analysis.important_context,
-    });
+    // Call OpenAI with full conversation context
+    const analysis = await analyseInput(messages as IntakeMessage[], turn);
 
     // Determine next stage
     let stage: string;
     if (analysis.status === "READY_FOR_BRIEF") {
       stage = "brief";
     } else if (analysis.status === "OUT_OF_SCOPE") {
-      stage = "brief"; // Still show a brief, but with can_likely_help = false
+      stage = "brief";
     } else {
       // NEEDS_FOLLOW_UP
-      stage = turn_number >= VALIDATION.MAX_TURNS - 1 ? "final_question" : "follow_up";
+      stage = turn >= VALIDATION.MAX_TURNS - 1 ? "final_question" : "follow_up";
     }
 
     return NextResponse.json({
       ...analysis,
-      session_id,
       stage,
     });
   } catch (err) {

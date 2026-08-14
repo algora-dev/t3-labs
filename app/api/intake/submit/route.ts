@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession, updateSession } from "../session/route";
+import type { IntakeMessage } from "@/lib/intake/types";
 
 /**
  * POST /api/intake/submit
  * Submits the intake brief with contact details.
  * Sends email to T3 Labs team and a copy to the visitor.
+ * Stateless — receives conversation messages + contact details from client.
  */
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -14,12 +15,12 @@ const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { session_id, contact } = body;
+    const { messages, contact, original_input_type } = body;
 
     // Validate
-    if (!session_id || !contact) {
+    if (!contact) {
       return NextResponse.json(
-        { error: "session_id and contact are required." },
+        { error: "Contact details are required." },
         { status: 400 },
       );
     }
@@ -40,47 +41,40 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const session = getSession(session_id);
-    if (!session) {
-      return NextResponse.json(
-        { error: "Session not found. Please start again." },
-        { status: 404 },
-      );
-    }
-
     const cleanName = String(contact.name).trim().slice(0, 200);
     const cleanEmail = String(contact.email).trim().toLowerCase().slice(0, 200);
     const cleanCompany = contact.company ? String(contact.company).trim().slice(0, 200) : null;
     const cleanPhone = contact.phone ? String(contact.phone).trim().slice(0, 50) : null;
 
-    // Get the last analysis for the brief
-    const lastAnalysis = session.messages
-      .filter((m) => m.role === "assistant")
-      .pop();
-    let analysisData: { problem_summary?: string; desired_outcome?: string; relevant_areas?: string[]; important_context?: string[] } = {};
-    try {
-      analysisData = lastAnalysis ? JSON.parse(lastAnalysis.content) : {};
-    } catch {
-      // Use session fields
+    // Extract analysis from the last assistant message
+    const typedMessages = (messages || []) as IntakeMessage[];
+    const lastAssistant = [...typedMessages]
+      .reverse()
+      .find((m) => m.role === "assistant");
+
+    let analysisData: Record<string, unknown> = {};
+    if (lastAssistant) {
+      try {
+        analysisData = JSON.parse(lastAssistant.content);
+      } catch {
+        // Use empty defaults
+      }
     }
 
-    const problem = analysisData.problem_summary || session.problem_summary || "Not specified";
-    const outcome = analysisData.desired_outcome || session.desired_outcome || "Not specified";
-    const areas = (analysisData.relevant_areas || session.relevant_areas || []).join(", ");
-    const context = (analysisData.important_context || session.important_context || []).join("; ");
+    const problem = (analysisData.problem_summary as string) || "Not specified";
+    const outcome = (analysisData.desired_outcome as string) || "Not specified";
+    const areas = Array.isArray(analysisData.relevant_areas)
+      ? (analysisData.relevant_areas as string[]).join(", ")
+      : "";
+    const context = Array.isArray(analysisData.important_context)
+      ? (analysisData.important_context as string[]).join("; ")
+      : "";
 
     // Build original transcript from visitor messages
-    const transcript = session.messages
+    const transcript = typedMessages
       .filter((m) => m.role === "visitor")
       .map((m, i: number) => `Input ${i + 1}: ${m.content}`)
       .join("\n\n");
-
-    // Update session
-    updateSession(session_id, {
-      status: "submitted",
-      contact: { name: cleanName, email: cleanEmail, company: cleanCompany, phone: cleanPhone },
-      current_stage: "submitted",
-    });
 
     // Send emails via Resend
     if (RESEND_API_KEY) {
@@ -95,8 +89,7 @@ export async function POST(req: NextRequest) {
         areas,
         context,
         transcript,
-        intakeId: session_id,
-        inputType: session.original_input_type,
+        inputType: original_input_type || "text",
       });
 
       await fetch("https://api.resend.com/emails", {
@@ -143,7 +136,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      intake_id: session_id,
     });
   } catch (err) {
     console.error("Intake submit error:", err);
@@ -175,8 +167,7 @@ function buildTeamEmail(data: {
   areas: string;
   context: string;
   transcript: string;
-  intakeId: string;
-  inputType: string | null;
+  inputType: string;
 }) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -195,8 +186,7 @@ function buildTeamEmail(data: {
               <tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Email</td><td style="padding:4px 0;"><a href="mailto:${escapeHtml(data.email)}" style="color:#111;text-decoration:underline;">${escapeHtml(data.email)}</a></td></tr>
               ${data.company ? `<tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Company</td><td style="padding:4px 0;">${escapeHtml(data.company)}</td></tr>` : ""}
               ${data.phone ? `<tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Phone</td><td style="padding:4px 0;">${escapeHtml(data.phone)}</td></tr>` : ""}
-              <tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Input type</td><td style="padding:4px 0;">${escapeHtml(data.inputType || "text")}</td></tr>
-              <tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Intake ID</td><td style="padding:4px 0;font-family:monospace;font-size:13px;">${escapeHtml(data.intakeId)}</td></tr>
+              <tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Input type</td><td style="padding:4px 0;">${escapeHtml(data.inputType)}</td></tr>
             </table>
 
             <div style="background:#f8f8f5;border:1px solid #eaeae4;border-radius:16px;padding:22px;margin-top:20px;">
