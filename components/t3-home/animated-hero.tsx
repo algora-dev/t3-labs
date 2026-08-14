@@ -31,8 +31,8 @@ const TYPE_SPEED = 42;
 const HEADING_EMPHASIS_DELAY = 150;
 const HEADING_EMPHASIS_HOLD = 900;
 const SERVICES_REVEAL_DELAY = 350;
-const SERVICE_PULSE_DURATION = 440; // shorter total time per item
-const SERVICE_PULSE_OVERLAP = 120; // overlap so next starts sooner
+const SERVICE_PULSE_DURATION = 550; // 25% slower
+const SERVICE_PULSE_OVERLAP = 150; // 25% slower
 const SERVICES_HOLD_AFTER_PULSE = 800;
 const SCENE_EXIT_DURATION = 500;
 const BETWEEN_SCENE_DELAY = 200;
@@ -169,7 +169,7 @@ export default function AnimatedHero() {
       <div className="t3-hero__inner">
         <div className="t3-hero__eyebrow">
           <span className="t3-hero__signal" aria-hidden="true" />
-          T3 Labs / Technology without the headache
+          T3 Labs / We remove your headache
         </div>
 
         <div className="t3-hero__stage">
