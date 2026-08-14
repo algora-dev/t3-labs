@@ -7,6 +7,9 @@ import { generateBrief } from "@/lib/intake/openai";
  * Generates the final project brief from the conversation.
  */
 
+// Vercel function timeout — GPT-5.6 reasoning models can take 20-30s
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

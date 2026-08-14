@@ -9,6 +9,9 @@ import { VALIDATION } from "@/lib/intake/types";
  * Analyses visitor input and returns structured interpretation.
  */
 
+// Vercel function timeout — GPT-5.6 reasoning models can take 20-30s
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -106,8 +109,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error("Intake analyse error:", err);
+    const message = err instanceof Error ? err.message : "Something went wrong while processing that. Your message is still here - please try again.";
     return NextResponse.json(
-      { error: "Something went wrong while processing that. Your message is still here - please try again." },
+      { error: message },
       { status: 500 },
     );
   }

@@ -180,7 +180,7 @@ export async function generateBrief(
   analysis: AnalysisResponse,
 ): Promise<FinalBrief> {
   const input: ResponseInputItem[] = [
-    { role: "system", content: INTAKE_SYSTEM_PROMPT },
+    { role: "developer", content: INTAKE_SYSTEM_PROMPT },
   ];
 
   // Add conversation

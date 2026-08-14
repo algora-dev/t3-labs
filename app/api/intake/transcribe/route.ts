@@ -7,6 +7,9 @@ import { VALIDATION } from "@/lib/intake/types";
  * Receives an audio file and returns a transcript.
  */
 
+// Audio transcription can take a few seconds
+export const maxDuration = 30;
+
 export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get("content-type") || "";
