@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import AnimatedHero from "@/components/t3-home/animated-hero";
+import IntakeModal from "@/components/intake/intake-modal";
+import "@/app/intake-modal.css";
 
 /* ------------------------------------------------------------------ */
 /*  T3 Labs Homepage - React/Tailwind conversion of legacy index.html */
@@ -98,7 +100,16 @@ export default function Home() {
   const [navOpen, setNavOpen] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [intakeOpen, setIntakeOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+
+  function openIntake() {
+    setIntakeOpen(true);
+  }
+
+  function closeIntake() {
+    setIntakeOpen(false);
+  }
 
   function toggleNav() {
     setNavOpen((v) => !v);
@@ -166,12 +177,12 @@ export default function Home() {
       <Header navOpen={navOpen} onToggle={toggleNav} onClose={closeNav} />
 
       <main id="top">
-        <AnimatedHero />
+        <AnimatedHero onCtaClick={openIntake} />
         <IntroStrip />
         <WorkSection />
-        <CustomSolutionsSection />
+        <CustomSolutionsSection onCtaClick={openIntake} />
         <Testimonials />
-        <CTASection />
+        <CTASection onCtaClick={openIntake} />
         <ContactForm
           formRef={formRef}
           submitting={formSubmitting}
@@ -181,6 +192,7 @@ export default function Home() {
         <CallStrip />
       </main>
 
+      <IntakeModal open={intakeOpen} onClose={closeIntake} />
       <Footer />
     </>
   );
@@ -344,7 +356,11 @@ function WorkSection() {
 /*  Custom Solutions Section                                          */
 /* ------------------------------------------------------------------ */
 
-function CustomSolutionsSection() {
+function CustomSolutionsSection({
+  onCtaClick,
+}: {
+  onCtaClick: () => void;
+}) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -494,6 +510,7 @@ function CustomSolutionsSection() {
         </div>
         <a
           href="#send-message"
+          onClick={(e) => { e.preventDefault(); onCtaClick(); }}
           className="inline-flex min-h-[48px] items-center justify-center gap-3 px-5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform whitespace-nowrap"
         >
           Start a project <span>&rarr;</span>
@@ -551,7 +568,7 @@ function Testimonials() {
 /*  CTA                                                               */
 /* ------------------------------------------------------------------ */
 
-function CTASection() {
+function CTASection({ onCtaClick }: { onCtaClick: () => void }) {
   return (
     <section
       id="contact"
@@ -569,12 +586,13 @@ function CTASection() {
           into working products.
         </p>
       </div>
-      <a
-        href="#send-message"
+      <button
+        type="button"
+        onClick={onCtaClick}
         className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform"
       >
         Get in touch <span>&rarr;</span>
-      </a>
+      </button>
     </section>
   );
 }
