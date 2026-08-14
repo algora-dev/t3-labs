@@ -192,6 +192,21 @@ textarea {
   transform: translateY(0);
 }
 
+/* Service item pulse */
+.t3-hero__service-item {
+  display: inline-block;
+  transition:
+    color 350ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-shadow 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.t3-hero__service-item--active {
+  color: var(--lime);
+  transform: scale(1.12);
+  text-shadow: 0 0 20px rgba(215, 255, 0, 0.4);
+}
+
 /* Final hero state */
 .t3-hero__final {
   opacity: 0;

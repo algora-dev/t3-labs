@@ -7,31 +7,35 @@ const HERO_SESSION_KEY = "t3HeroPlayed";
 type Scene = {
   heading: string;
   emphasisWord: string;
-  services: string;
+  services: string[];
 };
 
 const SCENES: Scene[] = [
   {
     heading: "CUSTOM SOFTWARE SOLUTIONS",
-    emphasisWord: "SOFTWARE",
-    services: "Dashboards · Internal bottlenecks · SaaS Platforms",
+    emphasisWord: "SOLUTIONS",
+    services: ["Dashboards", "Internal bottlenecks", "SaaS Platforms"],
   },
   {
     heading: "AI INTEGRATIONS",
     emphasisWord: "AI",
-    services: "Agent setup · Automation · Chatbots · Workflows",
+    services: ["Agent setup", "Automation", "Chatbots", "Workflows"],
   },
   {
     heading: "BUSINESS GROWTH",
     emphasisWord: "GROWTH",
-    services: "Websites/SEO · Tracking · Conversion Tools",
+    services: ["Websites/SEO", "Tracking", "Conversion Tools"],
   },
 ];
 
-// Timeline (ms) — tuned for readability
-const TYPE_SPEED = 55; // ms per char
+// Timeline (ms)
+const TYPE_SPEED = 55;
+const HEADING_EMPHASIS_DELAY = 150;
+const HEADING_EMPHASIS_HOLD = 900;
 const SERVICES_REVEAL_DELAY = 350;
-const SERVICES_HOLD = 2600; // hold after services appear
+const SERVICE_PULSE_DURATION = 500; // each item pulses for 500ms
+const SERVICE_PULSE_OVERLAP = 150; // next item starts 150ms after previous (350ms visible overlap)
+const SERVICES_HOLD_AFTER_PULSE = 800; // hold after all pulses finish
 const SCENE_EXIT_DURATION = 500;
 const BETWEEN_SCENE_DELAY = 200;
 const FINAL_REVEAL_DELAY = 400;
@@ -42,7 +46,8 @@ export default function AnimatedHero() {
   const [typedText, setTypedText] = useState("");
   const [showServices, setShowServices] = useState(false);
   const [sceneExiting, setSceneExiting] = useState(false);
-  const [emphasisActive, setEmphasisActive] = useState(false);
+  const [headingEmphasis, setHeadingEmphasis] = useState(false);
+  const [pulsingService, setPulsingService] = useState(-1); // index of currently pulsing service item
   const cancelRef = useRef(false);
 
   useEffect(() => {
@@ -74,7 +79,8 @@ export default function AnimatedHero() {
         setTypedText("");
         setShowServices(false);
         setSceneExiting(false);
-        setEmphasisActive(false);
+        setHeadingEmphasis(false);
+        setPulsingService(-1);
         setActiveScene(i);
 
         // Type the heading
@@ -85,17 +91,26 @@ export default function AnimatedHero() {
         }
 
         // Pulse the emphasis word green
-        await sleep(150);
-        setEmphasisActive(true);
-        await sleep(900);
-        setEmphasisActive(false);
+        await sleep(HEADING_EMPHASIS_DELAY);
+        setHeadingEmphasis(true);
+        await sleep(HEADING_EMPHASIS_HOLD);
+        setHeadingEmphasis(false);
 
         // Reveal services
-        await sleep(SERVICES_REVEAL_DELAY - 150);
+        await sleep(SERVICES_REVEAL_DELAY - HEADING_EMPHASIS_DELAY);
         setShowServices(true);
 
+        // Pulse each service item sequentially
+        await sleep(200); // brief pause after services appear
+        for (let s = 0; s < scene.services.length; s++) {
+          if (cancelRef.current) return;
+          setPulsingService(s);
+          await sleep(SERVICE_PULSE_DURATION - SERVICE_PULSE_OVERLAP);
+        }
+        setPulsingService(-1);
+
         // Hold
-        await sleep(SERVICES_HOLD);
+        await sleep(SERVICES_HOLD_AFTER_PULSE);
 
         // Exit scene
         setSceneExiting(true);
@@ -122,7 +137,7 @@ export default function AnimatedHero() {
     };
   }, []);
 
-  // Split heading to wrap emphasis word
+  // Split heading to wrap emphasis word — ensures spacing is preserved
   function renderHeading(scene: Scene) {
     if (!scene.emphasisWord || !typedText.includes(scene.emphasisWord)) {
       return typedText;
@@ -134,12 +149,29 @@ export default function AnimatedHero() {
     return (
       <>
         {before}
-        <span className={`t3-hero__emphasis${emphasisActive ? " t3-hero__emphasis--active" : ""}`}>
+        <span
+          className={`t3-hero__emphasis${headingEmphasis ? " t3-hero__emphasis--active" : ""}`}
+          style={{ display: "inline-block" }}
+        >
           {word}
         </span>
         {after}
       </>
     );
+  }
+
+  // Render services with pulse capability — uses middle dot separators
+  function renderServices(scene: Scene) {
+    return scene.services.map((item, idx) => (
+      <span key={idx} className="t3-hero__service-item-wrap">
+        {idx > 0 && <span className="t3-hero__service-sep"> · </span>}
+        <span
+          className={`t3-hero__service-item${pulsingService === idx ? " t3-hero__service-item--active" : ""}`}
+        >
+          {item}
+        </span>
+      </span>
+    ));
   }
 
   return (
@@ -164,7 +196,7 @@ export default function AnimatedHero() {
                 <p
                   className={`t3-hero__services${showServices ? " t3-hero__services--visible" : ""}`}
                 >
-                  {SCENES[activeScene].services}
+                  {renderServices(SCENES[activeScene])}
                 </p>
               </div>
             </div>
