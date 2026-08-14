@@ -1,6 +1,6 @@
 /**
  * T3 Labs AI Intake — OpenAI Integration
- * Uses the Responses API with Structured Outputs.
+ * Uses the Responses API with Structured Outputs (recommended for GPT-5.6 reasoning models).
  */
 
 import { INTAKE_SYSTEM_PROMPT } from "./prompts";
@@ -85,46 +85,45 @@ const briefSchema = {
   additionalProperties: false,
 } as const;
 
-// ── Build conversation context ──────────────────────────────────────
+// ── Build conversation context as Responses API input ──────────────
+
+type ResponseInputItem = {
+  role: "system" | "user" | "assistant" | "developer";
+  content: string;
+};
 
 function buildConversationContext(
   messages: IntakeMessage[],
   turnNumber: number,
-): { role: "system" | "user" | "assistant"; content: string }[] {
-  const context: { role: "system" | "user" | "assistant"; content: string }[] = [
+): ResponseInputItem[] {
+  const input: ResponseInputItem[] = [
     { role: "system", content: INTAKE_SYSTEM_PROMPT },
   ];
 
   // Add conversation context
   for (const msg of messages) {
-    context.push({
+    input.push({
       role: msg.role === "visitor" ? "user" : "assistant",
       content: msg.content,
     });
   }
 
-  // Add turn guidance
+  // Add turn guidance as developer message
+  let guidance: string;
   if (turnNumber === 1) {
-    context.push({
-      role: "system",
-      content:
-        "This is the visitor's first input. Analyse their problem, reflect your understanding, and ask ONE follow-up question that materially improves the inquiry. If the problem and desired outcome are already clear, set status to READY_FOR_BRIEF.",
-    });
+    guidance =
+      "This is the visitor's first input. Analyse their problem, reflect your understanding, and ask ONE follow-up question that materially improves the inquiry. If the problem and desired outcome are already clear, set status to READY_FOR_BRIEF.";
   } else if (turnNumber === 2) {
-    context.push({
-      role: "system",
-      content:
-        "This is the visitor's second input. If you now understand both the problem and the desired outcome, set status to READY_FOR_BRIEF. Only ask a third question if a genuinely critical ambiguity remains.",
-    });
-  } else if (turnNumber >= 3) {
-    context.push({
-      role: "system",
-      content:
-        "This is the visitor's final input (maximum 3 turns). You must now set status to READY_FOR_BRIEF. Do not ask another question.",
-    });
+    guidance =
+      "This is the visitor's second input. If you now understand both the problem and the desired outcome, set status to READY_FOR_BRIEF. Only ask a third question if a genuinely critical ambiguity remains.";
+  } else {
+    guidance =
+      "This is the visitor's final input (maximum 3 turns). You must now set status to READY_FOR_BRIEF. Do not ask another question.";
   }
 
-  return context;
+  input.push({ role: "developer", content: guidance });
+
+  return input;
 }
 
 // ── Analyse visitor input ───────────────────────────────────────────
@@ -133,9 +132,9 @@ export async function analyseInput(
   messages: IntakeMessage[],
   turnNumber: number,
 ): Promise<AnalysisResponse> {
-  const context = buildConversationContext(messages, turnNumber);
+  const input = buildConversationContext(messages, turnNumber);
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -143,10 +142,16 @@ export async function analyseInput(
     },
     body: JSON.stringify({
       model: INTAKE_MODEL,
-      messages: context,
-      response_format: { type: "json_schema", json_schema: { name: "intake_analysis", schema: analysisSchema, strict: true } },
-      max_tokens: 600,
-      temperature: 0.4,
+      input,
+      reasoning: { effort: "low" },
+      text: {
+        format: {
+          type: "json_schema",
+          name: "intake_analysis",
+          schema: analysisSchema,
+          strict: true,
+        },
+      },
     }),
   });
 
@@ -156,7 +161,7 @@ export async function analyseInput(
   }
 
   const data = await response.json();
-  const content = data.choices[0].message.content;
+  const content = data.output_text;
   const parsed = JSON.parse(content) as AnalysisResponse;
 
   // Enforce copy limits (word counts)
@@ -174,20 +179,20 @@ export async function generateBrief(
   messages: IntakeMessage[],
   analysis: AnalysisResponse,
 ): Promise<FinalBrief> {
-  const context: { role: "system" | "user" | "assistant"; content: string }[] = [
+  const input: ResponseInputItem[] = [
     { role: "system", content: INTAKE_SYSTEM_PROMPT },
   ];
 
   // Add conversation
   for (const msg of messages) {
-    context.push({
+    input.push({
       role: msg.role === "visitor" ? "user" : "assistant",
       content: msg.content,
     });
   }
 
   // Add analysis context
-  context.push({
+  input.push({
     role: "assistant",
     content: JSON.stringify({
       problem_summary: analysis.problem_summary,
@@ -197,13 +202,13 @@ export async function generateBrief(
     }),
   });
 
-  context.push({
-    role: "system",
+  input.push({
+    role: "developer",
     content:
       "Based on the conversation above, generate the final project brief. Keep the problem, desired outcome, and likely solution concise. The headline should be 'This sounds like something T3 Labs can help with.' if the project is within scope. The internal_handoff_summary can be more detailed for the T3 Labs team.",
   });
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -211,10 +216,16 @@ export async function generateBrief(
     },
     body: JSON.stringify({
       model: INTAKE_MODEL,
-      messages: context,
-      response_format: { type: "json_schema", json_schema: { name: "intake_brief", schema: briefSchema, strict: true } },
-      max_tokens: 800,
-      temperature: 0.4,
+      input,
+      reasoning: { effort: "low" },
+      text: {
+        format: {
+          type: "json_schema",
+          name: "intake_brief",
+          schema: briefSchema,
+          strict: true,
+        },
+      },
     }),
   });
 
@@ -224,7 +235,7 @@ export async function generateBrief(
   }
 
   const data = await response.json();
-  const content = data.choices[0].message.content;
+  const content = data.output_text;
   const parsed = JSON.parse(content) as FinalBrief;
 
   // Enforce copy limits
