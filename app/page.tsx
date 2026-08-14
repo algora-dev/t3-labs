@@ -224,12 +224,12 @@ function Header({
 
       <nav
         aria-label="Primary navigation"
-        className={`flex items-center justify-center gap-8 text-[#424657] text-sm font-semibold ${
-          navOpen ? "fixed top-[76px] left-5 right-5 grid gap-2 p-4.5 border border-[var(--line)] rounded-xl bg-white shadow-[0_26px_80px_rgba(24,31,51,0.12)]" : "hidden md:flex"
+        className={`flex items-center justify-center gap-2 text-sm font-semibold ${
+          navOpen ? "fixed top-[76px] left-5 right-5 grid gap-2 p-4 border border-[var(--line)] rounded-xl bg-white shadow-[0_26px_80px_rgba(24,31,51,0.12)]" : "hidden md:flex"
         }`}
       >
         {NAV_LINKS.map((link) => (
-          <a key={link.href} href={link.href} onClick={onClose} className="hover:text-[var(--ink)] transition-colors duration-200">
+          <a key={link.href} href={link.href} onClick={onClose} className="t3-header__nav-link">
             {link.label}
           </a>
         ))}
@@ -238,7 +238,7 @@ function Header({
       <a
         href="#contact"
         onClick={onClose}
-        className="hidden md:inline-flex px-4.5 py-3 border border-[var(--line)] rounded-lg bg-white text-sm font-semibold shadow-[0_8px_20px_rgba(16,24,40,0.05)] hover:border-[#e3e8bc] hover:bg-[#fbfff0] transition-colors duration-200 whitespace-nowrap"
+        className="t3-header__cta hidden md:inline-flex"
       >
         Build with T3 Labs
       </a>
