@@ -199,9 +199,20 @@ function Header({
   onToggle: () => void;
   onClose: () => void;
 }) {
+  const [headerVisible, setHeaderVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHeaderVisible(window.scrollY > 40);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <header
-      className="sticky top-0 z-30 flex items-center justify-between gap-4 w-[min(1180px,calc(100%-40px))] mx-auto mt-3.5 px-3.5 py-3 border border-[rgba(231,233,239,0.9)] rounded-xl bg-[rgba(255,255,255,0.82)] shadow-[0_14px_50px_rgba(31,35,52,0.08)] backdrop-blur-[22px]"
+      className={`t3-header${headerVisible ? " t3-header--visible" : ""}`}
     >
       <a href="#top" aria-label="T3 Labs home" className="inline-flex items-center shrink-0">
         <img
