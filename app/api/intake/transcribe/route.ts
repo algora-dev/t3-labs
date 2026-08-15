@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { transcribeAudio } from "@/lib/intake/openai";
+import { audioExtensionForMime } from "@/lib/intake/audio";
 import { VALIDATION } from "@/lib/intake/types";
 
 /**
@@ -58,7 +59,17 @@ export async function POST(req: NextRequest) {
     }
 
     const audioBlob = new Blob([await audioFile.arrayBuffer()], { type: audioFile.type });
-    const transcript = await transcribeAudio(audioBlob);
+
+    // Zero-byte recordings are rejected by the transcription API (400).
+    if (audioBlob.size === 0) {
+      return NextResponse.json(
+        { error: "That recording was empty. Hold the record button a little longer, or type your message instead." },
+        { status: 422 },
+      );
+    }
+
+    const filename = `recording.${audioExtensionForMime(audioFile.type)}`;
+    const transcript = await transcribeAudio(audioBlob, filename);
 
     if (!transcript || transcript.trim().length === 0) {
       return NextResponse.json(

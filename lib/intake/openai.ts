@@ -9,7 +9,7 @@ import type { AnalysisResponse, FinalBrief, IntakeMessage } from "./types";
 // ── Model config (env-configurable per spec Section 36) ─────────────
 
 const INTAKE_MODEL = process.env.OPENAI_INTAKE_MODEL || "gpt-5.6-luna";
-const TRANSCRIPTION_MODEL = process.env.OPENAI_TRANSCRIPTION_MODEL || "gpt-4o-mini-transcribe";
+const TRANSCRIPTION_MODEL = process.env.OPENAI_TRANSCRIPTION_MODEL || "gpt-4o-mini-transcribe-2025-12-15";
 
 type OpenAIResponseContent = {
   type?: string;
@@ -394,9 +394,9 @@ export async function generateBrief(
 
 // ── Transcribe audio ────────────────────────────────────────────────
 
-export async function transcribeAudio(audioBlob: Blob): Promise<string> {
+export async function transcribeAudio(audioBlob: Blob, filename = "recording.webm"): Promise<string> {
   const formData = new FormData();
-  formData.append("file", audioBlob, "recording.webm");
+  formData.append("file", audioBlob, filename);
   formData.append("model", TRANSCRIPTION_MODEL);
   formData.append("response_format", "json");
 

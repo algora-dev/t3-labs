@@ -376,6 +376,9 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
+      // The browser picks the container it supports (Chrome: webm, Firefox: ogg,
+      // Safari/iOS: mp4). Keep the real MIME so the upload isn't mislabelled.
+      const recordedMimeType = recorder.mimeType || "audio/webm";
       audioChunksRef.current = [];
 
       recorder.ondataavailable = (e) => {
@@ -393,7 +396,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         setStage("transcribing");
 
         try {
-          const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+          const audioBlob = new Blob(audioChunksRef.current, { type: recordedMimeType });
           const formData = new FormData();
           formData.append("audio", audioBlob, "recording.webm");
 
