@@ -589,7 +589,7 @@ function CTASection({ onCtaClick }: { onCtaClick: () => void }) {
       <button
         type="button"
         onClick={onCtaClick}
-        className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform"
+        className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform cursor-pointer"
       >
         Get in touch <span>&rarr;</span>
       </button>
