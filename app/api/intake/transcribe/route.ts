@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { transcribeAudio } from "@/lib/intake/openai";
-import { audioExtensionForMime } from "@/lib/intake/audio";
+import { audioExtensionForMime, sniffAudioContainer } from "@/lib/intake/audio";
 import { VALIDATION } from "@/lib/intake/types";
 
 /**
@@ -58,7 +58,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const audioBlob = new Blob([await audioFile.arrayBuffer()], { type: audioFile.type });
+    const audioBytes = await audioFile.arrayBuffer();
+    const audioBlob = new Blob([audioBytes], { type: audioFile.type });
 
     // Zero-byte recordings are rejected by the transcription API (400).
     if (audioBlob.size === 0) {
@@ -68,8 +69,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const filename = `recording.${audioExtensionForMime(audioFile.type)}`;
-    const transcript = await transcribeAudio(audioBlob, filename);
+    // iOS Safari can report an empty or misleading MIME type. Detect the real
+    // container from magic bytes and normalise filename + MIME before upload.
+    const sniffed = sniffAudioContainer(new Uint8Array(audioBytes.slice(0, 64)));
+    const uploadMime = sniffed?.mimeType ?? audioFile.type;
+    const uploadBlob = sniffed ? new Blob([audioBytes], { type: uploadMime }) : audioBlob;
+    const filename = `recording.${sniffed?.extension ?? audioExtensionForMime(audioFile.type)}`;
+    const transcript = await transcribeAudio(uploadBlob, filename);
 
     if (!transcript || transcript.trim().length === 0) {
       return NextResponse.json(
