@@ -62,9 +62,20 @@ export async function POST(req: NextRequest) {
     // Call OpenAI with full conversation context
     const analysis = await analyseInput(messages as IntakeMessage[], turn);
 
-    // Determine next stage
+    // The follow-up question is compulsory on turn 1. If the model tried to
+    // skip it, guarantee one so the UI never dead-ends.
+    if (turn === 1 && !analysis.follow_up_question) {
+      analysis.follow_up_question =
+        "What would make this a success for you — what outcome do you want to see in the next few months?";
+    }
+
+    // Determine next stage. The first turn ALWAYS asks a follow-up question
+    // (product requirement) — enforce server-side even if the model tries to
+    // skip straight to the brief.
     let stage: string;
-    if (analysis.status === "READY_FOR_BRIEF") {
+    if (turn === 1) {
+      stage = "follow_up";
+    } else if (analysis.status === "READY_FOR_BRIEF") {
       stage = "brief";
     } else if (analysis.status === "OUT_OF_SCOPE") {
       stage = "brief";

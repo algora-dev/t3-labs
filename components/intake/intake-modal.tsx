@@ -206,8 +206,8 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       };
       setMessages([...updatedMessages, assistantMessage]);
 
-      if (data.status === "READY_FOR_BRIEF" || data.status === "OUT_OF_SCOPE") {
-        // Generate the final brief
+      if (data.stage === "brief" || data.stage === "contact") {
+        // Generate the final brief (server decided the conversation is complete)
         const briefRes = await fetch("/api/intake/finalise", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -220,6 +220,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         setBrief(briefData);
         setStage("brief");
       } else {
+        // Server mandates the follow-up question on turn 1
         setStage("follow_up");
       }
       setFollowUpAnswer("");
@@ -265,7 +266,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       };
       setMessages([...updatedMessages, assistantMessage]);
 
-      if (data.status === "READY_FOR_BRIEF" || data.status === "OUT_OF_SCOPE") {
+      if (data.stage === "brief") {
         const briefRes = await fetch("/api/intake/finalise", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -277,7 +278,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         );
         setBrief(briefData);
         setStage("brief");
-      } else if (data.follow_up_question) {
+      } else if (data.stage === "final_question" && data.follow_up_question) {
         // Need a third question
         setAnalysis(data);
         setStage("final_question");

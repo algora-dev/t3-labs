@@ -138,7 +138,7 @@ function buildConversationContext(
   let guidance: string;
   if (turnNumber === 1) {
     guidance =
-      "This is the visitor's first input. Analyse their problem, reflect your understanding, and ask ONE follow-up question that materially improves the inquiry. If the problem and desired outcome are already clear, set status to READY_FOR_BRIEF.";
+      "This is the visitor's first input. Analyse their problem, reflect your understanding, and ask exactly ONE follow-up question that materially improves the inquiry. You MUST set status to NEEDS_FOLLOW_UP — never READY_FOR_BRIEF or OUT_OF_SCOPE on the first input, even if the request seems clear or off-topic. Choose the single most valuable question (desired outcome, success criteria, current workflow, scope, or constraints).";
   } else if (turnNumber === 2) {
     guidance =
       "This is the visitor's second input. If you now understand both the problem and the desired outcome, set status to READY_FOR_BRIEF. Only ask a third question if a genuinely critical ambiguity remains.";
