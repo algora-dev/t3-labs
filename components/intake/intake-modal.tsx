@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
+import { useState, useRef, useEffect, useCallback, type FormEvent, type ReactNode } from "react";
 import type {
   IntakeStage,
   AnalysisResponse,
@@ -90,7 +90,8 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
     onClose();
   }, [onClose]);
 
-  // Focus trap + Escape + scroll lock
+  // Focus trap + scroll lock. Escape deliberately does NOT close the modal —
+  // visitors exit via the X button or by finishing (prevents accidental loss).
   useEffect(() => {
     if (!open) return;
 
@@ -99,10 +100,6 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
     document.body.style.overflow = "hidden";
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        handleClose();
-        return;
-      }
       // Focus trap
       if (e.key === "Tab" && modalRef.current) {
         const focusable = modalRef.current.querySelectorAll<HTMLElement>(
@@ -411,12 +408,18 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
             "Transcription failed.",
           );
           if (target === "follow_up") {
-            setFollowUpAnswer(data.transcript);
+            setFollowUpAnswer((prev) =>
+              prev.trim() ? `${prev.trim()} ${data.transcript}` : data.transcript,
+            );
           } else if (target === "final_question") {
-            setFinalAnswer(data.transcript);
+            setFinalAnswer((prev) =>
+              prev.trim() ? `${prev.trim()} ${data.transcript}` : data.transcript,
+            );
           } else {
             setTranscript(data.transcript);
-            setTextInput(data.transcript);
+            setTextInput((prev) =>
+              prev.trim() ? `${prev.trim()} ${data.transcript}` : data.transcript,
+            );
           }
           setStage(target);
         } catch (err) {
@@ -494,9 +497,6 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="t3-intake-title"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) handleClose();
-      }}
     >
       <div className="t3-intake-modal" ref={modalRef}>
         <button
@@ -529,6 +529,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
             onSubmit={handleInitialSubmit}
             onStartRecording={() => startRecording("intro")}
             isTranscript={!!transcript}
+            hasVoice={!!transcript}
           />
         )}
 
@@ -556,7 +557,11 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
                 ? "Putting the brief together…"
                 : "Putting the brief together…"
             }
-            subMessage="Pulling out the problem, outcome and important details."
+            subMessage={
+              stage === "initial_processing"
+                ? "Pulling out the problem, outcome and important details."
+                : undefined
+            }
           />
         )}
 
@@ -629,6 +634,7 @@ function IntakeIntro({
   onSubmit,
   onStartRecording,
   isTranscript,
+  hasVoice,
 }: {
   textInput: string;
   setTextInput: (v: string) => void;
@@ -636,6 +642,7 @@ function IntakeIntro({
   onSubmit: () => void;
   onStartRecording: () => void;
   isTranscript: boolean;
+  hasVoice: boolean;
 }) {
   const canSubmit = textInput.trim().length >= 20;
   const tooShort = textInput.trim().length > 0 && textInput.trim().length < 20;
@@ -643,19 +650,23 @@ function IntakeIntro({
   return (
     <div className="t3-intake-step">
       <p className="t3-intake-eyebrow">T3 Labs / Project Intake</p>
-      <h2 id="t3-intake-title" className="t3-intake-heading">
-        What do you need help with?
-      </h2>
-      <p className="t3-intake-subtext">
-        Tell us what&apos;s happening, what isn&apos;t working, or what you wish existed.
-        You don&apos;t need to know the technical solution - just explain it in your own words.
-      </p>
-      <p className="t3-intake-reassurance">
-        The more context you give us, the better. Our agent will work out the important parts.
-      </p>
+      <div className="t3-intake-heading-row">
+        <h2 id="t3-intake-title" className="t3-intake-heading">
+          What do you need help with?
+        </h2>
+        <InfoDot label="How this works">
+          <p>
+            Describe your problem in your own words, or record a voice message
+            and we&apos;ll transcribe it for you to check. We&apos;ll ask one quick
+            question, then turn it into a short brief for the team. You can
+            edit or add to anything along the way.
+          </p>
+        </InfoDot>
+      </div>
+      <p className="t3-intake-subtext">Type it, or leave a voice message — whichever is easier.</p>
 
       {isTranscript && (
-        <p className="t3-intake-transcript-label">Transcript (editable):</p>
+        <p className="t3-intake-transcript-label">Transcript — check it&apos;s right:</p>
       )}
 
       <textarea
@@ -675,31 +686,29 @@ function IntakeIntro({
         </p>
       )}
 
-      <button
-        type="button"
-        onClick={onStartRecording}
-        className="t3-intake-voice-btn"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-          <line x1="12" y1="19" x2="12" y2="23" />
-          <line x1="8" y1="23" x2="16" y2="23" />
-        </svg>
-        Record a voice message
-      </button>
-      <p className="t3-intake-voice-hint">
-        Speak naturally. You can explain the problem exactly as you would to a person.
-      </p>
-
-      <button
-        type="button"
-        onClick={onSubmit}
-        disabled={!canSubmit}
-        className="t3-intake-primary-btn"
-      >
-        Continue <span aria-hidden="true">&rarr;</span>
-      </button>
+      <div className="t3-intake-actions t3-intake-actions--end">
+        <button
+          type="button"
+          onClick={onStartRecording}
+          className="t3-intake-voice-btn-inline"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" y1="19" x2="12" y2="23" />
+            <line x1="8" y1="23" x2="16" y2="23" />
+          </svg>
+          {hasVoice ? "Add another voice message" : "Record a voice message"}
+        </button>
+        <button
+          type="button"
+          onClick={onSubmit}
+          disabled={!canSubmit}
+          className="t3-intake-primary-btn"
+        >
+          Next <span aria-hidden="true">&rarr;</span>
+        </button>
+      </div>
     </div>
   );
 }
@@ -747,6 +756,21 @@ function RecordingView({
 /*  Processing state                                                  */
 /* ------------------------------------------------------------------ */
 
+function InfoDot({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <details className="t3-intake-info">
+      <summary aria-label={label} title={label}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </svg>
+      </summary>
+      <div className="t3-intake-info-panel">{children}</div>
+    </details>
+  );
+}
+
 function ProcessingState({
   message,
   subMessage,
@@ -787,7 +811,15 @@ function UnderstandingStep({
 
   return (
     <div className="t3-intake-step">
-      <p className="t3-intake-eyebrow">Here&apos;s what I&apos;m hearing</p>
+      <div className="t3-intake-heading-row">
+        <p className="t3-intake-eyebrow">Here&apos;s what I&apos;m hearing</p>
+        <InfoDot label="What do these options mean?">
+          <p>
+            Confirm the summary or fix anything that&apos;s off, then answer the
+            question below by typing or voice. It helps us give you a useful brief.
+          </p>
+        </InfoDot>
+      </div>
       <p className="t3-intake-understanding">{analysis.understanding}</p>
 
       {hasFollowUp ? (
@@ -817,7 +849,7 @@ function UnderstandingStep({
             maxLength={8000}
           />
 
-          <div className="t3-intake-actions">
+          <div className="t3-intake-actions t3-intake-actions--end">
             <button
               type="button"
               onClick={onStartRecording}
@@ -837,7 +869,7 @@ function UnderstandingStep({
               disabled={!canSubmit}
               className="t3-intake-primary-btn"
             >
-              Continue <span aria-hidden="true">&rarr;</span>
+          Next <span aria-hidden="true">&rarr;</span>
             </button>
           </div>
         </>
@@ -882,7 +914,7 @@ function FinalQuestionStep({
         maxLength={8000}
       />
 
-      <div className="t3-intake-actions">
+      <div className="t3-intake-actions t3-intake-actions--end">
         <button
           type="button"
           onClick={onStartRecording}
@@ -902,7 +934,7 @@ function FinalQuestionStep({
           disabled={!canSubmit}
           className="t3-intake-primary-btn"
         >
-          Continue <span aria-hidden="true">&rarr;</span>
+          Next <span aria-hidden="true">&rarr;</span>
         </button>
       </div>
     </div>
@@ -969,9 +1001,6 @@ function BriefStep({
           Book a call
         </button>
       </div>
-      <p className="t3-intake-brief-hint">
-        Send this to the T3 Labs team and receive a copy by email.
-      </p>
     </div>
   );
 }
@@ -996,7 +1025,7 @@ function ContactStep({
   return (
     <div className="t3-intake-step">
       <p className="t3-intake-eyebrow">Send your brief</p>
-      <h2 className="t3-intake-heading">We&apos;ll send this to the T3 Labs team and email you a copy.</h2>
+      <h2 className="t3-intake-heading">Where should we send it?</h2>
 
       <form onSubmit={onSubmit} className="t3-intake-form" noValidate>
         <div className="t3-intake-field">
@@ -1062,7 +1091,7 @@ function ContactStep({
           By sending this inquiry, you agree that T3 Labs can use the information you provide to respond to your request.
         </p>
 
-        <div className="t3-intake-actions">
+        <div className="t3-intake-actions t3-intake-actions--between">
           <button type="button" onClick={onBack} className="t3-intake-secondary-btn">
             Back
           </button>

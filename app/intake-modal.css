@@ -722,3 +722,77 @@
     transform: none;
   }
 }
+
+/* -- Heading row with info dot -- */
+
+.t3-intake-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.t3-intake-heading-row .t3-intake-heading {
+  flex: 1;
+}
+
+/* -- Info dot (expandable hint) -- */
+
+.t3-intake-info {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.t3-intake-info summary {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid #e7e9ef;
+  background: #fff;
+  color: #9aa0af;
+  cursor: help;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.t3-intake-info summary::-webkit-details-marker {
+  display: none;
+}
+
+.t3-intake-info summary:hover,
+.t3-intake-info[open] summary {
+  border-color: #b9c24d;
+  color: #5a6217;
+}
+
+.t3-intake-info-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  z-index: 20;
+  width: min(20rem, calc(100vw - 3rem));
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #e7e9ef;
+  border-radius: 0.6rem;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(10, 11, 16, 0.1);
+  color: #515763;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.t3-intake-info-panel p {
+  margin: 0;
+}
+
+/* -- Actions row, next-step aligned right -- */
+
+.t3-intake-actions--end {
+  justify-content: flex-end;
+}
+
+.t3-intake-actions--between {
+  justify-content: space-between;
+}
