@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 
-const BASE_URL = "https://t3labs.tech";
+const BASE_URL = "https://www.t3labs.tech";
 
 export const metadata: Metadata = {
   title: "Blog",

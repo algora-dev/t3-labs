@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import AnimatedHero from "@/components/t3-home/animated-hero";
-import IntakeModal from "@/components/intake/intake-modal";
+import IntakeModalMount from "@/components/intake/intake-modal-mount";
+import { openIntakeModal } from "@/lib/intake/analytics";
 import "@/app/intake-modal.css";
 
 /* ------------------------------------------------------------------ */
@@ -29,7 +30,7 @@ const WORK_CARDS = [
     num: "02",
     title: "Business Audit Tool",
     desc: "A simple diagnostic product that helps business owners spot the real bottleneck slowing growth and decide what to fix next.",
-    link: { href: "https://business-audit-chi.vercel.app/", label: "View Audit Tool" },
+    link: { href: "/business-audit", label: "View Audit Tool" },
   },
   {
     num: "03",
@@ -100,15 +101,22 @@ export default function Home() {
   const [navOpen, setNavOpen] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [intakeOpen, setIntakeOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   function openIntake() {
-    setIntakeOpen(true);
+    openIntakeModal({
+      trigger: "hero",
+      source_page: "/",
+      cta_text: "Tell us your problem",
+    });
   }
 
-  function closeIntake() {
-    setIntakeOpen(false);
+  function openIntakeFromPageCta(ctaText: string) {
+    openIntakeModal({
+      trigger: "page-cta",
+      source_page: "/",
+      cta_text: ctaText,
+    });
   }
 
   function toggleNav() {
@@ -180,9 +188,9 @@ export default function Home() {
         <AnimatedHero onCtaClick={openIntake} />
         <IntroStrip />
         <WorkSection />
-        <CustomSolutionsSection onCtaClick={openIntake} />
+        <CustomSolutionsSection onCtaClick={() => openIntakeFromPageCta("Start a project")} />
         <Testimonials />
-        <CTASection onCtaClick={openIntake} />
+        <CTASection onCtaClick={() => openIntakeFromPageCta("Get in touch")} />
         <ContactForm
           formRef={formRef}
           submitting={formSubmitting}
@@ -192,7 +200,7 @@ export default function Home() {
         <CallStrip />
       </main>
 
-      <IntakeModal open={intakeOpen} onClose={closeIntake} />
+      <IntakeModalMount />
       <Footer />
     </>
   );

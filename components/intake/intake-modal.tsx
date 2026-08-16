@@ -9,6 +9,11 @@ import type {
   IntakeMessage,
 } from "@/lib/intake/types";
 import { SERVICE_LABELS } from "@/lib/intake/types";
+import {
+  trackIntakeEvent,
+  getLandingAttribution,
+  type IntakeOpenContext,
+} from "@/lib/intake/analytics";
 
 /* ------------------------------------------------------------------ */
 /*  IntakeModal — main component                                      */
@@ -17,6 +22,8 @@ import { SERVICE_LABELS } from "@/lib/intake/types";
 interface IntakeModalProps {
   open: boolean;
   onClose: () => void;
+  /** Where this open came from (hero CTA, article CTA, #intake deep link). */
+  context?: IntakeOpenContext;
 }
 
 type AnalyseApiResponse = AnalysisResponse & { stage: IntakeStage };
@@ -51,7 +58,7 @@ async function readApiResponse<T>(response: Response, fallbackError: string): Pr
   return data as T;
 }
 
-export default function IntakeModal({ open, onClose }: IntakeModalProps) {
+export default function IntakeModal({ open, onClose, context }: IntakeModalProps) {
   const [stage, setStage] = useState<IntakeStage>("intro");
   const [textInput, setTextInput] = useState("");
   const [analysis, setAnalysis] = useState<AnalysisResponse | null>(null);
@@ -83,6 +90,8 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
   const audioChunksRef = useRef<Blob[]>([]);
   const recordingTargetRef = useRef<RecordingTarget>("intro");
   const recordingCancelledRef = useRef(false);
+  const contextRef = useRef<IntakeOpenContext | undefined>(context);
+  const startTrackedRef = useRef(false);
 
   // Close handler — defined early so it can be used in effects
   const handleClose = useCallback(() => {
@@ -126,6 +135,18 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
     };
   }, [open, handleClose]);
 
+  // Track modal opens with their source context (funnel analytics)
+  useEffect(() => {
+    if (!open) return;
+    contextRef.current = context;
+    trackIntakeEvent("intake_open", {
+      trigger: context?.trigger ?? "nav",
+      source_page: context?.source_page ?? window.location.pathname,
+      cta_text: context?.cta_text ?? "",
+      problem_category: context?.problem_category ?? "",
+    });
+  }, [open, context]);
+
   // Auto-focus text input on intro stage
   useEffect(() => {
     if (open && stage === "intro" && firstInputRef.current) {
@@ -161,7 +182,24 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
     setTranscript("");
     setContact({ name: "", email: "", company: "", phone: "" });
     setMessages([]);
+    startTrackedRef.current = false;
   }, []);
+
+  // ── Funnel analytics helpers ──────────────────────────────────
+
+  const trackStart = useCallback((method: "text" | "voice") => {
+    if (startTrackedRef.current) return;
+    startTrackedRef.current = true;
+    trackIntakeEvent("intake_start", { method });
+  }, []);
+
+  const handleTextInputChange = useCallback(
+    (v: string) => {
+      if (v.trim().length > 0) trackStart("text");
+      setTextInput(v);
+    },
+    [trackStart],
+  );
 
   // ── API handlers ──────────────────────────────────────────────────
 
@@ -216,6 +254,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         );
         setBrief(briefData);
         setStage("brief");
+        trackIntakeEvent("intake_step", { step: "finalise" });
       } else {
         // Server mandates the follow-up question on turn 1
         setStage("follow_up");
@@ -262,6 +301,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         timestamp: new Date().toISOString(),
       };
       setMessages([...updatedMessages, assistantMessage]);
+      trackIntakeEvent("intake_step", { step: "analyse" });
 
       if (data.stage === "brief") {
         const briefRes = await fetch("/api/intake/finalise", {
@@ -275,6 +315,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         );
         setBrief(briefData);
         setStage("brief");
+        trackIntakeEvent("intake_step", { step: "finalise" });
       } else if (data.stage === "final_question" && data.follow_up_question) {
         // Need a third question
         setAnalysis(data);
@@ -292,6 +333,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         );
         setBrief(briefData);
         setStage("brief");
+        trackIntakeEvent("intake_step", { step: "finalise" });
       }
     } catch (err) {
       setError((err as Error).message || "Something went wrong. Your message is still here - please try again.");
@@ -328,6 +370,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       setBrief(briefData);
       setMessages(updatedMessages);
       setStage("brief");
+      trackIntakeEvent("intake_step", { step: "finalise" });
     } catch (err) {
       setError((err as Error).message || "Something went wrong. Your message is still here - please try again.");
       setStage("final_question");
@@ -349,6 +392,8 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
           brief,
           contact,
           original_input_type: transcript ? "voice" : "text",
+          event_context: contextRef.current ?? null,
+          attribution: getLandingAttribution(),
         }),
       });
 
@@ -357,9 +402,11 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         "We couldn't send the brief yet. Your details haven't been lost. Please try again.",
       );
 
+      trackIntakeEvent("intake_submit", { success: true });
       setSubmitting(false);
       setStage("submitted");
     } catch (err) {
+      trackIntakeEvent("intake_submit", { success: false });
       setError((err as Error).message);
       setSubmitting(false);
     }
@@ -431,12 +478,13 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
       recorder.start();
       mediaRecorderRef.current = recorder;
       setIsRecording(true);
+      trackStart("voice");
       setStage("recording");
     } catch {
       setError("Microphone access is off. You can enable it in your browser or type your message instead.");
       setStage(target);
     }
-  }, []);
+  }, [trackStart]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
@@ -476,6 +524,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         );
         setBrief(briefData);
         setStage("brief");
+        trackIntakeEvent("intake_step", { step: "finalise" });
       } catch (err) {
         setError((err as Error).message || "Something went wrong. Please try again.");
         setStage("follow_up");
@@ -524,7 +573,7 @@ export default function IntakeModal({ open, onClose }: IntakeModalProps) {
         {stage === "intro" && (
           <IntakeIntro
             textInput={textInput}
-            setTextInput={setTextInput}
+            setTextInput={handleTextInputChange}
             firstInputRef={firstInputRef}
             onSubmit={handleInitialSubmit}
             onStartRecording={() => startRecording("intro")}
@@ -1109,6 +1158,12 @@ function ContactStep({
 /* ------------------------------------------------------------------ */
 
 function BookingStep({ onBack }: { onBack: () => void }) {
+  useEffect(() => {
+    trackIntakeEvent("calendly_view", {
+      source_page: window.location.pathname,
+    });
+  }, []);
+
   return (
     <div className="t3-intake-step">
       <p className="t3-intake-eyebrow">Book a call</p>

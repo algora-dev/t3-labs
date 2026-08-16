@@ -79,6 +79,18 @@ export async function POST(req: NextRequest) {
     const cleanCompany = contact.company ? String(contact.company).trim().slice(0, 200) : null;
     const cleanPhone = contact.phone ? String(contact.phone).trim().slice(0, 50) : null;
 
+    // Optional funnel analytics context (client-side attribution, Phase 1.3)
+    const ctx = sanitizeEventContext(body.event_context);
+    const attr = sanitizeAttribution(body.attribution);
+    const sourceBits: string[] = [];
+    if (ctx?.source_page) sourceBits.push(`page: ${ctx.source_page}`);
+    if (ctx?.cta_text) sourceBits.push(`cta: ${ctx.cta_text}`);
+    if (ctx?.problem_category) sourceBits.push(`category: ${ctx.problem_category}`);
+    if (attr?.landing_page) sourceBits.push(`landing: ${attr.landing_page}`);
+    const utmBits = [attr?.utm_source, attr?.utm_medium, attr?.utm_campaign].filter(Boolean).join(" / ");
+    if (utmBits) sourceBits.push(`utm: ${utmBits}`);
+    const sourceLine = sourceBits.length ? sourceBits.join(" · ") : "direct / no attribution";
+
     // Extract analysis from the last assistant message
     const lastAssistant = [...typedMessages]
       .reverse()
@@ -130,6 +142,7 @@ export async function POST(req: NextRequest) {
       context,
       transcript,
       inputType: original_input_type || "text",
+      sourceLine,
     });
 
     await sendEmail({
@@ -173,6 +186,47 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// ── Analytics context sanitisation ─────────────────────────────────
+
+function sanitizeEventContext(input: unknown): {
+  trigger: string | null;
+  source_page: string | null;
+  cta_text: string | null;
+  problem_category: string | null;
+} | null {
+  if (typeof input !== "object" || input === null) return null;
+  const o = input as Record<string, unknown>;
+  const str = (v: unknown) =>
+    typeof v === "string" && v.trim() ? v.trim().slice(0, 200) : null;
+  const trigger = str(o.trigger);
+  const sourcePage = str(o.source_page);
+  if (!trigger && !sourcePage) return null;
+  return {
+    trigger,
+    source_page: sourcePage,
+    cta_text: str(o.cta_text),
+    problem_category: str(o.problem_category),
+  };
+}
+
+function sanitizeAttribution(input: unknown): {
+  landing_page: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+} | null {
+  if (typeof input !== "object" || input === null) return null;
+  const o = input as Record<string, unknown>;
+  const str = (v: unknown) =>
+    typeof v === "string" && v.trim() ? v.trim().slice(0, 200) : null;
+  return {
+    landing_page: str(o.landing_page),
+    utm_source: str(o.utm_source),
+    utm_medium: str(o.utm_medium),
+    utm_campaign: str(o.utm_campaign),
+  };
+}
+
 // ── Email builders ──────────────────────────────────────────────────
 
 function escapeHtml(str: string): string {
@@ -197,6 +251,7 @@ function buildTeamEmail(data: {
   context: string;
   transcript: string;
   inputType: string;
+  sourceLine: string;
 }) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -216,6 +271,7 @@ function buildTeamEmail(data: {
               ${data.company ? `<tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Company</td><td style="padding:4px 0;">${escapeHtml(data.company)}</td></tr>` : ""}
               ${data.phone ? `<tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Phone</td><td style="padding:4px 0;">${escapeHtml(data.phone)}</td></tr>` : ""}
               <tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Input type</td><td style="padding:4px 0;">${escapeHtml(data.inputType)}</td></tr>
+              <tr><td style="padding:4px 0;vertical-align:top;width:120px;color:#888;">Source</td><td style="padding:4px 0;">${escapeHtml(data.sourceLine)}</td></tr>
             </table>
 
             <div style="background:#f8f8f5;border:1px solid #eaeae4;border-radius:16px;padding:22px;margin-top:20px;">

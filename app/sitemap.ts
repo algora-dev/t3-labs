@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
 
-const BASE_URL = "https://t3labs.tech";
+const BASE_URL = "https://www.t3labs.tech";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();

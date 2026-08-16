@@ -209,11 +209,11 @@ export default function AnimatedHero({ onCtaClick }: AnimatedHeroProps) {
               Custom software. AI integrations. Growth solutions.
             </p>
             <p className="t3-hero__description">
-              You bring us the problem. We work out what needs to be built.
+              AI can tell you what's possible. We help make it happen.
             </p>
             <div className="t3-hero__actions">
               <button type="button" onClick={onCtaClick} className="t3-hero__cta">
-                <span className="t3-hero__cta-text">Tell us what you need</span>
+                <span className="t3-hero__cta-text">Tell us your problem</span>
                 <span className="t3-hero__cta-arrow" aria-hidden="true">&rarr;</span>
               </button>
             </div>

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getAllSlugs, getPostBySlug, getAllPosts } from "@/lib/blog";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 
-const BASE_URL = "https://t3labs.tech";
+const BASE_URL = "https://www.t3labs.tech";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

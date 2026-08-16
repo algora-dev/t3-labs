@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/proposal/", "/business-audit/api/", "/dashboard", "/api/"],
       },
     ],
-    sitemap: "https://t3labs.tech/sitemap.xml",
+    sitemap: "https://www.t3labs.tech/sitemap.xml",
   };
 }

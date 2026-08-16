@@ -4,7 +4,7 @@ import "./globals.css";
 
 /* eslint-disable @next/next/no-page-custom-font -- This is the existing T3 Labs Inter source. */
 
-const BASE_URL = "https://t3labs.tech";
+const BASE_URL = "https://www.t3labs.tech";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
