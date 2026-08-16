@@ -556,35 +556,9 @@ textarea {
 /*  Reduced Motion                    */
 /* ================================== */
 
+/* Hero animation intentionally ignores prefers-reduced-motion (Shaun, 2026-08-16):
+   in-place text reveal, no viewport movement. Only the header reveal stays static. */
 @media (prefers-reduced-motion: reduce) {
-  .t3-hero__animation {
-    display: none;
-  }
-
-  .t3-hero__final {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    transition: none;
-  }
-
-  .t3-hero__signal {
-    animation: none;
-  }
-
-  .t3-hero__cursor {
-    animation: none;
-    display: none;
-  }
-
-  .t3-hero__emphasis {
-    transition: none;
-  }
-
-  .t3-hero__cta {
-    animation: none;
-  }
-
   .t3-header {
     opacity: 1;
     transform: none;

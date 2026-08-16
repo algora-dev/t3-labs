@@ -53,13 +53,8 @@ export default function AnimatedHero({ onCtaClick }: AnimatedHeroProps) {
   const cancelRef = useRef(false);
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Play every page load — no sessionStorage check
-    if (reducedMotion) {
-      setPhase("final");
-      return;
-    }
 
     cancelRef.current = false;
     let timers: number[] = [];
@@ -126,7 +121,19 @@ export default function AnimatedHero({ onCtaClick }: AnimatedHeroProps) {
       setPhase("final");
     }
 
-    runSequence();
+    // Watchdog: if the sequence stalls (throttled timers, hydration hiccup),
+    // force the final hero so the CTA always appears. Natural run is ~14.6s.
+    const watchdog = window.setTimeout(() => {
+      cancelRef.current = true;
+      timers.forEach(clearTimeout);
+      setPhase("final");
+    }, 20000);
+    timers.push(watchdog);
+
+    runSequence().catch(() => {
+      // Unexpected failure — never leave the visitor on a blank hero
+      setPhase("final");
+    });
 
     return () => {
       cancelRef.current = true;
