@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const token = process.env.INTAKE_ANALYTICS_TOKEN;
   if (!token || req.headers.get("authorization") !== `Bearer ${token}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized", token_set: Boolean(token) }, { status: 401 });
   }
 
   const limitParam = Number(req.nextUrl.searchParams.get("limit") ?? "200");
