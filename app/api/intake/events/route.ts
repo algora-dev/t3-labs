@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     // Blob not configured or temporarily unavailable — never disrupt the visitor
     console.error("Intake event storage failed:", err instanceof Error ? err.message : err);
-    return NextResponse.json({ ok: true, stored: false }, { status: 202 });
+    return NextResponse.json({ ok: true, stored: false, reason: err instanceof Error ? err.message : String(err) }, { status: 202 });
   }
 }
 
