@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getPostBySlug, getAllPosts } from "@/lib/blog";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
+import IntakeModalMount from "@/components/intake/intake-modal-mount";
+import ContextualIntakeCTA from "@/components/contextual-intake-cta";
 
 const BASE_URL = "https://www.t3labs.tech";
 
@@ -44,6 +46,7 @@ export async function generateMetadata({
 }
 
 const mdxComponents = {
+  ContextualIntakeCTA,
   h1: (props: any) => (
     <h1 className="mt-12 text-3xl font-bold tracking-tight sm:text-4xl" {...props} />
   ),
@@ -143,6 +146,8 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
 
       <main className="min-h-screen bg-[#0a0b10] text-white">
+        {/* Site-wide intake modal mount — lets article CTAs + #intake deep links open it */}
+        <IntakeModalMount />
         {/* Header */}
         <header className="border-b border-white/10">
           <nav className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
