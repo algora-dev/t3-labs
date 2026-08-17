@@ -99,14 +99,14 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     // Blob not configured or temporarily unavailable — never disrupt the visitor
     console.error("Intake event storage failed:", err instanceof Error ? err.message : err);
-    return NextResponse.json({ ok: true, stored: false, reason: err instanceof Error ? err.message : String(err) }, { status: 202 });
+    return NextResponse.json({ ok: true, stored: false }, { status: 202 });
   }
 }
 
 export async function GET(req: NextRequest) {
   const token = process.env.INTAKE_ANALYTICS_TOKEN;
   if (!token || req.headers.get("authorization") !== `Bearer ${token}`) {
-    return NextResponse.json({ error: "Unauthorized", token_set: Boolean(token) }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const limitParam = Number(req.nextUrl.searchParams.get("limit") ?? "200");
