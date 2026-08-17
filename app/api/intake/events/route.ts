@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put, list } from "@vercel/blob";
+import { put, list, get } from "@vercel/blob";
 
 /**
  * POST /api/intake/events — store a funnel event (intake_open, intake_start,
@@ -10,7 +10,8 @@ import { put, list } from "@vercel/blob";
  * no PII — event name, timestamp, random session id, and whitelisted props.
  *
  * Note: requires BLOB_READ_WRITE_TOKEN (Vercel project → Storage → Blob).
- * Until configured, POSTs return 202 {stored:false} so the funnel is unaffected.
+ * Store is PRIVATE - blobs are written without public access and read back
+ * with the token-authenticated get() API, never via public URLs.
  */
 
 export const maxDuration = 60;
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
 
   try {
     await put(`intake-events/${record.ts}-${crypto.randomUUID()}.json`, JSON.stringify(record), {
-      access: "public",
+      access: "private",
       contentType: "application/json",
       addRandomSuffix: false,
     });
@@ -120,9 +121,10 @@ export async function GET(req: NextRequest) {
     const records = await Promise.all(
       blobs.map(async (blob) => {
         try {
-          const res = await fetch(blob.url, { cache: "no-store" });
-          if (!res.ok) return null;
-          return (await res.json()) as Record<string, unknown>;
+          const res = await get(blob.pathname, { access: "private" });
+          if (!res) return null;
+          const text = await new Response(res.stream).text();
+          return JSON.parse(text) as Record<string, unknown>;
         } catch {
           return null;
         }
