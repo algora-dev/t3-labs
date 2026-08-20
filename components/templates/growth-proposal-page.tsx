@@ -2,15 +2,14 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import type { GrowthProposalConfig } from "@/sites/types";
+import type { GrowthBlock, GrowthProposalConfig } from "@/sites/types";
 
 /**
  * GROWTH PROPOSAL PAGE
  *
- * Text-led proposal renderer (no video / concept screenshots).
+ * Text-led proposal renderer built from config-driven content blocks.
  * T3 Labs theme with dark/light toggle (persisted per prospect).
  * Dark: #0a0b10 base, #d7ff00 lime accent. Light: #fbfcff base, olive accent.
- * Server-passed config; this component renders client-side for the toggle.
  */
 
 type Theme = "dark" | "light";
@@ -35,6 +34,7 @@ type ThemeTokens = {
   ctaPrimary: string;
   ctaSecondary: string;
   divider: string;
+  heroGlow: string;
 };
 
 const dark: ThemeTokens = {
@@ -57,6 +57,7 @@ const dark: ThemeTokens = {
   ctaPrimary: "bg-[#d7ff00] text-[#0a0b10] shadow-[0_14px_30px_rgba(215,255,0,0.18)]",
   ctaSecondary: "border-white/20 text-white hover:border-white/40",
   divider: "bg-[#d7ff00]",
+  heroGlow: "bg-[radial-gradient(circle_at_85%_10%,rgba(215,255,0,0.08),transparent_24rem)]",
 };
 
 const light: ThemeTokens = {
@@ -79,6 +80,7 @@ const light: ThemeTokens = {
   ctaPrimary: "bg-[#0a0b10] text-[#d7ff00] shadow-[0_14px_30px_rgba(10,11,16,0.25)]",
   ctaSecondary: "border-[#0a0b10]/20 text-[#0a0b10] hover:border-[#0a0b10]/40",
   divider: "bg-[#809000]",
+  heroGlow: "bg-[radial-gradient(circle_at_85%_10%,rgba(150,180,0,0.07),transparent_24rem)]",
 };
 
 function Check({ color }: { color: string }) {
@@ -123,6 +125,96 @@ function Moon() {
   );
 }
 
+function SectionHeading({ t, children }: { t: ThemeTokens; children: React.ReactNode }) {
+  return (
+    <h2 className={`text-[clamp(1.4rem,3vw,2rem)] font-extrabold leading-[1.2] tracking-[-0.01em] ${t.heading}`}>
+      {children}
+    </h2>
+  );
+}
+
+function Block({ block, t }: { block: GrowthBlock; t: ThemeTokens }) {
+  if (block.type === "text") {
+    return (
+      <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
+        <SectionHeading t={t}>{block.heading}</SectionHeading>
+        {block.paragraphs.map((para, i) => (
+          <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
+        ))}
+        {block.pullQuote ? (
+          <blockquote className={`mt-8 rounded-xl border-l-4 px-6 py-5 text-[clamp(1.05rem,2vw,1.2rem)] font-semibold leading-[1.6] ${t.quote}`}>
+            {block.pullQuote}
+          </blockquote>
+        ) : null}
+      </section>
+    );
+  }
+
+  if (block.type === "list") {
+    return (
+      <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
+        <SectionHeading t={t}>{block.heading}</SectionHeading>
+        {block.intro ? <p className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{block.intro}</p> : null}
+        {block.paragraphs?.map((para, i) => (
+          <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
+        ))}
+        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+          {block.items.map((item) => (
+            <li key={item} className={`flex items-start gap-3 rounded-xl border px-5 py-4 ${t.itemCard}`}>
+              <Check color={t.checkColor} />
+              <span className="leading-[1.55]">{item}</span>
+            </li>
+          ))}
+        </ul>
+        {block.closing ? <p className={`mt-6 max-w-3xl font-semibold ${t.muted}`}>{block.closing}</p> : null}
+      </section>
+    );
+  }
+
+  if (block.type === "groups") {
+    return (
+      <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
+        <SectionHeading t={t}>{block.heading}</SectionHeading>
+        {block.paragraphs?.map((para, i) => (
+          <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
+        ))}
+        <div className="mt-8 grid gap-5 md:grid-cols-2">
+          {block.groups.map((group) => (
+            <div key={group.heading} className={`rounded-xl border p-6 ${t.sectionBorder} ${t.itemCard}`}>
+              <h3 className={`text-xs font-bold uppercase tracking-[0.14em] ${t.toolNum}`}>{group.heading}</h3>
+              <ul className="mt-4 grid gap-2.5">
+                {group.items.map((item) => (
+                  <li key={item} className={`flex items-start gap-3 ${t.muted}`}>
+                    <Check color={t.checkColor} />
+                    <span className="leading-[1.55]">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  // cards
+  return (
+    <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
+      <SectionHeading t={t}>{block.heading}</SectionHeading>
+      {block.intro ? <p className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{block.intro}</p> : null}
+      <div className="mt-8 grid gap-5 md:grid-cols-3">
+        {block.cards.map((card, i) => (
+          <div key={card.title} className={`flex h-full flex-col rounded-xl border p-6 ${t.toolCard}`}>
+            <span className={`text-xs font-bold ${t.toolNum}`}>0{i + 1}</span>
+            <h3 className={`mt-3 font-bold leading-[1.35] ${t.heading}`}>{card.title}</h3>
+            <p className={`mt-3 text-sm leading-[1.65] ${t.body}`}>{card.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function GrowthProposalPage({ proposal }: { proposal: GrowthProposalConfig }) {
   const p = proposal;
   const [theme, setTheme] = useState<Theme>("dark");
@@ -140,26 +232,13 @@ export function GrowthProposalPage({ proposal }: { proposal: GrowthProposalConfi
 
   const t = theme === "dark" ? dark : light;
 
-  const SectionHeading = ({ children }: { children: React.ReactNode }) => (
-    <h2 className={`text-[clamp(1.4rem,3vw,2rem)] font-extrabold leading-[1.2] tracking-[-0.01em] ${t.heading}`}>
-      {children}
-    </h2>
-  );
-
   return (
     <div className={`min-h-screen transition-colors duration-200 ${t.page}`} style={{ fontFamily: "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif" }}>
       {/* Header */}
       <div className="mx-auto w-[min(1180px,calc(100%-28px))] py-4 sm:w-[min(1180px,calc(100%-40px))] sm:py-6">
         <header className={`flex min-h-16 items-center justify-between gap-3 rounded-xl border px-4 sm:px-6 ${t.headerCard}`}>
           <a href="https://www.t3labs.tech/" aria-label="T3 Labs home" className="relative h-8 w-24 shrink-0">
-            <Image
-              src={theme === "dark" ? "/assets/t3-labs-black.png" : "/assets/t3-labs-black.png"}
-              alt="T3 Labs"
-              fill
-              sizes="96px"
-              className="object-contain object-left"
-              priority
-            />
+            <Image src="/assets/t3-labs-black.png" alt="T3 Labs" fill sizes="96px" className="object-contain object-left" priority />
           </a>
           <div className={`flex items-center gap-2 text-sm font-semibold ${t.headerText}`}>
             <Lock />
@@ -182,10 +261,18 @@ export function GrowthProposalPage({ proposal }: { proposal: GrowthProposalConfi
 
         <main className="mt-6 grid gap-6 pb-16">
           {/* HERO */}
-          <section className={`relative overflow-hidden rounded-2xl border px-6 py-12 sm:px-12 sm:py-16 ${t.sectionBorder} ${t.sectionCard} ${theme === "dark" ? "bg-[radial-gradient(circle_at_85%_10%,rgba(215,255,0,0.08),transparent_24rem)]" : "bg-[radial-gradient(circle_at_85%_10%,rgba(150,180,0,0.07),transparent_24rem)]"}`}>
+          <section className={`relative overflow-hidden rounded-2xl border px-6 py-12 sm:px-12 sm:py-16 ${t.sectionBorder} ${t.sectionCard} ${t.heroGlow}`}>
             <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${t.faint}`}>{p.hero.overline}</p>
-            <div className="relative mt-6 h-28 w-28 overflow-hidden rounded-2xl bg-white shadow-sm sm:h-36 sm:w-36">
-              <Image src={p.logo.src} alt={p.logo.alt} fill sizes="144px" className="object-contain p-3" priority />
+            <div className="mt-6 flex items-center gap-5">
+              {p.logo ? (
+                <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-white shadow-sm sm:h-36 sm:w-36">
+                  <Image src={p.logo.src} alt={p.logo.alt} fill sizes="144px" className="object-contain p-3" priority />
+                </div>
+              ) : (
+                <div className={`flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border px-3 text-center text-[clamp(0.8rem,2vw,1.05rem)] font-black uppercase leading-[1.2] tracking-wide sm:h-28 sm:w-28 ${t.sectionBorder} ${t.muted}`}>
+                  {p.companyName}
+                </div>
+              )}
             </div>
             <h1 className={`mt-8 max-w-2xl text-[clamp(2rem,5vw,3.4rem)] font-black leading-[1.08] tracking-[-0.02em] ${t.heading}`}>
               {p.hero.headline}
@@ -207,133 +294,10 @@ export function GrowthProposalPage({ proposal }: { proposal: GrowthProposalConfi
             </p>
           </section>
 
-          {/* OPPORTUNITY */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.opportunity.heading}</SectionHeading>
-            {p.opportunity.paragraphs.map((para, i) => (
-              <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
-            ))}
-            <blockquote className={`mt-8 rounded-xl border-l-4 px-6 py-5 text-[clamp(1.05rem,2vw,1.2rem)] font-semibold leading-[1.6] ${t.quote}`}>
-              {p.opportunity.pullQuote}
-            </blockquote>
-          </section>
-
-          {/* ADVANTAGE */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.advantage.heading}</SectionHeading>
-            {p.advantage.paragraphs.map((para, i) => (
-              <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
-            ))}
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {p.advantage.items.map((item) => (
-                <li key={item} className={`flex items-start gap-3 rounded-xl border px-5 py-4 ${t.itemCard}`}>
-                  <Check color={t.checkColor} />
-                  <span className="leading-[1.55]">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* SEARCH REACH */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.searchReach.heading}</SectionHeading>
-            {p.searchReach.paragraphs.map((para, i) => (
-              <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
-            ))}
-            <div className="mt-8 grid gap-5 md:grid-cols-2">
-              {p.searchReach.groups.map((group) => (
-                <div key={group.heading} className={`rounded-xl border p-6 ${t.sectionBorder} ${t.itemCard}`}>
-                  <h3 className={`text-xs font-bold uppercase tracking-[0.14em] ${t.toolNum}`}>{group.heading}</h3>
-                  <ul className="mt-4 grid gap-2.5">
-                    {group.items.map((item) => (
-                      <li key={item} className={`flex items-start gap-3 ${t.muted}`}>
-                        <Check color={t.checkColor} />
-                        <span className="leading-[1.55]">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* PROJECTS */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.projects.heading}</SectionHeading>
-            {p.projects.paragraphs.map((para, i) => (
-              <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
-            ))}
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {p.projects.items.map((item) => (
-                <li key={item} className={`flex items-start gap-3 rounded-xl border px-5 py-4 ${t.itemCard}`}>
-                  <Check color={t.checkColor} />
-                  <span className="leading-[1.55]">{item}</span>
-                </li>
-              ))}
-            </ul>
-            <p className={`mt-6 max-w-3xl font-semibold ${t.muted}`}>{p.projects.closing}</p>
-          </section>
-
-          {/* TOOLS */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.tools.heading}</SectionHeading>
-            <p className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{p.tools.intro}</p>
-            <div className="mt-8 grid gap-5 md:grid-cols-3">
-              {p.tools.cards.map((card, i) => (
-                <div key={card.title} className={`flex h-full flex-col rounded-xl border p-6 ${t.toolCard}`}>
-                  <span className={`text-xs font-bold ${t.toolNum}`}>0{i + 1}</span>
-                  <h3 className={`mt-3 font-bold leading-[1.35] ${t.heading}`}>{card.title}</h3>
-                  <p className={`mt-3 text-sm leading-[1.65] ${t.body}`}>{card.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* SOCIAL */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.social.heading}</SectionHeading>
-            {p.social.paragraphs.map((para, i) => (
-              <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
-            ))}
-          </section>
-
-          {/* REFINEMENTS */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.refinements.heading}</SectionHeading>
-            <p className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{p.refinements.intro}</p>
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {p.refinements.items.map((item) => (
-                <li key={item} className={`flex items-start gap-3 rounded-xl border px-5 py-4 ${t.itemCard}`}>
-                  <Check color={t.checkColor} />
-                  <span className="leading-[1.55]">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* TIMELINE */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.timeline.heading}</SectionHeading>
-            {p.timeline.body.map((para, i) => (
-              <p key={i} className={`mt-5 max-w-3xl leading-[1.75] ${t.body}`}>{para}</p>
-            ))}
-          </section>
-
-          {/* SUCCESS */}
-          <section className={`rounded-2xl border px-6 py-10 sm:px-12 ${t.sectionBorder} ${t.sectionCard}`}>
-            <SectionHeading>{p.success.heading}</SectionHeading>
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {p.success.items.map((item) => (
-                <li key={item} className={`flex items-start gap-3 rounded-xl border px-5 py-4 ${t.itemCard}`}>
-                  <Check color={t.checkColor} />
-                  <span className="leading-[1.55]">{item}</span>
-                </li>
-              ))}
-            </ul>
-            <p className={`mt-8 max-w-3xl rounded-xl border-l-4 px-6 py-5 leading-[1.7] ${t.quote}`}>
-              {p.success.closing}
-            </p>
-          </section>
+          {/* CONTENT BLOCKS */}
+          {p.sections.map((block) => (
+            <Block key={block.heading} block={block} t={t} />
+          ))}
 
           {/* FINAL CTA */}
           <section className={`relative overflow-hidden rounded-2xl border px-6 py-14 text-center sm:px-12 ${t.ctaSection}`}>

@@ -7,6 +7,8 @@ import { threeARoofingProposal } from "./3a-roofing-wp-000207/proposal-config";
 import { shortProposalTemplate } from "./short-proposal-template-wp-000000/proposal-config";
 import { actRoofingProposal } from "./act-roofing-ltd/proposal-config";
 import { sunflowGrowthProposal } from "./sunflow-solar/growth-config";
+import { everestTrayGrowthProposal } from "./everest-tray/growth-config";
+import { nzavGrowthProposal } from "./nzav/growth-config";
 import type { AnyProposalConfig, GrowthProposalConfig, ProposalConfig } from "./types";
 
 export const sites = {
@@ -26,6 +28,8 @@ export const siteSlugs = Object.keys(sites) as SiteSlug[];
 /** Text-led growth proposals (GrowthProposalConfig / growth-proposal-page.tsx). */
 export const growthSites = {
   [sunflowGrowthProposal.slug]: sunflowGrowthProposal,
+  [everestTrayGrowthProposal.slug]: everestTrayGrowthProposal,
+  [nzavGrowthProposal.slug]: nzavGrowthProposal,
 } satisfies Record<string, GrowthProposalConfig>;
 
 export type GrowthSiteSlug = keyof typeof growthSites;

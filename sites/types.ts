@@ -161,11 +161,13 @@ export type ProposalConfig = {
   expiresAt?: string;
 };
 
-/**
- * Growth proposal: a text-led landing page (no video/concept screenshots).
- * Rendered by growth-proposal-page.tsx. Used for SEO/digital growth
- * proposals where the content is the deliverable.
- */
+/** Content blocks for growth proposals. Order and mix differ per proposal. */
+export type GrowthBlock =
+  | { type: "text"; heading: string; paragraphs: string[]; pullQuote?: string }
+  | { type: "list"; heading: string; intro?: string; paragraphs?: string[]; items: string[]; closing?: string }
+  | { type: "groups"; heading: string; paragraphs?: string[]; groups: Array<{ heading: string; items: string[] }> }
+  | { type: "cards"; heading: string; intro?: string; cards: Array<{ title: string; description: string }> };
+
 export type GrowthProposalConfig = {
   slug: string;
   prospectId: string;
@@ -174,7 +176,7 @@ export type GrowthProposalConfig = {
   location?: string;
   status: "draft" | "active";
   seo: { title: string; description: string };
-  logo: SiteImage;
+  logo?: SiteImage;
   hero: {
     overline: string;
     headline: string;
@@ -182,50 +184,7 @@ export type GrowthProposalConfig = {
     metaChips: string[];
     privacyNote: string;
   };
-  opportunity: {
-    heading: string;
-    paragraphs: string[];
-    pullQuote: string;
-  };
-  advantage: {
-    heading: string;
-    paragraphs: string[];
-    items: string[];
-  };
-  searchReach: {
-    heading: string;
-    paragraphs: string[];
-    groups: Array<{ heading: string; items: string[] }>;
-  };
-  projects: {
-    heading: string;
-    paragraphs: string[];
-    items: string[];
-    closing: string;
-  };
-  tools: {
-    heading: string;
-    intro: string;
-    cards: Array<{ title: string; description: string }>;
-  };
-  social: {
-    heading: string;
-    paragraphs: string[];
-  };
-  refinements: {
-    heading: string;
-    intro: string;
-    items: string[];
-  };
-  timeline: {
-    heading: string;
-    body: string[];
-  };
-  success: {
-    heading: string;
-    items: string[];
-    closing: string;
-  };
+  sections: GrowthBlock[];
   actions: {
     calendlyUrl: string;
     emailUrl: string;
