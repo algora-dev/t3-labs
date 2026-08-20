@@ -16,6 +16,11 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     title: "NZAV - Website Repositioning & Search Growth | Private Proposal by T3 Labs",
     description: "A Phase 1 website repositioning and search growth proposal prepared for NZAV by T3 Labs.",
   },
+  logo: {
+    src: "/proposal-assets/nzav/nzav-logo.png",
+    alt: "NZAV logo",
+    darkCard: true,
+  },
   hero: {
     overline: "A private Phase 1 proposal prepared for",
     headline: "Website repositioning & search growth.",

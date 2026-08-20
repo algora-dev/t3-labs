@@ -1,6 +1,8 @@
 export type SiteImage = {
   src: string;
   alt: string;
+  /** Render the logo on a dark card (for dark-background logos). Default: white card. */
+  darkCard?: boolean;
 };
 
 // Kept for the archived/restorable concept source. Public proposal routes use ProposalConfig.

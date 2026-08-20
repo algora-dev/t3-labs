@@ -217,7 +217,7 @@ function Block({ block, t }: { block: GrowthBlock; t: ThemeTokens }) {
 
 export function GrowthProposalPage({ proposal }: { proposal: GrowthProposalConfig }) {
   const p = proposal;
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     const stored = window.localStorage.getItem(`t3-growth-theme:${p.prospectId}`);
@@ -249,9 +249,10 @@ export function GrowthProposalPage({ proposal }: { proposal: GrowthProposalConfi
               type="button"
               onClick={toggleTheme}
               aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              className={`grid h-10 w-10 place-items-center rounded-lg border transition ${t.sectionBorder} ${t.headerText} hover:opacity-80`}
+              className={`inline-flex h-10 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-semibold transition ${t.sectionBorder} ${t.headerText} hover:opacity-80`}
             >
               {theme === "dark" ? <Sun /> : <Moon />}
+              <span>{theme === "dark" ? "Light" : "Dark"}</span>
             </button>
             <a href={p.actions.calendlyUrl} className="hidden text-sm font-semibold text-[#809000] hover:underline sm:block">
               Book a call
@@ -265,7 +266,9 @@ export function GrowthProposalPage({ proposal }: { proposal: GrowthProposalConfi
             <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${t.faint}`}>{p.hero.overline}</p>
             <div className="mt-6 flex items-center gap-5">
               {p.logo ? (
-                <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl bg-white shadow-sm sm:h-36 sm:w-36">
+                <div
+                  className={`relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl shadow-sm sm:h-36 sm:w-36 ${p.logo.darkCard ? "bg-[#0a0b10]" : "bg-white"}`}
+                >
                   <Image src={p.logo.src} alt={p.logo.alt} fill sizes="144px" className="object-contain p-3" priority />
                 </div>
               ) : (

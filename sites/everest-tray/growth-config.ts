@@ -16,6 +16,11 @@ export const everestTrayGrowthProposal: GrowthProposalConfig = {
     title: "Build the Foundation, Grow the Product - Private Proposal for Everest Tray | T3 Labs",
     description: "A digital growth proposal prepared for Everest Tray by T3 Labs.",
   },
+  logo: {
+    src: "/proposal-assets/everest-tray/element-roofing-logo.png",
+    alt: "Element Roofing & Cladding logo",
+    darkCard: true,
+  },
   hero: {
     overline: "A private digital growth proposal prepared for",
     headline: "Build the foundation. Grow the product. Create more freedom.",
