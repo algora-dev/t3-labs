@@ -161,6 +161,80 @@ export type ProposalConfig = {
   expiresAt?: string;
 };
 
+/**
+ * Growth proposal: a text-led landing page (no video/concept screenshots).
+ * Rendered by growth-proposal-page.tsx. Used for SEO/digital growth
+ * proposals where the content is the deliverable.
+ */
+export type GrowthProposalConfig = {
+  slug: string;
+  prospectId: string;
+  layout: "growth";
+  companyName: string;
+  location?: string;
+  status: "draft" | "active";
+  seo: { title: string; description: string };
+  logo: SiteImage;
+  hero: {
+    overline: string;
+    headline: string;
+    supportingCopy: string;
+    metaChips: string[];
+    privacyNote: string;
+  };
+  opportunity: {
+    heading: string;
+    paragraphs: string[];
+    pullQuote: string;
+  };
+  advantage: {
+    heading: string;
+    paragraphs: string[];
+    items: string[];
+  };
+  searchReach: {
+    heading: string;
+    paragraphs: string[];
+    groups: Array<{ heading: string; items: string[] }>;
+  };
+  projects: {
+    heading: string;
+    paragraphs: string[];
+    items: string[];
+    closing: string;
+  };
+  tools: {
+    heading: string;
+    intro: string;
+    cards: Array<{ title: string; description: string }>;
+  };
+  social: {
+    heading: string;
+    paragraphs: string[];
+  };
+  refinements: {
+    heading: string;
+    intro: string;
+    items: string[];
+  };
+  timeline: {
+    heading: string;
+    body: string[];
+  };
+  success: {
+    heading: string;
+    items: string[];
+    closing: string;
+  };
+  actions: {
+    calendlyUrl: string;
+    emailUrl: string;
+    ctaLabel: string;
+  };
+};
+
+export type AnyProposalConfig = ProposalConfig | GrowthProposalConfig;
+
 const unresolvedMarkers = ["[PLACEHOLDER]", "TODO"];
 
 function proposalMediaErrors(proposal: ProposalConfig) {

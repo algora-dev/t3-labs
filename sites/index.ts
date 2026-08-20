@@ -6,7 +6,8 @@ import { proposalTemplate } from "./proposal-template-wp-000000/proposal-config"
 import { threeARoofingProposal } from "./3a-roofing-wp-000207/proposal-config";
 import { shortProposalTemplate } from "./short-proposal-template-wp-000000/proposal-config";
 import { actRoofingProposal } from "./act-roofing-ltd/proposal-config";
-import type { ProposalConfig } from "./types";
+import { sunflowGrowthProposal } from "./sunflow-solar/growth-config";
+import type { AnyProposalConfig, GrowthProposalConfig, ProposalConfig } from "./types";
 
 export const sites = {
   [falconContractingProposal.slug]: falconContractingProposal,
@@ -21,6 +22,22 @@ export const sites = {
 
 export type SiteSlug = keyof typeof sites;
 export const siteSlugs = Object.keys(sites) as SiteSlug[];
+
+/** Text-led growth proposals (GrowthProposalConfig / growth-proposal-page.tsx). */
+export const growthSites = {
+  [sunflowGrowthProposal.slug]: sunflowGrowthProposal,
+} satisfies Record<string, GrowthProposalConfig>;
+
+export type GrowthSiteSlug = keyof typeof growthSites;
+export const growthSiteSlugs = Object.keys(growthSites) as GrowthSiteSlug[];
+
+export function getGrowthSite(slug: string): GrowthProposalConfig | undefined {
+  return growthSites[slug as GrowthSiteSlug];
+}
+
+export function getAnySite(slug: string): AnyProposalConfig | undefined {
+  return getSite(slug) ?? getGrowthSite(slug);
+}
 
 export function getSite(slug: string): ProposalConfig | undefined {
   return sites[slug as SiteSlug];
