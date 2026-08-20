@@ -9,7 +9,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = false;
 
-export function generateStaticParams() { return siteSlugs.map((slug) => ({ slug })); }
+export function generateStaticParams() { return [...siteSlugs, ...growthSiteSlugs].map((slug) => ({ slug })); }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const site = getAnySite((await params).slug);
