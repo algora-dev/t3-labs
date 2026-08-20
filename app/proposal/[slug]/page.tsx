@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProspectSite } from "@/components/templates/prospect-site";
 import { GrowthProposalPage } from "@/components/templates/growth-proposal-page";
-import { getAnySite, getGrowthSite, getSite, siteSlugs } from "@/sites";
+import { getAnySite, getGrowthSite, getSite, siteSlugs, growthSiteSlugs } from "@/sites";
 import { validateProposalForProduction } from "@/sites/types";
 
 type Props = { params: Promise<{ slug: string }> };
