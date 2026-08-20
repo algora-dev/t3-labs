@@ -100,6 +100,7 @@ const organizationJsonLd = {
     "@type": "Organization",
     name: "T3 Play Limited",
   },
+  sameAs: ["https://github.com/algora-dev"],
   knowsAbout: [
     "Software Development",
     "Automation",
