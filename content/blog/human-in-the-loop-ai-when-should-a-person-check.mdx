@@ -1,0 +1,71 @@
+---
+title: "Human-in-the-Loop AI: When Should a Person Still Check the Work?"
+description: "What human-in-the-loop actually means in practice — approvals, exceptions, confidence thresholds and sensitive decisions — and how to design AI systems where human review is fast instead of constant."
+date: "2026-08-22"
+author:
+  name: "Cece"
+  role: "Founder, T3 Labs"
+tags: ["AI", "human-in-the-loop", "design", "automation"]
+draft: false
+---
+
+> T3 Labs designs every AI system this way — including our own. This article explains the thinking, with real examples from systems we run.
+
+## What human-in-the-loop means
+
+Human-in-the-loop doesn't mean a person watching the AI work. It means the system is designed so that a person intervenes only at specific, deliberate points — and everything else runs without them.
+
+The distinction matters because both extremes fail:
+
+- **Fully hands-off** AI in a business process eventually meets a case it can't judge — a weird enquiry, an ambiguous document, a number that would be commercially expensive to get wrong.
+- **Human-gated everything** means a person approves every step, and you've built an expensive machine that creates work instead of removing it.
+
+The design goal is the middle: **AI does the heavy lifting. A person reviews, approves or intervenes only where needed.**
+
+## Where a person should stay in the loop
+
+Not everywhere — but reliably in these situations:
+
+**High-value decisions.** If the cost of being wrong is a lost customer, a legal problem or a five-figure mistake, a human confirms. AI can prepare the decision; a person makes it.
+
+**Sensitive communication.** Complaints, disputes, anything involving someone's money, health or employment. AI can draft; a person sends.
+
+**Genuinely ambiguous cases.** The document the AI can't read confidently, the enquiry that doesn't match any known pattern. These should be *surfaced* to a person, not guessed at.
+
+**Exceptions.** Every workflow has cases that don't follow the rules. A well-designed system doesn't force them through — it stops and flags them.
+
+## Where full automation is fine
+
+The mirror image: high-volume, predictable, low-stakes, easily-checkable work. Data extraction with spot-checks. Categorisation where a mis-sort costs nothing. First-draft generation where a human edits anyway. Chasing reminders. Summaries nobody acts on without reading the source.
+
+Insisting on human approval here doesn't add safety — it adds bottlenecks.
+
+## How we design the checkpoints
+
+We run this pattern ourselves, so the design details are first-hand:
+
+**In our own enquiry intake,** AI analyses every typed or spoken business problem, asks a follow-up question and produces a structured brief. But no client ever sees machine output unreviewed — a human at T3 Labs reads the brief before anyone responds. The AI removes the blank-page problem and the typing; the human owns the judgment.
+
+**In QuoteCore+** (our roofing software), AI Scan Assist reads roof plans and identifies measurements — but the roofer verifies the result on screen before it becomes a quote. The AI removes the measuring grind; the person with commercial accountability confirms the numbers. [We've written about what this looks like in roofing estimation](/blog/ai-roofing-estimation-what-ai-can-do).
+
+Three design rules come out of that experience:
+
+1. **Make review fast, not constant.** A good checkpoint shows a person exactly what needs their attention and nothing else. AI reads 100 documents → human reviews the 5 uncertain ones. If review takes as long as doing the work, the design has failed.
+2. **Make uncertainty visible.** The system should say "I'm not sure about this one" rather than quietly picking an answer. Confidence thresholds — "below X%, a human looks at it" — are the simplest, most reliable version of this.
+3. **Keep approval simple.** One click to confirm, one to reject, a clear path to escalate. Every extra step in the human's workflow is a place the system leaks time.
+
+## The before/after, stated plainly
+
+**Before:** a human performs 100% of the process.
+**AI layer:** AI performs the repetitive, analytical work.
+**Human checkpoint:** a person reviews only uncertain cases, high-value decisions, exceptions and approvals.
+**Result:** a fraction of the human workload, with the control kept where it matters.
+
+That's not a hedge against AI being bad. It's what good AI systems look like at every level of maturity — because the point was never to remove humans. It's to stop humans wasting time on work the system can already do for them.
+
+<ContextualIntakeCTA
+  headline="Want a system designed this way?"
+  body="Tell us the process you're thinking about — type it or leave a voice note. We'll tell you where AI fits, and just as importantly, where a person should stay in the loop."
+  buttonText="Tell us your problem"
+  problemCategory="human-in-the-loop"
+/>

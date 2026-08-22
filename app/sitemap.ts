@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
+import { AI_SERVICE_SLUGS } from "@/lib/ai-services";
 
 const BASE_URL = "https://www.t3labs.tech";
 
@@ -58,6 +59,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  const serviceRoutes = AI_SERVICE_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/${slug}`,
+    lastModified,
+    changeFrequency: "monthly" as const,
+    priority: 0.9,
+  }));
+
   const postRoutes = posts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.updated ?? post.date),
@@ -65,5 +73,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...postRoutes];
+  return [...staticRoutes, ...serviceRoutes, ...postRoutes];
 }

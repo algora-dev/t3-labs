@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import AnimatedHero from "@/components/t3-home/animated-hero";
+import AIServicesSection from "@/components/t3-home/ai-services-section";
 import IntakeModalMount from "@/components/intake/intake-modal-mount";
 import { openIntakeModal } from "@/lib/intake/analytics";
 import "@/app/intake-modal.css";
@@ -188,6 +189,7 @@ export default function Home() {
         <AnimatedHero onCtaClick={openIntake} />
         <IntroStrip />
         <WorkSection />
+        <AIServicesSection />
         <CustomSolutionsSection onCtaClick={() => openIntakeFromPageCta("Start a project")} />
         <Testimonials />
         <CTASection onCtaClick={() => openIntakeFromPageCta("Get in touch")} />
@@ -785,6 +787,14 @@ function Footer() {
         <a href="/cookies" className="text-[var(--ink)] font-semibold no-underline hover:underline">Cookies</a>
         {" "}&middot;{" "}
         <a href="/terms" className="text-[var(--ink)] font-semibold no-underline hover:underline">Terms</a>
+        {" "}&middot;{" "}
+        <a href="/ai-consultancy" className="text-[var(--ink)] font-semibold no-underline hover:underline">AI Consultancy</a>
+        {" "}&middot;{" "}
+        <a href="/ai-implementation" className="text-[var(--ink)] font-semibold no-underline hover:underline">AI Implementation</a>
+        {" "}&middot;{" "}
+        <a href="/ai-automation" className="text-[var(--ink)] font-semibold no-underline hover:underline">AI Automation</a>
+        {" "}&middot;{" "}
+        <a href="/ai-training" className="text-[var(--ink)] font-semibold no-underline hover:underline">AI Training</a>
       </p>
       <p className="m-0">T3 Labs is a trading name of T3 Play Limited.</p>
     </footer>
