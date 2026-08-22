@@ -59,12 +59,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const serviceRoutes = AI_SERVICE_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/${slug}`,
-    lastModified,
-    changeFrequency: "monthly" as const,
-    priority: 0.9,
-  }));
+  const serviceRoutes = [
+    ...AI_SERVICE_SLUGS.map((slug) => ({
+      url: `${BASE_URL}/${slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
+    {
+      url: `${BASE_URL}/ai-help`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+  ];
 
   const postRoutes = posts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,

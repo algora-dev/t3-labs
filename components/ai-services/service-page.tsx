@@ -57,6 +57,28 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
         ))}
       </section>
 
+      {/* Common questions */}
+      {data.faqs && data.faqs.length > 0 && (
+        <section className="mx-auto mb-16 w-[min(880px,calc(100%-40px))]">
+          <h2 className="mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Common questions
+          </h2>
+          <div className="space-y-4">
+            {data.faqs.map((f) => (
+              <details
+                key={f.q}
+                className="group rounded-xl border border-white/10 bg-white/5 px-6 py-4"
+              >
+                <summary className="cursor-pointer list-none text-base font-semibold text-white marker:hidden [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                </summary>
+                <p className="mt-3 text-base leading-8 text-white/70">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* CTA block */}
       <section
         id="intake"

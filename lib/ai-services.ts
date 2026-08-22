@@ -4,6 +4,11 @@
  * Keep each page's intent distinct (brief §7 cannibalisation rules).
  */
 
+export interface ServiceFaq {
+  q: string;
+  a: string;
+}
+
 export interface ServiceSection {
   id: string;
   heading: string;
@@ -26,6 +31,7 @@ export interface ServicePageData {
   problemCategory: string;
   related: { href: string; label: string }[];
   relatedHeading: string;
+  faqs: ServiceFaq[];
 }
 
 export const AI_SERVICES: ServicePageData[] = [
@@ -95,6 +101,24 @@ export const AI_SERVICES: ServicePageData[] = [
       { href: "/ai-training", label: "AI Training" },
     ],
     relatedHeading: "Once you know what fits",
+    faqs: [
+      {
+        q: "What does an AI consultant actually do?",
+        a: "An AI consultant looks at how your business actually works, identifies where AI — or often ordinary automation — would genuinely save time or money, and tells you what's worth implementing and what isn't. The output is a prioritised plan, not a technology shopping list.",
+      },
+      {
+        q: "How do I know where AI would help my business?",
+        a: "You don't need to — that's the assessment's job, not yours. The pattern we look for is the same work repeated many times with predictable rules: admin, documents, enquiries, data entry, reporting, quoting. If that exists in your business, there's usually something worth assessing.",
+      },
+      {
+        q: "Do I need to know what AI tools I want before contacting you?",
+        a: "No. You don't need a technical brief, tool shortlist or budget figure. Describe the problem in plain English — or leave a voice note — and we'll work out which technology, if any, fits.",
+      },
+      {
+        q: "Can you also implement what you recommend?",
+        a: "Yes. Consultancy at T3 Labs leads naturally into implementation, automation, integration, custom development or training — whichever the assessment points to. You don't need to pick; the assessment tells us.",
+      },
+    ],
   },
   {
     slug: "ai-implementation",
@@ -149,8 +173,27 @@ export const AI_SERVICES: ServicePageData[] = [
     related: [
       { href: "/ai-consultancy", label: "AI Consultancy" },
       { href: "/ai-automation", label: "AI Automation" },
+      { href: "/ai-training", label: "AI Training" },
     ],
     relatedHeading: "Related",
+    faqs: [
+      {
+        q: "Can you build something ChatGPT or another AI suggested?",
+        a: "Yes — that's a common starting point. An AI recommendation tells you what's technically possible, not how to build it inside your business. Bring us the recommendation and the outcome you want; we'll work out the implementation, including the parts the AI didn't mention.",
+      },
+      {
+        q: "Can you connect AI to our existing software?",
+        a: "Usually, yes. Integrations — CRMs, accounting systems, inboxes, job-management tools — are a core part of implementation work. If a system doesn't expose the access we need, we'll tell you honestly before any build starts.",
+      },
+      {
+        q: "Do we need an internal developer?",
+        a: "No. We handle the build, deployment and handover. If your team wants to take ownership later, we can structure the handover and documentation so that's realistic — but it's not required.",
+      },
+      {
+        q: "How do you decide where human approval is still needed?",
+        a: "We design checkpoints where the cost of being wrong is high: commercial figures, sensitive communications, legal obligations, genuinely ambiguous cases. Everything high-volume and predictable runs automatically. The result is AI doing the heavy lifting with people in control where it matters.",
+      },
+    ],
   },
   {
     slug: "ai-automation",
@@ -205,10 +248,29 @@ export const AI_SERVICES: ServicePageData[] = [
     ctaButtonText: "Tell us what's taking too much time",
     problemCategory: "ai-automation",
     related: [
-      { href: "/ai-implementation", label: "AI Implementation" },
       { href: "/ai-consultancy", label: "AI Consultancy" },
+      { href: "/ai-implementation", label: "AI Implementation" },
+      { href: "/ai-training", label: "AI Training" },
     ],
     relatedHeading: "Related",
+    faqs: [
+      {
+        q: "What business processes are good candidates for AI automation?",
+        a: "The best candidates are high-volume, repetitive and rule-shaped: processing enquiries, extracting data from documents, updating records, generating drafts, chasing information, preparing recurring reports. If your team does the same sequence of steps weekly, it's a candidate.",
+      },
+      {
+        q: "Does automation mean removing people entirely?",
+        a: "No — and trying to usually backfires. We automate the routine work and keep people for exceptions, approvals and judgment calls. The goal isn't to remove humans; it's to stop humans wasting time on work the system can already do for them.",
+      },
+      {
+        q: "Can you automate work between software we already use?",
+        a: "Yes — connecting your existing systems is often the highest-value automation there is, and sometimes it doesn't even need AI. We'll tell you honestly when a simple integration beats a clever one.",
+      },
+      {
+        q: "What happens when AI is uncertain or something unusual happens?",
+        a: "The workflow surfaces it. Uncertain cases, missing fields and unusual patterns get flagged to a person instead of guessed at. That's deliberate design, not a limitation: exceptions go to humans; routine work runs itself.",
+      },
+    ],
   },
   {
     slug: "ai-training",
@@ -256,8 +318,27 @@ export const AI_SERVICES: ServicePageData[] = [
     related: [
       { href: "/ai-consultancy", label: "AI Consultancy" },
       { href: "/ai-implementation", label: "AI Implementation" },
+      { href: "/ai-automation", label: "AI Automation" },
     ],
     relatedHeading: "Related",
+    faqs: [
+      {
+        q: "Can you train our team using our actual business workflows?",
+        a: "Yes — that's the only kind of training we do. Sessions are built around your real work: your documents, your processes, your judgment calls. Generic 'what is AI' courses aren't on the menu.",
+      },
+      {
+        q: "Is this generic ChatGPT training?",
+        a: "No. We cover prompts and tool use, but the core is the work around them: which tasks are worth using AI for, how to check output, how to handle company data safely, and when human review is required.",
+      },
+      {
+        q: "Can training be included with a system you implement?",
+        a: "Yes — it's the best time to train. Handover training happens on the live system your team will actually run, not a generic demo.",
+      },
+      {
+        q: "How do you teach staff when AI output needs checking?",
+        a: "Practically: real examples from your own workflows, showing what confident output looks like, what uncertain output looks like, and the specific checks that matter in your business. People learn judgment from cases, not slides.",
+      },
+    ],
   },
 ];
 

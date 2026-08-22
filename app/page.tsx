@@ -509,9 +509,10 @@ function CustomSolutionsSection({
       >
         <div>
           <p className="block mb-3 text-[#373c4c] text-[1.05rem] leading-[1.65]">
-            T3 Labs is a rare breed. We move fast, keep costs practical, and build
-            software that actually works - not slide decks and promises. Most agencies
-            quote thousands and take months. We solve problems in days.
+            We keep the process simple. You explain the problem, we work out the
+            right technology, and we involve your team only where their judgment
+            is genuinely needed. The result is practical software, automation and
+            AI systems designed around how your business actually works.
           </p>
           <p className="block m-0 text-[var(--muted)] text-sm leading-[1.6]">
             Lead generation. Workflow automation. Internal tools. Advanced integrations.
@@ -589,20 +590,35 @@ function CTASection({ onCtaClick }: { onCtaClick: () => void }) {
           Build with T3 Labs
         </p>
         <h2 className="mb-4.5 text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-none">
-          Got a problem that needs to be solved?
+          Got a problem you think technology could solve?
         </h2>
-        <p className="mb-0 text-[1.08rem] leading-[1.65]">
-          T3 Labs works with owners, operators, and teams who need ideas turned
-          into working products.
+        <p className="mb-2 text-[1.08rem] leading-[1.65]">
+          You don't need to know whether it needs AI, automation, existing
+          software or something custom. Tell us what's happening and we'll work
+          out the sensible next step.
+        </p>
+        <p className="mb-0 text-sm leading-[1.6] text-[#515763]">
+          Speak it or type it — no technical brief needed. A real person at T3
+          Labs reviews every enquiry.
         </p>
       </div>
-      <button
-        type="button"
-        onClick={onCtaClick}
-        className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform cursor-pointer"
-      >
-        Get in touch <span>&rarr;</span>
-      </button>
+      <div className="flex flex-col items-stretch gap-3">
+        <button
+          type="button"
+          onClick={onCtaClick}
+          className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform cursor-pointer"
+        >
+          Tell us your problem <span>&rarr;</span>
+        </button>
+        <a
+          href="https://calendly.com/cece-t3labs/20min"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-[rgba(17,19,24,0.2)] px-5.5 py-2.5 text-sm font-semibold text-[#050608] transition hover:border-[#050608]/50"
+        >
+          Book a free call
+        </a>
+      </div>
     </section>
   );
 }

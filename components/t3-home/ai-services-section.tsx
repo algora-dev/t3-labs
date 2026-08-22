@@ -10,6 +10,13 @@
 import Link from "next/link";
 import { openIntakeModal } from "@/lib/intake/analytics";
 
+const SERVICE_LINKS = [
+  { href: "/ai-consultancy", label: "AI Consultancy" },
+  { href: "/ai-implementation", label: "Implementation" },
+  { href: "/ai-automation", label: "Automation" },
+  { href: "/ai-training", label: "Training" },
+];
+
 export default function AIServicesSection() {
   return (
     <section
@@ -18,7 +25,21 @@ export default function AIServicesSection() {
     >
       <div className="rounded-2xl border border-[#d7ff00]/20 bg-gradient-to-br from-[#0f1118] to-[#0a0b10] p-8 sm:p-12">
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#d7ff00]">
-          AI Consultancy · Implementation · Automation · Training
+          {SERVICE_LINKS.map((l, i) => (
+            <span key={l.href}>
+              <Link
+                href={l.href}
+                className="text-[#d7ff00] underline decoration-[#d7ff00]/40 underline-offset-4 transition hover:text-[#b8dd00]"
+              >
+                {l.label}
+              </Link>
+              {i < SERVICE_LINKS.length - 1 && (
+                <span className="mx-1.5 text-white/30" aria-hidden="true">
+                  ·
+                </span>
+              )}
+            </span>
+          ))}
         </p>
         <h2 className="mb-5 max-w-[720px] text-[clamp(1.8rem,3vw,2.6rem)] font-semibold leading-tight tracking-tight">
           Need help using AI in your business?
