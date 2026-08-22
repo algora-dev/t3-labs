@@ -235,7 +235,7 @@ export const AI_SERVICES: ServicePageData[] = [
       {
         id: "exceptions-not-removal",
         heading: "Exceptions, not elimination",
-        body: "Fully hands-off sounds appealing until the first weird case. Our automated workflows surface exceptions clearly: the system flags the unusual enquiry, the missing field, the number that doesn't look right — and a person handles those. AI processes the routine 95%; your team spends its time on the cases that genuinely need them.",
+        body: "Fully hands-off sounds appealing until the first weird case. Our automated workflows surface exceptions clearly: the system flags the unusual enquiry, the missing field, the number that doesn't look right — and a person handles those. AI processes the routine work; your team spends its time on the cases that genuinely need them.",
       },
       {
         id: "evidence",
