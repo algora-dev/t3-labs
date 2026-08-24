@@ -5,13 +5,15 @@ export function DemoSiteStrip({ siteLabel }: { siteLabel: string }) {
   return (
     <div className="sticky top-0 z-[80] flex items-center justify-between gap-3 bg-black px-4 py-2 text-white">
       <div className="flex items-center gap-2.5">
-        <Image
-          src="/assets/t3-labs-white.png"
-          alt="T3 Labs"
-          width={24}
-          height={24}
-          className="h-6 w-auto"
-        />
+        <span className="flex h-8 items-center justify-center rounded-md bg-white px-1.5 py-1">
+          <Image
+            src="/assets/t3-labs-black.png"
+            alt="T3 Labs"
+            width={56}
+            height={26}
+            className="h-[26px] w-auto object-contain"
+          />
+        </span>
         <p className="text-xs font-semibold tracking-wide sm:text-sm">
           {siteLabel} — demo website built by <span className="text-[#d7ff00]">T3 Labs</span>
         </p>
