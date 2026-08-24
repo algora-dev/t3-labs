@@ -41,7 +41,7 @@ export default function AIServicesSection() {
             </span>
           ))}
         </p>
-        <h2 className="mb-5 max-w-[720px] text-[clamp(1.8rem,3vw,2.6rem)] font-semibold leading-tight tracking-tight">
+        <h2 className="mb-5 max-w-[720px] text-[clamp(1.8rem,3vw,2.6rem)] font-semibold leading-tight tracking-tight text-white">
           Need help using AI in your business?
         </h2>
         <p className="mb-3 max-w-[760px] text-[1.05rem] leading-8 text-white/75">

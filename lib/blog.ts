@@ -7,6 +7,7 @@ const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 export interface BlogPost {
   slug: string;
   title: string;
+  seoTitle?: string;
   description: string;
   date: string;
   updated?: string;
@@ -46,6 +47,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
   return {
     slug,
     title: data.title ?? slug,
+    seoTitle: data.seo_title,
     description: data.description ?? "",
     date: data.date ?? new Date().toISOString(),
     updated: data.updated,

@@ -151,6 +151,11 @@ export const AI_SERVICES: ServicePageData[] = [
         ],
       },
       {
+        id: "does-ai-reduce-cost",
+        heading: "Wondering whether AI should reduce the cost of your build?",
+        body: "We build with AI-assisted development ourselves, so it's a fair question. Read our guide to how AI changes software development economics — where it genuinely removes manual work, where experienced humans still matter, and what it should mean for a software quote. See: does AI make software development cheaper?",
+      },
+      {
         id: "from-ai-suggestion-to-working-system",
         heading: "From AI suggestion to working system",
         body: "Maybe ChatGPT, Claude or Gemini already told you the solution needs an API, a database, an automation, an agent or a custom application — and that's as far as you got. You don't need to know how to build those pieces yourself. Show us what you're trying to achieve and we'll work out the implementation. We're not affiliated with any AI provider; we just speak both languages — the AI's and your business's.",

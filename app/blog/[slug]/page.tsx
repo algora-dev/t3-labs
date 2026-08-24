@@ -24,11 +24,11 @@ export async function generateMetadata({
   if (!post) return {};
 
   return {
-    title: post.title,
+    title: post.seoTitle ?? post.title,
     description: post.description,
     alternates: { canonical: `${BASE_URL}/blog/${post.slug}` },
     openGraph: {
-      title: post.title,
+      title: post.seoTitle ?? post.title,
       description: post.description,
       url: `${BASE_URL}/blog/${post.slug}`,
       siteName: "T3 Labs",
@@ -39,7 +39,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
+      title: post.seoTitle ?? post.title,
       description: post.description,
     },
   };
