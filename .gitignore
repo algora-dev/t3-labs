@@ -18,3 +18,6 @@ Thumbs.db
 
 .vercel
 .env*
+
+!vendor/quote-core-roof-takeoff/dist/
+!vendor/quote-core-roof-takeoff/dist/**

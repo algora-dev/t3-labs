@@ -1,0 +1,30 @@
+import type { Entry, RoofComponentDef, CustomComponentDef, PitchType, ComponentSection, UnitSystem, RoofType } from './types';
+export declare const COMPONENT_DEFS: Record<string, {
+    label: string;
+    unit: string;
+    pitchType: PitchType;
+    colour: string;
+    description: string;
+}>;
+export declare const BUILT_IN_ORDER: string[];
+export declare function rafterPitchFactor(degrees: number): number;
+export declare function hipValleyPitchFactor(degrees: number): number;
+export declare function pitchFactor(degrees: number, pitchType: PitchType): number;
+export declare function areaValueForUnit(value: number, unitSystem: UnitSystem, fromDimensions: boolean): number;
+export declare function computeEntry(entry: Entry, kind: string, pitchType: PitchType): number;
+export declare function registerCustomKind(id: string, isArea: boolean, isFixed?: boolean): void;
+export declare function isCustomFixed(kind: string): boolean;
+export declare function computeMaterialCost(qty: number, comp: RoofComponentDef | null): {
+    cost: number;
+    packs: number;
+};
+export declare function computeLabourCost(qty: number, comp: RoofComponentDef | null): number;
+export declare function computeKnownPriceCost(qty: number, knownPrice: number): number;
+export declare function entriesFromPrefillValues(values: Record<string, number[]>, measureMode: import('./types').MeasureMode, pitchDegrees: number, unitSystem: UnitSystem): Record<string, Entry[]>;
+export declare function makeId(): string;
+export declare function makeCustomId(): string;
+export declare function makeEntry(pitchDegrees?: number): Entry;
+export declare function makeInitialSections(): Record<string, ComponentSection>;
+export declare function makeCustomSection(def: CustomComponentDef): ComponentSection;
+export declare function loadComponentsFromConfig(entries: import('./types').ComponentConfigEntry[]): RoofComponentDef[];
+export declare function filterComponentsForRoofType(components: RoofComponentDef[], roofType: RoofType | null): RoofComponentDef[];
