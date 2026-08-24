@@ -15,6 +15,16 @@ Yes — AI can genuinely reduce the amount of development work behind a software
 
 That second part is the story most coverage misses. This article explains where AI really saves development time, where it doesn't, and why the same technology produces dramatically different results depending on who is using it.
 
+| Area | Can AI reduce effort? | Human still needed? |
+|---|---|---|
+| Routine coding | Often significantly | Review and validation |
+| UI scaffolding | Often | Design and QA |
+| Testing | Partly | Test strategy and review |
+| Architecture | Limited | Yes |
+| Business requirements | Limited | Yes |
+| Integrations | Varies | Often |
+| Security | Assistance only | Yes |
+
 ## Where does AI actually save development time?
 
 In day-to-day building, the reliable gains are in:
@@ -42,7 +52,7 @@ This is where credibility lives, so let's be blunt:
 - **Security and data handling** — non-negotiable human responsibility.
 - **Integration edge cases** — real-world systems behave badly in ways documentation doesn't mention.
 - **Knowing when generated output is wrong** — plausible-but-incorrect code is worse than no code.
-- **Production reliability and accountability** — someone has to own it when it breaks at 2am.
+- **Production reliability and accountability** — someone still has to own reliability when the software is running in the real business.
 
 AI can produce an answer. An experienced human still needs to know whether it is the right answer.
 
@@ -50,7 +60,7 @@ AI can produce an answer. An experienced human still needs to know whether it is
 
 Because using AI well is a skill — one that takes real time to develop.
 
-Poor AI-assisted development looks like: vague instructions, constant context loss, solving the wrong problem, repeated rework, accepting generated code without understanding it, going in circles, fixing symptoms while the architecture rots. Anyone who has watched a junior developer "use AI" produce three days of rework from thirty minutes of prompting knows the pattern.
+Poor AI-assisted development looks like: vague instructions, constant context loss, solving the wrong problem, repeated rework, accepting generated code without understanding it, going in circles, fixing symptoms while the architecture rots. Poor AI-assisted development can turn thirty minutes of prompting into days of rework when the person using it cannot recognise that the approach has gone wrong. The pattern is common, and it is expensive.
 
 Good AI-assisted development looks different:
 
@@ -78,9 +88,9 @@ We're not a traditional agency that discovered AI last month. We previously outs
 
 Then we started working with AI-assisted development intensively. Not casually — full-time, across real products, for over a year. We learned which tools handle which tasks, how to structure work so AI is effective, where human review genuinely matters, and how to stop the failure modes. Our own [roofing quoting software, QuoteCore+](https://quote-core.com), the [AI intake system on this very website](/ai-help), and our [business audit tool](/business-audit) were all built this way.
 
-> **For us, the shift has been dramatic. Work that once required significant outsourced development time can now often be handled by a much smaller team, much faster. That doesn't mean every project is five or ten times cheaper; it means our cost structure and delivery model are fundamentally different from the one we used before.**
-
-That's an internal estimate from our own workflow, not an industry benchmark — the exact gain varies significantly by project. But the direction is unmistakable: we brought far more capability in-house, need fewer external resources, and ship in cycles that previously weren't possible for us.
+> **For us, the shift has been dramatic. Work that once required significant outsourced development time can now often be handled by a much smaller team, much faster. That does not mean every customer project becomes five or ten times cheaper; it means our internal cost structure and delivery model are fundamentally different from the one we used before.**
+>
+> **In our own workflow, we estimate that AI-assisted working has made us several times faster and more efficient than our previous outsourced model. The exact gain varies significantly by project.**
 
 ## Which projects benefit most from AI-assisted development?
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getPostBySlug, getAllPosts } from "@/lib/blog";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
+import remarkGfm from "remark-gfm";
 import IntakeModalMount from "@/components/intake/intake-modal-mount";
 import ContextualIntakeCTA from "@/components/contextual-intake-cta";
 
@@ -88,6 +89,18 @@ const mdxComponents = {
     />
   ),
   hr: () => <hr className="my-10 border-white/10" />,
+  table: (props: any) => (
+    <div className="mt-6 overflow-x-auto">
+      <table className="w-full border-collapse text-sm" {...props} />
+    </div>
+  ),
+  thead: (props: any) => <thead className="border-b border-white/20" {...props} />,
+  th: (props: any) => (
+    <th className="px-3 py-2 text-left font-semibold text-white" {...props} />
+  ),
+  td: (props: any) => (
+    <td className="border-b border-white/10 px-3 py-2 align-top text-white/75" {...props} />
+  ),
   strong: (props: any) => (
     <strong className="font-semibold text-white" {...props} />
   ),
@@ -207,7 +220,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
           {/* Content */}
           <div className="prose-invert mt-10">
-            <MDXRemote source={post.content} components={mdxComponents} />
+            <MDXRemote source={post.content} components={mdxComponents} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
           </div>
 
           {/* Tags */}
