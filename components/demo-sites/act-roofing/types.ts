@@ -29,6 +29,11 @@ export type ActRoofingSiteConfig = {
   };
   navigation: ReadonlyArray<{ label: string; href: string }>;
   mobileNavigation: ReadonlyArray<{ label: string; href: string }>;
+  featuredReview?: {
+    summary: string;
+    source: string;
+    rating: number;
+  };
   hero: {
     eyebrow: string;
     title: string;

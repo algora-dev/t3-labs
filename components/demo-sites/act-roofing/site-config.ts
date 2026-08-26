@@ -50,6 +50,12 @@ export const actRoofingSite = {
     { label: "Areas", href: "#areas" },
     { label: "Contact", href: "#contact" },
   ],
+  featuredReview: {
+    summary:
+      "Replaced our full slate roof in nine days. Neat, tidy and exactly the price they quoted. Easily the best trades experience we've had.",
+    source: "Sarah T. — Leeds",
+    rating: 5,
+  },
   hero: {
     eyebrow: "Trusted local roofing specialists",
     title: "Roofing built to protect what matters.",

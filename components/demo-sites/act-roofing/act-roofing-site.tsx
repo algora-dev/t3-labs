@@ -7,11 +7,9 @@ import {
   Feedback,
   FinalCta,
   Footer,
-  Gallery,
   Header,
   Hero,
   MobileActions,
-  Process,
   Projects,
   Services,
   TrustStrip,
@@ -51,8 +49,6 @@ export function ActRoofingSite({ site }: { site: ActRoofingSiteConfig }) {
         <Projects site={site} />
         <WhyChoose site={site} />
         <Feedback site={site} />
-        <Process site={site} />
-        <Gallery site={site} />
         <Coverage site={site} />
         <FinalCta site={site} />
         <Contact site={site} />

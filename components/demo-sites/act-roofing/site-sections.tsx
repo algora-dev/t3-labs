@@ -35,6 +35,17 @@ function StarIcon({ filled = true }: { filled?: boolean }) {
   );
 }
 
+function GoogleGlyph() {
+  return (
+    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 18 18">
+      <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.91c1.7-1.57 2.69-3.88 2.69-6.62Z" />
+      <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.81.54-1.84.86-3.05.86-2.35 0-4.34-1.58-5.05-3.71H.96v2.34A8.99 8.99 0 0 0 9 18Z" />
+      <path fill="#FBBC05" d="M3.95 10.71a5.41 5.41 0 0 1 0-3.42V4.95H.96a9 9 0 0 0 0 8.1l2.99-2.34Z" />
+      <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.46.89 11.43 0 9 0A8.99 8.99 0 0 0 .96 4.95l2.99 2.34C4.66 5.16 6.65 3.58 9 3.58Z" />
+    </svg>
+  );
+}
+
 function MenuIcon({ open }: { open: boolean }) {
   return (
     <svg aria-hidden="true" className="h-5 w-5" viewBox="0 0 20 20" fill="none">
@@ -123,8 +134,8 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
     <header className="sticky top-0 z-50 border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
       <div className="site-shell flex min-h-[72px] items-center justify-between gap-5">
         <a className="flex items-center gap-3" href="#top" aria-label={`${site.companyName} home`}>
-          <span className="relative block h-11 w-40 sm:w-44">
-            <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="176px" className="object-contain" priority />
+          <span className="relative block h-[72px] w-[280px] sm:w-[320px]">
+            <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="320px" className="object-contain" priority />
           </span>
         </a>
         <nav className="hidden items-center gap-8 text-[0.95rem] font-medium text-[#475467] lg:flex" aria-label="Main navigation">
@@ -208,9 +219,37 @@ export function Hero({ site }: { site: ActRoofingSiteConfig }) {
               </ButtonLink>
             ) : null}
           </div>
+          {/* Featured Google review */}
+          {site.featuredReview ? (
+            <HeroReviewCard review={site.featuredReview} />
+          ) : null}
         </div>
       </div>
     </section>
+  );
+}
+
+function HeroReviewCard({ review }: { review: { summary: string; source: string; rating: number } }) {
+  return (
+    <figure className="mt-10 max-w-md rounded-[14px] border border-white/15 bg-white/95 p-5 shadow-[0_8px_24px_rgba(16,24,40,0.25)] backdrop-blur">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex gap-1" aria-label={`${review.rating} out of 5 stars`}>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <StarIcon key={i} filled={i < review.rating} />
+          ))}
+        </div>
+        <span className="flex items-center gap-1.5 text-xs font-medium text-[#667085]">
+          <GoogleGlyph />
+          Google Review
+        </span>
+      </div>
+      <blockquote className="mt-3 text-[0.98rem] leading-7 text-[#344054]">
+        &ldquo;{review.summary}&rdquo;
+      </blockquote>
+      <figcaption className="mt-3 text-sm font-semibold text-[#101828]">
+        {review.source}
+      </figcaption>
+    </figure>
   );
 }
 
@@ -416,23 +455,29 @@ export function Feedback({ site }: { site: ActRoofingSiteConfig }) {
         <SectionIntro eyebrow={site.testimonials.eyebrow} title={site.testimonials.title} />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {site.testimonials.items.map((review) => (
-            <article key={review.source} className="flex flex-col rounded-[18px] border border-[#E5E7EB] bg-white p-7">
-              <div className="flex gap-1" aria-label={`${review.rating} out of 5 stars`}>
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <StarIcon key={i} filled={i < review.rating} />
-                ))}
-              </div>
-              <blockquote className="mt-5 flex-1 text-[1.05rem] leading-8 text-[#344054]">
-                &ldquo;{review.summary}&rdquo;
-              </blockquote>
-              <footer className="mt-6 flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-full bg-[#1769E0]/10 text-sm font-semibold text-[#1769E0]" aria-hidden="true">
+            <article key={review.source} className="flex flex-col rounded-[18px] border border-[#E5E7EB] bg-white p-7 shadow-[0_2px_10px_rgba(16,24,40,0.05)]">
+              <div className="flex items-center gap-3">
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-[#F2F4F7] text-base font-semibold text-[#344054]" aria-hidden="true">
                   {review.source.charAt(0)}
                 </span>
-                <div>
-                  <p className="text-[0.95rem] font-semibold text-[#101828]">{review.source}</p>
-                  <p className="text-sm text-[#667085]">Customer review</p>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[0.95rem] font-semibold text-[#101828]">{review.source}</p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <div className="flex gap-0.5" aria-label={`${review.rating} out of 5 stars`}>
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <StarIcon key={i} filled={i < review.rating} />
+                      ))}
+                    </div>
+                    <span className="text-xs text-[#667085]">·</span>
+                    <GoogleGlyph />
+                  </div>
                 </div>
+              </div>
+              <blockquote className="mt-5 flex-1 text-[1.02rem] leading-8 text-[#344054]">
+                {review.summary}
+              </blockquote>
+              <footer className="mt-6 border-t border-[#F2F4F7] pt-4 text-sm text-[#667085]">
+                Google Review
               </footer>
             </article>
           ))}
