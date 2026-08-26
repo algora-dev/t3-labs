@@ -1638,7 +1638,7 @@ function FormsLayout({ theme, components, initialMeasureMode = null, pricingMode
       children: [
         /* @__PURE__ */ jsxs6("header", { className: "border-b border-slate-100 sticky top-0 z-10 bg-white/95 backdrop-blur-sm", children: [
           /* @__PURE__ */ jsxs6("div", { className: "mx-auto max-w-2xl px-4 py-3 flex items-center justify-between", children: [
-            /* @__PURE__ */ jsx6(Link, { href: "/", className: "flex items-center", children: theme.logoUrl ? /* @__PURE__ */ jsx6("img", { src: theme.logoUrl, alt: theme.supplierName ?? void 0, className: "h-8 md:h-10 w-auto" }) : /* @__PURE__ */ jsx6("span", { className: "text-sm font-semibold text-slate-900", children: theme.copy.headerTitle }) }),
+            /* @__PURE__ */ jsx6(Link, { href: theme.homeUrl ?? "/", className: "flex items-center", children: theme.logoUrl ? /* @__PURE__ */ jsx6("img", { src: theme.logoUrl, alt: theme.supplierName ?? void 0, className: "h-8 md:h-10 w-auto" }) : /* @__PURE__ */ jsx6("span", { className: "text-sm font-semibold text-slate-900", children: theme.copy.headerTitle }) }),
             /* @__PURE__ */ jsxs6("div", { className: "flex items-center gap-3", children: [
               onSwitchLayout && /* @__PURE__ */ jsx6("button", { onClick: () => onSwitchLayout("fast"), className: "cursor-pointer rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 transition", children: "Fast mode" }),
               theme.copy.poweredBy && /* @__PURE__ */ jsx6("span", { className: "text-xs text-slate-400", children: theme.copy.poweredBy })
@@ -2248,7 +2248,7 @@ function ClassicLayout({ theme, components, initialMeasureMode = null, pricingMo
       style: { fontFamily: theme.bodyFont, "--roof-heading-font": theme.headingFont },
       children: [
         /* @__PURE__ */ jsx8("header", { className: "border-b border-slate-100 sticky top-0 z-10 bg-white/95 backdrop-blur-sm", children: /* @__PURE__ */ jsxs8("div", { className: "mx-auto max-w-5xl px-2 md:px-6 py-3 flex items-center justify-between", children: [
-          /* @__PURE__ */ jsx8(Link2, { href: "/", className: "flex items-center", children: theme.logoUrl ? /* @__PURE__ */ jsx8("img", { src: theme.logoUrl, alt: theme.supplierName ?? void 0, className: "h-8 md:h-10 w-auto" }) : /* @__PURE__ */ jsx8("span", { className: "text-sm font-semibold text-slate-900", children: theme.copy.headerTitle }) }),
+          /* @__PURE__ */ jsx8(Link2, { href: theme.homeUrl ?? "/", className: "flex items-center", children: theme.logoUrl ? /* @__PURE__ */ jsx8("img", { src: theme.logoUrl, alt: theme.supplierName ?? void 0, className: "h-8 md:h-10 w-auto" }) : /* @__PURE__ */ jsx8("span", { className: "text-sm font-semibold text-slate-900", children: theme.copy.headerTitle }) }),
           /* @__PURE__ */ jsxs8("div", { className: "flex items-center gap-3", children: [
             onSwitchLayout && /* @__PURE__ */ jsx8("button", { onClick: () => onSwitchLayout("guided"), className: "cursor-pointer rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 hover:text-slate-700 hover:border-slate-300 transition", children: "Guided mode" }),
             theme.copy.poweredBy && /* @__PURE__ */ jsx8("span", { className: "text-xs text-slate-400", children: theme.copy.poweredBy })
@@ -2659,7 +2659,7 @@ function TakeoffFlow({
       children: [
         !hideHeader && /* @__PURE__ */ jsxs9("header", { className: "border-b border-slate-100 sticky top-0 z-10 bg-white/95 backdrop-blur-sm", children: [
           /* @__PURE__ */ jsxs9("div", { className: "mx-auto max-w-2xl px-4 py-3 flex items-center justify-between", children: [
-            /* @__PURE__ */ jsx9(Link3, { href: "/", className: "flex items-center", children: activeTheme.logoUrl ? /* @__PURE__ */ jsx9("img", { src: activeTheme.logoUrl, alt: activeTheme.supplierName ?? activeTheme.copy.headerTitle, className: "h-8 md:h-10 w-auto" }) : /* @__PURE__ */ jsx9("span", { className: "text-sm font-semibold text-slate-900", children: activeTheme.copy.headerTitle }) }),
+            /* @__PURE__ */ jsx9(Link3, { href: activeTheme.homeUrl ?? "/", className: "flex items-center", children: activeTheme.logoUrl ? /* @__PURE__ */ jsx9("img", { src: activeTheme.logoUrl, alt: activeTheme.supplierName ?? activeTheme.copy.headerTitle, className: "h-8 md:h-10 w-auto" }) : /* @__PURE__ */ jsx9("span", { className: "text-sm font-semibold text-slate-900", children: activeTheme.copy.headerTitle }) }),
             activeTheme.copy.poweredBy && /* @__PURE__ */ jsx9("span", { className: "text-xs text-slate-400", children: activeTheme.copy.poweredBy })
           ] }),
           step !== "supplier" && step !== "measure" && /* @__PURE__ */ jsx9("div", { className: "h-1 bg-slate-100", children: /* @__PURE__ */ jsx9(

@@ -56,6 +56,7 @@ export interface ThemeConfig {
     primary: string;
     primaryHover: string;
     accent: string;
+    homeUrl?: string | null;
     logoUrl: string | null;
     logoUrlLight?: string | null;
     headingFont: string;

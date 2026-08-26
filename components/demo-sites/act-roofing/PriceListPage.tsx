@@ -49,10 +49,10 @@ export function PriceListPage({ theme, config }: PriceListPageProps) {
             <span className="text-sm font-semibold text-slate-900">{theme.supplierName}</span>
           )}
           <a
-            href="/"
+            href={theme.homeUrl ?? "/demo/roofing-site"}
             className="text-sm font-medium text-slate-500 hover:text-slate-900 transition"
           >
-            Back to home
+            Back to Apex Roofing home
           </a>
         </div>
       </header>

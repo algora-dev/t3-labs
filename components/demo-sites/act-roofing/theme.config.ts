@@ -5,6 +5,7 @@ const config: ThemeConfig = {
   primaryHover: '#1257BC',
   accent: '#101828',
   logoUrl: '/assets/demo-act-roofing/ApexLogoBlack---ae397798-5fc2-4f9a-9c88-5c1e394f7e69.png',
+  homeUrl: '/demo/roofing-site',
   headingFont: 'var(--font-manrope), "Segoe UI", Arial, sans-serif',
   bodyFont: 'var(--font-manrope), "Segoe UI", Arial, sans-serif',
   currency: 'GBP',
