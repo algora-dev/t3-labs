@@ -290,27 +290,62 @@ export function Intro({ site }: { site: ActRoofingSiteConfig }) {
 }
 
 export function Services({ site }: { site: ActRoofingSiteConfig }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   return (
     <section id="services" className="section-pad bg-[#F7F8FA]">
       <div className="site-shell">
         <SectionIntro eyebrow={site.servicesIntro.eyebrow} title={site.servicesIntro.title}>
           <p>{site.servicesIntro.description}</p>
         </SectionIntro>
-        <div className="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
-          {site.services.map((service, index) => (
-            <article key={service.title} className="group border-t-2 border-[#E5E7EB] pt-6 transition hover:border-[#1769E0]">
-              <span className="text-sm font-semibold tracking-[0.08em] text-[#98A2B3]">{String(index + 1).padStart(2, "0")}</span>
-              <h3 className="mt-3 text-xl font-semibold tracking-[-0.01em] text-[#101828]">{service.title}</h3>
-              <p className="mt-3 text-[0.98rem] leading-7 text-[#475467]">{service.summary}</p>
-              {service.linkLabel ? (
-                <a href="#contact" className="mt-4 inline-flex items-center gap-2 text-[0.9rem] font-semibold text-[#1769E0] transition hover:gap-3">
-                  {service.linkLabel}
-                  <ArrowIcon />
-                </a>
-              ) : null}
-            </article>
-          ))}
-        </div>
+        <ul className="mt-10 divide-y divide-[#E5E7EB] border-y border-[#E5E7EB]">
+          {site.services.map((service, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <li key={service.title}>
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between gap-4 py-5 text-left transition hover:text-[#1769E0]"
+                  aria-expanded={isOpen}
+                  aria-controls={`service-panel-${index}`}
+                  id={`service-button-${index}`}
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                >
+                  <span className="flex items-baseline gap-4">
+                    <span className="text-sm font-semibold tracking-[0.08em] text-[#98A2B3]">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="text-lg font-semibold tracking-[-0.01em] text-[#101828]">{service.title}</span>
+                  </span>
+                  <svg
+                    aria-hidden="true"
+                    className={`h-5 w-5 shrink-0 text-[#667085] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path d="m5 8 5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                <div
+                  id={`service-panel-${index}`}
+                  role="region"
+                  aria-labelledby={`service-button-${index}`}
+                  className={`grid transition-[grid-template-rows] duration-200 ${isOpen ? "[grid-template-rows:1fr]" : "[grid-template-rows:0fr]"}`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="flex flex-col gap-4 pb-6 pl-10 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="max-w-xl text-[0.98rem] leading-7 text-[#475467]">{service.summary}</p>
+                      {service.linkLabel ? (
+                        <a href="#contact" className="inline-flex shrink-0 items-center gap-2 text-[0.9rem] font-semibold text-[#1769E0] transition hover:gap-3">
+                          {service.linkLabel}
+                          <ArrowIcon />
+                        </a>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );
@@ -353,7 +388,7 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
               {tool.previewSteps.map((step, index) => {
                 const isLast = index === tool.previewSteps.length - 1;
                 return (
-                  <li key={step} className="flex items-start gap-4">
+                  <li key={step.label} className="flex items-start gap-4">
                     <div className="flex flex-col items-center">
                       <span
                         className={`grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-semibold ${
@@ -367,11 +402,9 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
                       {!isLast ? <span className="h-9 w-px bg-[#D0D5DD]" aria-hidden="true" /> : null}
                     </div>
                     <div className={isLast ? "pb-0 pt-2" : "pb-6 pt-2"}>
-                      <p className={`font-semibold ${isLast ? "text-[#1769E0]" : "text-[#101828]"}`}>{step}</p>
-                      {!isLast ? (
-                        <p className="mt-0.5 text-sm text-[#667085]">
-                          {index === 0 ? "Detached, semi or terrace" : index === 1 ? "Slate, tile or flat" : "Small, medium or large"}
-                        </p>
+                      <p className={`font-semibold ${isLast ? "text-[#1769E0]" : "text-[#101828]"}`}>{step.label}</p>
+                      {step.hint ? (
+                        <p className="mt-0.5 max-w-xs text-sm leading-6 text-[#667085]">{step.hint}</p>
                       ) : null}
                     </div>
                   </li>

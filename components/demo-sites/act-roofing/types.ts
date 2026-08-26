@@ -69,7 +69,7 @@ export type ActRoofingSiteConfig = {
     benefits: string[];
     ctaLabel: string;
     ctaHref: string;
-    previewSteps: string[];
+    previewSteps: Array<{ label: string; hint?: string }>;
     previewNote: string;
   };
   projectsIntro: {
