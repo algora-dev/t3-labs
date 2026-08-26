@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// ACT Roofing demo — takeoff enquiry endpoint.
-// Sends the completed roof takeoff result to the T3 Play inbox (info@t3play.com)
+// Apex Roofing Demo — takeoff enquiry endpoint.
+// Sends the completed roof takeoff result to the T3 Play inbox (insights@t3labs.co.uk)
 // via Resend. Falls back to demo mode (no send) if RESEND_API_KEY is absent.
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-const NOTIFY_EMAIL = process.env.DEMO_ENQUIRY_EMAIL || "info@t3play.com";
+const NOTIFY_EMAIL = process.env.DEMO_ENQUIRY_EMAIL || "insights@t3labs.co.uk";
 
 interface TakeoffSection {
   label: string;
@@ -67,7 +67,7 @@ function buildEmailHtml(data: EnquiryRequest): string {
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
         <tr><td style="background:#0f172a;padding:24px 32px;">
-          <h1 style="margin:0;font-size:18px;font-weight:600;color:#ffffff;">ACT Roofing Demo — Takeoff Enquiry</h1>
+          <h1 style="margin:0;font-size:18px;font-weight:600;color:#ffffff;">Apex Roofing Demo — Takeoff Enquiry</h1>
           <p style="margin:4px 0 0;font-size:13px;color:#94a3b8;">t3labs.tech/demo/roofing-site</p>
         </td></tr>
         <tr><td style="padding:24px 32px;">
@@ -97,7 +97,7 @@ function buildEmailHtml(data: EnquiryRequest): string {
 
 function buildEmailText(data: EnquiryRequest): string {
   const cur = data.currencySymbol || "\u00A3";
-  let text = `ACT Roofing Demo - Takeoff Enquiry\nFrom: ${data.senderName} <${data.senderEmail}>\n`;
+  let text = `Apex Roofing Demo - Takeoff Enquiry\nFrom: ${data.senderName} <${data.senderEmail}>\n`;
   if (data.senderPhone) text += `Phone: ${data.senderPhone}\n`;
   if (data.message) text += `\nMessage:\n${data.message}\n`;
   text += `\nTakeoff Details:\n`;
@@ -134,10 +134,10 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "ACT Roofing Demo <insights@t3labs.co.uk>",
+        from: "Apex Roofing Demo <insights@t3labs.co.uk>",
         to: [NOTIFY_EMAIL],
         reply_to: data.senderEmail,
-        subject: `ACT Roofing Demo - Takeoff Enquiry from ${data.senderName}`,
+        subject: `Apex Roofing Demo - Takeoff Enquiry from ${data.senderName}`,
         html: buildEmailHtml(data),
         text: buildEmailText(data),
       }),
