@@ -20,6 +20,10 @@ export const actRoofingSite = {
       src: asset("ApexLogoBlack---ae397798-5fc2-4f9a-9c88-5c1e394f7e69.png"),
       alt: "Apex Roofing",
     },
+    logoMark: {
+      src: asset("ApexLogoBlack---ae397798-5fc2-4f9a-9c88-5c1e394f7e69.png"),
+      alt: "Apex Roofing",
+    },
     colors: {
       ink: "#101828",
       paper: "#F7F8FA",

@@ -134,8 +134,11 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
     <header className="sticky top-0 z-50 border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
       <div className="site-shell flex min-h-[72px] items-center justify-between gap-5">
         <a className="flex items-center gap-3" href="#top" aria-label={`${site.companyName} home`}>
-          <span className="relative block h-[72px] w-[280px] sm:w-[320px]">
-            <Image src={site.brand.wordmark.src} alt={site.brand.wordmark.alt} fill sizes="320px" className="object-contain" priority />
+          <span className="relative block h-12 w-12 shrink-0 sm:h-14 sm:w-14">
+            <Image src={site.brand.logoMark.src} alt={site.brand.logoMark.alt} fill sizes="56px" className="object-contain" priority />
+          </span>
+          <span className="text-xl font-bold tracking-[-0.01em] text-[#101828] sm:text-[1.35rem]">
+            Apex<span className="text-[#1769E0]"> Roofing</span>
           </span>
         </a>
         <nav className="hidden items-center gap-8 text-[0.95rem] font-medium text-[#475467] lg:flex" aria-label="Main navigation">
@@ -293,32 +296,18 @@ export function Services({ site }: { site: ActRoofingSiteConfig }) {
         <SectionIntro eyebrow={site.servicesIntro.eyebrow} title={site.servicesIntro.title}>
           <p>{site.servicesIntro.description}</p>
         </SectionIntro>
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {site.services.map((service) => (
-            <article key={service.title} className="group overflow-hidden rounded-[18px] border border-[#E5E7EB] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_-12px_rgba(16,24,40,0.15)]">
-              {service.image ? (
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#E9EDF3]">
-                  <Image
-                    src={service.image.src}
-                    alt={service.image.alt}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, 50vw"
-                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                  />
-                </div>
-              ) : (
-                <div className="h-1.5 bg-[#1769E0]" aria-hidden="true" />
-              )}
-              <div className="p-6">
-                <h3 className="text-xl font-semibold tracking-[-0.01em] text-[#101828]">{service.title}</h3>
-                <p className="mt-3 text-[0.98rem] leading-7 text-[#475467]">{service.summary}</p>
-                {service.linkLabel ? (
-                  <a href="#contact" className="mt-4 inline-flex items-center gap-2 text-[0.9rem] font-semibold text-[#1769E0] transition hover:gap-3">
-                    {service.linkLabel}
-                    <ArrowIcon />
-                  </a>
-                ) : null}
-              </div>
+        <div className="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+          {site.services.map((service, index) => (
+            <article key={service.title} className="group border-t-2 border-[#E5E7EB] pt-6 transition hover:border-[#1769E0]">
+              <span className="text-sm font-semibold tracking-[0.08em] text-[#98A2B3]">{String(index + 1).padStart(2, "0")}</span>
+              <h3 className="mt-3 text-xl font-semibold tracking-[-0.01em] text-[#101828]">{service.title}</h3>
+              <p className="mt-3 text-[0.98rem] leading-7 text-[#475467]">{service.summary}</p>
+              {service.linkLabel ? (
+                <a href="#contact" className="mt-4 inline-flex items-center gap-2 text-[0.9rem] font-semibold text-[#1769E0] transition hover:gap-3">
+                  {service.linkLabel}
+                  <ArrowIcon />
+                </a>
+              ) : null}
             </article>
           ))}
         </div>
@@ -331,34 +320,35 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
   const tool = site.estimateTool;
   return (
     <section id="estimate" className="section-pad bg-white">
-      <div className="site-shell grid items-center gap-12 lg:grid-cols-2">
-        <div>
-          <p className="section-eyebrow">{tool.eyebrow}</p>
-          <h2 className={`mt-4 text-3xl font-bold leading-tight tracking-[-0.02em] text-[#101828] sm:text-4xl lg:text-[2.75rem]`}>
-            {tool.title}
-          </h2>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-[#475467]">
-            {tool.description}
-          </p>
-          <ul className="mt-7 grid max-w-md gap-3 sm:grid-cols-2">
-            {tool.benefits.map((benefit) => (
-              <li key={benefit} className="flex items-center gap-2.5 text-[0.95rem] font-medium text-[#344054]">
-                <CheckIcon />
-                {benefit}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8">
-            <ButtonLink href={tool.ctaHref}>
-              {tool.ctaLabel}
-              <ArrowIcon />
-            </ButtonLink>
+      <div className="site-shell">
+        <div className="rounded-[24px] border border-[#D6E5F8] bg-[#F5F9FF] p-6 sm:p-10 lg:p-14">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+          <div>
+            <p className="section-eyebrow">{tool.eyebrow}</p>
+            <h2 className={`mt-4 text-3xl font-bold leading-tight tracking-[-0.02em] text-[#101828] sm:text-4xl lg:text-[2.75rem]`}>
+              {tool.title}
+            </h2>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-[#475467]">
+              {tool.description}
+            </p>
+            <ul className="mt-7 grid max-w-md gap-3 sm:grid-cols-2">
+              {tool.benefits.map((benefit) => (
+                <li key={benefit} className="flex items-center gap-2.5 text-[0.95rem] font-medium text-[#344054]">
+                  <CheckIcon />
+                  {benefit}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8">
+              <ButtonLink href={tool.ctaHref}>
+                {tool.ctaLabel}
+                <ArrowIcon />
+              </ButtonLink>
+            </div>
           </div>
-        </div>
-        {/* Tool preview */}
-        <div className="relative">
-          <div className="absolute -inset-3 rounded-[28px] bg-[#1769E0]/[0.06] sm:-inset-5" aria-hidden="true" />
-          <div className="relative rounded-[20px] border border-[#E5E7EB] bg-white p-6 shadow-[0_16px_48px_-16px_rgba(16,24,40,0.18)] sm:p-8">
+          {/* Tool preview */}
+          <div className="relative">
+            <div className="relative rounded-[20px] border border-[#E5E7EB] bg-white p-6 shadow-[0_16px_48px_-16px_rgba(16,24,40,0.18)] sm:p-8">
             <ol className="relative grid gap-0" aria-label="Estimate tool steps">
               {tool.previewSteps.map((step, index) => {
                 const isLast = index === tool.previewSteps.length - 1;
@@ -376,7 +366,7 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
                       </span>
                       {!isLast ? <span className="h-9 w-px bg-[#D0D5DD]" aria-hidden="true" /> : null}
                     </div>
-                    <div className={`pb-"pb-0" pt-2`}>
+                    <div className={isLast ? "pb-0 pt-2" : "pb-6 pt-2"}>
                       <p className={`font-semibold ${isLast ? "text-[#1769E0]" : "text-[#101828]"}`}>{step}</p>
                       {!isLast ? (
                         <p className="mt-0.5 text-sm text-[#667085]">
@@ -388,8 +378,10 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
                 );
               })}
             </ol>
-            <div className="mt-6 rounded-[12px] bg-[#F7F8FA] p-4 text-sm leading-6 text-[#475467]">
-              {tool.previewNote}
+                <div className="mt-6 rounded-[12px] bg-[#F7F8FA] p-4 text-sm leading-6 text-[#475467]">
+                  {tool.previewNote}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -673,21 +665,24 @@ export function Contact({ site }: { site: ActRoofingSiteConfig }) {
           <p className="mt-5 text-lg leading-8 text-[#475467]">
             {site.contactSection.description}
           </p>
-          <div className="mt-8 grid gap-3 sm:max-w-sm">
+          <div className="mt-8 grid gap-5 sm:max-w-sm">
             <ButtonLink href={site.estimateTool.ctaHref} variant="primary">
               {site.callsToAction.estimate}
               <ArrowIcon />
             </ButtonLink>
-            <ButtonLink href={site.contact.telephoneHref} variant="secondary">
-              <PhoneIcon />
-              {site.contact.telephone}
-            </ButtonLink>
-            <ButtonLink href="#quote-request" variant="secondary" onClick={openQuoteChoice}>
-              {site.callsToAction.quote}
-            </ButtonLink>
-            <ButtonLink href={`mailto:${site.contact.email}`} variant="secondary">
-              {site.callsToAction.email}
-            </ButtonLink>
+            <div className="grid gap-3 border-t border-[#E5E7EB] pt-5 text-[0.95rem]">
+              <a className="flex items-center gap-2.5 font-medium text-[#344054] transition hover:text-[#1769E0]" href={site.contact.telephoneHref}>
+                <PhoneIcon />
+                {site.contact.telephone}
+              </a>
+              <a className="font-medium text-[#344054] transition hover:text-[#1769E0]" href={`mailto:${site.contact.email}`}>
+                {site.contact.email}
+              </a>
+              <a className="font-medium text-[#1769E0] transition hover:gap-3 inline-flex items-center gap-2 w-fit" href="#quote-request" onClick={openQuoteChoice}>
+                {site.callsToAction.quote}
+                <ArrowIcon />
+              </a>
+            </div>
           </div>
         </div>
         <div className="rounded-[20px] border border-[#E5E7EB] bg-white p-6 shadow-[0_8px_28px_-14px_rgba(16,24,40,0.12)] sm:p-8">
@@ -906,7 +901,14 @@ export function Footer({ site }: { site: ActRoofingSiteConfig }) {
     <footer className="bg-[#101828] pb-28 pt-14 text-white lg:pb-14">
       <div className="site-shell grid gap-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]">
         <div>
-          <Image src={site.brand.logo.src} alt={site.brand.logo.alt} width={180} height={52} className="h-auto w-[180px]" />
+          <a className="flex items-center gap-3" href="#top" aria-label={`${site.companyName} home`}>
+            <span className="relative block h-11 w-11 shrink-0">
+              <Image src={site.brand.logo.src} alt={site.brand.logo.alt} fill sizes="44px" className="object-contain" />
+            </span>
+            <span className="text-lg font-bold tracking-[-0.01em] text-white">
+              Apex<span className="text-[#8AB4F8]"> Roofing</span>
+            </span>
+          </a>
           <p className="mt-5 max-w-xs leading-7 text-white/60">
             {site.footer.location}. Straightforward advice, reliable workmanship and a job finished properly.
           </p>

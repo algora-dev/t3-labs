@@ -14,6 +14,7 @@ export type ActRoofingSiteConfig = {
   brand: {
     logo: SiteImage;
     wordmark: SiteImage;
+    logoMark: SiteImage;
     colors: {
       ink: string;
       paper: string;
