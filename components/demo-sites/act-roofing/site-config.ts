@@ -1,185 +1,267 @@
-import type { ActRoofingSiteConfig } from "@/components/demo-sites/act-roofing/types";
+import type { ActRoofingSiteConfig } from "./types";
 
 const asset = (name: string) => `/assets/demo-act-roofing/${name}`;
 
 export const actRoofingSite = {
-  companyName: "ACT Roofing",
+  companyName: "Apex Roofing",
+  demoDisclaimer:
+    "Demonstration website — Apex Roofing is a fictional business created to showcase website and tool design.",
   seo: {
-    title: "ACT Roofing | Roofing Services You Can Rely On",
+    title: "Apex Roofing | Roofing Done Properly",
     description:
-      "New roofs, roof repairs, slate tiling, lead work and roofing maintenance from a local, family-run team.",
+      "Roof replacements, repairs and specialist roofing work carried out by a trusted local team. Get an instant roof estimate online in around 60 seconds.",
   },
   brand: {
     logo: {
-      src: asset("act-roofing-logo-dark.png"),
-      alt: "ACT Roofing white and green logo",
+      src: asset("ApexLogoWhite---f166f5cd-ea1d-4d9c-86d4-f2e3dc127812.png"),
+      alt: "Apex Roofing logo",
     },
     wordmark: {
-      src: asset("act-roofing-logo-light.png"),
-      alt: "ACT Roofing navy and green logo",
+      src: asset("ApexLogoBlack---ae397798-5fc2-4f9a-9c88-5c1e394f7e69.png"),
+      alt: "Apex Roofing",
     },
     colors: {
-      ink: "#0D1B2A",
-      paper: "#F2F4F7",
-      accent: "#2E7D32",
+      ink: "#101828",
+      paper: "#F7F8FA",
+      accent: "#1769E0",
     },
   },
   contact: {
-    location: "Bramfield",
+    location: "Leeds",
     telephone: "0808 157 0426",
     telephoneHref: "tel:+448081570426",
-    email: "hello@actroofing.example",
+    email: "hello@apexroofing.example",
     socialLinks: [],
   },
   navigation: [
+    { label: "Home", href: "#top" },
     { label: "Services", href: "#services" },
-    { label: "Reviews", href: "#reviews" },
+    { label: "Our Work", href: "#projects" },
+    { label: "Roof Estimate", href: "#estimate" },
+    { label: "About", href: "#about" },
     { label: "Contact", href: "#contact" },
   ],
   mobileNavigation: [
+    { label: "Home", href: "#top" },
     { label: "Services", href: "#services" },
-    { label: "Work", href: "#projects" },
+    { label: "Our Work", href: "#projects" },
+    { label: "Roof Estimate", href: "#estimate" },
     { label: "Reviews", href: "#reviews" },
-    { label: "About", href: "#about" },
     { label: "Areas", href: "#areas" },
     { label: "Contact", href: "#contact" },
   ],
   hero: {
-    eyebrow: "Local roofing services",
-    title: "Reliable roofing, built to protect.",
+    eyebrow: "Trusted local roofing specialists",
+    title: "Roofing built to protect what matters.",
     description:
-      "New roofs, roof repairs, slate tiling, lead work and general roofing maintenance, delivered with clear communication and professional service.",
+      "Roof replacements, repairs and specialist roofing work carried out by a trusted local team.",
     image: {
-      src: asset("roofers-hero.jpg"),
-      alt: "Roofer carrying roof tiles across a pitched tiled roof",
+      src: asset("apex-hero.webp"),
+      alt: "Completed dark slate roof on an attractive UK residential home",
+    },
+    secondaryCta: {
+      label: "View Our Work",
+      href: "#projects",
     },
   },
-  quoteModal: {
-    toolTitle: "Get Preliminary Pricing",
-    toolDescription:
-      "Enter your roof measurements and get an instant preliminary price using ACT Roofing's products and pricing. Our tool calculates everything, including pitch if needed, and you can send the final result to ACT Roofing if you want.",
-    formTitle: "Quick Quote Request",
-    formDescription:
-      "Send your project details to ACT Roofing and they'll prepare a quote for you, usually within a couple of days.",
-  },
+  trustStrip: [
+    { label: "4.9 customer rating" },
+    { label: "500+ roofs completed" },
+    { label: "Fully insured" },
+    { label: "10-year workmanship guarantee" },
+  ],
   about: {
-    eyebrow: "About ACT Roofing",
-    title: "Professional roofing support, centred on the customer.",
+    eyebrow: "About Apex Roofing",
+    title: "Roofing done properly.",
     paragraphs: [
-      "ACT Roofing is a local, family-run roofing company, with work ranging from new roofs and repairs to slate tiling, lead work and general maintenance.",
-      "The team's approach is courteous, professional service with reliable workmanship, clear answers and solutions shaped around each customer's needs.",
+      "From small repairs to complete roof replacements, we combine experienced workmanship with straightforward communication from start to finish.",
+      "No chasing. No surprises. Just a properly managed roofing job, delivered by a team that treats your home with respect.",
     ],
   },
   servicesIntro: {
     eyebrow: "Roofing services",
-    title: "Practical support for roofs of every stage.",
+    title: "Everything your roof needs.",
     description:
-      "From planned roofing work to repairs and ongoing maintenance, speak directly with ACT Roofing about the service your property needs.",
+      "One trusted local team for new roofs, repairs and specialist roofing work.",
   },
   services: [
     {
       title: "New Roofs",
       summary:
-        "Roofing support for new roof projects, with the scope discussed around your property and requirements.",
+        "Complete roof replacements built to last, using quality materials and experienced workmanship.",
+      linkLabel: "Find out more",
     },
     {
       title: "Roof Repairs",
       summary:
-        "Repairs for roofing issues, helping to restore the affected area and protect the property.",
+        "Fast, effective repairs for leaks, slipped tiles and storm damage — sorted before they get worse.",
+      linkLabel: "Find out more",
     },
     {
-      title: "Slate Tiling",
+      title: "Flat Roofing",
       summary:
-        "Slate tiling services for roofing projects where a durable, traditional finish is required.",
+        "Modern flat roofing systems installed and maintained for lasting weather protection.",
+      linkLabel: "Find out more",
     },
     {
-      title: "Lead Work",
+      title: "Slate & Tiling",
       summary:
-        "Lead work for roof details and vulnerable junctions where careful weatherproofing matters.",
+        "Traditional slate and tile work, finished to a standard you can be proud of.",
+      linkLabel: "Find out more",
     },
     {
-      title: "Roofing Maintenance",
+      title: "Leadwork & Chimneys",
       summary:
-        "General roofing maintenance to address wear and keep roof elements in serviceable condition.",
+        "Careful leadwork and chimney repairs where good weatherproofing matters most.",
+      linkLabel: "Find out more",
+    },
+    {
+      title: "Inspections & Maintenance",
+      summary:
+        "Regular roof inspections and maintenance that keep small issues from becoming big bills.",
+      linkLabel: "Find out more",
     },
   ],
-  projectsIntro: {
-    eyebrow: "Roofing work",
-    title: "From roof preparation to the finished surface.",
+  estimateTool: {
+    eyebrow: "Instant roof estimate",
+    title: "Know roughly what your new roof could cost.",
     description:
-      "A supplied example showing work in progress alongside a completed roof finish.",
+      "Answer a few quick questions about your property and get an estimated price range instantly.",
+    benefits: [
+      "Takes around 60 seconds",
+      "No obligation",
+      "Instant estimate",
+      "Simple guided questions",
+    ],
+    ctaLabel: "Calculate My Roof Price",
+    ctaHref: "/takeoff",
+    previewSteps: [
+      "Property type",
+      "Roof type",
+      "Approximate size",
+      "Get estimate",
+    ],
+    previewNote: "Guided questions — no measurements or technical knowledge needed.",
+  },
+  projectsIntro: {
+    eyebrow: "Our work",
+    title: "Quality you can see.",
+    description:
+      "A complete slate roof replacement completed by the Apex Roofing team.",
   },
   projects: [
     {
-      src: asset("roofing-work-example.jpg"),
-      label: "Roof preparation and completed roofing",
-      alt: "Roof membrane and battens being installed beside a completed dark tiled roof",
+      src: asset("apex-aerial.webp"),
+      label: "Complete slate roof replacement — Leeds",
+      alt: "Aerial view of a completed dark slate roof on a UK residential property",
     },
   ],
   whyChoose: {
-    eyebrow: "Why ACT Roofing",
-    title: "Service shaped around your roofing needs.",
+    eyebrow: "Why choose Apex",
+    title: "Straightforward advice. Reliable workmanship.",
     description:
-      "Professional service, teamwork and customer relationships sit at the centre of everything ACT Roofing does.",
+      "We keep it simple: clear communication, quality materials and a job finished properly.",
     items: [
-      "Courteous, professional service from enquiry onwards.",
-      "Roofing solutions tailored to the customer's needs.",
-      "Clear communication and answers to project questions.",
-      "Customer satisfaction treated as a priority.",
+      "Experienced roofing team",
+      "Clear, upfront communication",
+      "Fully insured work",
+      "Reliable scheduling",
+      "Quality materials",
+      "Clean, respectful workmanship",
     ],
   },
   testimonials: {
-    eyebrow: "Customer feedback",
-    title: "What homeowners say about ACT Roofing.",
-    description:
-      "Feedback from customers across the local area.",
+    eyebrow: "Customer reviews",
+    title: "Trusted by homeowners.",
+    description: "",
     items: [
       {
-        summary: "Quick and easy job. Prompt and polite. Great communication throughout.",
-        source: "Catherine, Oakbridge",
+        summary:
+          "From the first call to the final clean-up, the whole team were brilliant. The new slate roof looks fantastic and they left the place spotless.",
+        source: "Sarah T. — Leeds",
+        rating: 5,
       },
       {
         summary:
-          "So easy to work with - called in the morning and the repair was done by the afternoon.",
-        source: "Daniel, Langmoor",
+          "Had a leak two days before Christmas. They came out, found the problem and fixed it the same morning. Can't ask for more than that.",
+        source: "James H. — Harrogate",
+        rating: 5,
       },
       {
         summary:
-          "Replaced our slate roof ahead of schedule and left everything spotless. Would happily recommend.",
-        source: "Priya, Milldale",
+          "Really clear from start to finish. The estimate tool gave us a sensible ballpark, the final price matched, and the job ran exactly to plan.",
+        source: "Priya M. — Wakefield",
+        rating: 5,
       },
     ],
   },
   process: {
-    eyebrow: "Getting started",
-    title: "A simple route to discussing your roof.",
+    eyebrow: "How it works",
+    title: "Simple from start to finish.",
     steps: [
-      "Tell ACT Roofing what you need",
-      "Share the property and project details",
-      "Discuss the most suitable next step",
-      "Review the proposed scope",
+      {
+        title: "Tell us about your roof",
+        description: "Use the estimator or contact the team.",
+      },
+      {
+        title: "Get clear recommendations",
+        description: "Straightforward guidance and pricing.",
+      },
+      {
+        title: "We complete the work",
+        description: "A professional team carries out the job with minimal disruption.",
+      },
+    ],
+  },
+  gallery: {
+    title: "Recent projects",
+    items: [
+      {
+        src: asset("apex-project-2.webp"),
+        alt: "UK terraced home with a freshly completed clay tiled roof",
+      },
+      {
+        src: asset("apex-aerial.webp"),
+        alt: "Aerial view of a completed dark slate roof",
+      },
+      {
+        src: asset("apex-roofer.webp"),
+        alt: "Apex Roofing team member laying natural slate tiles",
+      },
+      {
+        src: asset("apex-hero.webp"),
+        alt: "Completed slate roof on a UK residential home",
+      },
     ],
   },
   coverage: {
-    eyebrow: "Areas covered",
-    title: "Serving Bramfield and the surrounding towns.",
+    eyebrow: "Service area",
+    title: "Local roofing specialists.",
     description:
-      "ACT Roofing works across the following local areas.",
+      "Apex Roofing provides roofing services across Leeds and surrounding areas.",
     areas: [
-      "Bramfield",
-      "Oakbridge",
-      "Langmoor",
-      "Westbrook",
-      "Milldale",
-      "Ashcroft",
-      "Fenwick Hollow",
+      "Leeds",
+      "Harrogate",
+      "Wakefield",
+      "Bradford",
+      "Horsforth",
+      "Wetherby",
+      "Otley",
+      "Pudsey",
     ],
+  },
+  finalCta: {
+    title: "Need help with your roof?",
+    description:
+      "Get an instant estimate online or speak to our team about your roofing project.",
+    primaryLabel: "Get an Instant Estimate",
+    secondaryLabel: "Contact Apex Roofing",
   },
   contactSection: {
     eyebrow: "Contact",
-    title: "Tell ACT Roofing about your project.",
+    title: "Speak to our team.",
     description:
-      "Call, email or use the demonstration form to set out the roofing work you have in mind.",
+      "Call, email or use the demonstration form to tell us about the roofing work you have in mind.",
     formStatus:
       "Thanks — this demonstration has validated your details successfully. Nothing has been sent or stored.",
     generalFormTitle: "Send a demonstration enquiry",
@@ -192,9 +274,10 @@ export const actRoofingSite = {
     projectTypes: [
       "New roof",
       "Roof repair",
-      "Slate tiling",
-      "Lead work",
-      "Roofing maintenance",
+      "Flat roofing",
+      "Slate & tiling",
+      "Leadwork & chimneys",
+      "Inspection & maintenance",
     ],
     beforeQuoteOptions: [
       "Request a call before a quote",
@@ -205,11 +288,20 @@ export const actRoofingSite = {
     fileEmptyText: "No file chosen",
   },
   callsToAction: {
+    estimate: "Get an Instant Estimate",
     quote: "Request a Quote",
-    call: "Call ACT Roofing",
-    email: "Email ACT Roofing",
+    call: "Call Apex Roofing",
+    email: "Email Apex Roofing",
   },
   footer: {
-    location: "Serving Bramfield and the surrounding area",
+    location: "Roofing services across Leeds and surrounding areas",
+  },
+  quoteModal: {
+    toolTitle: "Get an Instant Roof Estimate",
+    toolDescription:
+      "Answer a few quick questions about your property and get an estimated price range instantly — no obligation.",
+    formTitle: "Send a Quick Enquiry",
+    formDescription:
+      "Send your project details to our team and we'll come back to you, usually within a couple of days.",
   },
 } satisfies ActRoofingSiteConfig;

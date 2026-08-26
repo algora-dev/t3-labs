@@ -1,17 +1,17 @@
 import type { ThemeConfig } from '@quote-core/roof-takeoff';
 
 const config: ThemeConfig = {
-  primary: '#2E7D32',
-  primaryHover: '#1B5E20',
-  accent: '#0D1B2A',
-  logoUrl: '/assets/demo-act-roofing/act-roofing-logo-light.png',
-  headingFont: 'var(--font-montserrat), "Segoe UI", Arial, sans-serif',
-  bodyFont: 'var(--font-roboto), "Segoe UI", Arial, sans-serif',
+  primary: '#1769E0',
+  primaryHover: '#1257BC',
+  accent: '#101828',
+  logoUrl: '/images/ApexLogoBlack---ae397798-5fc2-4f9a-9c88-5c1e394f7e69.png',
+  headingFont: 'var(--font-manrope), "Segoe UI", Arial, sans-serif',
+  bodyFont: 'var(--font-manrope), "Segoe UI", Arial, sans-serif',
   currency: 'GBP',
   currencySymbol: '\u00A3',
   defaultUnits: 'metric',
-  supplierName: 'ACT Roofing',
-  supplierEmail: 'info@t3play.com',
+  supplierName: 'Apex Roofing',
+  supplierEmail: 'hello@apexroofing.example',
   features: {
     sendToSupplier: true,
     convertToQuote: false,
@@ -21,9 +21,9 @@ const config: ThemeConfig = {
   roofTypeOptions: ['new_roof', 're_roof'],
   copy: {
     headerTitle: 'Roof Takeoff Calculator',
-    heroTitle: 'Get your roof measurements in minutes',
-    heroSubtitle: 'Enter your roof plan dimensions and get a complete material takeoff with pricing.',
-    footerText: 'ACT Roofing 2026',
+    heroTitle: 'Know roughly what your new roof could cost',
+    heroSubtitle: 'Answer a few quick questions about your property and get an estimated price range instantly.',
+    footerText: 'Apex Roofing 2026 — demonstration site',
     poweredBy: null,
   },
 };

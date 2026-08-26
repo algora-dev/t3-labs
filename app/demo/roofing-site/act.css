@@ -1,36 +1,37 @@
-/* ACT Roofing demo site styles — scoped to /demo-sites/act-roofing-ltd routes.
+/* Apex Roofing demo site styles — scoped to /demo/roofing-site routes.
    Tailwind is already compiled at the t3-labs root; the @source directives from
    the standalone app are not needed here (the compiled vendor package ships
    pre-built class names, and this site's own classes are defined below). */
 
 #act-demo-root {
-  --ink: #0a0b10;
-  --muted: #606575;
-  --line: #e7e9ef;
-  --paper: #fbfcff;
-  --clay: #a95537;
+  /* Apex Roofing design tokens — re-themable per client */
+  --ink: #101828;
+  --muted: #667085;
+  --line: #e5e7eb;
+  --paper: #f7f8fa;
+  --clay: #1769e0;
+  --brand-ink: #101828;
+  --brand-paper: #f7f8fa;
+  --brand-accent: #1769e0;
 }
 
 #act-demo-root * {
   box-sizing: border-box;
 }
 
-#act-demo-root html {
-  scroll-behavior: smooth;
-}
-
 #act-demo-root .contractor-site {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-roboto), "Segoe UI", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
+  font-family: var(--font-manrope), "Segoe UI", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  letter-spacing: -0.005em;
   text-rendering: optimizeLegibility;
 }
 
 #act-demo-root .contractor-site::selection {
-  background: #1d2529;
+  background: #1257bc;
   color: #ffffff;
 }
 
@@ -48,23 +49,31 @@
 }
 
 #act-demo-root :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 3px;
 }
 
 #act-demo-root .site-shell {
-  width: min(1160px, calc(100% - 32px));
+  width: min(1240px, calc(100% - 40px));
   margin-inline: auto;
 }
 
+@media (max-width: 640px) {
+  #act-demo-root .site-shell {
+    width: min(1240px, calc(100% - 32px));
+  }
+}
+
 #act-demo-root .section-pad {
-  padding-block: clamp(4rem, 7vw, 6.5rem);
+  padding-block: clamp(3.5rem, 8vw, 8rem);
 }
 
 #act-demo-root .section-eyebrow {
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--brand-accent);
 }
 
 #act-demo-root .image-shade::after {
@@ -72,27 +81,28 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(18, 25, 28, 0.92) 0%, rgba(18, 25, 28, 0.68) 36%, rgba(18, 25, 28, 0.16) 72%, rgba(18, 25, 28, 0.04) 100%),
-    linear-gradient(0deg, rgba(18, 25, 28, 0.18), rgba(18, 25, 28, 0.04));
+    linear-gradient(90deg, rgba(16, 24, 40, 0.9) 0%, rgba(16, 24, 40, 0.62) 36%, rgba(16, 24, 40, 0.14) 72%, rgba(16, 24, 40, 0.04) 100%),
+    linear-gradient(0deg, rgba(16, 24, 40, 0.18), rgba(16, 24, 40, 0.04));
 }
 
 #act-demo-root .button-base {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 48px;
   align-items: center;
   justify-content: center;
   gap: 10px;
   border: 1px solid transparent;
-  padding: 12px 18px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  padding: 13px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
   white-space: nowrap;
+  border-radius: 10px;
   transition:
     background-color 180ms ease,
     border-color 180ms ease,
     color 180ms ease,
+    box-shadow 180ms ease,
     transform 180ms ease;
 }
 
@@ -102,9 +112,10 @@
 
 #act-demo-root .form-field {
   min-height: 48px;
-  border: 1px solid #cbd3d2;
-  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
   padding-inline: 1rem;
+  background: #ffffff;
   color: var(--ink);
   font-size: 1rem;
   font-weight: 400;
@@ -113,7 +124,15 @@
 }
 
 #act-demo-root .form-field:focus {
-  border-color: var(--clay);
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 4px rgba(23, 105, 224, 0.12);
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #act-demo-root .button-base:hover {
+    transform: none;
+  }
 }
 
 /* Brand overrides (driven by CSS custom properties from the site config) */
@@ -148,11 +167,11 @@
 }
 
 #act-demo-root .contractor-site [class*="bg-[#eee9df]"] {
-  background-color: #e7ebef;
+  background-color: #f0f4fa;
 }
 
 #act-demo-root .contractor-site [class*="text-[#f1c59f]"] {
-  color: #8bd18f;
+  color: #8ab4f8;
 }
 
 #act-demo-root .contractor-site input[type="checkbox"],

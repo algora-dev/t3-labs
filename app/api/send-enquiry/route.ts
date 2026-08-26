@@ -68,7 +68,7 @@ function buildEmailHtml(data: EnquiryRequest): string {
       <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
         <tr><td style="background:#0f172a;padding:24px 32px;">
           <h1 style="margin:0;font-size:18px;font-weight:600;color:#ffffff;">ACT Roofing Demo — Takeoff Enquiry</h1>
-          <p style="margin:4px 0 0;font-size:13px;color:#94a3b8;">t3labs.tech/demo-sites/act-roofing-ltd</p>
+          <p style="margin:4px 0 0;font-size:13px;color:#94a3b8;">t3labs.tech/demo/roofing-site</p>
         </td></tr>
         <tr><td style="padding:24px 32px;">
           <table width="100%" cellpadding="0" cellspacing="0">

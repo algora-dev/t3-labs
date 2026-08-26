@@ -9,6 +9,8 @@ export type ActRoofingSiteConfig = {
     title: string;
     description: string;
   };
+  /** Small unobtrusive demonstration notice shown near reviews and in the footer. */
+  demoDisclaimer: string;
   brand: {
     logo: SiteImage;
     wordmark: SiteImage;
@@ -32,7 +34,12 @@ export type ActRoofingSiteConfig = {
     title: string;
     description: string;
     image: SiteImage;
+    secondaryCta?: {
+      label: string;
+      href: string;
+    };
   };
+  trustStrip: ReadonlyArray<{ label: string }>;
   about: {
     eyebrow: string;
     title: string;
@@ -46,8 +53,19 @@ export type ActRoofingSiteConfig = {
   services: Array<{
     title: string;
     summary: string;
+    linkLabel?: string;
     image?: SiteImage;
   }>;
+  estimateTool: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    benefits: string[];
+    ctaLabel: string;
+    ctaHref: string;
+    previewSteps: string[];
+    previewNote: string;
+  };
   projectsIntro: {
     eyebrow: string;
     title: string;
@@ -58,7 +76,6 @@ export type ActRoofingSiteConfig = {
     eyebrow: string;
     title: string;
     description: string;
-    image?: SiteImage;
     items: string[];
   };
   testimonials: {
@@ -68,18 +85,29 @@ export type ActRoofingSiteConfig = {
     items: Array<{
       summary: string;
       source: string;
+      rating: number;
     }>;
   };
   process: {
     eyebrow: string;
     title: string;
-    steps: string[];
+    steps: Array<{ title: string; description: string }>;
+  };
+  gallery: {
+    title: string;
+    items: SiteImage[];
   };
   coverage: {
     eyebrow: string;
     title: string;
     description: string;
     areas: string[];
+  };
+  finalCta: {
+    title: string;
+    description: string;
+    primaryLabel: string;
+    secondaryLabel: string;
   };
   contactSection: {
     eyebrow: string;
@@ -101,6 +129,7 @@ export type ActRoofingSiteConfig = {
     fileEmptyText?: string;
   };
   callsToAction: {
+    estimate: string;
     quote: string;
     call: string;
     email: string;

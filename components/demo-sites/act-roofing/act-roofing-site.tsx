@@ -1,7 +1,23 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { Contact, Feedback, Footer, Header, Hero, Intro, MobileActions, ProcessAndAreas, Projects, Services, WhyChoose } from "@/components/demo-sites/act-roofing/site-sections";
-import type { ActRoofingSiteConfig } from "@/components/demo-sites/act-roofing/types";
+import {
+  Contact,
+  Coverage,
+  EstimateToolSection,
+  Feedback,
+  FinalCta,
+  Footer,
+  Gallery,
+  Header,
+  Hero,
+  MobileActions,
+  Process,
+  Projects,
+  Services,
+  TrustStrip,
+  WhyChoose,
+} from "./site-sections";
+import type { ActRoofingSiteConfig } from "./types";
 
 export function createActRoofingMetadata(site: ActRoofingSiteConfig): Metadata {
   return {
@@ -29,12 +45,16 @@ export function ActRoofingSite({ site }: { site: ActRoofingSiteConfig }) {
       <Header site={site} />
       <main>
         <Hero site={site} />
-        <Intro site={site} />
+        <TrustStrip site={site} />
         <Services site={site} />
+        <EstimateToolSection site={site} />
         <Projects site={site} />
         <WhyChoose site={site} />
         <Feedback site={site} />
-        <ProcessAndAreas site={site} />
+        <Process site={site} />
+        <Gallery site={site} />
+        <Coverage site={site} />
+        <FinalCta site={site} />
         <Contact site={site} />
       </main>
       <Footer site={site} />

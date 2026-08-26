@@ -15,6 +15,20 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/demo-sites/act-roofing-ltd",
+        destination: "/demo/roofing-site",
+        permanent: true,
+      },
+      {
+        source: "/demo-sites/act-roofing-ltd/:path*",
+        destination: "/demo/roofing-site/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 const withMDX = createMDX({
