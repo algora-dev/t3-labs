@@ -1,67 +1,59 @@
 #!/usr/bin/env node
 /**
- * Submit T3 Labs URLs to IndexNow (Bing fast indexing).
- * Usage: node scripts/submit-indexnow.mjs
- *
- * Requires the key file at public/<KEY>.txt to be deployed.
- * Key: d42564ca45d2ca6a6c8d8fe891530b61
- * Keep this URL list in sync with app/sitemap.ts when new posts ship.
+ * Submit ALL URLs from the live sitemap to IndexNow (Bing + partners).
+ * Usage: node scripts/submit-indexnow.mjs [sitemapUrl]
+ * Default: https://www.t3labs.tech/sitemap.xml
+ * Key file must be deployed at https://www.t3labs.tech/<KEY>.txt
+ * (Full-sitemap mode, same pattern as the quotecore-plus script — no hardcoded URL list.)
  */
+
+import fs from 'node:fs';
+import path from 'node:path';
 
 const INDEXNOW_KEY = 'd42564ca45d2ca6a6c8d8fe891530b61';
 const INDEXNOW_URL = 'https://api.indexnow.org/IndexNow';
-const HOST = 'www.t3labs.tech';
+const SITEMAP_URL = process.argv[2] || 'https://www.t3labs.tech/sitemap.xml';
+const HOST = new URL(SITEMAP_URL).host;
 
-const URLS = [
-  'https://www.t3labs.tech/',
-  'https://www.t3labs.tech/blog',
-  'https://www.t3labs.tech/blog/ai-roofing-estimation-what-ai-can-do',
-  'https://www.t3labs.tech/blog/branded-calculators-lead-generation-tools',
-  'https://www.t3labs.tech/blog/building-quotecore-roofing-trade-software',
-  'https://www.t3labs.tech/business-audit',
-  'https://www.t3labs.tech/custom-software',
-  'https://www.t3labs.tech/case-studies/quotecore',
-  'https://www.t3labs.tech/blog/custom-roofing-software',
-  'https://www.t3labs.tech/blog/custom-software-development-cost-uk',
-  'https://www.t3labs.tech/blog/does-ai-make-software-development-cheaper',
-  'https://www.t3labs.tech/privacy',
-  'https://www.t3labs.tech/cookies',
-  'https://www.t3labs.tech/terms',
-  'https://www.t3labs.tech/service-terms',
-  'https://www.t3labs.tech/website-package-terms',
-];
+async function getSitemapUrls() {
+  const res = await fetch(SITEMAP_URL);
+  if (!res.ok) throw new Error(`Sitemap fetch failed: ${res.status}`);
+  const xml = await res.text();
+  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim());
+  return locs.filter((u) => new URL(u).host === HOST);
+}
 
-async function submit() {
+async function submit(urlList) {
   const body = {
     host: HOST,
     key: INDEXNOW_KEY,
     keyLocation: `https://${HOST}/${INDEXNOW_KEY}.txt`,
-    urlList: URLS,
+    urlList,
   };
-
-  console.log(`Submitting ${URLS.length} URLs to IndexNow for ${HOST}...`);
-
-  try {
-    const res = await fetch(INDEXNOW_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify(body),
-    });
-
-    console.log(`Response: ${res.status} ${res.statusText}`);
-    if (res.status === 200) {
-      console.log('URLs submitted successfully.');
-    } else if (res.status === 202) {
-      console.log('Submission accepted. URLs will be indexed soon.');
-    } else if (res.status === 422) {
-      console.log('Invalid submission. Check key file is accessible at the keyLocation URL.');
-    } else {
-      const text = await res.text().catch(() => '');
-      console.log(`Unexpected response: ${text}`);
-    }
-  } catch (err) {
-    console.error('Error submitting to IndexNow:', err.message);
-  }
+  const res = await fetch(INDEXNOW_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify(body),
+  });
+  return { status: res.status, text: await res.text() };
 }
 
-submit();
+async function main() {
+  const urls = await getSitemapUrls();
+  console.log(`Sitemap ${SITEMAP_URL}: ${urls.length} URLs`);
+  // IndexNow allows up to 10k URLs per request; batch at 1000 to be safe.
+  for (let i = 0; i < urls.length; i += 1000) {
+    const batch = urls.slice(i, i + 1000);
+    const { status, text } = await submit(batch);
+    console.log(`Batch ${Math.floor(i / 1000) + 1}: ${batch.length} URLs -> ${status} ${text || 'OK'}`);
+    if (status >= 400) process.exitCode = 1;
+  }
+  // Log submission for tracking
+  const logFile = path.join(process.cwd(), '.indexnow-log.json');
+  let log = [];
+  try { log = JSON.parse(fs.readFileSync(logFile, 'utf8')); } catch {}
+  log.push({ date: new Date().toISOString(), sitemap: SITEMAP_URL, count: urls.length });
+  fs.writeFileSync(logFile, JSON.stringify(log, null, 2));
+}
+
+main().catch((e) => { console.error(e); process.exit(1); });
