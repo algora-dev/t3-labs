@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import IntakeModalMount from "@/components/intake/intake-modal-mount";
 
 const BASE_URL = "https://www.t3labs.tech";
 
 export const metadata: Metadata = {
-  title: "Commission-Only Sales Roles — Find Business Problems, Earn When We Solve Them | T3 Labs",
+  title: "Commission-Only Sales Roles - Find Business Problems, Earn When We Solve Them | T3 Labs",
   description:
-    "Commission-based sales opportunity with T3 Labs. Find businesses stuck with slow, manual, outdated or disconnected ways of working — we scope, pitch and build the solution. Also sell QuoteCore+ subscriptions for recurring commission.",
+    "Commission-based sales opportunity with T3 Labs. Find businesses stuck with slow, manual, outdated or disconnected ways of working - we scope, pitch and build the solution. Also sell QuoteCore+ subscriptions for recurring commission.",
   alternates: { canonical: `${BASE_URL}/careers` },
   openGraph: {
-    title: "Commission-Only Sales Roles — T3 Labs & QuoteCore+",
+    title: "Commission-Only Sales Roles - T3 Labs & QuoteCore+",
     description:
       "Find valuable business problems. We build the solution. High-ticket commission with flexible deal structures, plus recurring QuoteCore+ subscription income.",
     url: `${BASE_URL}/careers`,
@@ -22,15 +22,15 @@ export const metadata: Metadata = {
 const faqs = [
   {
     q: "Is this a salaried job?",
-    a: "No. These are commission-only, self-employed opportunities. You earn when we earn — no base salary, no cap on commission, no exclusivity required. It suits people who want control over how, when and what they sell.",
+    a: "No. These are commission-only, self-employed opportunities. You earn when we earn - no base salary, no cap on commission, no exclusivity required. It suits people who want control over how, when and what they sell.",
   },
   {
     q: "What exactly would I be selling?",
-    a: "With T3 Labs, you are not limited to one software product. You find businesses with valuable problems — manual processes, old systems, weak online sales workflows, disconnected software, repetitive staff admin or other operational bottlenecks. T3 Labs then works out the right solution, which could be anything from a website tool or workflow automation to a customer portal or complete bespoke software platform. You can also sell QuoteCore+ subscriptions to contractors for recurring commission.",
+    a: "With T3 Labs, you are not limited to one software product. You find businesses with valuable problems - manual processes, old systems, weak online sales workflows, disconnected software, repetitive staff admin or other operational bottlenecks. T3 Labs then works out the right solution, which could be anything from a website tool or workflow automation to a customer portal or complete bespoke software platform. You can also sell QuoteCore+ subscriptions to contractors for recurring commission.",
   },
   {
     q: "How do I know if a business needs what T3 Labs builds?",
-    a: "Listen for expensive friction: staff copying data between systems, spreadsheets running core processes, customers phoning for things a website should do, or a business that needs another admin person just to keep up. If a problem is slow, manual, outdated or disconnected — and costing real time or money — it is worth a conversation.",
+    a: "Listen for expensive friction: staff copying data between systems, spreadsheets running core processes, customers phoning for things a website should do, or a business that needs another admin person just to keep up. If a problem is slow, manual, outdated or disconnected - and costing real time or money - it is worth a conversation.",
   },
   {
     q: "Do I need a technical background?",
@@ -38,19 +38,19 @@ const faqs = [
   },
   {
     q: "How much can I earn?",
-    a: "Custom software projects start in the thousands, so a single qualified, closed referral can pay significantly more than months of small sales. Subscription referrals pay a recurring share of monthly revenue that compounds as your base grows. And custom deals can be structured flexibly — paying you a one-off commission, a recurring share of monthly payments, or a mix of both. Exact rates are agreed in writing before you start.",
+    a: "Custom software projects start in the thousands, so a single qualified, closed referral can pay significantly more than months of small sales. Subscription referrals pay a recurring share of monthly revenue that compounds as your base grows. And custom deals can be structured flexibly - paying you a one-off commission, a recurring share of monthly payments, or a mix of both. Exact rates are agreed in writing before you start.",
   },
   {
     q: "How do customers pay for T3 Labs custom projects?",
-    a: "Flexibly — there is no single pricing model. A customer can pay a larger upfront fee with lower ongoing monthly hosting and support costs, or pay less upfront with higher monthly payments for an agreed period. If a prospect understands the value but does not want to risk a lot of capital to find out if it works, the payment structure can usually be shaped around that. It makes these deals far easier to close.",
+    a: "Flexibly - there is no single pricing model. A customer can pay a larger upfront fee with lower ongoing monthly hosting and support costs, or pay less upfront with higher monthly payments for an agreed period. If a prospect understands the value but does not want to risk a lot of capital to find out if it works, the payment structure can usually be shaped around that. It makes these deals far easier to close.",
   },
   {
     q: "Can I earn recurring commission on custom projects, not just one-off payments?",
-    a: "Yes — it depends on how the deal is structured. You might take a smaller share of the upfront payment and a larger share of the ongoing monthly revenue, or a larger one-off payment with little or no recurring. Your commission structure can be matched to the deal and to how you prefer to earn.",
+    a: "Yes - it depends on how the deal is structured. You might take a smaller share of the upfront payment and a larger share of the ongoing monthly revenue, or a larger one-off payment with little or no recurring. Your commission structure can be matched to the deal and to how you prefer to earn.",
   },
   {
     q: "What support and materials do I get?",
-    a: "A full asset library: live products you can demo, free tools that work as lead magnets, case studies (including the full QuoteCore+ build story), videos, cost guides and comparison content. Plus optional one-to-one calls to sharpen your strategy, and custom content built for your approach on request. Use any of it, all of it, or none of it — your strategy is yours.",
+    a: "A full asset library: live products you can demo, free tools that work as lead magnets, case studies (including the full QuoteCore+ build story), videos, cost guides and comparison content. Plus optional one-to-one calls to sharpen your strategy, and custom content built for your approach on request. Use any of it, all of it, or none of it - your strategy is yours.",
   },
   {
     q: "Can I sell both products?",
@@ -62,7 +62,7 @@ const faqs = [
   },
   {
     q: "How do I apply?",
-    a: "Email careers@t3labs.co.uk or book a call with a short note about which role fits you, your network, and how you would approach selling. We respond to every genuine application.",
+    a: "Email insights@t3labs.co.uk or book a call with a short note about which role fits you, your network, and how you would approach selling. We respond to every genuine application.",
   },
 ];
 
@@ -116,7 +116,7 @@ const salesTriggers = [
   },
   {
     quote: "\u201cWe need another member of staff just to keep up with admin.\u201d",
-    signals: "Often the strongest signal of all — the opportunity is usually to remove repetitive work before the business hires more people.",
+    signals: "Often the strongest signal of all - the opportunity is usually to remove repetitive work before the business hires more people.",
   },
 ];
 
@@ -138,7 +138,7 @@ const sellCategories = [
   },
   {
     title: "SEO, GEO & AI search visibility",
-    desc: "Easier discovery through Google, local and industry search, and AI answer engines — stronger site structure, better content, useful tools that attract qualified visitors.",
+    desc: "Easier discovery through Google, local and industry search, and AI answer engines - stronger site structure, better content, useful tools that attract qualified visitors.",
   },
   {
     title: "Interactive sales tools",
@@ -154,7 +154,7 @@ const sellCategories = [
   },
   {
     title: "AI added to existing workflows",
-    desc: "Document processing, extracting information, classification, drafting, search, recommendations, workflow assistance, internal knowledge — where it genuinely improves the workflow, not as a buzzword.",
+    desc: "Document processing, extracting information, classification, drafting, search, recommendations, workflow assistance, internal knowledge - where it genuinely improves the workflow, not as a buzzword.",
   },
   {
     title: "Integrations & automation",
@@ -172,23 +172,23 @@ const sellCategories = [
 
 const roles = [
   {
-    tag: "Role 1 · High-ticket deals",
-    title: "Custom Solutions Sales — T3 Labs",
+    tag: "Role 1 Â· High-ticket deals",
+    title: "Custom Solutions Sales - T3 Labs",
     summary:
-      "Find businesses losing time, money or sales because of slow, manual, outdated or disconnected processes. You qualify the opportunity; T3 Labs works out the solution, scopes it, pitches it and builds it.",
+      "Find construction and trade businesses stuck on outdated, disjointed processes - who need custom software, portals, integrations or workflow automation, and refer them to us. Projects start in the thousands - one closed deal can outweigh months of small sales.",
     points: [
       "High commission per closed project",
-      "Broad B2B opportunity — any business with expensive friction",
+      "Broad B2B opportunity - any business with expensive friction",
       "No technical background required",
-      "Flexible customer payment options — more upfront and less monthly, or the reverse",
+      "Flexible customer payment options - more upfront and less monthly, or the reverse",
       "Your commission can follow the deal: bigger one-off, or recurring share of monthly payments",
     ],
   },
   {
-    tag: "Role 2 · Recurring revenue",
-    title: "SaaS Subscription Sales — QuoteCore+",
+    tag: "Role 2 Â· Recurring revenue",
+    title: "SaaS Subscription Sales - QuoteCore+",
     summary:
-      "Sell QuoteCore+ subscriptions to roofing and construction contractors — our live, multi-use quoting and takeoff platform. Every paying customer pays you a share of their subscription, every month they stay.",
+      "Sell QuoteCore+ subscriptions to roofing and construction contractors - our live, multi-use quoting and takeoff platform. Every paying customer pays you a share of their subscription, every month they stay.",
     points: [
       "Recurring commission on monthly subscriptions",
       "Target: roofers, builders, estimators (UK, US, NZ, AU)",
@@ -197,8 +197,8 @@ const roles = [
     ],
   },
   {
-    tag: "Role 3 · Best of both",
-    title: "Hybrid Sales — T3 Labs + QuoteCore+",
+    tag: "Role 3 Â· Best of both",
+    title: "Hybrid Sales - T3 Labs + QuoteCore+",
     summary:
       "Sell both. Business software conversations reveal contractors who need quoting tools; contractor conversations surface workflow problems that become custom builds. Hybrid sellers earn big one-off commissions plus recurring income.",
     points: [
@@ -211,12 +211,12 @@ const roles = [
 ];
 
 const assets = [
-  { title: "Live products in production", desc: "QuoteCore+ is our strongest live proof of what T3 Labs can design and deliver — a complete production software platform built from a real industry problem. Demo it on any call." },
-  { title: "Case studies & the QuoteCore+ story", desc: "The full build story — from problem to production platform — published and ready to share with prospects." },
-  { title: "Free tools as lead magnets", desc: "Calculators, quote and invoice generators, a takeoff builder — genuinely useful tools you can hand to any prospect. They start conversations." },
+  { title: "Live products in production", desc: "QuoteCore+ is our strongest live proof of what T3 Labs can design and deliver - a complete production software platform built from a real industry problem. Demo it on any call." },
+  { title: "Case studies & the QuoteCore+ story", desc: "The full build story - from problem to production platform - published and ready to share with prospects." },
+  { title: "Free tools as lead magnets", desc: "Calculators, quote and invoice generators, a takeoff builder - genuinely useful tools you can hand to any prospect. They start conversations." },
   { title: "Cost guides & comparisons", desc: "UK custom software cost guides and competitor comparison content, maintained and current." },
   { title: "Videos & demos", desc: "Product walkthroughs and tutorials you can send or embed in your outreach." },
-  { title: "Custom content on request", desc: "Need a specific deck, landing page or demo environment for your strategy? Ask — we build it with you." },
+  { title: "Custom content on request", desc: "Need a specific deck, landing page or demo environment for your strategy? Ask - we build it with you." },
 ];
 
 function Check({ children }: { children: string }) {
@@ -234,7 +234,7 @@ export default function CareersPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
-      {/* Site header — logo links back to t3labs.tech */}
+      {/* Site header - logo links back to t3labs.tech */}
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0b10]/90 backdrop-blur">
         <div className="mx-auto flex h-16 w-[min(1080px,calc(100%-40px))] items-center justify-between">
           <a href="https://www.t3labs.tech" aria-label="T3 Labs home" className="inline-flex items-center">
@@ -255,16 +255,28 @@ export default function CareersPage() {
           <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-semibold leading-tight tracking-tight">
             Find valuable business problems. Earn commission when we solve them.
           </h1>
-          <p className="mt-5 max-w-[720px] text-lg leading-9 text-white/75">
-            T3 Labs builds practical digital solutions for businesses stuck with slow, manual, outdated or
-            disconnected ways of working — from website sales tools and workflow automation to AI, portals and
-            complete bespoke software. <span className="text-white">You find the opportunity. We scope, pitch and
-            build the solution.</span> You can also sell QuoteCore+, our live construction quoting platform, for
-            recurring monthly commission.
-          </p>
+          <div className="mt-5 max-w-[720px]">
+            <p className="text-lg leading-9 text-white/75">
+              We&rsquo;re recruiting commission-based salespeople for two ways to earn from one team:
+            </p>
+            <ul className="mt-4 space-y-2 text-lg leading-9 text-white/75">
+              <li className="flex items-start gap-3">
+                <span className="mt-4 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d7ff00]" aria-hidden="true"></span>
+                <span><span className="text-white">T3 Labs</span> - custom software and workflow solutions for
+                construction businesses running on outdated, disjointed processes</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="mt-4 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d7ff00]" aria-hidden="true"></span>
+                <span><span className="text-white">QuoteCore+</span> - our multi-use quoting platform for contractors.</span>
+              </li>
+            </ul>
+            <p className="mt-4 text-lg leading-9 text-white/75">
+              Uncapped commission. Your strategy, your proven formula - support and assets only if you want them.
+            </p>
+          </div>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
-              href="mailto:careers@t3labs.co.uk"
+              href="mailto:insights@t3labs.co.uk"
               className="inline-flex items-center gap-2 rounded-full bg-[#d7ff00] px-7 py-3.5 text-sm font-semibold text-[#0a0b10] transition hover:bg-[#b8dd00]"
             >
               Apply now <span aria-hidden="true">&rarr;</span>
@@ -278,7 +290,7 @@ export default function CareersPage() {
               Book a call
             </a>
           </div>
-          <p className="mt-3 text-sm text-white/50">Commission-only · Remote · Uncapped · No exclusivity required</p>
+          <p className="mt-3 text-sm text-white/50">Commission-only Â· Remote Â· Uncapped Â· No exclusivity required</p>
         </div>
       </section>
 
@@ -293,18 +305,23 @@ export default function CareersPage() {
           </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
-              <h3 className="text-lg font-semibold">T3 Labs — find the problem, we build the solution</h3>
+              <h3 className="text-lg font-semibold">T3 Labs - custom solutions, high-ticket projects</h3>
               <p className="mt-3 text-base leading-8 text-white/75">
-                Find businesses with expensive, slow, manual, outdated or disconnected ways of working or selling.
-                T3 Labs figures out what should replace them — from websites and sales tools to complete software
-                platforms. High-ticket projects with flexible payment structures.
+                We build custom software, AI integrations, portals and workflow systems for construction industry
+                businesses lagging behind on tech. Teams stitching spreadsheets, Word docs, PDF&apos;s and separate
+                apps together just to get through the day. We replace that with one effective, cost-efficient
+                solution that helps them sell more of their own product or service while reducing their staff&apos;s
+                workload - so they scale without hiring. Payment structures are flexible too: customers can pay more
+                upfront with lower ongoing monthly costs, or less upfront with higher monthly payments for an agreed
+                period - so if capital risk is the only thing blocking a sale, the deal can usually be shaped around
+                the customer.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
-              <h3 className="text-lg font-semibold">QuoteCore+ — recurring revenue</h3>
+              <h3 className="text-lg font-semibold">QuoteCore+ - recurring revenue</h3>
               <p className="mt-3 text-base leading-8 text-white/75">
                 A live, multi-use product already built and growing: takeoffs, quoting, ordering and invoicing for
-                roofing and construction contractors. Subscriptions recur monthly — your commission does too,
+                roofing and construction contractors. Subscriptions recur monthly - your commission does too,
                 compounding as your base grows.
               </p>
             </div>
@@ -360,7 +377,7 @@ export default function CareersPage() {
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">What can you actually sell through T3 Labs?</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
-            There is no fixed catalogue. These are examples of the kinds of problems we can solve — not the limit of
+            There is no fixed catalogue. These are examples of the kinds of problems we can solve - not the limit of
             what we can build.
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -396,7 +413,7 @@ export default function CareersPage() {
             <div className="rounded-xl border border-white/10 bg-white/5 p-6">
               <h3 className="font-semibold">3. Someone wants it fixed</h3>
               <p className="mt-2 text-sm leading-7 text-white/70">
-                They don&rsquo;t need to know the technical answer — just that the current process costs them enough
+                They don&rsquo;t need to know the technical answer - just that the current process costs them enough
                 to make solving it worthwhile.
               </p>
             </div>
@@ -406,7 +423,7 @@ export default function CareersPage() {
             <p className="mt-2 text-sm leading-7 text-white/70">
               Poor-fit leads: someone with only an idea and no real business problem; a tiny inconvenience with
               little commercial value; no budget and no value case; a request to clone a huge platform for almost
-              nothing; or no one who owns the problem or makes decisions. Qualify first — quality beats volume.
+              nothing; or no one who owns the problem or makes decisions. Qualify first - quality beats volume.
             </p>
           </div>
         </div>
@@ -416,7 +433,7 @@ export default function CareersPage() {
       <section className="border-b border-white/10">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Your job is to find the opportunity — not design the software
+            Your job is to find the opportunity - not design the software
           </h2>
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
@@ -452,7 +469,7 @@ export default function CareersPage() {
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">The roles</h2>
           <p className="mt-4 text-base leading-8 text-white/75">
-            Three ways in — same products, different strategies. Pick the one that fits your network and how you like
+            Three ways in - same products, different strategies. Pick the one that fits your network and how you like
             to sell.
           </p>
           <div className="mt-10 space-y-5">
@@ -477,18 +494,19 @@ export default function CareersPage() {
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">You don&rsquo;t get paid unless we get paid</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
-            That&rsquo;s the whole model — so making you effective is our problem too. But none of this boxes you in.
-            If you have your own strategy and a proven formula, run it your way. Everything below is optional — take
+            We only earn when you earn, so helping you sell effectively matters to us as much as it matters to
+            you. But none of this boxes you in.
+            If you have your own strategy and a proven formula, run it your way. Everything below is optional - take
             what helps, ignore what doesn&rsquo;t. All that matters is that you&rsquo;re effective and you sell:
           </p>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">
             {[
               "Optional one-to-one calls to sharpen your strategy",
-              "Custom content built for your approach — decks, videos, landing pages",
+              "Custom content built for your approach - decks, videos, landing pages",
               "Technical backup on calls with serious prospects",
               "Honest feedback on what's working across the team",
               "A growing asset, tool and content library",
-              "Direct line to the founders — no layers of management",
+              "Direct line to the founders - no layers of management",
             ].map((item) => (
               <li key={item} className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-medium text-white/80">
                 <span className="mt-0.5 text-[#d7ff00]" aria-hidden="true">✓</span>
@@ -504,7 +522,7 @@ export default function CareersPage() {
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Everything you need is already built</h2>
           <p className="mt-4 text-base leading-8 text-white/75">
-            You are not selling a slide deck. Both products are live and in production — and you get a library of
+            You are not selling a slide deck. Both products are live and in production - and you get a library of
             material to use from day one.
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
@@ -566,10 +584,10 @@ export default function CareersPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
-              href="mailto:careers@t3labs.co.uk"
+              href="mailto:insights@t3labs.co.uk"
               className="inline-flex items-center gap-2 rounded-full bg-[#d7ff00] px-7 py-3.5 text-sm font-semibold text-[#0a0b10] transition hover:bg-[#b8dd00]"
             >
-              Email careers@t3labs.co.uk <span aria-hidden="true">&rarr;</span>
+              Email insights@t3labs.co.uk <span aria-hidden="true">&rarr;</span>
             </a>
             <a
               href="https://calendly.com/cece-t3labs/20min"
@@ -581,7 +599,7 @@ export default function CareersPage() {
             </a>
           </div>
           <p className="mt-10 text-xs leading-5 text-white/40">
-            Commission-only, self-employed opportunities — not employment. Terms agreed in writing before you start.{" "}
+            Commission-only, self-employed opportunities - not employment. Terms agreed in writing before you start.{" "}
             <Link href="/privacy" className="underline hover:text-white/60">Privacy Policy</Link>.
           </p>
         </div>
