@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     q: "What exactly would I be selling?",
-    a: "Two products from one ecosystem. T3 Labs builds custom software, AI integrations, portals and workflow automation — high-ticket bespoke projects. QuoteCore+ is our subscription quoting platform for roofing and construction contractors. Many conversations open doors in both directions, so you can sell whichever fits the prospect.",
+    a: "Two things from one team. T3 Labs builds custom software, AI integrations, portals and workflow systems for construction businesses running on outdated, disjointed processes — high-ticket projects. QuoteCore+ is our multi-use subscription quoting platform for contractors — one app covering takeoffs, quoting, ordering and invoicing. Many conversations open doors in both directions, so you can sell whichever fits the prospect.",
   },
   {
     q: "How much can I earn?",
@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     q: "What support and materials do I get?",
-    a: "A full asset library: live products you can demo, free tools that work as lead magnets, case studies (including the full QuoteCore+ build story), videos, cost guides and comparison content. Plus one-to-one calls to sharpen your strategy, and custom content built for your approach on request.",
+    a: "A full asset library: live products you can demo, free tools that work as lead magnets, case studies (including the full QuoteCore+ build story), videos, cost guides and comparison content. Plus optional one-to-one calls to sharpen your strategy, and custom content built for your approach on request. Use any of it, all of it, or none of it — your strategy is yours.",
   },
   {
     q: "Can I sell both products?",
@@ -78,19 +78,19 @@ const roles = [
     tag: "Role 1 · High-ticket deals",
     title: "Custom Software & AI Sales — T3 Labs",
     summary:
-      "Find businesses that need custom software, AI integrations, portals or workflow automation, and refer them to us. Projects start in the thousands — one closed deal can outweigh months of small sales.",
+      "Find construction and trade businesses stuck on outdated, disjointed processes — spreadsheets, Word docs, PDFs and separate apps stitched together — who need custom software, portals, integrations or workflow automation, and refer them to us. Projects start in the thousands — one closed deal can outweigh months of small sales.",
     points: [
       "High commission per closed project",
-      "Target: SMBs, measured trades, manufacturers, service businesses",
+      "Target: construction & trade businesses lagging on tech — also SMBs, manufacturers, service businesses",
       "You qualify the lead — T3 Labs scopes, pitches and builds",
-      "Ideal if you have a B2B network or consultative sales background",
+      "Ideal if you have a B2B or trade network or consultative sales background",
     ],
   },
   {
     tag: "Role 2 · Recurring revenue",
     title: "SaaS Subscription Sales — QuoteCore+",
     summary:
-      "Sell QuoteCore+ subscriptions to roofing and construction contractors — our live quoting and takeoff platform. Every paying customer pays you a share of their subscription, every month they stay.",
+      "Sell QuoteCore+ subscriptions to roofing and construction contractors — our live, multi-use quoting and takeoff platform. Every paying customer pays you a share of their subscription, every month they stay.",
     points: [
       "Recurring commission on monthly subscriptions",
       "Target: roofers, builders, estimators (UK, US, NZ, AU)",
@@ -127,6 +127,18 @@ export default function CareersPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
+      {/* Site header — logo links back to t3labs.tech */}
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0b10]/90 backdrop-blur">
+        <div className="mx-auto flex h-16 w-[min(1080px,calc(100%-40px))] items-center justify-between">
+          <a href="https://www.t3labs.tech" aria-label="T3 Labs home" className="inline-flex items-center">
+            <img src="/assets/t3-labs-white.png" alt="T3 Labs" className="h-8 w-auto object-contain" />
+          </a>
+          <a href="https://www.t3labs.tech" className="text-sm font-semibold text-white/70 transition hover:text-[#d7ff00]">
+            t3labs.tech <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </header>
+
       {/* Hero */}
       <section className="border-b border-white/10">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-20 sm:py-24">
@@ -137,10 +149,11 @@ export default function CareersPage() {
             Earn serious commission selling software that&apos;s already built, live and proving itself.
           </h1>
           <p className="mt-5 max-w-[720px] text-lg leading-9 text-white/75">
-            We&apos;re recruiting commission-based salespeople for two products that feed each other:{" "}
-            <span className="text-white">T3 Labs</span> — custom software and AI integrations for businesses that
-            outgrew spreadsheets — and <span className="text-white">QuoteCore+</span>, our subscription quoting
-            platform for contractors. Uncapped commission. Your strategy. Real support.
+            We&apos;re recruiting commission-based salespeople for two ways to earn from one team:{" "}
+            <span className="text-white">T3 Labs</span> — custom software and workflow solutions for construction
+            businesses running on outdated, disjointed processes — and{" "}
+            <span className="text-white">QuoteCore+</span>, our multi-use quoting platform for contractors. Uncapped
+            commission. Your strategy, your proven formula — support and assets only if you want them.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
@@ -165,25 +178,30 @@ export default function CareersPage() {
       {/* Two products */}
       <section className="border-b border-white/10">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Two products. One ecosystem.</h2>
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">One team. Two ways to earn.</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
-            Every conversation can pay twice. A business buying custom software often knows contractors who need
-            proper quoting tools. A contractor on QuoteCore+ may need an integration that becomes a custom build.
-            You choose which door to open — or both.
+            Every conversation can pay twice. A construction business buying a custom solution may employ contractors
+            who need proper quoting tools. A contractor on QuoteCore+ may surface a workflow problem that becomes a
+            custom build. You choose which door to open — or both.
           </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
-              <h3 className="text-lg font-semibold">T3 Labs — high-ticket projects</h3>
+              <h3 className="text-lg font-semibold">T3 Labs — custom solutions, high-ticket projects</h3>
               <p className="mt-3 text-base leading-8 text-white/75">
-                Custom software, AI integrations, customer/supplier portals, workflow automation. Projects start in
-                the thousands. One qualified, closed referral can be worth more than a month of small sales.
+                We build custom software, AI integrations, portals and workflow systems for construction industry
+                businesses lagging behind on tech — teams stitching spreadsheets, Word docs, PDFs and separate apps
+                together just to get through the day. We replace that with one effective, cost-efficient solution that
+                helps them sell more of their own product or service while reducing their staff&apos;s workload — so
+                they scale without hiring. Projects start in the thousands; one closed referral can outweigh months of
+                small sales.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
               <h3 className="text-lg font-semibold">QuoteCore+ — recurring revenue</h3>
               <p className="mt-3 text-base leading-8 text-white/75">
-                Our live quoting platform for roofing and construction contractors: takeoffs, quoting, ordering,
-                invoicing. Subscriptions recur monthly — your commission does too, compounding as your base grows.
+                A live, multi-use product already built and growing: takeoffs, quoting, ordering and invoicing for
+                roofing and construction contractors — one app, many workflows. Subscriptions recur monthly — your
+                commission does too, compounding as your base grows.
               </p>
             </div>
           </div>
@@ -223,16 +241,17 @@ export default function CareersPage() {
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">You don&apos;t get paid unless we get paid</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
-            That&apos;s the whole model — so making you effective is our problem too. Commission-only does not mean
-            unsupported:
+            That&apos;s the whole model — so making you effective is our problem too. But none of this boxes you in.
+            If you have your own strategy and a proven formula, run it your way. Everything below is optional — take
+            what helps, ignore what doesn&apos;t. All that matters is that you&apos;re effective and you sell:
           </p>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">
             {[
-              "Regular one-to-one calls to sharpen your strategy",
+              "Optional one-to-one calls to sharpen your strategy",
               "Custom content built for your approach — decks, videos, landing pages",
               "Technical backup on calls with serious prospects",
               "Honest feedback on what's working across the team",
-              "New assets, tools and content added continuously",
+              "A growing asset, tool and content library",
               "Direct line to the founders — no layers of management",
             ].map((item) => (
               <li key={item} className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-medium text-white/80">
