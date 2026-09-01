@@ -172,7 +172,7 @@ const sellCategories = [
 
 const roles = [
   {
-    tag: "Role 1 Â· High-ticket deals",
+    tag: "Role 1 · High-ticket deals",
     title: "Custom Solutions Sales - T3 Labs",
     summary:
       "Find construction and trade businesses stuck on outdated, disjointed processes - who need custom software, portals, integrations or workflow automation, and refer them to us. Projects start in the thousands - one closed deal can outweigh months of small sales.",
@@ -185,7 +185,7 @@ const roles = [
     ],
   },
   {
-    tag: "Role 2 Â· Recurring revenue",
+    tag: "Role 2 · Recurring revenue",
     title: "SaaS Subscription Sales - QuoteCore+",
     summary:
       "Sell QuoteCore+ subscriptions to roofing and construction contractors - our live, multi-use quoting and takeoff platform. Every paying customer pays you a share of their subscription, every month they stay.",
@@ -197,7 +197,7 @@ const roles = [
     ],
   },
   {
-    tag: "Role 3 Â· Best of both",
+    tag: "Role 3 · Best of both",
     title: "Hybrid Sales - T3 Labs + QuoteCore+",
     summary:
       "Sell both. Business software conversations reveal contractors who need quoting tools; contractor conversations surface workflow problems that become custom builds. Hybrid sellers earn big one-off commissions plus recurring income.",
@@ -290,31 +290,24 @@ export default function CareersPage() {
               Book a call
             </a>
           </div>
-          <p className="mt-3 text-sm text-white/50">Commission-only Â· Remote Â· Uncapped Â· No exclusivity required</p>
+          <p className="mt-3 text-sm text-white/50">Commission-only · Remote · Uncapped · No exclusivity required</p>
         </div>
       </section>
 
       {/* Two ways to earn */}
       <section className="border-b border-white/10">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">One team. Two ways to earn.</h2>
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Multiple ways to earn</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
-            Every conversation can pay twice. A business buying a custom solution may employ contractors who need
-            proper quoting tools; a contractor on QuoteCore+ may surface a workflow problem that becomes a custom
-            build.
+            Earn from high-ticket custom projects, recurring subscriptions, or both at once.
           </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
               <h3 className="text-lg font-semibold">T3 Labs - custom solutions, high-ticket projects</h3>
               <p className="mt-3 text-base leading-8 text-white/75">
-                We build custom software, AI integrations, portals and workflow systems for construction industry
-                businesses lagging behind on tech. Teams stitching spreadsheets, Word docs, PDF&apos;s and separate
-                apps together just to get through the day. We replace that with one effective, cost-efficient
-                solution that helps them sell more of their own product or service while reducing their staff&apos;s
-                workload - so they scale without hiring. Payment structures are flexible too: customers can pay more
-                upfront with lower ongoing monthly costs, or less upfront with higher monthly payments for an agreed
-                period - so if capital risk is the only thing blocking a sale, the deal can usually be shaped around
-                the customer.
+                We find and fix expensive business problems with whatever digital solution makes sense - websites,
+                sales tools, workflows, portals or complete software platforms. You find the problem; we scope, pitch
+                and build the solution. Flexible payment structures: more upfront and less monthly, or the reverse.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
@@ -429,6 +422,25 @@ export default function CareersPage() {
         </div>
       </section>
 
+      {/* How one deal can pay twice - example */}
+      <section className="border-b border-white/10">
+        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">How one deal can pay twice</h2>
+          <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+            An example of the hybrid opportunity:
+          </p>
+          <div className="mt-8 rounded-xl border border-[#d7ff00]/30 bg-[#d7ff00]/5 p-7">
+            <p className="text-base leading-8 text-white/85">
+              Picture a construction supplies business with multiple stores or branches. T3 Labs builds them tools
+              that help their customers buy more of their products while cutting the time their staff spend on
+              quotes and admin - a high-ticket project that earns your commission on its own. Their trade customers
+              can also use QuoteCore+ for their own quoting, which is recurring commission for you. The business
+              loses nothing by their customers using our app, and you earn on both sides of the relationship.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Your job vs T3 Labs' job */}
       <section className="border-b border-white/10">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
@@ -520,10 +532,12 @@ export default function CareersPage() {
       {/* Assets */}
       <section className="border-b border-white/10">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Everything you need is already built</h2>
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">A lot is already built - and we build the rest</h2>
           <p className="mt-4 text-base leading-8 text-white/75">
-            You are not selling a slide deck. Both products are live and in production - and you get a library of
-            material to use from day one.
+            We have already built a range of tools, calculators and live products that showcase how we solve
+            problems. Some will fit a prospect perfectly; when they don&apos;t, that is the custom solution we build
+            for them. Client work we have delivered for other businesses often can&apos;t be shown publicly, so what
+            you see here is only what we own and can share. You get this library from day one:
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {assets.map((a) => (
