@@ -273,6 +273,10 @@ export default function CareersPage() {
             <p className="mt-4 text-lg leading-9 text-white/75">
               Uncapped commission. Your strategy, your proven formula - support and assets only if you want them.
             </p>
+            <p className="mt-4 text-lg leading-9 text-white/75">
+              You can focus on one type of opportunity, one industry, or sell across everything we offer - as
+              much or as little as suits you.
+            </p>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
@@ -370,8 +374,8 @@ export default function CareersPage() {
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">What can you actually sell through T3 Labs?</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
-            There is no fixed catalogue. These are examples of the kinds of problems we can solve - not the limit of
-            what we can build.
+            There is no fixed catalogue. The examples on this page are there to help you recognise
+            opportunities - not to define the limits of what T3 Labs can build.
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {sellCategories.map((c) => (
