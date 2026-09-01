@@ -1,0 +1,135 @@
+// Conversion utilities for metric / imperial measurement systems.
+// All database values are stored in METRIC (m, m²) as the canonical form.
+//
+// Imperial comes in two area flavours users can pick from:
+//   - Square Feet (ft²)         used by US roofers
+//   - Roofing Squares (RS)      used by NZ/AU/UK roofers; 1 RS = 100 ft² = 9.2903 m²
+// Linear is always in feet for both Imperial flavours.
+
+import type { MeasurementSystem } from '../types';
+import { normalizeMeasurementSystem } from '../types';
+
+// -- Conversion constants ----------------------------------------------------
+const M_TO_FT = 3.28084;
+const SQM_TO_FT2 = 10.7639;
+const SQM_TO_RS = 0.107639; // 1 m² = 0.107639 RS  (= 1/9.2903)
+const MM_PER_INCH = 25.4;   // exact by definition (since 1959)
+
+// -- Linear (m -> ft) --------------------------------------------------------
+
+/** Display a linear measurement (stored in meters) in feet, 2dp. */
+export function convertLinear(meters: number): number {
+  return Number((meters * M_TO_FT).toFixed(2));
+}
+
+/** Convert a linear rate ($/m -> $/ft), 2dp. */
+export function convertLinearRate(ratePerMeter: number): number {
+  return Number((ratePerMeter / M_TO_FT).toFixed(2));
+}
+
+/** Customer typed feet, store as meters. */
+export function convertLinearToMetric(feet: number): number {
+  return feet / M_TO_FT;
+}
+
+// -- Area (m² -> ft²) --------------------------------------------------------
+
+/** Display an area (stored in m²) in square feet, 2dp. */
+export function convertAreaFt2(sqm: number): number {
+  return Number((sqm * SQM_TO_FT2).toFixed(2));
+}
+
+/** Convert an area rate ($/m² -> $/ft²), 4dp (rates can be small per ft²). */
+export function convertAreaFt2Rate(ratePerSqm: number): number {
+  return Number((ratePerSqm / SQM_TO_FT2).toFixed(4));
+}
+
+/** Customer typed ft², store as m². */
+export function convertAreaFt2ToMetric(ft2: number): number {
+  return ft2 / SQM_TO_FT2;
+}
+
+// -- Area (m² -> Roofing Squares) --------------------------------------------
+
+/** Display an area (stored in m²) in Roofing Squares, 3dp. Returned as string for backwards compat. */
+export function convertArea(sqm: number): string {
+  return (sqm * SQM_TO_RS).toFixed(3);
+}
+
+/** Numeric variant of convertArea for callers that want to keep doing math. */
+export function convertAreaRs(sqm: number): number {
+  return Number((sqm * SQM_TO_RS).toFixed(3));
+}
+
+/** Convert an area rate ($/m² -> $/RS), 2dp. */
+export function convertAreaRate(ratePerSqm: number): number {
+  return Number((ratePerSqm / SQM_TO_RS).toFixed(2));
+}
+
+/** Customer typed RS, store as m². */
+export function convertAreaToMetric(roofingSquares: number): number {
+  return roofingSquares / SQM_TO_RS;
+}
+
+// -- Volume (m³ -> ft³) ------------------------------------------------------
+
+const SQM_TO_CUBIC_FT = SQM_TO_FT2 * M_TO_FT; // m³ -> ft³  (≈35.3147)
+
+/** Display a volume (stored in m³) in cubic feet, 2dp. */
+export function convertVolumeFt3(cubicM: number): number {
+  return Number((cubicM * SQM_TO_CUBIC_FT).toFixed(2));
+}
+
+/** Customer typed ft³, store as m³. */
+export function convertVolumeFt3ToMetric(ft3: number): number {
+  return ft3 / SQM_TO_CUBIC_FT;
+}
+
+/**
+ * Convert a volume value typed by the user (in their measurement system) into
+ * canonical metric storage (m³). Imperial users both flavours use ft³.
+ */
+export function volumeInputToMetric(input: number, system: MeasurementSystem): number {
+  const norm = normalizeMeasurementSystem(system);
+  if (norm === 'metric') return input;
+  return convertVolumeFt3ToMetric(input);
+}
+
+// -- Small-unit (mm ↔ in) ----------------------------------------------------
+//
+// Used by the flashings drawing tool, where canvas measurements are stored
+// in mm but Imperial users want to see and enter inches. 1 inch = 25.4 mm
+// exactly (international inch since 1959).
+
+/** Display a mm value in inches, 2dp. */
+export function mmToInches(mm: number): number {
+  return Number((mm / MM_PER_INCH).toFixed(2));
+}
+
+/** Customer typed inches, store as mm. Keeps full precision; callers may round. */
+export function inchesToMm(inches: number): number {
+  return inches * MM_PER_INCH;
+}
+
+// -- Polymorphic helpers (recommended for new call sites) --------------------
+
+/**
+ * Convert a linear value typed by the user (in their measurement system) into
+ * canonical metric storage (meters).
+ */
+export function linearInputToMetric(input: number, system: MeasurementSystem): number {
+  const norm = normalizeMeasurementSystem(system);
+  if (norm === 'metric') return input;
+  return convertLinearToMetric(input);
+}
+
+/**
+ * Convert an area value typed by the user (in their measurement system) into
+ * canonical metric storage (m²). Handles ft² vs Roofing Squares.
+ */
+export function areaInputToMetric(input: number, system: MeasurementSystem): number {
+  const norm = normalizeMeasurementSystem(system);
+  if (norm === 'metric') return input;
+  if (norm === 'imperial_ft') return convertAreaFt2ToMetric(input);
+  return convertAreaToMetric(input); // imperial_rs
+}
