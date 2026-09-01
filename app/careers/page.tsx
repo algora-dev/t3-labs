@@ -30,7 +30,15 @@ const faqs = [
   },
   {
     q: "How much can I earn?",
-    a: "Custom software projects start in the thousands, so a single qualified, closed referral can pay significantly more than months of small sales. Subscription referrals pay a recurring share of monthly revenue that compounds as your base grows. Exact rates are agreed in writing before you start.",
+    a: "Custom software projects start in the thousands, so a single qualified, closed referral can pay significantly more than months of small sales. Subscription referrals pay a recurring share of monthly revenue that compounds as your base grows. And custom deals can be structured flexibly — paying you a one-off commission, a recurring share of monthly payments, or a mix of both. Exact rates are agreed in writing before you start.",
+  },
+  {
+    q: "How do customers pay for T3 Labs custom projects?",
+    a: "Flexibly — there is no single pricing model. A customer can pay a larger upfront fee with lower ongoing monthly hosting and support costs, or pay less upfront with higher monthly payments for an agreed period. If a prospect understands the value but does not want to risk a lot of capital to find out if it works, the payment structure can usually be shaped around that. It makes these deals far easier to close.",
+  },
+  {
+    q: "Can I earn recurring commission on custom projects, not just one-off payments?",
+    a: "Yes — it depends on how the deal is structured. You might take a smaller share of the upfront payment and a larger share of the ongoing monthly revenue, or a larger one-off payment with little or no recurring. Your commission structure can be matched to the deal and to how you prefer to earn.",
   },
   {
     q: "Do I need a technical background?",
@@ -83,6 +91,8 @@ const roles = [
       "High commission per closed project",
       "Target: construction & trade businesses lagging on tech — also SMBs, manufacturers, service businesses",
       "You qualify the lead — T3 Labs scopes, pitches and builds",
+      "Flexible customer payment options — more upfront and less monthly, or the reverse",
+      "Your commission can follow the deal: bigger one-off, or recurring share of monthly payments",
       "Ideal if you have a B2B or trade network or consultative sales background",
     ],
   },
@@ -192,8 +202,10 @@ export default function CareersPage() {
                 businesses lagging behind on tech — teams stitching spreadsheets, Word docs, PDFs and separate apps
                 together just to get through the day. We replace that with one effective, cost-efficient solution that
                 helps them sell more of their own product or service while reducing their staff&apos;s workload — so
-                they scale without hiring. Projects start in the thousands; one closed referral can outweigh months of
-                small sales.
+                they scale without hiring. Projects start in the thousands; one closed referral can outweigh months
+                of small sales. Payment structures are flexible too: customers can pay more upfront with lower ongoing
+                monthly costs, or less upfront with higher monthly payments for an agreed period — so if capital risk
+                is the only thing blocking a sale, the deal can usually be shaped around the customer.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
