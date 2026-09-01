@@ -5,14 +5,14 @@ import IntakeModalMount from "@/components/intake/intake-modal-mount";
 const BASE_URL = "https://www.t3labs.tech";
 
 export const metadata: Metadata = {
-  title: "Commission-Only Sales Roles — Sell Custom Software & AI Solutions | T3 Labs",
+  title: "Commission-Only Sales Roles — Find Business Problems, Earn When We Solve Them | T3 Labs",
   description:
-    "Commission-based sales opportunities with T3 Labs and QuoteCore+. Refer high-ticket custom software and AI projects, or sell contractor SaaS subscriptions. Uncapped commission, real products in production, one-to-one support.",
+    "Commission-based sales opportunity with T3 Labs. Find businesses stuck with slow, manual, outdated or disconnected ways of working — we scope, pitch and build the solution. Also sell QuoteCore+ subscriptions for recurring commission.",
   alternates: { canonical: `${BASE_URL}/careers` },
   openGraph: {
     title: "Commission-Only Sales Roles — T3 Labs & QuoteCore+",
     description:
-      "Refer high-ticket custom software builds to T3 Labs, or sell QuoteCore+ subscriptions to contractors. Uncapped commission, existing assets, one-to-one support.",
+      "Find valuable business problems. We build the solution. High-ticket commission with flexible deal structures, plus recurring QuoteCore+ subscription income.",
     url: `${BASE_URL}/careers`,
     siteName: "T3 Labs",
     type: "website",
@@ -26,7 +26,15 @@ const faqs = [
   },
   {
     q: "What exactly would I be selling?",
-    a: "Two things from one team. T3 Labs builds custom software, AI integrations, portals and workflow systems for construction businesses running on outdated, disjointed processes — high-ticket projects. QuoteCore+ is our multi-use subscription quoting platform for contractors — one app covering takeoffs, quoting, ordering and invoicing. Many conversations open doors in both directions, so you can sell whichever fits the prospect.",
+    a: "With T3 Labs, you are not limited to one software product. You find businesses with valuable problems — manual processes, old systems, weak online sales workflows, disconnected software, repetitive staff admin or other operational bottlenecks. T3 Labs then works out the right solution, which could be anything from a website tool or workflow automation to a customer portal or complete bespoke software platform. You can also sell QuoteCore+ subscriptions to contractors for recurring commission.",
+  },
+  {
+    q: "How do I know if a business needs what T3 Labs builds?",
+    a: "Listen for expensive friction: staff copying data between systems, spreadsheets running core processes, customers phoning for things a website should do, or a business that needs another admin person just to keep up. If a problem is slow, manual, outdated or disconnected — and costing real time or money — it is worth a conversation.",
+  },
+  {
+    q: "Do I need a technical background?",
+    a: "No. Your job is to recognise a commercially important problem, ask sensible questions and connect us with the right people. T3 Labs handles technical discovery, scoping, solution design and development.",
   },
   {
     q: "How much can I earn?",
@@ -41,16 +49,12 @@ const faqs = [
     a: "Yes — it depends on how the deal is structured. You might take a smaller share of the upfront payment and a larger share of the ongoing monthly revenue, or a larger one-off payment with little or no recurring. Your commission structure can be matched to the deal and to how you prefer to earn.",
   },
   {
-    q: "Do I need a technical background?",
-    a: "No. You find and qualify the opportunity — the business with a spreadsheet problem, the growing firm drowning in manual process. Our team scopes, pitches and builds. You need to recognise the pain and start the conversation; we handle the technical depth.",
-  },
-  {
     q: "What support and materials do I get?",
     a: "A full asset library: live products you can demo, free tools that work as lead magnets, case studies (including the full QuoteCore+ build story), videos, cost guides and comparison content. Plus optional one-to-one calls to sharpen your strategy, and custom content built for your approach on request. Use any of it, all of it, or none of it — your strategy is yours.",
   },
   {
     q: "Can I sell both products?",
-    a: "Yes, and the best sellers do. A manufacturer buying a custom pricing system may employ contractors who need QuoteCore+; a contractor using QuoteCore+ may want an integration that becomes a T3 Labs project. Every conversation can pay twice.",
+    a: "Yes, and the best sellers do. A manufacturer buying a custom solution may employ contractors who need QuoteCore+; a contractor using QuoteCore+ may surface a workflow problem that becomes a custom build. Every conversation can pay twice.",
   },
   {
     q: "Where are these roles based?",
@@ -81,19 +85,103 @@ const breadcrumbLd = {
   ],
 };
 
+const salesTriggers = [
+  {
+    quote: "\u201cWe still use spreadsheets for most of this.\u201d",
+    signals: "Quoting, pricing, production planning, order tracking, stock, customer records, job management, reporting.",
+  },
+  {
+    quote: "\u201cOur staff spend hours doing this manually.\u201d",
+    signals: "Copying information between systems, retyping orders, rebuilding the same documents, checking multiple spreadsheets, answering repetitive customer questions, producing reports by hand.",
+  },
+  {
+    quote: "\u201cOur website doesn\u2019t really help us sell.\u201d",
+    signals: "Poor enquiry flow, no instant estimate or quote path, customers can\u2019t configure products, staff handle every basic enquiry, weak or dated website experience.",
+  },
+  {
+    quote: "\u201cCustomers keep calling us to do something they should be able to do themselves.\u201d",
+    signals: "Requesting pricing, configuring products, uploading files, checking order or job status, requesting quotes, booking services, retrieving documents.",
+  },
+  {
+    quote: "\u201cOur systems don\u2019t talk to each other.\u201d",
+    signals: "Website to spreadsheet, CRM to accounting, quoting to ordering, ordering to production, customer portal to internal system, duplicate entry across multiple apps.",
+  },
+  {
+    quote: "\u201cWe\u2019ve outgrown the software we use.\u201d",
+    signals: "Old internal software, unsupported legacy systems, Access databases, desktop-only apps, a process that changed but the software didn\u2019t.",
+  },
+  {
+    quote: "\u201cWe need more leads / we\u2019re hard to find online.\u201d",
+    signals: "Website improvements, SEO, AI search visibility, better landing pages, content and tools that attract and convert the right visitors.",
+  },
+  {
+    quote: "\u201cWe need another member of staff just to keep up with admin.\u201d",
+    signals: "Often the strongest signal of all — the opportunity is usually to remove repetitive work before the business hires more people.",
+  },
+];
+
+const uncoverQuestions = [
+  "What part of the business still takes far more manual work than it should?",
+  "What do your staff keep copying, retyping or rebuilding?",
+  "What do customers regularly have to phone or email you for?",
+  "Is there anything your website should be doing that your staff currently do manually?",
+  "Are there spreadsheets or old systems the business could not operate without?",
+  "Do your systems share information, or does somebody move it between them?",
+  "Is there anything stopping you selling more because the current process cannot keep up?",
+  "If you could remove one repetitive problem from the business tomorrow, what would it be?",
+];
+
+const sellCategories = [
+  {
+    title: "Website upgrades & rebuilds",
+    desc: "Clearer product presentation, better conversion paths, landing pages, enquiry flows, modern rebuilds, integrations with internal systems.",
+  },
+  {
+    title: "SEO, GEO & AI search visibility",
+    desc: "Easier discovery through Google, local and industry search, and AI answer engines — stronger site structure, better content, useful tools that attract qualified visitors.",
+  },
+  {
+    title: "Interactive sales tools",
+    desc: "Calculators, estimators, quote builders, product selectors, configurators, measurement and pricing tools built into a website so customers can understand, configure or buy with less staff involvement.",
+  },
+  {
+    title: "Internal workflow tools",
+    desc: "Estimating systems, pricing tools, order processing, job tracking, production workflows, reporting dashboards, document generation, approvals, staff portals, automation between systems.",
+  },
+  {
+    title: "Customer, dealer & supplier portals",
+    desc: "Self-service, trade pricing, dealer ordering, quote requests, file uploads, order tracking, account documents, repeat ordering, product configuration.",
+  },
+  {
+    title: "AI added to existing workflows",
+    desc: "Document processing, extracting information, classification, drafting, search, recommendations, workflow assistance, internal knowledge — where it genuinely improves the workflow, not as a buzzword.",
+  },
+  {
+    title: "Integrations & automation",
+    desc: "Connecting systems that currently need people to move data: website to CRM, CRM to accounting, quoting to ordering, portals to internal systems, custom APIs.",
+  },
+  {
+    title: "Legacy software replacement",
+    desc: "Replacing Access databases, old desktop apps, unsupported bespoke systems and spreadsheet-driven processes the business has outgrown.",
+  },
+  {
+    title: "Complete bespoke software platforms",
+    desc: "For larger opportunities: estimating and quoting platforms, industry-specific SaaS, operational systems, multi-user workflow applications designed around the business.",
+  },
+];
+
 const roles = [
   {
     tag: "Role 1 · High-ticket deals",
-    title: "Custom Software & AI Sales — T3 Labs",
+    title: "Custom Solutions Sales — T3 Labs",
     summary:
-      "Find construction and trade businesses stuck on outdated, disjointed processes — spreadsheets, Word docs, PDFs and separate apps stitched together — who need custom software, portals, integrations or workflow automation, and refer them to us. Projects start in the thousands — one closed deal can outweigh months of small sales.",
+      "Find businesses losing time, money or sales because of slow, manual, outdated or disconnected processes. You qualify the opportunity; T3 Labs works out the solution, scopes it, pitches it and builds it.",
     points: [
       "High commission per closed project",
-      "Target: construction & trade businesses lagging on tech — also SMBs, manufacturers, service businesses",
-      "You qualify the lead — T3 Labs scopes, pitches and builds",
+      "Broad B2B opportunity — any business with expensive friction",
+      "No technical background required",
       "Flexible customer payment options — more upfront and less monthly, or the reverse",
       "Your commission can follow the deal: bigger one-off, or recurring share of monthly payments",
-      "Ideal if you have a B2B or trade network or consultative sales background",
     ],
   },
   {
@@ -112,7 +200,7 @@ const roles = [
     tag: "Role 3 · Best of both",
     title: "Hybrid Sales — T3 Labs + QuoteCore+",
     summary:
-      "Sell both. Business software conversations reveal contractors who need quoting tools; contractor conversations surface custom software needs. Hybrid sellers earn big one-off commissions plus recurring income.",
+      "Sell both. Business software conversations reveal contractors who need quoting tools; contractor conversations surface workflow problems that become custom builds. Hybrid sellers earn big one-off commissions plus recurring income.",
     points: [
       "High-ticket project commissions + recurring subscriptions",
       "Cross-sell in both directions",
@@ -123,13 +211,22 @@ const roles = [
 ];
 
 const assets = [
-  { title: "Live products in production", desc: "QuoteCore+ is a real platform used by contractors — and T3 Labs built it. That's your proof we deliver. Demo it live on any call." },
+  { title: "Live products in production", desc: "QuoteCore+ is our strongest live proof of what T3 Labs can design and deliver — a complete production software platform built from a real industry problem. Demo it on any call." },
   { title: "Case studies & the QuoteCore+ story", desc: "The full build story — from problem to production platform — published and ready to share with prospects." },
   { title: "Free tools as lead magnets", desc: "Calculators, quote and invoice generators, a takeoff builder — genuinely useful tools you can hand to any prospect. They start conversations." },
   { title: "Cost guides & comparisons", desc: "UK custom software cost guides and competitor comparison content, maintained and current." },
   { title: "Videos & demos", desc: "Product walkthroughs and tutorials you can send or embed in your outreach." },
   { title: "Custom content on request", desc: "Need a specific deck, landing page or demo environment for your strategy? Ask — we build it with you." },
 ];
+
+function Check({ children }: { children: string }) {
+  return (
+    <li className="flex items-start gap-2.5 text-sm leading-6 text-white/75">
+      <span className="mt-1 text-[#d7ff00]" aria-hidden="true">✓</span>
+      {children}
+    </li>
+  );
+}
 
 export default function CareersPage() {
   return (
@@ -156,14 +253,14 @@ export default function CareersPage() {
             Commission-Only Sales Opportunities
           </p>
           <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-semibold leading-tight tracking-tight">
-            Earn serious commission selling software that&apos;s already built, live and proving itself.
+            Find valuable business problems. Earn commission when we solve them.
           </h1>
           <p className="mt-5 max-w-[720px] text-lg leading-9 text-white/75">
-            We&apos;re recruiting commission-based salespeople for two ways to earn from one team:{" "}
-            <span className="text-white">T3 Labs</span> — custom software and workflow solutions for construction
-            businesses running on outdated, disjointed processes — and{" "}
-            <span className="text-white">QuoteCore+</span>, our multi-use quoting platform for contractors. Uncapped
-            commission. Your strategy, your proven formula — support and assets only if you want them.
+            T3 Labs builds practical digital solutions for businesses stuck with slow, manual, outdated or
+            disconnected ways of working — from website sales tools and workflow automation to AI, portals and
+            complete bespoke software. <span className="text-white">You find the opportunity. We scope, pitch and
+            build the solution.</span> You can also sell QuoteCore+, our live construction quoting platform, for
+            recurring monthly commission.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
@@ -185,38 +282,168 @@ export default function CareersPage() {
         </div>
       </section>
 
-      {/* Two products */}
+      {/* Two ways to earn */}
       <section className="border-b border-white/10">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">One team. Two ways to earn.</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
-            Every conversation can pay twice. A construction business buying a custom solution may employ contractors
-            who need proper quoting tools. A contractor on QuoteCore+ may surface a workflow problem that becomes a
-            custom build. You choose which door to open — or both.
+            Every conversation can pay twice. A business buying a custom solution may employ contractors who need
+            proper quoting tools; a contractor on QuoteCore+ may surface a workflow problem that becomes a custom
+            build.
           </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
-              <h3 className="text-lg font-semibold">T3 Labs — custom solutions, high-ticket projects</h3>
+              <h3 className="text-lg font-semibold">T3 Labs — find the problem, we build the solution</h3>
               <p className="mt-3 text-base leading-8 text-white/75">
-                We build custom software, AI integrations, portals and workflow systems for construction industry
-                businesses lagging behind on tech — teams stitching spreadsheets, Word docs, PDFs and separate apps
-                together just to get through the day. We replace that with one effective, cost-efficient solution that
-                helps them sell more of their own product or service while reducing their staff&apos;s workload — so
-                they scale without hiring. Projects start in the thousands; one closed referral can outweigh months
-                of small sales. Payment structures are flexible too: customers can pay more upfront with lower ongoing
-                monthly costs, or less upfront with higher monthly payments for an agreed period — so if capital risk
-                is the only thing blocking a sale, the deal can usually be shaped around the customer.
+                Find businesses with expensive, slow, manual, outdated or disconnected ways of working or selling.
+                T3 Labs figures out what should replace them — from websites and sales tools to complete software
+                platforms. High-ticket projects with flexible payment structures.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
               <h3 className="text-lg font-semibold">QuoteCore+ — recurring revenue</h3>
               <p className="mt-3 text-base leading-8 text-white/75">
                 A live, multi-use product already built and growing: takeoffs, quoting, ordering and invoicing for
-                roofing and construction contractors — one app, many workflows. Subscriptions recur monthly — your
-                commission does too, compounding as your base grows.
+                roofing and construction contractors. Subscriptions recur monthly — your commission does too,
+                compounding as your base grows.
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Problems worth listening for */}
+      <section id="sales-triggers" className="border-b border-white/10">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Problems worth listening for</h2>
+          <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+            Most prospects will not say, &ldquo;We need custom software.&rdquo; They will describe the problem
+            instead. If you hear any of these, there may be an opportunity:
+          </p>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            {salesTriggers.map((t) => (
+              <div key={t.quote} className="rounded-xl border border-white/10 bg-white/5 p-6">
+                <p className="font-semibold text-white">{t.quote}</p>
+                <p className="mt-2 text-sm leading-7 text-white/70">{t.signals}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Ask better questions */}
+      <section className="border-b border-white/10">
+        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            You don&rsquo;t need to pitch software. Ask better questions.
+          </h2>
+          <p className="mt-4 text-base leading-8 text-white/75">
+            A good T3 Labs lead often appears after only a few simple questions:
+          </p>
+          <ol className="mt-8 space-y-3">
+            {uncoverQuestions.map((q, i) => (
+              <li key={q} className="flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
+                <span className="text-sm font-bold text-[#d7ff00]">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-base leading-7 text-white/80">{q}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-8 rounded-xl border border-[#d7ff00]/30 bg-[#d7ff00]/5 p-6 text-base leading-8 text-white/85">
+            <strong className="text-white">You do not have to design the answer.</strong> If the problem is real and
+            valuable enough to solve, bring us into the conversation.
+          </p>
+        </div>
+      </section>
+
+      {/* What can you actually sell */}
+      <section id="what-we-build" className="border-b border-white/10">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">What can you actually sell through T3 Labs?</h2>
+          <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+            There is no fixed catalogue. These are examples of the kinds of problems we can solve — not the limit of
+            what we can build.
+          </p>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {sellCategories.map((c) => (
+              <div key={c.title} className="rounded-xl border border-white/10 bg-white/5 p-6">
+                <h3 className="font-semibold">{c.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-white/70">{c.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Good lead / not a good lead */}
+      <section className="border-b border-white/10">
+        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">What does a good T3 Labs lead look like?</h2>
+          <div className="mt-8 grid gap-5 sm:grid-cols-3">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-6">
+              <h3 className="font-semibold">1. A real problem</h3>
+              <p className="mt-2 text-sm leading-7 text-white/70">
+                Something slow, manual, expensive, repetitive, outdated, disconnected, difficult for customers, or
+                limiting growth.
+              </p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-6">
+              <h3 className="font-semibold">2. It matters financially</h3>
+              <p className="mt-2 text-sm leading-7 text-white/70">
+                It consumes staff time, delays quotes or orders, loses enquiries, requires extra hiring, creates
+                mistakes, or restricts sales.
+              </p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-6">
+              <h3 className="font-semibold">3. Someone wants it fixed</h3>
+              <p className="mt-2 text-sm leading-7 text-white/70">
+                They don&rsquo;t need to know the technical answer — just that the current process costs them enough
+                to make solving it worthwhile.
+              </p>
+            </div>
+          </div>
+          <div className="mt-8 rounded-xl border border-white/10 p-6">
+            <h3 className="font-semibold">Not every problem needs custom software</h3>
+            <p className="mt-2 text-sm leading-7 text-white/70">
+              Poor-fit leads: someone with only an idea and no real business problem; a tiny inconvenience with
+              little commercial value; no budget and no value case; a request to clone a huge platform for almost
+              nothing; or no one who owns the problem or makes decisions. Qualify first — quality beats volume.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Your job vs T3 Labs' job */}
+      <section className="border-b border-white/10">
+        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            Your job is to find the opportunity — not design the software
+          </h2>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-7">
+              <h3 className="text-lg font-semibold">You</h3>
+              <ul className="mt-4 space-y-2.5">
+                <Check>Identify the business</Check>
+                <Check>Recognise the problem</Check>
+                <Check>Ask enough questions to understand why it matters</Check>
+                <Check>Get the right decision-maker into the conversation</Check>
+                <Check>Make the introduction and help move the opportunity forward</Check>
+              </ul>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-7">
+              <h3 className="text-lg font-semibold">T3 Labs</h3>
+              <ul className="mt-4 space-y-2.5">
+                <Check>Investigates the workflow</Check>
+                <Check>Works out what should be built</Check>
+                <Check>Scopes the project and handles technical questions</Check>
+                <Check>Presents and prices the solution</Check>
+                <Check>Builds and supports it</Check>
+              </ul>
+            </div>
+          </div>
+          <p className="mt-6 text-base leading-8 text-white/85">
+            <strong className="text-white">You do not need a technical background.</strong> You need commercial
+            awareness and the ability to recognise expensive problems.
+          </p>
         </div>
       </section>
 
@@ -236,10 +463,7 @@ export default function CareersPage() {
                 <p className="mt-3 text-base leading-8 text-white/75">{r.summary}</p>
                 <ul className="mt-5 grid gap-2 sm:grid-cols-2">
                   {r.points.map((pt) => (
-                    <li key={pt} className="flex items-start gap-2.5 text-sm leading-6 text-white/75">
-                      <span className="mt-1 text-[#d7ff00]" aria-hidden="true">✓</span>
-                      {pt}
-                    </li>
+                    <Check key={pt}>{pt}</Check>
                   ))}
                 </ul>
               </div>
@@ -251,11 +475,11 @@ export default function CareersPage() {
       {/* Support */}
       <section className="border-b border-white/10">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">You don&apos;t get paid unless we get paid</h2>
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">You don&rsquo;t get paid unless we get paid</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
-            That&apos;s the whole model — so making you effective is our problem too. But none of this boxes you in.
+            That&rsquo;s the whole model — so making you effective is our problem too. But none of this boxes you in.
             If you have your own strategy and a proven formula, run it your way. Everything below is optional — take
-            what helps, ignore what doesn&apos;t. All that matters is that you&apos;re effective and you sell:
+            what helps, ignore what doesn&rsquo;t. All that matters is that you&rsquo;re effective and you sell:
           </p>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">
             {[
