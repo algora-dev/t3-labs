@@ -21,7 +21,7 @@ function Header() {
         <div className="flex items-center gap-3">
           {headerLogo ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={headerLogo} alt={config.name} className="h-9 w-auto object-contain" onError={e => { if (config.logoUrl && e.target instanceof HTMLImageElement && e.target.src !== config.logoUrl) e.target.src = config.logoUrl; }} />
+            <img src={headerLogo} alt={config.name} className="h-[72px] w-auto object-contain" onError={e => { if (config.logoUrl && e.target instanceof HTMLImageElement && e.target.src !== config.logoUrl) e.target.src = config.logoUrl; }} />
           ) : (
             <span
               className="flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold"
