@@ -62,7 +62,7 @@ const faqs = [
   },
   {
     q: "How do I apply?",
-    a: "Email insights@t3labs.co.uk or book a call with a short note about which role fits you, your network, and how you would approach selling. We respond to every genuine application.",
+    a: "Email cece@t3labs.co.uk or book a call with a short note about which role fits you, your network, and how you would approach selling. We respond to every genuine application.",
   },
 ];
 
@@ -173,6 +173,7 @@ const sellCategories = [
 const roles = [
   {
     tag: "Role 1 · High-ticket deals",
+    key: "role-1",
     title: "Custom Solutions Sales - T3 Labs",
     summary:
       "Find construction and trade businesses stuck on outdated, disjointed processes - who need custom software, portals, integrations or workflow automation, and refer them to us. Projects start in the thousands - one closed deal can outweigh months of small sales.",
@@ -186,7 +187,8 @@ const roles = [
   },
   {
     tag: "Role 2 · Recurring revenue",
-    title: "SaaS Subscription Sales - QuoteCore+",
+    key: "role-2",
+    title: <>SaaS Subscription Sales - <a href="https://quote-core.com/careers" className="underline decoration-[#d7ff00]/60 underline-offset-2 transition hover:text-[#d7ff00]">QuoteCore+</a></>,
     summary:
       "Sell QuoteCore+ subscriptions to roofing and construction contractors - our live, multi-use quoting and takeoff platform. Every paying customer pays you a share of their subscription, every month they stay.",
     points: [
@@ -198,7 +200,8 @@ const roles = [
   },
   {
     tag: "Role 3 · Best of both",
-    title: "Hybrid Sales - T3 Labs + QuoteCore+",
+    key: "role-3",
+    title: <>Hybrid Sales - T3 Labs + <a href="https://quote-core.com/careers" className="underline decoration-[#d7ff00]/60 underline-offset-2 transition hover:text-[#d7ff00]">QuoteCore+</a></>,
     summary:
       "Sell both. Business software conversations reveal contractors who need quoting tools; contractor conversations surface workflow problems that become custom builds. Hybrid sellers earn big one-off commissions plus recurring income.",
     points: [
@@ -248,7 +251,7 @@ export default function CareersPage() {
 
       {/* Hero */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-20 sm:py-24">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-20 sm:py-24">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-[#d7ff00]">
             Commission-Only Sales Opportunities
           </p>
@@ -267,7 +270,7 @@ export default function CareersPage() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="mt-4 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d7ff00]" aria-hidden="true"></span>
-                <span><span className="text-white">QuoteCore+</span> - our multi-use quoting platform for contractors.</span>
+                <span><a href="https://quote-core.com/careers" className="text-white underline decoration-[#d7ff00]/60 underline-offset-2 transition hover:text-[#d7ff00]">QuoteCore+</a> - our multi-use quoting platform for contractors.</span>
               </li>
             </ul>
             <p className="mt-4 text-lg leading-9 text-white/75">
@@ -280,13 +283,13 @@ export default function CareersPage() {
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
-              href="mailto:insights@t3labs.co.uk"
+              href="mailto:cece@t3labs.co.uk"
               className="inline-flex items-center gap-2 rounded-full bg-[#d7ff00] px-7 py-3.5 text-sm font-semibold text-[#0a0b10] transition hover:bg-[#b8dd00]"
             >
               Apply now <span aria-hidden="true">&rarr;</span>
             </a>
             <a
-              href="https://calendly.com/cece-t3labs/20min"
+              href="https://calendly.com/cece-t3labs/interview"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-semibold text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]"
@@ -300,7 +303,7 @@ export default function CareersPage() {
 
       {/* Two ways to earn */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Multiple ways to earn</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
             Earn from high-ticket custom projects, recurring subscriptions, or both at once.
@@ -315,7 +318,7 @@ export default function CareersPage() {
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-7">
-              <h3 className="text-lg font-semibold">QuoteCore+ - recurring revenue</h3>
+              <h3 className="text-lg font-semibold"><a href="https://quote-core.com/careers" className="underline decoration-[#d7ff00]/60 underline-offset-2 transition hover:text-[#d7ff00]">QuoteCore+</a> - recurring revenue</h3>
               <p className="mt-3 text-base leading-8 text-white/75">
                 A live, multi-use product already built and growing: takeoffs, quoting, ordering and invoicing for
                 roofing and construction contractors. Subscriptions recur monthly - your commission does too,
@@ -347,7 +350,7 @@ export default function CareersPage() {
 
       {/* Ask better questions */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             You don&rsquo;t need to pitch software. Ask better questions.
           </h2>
@@ -390,7 +393,7 @@ export default function CareersPage() {
 
       {/* Good lead / not a good lead */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">What does a good T3 Labs lead look like?</h2>
           <div className="mt-8 grid gap-5 sm:grid-cols-3">
             <div className="rounded-xl border border-white/10 bg-white/5 p-6">
@@ -428,7 +431,7 @@ export default function CareersPage() {
 
       {/* How one deal can pay twice - example */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">How one deal can pay twice</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
             An example of the hybrid opportunity:
@@ -438,7 +441,7 @@ export default function CareersPage() {
               Picture a construction supplies business with multiple stores or branches. T3 Labs builds them tools
               that help their customers buy more of their products while cutting the time their staff spend on
               quotes and admin - a high-ticket project that earns your commission on its own. Their trade customers
-              can also use QuoteCore+ for their own quoting, which is recurring commission for you. The business
+              can also use <a href="https://quote-core.com/careers" className="underline decoration-[#d7ff00]/60 underline-offset-2 hover:text-[#d7ff00]">QuoteCore+</a> for their own quoting, which is recurring commission for you. The business
               loses nothing by their customers using our app, and you earn on both sides of the relationship.
             </p>
           </div>
@@ -447,7 +450,7 @@ export default function CareersPage() {
 
       {/* Your job vs T3 Labs' job */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             Your job is to find the opportunity - not design the software
           </h2>
@@ -482,7 +485,7 @@ export default function CareersPage() {
 
       {/* Roles */}
       <section id="roles" className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">The roles</h2>
           <p className="mt-4 text-base leading-8 text-white/75">
             Three ways in - same products, different strategies. Pick the one that fits your network and how you like
@@ -490,7 +493,7 @@ export default function CareersPage() {
           </p>
           <div className="mt-10 space-y-5">
             {roles.map((r) => (
-              <div key={r.title} className="rounded-xl border border-white/10 bg-white/5 p-7 transition hover:border-[#d7ff00]/40">
+              <div key={r.key} className="rounded-xl border border-white/10 bg-white/5 p-7 transition hover:border-[#d7ff00]/40">
                 <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#d7ff00]">{r.tag}</p>
                 <h3 className="mt-2 text-xl font-semibold">{r.title}</h3>
                 <p className="mt-3 text-base leading-8 text-white/75">{r.summary}</p>
@@ -507,7 +510,7 @@ export default function CareersPage() {
 
       {/* Support */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">You don&rsquo;t get paid unless we get paid</h2>
           <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
             We only earn when you earn, so helping you sell effectively matters to us as much as it matters to
@@ -535,7 +538,7 @@ export default function CareersPage() {
 
       {/* Assets */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">A lot is already built - and we build the rest</h2>
           <p className="mt-4 text-base leading-8 text-white/75">
             We have already built a range of tools, calculators and live products that showcase how we solve
@@ -556,7 +559,7 @@ export default function CareersPage() {
 
       {/* How it works */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">How it works</h2>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
             {[
@@ -576,7 +579,7 @@ export default function CareersPage() {
 
       {/* FAQ */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Common questions</h2>
           <div className="mt-8 divide-y divide-white/10 rounded-xl border border-white/10 bg-white/5">
             {faqs.map((f) => (
@@ -594,7 +597,7 @@ export default function CareersPage() {
 
       {/* Apply CTA */}
       <section className="border-b border-white/10">
-        <div className="mx-auto w-[min(880px,calc(100%-40px))] py-16 text-center">
+        <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16 text-center">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Apply</h2>
           <p className="mx-auto mt-4 max-w-[620px] text-base leading-8 text-white/75">
             Email us a short note about which role fits you, your network, and how you would approach selling. We
@@ -602,18 +605,18 @@ export default function CareersPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
-              href="mailto:insights@t3labs.co.uk"
+              href="mailto:cece@t3labs.co.uk"
               className="inline-flex items-center gap-2 rounded-full bg-[#d7ff00] px-7 py-3.5 text-sm font-semibold text-[#0a0b10] transition hover:bg-[#b8dd00]"
             >
-              Email insights@t3labs.co.uk <span aria-hidden="true">&rarr;</span>
+              Apply now <span aria-hidden="true">&rarr;</span>
             </a>
             <a
-              href="https://calendly.com/cece-t3labs/20min"
+              href="https://calendly.com/cece-t3labs/interview"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-semibold text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]"
             >
-              Book a discovery call
+              Book a call
             </a>
           </div>
           <p className="mt-10 text-xs leading-5 text-white/40">
