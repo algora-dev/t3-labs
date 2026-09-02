@@ -417,8 +417,9 @@ export default function CareersPage() {
                     Free tools hub <span aria-hidden="true">&rarr;</span>
                   </p>
                   <p className="mt-2 text-sm leading-7 text-white/70">
-                    A suite of calculators, quote and invoice generators and a takeoff builder - live, in use and
-                    working as lead magnets for QuoteCore+.
+                    Custom measuring and estimating tools that let users quantify materials on real drawings, then
+                    turn those quantities into prices using specific products - alongside calculators, generators
+                    and a full takeoff builder. Live, in use and pulling in leads for QuoteCore+.
                   </p>
                 </div>
               </a>
