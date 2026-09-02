@@ -388,6 +388,66 @@ export default function CareersPage() {
               </div>
             ))}
           </div>
+
+          {/* Built examples */}
+          <div className="mt-16 border-t border-white/10 pt-12">
+            <h3 className="text-2xl font-semibold tracking-tight">Examples of things we&rsquo;ve built already</h3>
+            <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+              A small snippet of what we&rsquo;re building and what we can build. The scope is far broader than any
+              list of tools - the work is really about solving the problem in front of us. But we are very good at
+              building tools like these:
+            </p>
+            <div className="mt-8 grid gap-5 sm:grid-cols-2">
+              <a
+                href="https://quote-core.com/free-tools"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group overflow-hidden rounded-xl border border-white/10 bg-white/5 transition hover:border-[#d7ff00]/40"
+              >
+                <img
+                  src="/assets/careers/free-tools-hub.png"
+                  alt="QuoteCore+ free tools hub - calculators, generators and a takeoff builder"
+                  width={1554}
+                  height={1367}
+                  loading="lazy"
+                  className="aspect-[16/10] w-full border-b border-white/10 object-cover object-top"
+                />
+                <div className="p-6">
+                  <p className="font-semibold text-white group-hover:text-[#d7ff00]">
+                    Free tools hub <span aria-hidden="true">&rarr;</span>
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-white/70">
+                    A suite of calculators, quote and invoice generators and a takeoff builder - live, in use and
+                    working as lead magnets for QuoteCore+.
+                  </p>
+                </div>
+              </a>
+              <a
+                href="https://www.t3labs.tech/supplier-pricing-tool/burton-roofing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group overflow-hidden rounded-xl border border-white/10 bg-white/5 transition hover:border-[#d7ff00]/40"
+              >
+                <img
+                  src="/assets/careers/supplier-pricing-tool.png"
+                  alt="Branded supplier pricing tool demo built for Burton Roofing"
+                  width={1554}
+                  height={1367}
+                  loading="lazy"
+                  className="aspect-[16/10] w-full border-b border-white/10 object-cover object-top"
+                />
+                <div className="p-6">
+                  <p className="font-semibold text-white group-hover:text-[#d7ff00]">
+                    Branded supplier pricing tool <span aria-hidden="true">&rarr;</span>
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-white/70">
+                    A custom, supplier-branded pricing tool built on a real roofing catalogue - an example of the
+                    interactive sales tools we build for businesses.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
