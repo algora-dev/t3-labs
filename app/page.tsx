@@ -188,7 +188,9 @@ export default function Home() {
 
       <main id="top">
         <AnimatedHero onCtaClick={openIntake} />
-        <T3OutcomeAnimation />
+        <div className="mb-[104px]">
+          <T3OutcomeAnimation />
+        </div>
         <IntroStrip />
         <WorkSection />
         <AIServicesSection />
