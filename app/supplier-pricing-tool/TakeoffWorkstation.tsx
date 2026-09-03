@@ -337,7 +337,7 @@ export function TakeoffWorkstation({
   const [pages, setPages] = useState<Array<{ id?: string; url: string; name: string; order: number }>>(
     initialPageId
       ? [{ id: initialPageId, url: planUrl, name: initialPageName || 'New Area', order: 1 }]
-      : [{ url: planUrl, name: 'Plan 1', order: 1 }]
+      : [{ id: 'page-local-1', url: planUrl, name: 'Plan 1', order: 1 }]
   );
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   // P1-3: tracks the quote_roof_areas DB ID to route component measurements
@@ -463,9 +463,66 @@ export function TakeoffWorkstation({
   // Fix #3: sub-tool selection for line mode: 'single' (2-point line) or
   // 'multi' (N-point polyline, formerly the standalone Multi-Line button).
   const [lineSubTool, setLineSubTool] = useState<'single' | 'multi'>('single');
+  // Length x Height toolbar mode (supplier tool): forces the multi-point
+  // chain and prompts for the height at Finish - the measurement is stored
+  // as length x height in m2. Mirrors the app's multi_lineal_lxh_freestyle
+  // component behaviour but toolbar-driven so ANY selected component can be
+  // measured this way (wall runs from a floor plan).
+  const [lineHeightMode, setLineHeightMode] = useState(false);
+  const lineHeightModeRef = useRef(false);
+  // GENERIC TRADES: the Area button opens a 4-option dropdown instead of
+  // arming polygon directly: Polygon / Rectangle / Length x Height single /
+  // Length x Height multi (LxH produces m2 - it IS an area method).
+  const [showAreaDropdown, setShowAreaDropdown] = useState(false);
+  /** Arm an area-tool variant from the dropdown (generic trades). */
+  const armAreaVariant = (variant: 'polygon' | 'rect' | 'lxh-single' | 'lxh-multi') => {
+    // Transition out of any active drawing cleanly
+    if (multiLinealMode) handleCancelMultiLineal();
+    cleanupBoxDrag();
+    discardInProgressDrawing();
+    setShowAreaDropdown(false);
+    if (variant === 'polygon' || variant === 'rect') {
+      setLineHeightMode(false);
+      lineHeightModeRef.current = false;
+      setLineMode(false);
+      setMultiLinealMode(false);
+      setPointMode(false);
+      setAreaMode(true);
+      setAreaSubTool(variant);
+      setAreaPoints([]);
+    } else {
+      // Length x Height: line gesture, height prompt at the end,
+      // committed as m2 onto the selected component.
+      setAreaMode(false);
+      setPointMode(false);
+      setLineHeightMode(true);
+      lineHeightModeRef.current = true;
+      if (variant === 'lxh-single') {
+        setLineSubTool('single');
+        setLineMode(true);
+        setMultiLinealMode(false);
+        setMultiLinealPoints([]);
+        setMultiLinealSegmentObjects([]);
+        setLinePoints([]);
+      } else {
+        setLineSubTool('multi');
+        setLineMode(false);
+        setLinePoints([]);
+        setMultiLinealMode(true);
+      }
+    }
+  };
   const [areaPoints, setAreaPoints] = useState<{ x: number; y: number }[]>([]);
   const [_tempAreaPolygon, _setTempAreaPolygon] = useState<any>(null);
   const [showAreaNamePrompt, setShowAreaNamePrompt] = useState(false);
+  // GENERIC TRADES (cladding / flooring): name-only buckets - the "New Area"
+  // button opens this prompt instead of arming polygon drawing. Buckets
+  // carry no geometry; components attached to them do the measuring.
+  const [showBucketNamePrompt, setShowBucketNamePrompt] = useState(false);
+  const [bucketNameInput, setBucketNameInput] = useState('');
+  // Upload-another-plan -> new area: the file is stashed while the user
+  // names the bucket; the bucket prompt attaches the plan as its first page.
+  const [pendingNewAreaPlanFile, setPendingNewAreaPlanFile] = useState<File | null>(null);
   // P1-1b new-page mode: pitch-only prompt after drawing the first area boundary.
   // Bypasses AreaNameModal entirely so the name never has to be re-typed.
   const [showPitchOnlyPrompt, setShowPitchOnlyPrompt] = useState(false);
@@ -1476,6 +1533,20 @@ export function TakeoffWorkstation({
       });
       return;
     }
+    // GENERIC TRADES: buckets are name-only - prompt for a name, no drawing.
+    // Once at least one bucket exists, show the same choice as roofing:
+    // attach to an existing system or create a new one.
+    if (!tradeConfig.pitchRequired) {
+      if (areaList.length === 0) {
+        setBucketNameInput('');
+        setShowBucketNamePrompt(true);
+        return;
+      }
+      setNewAreaChoice('existing');
+      setNewAreaExistingId(activeAreaId ?? areaList[0]?.id ?? '');
+      setShowNewAreaChoiceModal(true);
+      return;
+    }
     // RULE: "+ New Area" always deselects any active component so the
     // drawn polygon is routed as a roof area, not a component measurement.
     // RC-2 fix (2026-07-05): do NOT clear activeComponentIds here - that wiped
@@ -1506,6 +1577,81 @@ export function TakeoffWorkstation({
     setShowNewAreaChoiceModal(true);
   }, [areaList]);
 
+  /** Add an uploaded plan as a new page under an area, switch to it and
+   *  force recalibration. Switches the AREA through handleSwitchArea first
+   *  (caches the outgoing bucket's measurements, restores the target) so the
+   *  new plan's area never takes over existing areas. */
+  const attachPlanToArea = async (file: File, areaId: string | null) => {
+    const url = URL.createObjectURL(file);
+    const newPageId = `page-${Date.now()}`;
+    setPages(prev => [...prev, {
+      id: newPageId,
+      url,
+      name: file.name || `Plan ${prev.length + 1}`,
+      order: prev.length + 1,
+    }]);
+    if (areaId) {
+      setAreaPages(prev => ({
+        ...prev,
+        [areaId]: [...(prev[areaId] ?? []), newPageId],
+      }));
+    }
+    const switchTo = pages.length; // index of the page we just appended
+    setTimeout(async () => {
+      if (areaId && areaId !== activeAreaIdRef.current) {
+        try { await handleSwitchArea(areaId); } catch { /* best-effort */ }
+      }
+      setCurrentPageIndex(switchTo);
+      setPageBackgroundImage(url);
+      setCalibrations([]);
+      setCalibrationPoints([]);
+      setCalibrationConfirmed(false);
+      setCalibrationMode(true);
+      setShowCalibrationHelp(true);
+      setAreaMode(false);
+      setLineMode(false);
+      setPointMode(false);
+      setMultiLinealMode(false);
+      setAreaPoints([]);
+      setLinePoints([]);
+      setMultiLinealPoints([]);
+      setMultiLinealSegmentObjects([]);
+      setRedrawNonce(n => n + 1);
+    }, 80);
+  };
+
+  // GENERIC TRADES: create a name-only bucket. No polygon, no pitch - the
+  // bucket just names the system ("Cedar Cladding"); components attached
+  // to it carry the measurements. Becomes the active area (via a proper
+  // switch) so new measurements stamp to it. When a plan upload is pending,
+  // the plan attaches to this bucket as its first page.
+  const handleSaveBucket = () => {
+    const name = bucketNameInput.trim();
+    if (!name) return;
+    const areaId = `area-${Date.now()}`;
+    setRoofAreas(prev => [...prev, {
+      id: areaId,
+      name,
+      points: [],
+      area: 0,
+      pitch: 0,
+      visible: true,
+      markers: [],
+      quoteRoofAreaId: null,
+      fromPageId: currentPageIdRef.current,
+    }]);
+    setAreaList(prev => [...prev, { id: areaId, label: name }]);
+    setShowBucketNamePrompt(false);
+    setBucketNameInput('');
+    const file = pendingNewAreaPlanFile;
+    setPendingNewAreaPlanFile(null);
+    if (file) {
+      void attachPlanToArea(file, areaId);
+    } else {
+      setTimeout(() => { void handleSwitchArea(areaId); }, 60);
+    }
+  };
+
   // Phase 6: confirm the choice modal → arm drawing mode
   const handleConfirmNewAreaChoice = () => {
     // Defensive: clear component selection again (in case state didn't flush yet)
@@ -1513,6 +1659,20 @@ export function TakeoffWorkstation({
     setSelectedComponentId(null);
     activeAreaComponentIdRef.current = null;
     setPendingComponentId(null);
+
+    // GENERIC TRADES: no drawing - switch to the chosen existing bucket, or
+    // open the name prompt for a new one.
+    if (!tradeConfig.pitchRequired) {
+      if (newAreaChoice === 'existing' && newAreaExistingId) {
+        void handleSwitchArea(newAreaExistingId);
+      } else {
+        setBucketNameInput('');
+        setShowBucketNamePrompt(true);
+      }
+      setShowNewAreaChoiceModal(false);
+      return;
+    }
+
     // RC-5: mark this draw as authorised via the "+ New Area" flow.
     viaNewAreaFlowRef.current = true;
 
@@ -2277,7 +2437,8 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
     const compMeasType = (compForType?.measurement_type ?? compForType?.default_measurement_type) as string;
 
     // Freestyle: intercept multi_lineal_lxh_freestyle - show height prompt instead of committing.
-    if (compMeasType === 'multi_lineal_lxh_freestyle') {
+    // Also fires when the toolbar Length x Height mode is active (supplier tool).
+    if (compMeasType === 'multi_lineal_lxh_freestyle' || lineHeightModeRef.current) {
       const canvasObjs = [...multiLinealSegmentObjects];
       setPendingFreestyleLength(totalLength);
       setPendingFreestyleComponentId(compId);
@@ -3008,10 +3169,51 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
     });
   };
 
-  // DEMO: plan uploads are out of scope - the header button is disabled.
-  // Confirming just surfaces the demo notice.
+  // Upload another plan (supplier tool / generic trades): fully client-side.
+  // Stamps current drawings with the current page + caches its calibration,
+  // then either adds the plan to an existing bucket (proper area switch -
+  // never a master-area takeover) or, for a NEW area, stashes the file and
+  // asks for the bucket name first (no filename-as-name).
   const handleConfirmSaveAndUploadAnother = async () => {
-    setUploadAnotherError('Uploads are not available in the demo - create a free account to upload your own plans.');
+    if (!uploadAnotherFile) {
+      setUploadAnotherError('Choose a plan image first.');
+      return;
+    }
+    setUploadAnotherError(null);
+    setIsUploadingPage(true);
+    try {
+      const currentPid = pages[currentPageIndex]?.id ?? null;
+      if (currentPid) {
+        setComponentMeasurements(prev => prev.map(c => ({
+          ...c,
+          measurements: c.measurements.map(m => m.fromPageId ? m : { ...m, fromPageId: currentPid }),
+        })));
+        if (calibrations.length > 0) {
+          pageCalibrationsRef.current.set(currentPid, calibrations.map(c => ({ ...c })));
+        }
+      }
+
+      if (uploadAnotherTarget === 'new') {
+        // Name-first: stash the plan, then the bucket prompt creates the
+        // bucket AND attaches this plan as its first page.
+        setPendingNewAreaPlanFile(uploadAnotherFile);
+        setShowUploadAnotherModal(false);
+        setUploadAnotherFile(null);
+        setUploadAnotherTarget('existing');
+        setBucketNameInput('');
+        setShowBucketNamePrompt(true);
+        return;
+      }
+
+      // 'existing': the plan becomes a numbered slot under the CHOSEN bucket.
+      const targetAreaId = uploadAnotherAreaId || activeAreaId;
+      await attachPlanToArea(uploadAnotherFile, targetAreaId);
+      setShowUploadAnotherModal(false);
+      setUploadAnotherFile(null);
+      setUploadAnotherTarget('existing');
+    } finally {
+      setIsUploadingPage(false);
+    }
   };
   // Calculate area using Shoelace formula
   const calculatePolygonArea = (points: { x: number; y: number }[]) => {
@@ -4702,6 +4904,14 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
       cached.roofAreas.forEach((ra: any) => pushArea(ra));
     });
     roofAreas.forEach(ra => pushArea(ra));
+    // GENERIC TRADES (supplier tool): buckets are name-only - their rows are
+    // never drawn polygons, so the fresh-area restore (setRoofAreas([]))
+    // wipes them from state/cache. Re-seed every sidebar bucket as a
+    // payload area so measurements resolve to their bucket (2026-09-02 fix:
+    // empty-bucket payload emptied the whole downstream flow).
+    if (!tradeConfig.pitchRequired) {
+      areaList.forEach(a => pushArea({ id: a.id, name: a.label, area: 0, pitch: 0, quoteRoofAreaId: null }));
+    }
 
     return {
     roofAreas: mergedRoofAreas,
@@ -4740,13 +4950,14 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
         <div className="bg-white border-b border-gray-200 px-2 md:px-6 py-2 md:py-3 flex items-center justify-between">
           <h1 className="text-xl font-semibold">{quote.customer_name} - Digital Takeoff</h1>
         <div className="flex items-center gap-2">
-          {/* P1-3: Save current takeoff + upload another plan image. */}
+          {/* P1-3: Save current takeoff + upload another plan image.
+              Generic trades (supplier tool): client-side multi-plan, enabled.
+              Roofing demo: uploads stay disabled (app-only). */}
           <button
             onClick={openSaveAndUploadAnotherPlan}
-            disabled
-            data-demo-disabled
+            disabled={!quoteIsGeneric || isSaving || isUploadingPage}
             className="px-3 py-2 bg-black hover:bg-slate-900 text-white rounded-full text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-[0_0_12px_rgba(1,43,57,0.45)]"
-            title="Uploads are not available in the demo - create a free account to upload your own plans"
+            title={quoteIsGeneric ? 'Add another plan or image to this takeoff' : 'Uploads are not available in the demo - create a free account to upload your own plans'}
           >
             {isSaving || isUploadingPage ? 'Saving…' : 'Upload another plan or image'}
           </button>
@@ -5021,15 +5232,17 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
               Click an area to switch the canvas + component list. */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-gray-900">{quoteIsGeneric ? 'Areas' : 'Roof Areas'}</h2>
+              <h2 className="text-sm font-bold text-gray-900">{tradeConfig.areaPluralLabel}</h2>
                 <button
                   onClick={handleCreateNewArea}
                   disabled={false}
                   className="inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_0_12px_rgba(37,99,235,0.45)] transition hover:bg-blue-700 animate-pulse"
                   title="Create a new area"
                 >
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-                  New Area
+                  {tradeConfig.pitchRequired && (
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                  )}
+                  {tradeConfig.pitchRequired ? 'New Area' : `+ ${tradeConfig.areaSingularLabel.replace(/s$/, '')} System`}
                 </button>
               </div>
               <div className="space-y-2">
@@ -5613,19 +5826,56 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
               >
                 {calibrationConfirmed ? 'Recalibrate' : 'Calibrate'}
               </button>
+              <div className="relative">
               <button
                 onClick={() => {
+                  // GENERIC TRADES: the Area button opens the variant dropdown
+                  // (Polygon / Rectangle / Length x Height single / multi).
+                  if (quoteIsGeneric) {
+                    if (!selectedComponentId) { showAlert('Select a component first', 'Pick a component from the list.', 'info'); return; }
+                    setShowAreaDropdown(v => !v);
+                    return;
+                  }
                   if (areaMode) { cleanupBoxDrag(); setAreaMode(false); setAreaPoints([]); }
                   else { setAreaMode(true); setLineMode(false); setPointMode(false); setMultiLinealMode(false); setMultiLinealPoints([]); setMultiLinealSegmentObjects([]); setAreaPoints([]); }
                 }}
                 disabled={calibrationMode || calibrations.length === 0}
                 data-copilot="takeoff-tool-area"
                 className={`px-3 py-2 rounded-full text-sm disabled:opacity-50 disabled:cursor-not-allowed ${
-                  areaMode ? 'bg-blue-100 border border-blue-500 text-blue-700' : 'bg-gray-100 hover:bg-gray-200 border-2 border-transparent'
+                  (areaMode || showAreaDropdown || (lineHeightMode && (lineMode || multiLinealMode))) ? 'bg-blue-100 border border-blue-500 text-blue-700' : 'bg-gray-100 hover:bg-gray-200 border-2 border-transparent'
                 }`}
-                title={calibrations.length === 0 ? 'Calibrate first' : 'Measure roof area'}
+                title={calibrations.length === 0 ? 'Calibrate first' : 'Measure area'}
               >Area</button>
-              {areaMode && (
+              {/* Generic trades: 4-option area dropdown (opens on Area click) */}
+              {showAreaDropdown && quoteIsGeneric && (
+                <div className="absolute left-0 top-full mt-1 z-50 w-64 rounded-xl border border-gray-200 bg-white shadow-lg p-1">
+                  <button onClick={() => armAreaVariant('polygon')} className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
+                    Polygon
+                    <span className="block text-xs text-gray-400">Point by point, click first point to close</span>
+                  </button>
+                  <button onClick={() => armAreaVariant('rect')} className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
+                    Rectangle
+                    <span className="block text-xs text-gray-400">Click and drag to create a box</span>
+                  </button>
+                  <button onClick={() => armAreaVariant('lxh-single')} className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
+                    Length × Height - single
+                    <span className="block text-xs text-gray-400">One run, height at the end (m²)</span>
+                  </button>
+                  <button onClick={() => armAreaVariant('lxh-multi')} className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
+                    Length × Height - multi
+                    <span className="block text-xs text-gray-400">Chain of points × height at the end (m²)</span>
+                  </button>
+                  {(areaMode || ((lineMode || multiLinealMode))) && (
+                    <button onClick={() => { if (multiLinealMode) handleCancelMultiLineal(); cleanupBoxDrag(); setAreaMode(false); setLineMode(false); setMultiLinealMode(false); setAreaPoints([]); setLinePoints([]); setLineHeightMode(false); lineHeightModeRef.current = false; setShowAreaDropdown(false); }}
+                      className="w-full text-left px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-50 transition">
+                      Cancel area measurement
+                    </button>
+                  )}
+                </div>
+              )}
+              </div>
+              {/* Roofing keeps the classic Polygon/Rectangle pills */}
+              {areaMode && !quoteIsGeneric && (
                 <div className="flex items-center rounded-full bg-gray-100 p-0.5">
                   <button onClick={() => { cleanupBoxDrag(); setAreaSubTool('polygon'); setAreaPoints([]); }}
                     className={`px-2 py-1 rounded-full text-xs font-medium ${areaSubTool === 'polygon' ? 'bg-slate-900 text-white' : 'text-gray-500 hover:text-gray-700'}`}
@@ -5652,21 +5902,29 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
               <button
                 onClick={() => {
                   const isActive = lineMode || multiLinealMode;
-                  if (isActive) { if (multiLinealMode) handleCancelMultiLineal(); cleanupBoxDrag(); setLineMode(false); setMultiLinealMode(false); setLinePoints([]); return; }
+                  if (isActive) {
+                    if (multiLinealMode) handleCancelMultiLineal();
+                    cleanupBoxDrag();
+                    setLineMode(false); setMultiLinealMode(false); setLinePoints([]);
+                    setLineHeightMode(false); lineHeightModeRef.current = false;
+                    return;
+                  }
                   if (!quoteIsGeneric) { const h = roofAreas.length > 0 && roofAreas.some(a => a.pitch > 0); if (!h) { showAlert('Roof area required', 'Create a roof area with pitch first.', 'info'); return; } }
                   if (!selectedComponentId) { showAlert('Select a component first', 'Pick a component from the list.', 'info'); return; }
-                  cleanupBoxDrag(); setAreaMode(false); setPointMode(false);
+                  cleanupBoxDrag(); setAreaMode(false); setPointMode(false); setShowAreaDropdown(false);
                   if (lineSubTool === 'multi') { setMultiLinealMode(true); setLineMode(false); setLinePoints([]); }
                   else { setLineMode(true); setMultiLinealMode(false); setMultiLinealPoints([]); setMultiLinealSegmentObjects([]); setLinePoints([]); }
                 }}
                 disabled={calibrationMode || calibrations.length === 0 || (!quoteIsGeneric && (roofAreas.length === 0 || !roofAreas.some(a => a.pitch > 0)))}
                 data-copilot="takeoff-tool-line"
                 className={`px-3 py-2 rounded-full text-sm disabled:opacity-50 disabled:cursor-not-allowed ${
-                  (lineMode || multiLinealMode) ? 'bg-blue-100 border border-blue-500 text-blue-700' : 'bg-gray-100 hover:bg-gray-200 border-2 border-transparent'
+                  (lineMode || multiLinealMode) && !lineHeightMode ? 'bg-blue-100 border border-blue-500 text-blue-700' : 'bg-gray-100 hover:bg-gray-200 border-2 border-transparent'
                 }`}
-                title="Measure line or polyline"
+                title="Measure length (point to point or multi-point)"
               >Line</button>
-              {(lineMode || multiLinealMode) && (
+              {/* Lengths only - Single/Multi pills (both trades; hidden while a
+                  Length x Height variant from the Area dropdown is active) */}
+              {(lineMode || multiLinealMode) && !lineHeightMode && (
                 <div className="flex items-center rounded-full bg-gray-100 p-0.5">
                   <button onClick={() => { setLineSubTool('single'); if (multiLinealMode) { handleCancelMultiLineal(); setLineMode(true); } }}
                     className={`px-2 py-1 rounded-full text-xs font-medium ${lineSubTool === 'single' ? 'bg-slate-900 text-white' : 'text-gray-500 hover:text-gray-700'}`}
@@ -6142,6 +6400,35 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
         </div>
       )}
 
+      {/* GENERIC TRADES: name-only bucket prompt (no drawing) */}
+      {showBucketNamePrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+            <div className="p-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-1">New {(quote as { trade?: string }).trade === 'flooring' ? 'Floor' : 'Wall'} System</h2>
+              <p className="text-sm text-slate-500 mb-4">
+                Name the system {(quote as { trade?: string }).trade === 'flooring' ? '(e.g. Hybrid Flooring, Tiles)' : '(e.g. Cedar Cladding, Plasterboard)'}. Components and measurements attach to it; products get applied to the components at the next step.
+              </p>
+              <input
+                autoFocus
+                value={bucketNameInput}
+                onChange={e => setBucketNameInput(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') handleSaveBucket();
+                  if (e.key === 'Escape') setShowBucketNamePrompt(false);
+                }}
+                placeholder={(quote as { trade?: string }).trade === 'flooring' ? 'e.g. Hybrid Flooring, Tiles' : 'e.g. Cedar Cladding, Render'}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              />
+              <div className="mt-4 flex justify-end gap-2">
+                <button onClick={() => setShowBucketNamePrompt(false)} className="rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:border-slate-400 transition">Cancel</button>
+                <button onClick={handleSaveBucket} disabled={!bucketNameInput.trim()} className="rounded-full bg-black px-5 py-2 text-sm font-semibold text-white hover:bg-slate-800 transition disabled:opacity-40">Create</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Area Name Prompt */}
       {showAreaNamePrompt && (
         <AreaNameModal
@@ -6327,7 +6614,7 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
 
             // Freestyle intercept: length_x_height_freestyle - show height prompt.
             const selectedComp = components.find(c => c.id === selectedComponentId);
-            if ((selectedComp?.measurement_type as string) === 'length_x_height_freestyle') {
+            if ((selectedComp?.measurement_type as string) === 'length_x_height_freestyle' || lineHeightModeRef.current) {
               const objects = fabricRef.current?.getObjects() || [];
               const canvasObjs = objects.slice(-3);
               setPendingFreestyleLength(pendingLineMeasurement.length);

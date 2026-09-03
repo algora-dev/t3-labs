@@ -5,7 +5,11 @@
 // The tool components never change - everything renders from the def.
 
 import { BURTON_ROOFING } from './burton-roofing';
+import { VERTEX_CLADDING } from './vertex-cladding';
+import { OAKLINE_FLOORING } from './oakline-flooring';
+import { APEX_ROOFING } from './apex-roofing';
 import type { SupplierProduct } from '../types';
+import type { Trade } from '../tradeConfig';
 
 /** Theme palette that drives the scoped CSS remap in the tool shell. */
 export interface SupplierTheme {
@@ -21,8 +25,15 @@ export interface SupplierTheme {
 
 export interface SupplierDefinition {
   slug: string;
+  /** which trade this instance serves - drives the flow model
+   *  (roofing = groups + placeholder components, cladding/flooring =
+   *  parent areas). Defaults to roofing when omitted. */
+  trade?: Trade;
   name: string;
   tagline: string;
+  /** demo instance - shows "(demo)" labelling so nobody mistakes it for a
+   *  real company. All current suppliers in this tool are demos. */
+  demo?: boolean;
   currency: string;
   logoUrl: string | null;
   logoDarkUrl: string | null;
@@ -50,7 +61,10 @@ export interface SupplierDefinition {
 }
 
 export const SUPPLIER_DEFS: SupplierDefinition[] = [
+  APEX_ROOFING as unknown as SupplierDefinition,
   BURTON_ROOFING as unknown as SupplierDefinition,
+  VERTEX_CLADDING as unknown as SupplierDefinition,
+  OAKLINE_FLOORING as unknown as SupplierDefinition,
 ];
 
 export const DEFAULT_SUPPLIER_SLUG = 'burton-roofing';

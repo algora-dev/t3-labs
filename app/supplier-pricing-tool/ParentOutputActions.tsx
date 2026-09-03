@@ -1,48 +1,68 @@
-// Output actions: convert-to-quote URL (free quote generator handoff),
-// supplier request / order request payloads (mailto MVP - no backend yet),
-// and the continue-in-app stub.
+// Output actions for parent-model trades: same end-of-flow options as the
+// roofing tool - Continue in QuoteCore+ (draft handoff), Convert to
+// customer quote (supplier quote builder), Request supplier quote, Send
+// order request, email-capture lead modal, and Start a new job.
 
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { MeasurementSet, SupplierProduct } from './types';
-import { priceOutput, fmt } from './pricing';
+import type { ParentJob, SupplierProduct, MeasurementSet, CustomComponent } from './types';
+import { PARENT_BASIS_UNIT } from './types';
+import { priceParentOutput } from './parentPricing';
 import { useSupplierConfig, addLead, toolUrls } from './supplierConfig';
 import { useFreeToolsAuth } from '../_components/FreeToolsAuthProvider';
-import { GROUP_DEFS, groupPitchedTotal, CUSTOM_BASIS_UNIT } from './types';
 import { SupplierEnquiryModal } from './SupplierEnquiryModal';
 
-/** Save the takeoff output as a draft quote handoff (areas + component groups
- *  with measured quantities and pitches). Component persistence is deliberately
- *  skipped - this tool prices supplier products, not user components. */
-async function saveDraftQuote(measureSet: MeasurementSet, draftsApi: string): Promise<string | null> {
+/** Convert-to-quote URL for the supplier quote builder (same contract as
+ *  the roofing flow's buildConvertToQuoteUrl). */
+export function buildParentConvertToQuoteUrl(job: ParentJob, catalog: SupplierProduct[]): string {
+  const output = priceParentOutput(job, catalog);
+  const lines = output.lines.map(l => ({
+    description: `${l.name} - ${l.bucketName} / ${l.componentName}`,
+    qty: Math.round(l.purchaseQty * 100) / 100,
+    unit: l.basisUnit,
+    rate: Math.round(l.unitPrice * 100) / 100,
+  }));
+  for (const c of output.customs) {
+    lines.push({
+      description: c.name,
+      qty: Math.round(c.quantity * 100) / 100,
+      unit: c.basis === 'area' ? 'm\u00B2' : c.basis === 'lineal' ? 'm' : 'ea',
+      rate: Math.round((c.unitPrice + c.labourRate) * 100) / 100,
+    });
+  }
+  const params = new URLSearchParams();
+  params.set('amount', (output.material + output.labour).toFixed(2));
+  if (lines.length > 0) params.set('lines', encodeURIComponent(JSON.stringify(lines)));
+  params.set('ref', 'supplier-pricing-tool');
+  return `/supplier-pricing-tool/quote?${params.toString()}`;
+}
+
+/** Save the parent-flow output as a takeoff draft (same shape the app
+ *  import expects): buckets -> roof areas, components -> component groups. */
+async function saveParentDraftQuote(job: ParentJob): Promise<string | null> {
   const payload = {
     tool: 'supplier-pricing-tool',
     unitSystem: 'metric' as const,
-    roofAreas: measureSet.groups.roofAreas.entries.map((a, i) => ({
-      id: a.id,
-      name: a.label || `Roof Area ${i + 1}`,
-      // plan area for pitch conversion in the app import; takeoff-measured
-      // areas are already pitched so the value passes through unchanged.
-      area: entryPlanArea(measureSet, a.id),
-      pitch: a.pitchDegrees ?? 0,
+    roofAreas: job.parents.map(b => {
+      const bucketArea = job.components
+        .filter(c => c.parentId === b.id && c.basis === 'area')
+        .reduce((s, c) => s + job.entries.filter(e => e.componentId === c.id)
+          .reduce((s2, e) => s2 + e.value * (e.quantity || 1), 0), 0);
+      return { id: b.id, name: b.name, area: bucketArea, pitch: 0 };
+    }),
+    componentGroups: job.components.map(c => ({
+      componentId: c.id,
+      name: c.name,
+      isSystem: true,
+      semantic: null,
+      count: job.entries.filter(e => e.componentId === c.id).length,
+      total: job.entries.filter(e => e.componentId === c.id)
+        .reduce((s, e) => s + e.value * (e.quantity || 1), 0),
+      measurementType: c.basis === 'point' ? 'quantity' : c.basis,
+      measurements: job.entries.filter(e => e.componentId === c.id)
+        .map(e => ({ value: e.value * (e.quantity || 1), quoteRoofAreaId: c.parentId })),
     })),
-    componentGroups: GROUP_DEFS
-      .filter(d => d.key !== 'roofAreas')
-      .flatMap(d => {
-        const entries = measureSet.groups[d.key].entries;
-        if (entries.length === 0) return [];
-        return [{
-          componentId: `g-${d.key}`,
-          name: d.label,
-          isSystem: true,
-          semantic: null,
-          count: entries.length,
-          total: groupPitchedTotal(measureSet, d.key),
-          measurementType: d.basis === 'count' ? 'quantity' : d.basis,
-          measurements: entries.map(e => ({ value: e.value * (e.quantity || 1), quoteRoofAreaId: null })),
-        }];
-      }),
     savedAt: new Date().toISOString(),
   };
   const res = await fetch('/api/free-tools/drafts', {
@@ -55,50 +75,63 @@ async function saveDraftQuote(measureSet: MeasurementSet, draftsApi: string): Pr
   return id;
 }
 
-/** Plan (pre-pitch) area of one roof-area entry, undoing the pitch factor. */
-function entryPlanArea(measureSet: MeasurementSet, entryId: string): number {
-  const e = measureSet.groups.roofAreas.entries.find(x => x.id === entryId);
-  if (!e) return 0;
-  return e.value * (e.quantity || 1);
-}
-export function buildConvertToQuoteUrl(measureSet: MeasurementSet, catalog: SupplierProduct[]): string {
-  const output = priceOutput(measureSet, catalog);
-  const lines = output.lines.map(l => ({
-    description: l.entryLabel ? `${l.name} (${l.entryLabel})` : l.name,
-    qty: Math.round(l.purchaseQty * 100) / 100,
-    unit: l.basisUnit,
-    rate: Math.round(l.unitPrice * 100) / 100,
-  }));
-  // custom components ride along as plain priced lines
-  for (const c of output.customs) {
-    lines.push({
-      description: c.name,
-      qty: Math.round(c.quantity * 100) / 100,
-      unit: CUSTOM_BASIS_UNIT[c.basis],
-      rate: Math.round((c.unitPrice + c.labourRate) * 100) / 100,
+/** Synthetic MeasurementSet so the shared enquiry modal renders parent-flow
+ *  lines without any changes: area components become roof-area entries,
+ *  lineal/point components + customs ride along as custom components. */
+function enquiryShim(job: ParentJob): MeasurementSet {
+  const customComponents: CustomComponent[] = [];
+  for (const c of job.components) {
+    if (c.basis === 'area') continue;
+    const qty = job.entries.filter(e => e.componentId === c.id)
+      .reduce((s, e) => s + e.value * (e.quantity || 1), 0);
+    const applied = job.applied.filter(a => a.componentId === c.id);
+    const rate = applied.length > 0
+      ? applied.reduce((s, a, i) => s + (i === 0 ? a.labourRate : 0), 0)
+      : 0;
+    customComponents.push({
+      id: c.id,
+      name: `${c.name} (${job.parents.find(b => b.id === c.parentId)?.name ?? ''})`.trim(),
+      basis: c.basis === 'point' ? 'count' : 'lineal',
+      quantity: Math.round(qty * 1000) / 1000,
+      unitPrice: 0,
+      labourRate: rate,
     });
   }
-  const params = new URLSearchParams();
-  params.set('amount', (output.material + output.labour).toFixed(2));
-  if (lines.length > 0) params.set('lines', encodeURIComponent(JSON.stringify(lines)));
-  params.set('ref', 'supplier-pricing-tool');
-  // Self-contained supplier quote builder (per-line + global markup/margin,
-  // branding) - replaces the /free-quote-generator handoff.
-  return `/supplier-pricing-tool/quote?${params.toString()}`;
+  return {
+    entryPath: 'actual',
+    groups: {
+      roofAreas: {
+        key: 'roofAreas',
+        pitchDegrees: 0,
+        entries: job.components
+          .filter(c => c.basis === 'area')
+          .flatMap(c => {
+            const bucket = job.parents.find(b => b.id === c.parentId);
+            return job.entries.filter(e => e.componentId === c.id).map(e => ({
+              id: e.id,
+              label: `${bucket?.name ?? ''} ${c.name}`.trim(),
+              value: e.value,
+              quantity: e.quantity,
+              pitchDegrees: undefined,
+            }));
+          }),
+      },
+    },
+    appliedProducts: [],
+    customComponents: [...customComponents, ...job.customComponents],
+  };
 }
 
-/** Actions card under the output: request supplier quote, order request,
- *  convert to customer quote (free quote generator), continue in QuoteCore+. */
-export function OutputActions({ measureSet, catalog }: {
-  measureSet: MeasurementSet;
+export function ParentOutputActions({ job, catalog, onRestart }: {
+  job: ParentJob;
   catalog: SupplierProduct[];
+  onRestart: () => void;
 }) {
   const [modal, setModal] = useState<'quote' | 'order' | null>(null);
   const { config: supplierCfg } = useSupplierConfig();
   const { user, signInWithGoogle } = useFreeToolsAuth();
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(false);
-  // Email capture (lead-gen for the supplier): one-time modal on the output.
   const [leadOpen, setLeadOpen] = useState(false);
   const [leadDone, setLeadDone] = useState(false);
   const [leadName, setLeadName] = useState('');
@@ -107,7 +140,6 @@ export function OutputActions({ measureSet, catalog }: {
 
   useEffect(() => {
     if (supplierCfg.features.emailCapture && !leadDone) {
-      // Let the user actually read their output before pitching (12s)
       const t = setTimeout(() => setLeadOpen(true), 12000);
       return () => clearTimeout(t);
     }
@@ -120,7 +152,6 @@ export function OutputActions({ measureSet, catalog }: {
     setLeadOpen(false);
   }
 
-  // Google sign-in captures the email without the form
   async function googleLead() {
     const before = user?.email;
     await signInWithGoogle();
@@ -131,15 +162,13 @@ export function OutputActions({ measureSet, catalog }: {
     }
   }
 
-  const quoteUrl = buildConvertToQuoteUrl(measureSet, catalog);
+  const quoteUrl = buildParentConvertToQuoteUrl(job, catalog);
 
   async function continueInApp() {
     setSaving(true);
     setSaveError(false);
     try {
-      const id = await saveDraftQuote(measureSet, urls.draftsApi);
-      // Cross-origin (T3 Labs port) without CORS: skip the draft handoff and
-      // still send the user to signup so the CTA never dead-ends.
+      const id = await saveParentDraftQuote(job);
       if (id) {
         window.open(`${urls.signup}?ref=supplier-pricing-tool&draft=${id}`, '_blank', 'noopener');
       } else {
@@ -156,7 +185,6 @@ export function OutputActions({ measureSet, catalog }: {
     <div className="rounded-xl border border-slate-200 bg-white p-4 md:p-6">
       <h3 className="text-base font-bold text-slate-900">What next?</h3>
 
-      {/* Featured hero card - QuoteCore+ is the option we push */}
       {supplierCfg.poweredBy && supplierCfg.features.quoteCoreConnect && (
         <button
           onClick={continueInApp}
@@ -175,7 +203,7 @@ export function OutputActions({ measureSet, catalog }: {
             <div>
               <div className="text-base font-bold text-white">Continue in QuoteCore+</div>
               <div className="mt-0.5 text-xs leading-relaxed text-slate-400">
-                Turn this takeoff into a full quote - measurements, pitches and products carry straight into the app. Opens in a new tab.
+                Turn this takeoff into a full quote - your systems, measurements and products carry straight into the app. Opens in a new tab.
               </div>
             </div>
           </div>
@@ -184,45 +212,44 @@ export function OutputActions({ measureSet, catalog }: {
 
       <div className="mt-3 grid gap-2 md:grid-cols-2 lg:grid-cols-4">
         <ActionTile
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-          }
+          icon={<path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />}
           title="Download / Print output"
           desc="Save this pricing as a PDF or print it - use Save as PDF in the print dialog."
           onClick={() => window.print()}
         />
         <ActionTile
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          }
+          icon={<path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />}
           title="Convert to customer quote"
           desc="Editable quote document with your markup - opens the quote builder in a new tab."
           href={quoteUrl}
         />
         <ActionTile
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          }
+          icon={<path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />}
           title="Request supplier quote"
           desc="Send this pricing to the supplier and ask for a formal quote."
           onClick={() => setModal('quote')}
         />
         <ActionTile
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          }
+          icon={<path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />}
           title="Send order request"
           desc="Place an order request for these products and quantities."
           onClick={() => setModal('order')}
         />
       </div>
+
+      <button
+        onClick={onRestart}
+        className="mt-3 w-full rounded-full border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-600 hover:border-slate-400 transition cursor-pointer"
+      >
+        Start a new job
+      </button>
+
       {saveError && (
         <p className="mt-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-600">
           Could not save right now. Check your connection and try again.
         </p>
       )}
 
-      {/* Email-capture modal: supplier lead-gen ("sign up, get 5% off") */}
       {leadOpen && !leadDone && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
@@ -288,7 +315,7 @@ export function OutputActions({ measureSet, catalog }: {
         <SupplierEnquiryModal
           supplierName={supplierCfg.name}
           supplierSlug={supplierCfg.slug}
-          measureSet={measureSet}
+          measureSet={enquiryShim(job)}
           catalog={catalog}
           currency={supplierCfg.currency}
           initialIntent={modal}
@@ -299,45 +326,29 @@ export function OutputActions({ measureSet, catalog }: {
   );
 }
 
-function ActionTile({ title, desc, onClick, href, icon, disabled }: {
+function ActionTile({ title, desc, onClick, href, icon }: {
   title: string;
   desc: string;
   onClick?: () => void;
-  /** link tile - always opens in a new tab so the output page stays put */
   href?: string;
   icon?: React.ReactNode;
-  disabled?: boolean;
 }) {
   const inner = (
-    <>
-      <div className="flex items-start gap-3">
-        <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-blue-50 ring-1 ring-blue-100">
-          <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            {icon}
-          </svg>
-        </span>
-        <div>
-          <div className="text-sm font-semibold text-slate-900">{title}</div>
-          <div className="mt-0.5 text-xs text-slate-500">{desc}</div>
-        </div>
+    <div className="flex items-start gap-3">
+      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-blue-50 ring-1 ring-blue-100">
+        <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          {icon}
+        </svg>
+      </span>
+      <div>
+        <div className="text-sm font-semibold text-slate-900">{title}</div>
+        <div className="mt-0.5 text-xs text-slate-500">{desc}</div>
       </div>
-    </>
+    </div>
   );
-  const cls = 'text-left rounded-xl border border-slate-200 bg-white px-4 py-3.5 transition hover:border-blue-200 hover:bg-blue-50/40 hover:shadow-[0_0_8px_rgba(37,99,235,0.08)] disabled:opacity-50';
+  const cls = 'text-left rounded-xl border border-slate-200 bg-white px-4 py-3.5 transition hover:border-blue-200 hover:bg-blue-50/40 hover:shadow-[0_0_8px_rgba(37,99,235,0.08)]';
   if (href) {
-    return (
-      <a href={href} target="_blank" rel="noopener" className={cls}>
-        {inner}
-      </a>
-    );
+    return <a href={href} target="_blank" rel="noopener" className={cls}>{inner}</a>;
   }
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`${cls} cursor-pointer`}
-    >
-      {inner}
-    </button>
-  );
+  return <button onClick={onClick} className={`${cls} cursor-pointer`}>{inner}</button>;
 }

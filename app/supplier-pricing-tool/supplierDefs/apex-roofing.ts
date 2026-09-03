@@ -1,27 +1,26 @@
-// Supplier definition: Burton Roofing - config #1, the original demo build.
-// Everything Burton-specific lives here (brand, theme, pricing policy,
-// catalog). Adding a new supplier demo = copy this file, change the values,
-// register it in ./index.ts. No component changes required.
+﻿// Demo supplier definition: Apex Roofing - the generic FULL-DEMO roofing
+// build (blue/slate brand from the T3 Labs demo site). Same roofing flow
+// and catalog shape as Burton; Burton stays as the "real customer" example.
 
 import type { SupplierProduct } from '../types';
 
-export const BURTON_ROOFING = {
-  slug: 'burton-roofing',
-  name: 'Burton Roofing',
+export const APEX_ROOFING = {
+  slug: 'apex-roofing',
+  trade: 'roofing' as const,
+  name: 'Apex Roofing',
+  tagline: 'Roofing Done Properly',
   demo: true,
-  tagline: 'The Roofing People',
   currency: '\u00A3', // GBP
-  logoUrl: '/supplier-logos/burton-roofing.png',
-  /** darker logo variant for use on the dark brand-coloured header */
-  logoDarkUrl: '/supplier-logos/burton-roofing-dark.png',
-  brandColor: '#012B39', // Burton teal
+  logoUrl: '/supplier-logos/apex-roofing.png',
+  logoDarkUrl: '/supplier-logos/apex-roofing-header.png',
+  brandColor: '#1E293B', // deep slate
   theme: {
-    primary: '#012B39',
-    primaryHover: '#014055',
-    accent: '#014E63',
-    accentHover: '#013A4D',
-    border: '#8FBAC4',
-    borderHover: '#6BA7B4',
+    primary: '#1E293B',
+    primaryHover: '#334155',
+    accent: '#1769E0', // Apex blue
+    accentHover: '#1258B4',
+    border: '#93B4E3',
+    borderHover: '#7AA0DC',
     washAlpha: 0.05,
     glowAlpha: 0.4,
   },
@@ -34,8 +33,7 @@ export const BURTON_ROOFING = {
     quoteCoreConnect: true,
     convertToQuote: true,
     emailCapture: true,
-  },
-  products: [
+  },  products: [
     // ---- Roof coverings (area) - picking one sets roof type + family ----
     { id: 'cupa-r18', name: 'CUPA R18 Natural Spanish Slate 500x250mm', code: 'SLT-CU-R18', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['slate'], family: 'CUPA Slate', unitPrice: 48.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 21.0, priceEditable: true, suggested: true },
     { id: 'cupa-heavy3', name: 'CUPA Heavy 3 Natural Spanish Slate 500x250mm', code: 'SLT-CU-H3', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['slate'], family: 'CUPA Slate', unitPrice: 52.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 21.0, priceEditable: true },
@@ -77,4 +75,12 @@ export const BURTON_ROOFING = {
     { id: 'evolve-downpipe', name: 'EVOLVE 76mm Flushfit Downpipe 3m - Black', code: 'DWN-EV-76', basis: 'count', groups: ['downpipes'], component: 'downpipe', roofTypes: ['all'], family: 'EVOLVE', unitPrice: 14.8, packSize: null, defaultWastePct: 0, defaultLabourRate: 24.0, priceEditable: true, suggested: true },
     { id: 'floplast-downpipe', name: 'FloPlast Round Downpipe - Black', code: 'DWN-FP-RD', basis: 'count', groups: ['downpipes'], component: 'downpipe', roofTypes: ['all'], family: 'FloPlast', unitPrice: 13.2, packSize: null, defaultWastePct: 0, defaultLabourRate: 24.0, priceEditable: true },
   ] as SupplierProduct[],
+
+  // T3 Labs port: point account/draft endpoints at QuoteCore+ (this tool is
+  // embedded on t3labs.tech). Enquiries stay same-origin (t3-labs route).
+  urls: {
+    signup: 'https://quote-core.com/signup',
+    draftsApi: 'https://quote-core.com/api/free-tools/drafts',
+  },
 } as const;
+

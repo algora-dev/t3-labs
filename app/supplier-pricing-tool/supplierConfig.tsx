@@ -11,6 +11,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { SupplierProduct } from './types';
+import type { Trade } from './tradeConfig';
 import type { SupplierTheme } from './supplierDefs';
 import { getSupplierDef, DEFAULT_SUPPLIER_SLUG } from './supplierDefs';
 
@@ -31,8 +32,13 @@ export interface SupplierFeatures {
 
 export interface SupplierConfig {
   slug: string;
+  /** trade this instance serves - roofing keeps the group model,
+   *  cladding/flooring use the parent-area flow. Defaults to roofing. */
+  trade?: Trade;
   name: string;
   tagline: string;
+  /** demo instance - adds "(demo)" labelling to header + output */
+  demo?: boolean;
   currency: string;
   /** supplier logo URL (null = monogram placeholder) */
   logoUrl: string | null;

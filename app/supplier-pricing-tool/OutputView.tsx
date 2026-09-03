@@ -69,10 +69,10 @@ export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tr
 
   return (
     <div className="space-y-4">
-      <div className="bg-white rounded-xl border-2 p-6 md:p-10 space-y-6" style={{ borderColor: brand }}>
+      <div className="spt-print-area bg-white rounded-xl border-2 p-6 md:p-10 space-y-6" style={{ borderColor: brand }}>
         <div className="flex items-start justify-between gap-4 border-b-2 pb-5" style={{ borderColor: brand }}>
           <div className="min-w-0">
-            <h1 className="text-xl font-bold text-black">MATERIALS PRICING</h1>
+            <h1 className="text-xl font-bold text-black">MATERIALS PRICING{supplierCfg.demo ? ' (DEMO)' : ''}</h1>
             <p className="mt-1 text-sm text-black">Generated {today} - {supplierName}</p>
             <p className="mt-1 text-xs text-black/60">{measureNote}{tradeLabel ? ` - ${tradeLabel}` : ''}</p>
           </div>
@@ -90,7 +90,7 @@ export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tr
         </div>
 
         {byGroup.map(({ def, lines }) => (
-          <div key={def.key}>
+          <div key={def.key} className="spt-keep">
             <div className="flex items-center justify-between border-b-2 px-3 py-2" style={{ backgroundColor: `${brand}14`, borderColor: brand }}>
               <span className="text-black font-bold">{def.label}</span>
               <span className="text-black font-medium text-sm">{fmt(groupPitchedTotal(measureSet, def.key), 1)} {def.unit}</span>
@@ -151,7 +151,7 @@ export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tr
         ))}
 
         {output.customs.length > 0 && (
-          <div>
+          <div className="spt-keep">
             <div className="flex items-center justify-between border-b-2 px-3 py-2" style={{ backgroundColor: `${brand}14`, borderColor: brand }}>
               <span className="text-black font-bold">Custom Components</span>
               <span className="text-black font-medium text-sm">{output.customs.length} item{output.customs.length === 1 ? '' : 's'}</span>
@@ -185,7 +185,7 @@ export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tr
           </div>
         )}
 
-        <div className="border-t-2 pt-4 space-y-1.5" style={{ borderColor: brand }}>
+        <div className="spt-keep border-t-2 pt-4 space-y-1.5" style={{ borderColor: brand }}>
           {showTradeTotals && baselineOutput && (
             <div className="flex items-center justify-between">
               <span className="text-black font-medium">Standard materials price</span>
