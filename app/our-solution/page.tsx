@@ -1042,7 +1042,7 @@ export default function OurSolutionPage() {
 
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             <div>
-              <div style={{ background: t.surface, borderColor: t.border }} className="h-full rounded-2xl border p-6 sm:p-10">
+              <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
                 <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase One</p>
                 <h3 className="mt-3 text-2xl font-bold">Make the business more useful now.</h3>
                 <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
@@ -1074,7 +1074,7 @@ export default function OurSolutionPage() {
               </div>
             </div>
             <div>
-              <div style={{ background: t.surface, borderColor: t.border }} className="h-full rounded-2xl border p-6 sm:p-10">
+              <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
                 <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase Two</p>
                 <h3 className="mt-3 text-2xl font-bold">Turn usage into a competitive advantage.</h3>
                 <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
