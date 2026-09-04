@@ -3,9 +3,9 @@
 import { useState } from "react";
 
 /**
- * T3 Labs - "Become Part of the Answer" sales landing page (conversion upgrade).
- * Short by default, deep on demand: proof + detail in expandable cards.
- * Dark/light theme toggle (persisted), tokens matching growth proposal pages.
+ * T3 Labs - "Become Part of the Answer" sales landing page (lean version).
+ * ~7 main sections, short by default, deep on demand (proof in expandable cards).
+ * Two conversion paths: Book a free short call / Send us how you work.
  */
 
 type Theme = "dark" | "light";
@@ -153,11 +153,6 @@ const ASSESSMENT_QUESTIONS = [
 type AnswerValue = 0 | 1 | 2;
 const ANSWER_LABELS: Record<AnswerValue, string> = { 2: "Yes", 1: "Partly", 0: "No" };
 
-const CALL_CTA = {
-  band1: "Book a free short call to see where we could improve it",
-  band3: "Book a free short call to see how we could build on it",
-};
-
 const OPPORTUNITY_COPY: Record<string, { no: string; partly: string }> = {
   pricing: {
     no: "Customers still need your team before they can understand what something is likely to cost.",
@@ -189,7 +184,7 @@ const OPPORTUNITY_COPY: Record<string, { no: string; partly: string }> = {
   },
 };
 
-function SelfAssessment({ t }: { t: Tokens }) {
+function SelfAssessment({ t, onSendUs }: { t: Tokens; onSendUs: () => void }) {
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<(AnswerValue | null)[]>(Array(ASSESSMENT_QUESTIONS.length).fill(null));
@@ -202,17 +197,17 @@ function SelfAssessment({ t }: { t: Tokens }) {
     1: {
       heading: "There are some clear opportunities to improve the buying journey.",
       body: "You have several areas where customers could be getting faster answers, better information or a smoother path to pricing and quoting. That is a good place to start, because even a small improvement in the right part of the journey can create useful gains in customer experience, conversion and staff efficiency.",
-      cta: CALL_CTA.band1,
+      sub: "See where we could improve it.",
     },
     2: {
       heading: "You already have a good foundation.",
       body: "You are already doing some of the important things well. The opportunity now is to improve the weaker parts of the journey, connect the pieces more effectively and make it easier for customers, contractors and staff to get the answers they need faster.",
-      cta: CALL_CTA.band1,
+      sub: "See where we could improve it.",
     },
     3: {
       heading: "You already have a strong foundation.",
       body: "That is a major advantage. You already have many of the building blocks that make the next stage easier: connecting the systems, improving the customer journey, capturing better first-party data and compounding the authority you already have. The goal now is not to start from scratch - it is to scale what is already working, strengthen the gaps and keep increasing the distance between you and your competitors.",
-      cta: CALL_CTA.band3,
+      sub: "See how we could build on it.",
     },
   }[band];
 
@@ -365,23 +360,26 @@ function SelfAssessment({ t }: { t: Tokens }) {
             </div>
           ) : null}
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <a
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("assessment_call_click", { band: String(band), total: String(total) })}
-              style={{ background: t.accent, color: t.accentText }}
-              className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
-            >
-              {bandCopy.cta}
-            </a>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start">
+            <div>
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("assessment_call_click", { band: String(band), total: String(total) })}
+                style={{ background: t.accent, color: t.accentText }}
+                className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+              >
+                Book a free short call
+              </a>
+              <p className="mt-2 text-sm" style={{ color: t.muted }}>{bandCopy.sub}</p>
+            </div>
             <button
-              onClick={() => { trackEvent("assessment_enquiry_click", { band: String(band), total: String(total) }); scrollToId("enquiry"); }}
+              onClick={() => { trackEvent("assessment_enquiry_click", { band: String(band), total: String(total) }); onSendUs(); }}
               style={{ border: `1px solid ${t.border}` }}
               className="btn-outline inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
             >
-              Prefer not to call? Send us your details instead
+              Send us how you work
             </button>
           </div>
           <div className="mt-4 flex flex-wrap gap-5">
@@ -402,7 +400,7 @@ function SelfAssessment({ t }: { t: Tokens }) {
   );
 }
 
-/** Lightweight async enquiry form - secondary conversion path for prospects who don't want a call. */
+/** Lightweight async enquiry form - secondary conversion path ("Send us how you work"). */
 const IMPROVE_OPTIONS = [
   "Get found more often",
   "Improve AI/search visibility",
@@ -474,10 +472,10 @@ function EnquiryForm({ t }: { t: Tokens }) {
 
   return (
     <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
-      <h3 className="text-2xl font-bold sm:text-3xl">Prefer to send us the details?</h3>
+      <h3 className="text-2xl font-bold sm:text-3xl">Send us how you work</h3>
       <p className="mt-3 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-        Tell us a little about your business and where you think the biggest opportunity might be. We can take a look
-        and come back with some initial thoughts.
+        Send us your website and a quick outline of how the process works today. We&apos;ll take a look and use it to
+        identify where there may be opportunities to improve.
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -554,7 +552,7 @@ function EnquiryForm({ t }: { t: Tokens }) {
         style={{ background: t.accent, color: t.accentText }}
         className="btn-solid mt-6 inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold disabled:opacity-60"
       >
-        {submitting ? "Sending…" : "Send us your details"}
+        {submitting ? "Sending…" : "Send us how you work"}
       </button>
     </div>
   );
@@ -564,6 +562,7 @@ export default function OurSolutionPage() {
   const [theme, setTheme] = useState<Theme>("dark");
   const [tab, setTab] = useState<"ai" | "customers" | "contractors" | "team">("ai");
   const [showAllDemos, setShowAllDemos] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
   const t = theme === "dark" ? dark : light;
 
   const tabOrder = ["ai", "customers", "contractors", "team"] as const;
@@ -578,6 +577,11 @@ export default function OurSolutionPage() {
   const switchTheme = (next: Theme) => {
     setTheme(next);
     window.localStorage.setItem("t3-solution-theme", next);
+  };
+
+  const openForm = () => {
+    setFormOpen(true);
+    setTimeout(() => scrollToId("enquiry-form"), 60);
   };
 
   return (
@@ -595,6 +599,8 @@ export default function OurSolutionPage() {
         .hover-card:hover { transform: translateY(-2px); border-color: var(--t-accent-ink) !important; }
         .card-toggle:hover { background-color: rgba(127,127,127,0.06); }
         .proof-stat strong { color: var(--t-accent-ink); }
+        .loop-pill { transition: background-color .15s ease, color .15s ease, border-color .15s ease, transform .15s ease, box-shadow .15s ease; }
+        .loop-pill:hover, .loop-pill:focus-visible { background-color: var(--t-accent) !important; color: ${t.accentText} !important; border-color: var(--t-accent) !important; transform: scale(1.04); box-shadow: 0 4px 14px rgba(215,255,0,0.22); }
       `}</style>
       {/* ===== Sticky header ===== */}
       <header
@@ -608,10 +614,11 @@ export default function OurSolutionPage() {
           </a>
           <nav className="hidden items-center gap-5 text-sm lg:flex" style={{ color: t.muted }}>
             <button onClick={() => scrollToId("shift")} className="hover:opacity-70">The Shift</button>
+            <button onClick={() => scrollToId("assessment")} className="hover:opacity-70">Assessment</button>
             <button onClick={() => scrollToId("demos")} className="hover:opacity-70">Demos</button>
             <button onClick={() => scrollToId("who")} className="hover:opacity-70">Who It Helps</button>
-            <button onClick={() => scrollToId("phases")} className="hover:opacity-70">Phases</button>
-            <button onClick={() => scrollToId("start-small")} className="hover:opacity-70">Start Small</button>
+            <button onClick={() => scrollToId("phases")} className="hover:opacity-70">How It Grows</button>
+            <button onClick={() => scrollToId("start")} className="hover:opacity-70">Get Started</button>
           </nav>
           <div className="flex items-center gap-2">
             <button
@@ -630,7 +637,7 @@ export default function OurSolutionPage() {
               style={{ background: t.accent, color: t.accentText }}
               className="btn-solid hidden rounded-full px-4 py-1.5 text-xs font-semibold sm:inline-block"
             >
-              Show us your current process
+              Book a free short call
             </a>
           </div>
         </div>
@@ -676,8 +683,7 @@ export default function OurSolutionPage() {
             </div>
           </div>
 
-          {/* Cold-traffic CTA priority: see how it works first */}
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-10">
             <button
               onClick={() => { trackEvent("solution_cta_click", { location: "hero_see_how" }); scrollToId("shift"); }}
               style={{ background: t.accent, color: t.accentText }}
@@ -685,20 +691,10 @@ export default function OurSolutionPage() {
             >
               See how it works
             </button>
-            <a
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("solution_cta_click", { location: "hero" })}
-              style={{ border: `1px solid ${t.border}` }}
-              className="btn-outline inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
-            >
-              Show us your current process
-            </a>
           </div>
         </section>
 
-        {/* ===== 2. Old Way vs AI Way ===== */}
+        {/* ===== 2. The Shift + Proof (one section) ===== */}
         <section id="shift" className="scroll-mt-20 py-16 sm:py-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">The way people find answers is changing.</h2>
 
@@ -730,20 +726,9 @@ export default function OurSolutionPage() {
           <p className="mt-8 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
             The customer is doing less of the research themselves. AI is increasingly doing more of it for them.
           </p>
-          <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            AI can now answer much more of the customer&apos;s question before they ever visit a website. When it
-            references sources as part of that answer, you want your business to be one of them.
-          </p>
-        </section>
 
-        {/* ===== 3. NEW - Proof: this is already happening ===== */}
-        <section className="py-16 sm:py-20">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">This is already happening.</h2>
-          <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            These are not predictions about a distant future. Search behaviour and buying behaviour are already changing.
-          </p>
-
-          <div className="mt-8 space-y-4">
+          <h3 className="mt-12 text-xl font-bold sm:text-2xl">This is already happening.</h3>
+          <div className="mt-5 space-y-4">
             <ExpandCard
               t={t}
               id="google_ai_mode"
@@ -808,8 +793,8 @@ export default function OurSolutionPage() {
           </div>
         </section>
 
-        {/* ===== 4. Qualification ===== */}
-        <section className="py-16 sm:py-20">
+        {/* ===== 3. AI answer gap + self-assessment ===== */}
+        <section id="assessment" className="scroll-mt-20 py-16 sm:py-20">
           <h2 className="max-w-3xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
             If AI is building the answer, how much of that answer can it currently get from you?
           </h2>
@@ -833,14 +818,13 @@ export default function OurSolutionPage() {
             opportunity it has to become part of the answer.</strong>
           </p>
 
-          {/* NEW - Self-assessment: what matters -> how much do you provide -> the gap */}
           <div className="mt-10">
-            <SelfAssessment t={t} />
+            <SelfAssessment t={t} onSendUs={openForm} />
           </div>
         </section>
 
-        {/* ===== 5. What we build ===== */}
-        <section className="py-16 sm:py-20">
+        {/* ===== 4. What we build + live demos (one section) ===== */}
+        <section id="demos" className="scroll-mt-20 py-16 sm:py-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">We turn websites into tools customers can actually use.</h2>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
@@ -857,39 +841,22 @@ export default function OurSolutionPage() {
           </div>
 
           <p className="mt-10 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            Instead of a website that simply says:
-          </p>
-          <p style={{ background: t.surfaceAlt, borderColor: t.border }} className="mt-3 max-w-md rounded-xl border px-5 py-3 text-sm italic">
-            &ldquo;Contact us for a quote.&rdquo;
-          </p>
-          <p className="mt-6 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            we can build a system that helps the customer start solving the problem immediately. Depending on the
-            business, customers may be able to:
+            Instead of stopping at <strong style={{ color: t.text }}>&ldquo;Contact us for a quote.&rdquo;</strong>, we
+            build tools that help customers start solving the problem immediately. Depending on the business, customers
+            may be able to:
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">
-            {["Upload a plan or image", "Measure a project", "Calculate quantities", "Select products", "Apply pricing", "Add labour", "Add waste", "Generate an estimate", "Create a quote", "Send a complete job to the supplier"].map((c) => (
+            {["Upload or measure plans", "Calculate quantities", "Apply products & pricing", "Add labour & waste", "Generate estimates or quotes", "Send a complete job"].map((c) => (
               <span key={c} style={{ background: t.surface, borderColor: t.border, color: t.text }} className="rounded-full border px-4 py-2 text-sm">
                 {c}
               </span>
             ))}
           </div>
 
-          <p className="mt-8 max-w-2xl text-base leading-7">
-            <span style={{ color: t.muted }}>The exact tool changes from business to business. The goal stays the same:</span>{" "}
-            <strong>give people the answer faster, make it easier to buy, and reduce the amount of manual work required
-            from your team.</strong>
-          </p>
-        </section>
+          <h3 className="mt-14 text-xl font-bold sm:text-2xl">See it in practice.</h3>
 
-        {/* ===== 6. Demos ===== */}
-        <section id="demos" className="scroll-mt-20 py-16 sm:py-20">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">See what this looks like in practice.</h2>
-          <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            These are live tools built for real trades and suppliers - open any of them and try it yourself.
-          </p>
-
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
             {(showAllDemos ? ALL_DEMOS : FEATURED_DEMOS).map((d) => (
               <div key={d.name} style={{ background: t.surface, borderColor: t.border }} className="hover-card flex flex-col rounded-2xl border p-6">
                 <h3 className="text-lg font-semibold">{d.name}</h3>
@@ -915,33 +882,14 @@ export default function OurSolutionPage() {
           >
             {showAllDemos ? "Show fewer demo tools →" : "See all demo tools →"}
           </button>
-
-          {/* Small recurring CTA after demos */}
-          <div className="mt-10 flex flex-col items-center gap-1 text-center">
-            <a
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("solution_cta_click", { location: "demos_inline" })}
-              style={{ background: t.accent, color: t.accentText }}
-              className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
-            >
-              Book a free short call
-            </a>
-            <p className="mt-1 max-w-md text-sm" style={{ color: t.muted }}>
-              We&apos;ll look at your current process and identify where the strongest opportunity may be.
-            </p>
-          </div>
         </section>
 
-        {/* ===== 7. Four ways the system creates value ===== */}
+        {/* ===== 5. Four ways it creates value ===== */}
         <section id="who" className="scroll-mt-20 py-16 sm:py-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">One system. Four ways it creates value.</h2>
-          <p className="mt-4 max-w-2xl text-base font-semibold leading-7">
-            Explore all four ways the same system creates value.
-          </p>
-          <p className="mt-1 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            Choose a view below, or use the arrows to step through them.
+          <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
+            <strong style={{ color: t.text }}>Choose a view below or use the arrows</strong> to see how the same system
+            helps AI & Search, customers, contractors and your team.
           </p>
 
           {/* Large explicit tabs - over-obvious that there are four views */}
@@ -976,6 +924,7 @@ export default function OurSolutionPage() {
           {/* All four panels stay in the DOM (crawlable); only display state changes */}
           <div style={{ background: t.surface, borderColor: t.border }} className="mt-6 rounded-2xl border p-6 sm:p-10">
             <div hidden={tab !== "ai"} role="tabpanel" id="aud-panel-ai" aria-labelledby="aud-tab-ai">
+              <div>
                 <h3 className="text-2xl font-semibold">Give AI useful information to work with.</h3>
                 <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
                   We structure tools and supporting information so they are easier for search engines and AI systems
@@ -990,6 +939,7 @@ export default function OurSolutionPage() {
                     </li>
                   ))}
                 </ul>
+              </div>
             </div>
             <div hidden={tab !== "customers"} role="tabpanel" id="aud-panel-customers" aria-labelledby="aud-tab-customers">
               <div>
@@ -1060,14 +1010,12 @@ export default function OurSolutionPage() {
               →
             </button>
           </div>
-        </section>
 
-        {/* ===== 8. Second qualification ===== */}
-        <section className="py-16 sm:py-20">
-          <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-8 text-center sm:p-12">
+          {/* Short qualification */}
+          <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="mt-14 rounded-2xl border p-8 text-center sm:p-12">
             <p className="mx-auto max-w-3xl text-2xl font-bold leading-snug sm:text-3xl">
-              If a customer could work out the right quantities, get useful pricing and send you a much more complete
-              job before your team touched the enquiry - would that save your team time or help you win more work?
+              If customers could send you better, more complete jobs before your team got involved - would that save
+              time or help you win more work?
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <button
@@ -1088,233 +1036,156 @@ export default function OurSolutionPage() {
           </div>
         </section>
 
-        {/* ===== 9. Phase One + 10. speed proof ===== */}
+        {/* ===== 6. Phases + proof + compounding (one section) ===== */}
         <section id="phases" className="scroll-mt-20 py-16 sm:py-20">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
-              <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase One</p>
-              <h3 className="mt-3 text-2xl font-bold">Make the business more useful now.</h3>
-              <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
-                The first phase focuses on immediate commercial improvements: give customers answers faster, convert
-                more visitors, generate better enquiries, reduce unnecessary enquiries, speed up quoting, make products
-                easier to buy and help contractors quote with your products.
-              </p>
-              <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
-                Better enquiries arrive with more of the information your staff need to actually quote or sell. This
-                removes repetitive work so your existing team can spend more time on valuable quoting, sales and
-                customer service.
-              </p>
-              <p className="mt-6 text-lg font-semibold">More customers. Faster sales. Less manual work.</p>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Improve the business now. Build the advantage over time.</h2>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            <div>
+              <div style={{ background: t.surface, borderColor: t.border }} className="h-full rounded-2xl border p-6 sm:p-10">
+                <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase One</p>
+                <h3 className="mt-3 text-2xl font-bold">Make the business more useful now.</h3>
+                <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
+                  Give customers faster answers, generate better enquiries, speed up quoting and remove repetitive work
+                  from your team.
+                </p>
+                <p className="mt-6 text-lg font-semibold">More customers. Faster sales. Less manual work.</p>
+              </div>
+              <div className="mt-4">
+                <ExpandCard
+                  t={t}
+                  id="speed_gap"
+                  headline="Customers do not want to wait for basic information."
+                  stat={<><strong>79%</strong> of surveyed US and UK home-services consumers said they would switch to a competitor that responds faster. <strong>26%</strong> had called a business because the information they needed was not available online.</>}
+                  source="Invoca, 2026"
+                >
+                  <p>Our approach is simple: give customers more of the answer before they need to ask.</p>
+                  <a
+                    href="https://www.invoca.com/uk/reports/home-services-buyer-experience-report-2026"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackEvent("solution_source_click", { source: "invoca_speed_gap" })}
+                    style={{ color: t.accentInk }}
+                    className="mt-2 inline-block font-semibold hover:underline"
+                  >
+                    View research →
+                  </a>
+                </ExpandCard>
+              </div>
             </div>
-            <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
-              <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase Two</p>
-              <h3 className="mt-3 text-2xl font-bold">Turn usage into a competitive advantage.</h3>
-              <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
-                Once customers, contractors and staff start using the tools, the business learns things such as: what
-                products people price, project sizes, material quantities, product combinations, locations, common
-                questions, pricing trends and demand patterns.
-              </p>
-              <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
-                That becomes pricing resources, industry reports, product guides, technical resources, new calculators
-                and market insights.
-              </p>
-              <p className="mt-6 text-base font-semibold">
-                Instead of publishing generic content that anybody could create, the business can publish information
-                based on its own products, expertise and real-world activity.
-              </p>
+            <div>
+              <div style={{ background: t.surface, borderColor: t.border }} className="h-full rounded-2xl border p-6 sm:p-10">
+                <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase Two</p>
+                <h3 className="mt-3 text-2xl font-bold">Turn usage into a competitive advantage.</h3>
+                <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
+                  As customers, contractors and staff use the tools, the business builds first-party data around
+                  products, pricing, projects, demand and common questions.
+                </p>
+                <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
+                  Turn that into useful pricing resources, guides, reports, calculators and original information that
+                  customers, search engines and AI can use.
+                </p>
+              </div>
+              <div className="mt-4 space-y-4">
+                <ExpandCard
+                  t={t}
+                  id="google_guidance"
+                  headline="This follows Google's own guidance for generative AI Search."
+                  stat={<>Google recommends creating <strong>unique, useful, non-commodity content</strong> and says its generative AI Search features retrieve relevant, up-to-date pages from the web to help ground responses.</>}
+                  source="Google Search Central"
+                >
+                  <ul className="space-y-2">
+                    <li>Generative AI Search remains rooted in Google&apos;s Search ranking and quality systems.</li>
+                    <li>Google retrieves relevant, up-to-date web pages to ground AI responses.</li>
+                    <li>Google recommends content that is unique, useful and based on first-hand expertise or experience.</li>
+                    <li>Google specifically warns against simply recycling generic information that already exists elsewhere.</li>
+                    <li>Publicly accessible and crawlable content is important for discovery in Google&apos;s AI Search experiences.</li>
+                  </ul>
+                  <a
+                    href="https://developers.google.com/search/docs/fundamentals/ai-optimization-guide"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackEvent("solution_source_click", { source: "google_guidance" })}
+                    style={{ color: t.accentInk }}
+                    className="mt-2 inline-block font-semibold hover:underline"
+                  >
+                    Read Google&apos;s guidance →
+                  </a>
+                </ExpandCard>
+                <ExpandCard
+                  t={t}
+                  id="openai_guidance"
+                  headline="Public websites can be surfaced and cited in ChatGPT Search."
+                  stat={<>OpenAI says public websites can appear in ChatGPT Search and provides specific guidance for allowing its search crawler to discover, surface and cite site content.</>}
+                  source="OpenAI"
+                >
+                  <p>
+                    OpenAI states that public websites can appear in ChatGPT Search. It advises publishers who want
+                    their content discoverable, surfaced and clearly cited to allow access to OAI-SearchBot. OpenAI
+                    also says publishers can track referral traffic coming from ChatGPT Search.
+                  </p>
+                  <a
+                    href="https://help.openai.com/en/articles/12627856-publishers-and-developers-faq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackEvent("solution_source_click", { source: "openai_guidance" })}
+                    style={{ color: t.accentInk }}
+                    className="mt-2 inline-block font-semibold hover:underline"
+                  >
+                    Read OpenAI guidance →
+                  </a>
+                </ExpandCard>
+              </div>
             </div>
           </div>
 
-          {/* Compact speed / information-gap proof strip */}
-          <div className="mt-6">
-            <ExpandCard
-              t={t}
-              id="speed_gap"
-              headline="Customers do not want to wait for basic information."
-              stat={<><strong>79%</strong> of surveyed US and UK home-services consumers said they would switch to a competitor that responds faster. <strong>26%</strong> had called a business because the information they needed was not available online.</>}
-              source="Invoca, 2026"
-            >
-              <p>Our approach is simple: give customers more of the answer before they need to ask.</p>
-              <a
-                href="https://www.invoca.com/uk/reports/home-services-buyer-experience-report-2026"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("solution_source_click", { source: "invoca_speed_gap" })}
-                style={{ color: t.accentInk }}
-                className="mt-2 inline-block font-semibold hover:underline"
-              >
-                View research →
-              </a>
-            </ExpandCard>
-          </div>
-
-          {/* ===== 12. Google + OpenAI validation ===== */}
-          <div className="mt-6 grid gap-4 lg:grid-cols-2">
-            <ExpandCard
-              t={t}
-              id="google_guidance"
-              headline="This follows Google's own guidance for generative AI Search."
-              stat={<>Google recommends creating <strong>unique, useful, non-commodity content</strong> and says its generative AI Search features retrieve relevant, up-to-date pages from the web to help ground responses.</>}
-              source="Google Search Central"
-            >
-              <ul className="space-y-2">
-                <li>Generative AI Search remains rooted in Google&apos;s Search ranking and quality systems.</li>
-                <li>Google retrieves relevant, up-to-date web pages to ground AI responses.</li>
-                <li>Google recommends content that is unique, useful and based on first-hand expertise or experience.</li>
-                <li>Google specifically warns against simply recycling generic information that already exists elsewhere.</li>
-                <li>Publicly accessible and crawlable content is important for discovery in Google&apos;s AI Search experiences.</li>
-              </ul>
-              <p className="mt-3">
-                This aligns directly with the T3 Labs strategy: build genuinely useful tools, publish better product
-                and pricing information, capture original data, and turn that into useful resources customers actually
-                want. Our strategy aligns with the type of useful, original and crawlable information Google itself
-                recommends.
-              </p>
-              <a
-                href="https://developers.google.com/search/docs/fundamentals/ai-optimization-guide"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("solution_source_click", { source: "google_guidance" })}
-                style={{ color: t.accentInk }}
-                className="mt-2 inline-block font-semibold hover:underline"
-              >
-                Read Google&apos;s guidance →
-              </a>
-            </ExpandCard>
-
-            <ExpandCard
-              t={t}
-              id="openai_guidance"
-              headline="Public websites can be surfaced and cited in ChatGPT Search."
-              stat={<>OpenAI says public websites can appear in ChatGPT Search and provides specific guidance for allowing its search crawler to discover, surface and cite site content.</>}
-              source="OpenAI"
-            >
-              <p>
-                OpenAI states that public websites can appear in ChatGPT Search. It advises publishers who want their
-                content discoverable, surfaced and clearly cited to allow access to OAI-SearchBot. OpenAI also says
-                publishers can track referral traffic coming from ChatGPT Search.
-              </p>
-              <p>
-                This supports the basic principle that making useful public information accessible to AI and search
-                systems creates an opportunity for that information - and the business behind it - to be surfaced in
-                AI-led research.
-              </p>
-              <a
-                href="https://help.openai.com/en/articles/12627856-publishers-and-developers-faq"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("solution_source_click", { source: "openai_guidance" })}
-                style={{ color: t.accentInk }}
-                className="mt-2 inline-block font-semibold hover:underline"
-              >
-                Read OpenAI guidance →
-              </a>
-            </ExpandCard>
-          </div>
-
-          {/* ===== 13. Compounding loop ===== */}
+          {/* Compounding loop - no separate section spacing */}
           <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="mt-6 rounded-2xl border p-6 sm:p-10">
             <h3 className="text-center text-2xl font-bold">The advantage compounds.</h3>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
               {["Useful Tools", "More Users", "More Data", "Better Information", "More Authority", "More Visibility", "More Customers"].map((s, i, arr) => (
                 <span key={s} className="flex items-center gap-2 sm:gap-3">
-                  <span style={{ background: i === 0 ? t.accent : t.surface, color: i === 0 ? t.accentText : t.text, borderColor: t.border }} className="rounded-full border px-4 py-2 text-sm font-medium">
+                  <span
+                    style={{ background: t.surface, color: t.text, borderColor: t.border }}
+                    className="loop-pill rounded-full border px-4 py-2 text-sm font-medium"
+                  >
                     {s}
                   </span>
-                  <span style={{ color: t.accentInk }} className="text-xs">{i < arr.length - 1 ? "→" : "↺"}</span>
+                  {i < arr.length - 1 ? (
+                    <span style={{ color: t.accentInk }} className="text-xs">→</span>
+                  ) : (
+                    <span
+                      role="img"
+                      aria-label="The cycle repeats"
+                      style={{ color: t.accentInk }}
+                      className="text-2xl font-bold leading-none sm:text-3xl"
+                    >
+                      ↺
+                    </span>
+                  )}
                 </span>
               ))}
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-center text-sm leading-6" style={{ color: t.muted }}>
-              The long-term goal is to make the business one of the strongest useful sources in its niche - so that
-              when customers ask AI or search engines about that product, industry or market, the business has more
-              useful information available than competitors who publish little more than generic product pages and
-              quote forms.
+              Each cycle creates more useful information, strengthens the next one and makes the advantage harder for
+              competitors to copy.
             </p>
           </div>
 
-          {/* Small recurring CTA after Phase Two / official proof */}
-          <div className="mt-8 flex flex-col items-center gap-1 text-center">
-            <a
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("solution_cta_click", { location: "phases_inline" })}
-              style={{ background: t.accent, color: t.accentText }}
-              className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
-            >
-              Book a free short call
-            </a>
-            <p className="mt-1 max-w-md text-sm" style={{ color: t.muted }}>
-              We&apos;ll look at your current process and identify where the strongest opportunity may be.
-            </p>
-          </div>
-        </section>
-
-        {/* ===== 14. Benefits - 4 expandable cards ===== */}
-        <section className="py-16 sm:py-20">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">What this can improve</h2>
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <ExpandCard
-              t={t}
-              id="benefits_found"
-              headline="Get Found"
-              stat={<>Make the business easier for customers, search engines and AI to understand and discover.</>}
-              source=""
-            >
-              <ul className="space-y-2">
-                {["Get found by more potential customers", "Increase opportunities to appear in AI-generated answers", "Build stronger search authority", "Publish better product and technical information", "Become a stronger source in your niche", "Differentiate from competitors"].map((b) => <li key={b}>• {b}</li>)}
-              </ul>
-            </ExpandCard>
-            <ExpandCard
-              t={t}
-              id="benefits_convert"
-              headline="Convert More"
-              stat={<>Give buyers more of the information they need before they leave or contact a competitor.</>}
-              source=""
-            >
-              <ul className="space-y-2">
-                {["Give customers faster answers", "Make pricing easier to access", "Convert more visitors into enquiries", "Respond faster", "Improve the buying experience", "Create clearer next steps", "Help buyers understand products and quantities"].map((b) => <li key={b}>• {b}</li>)}
-              </ul>
-            </ExpandCard>
-            <ExpandCard
-              t={t}
-              id="benefits_time"
-              headline="Save Time"
-              stat={<>Reduce repetitive work and improve the quality of the enquiries that reach the team.</>}
-              source=""
-            >
-              <ul className="space-y-2">
-                {["Reduce basic enquiries", "Reduce staff back-and-forth", "Save quoting time", "Collect better project information", "Improve enquiry quality", "Speed up quote preparation", "Let staff focus on more valuable work"].map((b) => <li key={b}>• {b}</li>)}
-              </ul>
-            </ExpandCard>
-            <ExpandCard
-              t={t}
-              id="benefits_advantage"
-              headline="Build an Advantage"
-              stat={<>Turn tools, usage and first-party information into something competitors cannot easily copy.</>}
-              source=""
-            >
-              <ul className="space-y-2">
-                {["Capture useful project data", "Identify demand patterns", "Create proprietary industry information", "Build content from real activity", "Create useful pricing resources", "Improve contractor loyalty", "Build a longer-term information advantage"].map((b) => <li key={b}>• {b}</li>)}
-              </ul>
-            </ExpandCard>
-          </div>
-        </section>
-
-        {/* ===== 15. Flexible scope ===== */}
-        <section id="start-small" className="scroll-mt-20 py-16 sm:py-20">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Start with what makes sense for your business.</h2>
-          <p className="mt-6 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            This does not need to begin as a large platform. We can start with the simplest commercial opportunity and
-            expand from there. Commercial and payment structures can also be tailored around the opportunity.
+          <p className="mt-8 text-center text-base font-semibold">
+            Get found. Convert more. Save time. Build an advantage.
           </p>
+        </section>
+
+        {/* ===== 7. Start small + two ways to begin (one section) ===== */}
+        <section id="start" className="scroll-mt-20 py-16 sm:py-24">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Start with what makes sense for your business.</h2>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {[
-              { n: "1", title: "One useful tool", body: "A focused calculator, estimator or quoting tool solving one commercial problem." },
-              { n: "2", title: "Connected sales tools", body: "Multiple tools working across pricing, estimating, quoting or customer journeys." },
-              { n: "3", title: "Bespoke platform", body: "A deeper system tailored around customers, contractors, staff, pricing and workflows." },
+              { n: "1", title: "One useful tool", body: "Solve one clear commercial problem." },
+              { n: "2", title: "Connected sales tools", body: "Connect pricing, estimating, quoting and customer journeys." },
+              { n: "3", title: "Bespoke platform", body: "Build around your customers, contractors, staff and workflows." },
             ].map((s) => (
               <div key={s.n} style={{ background: t.surface, borderColor: t.border }} className="hover-card rounded-2xl border p-6 text-center">
                 <span style={{ background: t.accentSoft, color: t.accentInk }} className="inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold">
@@ -1326,49 +1197,56 @@ export default function OurSolutionPage() {
             ))}
           </div>
 
-          <p className="mt-8 max-w-2xl text-base font-semibold">
-            The starting point is simply finding the easiest place to create meaningful value.
+          <p className="mt-8 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
+            Start with the easiest place to create value and expand from there. Scope, payment structure and complexity
+            can all be tailored to the opportunity.
           </p>
-        </section>
 
-        {/* ===== 16. Final CTA ===== */}
-        <section className="py-20 sm:py-28">
-          <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-8 text-center sm:p-14">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Start with your current process.</h2>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-              You do not need to know which tool you need. Show us how customers currently find you, work out what
-              they need, get pricing and place orders - and how your team handles those enquiries. We&apos;ll look for
-              the simplest opportunities to remove friction, save time, improve conversion and strengthen your
-              position online.
-            </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <h2 className="mt-16 text-3xl font-bold tracking-tight sm:text-4xl">Start with how you work today.</h2>
+          <p className="mt-6 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
+            You do not need to know which tool you need. Show us how customers currently get information, pricing or
+            quotes - and how your team handles that process. We&apos;ll look for the simplest opportunities to improve it.
+          </p>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            <div style={{ background: t.surface, borderColor: t.border }} className="hover-card flex flex-col rounded-2xl border p-6 sm:p-8">
+              <h3 className="text-xl font-semibold">Have a short call</h3>
+              <p className="mt-3 flex-1 text-base leading-7" style={{ color: t.muted }}>
+                Show us how things currently work and we&apos;ll talk through where the strongest opportunities may be.
+              </p>
               <a
                 href={BOOKING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackEvent("solution_cta_click", { location: "final" })}
+                onClick={() => trackEvent("solution_cta_click", { location: "final_call" })}
                 style={{ background: t.accent, color: t.accentText }}
-                className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+                className="btn-solid mt-6 inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
               >
-                Show us your current process
+                Book a free short call
               </a>
+            </div>
+            <div style={{ background: t.surface, borderColor: t.border }} className="hover-card flex flex-col rounded-2xl border p-6 sm:p-8">
+              <h3 className="text-xl font-semibold">Send us how you work</h3>
+              <p className="mt-3 flex-1 text-base leading-7" style={{ color: t.muted }}>
+                Send us your website and a quick outline of how customers currently get pricing, quotes or place
+                orders. We&apos;ll take a look and come back with some initial thoughts.
+              </p>
               <button
-                onClick={() => { trackEvent("solution_demo_cta", { location: "final" }); scrollToId("demos"); }}
+                onClick={() => { trackEvent("solution_cta_click", { location: "final_enquiry" }); openForm(); }}
                 style={{ border: `1px solid ${t.border}` }}
-                className="btn-outline inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
+                className="btn-outline mt-6 inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
               >
-                Try the demo tools
+                Send us how you work
               </button>
             </div>
-            <p className="mt-6 text-xs" style={{ color: t.muted }}>
-              Projects can start with one simple commercial improvement and grow from there.
-            </p>
           </div>
-        </section>
 
-        {/* ===== Secondary conversion path: lightweight enquiry form ===== */}
-        <section id="enquiry" className="scroll-mt-20 py-16 sm:py-20">
-          <EnquiryForm t={t} />
+          {/* Expandable enquiry form - same section, collapsed by default */}
+          {formOpen && (
+            <div id="enquiry-form" className="mt-6 scroll-mt-20">
+              <EnquiryForm t={t} />
+            </div>
+          )}
         </section>
 
         <footer style={{ borderColor: t.border }} className="border-t py-8 text-center text-sm">
@@ -1387,7 +1265,7 @@ export default function OurSolutionPage() {
         style={{ background: t.accent, color: t.accentText }}
         className="btn-solid fixed inset-x-4 bottom-4 z-50 flex min-h-12 items-center justify-center rounded-full text-sm font-semibold shadow-lg sm:hidden"
       >
-        Show us your current process
+        Book a free short call
       </a>
       <div className="h-16 sm:hidden" />
     </main>
