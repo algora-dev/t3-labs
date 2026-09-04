@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 const BASE_URL = "https://www.t3labs.tech";
 
 export const metadata: Metadata = {
-  title: "Become Part of the Answer — AI Visibility & Sales Tools | T3 Labs",
+  title: "AI Visibility & Digital Sales Tools for Suppliers | T3 Labs",
   description:
-    "People now expect the answer immediately. We make your business part of the answer — with customer tools that measure, price and quote before your team touches the enquiry. See live demo tools.",
+    "T3 Labs builds pricing, estimating and quoting tools that help suppliers get found, give customers faster answers, reduce quoting workload and build stronger AI/search visibility.",
   alternates: { canonical: `${BASE_URL}/our-solution` },
   openGraph: {
-    title: "Become Part of the Answer — AI Visibility & Sales Tools | T3 Labs",
+    title: "AI Visibility & Digital Sales Tools for Suppliers | T3 Labs",
     description:
       "AI is answering your customers before they visit a website. We build tools that make your business part of the answer — faster pricing, easier buying, less manual work.",
     url: `${BASE_URL}/our-solution`,
