@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 /**
- * T3 Labs — "Become Part of the Answer" sales landing page (conversion upgrade).
+ * T3 Labs - "Become Part of the Answer" sales landing page (conversion upgrade).
  * Short by default, deep on demand: proof + detail in expandable cards.
  * Dark/light theme toggle (persisted), tokens matching growth proposal pages.
  */
@@ -53,12 +53,12 @@ const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
 
 const FEATURED_DEMOS = [
   {
-    name: "Apex Roofing — Supplier Pricing Tool",
+    name: "Apex Roofing - Supplier Pricing Tool",
     problem: "Let customers measure a job, calculate quantities and apply supplier pricing before your team needs to touch the enquiry.",
     href: "/supplier-pricing-tool/apex-roofing",
   },
   {
-    name: "Oakline Flooring — Supplier Pricing Tool",
+    name: "Oakline Flooring - Supplier Pricing Tool",
     problem: "Let flooring customers estimate a room, apply pricing and send a much more complete enquiry to the supplier.",
     href: "/supplier-pricing-tool/oakline-flooring",
   },
@@ -72,13 +72,13 @@ const FEATURED_DEMOS = [
 const ALL_DEMOS = [
   ...FEATURED_DEMOS,
   {
-    name: "Vertex Cladding — Supplier Pricing Tool",
+    name: "Vertex Cladding - Supplier Pricing Tool",
     problem: "Let cladding customers work out sheet quantities and pricing themselves instead of waiting for a quote.",
     href: "/supplier-pricing-tool/vertex-cladding",
   },
   {
     name: "Free Quote Generator",
-    problem: "Give customers a formatted, professional quote document immediately — no account, no waiting.",
+    problem: "Give customers a formatted, professional quote document immediately - no account, no waiting.",
     href: "https://quote-core.com/free-quote-generator",
   },
   {
@@ -99,7 +99,7 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/** Expandable card — collapsed headline/stat stays in DOM; expanded content rendered but visually hidden until open (crawlable). */
+/** Expandable card - collapsed headline/stat stays in DOM; expanded content rendered but visually hidden until open (crawlable). */
 function ExpandCard({
   t,
   id,
@@ -125,8 +125,8 @@ function ExpandCard({
       >
         <div>
           <p className="text-base font-semibold">{headline}</p>
-          <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>{stat}</p>
-          <p className="mt-2 text-xs font-medium uppercase tracking-wide" style={{ color: t.muted }}>Source: {source}</p>
+          <p className="proof-stat mt-2 text-sm leading-6" style={{ color: t.muted }}>{stat}</p>
+          {source ? <p className="mt-2 text-xs font-semibold uppercase tracking-wide" style={{ color: t.accentInk }}>Source: {source}</p> : null}
         </div>
         <span style={{ color: t.accentInk }} className={`mt-1 shrink-0 text-lg transition-transform ${open ? "rotate-180" : ""}`}>⌄</span>
       </button>
@@ -145,6 +145,15 @@ export default function OurSolutionPage() {
   const [showAllDemos, setShowAllDemos] = useState(false);
   const t = theme === "dark" ? dark : light;
 
+  const tabOrder = ["ai", "customers", "contractors", "team"] as const;
+  const tabLabels: Record<string, string> = { ai: "AI & Search", customers: "Customers", contractors: "Contractors", team: "Your Team" };
+  const tabIndex = tabOrder.indexOf(tab);
+  const switchTab = (dir: 1 | -1) => {
+    const next = tabOrder[(tabIndex + dir + tabOrder.length) % tabOrder.length];
+    setTab(next);
+    trackEvent("solution_carousel", { tab: next, dir: dir === 1 ? "next" : "prev" });
+  };
+
   const switchTheme = (next: Theme) => {
     setTheme(next);
     window.localStorage.setItem("t3-solution-theme", next);
@@ -156,6 +165,7 @@ export default function OurSolutionPage() {
       className="min-h-screen antialiased transition-colors duration-200 [button]:cursor-pointer [a]:cursor-pointer"
     >
       <style>{`
+        main button, main a, main [role="button"], main summary { cursor: pointer; }
         main button, main a { transition: filter .15s ease, transform .15s ease, opacity .15s ease, border-color .15s ease, background-color .15s ease, box-shadow .15s ease; }
         .btn-solid:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(215,255,0,0.28); }
         .btn-solid:active { transform: translateY(0); filter: brightness(0.97); }
@@ -163,6 +173,7 @@ export default function OurSolutionPage() {
         .btn-soft:hover { background-color: var(--t-accent-ink) !important; color: ${t.accentText} !important; }
         .hover-card:hover { transform: translateY(-2px); border-color: var(--t-accent-ink) !important; }
         .card-toggle:hover { background-color: rgba(127,127,127,0.06); }
+        .proof-stat strong { color: var(--t-accent-ink); }
       `}</style>
       {/* ===== Sticky header ===== */}
       <header
@@ -217,7 +228,7 @@ export default function OurSolutionPage() {
             AI is increasingly giving customers those answers before they ever visit a website.
           </p>
           <p className="mt-4 max-w-2xl text-lg leading-8" style={{ color: t.muted }}>
-            We help make your business part of the answer — and give customers, contractors and your own team tools
+            We help make your business part of the answer - and give customers, contractors and your own team tools
             that make it faster and easier to price, quote and buy.
           </p>
 
@@ -274,7 +285,7 @@ export default function OurSolutionPage() {
             <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 text-center sm:p-8">
               <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.muted }}>The old way</p>
               <div className="mx-auto mt-6 max-w-xs space-y-3">
-                {["Search", "Visit several websites", "Compare products", "Find pricing", "Make enquiries", "Wait for replies", "Work out the answer yourself"].map((s, i, arr) => (
+                {["Search (2-3 keywords)", "Visit several websites", "Compare products", "Find pricing", "Make enquiries", "Wait for replies", "Work out the answer yourself"].map((s, i, arr) => (
                   <div key={s}>
                     <p style={{ background: t.surfaceAlt }} className="rounded-xl px-4 py-2.5 text-sm font-medium">{s}</p>
                     {i < arr.length - 1 && <p style={{ color: t.muted }} className="py-0.5 text-center text-xs">↓</p>}
@@ -283,9 +294,9 @@ export default function OurSolutionPage() {
               </div>
             </div>
             <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-6 text-center sm:p-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>The AI way</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>The new way</p>
               <div className="mx-auto mt-6 max-w-xs space-y-3">
-                {["Explain the problem", "AI searches for useful information", "AI compares the options", "AI builds the answer", "The customer gets a result immediately"].map((s, i, arr) => (
+                {["Ask AI your question, in full", "AI searches for useful information", "AI compares the options", "AI builds the answer", "The customer gets a result immediately"].map((s, i, arr) => (
                   <div key={s}>
                     <p style={{ background: t.surface }} className="rounded-xl px-4 py-2.5 text-sm font-medium">{s}</p>
                     {i < arr.length - 1 && <p style={{ color: t.accentInk }} className="py-0.5 text-center text-xs">↓</p>}
@@ -298,9 +309,13 @@ export default function OurSolutionPage() {
           <p className="mt-8 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
             The customer is doing less of the research themselves. AI is increasingly doing more of it for them.
           </p>
+          <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
+            In many cases the customer no longer needs to leave the AI page at all: AI is creating the solution right
+            there. And when the next step is a link, those are the links that get clicked.
+          </p>
         </section>
 
-        {/* ===== 3. NEW — Proof: this is already happening ===== */}
+        {/* ===== 3. NEW - Proof: this is already happening ===== */}
         <section className="py-16 sm:py-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">This is already happening.</h2>
           <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
@@ -343,13 +358,13 @@ export default function OurSolutionPage() {
               t={t}
               id="invoca_genai"
               headline="AI is already part of the buying journey."
-              stat={<>In a 2026 US/UK home-services study, <strong>63%</strong> of consumers surveyed said they used generative AI to research a high-stakes purchase, up from <strong>46% in 2025</strong>.</>}
+              stat={<>In a 2026 US/UK home-services study, <strong>63% of consumers surveyed</strong> said they used generative AI to research a high-stakes purchase - up from <strong>46% in 2025</strong>, and likely to keep increasing each year.</>}
               source="Invoca, 2026"
             >
               <p>
                 Invoca&apos;s 2026 Home Services Buyer Experience Report found that 63% of the US and UK home-services
                 consumers in its sample had used tools such as ChatGPT, Gemini or Claude to research a high-stakes
-                purchase — up 17 percentage points from the previous year.
+                purchase - up 17 percentage points from the previous year.
               </p>
               <p>
                 This is survey evidence of a direction of travel, not a claim that 63% of all consumers everywhere
@@ -471,7 +486,7 @@ export default function OurSolutionPage() {
         <section id="demos" className="scroll-mt-20 py-16 sm:py-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">See what this looks like in practice.</h2>
           <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            These are live tools built for real trades and suppliers — open any of them and try it yourself.
+            These are live tools built for real trades and suppliers - open any of them and try it yourself.
           </p>
 
           <div className="mt-10 grid gap-5 md:grid-cols-3">
@@ -506,17 +521,30 @@ export default function OurSolutionPage() {
         <section id="who" className="scroll-mt-20 py-16 sm:py-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">One system. Four ways it creates value.</h2>
 
-          <div className="mt-8 flex flex-wrap gap-2">
-            {([["ai", "AI & Search"], ["customers", "Customers"], ["contractors", "Contractors"], ["team", "Your Team"]] as const).map(([key, label]) => (
-              <button
-                key={key}
-                onClick={() => { setTab(key); trackEvent("solution_tab", { tab: key }); }}
-                style={tab === key ? { background: t.accent, color: t.accentText, borderColor: t.accent } : { border: `1px solid ${t.border}`, color: t.muted }}
-                className="btn-outline rounded-full border px-5 py-2 text-sm font-medium"
-              >
-                {label}
-              </button>
-            ))}
+          {/* Carousel controls - large arrows so it's obvious you can move between audiences */}
+          <div className="mt-8 flex items-center justify-between gap-3 sm:gap-6">
+            <button
+              onClick={() => switchTab(-1)}
+              aria-label="Previous audience"
+              style={{ background: t.accent, color: t.accentText }}
+              className="btn-solid flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl font-bold leading-none"
+            >
+              ←
+            </button>
+            <div className="min-w-0 flex-1 text-center">
+              <p className="truncate text-lg font-semibold">{tabLabels[tab]}</p>
+              <p className="mt-1 text-xs" style={{ color: t.muted }}>
+                {tabIndex + 1} of {tabOrder.length} · use the arrows to see who benefits
+              </p>
+            </div>
+            <button
+              onClick={() => switchTab(1)}
+              aria-label="Next audience"
+              style={{ background: t.accent, color: t.accentText }}
+              className="btn-solid flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl font-bold leading-none"
+            >
+              →
+            </button>
           </div>
 
           <div style={{ background: t.surface, borderColor: t.border }} className="mt-6 rounded-2xl border p-6 sm:p-10">
@@ -555,7 +583,7 @@ export default function OurSolutionPage() {
                 <h3 className="text-2xl font-semibold">Give contractors a reason to keep quoting with your products.</h3>
                 <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
                   The same tools let contractors measure the job, calculate materials, apply your products and pricing,
-                  add their own labour and waste, and produce a quote for their customer — which naturally connects the
+                  add their own labour and waste, and produce a quote for their customer - which naturally connects the
                   material purchase to the supplier.
                 </p>
                 <p style={{ background: t.accentSoft }} className="mt-6 rounded-xl px-5 py-4 text-base font-semibold">
@@ -591,7 +619,7 @@ export default function OurSolutionPage() {
           <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-8 text-center sm:p-12">
             <p className="mx-auto max-w-3xl text-2xl font-bold leading-snug sm:text-3xl">
               If a customer could work out the right quantities, get useful pricing and send you a much more complete
-              job before your team touched the enquiry — would that save your team time or help you win more work?
+              job before your team touched the enquiry - would that save your team time or help you win more work?
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <button
@@ -599,7 +627,7 @@ export default function OurSolutionPage() {
                 style={{ background: t.accent, color: t.accentText }}
                 className="btn-solid rounded-full px-6 py-2.5 text-sm font-semibold"
               >
-                Yes — definitely
+                Yes - definitely
               </button>
               <button
                 onClick={() => { trackEvent("solution_qualify_2", { answer: "probably" }); scrollToId("phases"); }}
@@ -720,7 +748,7 @@ export default function OurSolutionPage() {
               </p>
               <p>
                 This supports the basic principle that making useful public information accessible to AI and search
-                systems creates an opportunity for that information — and the business behind it — to be surfaced in
+                systems creates an opportunity for that information - and the business behind it - to be surfaced in
                 AI-led research.
               </p>
               <a
@@ -750,7 +778,7 @@ export default function OurSolutionPage() {
               ))}
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-center text-sm leading-6" style={{ color: t.muted }}>
-              The long-term goal is to make the business one of the strongest useful sources in its niche — so that
+              The long-term goal is to make the business one of the strongest useful sources in its niche - so that
               when customers ask AI or search engines about that product, industry or market, the business has more
               useful information available than competitors who publish little more than generic product pages and
               quote forms.
@@ -758,7 +786,7 @@ export default function OurSolutionPage() {
           </div>
         </section>
 
-        {/* ===== 14. Benefits — 4 expandable cards ===== */}
+        {/* ===== 14. Benefits - 4 expandable cards ===== */}
         <section className="py-16 sm:py-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">What this can improve</h2>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -844,7 +872,7 @@ export default function OurSolutionPage() {
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Start with your current process.</h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
               You do not need to know which tool you need. Show us how customers currently find you, work out what
-              they need, get pricing and place orders — and how your team handles those enquiries. We&apos;ll look for
+              they need, get pricing and place orders - and how your team handles those enquiries. We&apos;ll look for
               the simplest opportunities to remove friction, save time, improve conversion and strengthen your
               position online.
             </p>
@@ -875,7 +903,7 @@ export default function OurSolutionPage() {
 
         <footer style={{ borderColor: t.border }} className="border-t py-8 text-center text-sm">
           <a href="https://www.t3labs.tech" style={{ color: t.muted }} className="hover:opacity-70">
-            ← t3labs.tech — We remove your headache
+            ← t3labs.tech - We remove your headache
           </a>
         </footer>
       </div>

@@ -5,7 +5,7 @@ const BASE_URL = "https://www.t3labs.tech";
 export const metadata: Metadata = {
   title: "AI Visibility & Digital Sales Tools for Suppliers | T3 Labs",
   description:
-    "T3 Labs builds pricing, estimating and quoting tools that help suppliers get found, give customers faster answers, reduce quoting workload and build stronger AI/search visibility.",
+    "T3 Labs builds pricing, estimating and quoting tools that help suppliers get found, give customers faster answers, reduce quoting workload and build stronger AI and search visibility.",
   alternates: { canonical: `${BASE_URL}/our-solution` },
   openGraph: {
     title: "AI Visibility & Digital Sales Tools for Suppliers | T3 Labs",
