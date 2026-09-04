@@ -139,6 +139,183 @@ function ExpandCard({
   );
 }
 
+/** Quick self-assessment - 7 questions, one at a time, plain-language result. Sales qualifier, not a score. */
+const ASSESSMENT_QUESTIONS = [
+  { id: "pricing", category: "Pricing", q: "Can a customer see useful pricing or generate a realistic price estimate without contacting your team?" },
+  { id: "selection", category: "Product Selection", q: "Can a customer work out which products and quantities they need without speaking to a staff member?" },
+  { id: "quote", category: "Quote Journey", q: "Can a customer complete most of the quoting process online before your team gets involved?" },
+  { id: "clarity", category: "Product Clarity", q: "Can someone unfamiliar with your business clearly understand what you sell, where you sell it and who it is suitable for from your website alone?" },
+  { id: "expertise", category: "Original Expertise", q: "Do you publish useful information based on your own expertise, products, pricing or real customer activity?" },
+  { id: "access", category: "Public Accessibility", q: "Is your most useful product, pricing and technical information publicly accessible without requiring a login, phone call or quote request?" },
+  { id: "data", category: "First-Party Data", q: "Do you collect useful data from how customers price, quote, select products or use your tools?" },
+] as const;
+
+type AnswerValue = 0 | 1 | 2;
+const ANSWER_LABELS: Record<AnswerValue, string> = { 2: "Yes", 1: "Partly", 0: "No" };
+
+function SelfAssessment({ t }: { t: Tokens }) {
+  const [started, setStarted] = useState(false);
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState<(AnswerValue | null)[]>(Array(ASSESSMENT_QUESTIONS.length).fill(null));
+  const done = started && answers.every((a) => a !== null);
+
+  const total = answers.reduce<number>((s, a) => s + (a ?? 0), 0);
+  const band = total <= 4 ? 1 : total <= 9 ? 2 : 3;
+  const bandCopy = {
+    1: {
+      heading: "There are several clear gaps in your online buying journey.",
+      body: "Customers - and the systems helping them research - currently need to work harder to understand your products, pricing or buying process. That creates opportunities to make the business easier to find, easier to buy from and easier for your team to manage.",
+      cta: "Show us your current process",
+    },
+    2: {
+      heading: "You already have some useful foundations.",
+      body: "Parts of the buying journey are working, but there are still opportunities to give customers faster answers, reduce manual work and provide more useful information online. The next step is usually connecting the pieces and improving the weakest parts of the journey.",
+      cta: "See where we would improve it",
+    },
+    3: {
+      heading: "You have a strong foundation.",
+      body: "You already provide a good amount of useful information and self-service capability. The opportunity now is to connect those systems, capture better first-party data and build a stronger long-term information advantage around your niche.",
+      cta: "See how we could build on it",
+    },
+  }[band];
+
+  const lowest = [...ASSESSMENT_QUESTIONS]
+    .map((q, i) => ({ ...q, score: answers[i] ?? 2 }))
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3)
+    .filter((q) => (answers[ASSESSMENT_QUESTIONS.findIndex((x) => x.id === q.id)] ?? 2) < 2);
+
+  const answer = (v: AnswerValue) => {
+    if (!started) {
+      setStarted(true);
+      trackEvent("assessment_start");
+    }
+    const next = [...answers];
+    next[step] = v;
+    setAnswers(next);
+    trackEvent("assessment_answer", { question: ASSESSMENT_QUESTIONS[step].id, answer: ANSWER_LABELS[v] });
+    if (next.every((a) => a !== null)) trackEvent("assessment_complete", { band: String(band) });
+    if (step < ASSESSMENT_QUESTIONS.length - 1) setTimeout(() => setStep(step + 1), 150);
+  };
+
+  const restart = () => { setStarted(false); setStep(0); setAnswers(Array(ASSESSMENT_QUESTIONS.length).fill(null)); };
+
+  return (
+    <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
+      {!done ? (
+        <div>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Quick Assessment</p>
+            <p className="text-sm font-semibold" style={{ color: t.muted }}>
+              {started ? `Question ${step + 1} of ${ASSESSMENT_QUESTIONS.length}` : "7 questions · under 60 seconds"}
+            </p>
+          </div>
+
+          {started ? (
+            <>
+              <div className="mt-4 flex gap-1.5" aria-hidden="true">
+                {ASSESSMENT_QUESTIONS.map((q, i) => (
+                  <span key={q.id} style={{ background: answers[i] !== null ? t.accent : t.surfaceAlt }} className="h-1.5 flex-1 rounded-full" />
+                ))}
+              </div>
+              <h3 className="mt-6 max-w-2xl text-xl font-semibold leading-8 sm:text-2xl">{ASSESSMENT_QUESTIONS[step].q}</h3>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                {([2, 1, 0] as AnswerValue[]).map((v) => (
+                  <button
+                    key={v}
+                    onClick={() => answer(v)}
+                    style={answers[step] === v ? { background: t.accent, color: t.accentText, borderColor: t.accent } : { background: t.surfaceAlt, color: t.text, borderColor: t.border }}
+                    className="btn-outline min-h-12 rounded-full border px-6 py-3 text-base font-semibold"
+                  >
+                    {ANSWER_LABELS[v]}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-6 flex items-center justify-between">
+                <button
+                  onClick={() => setStep(Math.max(0, step - 1))}
+                  disabled={step === 0}
+                  style={{ color: step === 0 ? t.border : t.accentInk }}
+                  className="text-sm font-semibold hover:underline disabled:cursor-default disabled:no-underline"
+                >
+                  ← Back
+                </button>
+                {step < ASSESSMENT_QUESTIONS.length - 1 && answers.slice(step + 1).some((a) => a !== null) && (
+                  <button onClick={() => setStep(step + 1)} style={{ color: t.accentInk }} className="text-sm font-semibold hover:underline">
+                    Next →
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="mt-6">
+              <h3 className="max-w-2xl text-xl font-semibold leading-8 sm:text-2xl">How much of the buying answer can AI get from your business?</h3>
+              <p className="mt-3 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
+                Answer a few quick questions. There is no perfect score - the goal is simply to identify obvious gaps.
+              </p>
+              <button
+                onClick={() => { setStarted(true); trackEvent("assessment_start"); }}
+                style={{ background: t.accent, color: t.accentText }}
+                className="btn-solid mt-6 inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+              >
+                Start the assessment
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div>
+          <h3 className="text-2xl font-bold sm:text-3xl">{bandCopy.heading}</h3>
+          <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>{bandCopy.body}</p>
+
+          <div className="mt-8 grid gap-2 sm:grid-cols-2">
+            {ASSESSMENT_QUESTIONS.map((q, i) => (
+              <div key={q.id} style={{ background: t.surfaceAlt }} className="flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm">
+                <span className="font-medium">{q.category}</span>
+                <span className="font-semibold" style={{ color: (answers[i] ?? 0) < 2 ? t.accentInk : t.muted }}>
+                  {ANSWER_LABELS[(answers[i] ?? 0) as AnswerValue]}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {lowest.length > 0 && (
+            <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="mt-6 rounded-2xl border p-6">
+              <p className="font-semibold">Your biggest opportunities appear to be:</p>
+              <ul className="mt-3 space-y-1.5">
+                {lowest.map((q) => <li key={q.id} className="text-sm" style={{ color: t.muted }}>• {q.category}</li>)}
+              </ul>
+            </div>
+          )}
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("assessment_cta", { band: String(band) })}
+              style={{ background: t.accent, color: t.accentText }}
+              className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+            >
+              {bandCopy.cta}
+            </a>
+            <button
+              onClick={() => { trackEvent("assessment_demo", { band: String(band) }); scrollToId("demos"); }}
+              style={{ border: `1px solid ${t.border}` }}
+              className="btn-outline inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
+            >
+              Try the demo tools
+            </button>
+            <button onClick={restart} style={{ color: t.muted }} className="inline-flex min-h-12 items-center justify-center px-4 text-sm font-semibold hover:underline">
+              Restart assessment
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function OurSolutionPage() {
   const [theme, setTheme] = useState<Theme>("dark");
   const [tab, setTab] = useState<"ai" | "customers" | "contractors" | "team">("ai");
@@ -310,8 +487,8 @@ export default function OurSolutionPage() {
             The customer is doing less of the research themselves. AI is increasingly doing more of it for them.
           </p>
           <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
-            In many cases the customer no longer needs to leave the AI page at all: AI is creating the solution right
-            there. And when the next step is a link, those are the links that get clicked.
+            AI can now answer much more of the customer&apos;s question before they ever visit a website. When it
+            references sources as part of that answer, you want your business to be one of them.
           </p>
         </section>
 
@@ -358,7 +535,7 @@ export default function OurSolutionPage() {
               t={t}
               id="invoca_genai"
               headline="AI is already part of the buying journey."
-              stat={<>In a 2026 US/UK home-services study, <strong>63% of consumers surveyed</strong> said they used generative AI to research a high-stakes purchase - up from <strong>46% in 2025</strong>, and likely to keep increasing each year.</>}
+              stat={<>In a 2026 US/UK home-services study, <strong>63% of consumers surveyed</strong> said they used generative AI to research a high-stakes purchase - up from <strong>46% in 2025</strong>.</>}
               source="Invoca, 2026"
             >
               <p>
@@ -370,40 +547,14 @@ export default function OurSolutionPage() {
                 This is survey evidence of a direction of travel, not a claim that 63% of all consumers everywhere
                 behave this way.
               </p>
+              <p className="font-semibold" style={{ color: t.text }}>
+                Based on 134 home-services respondents across the US and UK.
+              </p>
               <a
                 href="https://www.invoca.com/uk/reports/home-services-buyer-experience-report-2026"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("solution_source_click", { source: "invoca_genai" })}
-                style={{ color: t.accentInk }}
-                className="mt-2 inline-block font-semibold hover:underline"
-              >
-                View the research →
-              </a>
-            </ExpandCard>
-
-            <ExpandCard
-              t={t}
-              id="invoca_speed"
-              headline="Customers are willing to move to whoever answers faster."
-              stat={<>In the same 2026 home-services study, <strong>79%</strong> of consumers surveyed said they would switch to a competitor that responds faster.</>}
-              source="Invoca, 2026"
-            >
-              <p>
-                The same research found that 79% of surveyed US and UK home-services consumers would switch to a
-                competitor that responds faster, and that <strong>26% had called a business because information they
-                needed was not available online</strong>.
-              </p>
-              <p>
-                Speed matters, and customers are willing to change provider when another business answers faster. Our
-                approach gives customers more of the answer before they need to call, email or wait for somebody to
-                respond.
-              </p>
-              <a
-                href="https://www.invoca.com/uk/reports/home-services-buyer-experience-report-2026"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("solution_source_click", { source: "invoca_speed" })}
                 style={{ color: t.accentInk }}
                 className="mt-2 inline-block font-semibold hover:underline"
               >
@@ -437,6 +588,11 @@ export default function OurSolutionPage() {
             <strong style={{ color: t.text }}>The more useful information your business can provide, the more
             opportunity it has to become part of the answer.</strong>
           </p>
+
+          {/* NEW - Self-assessment: what matters -> how much do you provide -> the gap */}
+          <div className="mt-10">
+            <SelfAssessment t={t} />
+          </div>
         </section>
 
         {/* ===== 5. What we build ===== */}
@@ -520,36 +676,45 @@ export default function OurSolutionPage() {
         {/* ===== 7. Four ways the system creates value ===== */}
         <section id="who" className="scroll-mt-20 py-16 sm:py-20">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">One system. Four ways it creates value.</h2>
+          <p className="mt-4 max-w-2xl text-base font-semibold leading-7">
+            Explore all four ways the same system creates value.
+          </p>
+          <p className="mt-1 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
+            Choose a view below, or use the arrows to step through them.
+          </p>
 
-          {/* Carousel controls - large arrows so it's obvious you can move between audiences */}
-          <div className="mt-8 flex items-center justify-between gap-3 sm:gap-6">
-            <button
-              onClick={() => switchTab(-1)}
-              aria-label="Previous audience"
-              style={{ background: t.accent, color: t.accentText }}
-              className="btn-solid flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl font-bold leading-none"
-            >
-              ←
-            </button>
-            <div className="min-w-0 flex-1 text-center">
-              <p className="truncate text-lg font-semibold">{tabLabels[tab]}</p>
-              <p className="mt-1 text-xs" style={{ color: t.muted }}>
-                {tabIndex + 1} of {tabOrder.length} · use the arrows to see who benefits
-              </p>
-            </div>
-            <button
-              onClick={() => switchTab(1)}
-              aria-label="Next audience"
-              style={{ background: t.accent, color: t.accentText }}
-              className="btn-solid flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl font-bold leading-none"
-            >
-              →
-            </button>
+          {/* Large explicit tabs - over-obvious that there are four views */}
+          <div
+            role="tablist"
+            aria-label="Audience views"
+            onKeyDown={(e) => {
+              if (e.key === "ArrowRight") { switchTab(1); }
+              else if (e.key === "ArrowLeft") { switchTab(-1); }
+            }}
+            className="mt-8 flex gap-2 overflow-x-auto pb-1 sm:gap-3"
+          >
+            {tabOrder.map((k) => (
+              <button
+                key={k}
+                role="tab"
+                id={`aud-tab-${k}`}
+                aria-selected={tab === k}
+                aria-controls={`aud-panel-${k}`}
+                tabIndex={tab === k ? 0 : -1}
+                onClick={() => { setTab(k); trackEvent("solution_carousel", { tab: k, dir: "tab" }); }}
+                style={tab === k
+                  ? { background: t.accent, color: t.accentText, borderColor: t.accent }
+                  : { background: t.surface, color: t.text, borderColor: t.border }}
+                className={`shrink-0 rounded-full border px-6 py-3 text-base font-semibold transition-all ${tab === k ? "btn-solid" : "btn-outline hover:border-current"} min-h-12`}
+              >
+                {tabLabels[k]}
+              </button>
+            ))}
           </div>
 
+          {/* All four panels stay in the DOM (crawlable); only display state changes */}
           <div style={{ background: t.surface, borderColor: t.border }} className="mt-6 rounded-2xl border p-6 sm:p-10">
-            {tab === "ai" && (
-              <div>
+            <div hidden={tab !== "ai"} role="tabpanel" id="aud-panel-ai" aria-labelledby="aud-tab-ai">
                 <h3 className="text-2xl font-semibold">Give AI useful information to work with.</h3>
                 <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
                   We structure tools and supporting information so they are easier for search engines and AI systems
@@ -564,9 +729,8 @@ export default function OurSolutionPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
-            )}
-            {tab === "customers" && (
+            </div>
+            <div hidden={tab !== "customers"} role="tabpanel" id="aud-panel-customers" aria-labelledby="aud-tab-customers">
               <div>
                 <h3 className="text-2xl font-semibold">Give customers the answer now.</h3>
                 <ul className="mt-6 grid gap-2 sm:grid-cols-2">
@@ -577,8 +741,8 @@ export default function OurSolutionPage() {
                   ))}
                 </ul>
               </div>
-            )}
-            {tab === "contractors" && (
+            </div>
+            <div hidden={tab !== "contractors"} role="tabpanel" id="aud-panel-contractors" aria-labelledby="aud-tab-contractors">
               <div>
                 <h3 className="text-2xl font-semibold">Give contractors a reason to keep quoting with your products.</h3>
                 <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
@@ -590,8 +754,8 @@ export default function OurSolutionPage() {
                   &ldquo;Use our system to quote your jobs.&rdquo;
                 </p>
               </div>
-            )}
-            {tab === "team" && (
+            </div>
+            <div hidden={tab !== "team"} role="tabpanel" id="aud-panel-team" aria-labelledby="aud-tab-team">
               <div>
                 <h3 className="text-2xl font-semibold">Make the same system useful for your own quoting team.</h3>
                 <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
@@ -610,7 +774,30 @@ export default function OurSolutionPage() {
                   on the work that actually needs them.
                 </p>
               </div>
-            )}
+            </div>
+          </div>
+
+          {/* Sequential arrows + counter below the panel */}
+          <div className="mt-6 flex items-center justify-center gap-6">
+            <button
+              onClick={() => switchTab(-1)}
+              aria-label="Previous audience"
+              style={{ background: t.accent, color: t.accentText }}
+              className="btn-solid flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl font-bold leading-none"
+            >
+              ←
+            </button>
+            <p className="min-w-24 text-center text-sm font-semibold" style={{ color: t.muted }}>
+              {tabIndex + 1} of {tabOrder.length}
+            </p>
+            <button
+              onClick={() => switchTab(1)}
+              aria-label="Next audience"
+              style={{ background: t.accent, color: t.accentText }}
+              className="btn-solid flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl font-bold leading-none"
+            >
+              →
+            </button>
           </div>
         </section>
 
