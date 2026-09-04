@@ -121,7 +121,7 @@ function ExpandCard({
       <button
         onClick={() => { setOpen(!open); if (!open) trackEvent("solution_card_expand", { card: id }); }}
         aria-expanded={open}
-        className="flex w-full cursor-pointer items-start justify-between gap-4 p-6 text-left"
+        className="card-toggle flex w-full cursor-pointer items-start justify-between gap-4 p-6 text-left"
       >
         <div>
           <p className="text-base font-semibold">{headline}</p>
@@ -152,9 +152,18 @@ export default function OurSolutionPage() {
 
   return (
     <main
-      style={{ background: t.bg, color: t.text }}
+      style={{ background: t.bg, color: t.text, ["--t-accent-ink" as string]: t.accentInk, ["--t-accent" as string]: t.accent }}
       className="min-h-screen antialiased transition-colors duration-200 [button]:cursor-pointer [a]:cursor-pointer"
     >
+      <style>{`
+        main button, main a { transition: filter .15s ease, transform .15s ease, opacity .15s ease, border-color .15s ease, background-color .15s ease, box-shadow .15s ease; }
+        .btn-solid:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(215,255,0,0.28); }
+        .btn-solid:active { transform: translateY(0); filter: brightness(0.97); }
+        .btn-outline:hover { border-color: var(--t-accent-ink) !important; transform: translateY(-1px); }
+        .btn-soft:hover { background-color: var(--t-accent-ink) !important; color: ${t.accentText} !important; }
+        .hover-card:hover { transform: translateY(-2px); border-color: var(--t-accent-ink) !important; }
+        .card-toggle:hover { background-color: rgba(127,127,127,0.06); }
+      `}</style>
       {/* ===== Sticky header ===== */}
       <header
         style={{ background: theme === "dark" ? "rgba(10,11,16,0.85)" : "rgba(251,252,255,0.92)", borderColor: t.border }}
@@ -177,7 +186,7 @@ export default function OurSolutionPage() {
               onClick={() => switchTheme(theme === "dark" ? "light" : "dark")}
               aria-label="Toggle light or dark theme"
               style={{ border: `1px solid ${t.border}`, color: t.muted }}
-              className="rounded-full px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-70"
+              className="btn-outline rounded-full px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-70"
             >
               {theme === "dark" ? "☀ Light" : "☾ Dark"}
             </button>
@@ -187,7 +196,7 @@ export default function OurSolutionPage() {
               rel="noopener noreferrer"
               onClick={() => trackEvent("solution_cta_click", { location: "sticky" })}
               style={{ background: t.accent, color: t.accentText }}
-              className="hidden rounded-full px-4 py-1.5 text-xs font-semibold sm:inline-block"
+              className="btn-solid hidden rounded-full px-4 py-1.5 text-xs font-semibold sm:inline-block"
             >
               Show us your current process
             </a>
@@ -221,14 +230,14 @@ export default function OurSolutionPage() {
               <button
                 onClick={() => { trackEvent("solution_qualify_1", { answer: "yes" }); scrollToId("shift"); }}
                 style={{ background: t.accent, color: t.accentText }}
-                className="rounded-full px-6 py-2.5 text-sm font-semibold"
+                className="btn-solid rounded-full px-6 py-2.5 text-sm font-semibold"
               >
                 Yes, I do this
               </button>
               <button
                 onClick={() => { trackEvent("solution_qualify_1", { answer: "seen" }); scrollToId("shift"); }}
                 style={{ border: `1px solid ${t.border}`, color: t.text }}
-                className="rounded-full px-6 py-2.5 text-sm font-medium"
+                className="btn-outline rounded-full px-6 py-2.5 text-sm font-medium"
               >
                 I&apos;ve seen people doing this
               </button>
@@ -240,7 +249,7 @@ export default function OurSolutionPage() {
             <button
               onClick={() => { trackEvent("solution_cta_click", { location: "hero_see_how" }); scrollToId("shift"); }}
               style={{ background: t.accent, color: t.accentText }}
-              className="inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+              className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
             >
               See how it works
             </button>
@@ -250,7 +259,7 @@ export default function OurSolutionPage() {
               rel="noopener noreferrer"
               onClick={() => trackEvent("solution_cta_click", { location: "hero" })}
               style={{ border: `1px solid ${t.border}` }}
-              className="inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
+              className="btn-outline inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
             >
               Show us your current process
             </a>
@@ -425,7 +434,7 @@ export default function OurSolutionPage() {
               { title: "Quote Easier", body: "Help customers, contractors and staff calculate and quote more efficiently." },
               { title: "Send Better Enquiries", body: "Collect more useful project information before the job reaches the team." },
             ].map((o) => (
-              <div key={o.title} style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-6">
+              <div key={o.title} style={{ background: t.accentSoft, borderColor: t.accentInk }} className="hover-card rounded-2xl border p-6">
                 <h3 className="text-lg font-semibold">{o.title}</h3>
                 <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>{o.body}</p>
               </div>
@@ -467,7 +476,7 @@ export default function OurSolutionPage() {
 
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {(showAllDemos ? ALL_DEMOS : FEATURED_DEMOS).map((d) => (
-              <div key={d.name} style={{ background: t.surface, borderColor: t.border }} className="flex flex-col rounded-2xl border p-6">
+              <div key={d.name} style={{ background: t.surface, borderColor: t.border }} className="hover-card flex flex-col rounded-2xl border p-6">
                 <h3 className="text-lg font-semibold">{d.name}</h3>
                 <p className="mt-3 flex-1 text-sm leading-6" style={{ color: t.muted }}>{d.problem}</p>
                 <a
@@ -476,7 +485,7 @@ export default function OurSolutionPage() {
                   rel="noopener noreferrer"
                   onClick={() => trackEvent("solution_demo_open", { demo: d.name })}
                   style={{ background: t.accent, color: t.accentText }}
-                  className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-semibold"
+                  className="btn-solid mt-5 inline-flex min-h-11 items-center justify-center rounded-full px-6 text-sm font-semibold"
                 >
                   Try the demo ↗
                 </a>
@@ -503,7 +512,7 @@ export default function OurSolutionPage() {
                 key={key}
                 onClick={() => { setTab(key); trackEvent("solution_tab", { tab: key }); }}
                 style={tab === key ? { background: t.accent, color: t.accentText, borderColor: t.accent } : { border: `1px solid ${t.border}`, color: t.muted }}
-                className="rounded-full border px-5 py-2 text-sm font-medium"
+                className="btn-outline rounded-full border px-5 py-2 text-sm font-medium"
               >
                 {label}
               </button>
@@ -588,14 +597,14 @@ export default function OurSolutionPage() {
               <button
                 onClick={() => { trackEvent("solution_qualify_2", { answer: "yes" }); scrollToId("phases"); }}
                 style={{ background: t.accent, color: t.accentText }}
-                className="rounded-full px-6 py-2.5 text-sm font-semibold"
+                className="btn-solid rounded-full px-6 py-2.5 text-sm font-semibold"
               >
                 Yes — definitely
               </button>
               <button
                 onClick={() => { trackEvent("solution_qualify_2", { answer: "probably" }); scrollToId("phases"); }}
                 style={{ border: `1px solid ${t.border}` }}
-                className="rounded-full px-6 py-2.5 text-sm font-medium"
+                className="btn-outline rounded-full px-6 py-2.5 text-sm font-medium"
               >
                 It probably would
               </button>
@@ -814,7 +823,7 @@ export default function OurSolutionPage() {
               { n: "2", title: "Connected sales tools", body: "Multiple tools working across pricing, estimating, quoting or customer journeys." },
               { n: "3", title: "Bespoke platform", body: "A deeper system tailored around customers, contractors, staff, pricing and workflows." },
             ].map((s) => (
-              <div key={s.n} style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 text-center">
+              <div key={s.n} style={{ background: t.surface, borderColor: t.border }} className="hover-card rounded-2xl border p-6 text-center">
                 <span style={{ background: t.accentSoft, color: t.accentInk }} className="inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold">
                   {s.n}
                 </span>
@@ -846,14 +855,14 @@ export default function OurSolutionPage() {
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("solution_cta_click", { location: "final" })}
                 style={{ background: t.accent, color: t.accentText }}
-                className="inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+                className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
               >
                 Show us your current process
               </a>
               <button
                 onClick={() => { trackEvent("solution_demo_cta", { location: "final" }); scrollToId("demos"); }}
                 style={{ border: `1px solid ${t.border}` }}
-                className="inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
+                className="btn-outline inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
               >
                 Try the demo tools
               </button>
@@ -878,7 +887,7 @@ export default function OurSolutionPage() {
         rel="noopener noreferrer"
         onClick={() => trackEvent("solution_cta_click", { location: "mobile_sticky" })}
         style={{ background: t.accent, color: t.accentText }}
-        className="fixed inset-x-4 bottom-4 z-50 flex min-h-12 items-center justify-center rounded-full text-sm font-semibold shadow-lg sm:hidden"
+        className="btn-solid fixed inset-x-4 bottom-4 z-50 flex min-h-12 items-center justify-center rounded-full text-sm font-semibold shadow-lg sm:hidden"
       >
         Show us your current process
       </a>
