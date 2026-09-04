@@ -153,6 +153,42 @@ const ASSESSMENT_QUESTIONS = [
 type AnswerValue = 0 | 1 | 2;
 const ANSWER_LABELS: Record<AnswerValue, string> = { 2: "Yes", 1: "Partly", 0: "No" };
 
+const CALL_CTA = {
+  band1: "Book a free short call to see where we could improve it",
+  band3: "Book a free short call to see how we could build on it",
+};
+
+const OPPORTUNITY_COPY: Record<string, { no: string; partly: string }> = {
+  pricing: {
+    no: "Customers still need your team before they can understand what something is likely to cost.",
+    partly: "Some pricing is available, but there may be room to make it more useful or easier to access.",
+  },
+  selection: {
+    no: "Customers still rely heavily on staff to work out what products or quantities they need.",
+    partly: "Customers can make some progress themselves, but still need help to complete the process.",
+  },
+  quote: {
+    no: "Most of the quoting journey still begins with a basic enquiry, phone call or email.",
+    partly: "Customers can provide some useful information, but your team still needs significant follow-up.",
+  },
+  clarity: {
+    no: "A new customer may struggle to fully understand what you sell, where you sell it or what is right for them.",
+    partly: "Most of the information is available, but some important details may still be difficult to find or understand.",
+  },
+  expertise: {
+    no: "Your website is not yet making much use of your own expertise, data, pricing or real-world experience.",
+    partly: "You already have some useful content, but there is room to make it more original and commercially useful.",
+  },
+  access: {
+    no: "Important buying information is still hidden behind enquiries, logins or staff involvement.",
+    partly: "Some useful information is public, but important parts of the buying decision still require contact.",
+  },
+  data: {
+    no: "You are not yet building much reusable insight from how customers price, quote or choose products.",
+    partly: "Useful data exists, but it may not yet be structured or used to build a long-term advantage.",
+  },
+};
+
 function SelfAssessment({ t }: { t: Tokens }) {
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
@@ -161,21 +197,22 @@ function SelfAssessment({ t }: { t: Tokens }) {
 
   const total = answers.reduce<number>((s, a) => s + (a ?? 0), 0);
   const band = total <= 4 ? 1 : total <= 9 ? 2 : 3;
+  const perfect = answers.every((a) => a === 2);
   const bandCopy = {
     1: {
-      heading: "There are several clear gaps in your online buying journey.",
-      body: "Customers - and the systems helping them research - currently need to work harder to understand your products, pricing or buying process. That creates opportunities to make the business easier to find, easier to buy from and easier for your team to manage.",
-      cta: "Show us your current process",
+      heading: "There are some clear opportunities to improve the buying journey.",
+      body: "You have several areas where customers could be getting faster answers, better information or a smoother path to pricing and quoting. That is a good place to start, because even a small improvement in the right part of the journey can create useful gains in customer experience, conversion and staff efficiency.",
+      cta: CALL_CTA.band1,
     },
     2: {
-      heading: "You already have some useful foundations.",
-      body: "Parts of the buying journey are working, but there are still opportunities to give customers faster answers, reduce manual work and provide more useful information online. The next step is usually connecting the pieces and improving the weakest parts of the journey.",
-      cta: "See where we would improve it",
+      heading: "You already have a good foundation.",
+      body: "You are already doing some of the important things well. The opportunity now is to improve the weaker parts of the journey, connect the pieces more effectively and make it easier for customers, contractors and staff to get the answers they need faster.",
+      cta: CALL_CTA.band1,
     },
     3: {
-      heading: "You have a strong foundation.",
-      body: "You already provide a good amount of useful information and self-service capability. The opportunity now is to connect those systems, capture better first-party data and build a stronger long-term information advantage around your niche.",
-      cta: "See how we could build on it",
+      heading: "You already have a strong foundation.",
+      body: "That is a major advantage. You already have many of the building blocks that make the next stage easier: connecting the systems, improving the customer journey, capturing better first-party data and compounding the authority you already have. The goal now is not to start from scratch - it is to scale what is already working, strengthen the gaps and keep increasing the distance between you and your competitors.",
+      cta: CALL_CTA.band3,
     },
   }[band];
 
@@ -194,7 +231,18 @@ function SelfAssessment({ t }: { t: Tokens }) {
     next[step] = v;
     setAnswers(next);
     trackEvent("assessment_answer", { question: ASSESSMENT_QUESTIONS[step].id, answer: ANSWER_LABELS[v] });
-    if (next.every((a) => a !== null)) trackEvent("assessment_complete", { band: String(band) });
+    // Score/band/analytics all calculated from the completed answers (incl. this final response)
+    if (next.every((a) => a !== null)) {
+      const finalTotal = next.reduce<number>((s, a) => s + (a ?? 0), 0);
+      const finalBand = finalTotal <= 4 ? 1 : finalTotal <= 9 ? 2 : 3;
+      const lowestIds = [...ASSESSMENT_QUESTIONS]
+        .map((q, i) => ({ id: q.id, score: next[i] ?? 2 }))
+        .sort((a, b) => a.score - b.score)
+        .slice(0, 3)
+        .filter((q) => q.score < 2)
+        .map((q) => q.id);
+      trackEvent("assessment_complete", { total: String(finalTotal), band: String(finalBand), lowest: lowestIds.join(",") });
+    }
     if (step < ASSESSMENT_QUESTIONS.length - 1) setTimeout(() => setStep(step + 1), 150);
   };
 
@@ -219,7 +267,10 @@ function SelfAssessment({ t }: { t: Tokens }) {
                 ))}
               </div>
               <h3 className="mt-6 max-w-2xl text-xl font-semibold leading-8 sm:text-2xl">{ASSESSMENT_QUESTIONS[step].q}</h3>
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <p className="mt-5 text-sm font-semibold" style={{ color: t.muted }}>
+                Choose the answer that best describes your business today.
+              </p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 {([2, 1, 0] as AnswerValue[]).map((v) => (
                   <button
                     key={v}
@@ -267,6 +318,7 @@ function SelfAssessment({ t }: { t: Tokens }) {
         <div>
           <h3 className="text-2xl font-bold sm:text-3xl">{bandCopy.heading}</h3>
           <p className="mt-4 max-w-2xl text-base leading-7" style={{ color: t.muted }}>{bandCopy.body}</p>
+          {band === 3 && <p className="mt-2 max-w-2xl text-base font-semibold">A strong foundation gives us more to build on.</p>}
 
           <div className="mt-8 grid gap-2 sm:grid-cols-2">
             {ASSESSMENT_QUESTIONS.map((q, i) => (
@@ -279,39 +331,231 @@ function SelfAssessment({ t }: { t: Tokens }) {
             ))}
           </div>
 
-          {lowest.length > 0 && (
+          {perfect ? (
             <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="mt-6 rounded-2xl border p-6">
-              <p className="font-semibold">Your biggest opportunities appear to be:</p>
-              <ul className="mt-3 space-y-1.5">
-                {lowest.map((q) => <li key={q.id} className="text-sm" style={{ color: t.muted }}>• {q.category}</li>)}
+              <p className="font-semibold">Where we would look next</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>You already have the main foundations in place. The next opportunity is to look at:</p>
+              <ul className="mt-3 space-y-1.5 text-sm" style={{ color: t.muted }}>
+                <li>• How well the systems connect together</li>
+                <li>• Whether the customer journey can be made even faster</li>
+                <li>• Whether contractors and staff can use the same underlying tools</li>
+                <li>• How much useful first-party data is being captured</li>
+                <li>• Whether that data is being turned into original public information</li>
+                <li>• How the business can continue compounding its authority and staying ahead</li>
+              </ul>
+              <p className="mt-4 text-sm font-semibold" style={{ color: t.text }}>
+                The advantage of already having a strong foundation is that we can focus more of the work on optimisation, scale and compounding what is already working.
+              </p>
+            </div>
+          ) : lowest.length > 0 ? (
+            <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="mt-6 rounded-2xl border p-6">
+              <p className="font-semibold">
+                {band === 1 ? "Your biggest opportunities" : band === 2 ? "The next areas we would look at" : "Where we would look next"}
+              </p>
+              <ul className="mt-3 space-y-3">
+                {lowest.map((q) => (
+                  <li key={q.id}>
+                    <p className="text-sm font-semibold">{q.category}</p>
+                    <p className="text-sm leading-6" style={{ color: t.muted }}>
+                      {q.score === 0 ? OPPORTUNITY_COPY[q.id].no : OPPORTUNITY_COPY[q.id].partly}
+                    </p>
+                  </li>
+                ))}
               </ul>
             </div>
-          )}
+          ) : null}
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <a
               href={BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => trackEvent("assessment_cta", { band: String(band) })}
+              onClick={() => trackEvent("assessment_call_click", { band: String(band), total: String(total) })}
               style={{ background: t.accent, color: t.accentText }}
               className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
             >
               {bandCopy.cta}
             </a>
             <button
-              onClick={() => { trackEvent("assessment_demo", { band: String(band) }); scrollToId("demos"); }}
+              onClick={() => { trackEvent("assessment_enquiry_click", { band: String(band), total: String(total) }); scrollToId("enquiry"); }}
               style={{ border: `1px solid ${t.border}` }}
               className="btn-outline inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-medium"
             >
-              Try the demo tools
+              Prefer not to call? Send us your details instead
             </button>
-            <button onClick={restart} style={{ color: t.muted }} className="inline-flex min-h-12 items-center justify-center px-4 text-sm font-semibold hover:underline">
+          </div>
+          <div className="mt-4 flex flex-wrap gap-5">
+            <button
+              onClick={() => { trackEvent("assessment_demo", { band: String(band) }); scrollToId("demos"); }}
+              style={{ color: t.accentInk }}
+              className="text-sm font-semibold hover:underline"
+            >
+              Try the demo tools →
+            </button>
+            <button onClick={restart} style={{ color: t.muted }} className="text-sm font-semibold hover:underline">
               Restart assessment
             </button>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/** Lightweight async enquiry form - secondary conversion path for prospects who don't want a call. */
+const IMPROVE_OPTIONS = [
+  "Get found more often",
+  "Improve AI/search visibility",
+  "Give customers faster pricing",
+  "Improve quoting",
+  "Convert more website visitors",
+  "Reduce staff workload",
+  "Give contractors better tools",
+  "Build better customer data",
+  "Not sure yet",
+];
+
+function EnquiryForm({ t }: { t: Tokens }) {
+  const [form, setForm] = useState({ name: "", business: "", email: "", website: "", message: "" });
+  const [improve, setImprove] = useState<string[]>([]);
+  const [touched, setTouched] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  const fieldStyle = { background: t.surfaceAlt, borderColor: t.border, color: t.text };
+
+  const submit = async () => {
+    if (!form.name.trim() || !form.business.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError("Please fill in your name, business name and a valid email address.");
+      return;
+    }
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch("/api/our-solution-enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, improve }),
+      });
+      if (!res.ok) throw new Error("submit failed");
+      setSubmitted(true);
+      trackEvent("enquiry_form_submit");
+    } catch {
+      setError("Something went wrong sending that. Please try again, or book a call instead.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (submitted) {
+    return (
+      <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 text-center sm:p-10">
+        <h3 className="text-2xl font-bold sm:text-3xl">Thanks - we&apos;ve got it.</h3>
+        <p className="mx-auto mt-4 max-w-xl text-base leading-7" style={{ color: t.muted }}>
+          We&apos;ll take a look at what you sent through and use it to understand where the strongest opportunities may be.
+        </p>
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-6" style={{ color: t.muted }}>
+          If you would still prefer to talk it through, you can also:
+        </p>
+        <a
+          href={BOOKING_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackEvent("solution_cta_click", { location: "enquiry_success" })}
+          style={{ background: t.accent, color: t.accentText }}
+          className="btn-solid mt-6 inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+        >
+          Book a free short call
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
+      <h3 className="text-2xl font-bold sm:text-3xl">Prefer to send us the details?</h3>
+      <p className="mt-3 max-w-2xl text-base leading-7" style={{ color: t.muted }}>
+        Tell us a little about your business and where you think the biggest opportunity might be. We can take a look
+        and come back with some initial thoughts.
+      </p>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <input
+          value={form.name}
+          onFocus={() => { if (!touched) { setTouched(true); trackEvent("enquiry_form_start"); } }}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          placeholder="Your name *"
+          style={fieldStyle}
+          className="min-h-12 rounded-xl border px-4 text-base focus:border-current focus:outline-none"
+        />
+        <input
+          value={form.business}
+          onFocus={() => { if (!touched) { setTouched(true); trackEvent("enquiry_form_start"); } }}
+          onChange={(e) => setForm({ ...form, business: e.target.value })}
+          placeholder="Business name *"
+          style={fieldStyle}
+          className="min-h-12 rounded-xl border px-4 text-base focus:border-current focus:outline-none"
+        />
+        <input
+          value={form.email}
+          onFocus={() => { if (!touched) { setTouched(true); trackEvent("enquiry_form_start"); } }}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          placeholder="Email *"
+          type="email"
+          style={fieldStyle}
+          className="min-h-12 rounded-xl border px-4 text-base focus:border-current focus:outline-none"
+        />
+        <input
+          value={form.website}
+          onFocus={() => { if (!touched) { setTouched(true); trackEvent("enquiry_form_start"); } }}
+          onChange={(e) => setForm({ ...form, website: e.target.value })}
+          placeholder="Website"
+          style={fieldStyle}
+          className="min-h-12 rounded-xl border px-4 text-base focus:border-current focus:outline-none"
+        />
+      </div>
+      <p className="mt-2 text-xs" style={{ color: t.muted }}>
+        If you have a website, send us the link so we can take a quick look.
+      </p>
+
+      <p className="mt-6 text-sm font-semibold">What would you most like to improve? (optional)</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {IMPROVE_OPTIONS.map((o) => {
+          const active = improve.includes(o);
+          return (
+            <button
+              key={o}
+              type="button"
+              onClick={() => setImprove(active ? improve.filter((x) => x !== o) : [...improve, o])}
+              style={active ? { background: t.accent, color: t.accentText, borderColor: t.accent } : { background: t.surfaceAlt, color: t.text, borderColor: t.border }}
+              className="rounded-full border px-4 py-2 text-sm font-medium transition-colors"
+            >
+              {o}
+            </button>
+          );
+        })}
+      </div>
+
+      <textarea
+        value={form.message}
+        onFocus={() => { if (!touched) { setTouched(true); trackEvent("enquiry_form_start"); } }}
+        onChange={(e) => setForm({ ...form, message: e.target.value })}
+        placeholder="What currently feels slow, manual or difficult for customers or staff?"
+        rows={3}
+        style={fieldStyle}
+        className="mt-6 w-full rounded-xl border px-4 py-3 text-base focus:border-current focus:outline-none"
+      />
+
+      {error && <p className="mt-4 text-sm font-semibold" style={{ color: "#ff6b6b" }}>{error}</p>}
+      <button
+        onClick={submit}
+        disabled={submitting}
+        style={{ background: t.accent, color: t.accentText }}
+        className="btn-solid mt-6 inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold disabled:opacity-60"
+      >
+        {submitting ? "Sending…" : "Send us your details"}
+      </button>
     </div>
   );
 }
@@ -671,6 +915,23 @@ export default function OurSolutionPage() {
           >
             {showAllDemos ? "Show fewer demo tools →" : "See all demo tools →"}
           </button>
+
+          {/* Small recurring CTA after demos */}
+          <div className="mt-10 flex flex-col items-center gap-1 text-center">
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("solution_cta_click", { location: "demos_inline" })}
+              style={{ background: t.accent, color: t.accentText }}
+              className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+            >
+              Book a free short call
+            </a>
+            <p className="mt-1 max-w-md text-sm" style={{ color: t.muted }}>
+              We&apos;ll look at your current process and identify where the strongest opportunity may be.
+            </p>
+          </div>
         </section>
 
         {/* ===== 7. Four ways the system creates value ===== */}
@@ -971,6 +1232,23 @@ export default function OurSolutionPage() {
               quote forms.
             </p>
           </div>
+
+          {/* Small recurring CTA after Phase Two / official proof */}
+          <div className="mt-8 flex flex-col items-center gap-1 text-center">
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("solution_cta_click", { location: "phases_inline" })}
+              style={{ background: t.accent, color: t.accentText }}
+              className="btn-solid inline-flex min-h-12 items-center justify-center rounded-full px-8 text-base font-semibold"
+            >
+              Book a free short call
+            </a>
+            <p className="mt-1 max-w-md text-sm" style={{ color: t.muted }}>
+              We&apos;ll look at your current process and identify where the strongest opportunity may be.
+            </p>
+          </div>
         </section>
 
         {/* ===== 14. Benefits - 4 expandable cards ===== */}
@@ -1086,6 +1364,11 @@ export default function OurSolutionPage() {
               Projects can start with one simple commercial improvement and grow from there.
             </p>
           </div>
+        </section>
+
+        {/* ===== Secondary conversion path: lightweight enquiry form ===== */}
+        <section id="enquiry" className="scroll-mt-20 py-16 sm:py-20">
+          <EnquiryForm t={t} />
         </section>
 
         <footer style={{ borderColor: t.border }} className="border-t py-8 text-center text-sm">
