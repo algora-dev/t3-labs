@@ -82,9 +82,9 @@ const ALL_DEMOS = [
     href: "https://quote-core.com/free-quote-generator",
   },
   {
-    name: "Free Construction Calculator",
-    problem: "Give buyers useful quantities and pricing instantly instead of making them wait for a reply.",
-    href: "https://quote-core.com/free-construction-calculator",
+    name: "QuoteCore+ Free Tools Hub",
+    problem: "Every free tool in one place - takeoff builders, calculators, quote and invoice generators. Try the full set yourself.",
+    href: "https://quote-core.com/free-tools",
   },
 ];
 
@@ -1041,52 +1041,54 @@ export default function OurSolutionPage() {
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Improve the business now. Build the advantage over time.</h2>
 
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            <div>
-              <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
-                <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase One</p>
-                <h3 className="mt-3 text-2xl font-bold">Make the business more useful now.</h3>
-                <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
-                  Give customers faster answers, generate better enquiries, speed up quoting and remove repetitive work
-                  from your team.
-                </p>
-                <p className="mt-6 text-lg font-semibold">More customers. Faster sales. Less manual work.</p>
-              </div>
-              <div className="mt-4">
-                <ExpandCard
-                  t={t}
-                  id="speed_gap"
-                  headline="Customers do not want to wait for basic information."
-                  stat={<><strong>79%</strong> of surveyed US and UK home-services consumers said they would switch to a competitor that responds faster. <strong>26%</strong> had called a business because the information they needed was not available online.</>}
-                  source="Invoca, 2026"
-                >
-                  <p>Our approach is simple: give customers more of the answer before they need to ask.</p>
-                  <a
-                    href="https://www.invoca.com/uk/reports/home-services-buyer-experience-report-2026"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackEvent("solution_source_click", { source: "invoca_speed_gap" })}
-                    style={{ color: t.accentInk }}
-                    className="mt-2 inline-block font-semibold hover:underline"
-                  >
-                    View research →
-                  </a>
-                </ExpandCard>
-              </div>
+            <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
+              <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase One</p>
+              <h3 className="mt-3 text-2xl font-bold">Make the business more useful now.</h3>
+              <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
+                Give customers faster answers, generate better enquiries, speed up quoting and remove repetitive work
+                from your team.
+              </p>
+              <p className="mt-6 text-lg font-semibold">More customers. Faster sales. Less manual work.</p>
             </div>
-            <div>
-              <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
-                <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase Two</p>
-                <h3 className="mt-3 text-2xl font-bold">Turn usage into a competitive advantage.</h3>
-                <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
-                  As customers, contractors and staff use the tools, the business builds first-party data around
-                  products, pricing, projects, demand and common questions.
-                </p>
-                <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
-                  Turn that into useful pricing resources, guides, reports, calculators and original information that
-                  customers, search engines and AI can use.
-                </p>
-              </div>
-              <div className="mt-4 space-y-4">
+            <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-6 sm:p-10">
+              <p className="text-sm font-semibold uppercase tracking-[0.15em]" style={{ color: t.accentInk }}>Phase Two</p>
+              <h3 className="mt-3 text-2xl font-bold">Turn usage into a competitive advantage.</h3>
+              <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
+                As customers, contractors and staff use the tools, the business builds first-party data around
+                products, pricing, projects, demand and common questions.
+              </p>
+              <p className="mt-4 text-base leading-7" style={{ color: t.muted }}>
+                Turn that into useful pricing resources, guides, reports, calculators and original information that
+                customers, search engines and AI can use.
+              </p>
+            </div>
+          </div>
+
+          {/* Speed proof - validates Phase One's immediate commercial value */}
+          <div className="mt-4">
+            <ExpandCard
+              t={t}
+              id="speed_gap"
+              headline="Customers do not want to wait for basic information."
+              stat={<><strong>79%</strong> of surveyed US and UK home-services consumers said they would switch to a competitor that responds faster. <strong>26%</strong> had called a business because the information they needed was not available online.</>}
+              source="Invoca, 2026"
+            >
+              <p>Our approach is simple: give customers more of the answer before they need to ask.</p>
+              <a
+                href="https://www.invoca.com/uk/reports/home-services-buyer-experience-report-2026"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("solution_source_click", { source: "invoca_speed_gap" })}
+                style={{ color: t.accentInk }}
+                className="mt-2 inline-block font-semibold hover:underline"
+              >
+                View research →
+              </a>
+            </ExpandCard>
+          </div>
+
+          {/* Google + OpenAI official proof - supports the Phase Two strategy */}
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
                 <ExpandCard
                   t={t}
                   id="google_guidance"
@@ -1135,8 +1137,6 @@ export default function OurSolutionPage() {
                     Read OpenAI guidance →
                   </a>
                 </ExpandCard>
-              </div>
-            </div>
           </div>
 
           {/* Compounding loop - no separate section spacing */}
