@@ -63,18 +63,18 @@ const FEATURED_DEMOS = [
     href: "/supplier-pricing-tool/oakline-flooring",
   },
   {
-    name: "Free Roof Takeoff Builder",
-    problem: "Give customers useful measurements and quantities immediately instead of making them wait for a reply.",
-    href: "https://quote-core.com/free-roofing-takeoff-builder",
+    name: "Vertex Cladding - Supplier Pricing Tool",
+    problem: "Let cladding customers work out sheet quantities and pricing themselves instead of waiting for a quote.",
+    href: "/supplier-pricing-tool/vertex-cladding",
   },
 ];
 
 const ALL_DEMOS = [
   ...FEATURED_DEMOS,
   {
-    name: "Vertex Cladding - Supplier Pricing Tool",
-    problem: "Let cladding customers work out sheet quantities and pricing themselves instead of waiting for a quote.",
-    href: "/supplier-pricing-tool/vertex-cladding",
+    name: "Free Roof Takeoff Builder",
+    problem: "Give customers useful measurements and quantities immediately instead of making them wait for a reply.",
+    href: "https://quote-core.com/free-roofing-takeoff-builder",
   },
   {
     name: "Free Quote Generator",
