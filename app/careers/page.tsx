@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     q: "How much can I earn?",
-    a: "Custom software projects start in the thousands, so a single qualified, closed referral can pay significantly more than months of small sales. Subscription referrals pay a recurring share of monthly revenue that compounds as your base grows. And custom deals can be structured flexibly - paying you a one-off commission, a recurring share of monthly payments, or a mix of both. Exact rates are agreed in writing before you start.",
+    a: "Custom software projects start in the thousands, so a single qualified, closed referral can pay significantly more than months of small sales. Subscription referrals pay a recurring share of monthly revenue that compounds as your base grows. And custom deals can be structured flexibly - paying you a one-off commission, a recurring share of monthly payments, or a mix of both. QuoteCore+ Done-For-You setup referrals (see quote-core.com/done-for-you-setup) pay a one-off 30% of the setup value - typically $150-$300+ per sale. Exact rates are agreed in writing before you start.",
   },
   {
     q: "How do customers pay for T3 Labs custom projects?",
@@ -193,6 +193,7 @@ const roles = [
       "Sell QuoteCore+ subscriptions to roofing and construction contractors - our live, multi-use quoting and takeoff platform. Every paying customer pays you a share of their subscription, every month they stay.",
     points: [
       "Recurring commission on monthly subscriptions",
+      "One-off boosters: Done-For-You setups pay 30% commission - $150-$300+ per sale",
       "Target: roofers, builders, estimators (UK, US, NZ, AU)",
       "Free tools and calculators work as powerful lead magnets",
       "Compounds as your customer base grows",
