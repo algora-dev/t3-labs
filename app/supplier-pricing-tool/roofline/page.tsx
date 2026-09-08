@@ -57,15 +57,9 @@ export default function RooflineEntryPage() {
 
       <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-14 md:py-20">
         <div className="text-center">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#C8102E]">
-            Step 1 of 1
-          </p>
           <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-semibold leading-tight tracking-tight text-[#111111]">
             What are you measuring?
           </h1>
-          <p className="mt-3 text-base leading-7 text-slate-500">
-            Pick a trade to start - you can restart with the other at any time.
-          </p>
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-2">
