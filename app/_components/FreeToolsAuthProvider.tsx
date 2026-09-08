@@ -1,16 +1,18 @@
 'use client';
 
 /**
- * T3 LABS DEMO PORT — no-op FreeToolsAuthProvider.
+ * T3 LABS DEMO PORT - no-op FreeToolsAuthProvider with authTheme passthrough.
  *
  * The supplier pricing tool was ported from quote-core.com, where free-tools
  * login is backed by Supabase. On t3labs.tech the demos are self-contained:
  * `login` is a per-supplier config flag. This provider satisfies the same
- * context API surface but always reports an anonymous visitor, so components
- * render their logged-out branches (which the tool handles gracefully).
+ * context API surface as master (including the authTheme prop that master
+ * pages pass so the login modal matches the supplier brand) but always
+ * reports an anonymous visitor, so components render their logged-out
+ * branches (which the tool handles gracefully).
  *
  * If a future demo needs real auth, replace this file with a Supabase-backed
- * implementation matching FreeToolsAuthState.
+ * implementation matching FreeToolsAuthState (see the quotecore-plus master).
  */
 
 import { createContext, useContext, type ReactNode } from 'react';
@@ -20,6 +22,11 @@ export interface FreeToolsTierInfo {
   tier: 1 | 2 | 3;
   hasAppAccount: boolean;
   limits: { aiPerDay: number; docPerDay: number | null; imagePerDay: number; textPerDay: number; label: string };
+}
+
+export interface FreeToolsAuthTheme {
+  accent: string;
+  accentHover: string;
 }
 
 interface FreeToolsAuthState {
@@ -54,7 +61,14 @@ const noopState: FreeToolsAuthState = {
 
 const FreeToolsAuthContext = createContext<FreeToolsAuthState>(noopState);
 
-export function FreeToolsAuthProvider({ children }: { children: ReactNode }) {
+export function FreeToolsAuthProvider({
+  children,
+  authTheme,
+}: {
+  children: ReactNode;
+  /** accepted for API parity with master; unused by this no-op port */
+  authTheme?: FreeToolsAuthTheme;
+}) {
   return <FreeToolsAuthContext.Provider value={noopState}>{children}</FreeToolsAuthContext.Provider>;
 }
 
