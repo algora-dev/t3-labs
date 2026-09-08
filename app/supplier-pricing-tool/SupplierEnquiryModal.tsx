@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { priceOutput, fmt } from './pricing';
 import { useSupplierConfig, toolUrls } from './supplierConfig';
 
@@ -25,13 +25,19 @@ export interface EnquiryModalProps {
   measureSet: import('./types').MeasurementSet;
   catalog: import('./types').SupplierProduct[];
   currency: string;
+  /** false = supply-only pricing: labour zeroed in the totals payload */
+  includeLabour?: boolean;
   /** 'quote' pre-selects detailed_quote, 'order' pre-selects order_request */
   initialIntent?: 'quote' | 'order';
+  /** Plan images captured by the takeoff station (annotated drawings +
+   *  originals). Pre-attached to the enquiry so the supplier receives
+   *  the marked-up plans and the output in one hit. Session-only. */
+  presetImages?: { name: string; dataUrl: string; annotated: boolean }[];
   onClose: () => void;
 }
 
 export function SupplierEnquiryModal({
-  supplierName, supplierSlug, measureSet, catalog, currency, initialIntent, onClose,
+  supplierName, supplierSlug, measureSet, catalog, currency, includeLabour = true, initialIntent, presetImages, onClose,
 }: EnquiryModalProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -46,6 +52,35 @@ export function SupplierEnquiryModal({
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Pre-attach the takeoff plan images (annotated drawings + originals)
+  // on mount - converted from data URLs to real Files so they upload
+  // through the normal attachment flow. Cap shared with manual picks (10).
+  useEffect(() => {
+    if (!presetImages || presetImages.length === 0) return;
+    const toFile = (img: { name: string; dataUrl: string }): Promise<File | null> =>
+      new Promise(resolve => {
+        try {
+          const comma = img.dataUrl.indexOf(',');
+          const meta = img.dataUrl.slice(0, comma);
+          const b64 = img.dataUrl.slice(comma + 1);
+          const mime = /data:(.*?)(;|$)/.exec(meta)?.[1] ?? 'image/png';
+          const bin = atob(b64);
+          const arr = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+          resolve(new File([arr], img.name, { type: mime }));
+        } catch {
+          resolve(null);
+        }
+      });
+    let cancelled = false;
+    void Promise.all(presetImages.map(toFile)).then(fs => {
+      if (cancelled) return;
+      const valid = fs.filter((f): f is File => !!f);
+      if (valid.length > 0) setFiles(prev => [...prev, ...valid].slice(0, 10));
+    });
+    return () => { cancelled = true; };
+  }, []);
   const { config: supplierCfg } = useSupplierConfig();
   const urls = toolUrls(supplierCfg);
 
@@ -54,7 +89,7 @@ export function SupplierEnquiryModal({
   const nameValid = name.trim().length >= 2;
   const canSend = nameValid && emailValid && !sending;
 
-  const output = priceOutput(measureSet, catalog);
+  const output = priceOutput(measureSet, catalog, includeLabour);
   const cur = currency;
 
   /** Enriched totals payload: groups -> lines, respecting the toggles. */
@@ -98,7 +133,7 @@ export function SupplierEnquiryModal({
     const selected = Array.from(e.target.files ?? []);
     const allowed = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
     const valid = selected.filter(f => allowed.includes(f.type) && f.size <= 10 * 1024 * 1024);
-    setFiles([...files, ...valid].slice(0, 5));
+    setFiles([...files, ...valid].slice(0, 10));
     if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
@@ -242,7 +277,7 @@ export function SupplierEnquiryModal({
                 <button
                   key={opt.value}
                   onClick={() => setIntent(opt.value)}
-                  className={`text-left rounded-lg border p-2.5 transition cursor-pointer ${intent === opt.value ? 'border-[#FF6B35] bg-orange-50/50' : 'border-slate-200 hover:border-slate-300'}`}
+                  className={`text-left rounded-lg border p-2.5 transition cursor-pointer ${intent === opt.value ? 'border-blue-400 bg-blue-50/50' : 'border-slate-200 hover:border-slate-300'}`}
                 >
                   <div className="text-xs font-semibold text-slate-900">{opt.label}</div>
                   <div className="text-[11px] text-slate-400 mt-0.5">{opt.desc}</div>
@@ -281,7 +316,7 @@ export function SupplierEnquiryModal({
 
           {/* File upload */}
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Attachments (optional, max 5 files, 10MB each)</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Attachments (optional, max 10 files, 10MB each)</label>
             <input
               ref={fileInputRef}
               type="file"
@@ -292,10 +327,10 @@ export function SupplierEnquiryModal({
             />
             <button
               onClick={() => fileInputRef.current?.click()}
-              disabled={files.length >= 5}
+              disabled={files.length >= 10}
               className="w-full rounded-lg border border-dashed border-slate-300 px-4 py-3 text-xs text-slate-500 hover:border-[#FF6B35] hover:bg-orange-50/30 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {files.length >= 5 ? 'Maximum 5 files reached' : '+ Add file (PDF, JPG, PNG, WebP)'}
+              {files.length >= 5 ? 'Maximum 10 files reached' : '+ Add file (PDF, JPG, PNG, WebP)'}
             </button>
             {files.length > 0 && (
               <div className="mt-2 space-y-1">
@@ -318,7 +353,7 @@ export function SupplierEnquiryModal({
               type="checkbox"
               checked={marketingConsent}
               onChange={(e) => setMarketingConsent(e.target.checked)}
-              className="mt-0.5 rounded border-slate-300 text-[#FF6B35] focus:ring-[#FF6B35]"
+              className="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
             />
             <span className="text-xs text-slate-500">
               Send me product updates, deals, and news from {supplierName}. I can unsubscribe at any time.
@@ -344,7 +379,7 @@ export function SupplierEnquiryModal({
           <button
             onClick={handleSend}
             disabled={!canSend}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#FF6B35] px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-[#ff5722] hover:shadow-[0_0_16px_rgba(255,107,53,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-[0_0_16px_rgba(37,99,235,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {sending ? (
               <>

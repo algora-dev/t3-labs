@@ -98,9 +98,61 @@ const UPLOAD_STEPS: GuideStep[] = [
   },
 ];
 
+/** Flow B for the SUPPLIER tool cladding instance: system-first - the user
+ *  creates named product systems, then attaches areas / lines / items to them. */
+const SUPPLIER_CLADDING_STEPS: GuideStep[] = [
+  {
+    title: 'Calibrate your plan',
+    body: 'Click two points on a known dimension printed on the plan, enter its real length and confirm. At least one calibration is required, then click Confirm Calibration (top left) to move on to your wall systems.',
+  },
+  {
+    title: 'Create your wall systems',
+    body: 'Click + Wall System (top left of the plan) and name it (e.g. Brick, Cedar, Plasterboard). Click it again to add as many systems as you need - one per covering on the job.',
+  },
+  {
+    title: 'Draw your areas',
+    body: 'Create as many areas as you need by drawing them with the Area tool (Polygon or Rectangle). Each area attaches to the system selected and highlighted in the left panel - click a different system first to switch.',
+  },
+  {
+    title: 'Add your components',
+    body: 'Components come in three types. Area-based (e.g. cedar, brick), single length (e.g. trims, battens) and single item (e.g. fixings, single pieces). Pick one, measure it, repeat for the rest.',
+  },
+  {
+    title: 'Finish and see your quote',
+    body: 'When you are happy, click Finish and Save in the top right. Your measurements roll into the supplier quote flow.',
+  },
+];
+
+/** Flow B for the SUPPLIER tool flooring instance: system-first. */
+const SUPPLIER_FLOORING_STEPS: GuideStep[] = [
+  {
+    title: 'Calibrate your plan',
+    body: 'Click two points on a known dimension printed on the plan, enter its real length and confirm. At least one calibration is required, then click Confirm Calibration (top left) to move on to your floor systems.',
+  },
+  {
+    title: 'Create your floor systems',
+    body: 'Click + Floor System (top left of the plan) and name it (e.g. Carpet, Tiles, Timber plank). Click it again to add as many systems as you need - one per covering on the job.',
+  },
+  {
+    title: 'Draw your areas',
+    body: 'Create as many areas as you need by drawing them with the Area tool (Polygon or Rectangle). Each area attaches to the system selected and highlighted in the left panel - click a different system first to switch.',
+  },
+  {
+    title: 'Add your components',
+    body: 'Components come in three types. Area-based (e.g. carpet, tiles), single length (e.g. scotia, skirting) and single item (e.g. glue, sundries). Pick one, measure it, repeat for the rest.',
+  },
+  {
+    title: 'Finish and see your quote',
+    body: 'When you are happy, click Finish and Save in the top right. Your measurements roll into the supplier quote flow.',
+  },
+];
+
 interface Props {
   open: boolean;
   flow: 'scan' | 'manual' | 'upload';
+  /** Trade variant for the upload flow: cladding / flooring supplier tools
+   *  get the system-first step set. Default roofing = existing steps. */
+  trade?: 'roofing' | 'cladding' | 'flooring';
   onClose: () => void;
 }
 
@@ -117,7 +169,7 @@ export function DemoLimitModal({ open, title, body, onClose }: { open: boolean; 
           <p className="mt-2 text-sm leading-relaxed text-slate-600">{body}</p>
           <div className="mt-6 flex flex-col gap-2">
             <a
-              href="/signup?source=takeoff-demo"
+              href="https://quote-core.com/signup?source=takeoff-demo"
               className="w-full inline-flex items-center justify-center rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-slate-800 hover:shadow-[0_0_16px_rgba(37,99,235,0.5)]"
             >
               Sign up for free
@@ -137,7 +189,7 @@ export function DemoLimitModal({ open, title, body, onClose }: { open: boolean; 
 
 const PANEL_W = 340;
 
-export function DemoGuideMeModal({ open, flow, onClose }: Props) {
+export function DemoGuideMeModal({ open, flow, trade = 'roofing', onClose }: Props) {
   const [step, setStep] = useState(0);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const dragRef = useRef<{ startX: number; startY: number; origX: number; origY: number } | null>(null);
@@ -178,7 +230,12 @@ export function DemoGuideMeModal({ open, flow, onClose }: Props) {
 
   if (!open) return null;
 
-  const steps = flow === 'scan' ? SCAN_STEPS : flow === 'upload' ? UPLOAD_STEPS : MANUAL_STEPS;
+  let steps: GuideStep[];
+  if (flow === 'scan') steps = SCAN_STEPS;
+  else if (flow === 'upload' && trade === 'cladding') steps = SUPPLIER_CLADDING_STEPS;
+  else if (flow === 'upload' && trade === 'flooring') steps = SUPPLIER_FLOORING_STEPS;
+  else if (flow === 'upload') steps = UPLOAD_STEPS;
+  else steps = MANUAL_STEPS;
   const current = steps[step];
   const isLast = step === steps.length - 1;
 

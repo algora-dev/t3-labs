@@ -28,6 +28,10 @@ export interface SupplierFeatures {
   convertToQuote: boolean;
   /** email-capture modal at the output (lead capture for the supplier) */
   emailCapture: boolean;
+  /** supply-mode choice at the start of the flow: "Supply only (materials)"
+   *  vs "Supply + install". When false the step is bypassed and the flow
+   *  behaves exactly as before (labour included where rates are set). */
+  pricingMode: boolean;
 }
 
 export interface SupplierConfig {
@@ -46,6 +50,16 @@ export interface SupplierConfig {
   logoDarkUrl: string | null;
   /** supplier brand colour - drives output page accents/borders */
   brandColor: string;
+  /** optional explicit header background - defaults to brandColor */
+  headerColor?: string;
+  /** render the header logo inside a white rounded box (dark-bg logos) */
+  logoWhiteBox?: boolean;
+  /** show " - demo only, not a real company" after the tagline (default true) */
+  demoDisclaimer?: boolean;
+  /** guide-me diagram indicative-line colour (default blue) */
+  guideLineColor?: string;
+  /** plain-language colour name for the guide copy ("indicated in red") */
+  guideLineColorName?: string;
   /** scoped theme palette - drives the tool shell CSS remap */
   theme: SupplierTheme;
   /** Powered by QuoteCore+ vs white-label */
@@ -67,12 +81,14 @@ export interface SupplierConfig {
   products: SupplierProduct[];
 }
 
-/** Resolved tool URLs - def overrides fall back to same-origin defaults. */
+/** Resolved tool URLs - def overrides fall back to T3 LABS PORT defaults:
+ *  everything points at quote-core.com because the backing APIs/signup
+ *  live there, not on t3labs.tech. */
 export function toolUrls(cfg: SupplierConfig) {
   return {
-    signup: cfg.urls?.signup ?? '/signup',
-    draftsApi: cfg.urls?.draftsApi ?? '/api/free-tools/drafts',
-    enquiryApi: cfg.urls?.enquiryApi ?? '/api/free-tools/supplier-enquiry',
+    signup: cfg.urls?.signup ?? 'https://quote-core.com/signup',
+    draftsApi: cfg.urls?.draftsApi ?? 'https://quote-core.com/api/free-tools/drafts',
+    enquiryApi: cfg.urls?.enquiryApi ?? 'https://quote-core.com/api/free-tools/supplier-enquiry',
   };
 }
 
@@ -218,7 +234,9 @@ export function useSupplierConfig(): SupplierConfigContextValue {
   return { slug: DEFAULT_SUPPLIER_SLUG, basePath: '/supplier-pricing-tool', config: fallbackConfig, ready: fallbackReady };
 }
 
-/** Trade price for a product under a config (blanket discount off baseline). */
-export function tradeUnitPrice(p: SupplierProduct, cfg: SupplierConfig): number {
-  return Math.round(p.unitPrice * (1 - (cfg.discountPct || 0) / 100) * 100) / 100;
+/** Trade price for a product under a config + effective discount pct
+ *  (customer tier discount when provided, blanket discount otherwise). */
+export function tradeUnitPrice(p: SupplierProduct, cfg: SupplierConfig, discountPct?: number): number {
+  const pct = discountPct ?? (cfg.discountPct || 0);
+  return Math.round(p.unitPrice * (1 - pct / 100) * 100) / 100;
 }

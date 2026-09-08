@@ -12,12 +12,15 @@ import { emptyMeasurementSet, GROUP_DEFS } from './types';
 import type { SupplierProduct } from './types';
 import { StepProgress } from './StepShell';
 import { EntryModeStep } from './EntryModeStep';
+import { PricingModeChoice, includeLabourFor } from './PricingModeChoice';
+import type { PricingMode } from './PricingModeChoice';
 import { MeasureEntryStep } from './MeasureEntryStep';
 import { ProductStep } from './ProductStep';
 import { OutputView } from './OutputView';
 import { CustomComponentsStep } from './CustomComponentsStep';
 import { TakeoffStation, stageSlug } from './TakeoffStation';
 import { tradeUnitPrice, useSupplierConfig } from './supplierConfig';
+import { readAdminData, effectiveTrade } from './adminData';
 import { useFreeToolsAuth } from '../_components/FreeToolsAuthProvider';
 
 /** Session persistence: the whole in-progress flow survives Back navigation,
@@ -28,6 +31,7 @@ const FLOW_KEY = '***';
 interface PersistedFlow {
   entryMode: EntryMode | null;
   haveSubMode: HaveSubMode | null;
+  pricingMode: PricingMode | null;
   measureSet: MeasurementSet;
   mode: Mode;
   flowSpeed: 'guide' | 'fast';
@@ -51,9 +55,13 @@ export function PortalFlow() {
   const restored = readPersisted();
   const [entryMode, setEntryMode] = useState<EntryMode | null>(restored?.entryMode ?? null);
   const [haveSubMode, setHaveSubMode] = useState<HaveSubMode | null>(restored?.haveSubMode ?? null);
+  const [pricingMode, setPricingMode] = useState<PricingMode | null>(restored?.pricingMode ?? null);
   const [planFile, setPlanFile] = useState<File | null>(null);
   const [planUrl, setPlanUrl] = useState<string | null>(null);
   const [measureSet, setMeasureSet] = useState<MeasurementSet>(restored?.measureSet ?? emptyMeasurementSet());
+  // Plan images captured at the takeoff station (annotated + originals) -
+  // handed to the send-to-supplier enquiry as pre-attached files.
+  const [planImages, setPlanImages] = useState<{ name: string; dataUrl: string; annotated: boolean }[] | null>(null);
   const [mode, setMode] = useState<Mode>(restored?.mode ?? 'standard');
   const [step, setStep] = useState(() => {
     // A restored takeoff flow at the station step has no plan file to
@@ -64,14 +72,16 @@ export function PortalFlow() {
   // Guide (one product group per page) vs Fast (all groups on one page).
   // Mirrors the takeoff tool's Guide me / Fast mode switch.
   const [flowSpeed, setFlowSpeed] = useState<'guide' | 'fast'>(restored?.flowSpeed ?? 'guide');
+  // Header brand click: offer go-back vs restart instead of wiping
+  const [restartOpen, setRestartOpen] = useState(false);
 
   // Persist after every change so Back/refresh/output-return never loses work
   useEffect(() => {
     try {
-      const p: PersistedFlow = { entryMode, haveSubMode, measureSet, mode, flowSpeed, step };
+      const p: PersistedFlow = { entryMode, haveSubMode, pricingMode, measureSet, mode, flowSpeed, step };
       window.sessionStorage.setItem(FLOW_KEY, JSON.stringify(p));
     } catch { /* ignore quota */ }
-  }, [entryMode, haveSubMode, measureSet, mode, flowSpeed, step]);
+  }, [entryMode, haveSubMode, pricingMode, measureSet, mode, flowSpeed, step]);
 
   const populated = GROUP_DEFS.filter(g => measureSet.groups[g.key].entries.length > 0);
   const productDefs = populated;
@@ -82,12 +92,17 @@ export function PortalFlow() {
   // can never be satisfied - treat trade pricing as public in that case.
   const { config, basePath } = useSupplierConfig();
   const { user } = useFreeToolsAuth();
+  // Supply-mode choice (materials only vs materials + install). Bypassed
+  // (labour included) when the supplier config disables the feature.
+  const showPricingMode = config.features.pricingMode;
+  const includeLabour = showPricingMode ? includeLabourFor(pricingMode) : true;
   const showTrade = (config.features.login && user != null) || !config.tradeRequiresLogin;
+  const trade = effectiveTrade(config, readAdminData(config.slug, config), user?.email);
   const catalog = useMemo<SupplierProduct[]>(() =>
     showTrade
-      ? config.products.map(p => ({ ...p, unitPrice: tradeUnitPrice(p, config) }))
+      ? config.products.map(p => ({ ...p, unitPrice: tradeUnitPrice(p, config, trade.pct) }))
       : config.products,
-    [config, showTrade]);
+    [config, showTrade, trade.pct]);
 
   const steps = [
     { key: 'mode', label: 'How do you want to price this job?' },
@@ -123,6 +138,7 @@ export function PortalFlow() {
   function reset() {
     setEntryMode(null);
     setHaveSubMode(null);
+    setPricingMode(null);
     setPlanFile(null);
     if (planUrl) URL.revokeObjectURL(planUrl);
     setPlanUrl(null);
@@ -131,8 +147,27 @@ export function PortalFlow() {
     try { window.sessionStorage.removeItem(FLOW_KEY); } catch { /* ignore */ }
   }
 
-  function handleTakeoffFinish(set: MeasurementSet) {
+  // Header brand click restarts the flow (choice modal keeps progress)
+  const hasProgress = step > 1
+    || Object.values(measureSet.groups).some(g => g.entries.length > 0)
+    || measureSet.appliedProducts.length > 0
+    || (measureSet.customComponents?.length ?? 0) > 0;
+  useEffect(() => {
+    const restart = () => { if (hasProgress) setRestartOpen(true); };
+    window.addEventListener('qc-spt-restart', restart);
+    return () => window.removeEventListener('qc-spt-restart', restart);
+  }, [hasProgress]);
+  // Warn before closing the tab with a job in progress (browser prompt)
+  useEffect(() => {
+    if (!hasProgress) return;
+    const h = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = ''; };
+    window.addEventListener('beforeunload', h);
+    return () => window.removeEventListener('beforeunload', h);
+  }, [hasProgress]);
+
+  function handleTakeoffFinish(set: MeasurementSet, planImages?: { name: string; dataUrl: string; annotated: boolean }[]) {
     setMeasureSet(set);
+    setPlanImages(planImages ?? null);
     // skip the manual entry step - measurements came from the station
     setStep(3);
   }
@@ -193,6 +228,9 @@ export function PortalFlow() {
             setEntryMode={setEntryMode}
             haveSubMode={haveSubMode}
             setHaveSubMode={setHaveSubMode}
+            pricingMode={pricingMode}
+            setPricingMode={setPricingMode}
+            showPricingMode={showPricingMode}
             planFile={planFile}
             setPlanFile={f => {
               if (planUrl) URL.revokeObjectURL(planUrl);
@@ -226,6 +264,7 @@ export function PortalFlow() {
             flowSpeed={flowSpeed}
             catalog={catalog}
             mode={mode}
+            includeLabour={includeLabour}
             onBack={() => setStep(1)}
             onNext={() => setStep(customStepNum)}
           />
@@ -243,6 +282,7 @@ export function PortalFlow() {
                 catalog={catalog}
                 setMeasureSet={setMeasureSet}
                 mode={mode}
+                includeLabour={includeLabour}
                 hideNav
                 onBack={() => setStep(2)}
                 onNext={() => {}}
@@ -272,6 +312,7 @@ export function PortalFlow() {
             catalog={catalog}
             setMeasureSet={setMeasureSet}
             mode={mode}
+            includeLabour={includeLabour}
             onBack={() => setStep(step - 1)}
             onNext={() => setStep(step + 1)}
             stepNum={productStepIdx + 1}
@@ -284,6 +325,7 @@ export function PortalFlow() {
           <CustomComponentsStep
             measureSet={measureSet}
             setMeasureSet={setMeasureSet}
+            includeLabour={includeLabour}
             onBack={() => setStep(customStepNum - 1)}
             onNext={() => setStep(outputStepNum)}
           />
@@ -295,13 +337,40 @@ export function PortalFlow() {
             catalog={catalog}
             baselineCatalog={config.products}
             showTrade={showTrade}
-            tradeLabel={showTrade && config.discountPct > 0 ? `trade pricing (-${config.discountPct}%)` : null}
+            tradeLabel={showTrade && trade.pct > 0 ? trade.label : null}
+            includeLabour={includeLabour}
+            pricingMode={showPricingMode ? pricingMode : null}
             onBack={() => setStep(customStepNum)}
             onAddCustom={() => setStep(customStepNum)}
             onRestart={reset}
+            planImages={planImages ?? undefined}
           />
         )}
       </div>
+
+      {/* Header restart choice: keep the job or start fresh */}
+      {restartOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white border border-slate-200 shadow-xl p-6 text-center">
+            <h3 className="text-base font-bold text-slate-900">You have a job in progress</h3>
+            <p className="mt-1 text-sm text-slate-500">Everything is saved - your measurements, products and choices. Go back to carry on where you left off, or start fresh.</p>
+            <div className="mt-4 grid gap-2">
+              <button
+                onClick={() => setRestartOpen(false)}
+                className="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 transition cursor-pointer"
+              >
+                Go back to my job
+              </button>
+              <button
+                onClick={() => { reset(); setRestartOpen(false); }}
+                className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-600 hover:border-slate-400 transition cursor-pointer"
+              >
+                Start a new job (clears everything)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

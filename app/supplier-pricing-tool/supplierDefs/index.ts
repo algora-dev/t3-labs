@@ -8,6 +8,8 @@ import { BURTON_ROOFING } from './burton-roofing';
 import { VERTEX_CLADDING } from './vertex-cladding';
 import { OAKLINE_FLOORING } from './oakline-flooring';
 import { APEX_ROOFING } from './apex-roofing';
+import { ROOFLINE_ROOFING } from './roofline-roofing';
+import { ROOFLINE_CLADDING } from './roofline-cladding';
 import type { SupplierProduct } from '../types';
 import type { Trade } from '../tradeConfig';
 
@@ -38,6 +40,23 @@ export interface SupplierDefinition {
   logoUrl: string | null;
   logoDarkUrl: string | null;
   brandColor: string;
+  /** optional explicit header background - defaults to brandColor. Used
+   *  when a supplier wants a black header but coloured accents elsewhere
+   *  (e.g. Roofline black header + red output accents). */
+  headerColor?: string;
+  /** render the header logo inside a white rounded box (dark-background
+   *  logos that would disappear on a dark header). */
+  logoWhiteBox?: boolean;
+  /** show " - demo only, not a real company" after the tagline (default
+   *  true). False for demos of REAL companies (e.g. Roofline Canterbury). */
+  demoDisclaimer?: boolean;
+  /** colour of the indicative lines in the guide-me vector diagrams.
+   *  Defaults to blue. Set per supplier when the theme colour stands out
+   *  on white (skip it for light colours that won't read). */
+  guideLineColor?: string;
+  /** plain-language name of that colour, used in the supporting text
+   *  ("indicated in red") so the copy always matches the diagram. */
+  guideLineColorName?: string;
   theme: SupplierTheme;
   poweredBy: boolean;
   discountPct: number;
@@ -48,6 +67,8 @@ export interface SupplierDefinition {
     quoteCoreConnect: boolean;
     convertToQuote: boolean;
     emailCapture: boolean;
+    /** supply-mode choice at flow start (supply only vs supply + install) */
+    pricingMode: boolean;
   };
   products: SupplierProduct[];
   /** external endpoint overrides - defaults are same-origin relative paths.
@@ -65,6 +86,8 @@ export const SUPPLIER_DEFS: SupplierDefinition[] = [
   BURTON_ROOFING as unknown as SupplierDefinition,
   VERTEX_CLADDING as unknown as SupplierDefinition,
   OAKLINE_FLOORING as unknown as SupplierDefinition,
+  ROOFLINE_ROOFING as unknown as SupplierDefinition,
+  ROOFLINE_CLADDING as unknown as SupplierDefinition,
 ];
 
 export const DEFAULT_SUPPLIER_SLUG = 'burton-roofing';

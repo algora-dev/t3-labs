@@ -9,6 +9,7 @@ import type { MeasurementSet, SupplierProduct } from './types';
 import { priceOutput, fmt } from './pricing';
 import { useSupplierConfig, addLead, toolUrls } from './supplierConfig';
 import { useFreeToolsAuth } from '../_components/FreeToolsAuthProvider';
+import { readAdminData, logEvent, ctaText } from './adminData';
 import { GROUP_DEFS, groupPitchedTotal, CUSTOM_BASIS_UNIT } from './types';
 import { SupplierEnquiryModal } from './SupplierEnquiryModal';
 
@@ -61,8 +62,8 @@ function entryPlanArea(measureSet: MeasurementSet, entryId: string): number {
   if (!e) return 0;
   return e.value * (e.quantity || 1);
 }
-export function buildConvertToQuoteUrl(measureSet: MeasurementSet, catalog: SupplierProduct[]): string {
-  const output = priceOutput(measureSet, catalog);
+export function buildConvertToQuoteUrl(measureSet: MeasurementSet, catalog: SupplierProduct[], includeLabour = true): string {
+  const output = priceOutput(measureSet, catalog, includeLabour);
   const lines = output.lines.map(l => ({
     description: l.entryLabel ? `${l.name} (${l.entryLabel})` : l.name,
     qty: Math.round(l.purchaseQty * 100) / 100,
@@ -75,7 +76,7 @@ export function buildConvertToQuoteUrl(measureSet: MeasurementSet, catalog: Supp
       description: c.name,
       qty: Math.round(c.quantity * 100) / 100,
       unit: CUSTOM_BASIS_UNIT[c.basis],
-      rate: Math.round((c.unitPrice + c.labourRate) * 100) / 100,
+      rate: Math.round((c.unitPrice + (includeLabour ? c.labourRate : 0)) * 100) / 100,
     });
   }
   const params = new URLSearchParams();
@@ -89,9 +90,13 @@ export function buildConvertToQuoteUrl(measureSet: MeasurementSet, catalog: Supp
 
 /** Actions card under the output: request supplier quote, order request,
  *  convert to customer quote (free quote generator), continue in QuoteCore+. */
-export function OutputActions({ measureSet, catalog }: {
+export function OutputActions({ measureSet, catalog, includeLabour = true, planImages }: {
   measureSet: MeasurementSet;
   catalog: SupplierProduct[];
+  /** false = supply-only pricing: labour zeroed in totals/actions */
+  includeLabour?: boolean;
+  /** Plan images from the takeoff station - pre-attached to the supplier enquiry. */
+  planImages?: { name: string; dataUrl: string; annotated: boolean }[];
 }) {
   const [modal, setModal] = useState<'quote' | 'order' | null>(null);
   const { config: supplierCfg } = useSupplierConfig();
@@ -104,9 +109,10 @@ export function OutputActions({ measureSet, catalog }: {
   const [leadName, setLeadName] = useState('');
   const [leadEmail, setLeadEmail] = useState('');
   const urls = toolUrls(supplierCfg);
+  const cta = readAdminData(supplierCfg.slug, supplierCfg).cta;
 
   useEffect(() => {
-    if (supplierCfg.features.emailCapture && !leadDone) {
+    if (supplierCfg.features.emailCapture && cta.enabled && !leadDone) {
       // Let the user actually read their output before pitching (12s)
       const t = setTimeout(() => setLeadOpen(true), 12000);
       return () => clearTimeout(t);
@@ -116,6 +122,7 @@ export function OutputActions({ measureSet, catalog }: {
   function captureLead() {
     if (!leadEmail.trim()) return;
     addLead({ email: leadEmail.trim(), name: leadName.trim() }, supplierCfg.slug);
+    logEvent(supplierCfg.slug, { type: 'signup', createdAt: new Date().toISOString(), email: leadEmail.trim(), name: leadName.trim() });
     setLeadDone(true);
     setLeadOpen(false);
   }
@@ -126,12 +133,19 @@ export function OutputActions({ measureSet, catalog }: {
     await signInWithGoogle();
     if (before == null && user?.email) {
       addLead({ email: user.email, name: user.email?.split('@')[0] ?? '' }, supplierCfg.slug);
+      logEvent(supplierCfg.slug, { type: 'signup', createdAt: new Date().toISOString(), email: user.email, name: user.email?.split('@')[0] ?? '' });
       setLeadDone(true);
       setLeadOpen(false);
     }
   }
 
-  const quoteUrl = buildConvertToQuoteUrl(measureSet, catalog);
+  const quoteUrl = buildConvertToQuoteUrl(measureSet, catalog, includeLabour);
+  const outputTotal = (() => { const o = priceOutput(measureSet, catalog, includeLabour); return o.material + o.labour; })();
+
+  // Tracking: what the user did with the output (convert / order / enquiry)
+  function logAction(action: 'convert' | 'order' | 'enquiry') {
+    logEvent(supplierCfg.slug, { type: 'action', action, createdAt: new Date().toISOString(), email: user?.email ?? null, total: outputTotal });
+  }
 
   async function continueInApp() {
     setSaving(true);
@@ -182,7 +196,7 @@ export function OutputActions({ measureSet, catalog }: {
         </button>
       )}
 
-      <div className="mt-3 grid gap-2 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-3 grid gap-2 md:grid-cols-2 lg:grid-cols-3">
         <ActionTile
           icon={
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -198,22 +212,15 @@ export function OutputActions({ measureSet, catalog }: {
           title="Convert to customer quote"
           desc="Editable quote document with your markup - opens the quote builder in a new tab."
           href={quoteUrl}
+          onClick={() => logAction('convert')}
         />
         <ActionTile
           icon={
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
           }
-          title="Request supplier quote"
-          desc="Send this pricing to the supplier and ask for a formal quote."
-          onClick={() => setModal('quote')}
-        />
-        <ActionTile
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          }
-          title="Send order request"
-          desc="Place an order request for these products and quantities."
-          onClick={() => setModal('order')}
+          title="Send to supplier"
+          desc={`Send this output with any supporting documents to ${supplierCfg.name} - request a quote or place an order.`}
+          onClick={() => { logAction('enquiry'); setModal('quote'); }}
         />
       </div>
       {saveError && (
@@ -235,9 +242,9 @@ export function OutputActions({ measureSet, catalog }: {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="mt-3 text-lg font-bold text-white">Get 5% off this job</h3>
+              <h3 className="mt-3 text-lg font-bold text-white">{ctaText(cta.headline, cta.discountPct)}</h3>
               <p className="mt-1 text-xs text-slate-400">
-                Join {supplierCfg.name} pricing list - we&apos;ll email your saving code plus a copy of this pricing.
+                {ctaText(cta.body, cta.discountPct)}
               </p>
             </div>
             <div className="p-5 space-y-3">
@@ -271,7 +278,7 @@ export function OutputActions({ measureSet, catalog }: {
                 disabled={!leadEmail.trim()}
                 className="w-full rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] disabled:opacity-40"
               >
-                Send my 5% saving code
+                {ctaText(cta.buttonLabel, cta.discountPct)}
               </button>
               <p className="text-center text-[11px] text-slate-400">No spam. One email with your code, that&apos;s it.</p>
             </div>
@@ -291,7 +298,9 @@ export function OutputActions({ measureSet, catalog }: {
           measureSet={measureSet}
           catalog={catalog}
           currency={supplierCfg.currency}
+          includeLabour={includeLabour}
           initialIntent={modal}
+          presetImages={planImages}
           onClose={() => setModal(null)}
         />
       )}
@@ -326,7 +335,7 @@ function ActionTile({ title, desc, onClick, href, icon, disabled }: {
   const cls = 'text-left rounded-xl border border-slate-200 bg-white px-4 py-3.5 transition hover:border-blue-200 hover:bg-blue-50/40 hover:shadow-[0_0_8px_rgba(37,99,235,0.08)] disabled:opacity-50';
   if (href) {
     return (
-      <a href={href} target="_blank" rel="noopener" className={cls}>
+      <a href={href} target="_blank" rel="noopener" onClick={onClick} className={cls}>
         {inner}
       </a>
     );

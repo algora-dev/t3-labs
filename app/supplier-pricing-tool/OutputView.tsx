@@ -3,13 +3,18 @@
 
 'use client';
 
+import { useEffect, useRef } from 'react';
 import type { GroupKey, MeasurementSet, SupplierProduct } from './types';
 import { GROUP_DEFS, groupPitchedTotal, entryPitched, CUSTOM_BASIS_UNIT } from './types';
 import { fmt, priceOutput } from './pricing';
+import { PricingModeChip } from './PricingModeChoice';
+import type { PricingMode } from './PricingModeChoice';
 import { useSupplierConfig } from './supplierConfig';
+import { useFreeToolsAuth } from '../_components/FreeToolsAuthProvider';
+import { logEvent } from './adminData';
 import { OutputActions } from './OutputActions';
 
-export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tradeLabel, onBack, onRestart, onAddCustom }: {
+export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tradeLabel, includeLabour = true, pricingMode = null, onBack, onRestart, onAddCustom, planImages }: {
   measureSet: MeasurementSet;
   catalog: SupplierProduct[];
   /** baseline-price catalog for the standard-vs-trade comparison */
@@ -17,16 +22,43 @@ export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tr
   /** logged in (or trade public) - show trade totals */
   showTrade?: boolean;
   tradeLabel?: string | null;
+  /** false = supply-only pricing: labour zeroed throughout */
+  includeLabour?: boolean;
+  /** chosen supply mode (shown as a chip on the output) */
+  pricingMode?: PricingMode | null;
   onBack: () => void;
   onRestart: () => void;
   /** 2026-08-30: jump back to the custom-components step to add one more
    *  without restarting the flow. Falls back to onBack when not provided. */
   onAddCustom?: () => void;
+  /** Plan images captured at the takeoff station - pre-attached to the
+   *  send-to-supplier enquiry (annotated drawings + originals). */
+  planImages?: { name: string; dataUrl: string; annotated: boolean }[];
 }) {
-  const output = priceOutput(measureSet, catalog);
+  const output = priceOutput(measureSet, catalog, includeLabour);
   // Same quantities priced at baseline for the trade-saving comparison.
-  const baselineOutput = baselineCatalog ? priceOutput(measureSet, baselineCatalog) : null;
+  const baselineOutput = baselineCatalog ? priceOutput(measureSet, baselineCatalog, includeLabour) : null;
   const { config: supplierCfg } = useSupplierConfig();
+  const { user } = useFreeToolsAuth();
+  const loggedRef = useRef(false);
+  // Tracking (demo-grade): log one quote event per output view - value,
+  // item count, creator email and per-product quoted counters.
+  useEffect(() => {
+    if (loggedRef.current) return;
+    loggedRef.current = true;
+    const counts: Record<string, number> = {};
+    for (const l of output.lines) counts[l.productId] = (counts[l.productId] ?? 0) + 1;
+    logEvent(supplierCfg.slug, {
+      type: 'quote',
+      createdAt: new Date().toISOString(),
+      email: user?.email ?? null,
+      itemCount: output.lines.length,
+      total: output.material + output.labour,
+      currency: cur,
+      productCounts: counts,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const today = new Date().toLocaleDateString('en-NZ', { day: '2-digit', month: 'long', year: 'numeric' });
   const cur = supplierCfg.currency;
   const supplierName = supplierCfg.name;
@@ -75,6 +107,7 @@ export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tr
             <h1 className="text-xl font-bold text-black">MATERIALS PRICING{supplierCfg.demo ? ' (DEMO)' : ''}</h1>
             <p className="mt-1 text-sm text-black">Generated {today} - {supplierName}</p>
             <p className="mt-1 text-xs text-black/60">{measureNote}{tradeLabel ? ` - ${tradeLabel}` : ''}</p>
+            {pricingMode && <div className="mt-2"><PricingModeChip mode={pricingMode} /></div>}
           </div>
           {supplierCfg.logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -225,7 +258,7 @@ export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tr
         </p>
       </div>
 
-      <OutputActions measureSet={measureSet} catalog={catalog} />
+      <OutputActions measureSet={measureSet} catalog={catalog} includeLabour={includeLabour} planImages={planImages} />
 
       <div className="flex items-center justify-between flex-wrap gap-2">
         <button onClick={onBack} className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-600 hover:border-slate-400 transition">

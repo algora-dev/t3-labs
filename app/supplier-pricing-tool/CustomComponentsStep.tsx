@@ -21,10 +21,12 @@ const BASIS_OPTIONS: { value: MeasurementBasis; label: string; unit: string; des
 ];
 
 export function CustomComponentsStep({
-  measureSet, setMeasureSet, onBack, onNext,
+  measureSet, setMeasureSet, includeLabour = true, onBack, onNext,
 }: {
   measureSet: MeasurementSet;
   setMeasureSet: (s: MeasurementSet) => void;
+  /** false = supply-only pricing: hide labour inputs */
+  includeLabour?: boolean;
   onBack: () => void;
   onNext: () => void;
 }) {
@@ -92,11 +94,11 @@ export function CustomComponentsStep({
                 <div className="text-xs text-slate-400">
                   {fmt(c.quantity, c.basis === 'count' ? 0 : 1)} {CUSTOM_BASIS_UNIT[c.basis]} -
                   ${cur}${fmt(c.unitPrice)}/{CUSTOM_BASIS_UNIT[c.basis]}
-                  {c.labourRate > 0 && <span> - labour ${cur}${fmt(c.labourRate)}/{CUSTOM_BASIS_UNIT[c.basis]}</span>}
+                  {includeLabour && c.labourRate > 0 && <span> - labour ${cur}${fmt(c.labourRate)}/{CUSTOM_BASIS_UNIT[c.basis]}</span>}
                 </div>
               </div>
               <span className="text-sm font-semibold text-slate-900 whitespace-nowrap flex-shrink-0">
-                ${cur}${fmt(c.quantity * (c.unitPrice + c.labourRate))}
+                ${cur}${fmt(c.quantity * (c.unitPrice + (includeLabour ? c.labourRate : 0)))}
               </span>
               <button
                 onClick={() => removeCustom(c.id)}
@@ -108,8 +110,8 @@ export function CustomComponentsStep({
             </div>
           ))}
           <p className="text-xs text-slate-400 pt-1">
-            Custom components total: ${cur}${fmt(customMaterial + customLabour)}
-            {customLabour > 0 && <span> (${cur}${fmt(customMaterial)} materials + ${cur}${fmt(customLabour)} labour)</span>}
+            Custom components total: ${cur}${fmt(customMaterial + (includeLabour ? customLabour : 0))}
+            {includeLabour && customLabour > 0 && <span> (${cur}${fmt(customMaterial)} materials + ${cur}${fmt(customLabour)} labour)</span>}
           </p>
         </div>
       )}
@@ -150,14 +152,16 @@ export function CustomComponentsStep({
               <label className="text-xs font-medium text-slate-600">Material cost ($/{unit})</label>
               <input type="number" min="0" step="0.01" value={unitPrice} onChange={e => setUnitPrice(e.target.value)} placeholder="0.00" className={inputCls} />
             </div>
+            {includeLabour && (
             <div>
               <label className="text-xs font-medium text-slate-600">Labour cost ($/{unit})</label>
               <input type="number" min="0" step="0.01" value={labourRate} onChange={e => setLabourRate(e.target.value)} placeholder="0.00" className={inputCls} />
             </div>
+            )}
           </div>
           {canAdd && (
             <p className="text-xs text-slate-500">
-              Line total: <span className="font-semibold text-slate-900">${cur}${fmt(qty * (price + labour))}</span>
+              Line total: <span className="font-semibold text-slate-900">${cur}${fmt(qty * (price + (includeLabour ? labour : 0)))}</span>
             </p>
           )}
           <div className="flex items-center justify-between pt-1">
@@ -187,7 +191,8 @@ export function CustomComponentsStep({
                 </button>
                 <button
                   onClick={onNext}
-                  className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-600 hover:border-slate-400 transition cursor-pointer"
+                  className="rounded-full border px-5 py-2.5 text-sm font-semibold transition cursor-pointer hover:shadow-[0_0_12px_rgba(255,107,53,0.4)]"
+                  style={{ borderColor: supplierCfg.brandColor, color: supplierCfg.brandColor }}
                 >
                   No thanks, generate the output
                 </button>

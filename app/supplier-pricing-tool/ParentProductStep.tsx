@@ -22,7 +22,7 @@ const BASIS_PRODUCT_BASIS: Record<ParentBasis, 'area' | 'lineal' | 'count'> = {
 const BASIS_LABEL: Record<ParentBasis, string> = { area: 'Area', lineal: 'Length', point: 'Item' };
 
 export function ParentProductStep({
-  job, setJob, catalog, mode, currency, trade, onBack, onNext,
+  job, setJob, catalog, mode, currency, trade, includeLabour = true, onBack, onNext,
 }: {
   job: ParentJob;
   setJob: (j: ParentJob) => void;
@@ -30,6 +30,8 @@ export function ParentProductStep({
   mode: 'standard' | 'advanced';
   currency: string;
   trade: TradeConfig;
+  /** false = supply-only pricing: hide labour inputs/previews */
+  includeLabour?: boolean;
   onBack: () => void;
   onNext: () => void;
 }) {
@@ -80,6 +82,7 @@ export function ParentProductStep({
                     setJob={setJob}
                     catalog={catalog}
                     mode={mode}
+                    includeLabour={includeLabour}
                     currency={currency}
                     pickerOpen={openPicker === comp.id}
                     onTogglePicker={() => setOpenPicker(openPicker === comp.id ? null : comp.id)}
@@ -107,7 +110,7 @@ export function ParentProductStep({
 }
 
 function ComponentRow({
-  comp, job, setJob, catalog, mode, currency, pickerOpen, onTogglePicker,
+  comp, job, setJob, catalog, mode, currency, includeLabour = true, pickerOpen, onTogglePicker,
 }: {
   comp: ParentJob['components'][number];
   job: ParentJob;
@@ -115,6 +118,8 @@ function ComponentRow({
   catalog: SupplierProduct[];
   mode: 'standard' | 'advanced';
   currency: string;
+  /** false = supply-only pricing: hide labour inputs/previews */
+  includeLabour?: boolean;
   pickerOpen: boolean;
   onTogglePicker: () => void;
 }) {
@@ -127,11 +132,14 @@ function ComponentRow({
     const p = products.find(x => x.id === productId);
     if (!p) return;
     if (applied.some(a => a.productId === productId)) return; // no duplicates
+    const wasteMode: 'percent' | 'flat' = comp.basis === 'lineal' && p.basis === 'lineal' ? (p.defaultWasteMode ?? 'percent') : 'percent';
     const ap: ComponentApplied = {
       id: makeId('ap'),
       componentId: comp.id,
       productId,
-      wastePct: p.defaultWastePct,
+      wastePct: wasteMode === 'flat' ? 0 : p.defaultWastePct,
+      wasteFlat: wasteMode === 'flat' ? (p.defaultWasteFlat ?? 0) : 0,
+      wasteMode,
       labourRate: p.defaultLabourRate,
       qtyOverride: null,
       priceOverride: null,
@@ -175,8 +183,10 @@ function ComponentRow({
                     <span className="text-sm font-medium text-slate-800">{product.name}</span>
                     <span className="ml-2 text-xs text-slate-400">
                       {currency}{product.unitPrice.toFixed(2)}/{unit}
-                      {ap.wastePct > 0 && ` - ${ap.wastePct}% waste`}
-                      {ap.labourRate > 0 ? ` - ${currency}${ap.labourRate.toFixed(2)}/${unit} labour` : ''}
+                      {ap.wasteMode === 'flat'
+                        ? ` - +${ap.wasteFlat}m per entry`
+                        : (ap.wastePct > 0 ? ` - ${ap.wastePct}% waste` : '')}
+                      {includeLabour && ap.labourRate > 0 ? ` - ${currency}${ap.labourRate.toFixed(2)}/${unit} labour` : ''}
                     </span>
                   </div>
                   <button onClick={() => removeApplied(ap.id)}
@@ -186,16 +196,32 @@ function ComponentRow({
                 </div>
                 {advancedOpen && (
                   <div className="mt-2 grid gap-2 sm:grid-cols-4">
+                    {comp.basis === 'lineal' && (
                     <div>
-                      <label className="text-xs font-medium text-slate-600">Waste %</label>
-                      <input type="number" min="0" max="100" step="0.5" value={ap.wastePct}
-                        onChange={e => patchApplied(ap.id, { wastePct: parseFloat(e.target.value) || 0 })} className={inputCls} />
+                      <label className="text-xs font-medium text-slate-600">Waste type</label>
+                      <select value={ap.wasteMode ?? 'percent'} onChange={e => patchApplied(ap.id, { wasteMode: e.target.value as 'percent' | 'flat' })} className={inputCls} aria-label="Waste type">
+                        <option value="percent">%</option>
+                        <option value="flat">+m per entry</option>
+                      </select>
                     </div>
+                    )}
+                    <div>
+                      <label className="text-xs font-medium text-slate-600">{comp.basis === 'lineal' && (ap.wasteMode ?? 'percent') === 'flat' ? `Extra waste (${unit})` : 'Waste %'}</label>
+                      {comp.basis === 'lineal' && (ap.wasteMode ?? 'percent') === 'flat' ? (
+                        <input type="number" min="0" step="0.1" value={ap.wasteFlat}
+                          onChange={e => patchApplied(ap.id, { wasteFlat: parseFloat(e.target.value) || 0 })} className={inputCls} />
+                      ) : (
+                        <input type="number" min="0" max="100" step="0.5" value={ap.wastePct}
+                          onChange={e => patchApplied(ap.id, { wastePct: parseFloat(e.target.value) || 0 })} className={inputCls} />
+                      )}
+                    </div>
+                    {includeLabour && (
                     <div>
                       <label className="text-xs font-medium text-slate-600">Labour {currency}/{unit}</label>
                       <input type="number" min="0" step="0.5" value={ap.labourRate}
                         onChange={e => patchApplied(ap.id, { labourRate: parseFloat(e.target.value) || 0 })} className={inputCls} />
                     </div>
+                    )}
                     <div>
                       <label className="text-xs font-medium text-slate-600">Qty override ({unit})</label>
                       <input type="number" min="0" step="0.1" value={ap.qtyOverride ?? ''}

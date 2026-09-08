@@ -15,9 +15,12 @@ import { ParentProductStep } from './ParentProductStep';
 import { ParentOutputView } from './ParentOutputView';
 import { CustomComponentsStep } from './CustomComponentsStep';
 import { ParentTakeoffStation } from './ParentTakeoffStation';
+import { PricingModeChoice, includeLabourFor } from './PricingModeChoice';
+import type { PricingMode } from './PricingModeChoice';
 import { tradeConfigFor } from './tradeConfig';
 import type { TradeConfig } from './tradeConfig';
 import { tradeUnitPrice, useSupplierConfig } from './supplierConfig';
+import { readAdminData, effectiveTrade } from './adminData';
 import { useFreeToolsAuth } from '../_components/FreeToolsAuthProvider';
 import { usePdfPagePicker } from '@/app/components/PdfPagePicker';
 
@@ -25,6 +28,7 @@ const FLOW_KEY = 'qc-spt-parentflow-v2';
 
 interface PersistedParentFlow {
   entryMode: 'measure' | 'have' | null;
+  pricingMode: PricingMode | null;
   step: number;
   mode: 'standard' | 'advanced';
   job: ParentJob;
@@ -50,6 +54,7 @@ export function ParentFlow() {
 
   const restored = readPersisted();
   const [entryMode, setEntryMode] = useState<'measure' | 'have' | null>(restored?.entryMode ?? null);
+  const [pricingMode, setPricingMode] = useState<PricingMode | null>(restored?.pricingMode ?? null);
   const [planUrl, setPlanUrl] = useState<string | null>(null);
   const [step, setStep] = useState(() => {
     // A restored measure flow at the station step has no plan file to
@@ -59,20 +64,26 @@ export function ParentFlow() {
   });
   const [mode, setMode] = useState<'standard' | 'advanced'>(restored?.mode ?? 'standard');
   const [job, setJob] = useState<ParentJob>(restored?.job ?? emptyParentJob());
+  // Header brand click: offer go-back vs restart instead of wiping
+  const [restartOpen, setRestartOpen] = useState(false);
+  // Plan images captured at the takeoff station (annotated + originals) -
+  // handed to the send-to-supplier enquiry as pre-attached files.
+  const [planImages, setPlanImages] = useState<{ name: string; dataUrl: string; annotated: boolean }[] | null>(null);
 
   useEffect(() => {
     try {
-      window.sessionStorage.setItem(FLOW_KEY, JSON.stringify({ entryMode, step, mode, job } satisfies PersistedParentFlow));
+      window.sessionStorage.setItem(FLOW_KEY, JSON.stringify({ entryMode, pricingMode, step, mode, job } satisfies PersistedParentFlow));
     } catch { /* ignore quota */ }
-  }, [entryMode, step, mode, job]);
+  }, [entryMode, pricingMode, step, mode, job]);
 
-  // Trade pricing parity with the roofing flow
+  // Trade pricing parity with the roofing flow (customer tier beats blanket)
   const showTrade = (config.features.login && user != null) || !config.tradeRequiresLogin;
+  const tradeInfo = effectiveTrade(config, readAdminData(config.slug, config), user?.email);
   const catalog = useMemo<SupplierProduct[]>(() =>
     showTrade
-      ? config.products.map(p => ({ ...p, unitPrice: tradeUnitPrice(p, config) }))
+      ? config.products.map(p => ({ ...p, unitPrice: tradeUnitPrice(p, config, tradeInfo.pct) }))
       : config.products,
-    [config, showTrade]);
+    [config, showTrade, tradeInfo.pct]);
 
   // Dynamic step list: the takeoff station only exists on the measure path.
   const stationStep = entryMode === 'measure' ? 2 : 0;
@@ -100,6 +111,7 @@ export function ParentFlow() {
 
   function reset() {
     setEntryMode(null);
+    setPricingMode(null);
     if (planUrl) URL.revokeObjectURL(planUrl);
     setPlanUrl(null);
     setJob(emptyParentJob());
@@ -107,10 +119,30 @@ export function ParentFlow() {
     try { window.sessionStorage.removeItem(FLOW_KEY); } catch { /* ignore */ }
   }
 
+  // Header brand click restarts the flow (choice modal keeps progress)
+  const hasProgress = step > 1
+    || job.parents.length > 0
+    || job.components.length > 0
+    || job.applied.length > 0
+    || job.customComponents.length > 0;
+  useEffect(() => {
+    const restart = () => { if (hasProgress) setRestartOpen(true); };
+    window.addEventListener('qc-spt-restart', restart);
+    return () => window.removeEventListener('qc-spt-restart', restart);
+  }, [hasProgress]);
+  // Warn before closing the tab with a job in progress (browser prompt)
+  useEffect(() => {
+    if (!hasProgress) return;
+    const h = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = ''; };
+    window.addEventListener('beforeunload', h);
+    return () => window.removeEventListener('beforeunload', h);
+  }, [hasProgress]);
+
   /** Station finished: merge its parents/entries/customs into the job and
    *  land on the measurement edit step so names/values can be reviewed. */
-  function handleStationFinish(next: ParentJob) {
+  function handleStationFinish(next: ParentJob, planImages?: { name: string; dataUrl: string; annotated: boolean }[]) {
     setJob(next);
+    setPlanImages(planImages ?? null);
     setStep(measureStepNum);
   }
 
@@ -149,6 +181,9 @@ export function ParentFlow() {
             trade={trade}
             entryMode={entryMode}
             setEntryMode={setEntryMode}
+            pricingMode={pricingMode}
+            setPricingMode={setPricingMode}
+            showPricingMode={config.features.pricingMode}
             planUrl={planUrl}
             setPlanUrl={setPlanUrl}
             onBackToChoice={() => { setEntryMode(null); setPlanUrl(null); }}
@@ -183,6 +218,7 @@ export function ParentFlow() {
             setJob={setJob}
             catalog={catalog}
             mode={mode}
+            includeLabour={config.features.pricingMode ? includeLabourFor(pricingMode) : true}
             currency={config.currency}
             trade={trade}
             onBack={() => setStep(measureStepNum)}
@@ -194,6 +230,7 @@ export function ParentFlow() {
           <CustomComponentsStep
             measureSet={customsShim}
             setMeasureSet={setCustomsShim}
+            includeLabour={config.features.pricingMode ? includeLabourFor(pricingMode) : true}
             onBack={() => setStep(productStepNum)}
             onNext={() => setStep(outputStepNum)}
           />
@@ -205,8 +242,11 @@ export function ParentFlow() {
             job={job}
             catalog={catalog}
             baselineCatalog={config.products}
+            planImages={planImages ?? undefined}
+            includeLabour={config.features.pricingMode ? includeLabourFor(pricingMode) : true}
+            pricingMode={config.features.pricingMode ? pricingMode : null}
             showTrade={showTrade}
-            tradeLabel={showTrade && config.discountPct > 0 ? `trade pricing (-${config.discountPct}%)` : null}
+            tradeLabel={showTrade && tradeInfo.pct > 0 ? tradeInfo.label : null}
             currency={config.currency}
             basePath={basePath}
             onBack={() => setStep(customStepNum)}
@@ -215,6 +255,30 @@ export function ParentFlow() {
           />
         )}
       </div>
+
+      {/* Header restart choice: keep the job or start fresh */}
+      {restartOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white border border-slate-200 shadow-xl p-6 text-center">
+            <h3 className="text-base font-bold text-slate-900">You have a job in progress</h3>
+            <p className="mt-1 text-sm text-slate-500">Everything is saved - your measurements, products and choices. Go back to carry on where you left off, or start fresh.</p>
+            <div className="mt-4 grid gap-2">
+              <button
+                onClick={() => setRestartOpen(false)}
+                className="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-700 transition cursor-pointer"
+              >
+                Go back to my job
+              </button>
+              <button
+                onClick={() => { reset(); setRestartOpen(false); }}
+                className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-600 hover:border-slate-400 transition cursor-pointer"
+              >
+                Start a new job (clears everything)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -222,7 +286,7 @@ export function ParentFlow() {
 /** Step 1: two paths - measure from plans (upload PNG/JPG/PDF) or enter
  *  known measurements. The station handles multi-plan in-session. */
 function ParentEntryStep({
-  trade, entryMode, setEntryMode, planUrl, setPlanUrl, onBackToChoice, onNext,
+  trade, entryMode, setEntryMode, planUrl, setPlanUrl, onBackToChoice, onNext, pricingMode, setPricingMode, showPricingMode,
 }: {
   trade: TradeConfig;
   entryMode: 'measure' | 'have' | null;
@@ -231,6 +295,9 @@ function ParentEntryStep({
   setPlanUrl: (u: string | null) => void;
   onBackToChoice: () => void;
   onNext: () => void;
+  pricingMode: PricingMode | null;
+  setPricingMode: (m: PricingMode) => void;
+  showPricingMode: boolean;
 }) {
   const pdfPicker = usePdfPagePicker();
   const [fileName, setFileName] = useState<string | null>(null);
@@ -272,24 +339,66 @@ function ParentEntryStep({
             </p>
             {entryMode === 'measure' && (
               <div className="mt-3">
-                <label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white px-4 py-5 text-center hover:border-blue-300 transition">
-                  <span className="text-sm font-medium text-slate-700">
-                    {busy ? 'Processing PDF...' : planUrl ? 'Choose a different plan' : 'Upload your first plan'}
-                  </span>
-                  <span className="mt-1 text-xs text-slate-400">PDF, PNG, JPG</span>
-                  <input
-                    type="file"
-                    accept="application/pdf,image/png,image/jpeg"
-                    className="hidden"
-                    onChange={e => {
-                      const f = e.target.files?.[0];
-                      if (f) void handleFile(f);
-                      e.target.value = '';
-                    }}
-                  />
-                </label>
-                {fileName && (
-                  <p className="mt-2 truncate text-xs text-slate-500">Selected: {fileName}</p>
+                {planUrl ? (
+                  <div className="rounded-xl border border-green-200 bg-green-50/40 p-4">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-white">
+                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" /></svg>
+                      </span>
+                      <span className="text-sm font-semibold text-slate-900">Plan uploaded</span>
+                    </div>
+                    <div className="mt-3 flex items-start gap-3">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={planUrl}
+                        alt="Uploaded plan"
+                        className="h-28 w-40 flex-shrink-0 rounded-lg border border-slate-200 bg-white object-contain"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-xs font-medium text-slate-700" title={fileName ?? undefined}>{fileName ?? 'Your plan'}</p>
+                        <p className="mt-1 text-xs text-slate-500">This is the plan you will calibrate and measure in the next step.</p>
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          <label className="inline-flex cursor-pointer items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-medium text-slate-600 transition hover:border-slate-400">
+                            {busy ? 'Processing PDF...' : 'Upload another plan'}
+                            <input
+                              type="file"
+                              accept="application/pdf,image/png,image/jpeg"
+                              className="hidden"
+                              onChange={e => {
+                                const f = e.target.files?.[0];
+                                if (f) void handleFile(f);
+                                e.target.value = '';
+                              }}
+                            />
+                          </label>
+                          <button
+                            onClick={onNext}
+                            disabled={busy}
+                            className="inline-flex items-center rounded-full bg-black px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-800 hover:shadow-[0_0_16px_rgba(37,99,235,0.5)] disabled:opacity-40"
+                          >
+                            Continue
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <label className="flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white px-4 py-5 text-center hover:border-blue-300 transition">
+                    <span className="text-sm font-medium text-slate-700">
+                      {busy ? 'Processing PDF...' : 'Upload your first plan'}
+                    </span>
+                    <span className="mt-1 text-xs text-slate-400">PDF, PNG, JPG</span>
+                    <input
+                      type="file"
+                      accept="application/pdf,image/png,image/jpeg"
+                      className="hidden"
+                      onChange={e => {
+                        const f = e.target.files?.[0];
+                        if (f) void handleFile(f);
+                        e.target.value = '';
+                      }}
+                    />
+                  </label>
                 )}
               </div>
             )}
@@ -309,6 +418,11 @@ function ParentEntryStep({
         </div>
       </div>
 
+      {/* Supply-mode choice: materials only vs materials + install */}
+      {showPricingMode && (
+        <PricingModeChoice pricingMode={pricingMode} setPricingMode={setPricingMode} />
+      )}
+
       <div className="flex items-center justify-between">
         {entryMode ? (
           <button onClick={onBackToChoice} className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-medium text-slate-600 hover:border-slate-400 transition">
@@ -317,7 +431,7 @@ function ParentEntryStep({
         ) : <span className="text-xs text-slate-400">Step 1 of 5</span>}
         <button
           onClick={onNext}
-          disabled={entryMode === null || (entryMode === 'measure' && !planUrl) || busy}
+          disabled={entryMode === null || (entryMode === 'measure' && !planUrl) || busy || (showPricingMode && pricingMode === null)}
           className="rounded-full bg-black px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 hover:shadow-[0_0_16px_rgba(37,99,235,0.5)] disabled:opacity-40"
         >
           {entryMode === 'measure' ? 'Next: Measure your plans' : `Next: ${trade.areaLabel}`}

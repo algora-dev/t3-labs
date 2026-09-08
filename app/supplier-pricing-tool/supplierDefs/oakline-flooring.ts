@@ -35,6 +35,7 @@ export const OAKLINE_FLOORING = {
     quoteCoreConnect: true,
     convertToQuote: true,
     emailCapture: true,
+    pricingMode: true,
   },
   products: [
     // ---- Floor coverings (area, applied per floor system) ----
@@ -51,11 +52,11 @@ export const OAKLINE_FLOORING = {
     { id: 'of-levelling-compound', name: 'Self-Levelling Compound 3mm (per m\u00B2)', code: 'UND-SL-3MM', basis: 'area', groups: ['areas'], component: 'underlay', roofTypes: ['all'], unitPrice: 7.2, packSize: null, defaultWastePct: 7, defaultLabourRate: 11.0, priceEditable: true },
 
     // ---- Floor edge lengths (lineal) ----
-    { id: 'of-skirting-oak', name: 'Oak Skirting 119mm Prefinished', code: 'TRM-SK-O119', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], family: 'Skirting', unitPrice: 12.8, packSize: null, defaultWastePct: 8, defaultLabourRate: 8.0, priceEditable: true, suggested: true },
-    { id: 'of-skirting-mdf', name: 'MDF Skirting 96mm White Foil', code: 'TRM-SK-M96', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], unitPrice: 4.6, packSize: null, defaultWastePct: 8, defaultLabourRate: 8.0, priceEditable: true },
-    { id: 'of-scotia', name: 'Scotia Beading 19mm White', code: 'TRM-SC-19', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], unitPrice: 2.4, packSize: null, defaultWastePct: 8, defaultLabourRate: 5.0, priceEditable: true },
-    { id: 'of-transition-strip', name: 'Wood-to-Tile Transition Strip 32mm - Silver', code: 'TRM-TR-32', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], unitPrice: 9.6, packSize: null, defaultWastePct: 5, defaultLabourRate: 7.0, priceEditable: true },
-    { id: 'of-stair-nosing', name: 'Stair Nosing Flush Fit 50mm - Oak', code: 'TRM-SN-50', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], unitPrice: 21.5, packSize: null, defaultWastePct: 5, defaultLabourRate: 14.0, priceEditable: true },
+    { id: 'of-skirting-oak', name: 'Oak Skirting 119mm Prefinished', code: 'TRM-SK-O119', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], family: 'Skirting', unitPrice: 12.8, packSize: null, defaultWastePct: 8, defaultWasteMode: 'flat', defaultWasteFlat: 0.5, defaultLabourRate: 8.0, priceEditable: true, suggested: true },
+    { id: 'of-skirting-mdf', name: 'MDF Skirting 96mm White Foil', code: 'TRM-SK-M96', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], unitPrice: 4.6, packSize: null, defaultWastePct: 8, defaultWasteMode: 'flat', defaultWasteFlat: 0.5, defaultLabourRate: 8.0, priceEditable: true },
+    { id: 'of-scotia', name: 'Scotia Beading 19mm White', code: 'TRM-SC-19', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], unitPrice: 2.4, packSize: null, defaultWastePct: 8, defaultWasteMode: 'flat', defaultWasteFlat: 0.5, defaultLabourRate: 5.0, priceEditable: true },
+    { id: 'of-transition-strip', name: 'Wood-to-Tile Transition Strip 32mm - Silver', code: 'TRM-TR-32', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], unitPrice: 9.6, packSize: null, defaultWastePct: 5, defaultWasteMode: 'flat', defaultWasteFlat: 0.5, defaultLabourRate: 7.0, priceEditable: true },
+    { id: 'of-stair-nosing', name: 'Stair Nosing Flush Fit 50mm - Oak', code: 'TRM-SN-50', basis: 'lineal', groups: ['areas'], component: 'ridge', roofTypes: ['all'], unitPrice: 21.5, packSize: null, defaultWastePct: 5, defaultWasteMode: 'flat', defaultWasteFlat: 0.5, defaultLabourRate: 14.0, priceEditable: true },
 
     // ---- Floor items (count, one-off fittings) ----
     { id: 'of-pipe-cover', name: 'Radiator Pipe Cover Set - Oak', code: 'ITM-PC-OAK', basis: 'count', groups: ['areas'], component: 'downpipe', roofTypes: ['all'], unitPrice: 6.9, packSize: null, defaultWastePct: 0, defaultLabourRate: 8.0, priceEditable: true, suggested: true },
@@ -63,11 +64,4 @@ export const OAKLINE_FLOORING = {
     { id: 'of-floor-box', name: 'Floor Socket Box 2-Gang Brushed Steel', code: 'ITM-FB-2G', basis: 'count', groups: ['areas'], component: 'downpipe', roofTypes: ['all'], unitPrice: 38.5, packSize: null, defaultWastePct: 0, defaultLabourRate: 45.0, priceEditable: true },
     { id: 'of-door-bar', name: 'Door Threshold Bar 900mm - Matt Black', code: 'ITM-DB-900', basis: 'count', groups: ['areas'], component: 'downpipe', roofTypes: ['all'], unitPrice: 15.4, packSize: null, defaultWastePct: 0, defaultLabourRate: 10.0, priceEditable: true },
   ] as SupplierProduct[],
-
-  // T3 Labs port: point account/draft endpoints at QuoteCore+ (this tool is
-  // embedded on t3labs.tech). Enquiries stay same-origin (t3-labs route).
-  urls: {
-    signup: 'https://quote-core.com/signup',
-    draftsApi: 'https://quote-core.com/api/free-tools/drafts',
-  },
 } as const;
