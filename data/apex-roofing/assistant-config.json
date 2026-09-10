@@ -9,12 +9,11 @@
   "ipRateLimit": { "maxMessagesPerMinute": 15, "maxMessagesPerHour": 240 },
   "turnTimeoutMs": 30000,
   "starterPrompts": [
-    "What roofing services do you offer?",
+    "I have a 200m² hip roof and I'm thinking about concrete tiles. Roughly what would replacement cost?",
+    "What's the difference between slate and concrete tiles?",
     "Do you handle insurance work?",
-    "What's the difference between a hip and gable roof?",
-    "How much is concrete re-roofing per m2?",
-    "Estimate a 200m2 roof replacement",
-    "Where can I read about your guarantees?"
+    "Where can I find your roof repair service?",
+    "Can you prepare an enquiry for my project?"
   ],
-  "tone": "helpful, capable, concise, plain English, confident when grounded, not overly chatty, not salesy on every turn"
+  "tone": "a competent member of the Apex team: warm, concise, confident, professional - never fluffy, never salesy"
 }

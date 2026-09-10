@@ -420,10 +420,10 @@ export async function runAssistantTurn(
   // Attach standard follow-up actions when an estimate was produced
   if (turnState.latestEstimateId) {
     turnState.actions.push({ type: 'DOWNLOAD_OUTPUT', label: 'Download PDF', estimateId: turnState.latestEstimateId });
-    turnState.actions.push({ type: 'OPEN_INQUIRY', label: 'Make an enquiry from this estimate' });
+    turnState.actions.push({ type: 'OPEN_INQUIRY', label: 'Request Formal Quote' });
     turnState.actions.push({
       type: 'ADD_ESTIMATE_OPTION',
-      label: 'Add gutter replacement',
+      label: 'Add Guttering',
       followUpMessage: 'Can you add gutter replacement to the estimate?',
     });
   }
