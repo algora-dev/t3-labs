@@ -129,7 +129,7 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
                     ))}
                   </ul>
                   <p className="mt-6 text-xl font-bold leading-7">Most business websites are passive databases disguised as brochures.</p>
-                  <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>They contain the answer. They just make the customer find it.</p>
+                  <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>They contain the answer, but force the user to find it, call or enquire about it.</p>
                 </div>
               )}
 
