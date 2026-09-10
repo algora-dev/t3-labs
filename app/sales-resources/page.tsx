@@ -44,10 +44,10 @@ const light: Tokens = {
 };
 
 const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
-const CUSTOMER_PAGE = "/our-solution";
+const CUSTOMER_PAGE = "/our-solution/referred";
 
-// Add this later when the separate QuoteCore Plus sales page is live.
-const QUOTECORE_SALES_GUIDE = "";
+// Ron: swap this to the confirmed /public logo asset if the filename differs.
+const LOGO_SRC = "/assets/t3-logo.jpg";
 
 // Add this when the Apex Roofing assistant demo is live.
 const ASSISTANT_DEMO_URL = "";
@@ -173,6 +173,54 @@ function Card({
     >
       {title && <h3 className="text-lg font-semibold">{title}</h3>}
       <div className={title ? "mt-3" : ""}>{children}</div>
+    </div>
+  );
+}
+
+function CollapsibleTool({
+  t,
+  title,
+  subtitle,
+  defaultOpen = false,
+  children,
+}: {
+  t: Tokens;
+  title: string;
+  subtitle?: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="overflow-hidden rounded-3xl border">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className="tool-toggle flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-7 sm:py-5"
+      >
+        <div>
+          <p className="text-lg font-semibold">{title}</p>
+          {subtitle && (
+            <p className="mt-1 text-sm leading-6" style={{ color: t.muted }}>
+              {subtitle}
+            </p>
+          )}
+        </div>
+        <span
+          aria-hidden="true"
+          style={{ color: t.accentInk }}
+          className={`shrink-0 text-xl transition-transform ${open ? "rotate-180" : ""}`}
+        >
+          ⌄
+        </span>
+      </button>
+      {open && (
+        <div style={{ borderColor: t.border }} className="border-t p-3 sm:p-5">
+          {children}
+        </div>
+      )}
     </div>
   );
 }
@@ -462,7 +510,7 @@ function LeadAngleFinder({ t }: { t: Tokens }) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
-              Lead Angle Finder
+              Website audit
             </p>
             <h3 className="mt-2 text-2xl font-bold">Audit the lead in under 2 minutes.</h3>
           </div>
@@ -770,11 +818,11 @@ function EarningsCalculator({ t }: { t: Tokens }) {
       <div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
-            Earnings calculator
+            Calculator
           </p>
           <h3 className="mt-2 text-2xl font-bold">What could this deal be worth to you?</h3>
           <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
-            Minimum commission depends on your involvement. Higher rates can be agreed for individual deals, up to 50%.
+            Minimum commission depends on your involvement. Higher rates can be agreed for individual deals, up to 50%. Recurring commission can also be included where the customer has ongoing fees.
           </p>
 
           <div className="mt-5">
@@ -790,7 +838,7 @@ function EarningsCalculator({ t }: { t: Tokens }) {
               />
             </div>
             <div className="mt-2 flex flex-wrap gap-2">
-              {["999", "5000", "10000"].map((preset) => (
+              {["999", "5000", "10000", "20000"].map((preset) => (
                 <button
                   key={preset}
                   type="button"
@@ -860,15 +908,15 @@ function EarningsCalculator({ t }: { t: Tokens }) {
             </div>
 
             <p className="mt-5 text-xs leading-5" style={{ color: t.muted }}>
-              These are illustrations, not an automatic entitlement to 50%. Each paying customer will have a separate deal record or agreement that confirms the project value, your role, the agreed commission rate and payment terms.
+              These are illustrations, not an automatic entitlement to 50%. Each paying customer will have a separate deal record or agreement that confirms the project value, your role, the agreed commission rate, any recurring commission and the payment terms. Recurring commission is not included in this calculator.
             </p>
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {[
               ["$999 project", "Referral minimum", "$150"],
-              ["$5,000 project", "Close minimum", "$1,500"],
-              ["$10,000 project", "Close minimum", "$3,000"],
+              ["$5,000 project", "Referral minimum", "$750"],
+              ["$10,000 project", "Referral minimum", "$1,500+"],
             ].map(([title, label, value]) => (
               <div key={title} style={{ background: t.surfaceAlt, borderColor: t.border }} className="rounded-xl border p-4">
                 <p className="text-xs font-semibold" style={{ color: t.muted }}>{title}</p>
@@ -905,6 +953,8 @@ export default function SalesResourcesPage() {
         .hover-card:hover { transform:translateY(-2px); border-color:var(--accent-ink)!important; }
         .nav-scroll { scrollbar-width:none; }
         .nav-scroll::-webkit-scrollbar { display:none; }
+        .tool-toggle:hover { background:rgba(127,127,127,.05); }
+        .sales-anchor { scroll-margin-top:9.5rem; }
         table { border-collapse:separate; border-spacing:0; }
         th, td { vertical-align:top; }
       `}</style>
@@ -917,11 +967,9 @@ export default function SalesResourcesPage() {
         className="sticky top-0 z-50 border-b backdrop-blur"
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-5">
-          <div className="flex shrink-0 items-center gap-2 font-semibold">
-            <span style={{ background: t.accent, color: t.accentText }} className="rounded-md px-2 py-0.5 text-sm font-bold">
-              T3
-            </span>
-            <span className="text-sm" style={{ color: t.muted }}>Sales Resources</span>
+          <div className="flex min-w-0 shrink-0 items-center gap-3">
+            <img src={LOGO_SRC} alt="T3 Labs" className="h-7 w-auto max-w-[130px] object-contain" />
+            <span className="hidden text-sm font-semibold sm:inline" style={{ color: t.muted }}>Sales Resources</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -945,7 +993,7 @@ export default function SalesResourcesPage() {
           </div>
         </div>
 
-        <div className="nav-scroll mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 pb-3 sm:px-5">
+        <div style={{ borderColor: t.border }} className="nav-scroll mx-auto flex max-w-7xl gap-1 overflow-x-auto border-t px-4 py-2.5 sm:px-5">
           {[
             ["target", "Target"],
             ["finder", "Angle Finder"],
@@ -959,8 +1007,8 @@ export default function SalesResourcesPage() {
               key={id}
               type="button"
               onClick={() => scrollToId(id)}
-              style={{ background: t.surfaceAlt, borderColor: t.border, color: t.muted }}
-              className="outline shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold"
+              style={{ color: t.muted }}
+              className="shrink-0 rounded-md px-2.5 py-1 text-xs font-semibold hover:underline"
             >
               {label}
             </button>
@@ -987,7 +1035,7 @@ export default function SalesResourcesPage() {
               <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>Customer starting price</p>
               <p className="mt-2 text-3xl font-bold">$999+</p>
               <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
-                Focused custom projects can start from $999, then grow with the customer&apos;s needs.
+                $999 is the entry point, not a fixed package. Scope can scale as far as the business needs.
               </p>
             </div>
 
@@ -995,7 +1043,7 @@ export default function SalesResourcesPage() {
               <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.muted }}>Your minimum commission</p>
               <p className="mt-2 text-3xl font-bold">15%+</p>
               <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
-                Even a referral can earn roughly $150 on a $999 project.
+                Even a referral can earn roughly $150 on a $999 project, or $1,500+ on a $10,000 project.
               </p>
             </div>
 
@@ -1003,7 +1051,7 @@ export default function SalesResourcesPage() {
               <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.muted }}>If you close the deal</p>
               <p className="mt-2 text-3xl font-bold">30%+</p>
               <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
-                Higher rates can be agreed by deal, up to 50% depending on involvement and opportunity.
+                Higher rates can be agreed by deal, up to 50%. Some deals can also include recurring commission.
               </p>
             </div>
           </div>
@@ -1035,7 +1083,7 @@ export default function SalesResourcesPage() {
           </div>
         </section>
 
-        <section id="target" className="scroll-mt-28 py-12 sm:py-16">
+        <section id="target" className="sales-anchor py-12 sm:py-16">
           <div className="max-w-4xl">
             <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>1. Who to target</p>
             <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Start where the sales friction is easiest to see.</h2>
@@ -1078,8 +1126,15 @@ export default function SalesResourcesPage() {
           </div>
         </section>
 
-        <section id="finder" className="scroll-mt-28 py-12 sm:py-16">
-          <LeadAngleFinder t={t} />
+        <section id="finder" className="sales-anchor py-12 sm:py-16">
+          <CollapsibleTool
+            t={t}
+            title="Lead Angle Finder"
+            subtitle="Audit a prospect&apos;s website, find the strongest opening angle and get a usable pitch in under 2 minutes."
+            defaultOpen={true}
+          >
+            <LeadAngleFinder t={t} />
+          </CollapsibleTool>
         </section>
 
         <section className="py-10 sm:py-14">
@@ -1128,7 +1183,7 @@ export default function SalesResourcesPage() {
           </div>
         </section>
 
-        <section id="contact" className="scroll-mt-28 py-12 sm:py-16">
+        <section id="contact" className="sales-anchor py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>2. Reaching the lead</p>
           <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Lead with the thing you actually noticed.</h2>
           <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
@@ -1198,7 +1253,7 @@ export default function SalesResourcesPage() {
           </div>
         </section>
 
-        <section id="discovery" className="scroll-mt-28 py-12 sm:py-16">
+        <section id="discovery" className="sales-anchor py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>3. Discovery</p>
           <h2 className="mt-3 text-3xl font-bold sm:text-4xl">The website shows the symptom. The conversation finds the real problem.</h2>
           <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
@@ -1237,14 +1292,14 @@ export default function SalesResourcesPage() {
           </div>
         </section>
 
-        <section id="sell" className="scroll-mt-28 py-12 sm:py-16">
+        <section id="sell" className="sales-anchor py-12 sm:py-16">
           <div className="grid gap-6 lg:grid-cols-[.75fr_1.25fr] lg:items-end">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>4. What we sell</p>
               <h2 className="mt-3 text-3xl font-bold sm:text-4xl">One custom solution, many possible forms.</h2>
             </div>
             <p className="leading-7" style={{ color: t.muted }}>
-              Do not force the prospect into a fixed package. We can build one focused feature from $999 or combine several pieces into a larger bespoke system.
+              Do not force the prospect into a fixed package. $999 is only the entry point. Project value depends on the size of the business, how much tailored work is involved and how many features they need or want. Bespoke packages can easily reach $20,000+ and there is no fixed upper limit.
             </p>
           </div>
 
@@ -1293,7 +1348,7 @@ export default function SalesResourcesPage() {
                 </p>
                 <h3 className="mt-2 text-2xl font-bold">Intelligent Online Sales Assistant</h3>
                 <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
-                  A trained online sales assistant that understands the business, product catalogue, pricing rules, compatibility and common questions. It can answer customers, guide product selection, produce preliminary pricing and move the customer toward an enquiry, quote, purchase or human handoff.
+                  A trained online sales assistant that understands the business, product catalogue, pricing rules, compatibility and common questions. It can handle basic to complex enquiries, solve straightforward questions directly, work through product, quantity and indicative-pricing needs, then hand anything that needs a person to the human team with the context already collected. The goal is to reduce avoidable calls and emails without ever blocking the sale.
                 </p>
               </div>
 
@@ -1301,13 +1356,13 @@ export default function SalesResourcesPage() {
                 <div style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border p-4">
                   <p className="text-sm font-semibold">AI-friendly prospect</p>
                   <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
-                    “Imagine ChatGPT on your website, except it knows your business, products and pricing, and its job is to help customers buy from you.”
+                    “Imagine ChatGPT on your website, except it knows your business, products and pricing. It can answer the easy questions instantly, work through product, quantity and indicative-pricing needs, and hand anything more complex to your team with the conversation already captured.”
                   </p>
                 </div>
                 <div style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border p-4">
                   <p className="text-sm font-semibold">AI-cautious prospect</p>
                   <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
-                    “Think of it as a controlled online sales assistant. It works inside the knowledge and rules we configure, and if it cannot answer safely, it hands the customer to your team.”
+                    “Think of it as a controlled online sales assistant. We define what it knows, what it can answer and when it must stop. It handles the repetitive product, usage, quantity and indicative-pricing questions that create calls and emails, and anything uncertain or complex is handed to your team, so it never needs to guess or block the sale.”
                   </p>
                 </div>
               </div>
@@ -1315,14 +1370,14 @@ export default function SalesResourcesPage() {
           </div>
 
           <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="mt-5 rounded-2xl border p-5">
-            <p className="text-sm font-semibold">$999 is the entry point, not a fixed package.</p>
+            <p className="text-sm font-semibold">$999 is the entry point, not a fixed package or ceiling.</p>
             <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
-              Larger product catalogues, more complex calculations, integrations, website work, internal systems and sales-assistant functionality can increase the scope. Keep the first conversation focused on the problem and value. T3 Labs can help scope the right build.
+              Larger catalogues, complex calculations, integrations, website work, internal systems and sales-assistant functionality can move a project into the thousands or easily beyond $20,000. There is no fixed upper limit. Keep the first conversation focused on the problem and value, then T3 Labs can help scope the right build.
             </p>
           </div>
         </section>
 
-        <section id="demos" className="scroll-mt-28 py-12 sm:py-16">
+        <section id="demos" className="sales-anchor py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>5. Demo the behaviour</p>
           <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Show the closest example. Do not sell the design.</h2>
           <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
@@ -1448,12 +1503,19 @@ export default function SalesResourcesPage() {
           </div>
         </section>
 
-        <section id="earnings" className="scroll-mt-28 py-12 sm:py-16">
+        <section id="earnings" className="sales-anchor py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>7. What you can earn</p>
           <h2 className="mt-3 max-w-4xl text-3xl font-bold sm:text-4xl">More involvement can mean materially more commission.</h2>
           <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
-            The minimum rate depends on how much of the sales process you own. These are minimums, not caps. Stronger arrangements can be discussed for individual opportunities, up to a maximum of 50%.
+            The minimum rate depends on how much of the sales process you own. These are minimums, not caps. Stronger arrangements can be discussed for individual opportunities, up to a maximum of 50%. Commission can be one-off, recurring, or a combination where the deal supports it.
           </p>
+
+          <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="mt-6 rounded-2xl border p-5 sm:p-6">
+            <p className="text-sm font-semibold">Think beyond the $999 entry project.</p>
+            <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+              A $10,000 project is $1,500+ commission even at the 15% referral minimum. A $20,000 project is $3,000+ at the same rate. Bespoke projects can go higher, and some customer arrangements may also create recurring commission.
+            </p>
+          </div>
 
           <div className="mt-7 grid gap-4 lg:grid-cols-3">
             {(Object.keys(COMMISSION) as Involvement[]).map((key) => (
@@ -1467,32 +1529,17 @@ export default function SalesResourcesPage() {
           </div>
 
           <div className="mt-5">
-            <EarningsCalculator t={t} />
+            <CollapsibleTool
+              t={t}
+              title="Earnings calculator"
+              subtitle="Estimate what a one-off project could be worth at each involvement level."
+              defaultOpen={false}
+            >
+              <EarningsCalculator t={t} />
+            </CollapsibleTool>
           </div>
         </section>
 
-        <section className="py-12 sm:py-16">
-          <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="rounded-3xl border p-6 sm:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>Another T3 Labs product</p>
-            <div className="mt-3 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
-              <div>
-                <h2 className="text-2xl font-bold">QuoteCore Plus will have its own sales guide.</h2>
-                <p className="mt-3 max-w-3xl text-sm leading-6" style={{ color: t.muted }}>
-                  Keep this page focused on custom T3 Labs projects. If a business is a better fit for the existing QuoteCore Plus platform, use the separate product guide once it is available.
-                </p>
-              </div>
-              {QUOTECORE_SALES_GUIDE && (
-                <a
-                  href={QUOTECORE_SALES_GUIDE}
-                  style={{ background: t.accent, color: t.accentText }}
-                  className="solid rounded-full px-6 py-3 text-sm font-semibold"
-                >
-                  Open QuoteCore Plus guide
-                </a>
-              )}
-            </div>
-          </div>
-        </section>
 
         <section className="py-12 sm:py-20">
           <div style={{ background: t.surface, borderColor: t.accentInk }} className="rounded-3xl border p-7 sm:p-10">
