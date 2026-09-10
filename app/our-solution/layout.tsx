@@ -3,12 +3,12 @@ import type { ReactNode } from "react";
 
 const BASE_URL = "https://www.t3labs.tech";
 
-const TITLE = "Construction Digital Tools & AI Visibility | T3 Labs";
+const TITLE = "Digital Sales & Pricing Tools for Construction Suppliers | T3 Labs";
 const DESCRIPTION =
-  "T3 Labs builds pricing, estimating and quoting tools for construction suppliers and trade businesses — help customers price and buy faster, reduce repetitive quoting work and get found as search shifts to AI.";
+  "T3 Labs builds pricing, estimating and quoting tools for construction suppliers and trade businesses — helping customers get answers faster, improving conversion and reducing manual quoting work.";
 
 export const metadata: Metadata = {
-  title: { absolute: TITLE }, // absolute: root layout template would append "| T3 Labs" again
+  title: { absolute: TITLE },
   description: DESCRIPTION,
   alternates: { canonical: `${BASE_URL}/our-solution` },
   openGraph: {
