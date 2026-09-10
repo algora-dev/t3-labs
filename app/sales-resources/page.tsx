@@ -3,176 +3,1531 @@
 import { useState } from "react";
 
 type Theme = "dark" | "light";
-type Tokens = { bg:string; surface:string; surfaceAlt:string; border:string; text:string; muted:string; accent:string; accentText:string; accentInk:string; accentSoft:string };
-const dark: Tokens = { bg:"#0a0b10",surface:"#101219",surfaceAlt:"#161927",border:"#262a3a",text:"#e8eaf2",muted:"#9aa1b5",accent:"#d7ff00",accentText:"#0a0b10",accentInk:"#d7ff00",accentSoft:"rgba(215,255,0,.08)" };
-const light: Tokens = { bg:"#fbfcff",surface:"#fff",surfaceAlt:"#f3f5fa",border:"#e7e9ef",text:"#0a0b10",muted:"#5a6172",accent:"#d7ff00",accentText:"#0a0b10",accentInk:"#809000",accentSoft:"rgba(215,255,0,.18)" };
+
+type Tokens = {
+  bg: string;
+  surface: string;
+  surfaceAlt: string;
+  border: string;
+  text: string;
+  muted: string;
+  accent: string;
+  accentText: string;
+  accentInk: string;
+  accentSoft: string;
+};
+
+const dark: Tokens = {
+  bg: "#0a0b10",
+  surface: "#101219",
+  surfaceAlt: "#161927",
+  border: "#262a3a",
+  text: "#e8eaf2",
+  muted: "#9aa1b5",
+  accent: "#d7ff00",
+  accentText: "#0a0b10",
+  accentInk: "#d7ff00",
+  accentSoft: "rgba(215,255,0,.08)",
+};
+
+const light: Tokens = {
+  bg: "#fbfcff",
+  surface: "#ffffff",
+  surfaceAlt: "#f3f5fa",
+  border: "#e7e9ef",
+  text: "#0a0b10",
+  muted: "#5a6172",
+  accent: "#d7ff00",
+  accentText: "#0a0b10",
+  accentInk: "#809000",
+  accentSoft: "rgba(215,255,0,.18)",
+};
 
 const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
 const CUSTOMER_PAGE = "/our-solution";
 
-const DEMOS = [
-  ["Roofing", "/supplier-pricing-tool/apex-roofing", "Best first demo for roof suppliers, manufacturers and roofing-focused trade businesses."],
-  ["Flooring", "/supplier-pricing-tool/oakline-flooring", "Use for flooring suppliers or any business where areas, quantities and material pricing matter."],
-  ["Cladding", "/supplier-pricing-tool/vertex-cladding", "Use for wall/cladding suppliers or broader construction businesses with sheet/product quantity workflows."],
-] as const;
+// Add this later when the separate QuoteCore Plus sales page is live.
+const QUOTECORE_SALES_GUIDE = "";
 
-function Card({ t, title, children }: { t: Tokens; title: string; children: React.ReactNode }) {
-  return <div style={{ background:t.surface,borderColor:t.border }} className="rounded-2xl border p-6"><h3 className="text-lg font-semibold">{title}</h3><div className="mt-3 text-sm leading-6" style={{ color:t.muted }}>{children}</div></div>;
+// Add this when the Apex Roofing assistant demo is live.
+const ASSISTANT_DEMO_URL = "";
+
+const DEMOS = {
+  roofing: {
+    name: "Apex Roofing",
+    href: "/supplier-pricing-tool/apex-roofing",
+    note: "Best first demo for roofing suppliers, manufacturers and roof-focused trade businesses.",
+  },
+  flooring: {
+    name: "Oakline Flooring",
+    href: "/supplier-pricing-tool/oakline-flooring",
+    note: "Use where area, quantities, material selection and pricing matter.",
+  },
+  cladding: {
+    name: "Vertex Cladding",
+    href: "/supplier-pricing-tool/vertex-cladding",
+    note: "Use for cladding, sheet products and similar quantity-driven workflows.",
+  },
+};
+
+type Tri = "yes" | "partly" | "no";
+type StoreState = "easy" | "clunky" | "none" | "not-relevant";
+type OverallState = "strong" | "mixed" | "weak";
+type Industry = "roofing" | "flooring" | "cladding" | "construction" | "other";
+
+type LeadInput = {
+  industry: Industry;
+  otherIndustry: string;
+  pricing: Tri | null;
+  guidedChoice: Tri | null;
+  education: Tri | null;
+  quoteReady: Tri | null;
+  mobile: Tri | null;
+  store: StoreState | null;
+  overall: OverallState | null;
+};
+
+type AngleKey =
+  | "faster"
+  | "buying"
+  | "guidance"
+  | "manual"
+  | "mobile"
+  | "visibility"
+  | "icing";
+
+type AngleDefinition = {
+  key: AngleKey;
+  title: string;
+  short: string;
+  opener: string;
+};
+
+const ANGLES: Record<AngleKey, AngleDefinition> = {
+  faster: {
+    key: "faster",
+    title: "Faster answers",
+    short: "Customers still have to wait for pricing, quantities or a useful answer.",
+    opener:
+      "I was looking through your website and noticed customers still need to contact you for quite a bit of the information they need before buying. We build tools that can give them more of that answer instantly and send your team a much better-qualified enquiry.",
+  },
+  buying: {
+    key: "buying",
+    title: "Make buying easier",
+    short: "The website has products or ordering, but the customer still has to do too much work.",
+    opener:
+      "You already have a lot in place online, but the customer still has to hunt around and work out quite a lot themselves. We build guided tools that make the buying journey much easier and move people toward a quote or order.",
+  },
+  guidance: {
+    key: "guidance",
+    title: "Product guidance",
+    short: "Customers may struggle to know what product they need, what works together, or how it is measured.",
+    opener:
+      "It looks like a customer needs a fair amount of product knowledge before they can confidently choose what to buy. We build selectors, calculators and online sales assistants that can guide them through that without relying on a staff member every time.",
+  },
+  manual: {
+    key: "manual",
+    title: "Reduce manual sales work",
+    short: "The website may be pushing repeat questions, quote collection and calculations back onto staff.",
+    opener:
+      "From the outside, it looks like quite a bit of the buying process may still end up back with your team. We build customer and staff tools that can collect the right information, calculate more of the job and reduce the repetitive back-and-forth.",
+  },
+  mobile: {
+    key: "mobile",
+    title: "Mobile buying journey",
+    short: "The first impression or buying flow is weaker on a phone.",
+    opener:
+      "I had a look at the website on mobile and there are a few places where the buying journey could be easier. We build mobile-first pricing, selection and enquiry tools so customers can actually get something useful done from their phone.",
+  },
+  visibility: {
+    key: "visibility",
+    title: "Get found with more useful information",
+    short: "Useful product, pricing or technical information is hard to find or hidden behind an enquiry.",
+    opener:
+      "A lot of the useful buying information still seems to sit behind an enquiry or inside the team. We help businesses turn that knowledge into useful public information and tools, so customers can find better answers earlier and the website has more value to search systems.",
+  },
+  icing: {
+    key: "icing",
+    title: "Make a good system work harder",
+    short: "They already have a solid foundation. The angle is optimisation, connection and the final 10 to 20 percent.",
+    opener:
+      "You have already done a lot of the heavy lifting online. We often work with businesses at that stage to connect the last pieces, remove smaller points of friction and get more value from what they have already built.",
+  },
+};
+
+function Card({
+  t,
+  title,
+  children,
+  className = "",
+}: {
+  t: Tokens;
+  title?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      style={{ background: t.surface, borderColor: t.border }}
+      className={`rounded-2xl border p-5 sm:p-6 ${className}`}
+    >
+      {title && <h3 className="text-lg font-semibold">{title}</h3>}
+      <div className={title ? "mt-3" : ""}>{children}</div>
+    </div>
+  );
 }
 
-function scrollToId(id:string){ document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"}); }
+function scrollToId(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
-export default function SalesRepConstructionPlaybookPage(){
-  const [theme,setTheme]=useState<Theme>("dark"); const t=theme==="dark"?dark:light;
-  return <main style={{background:t.bg,color:t.text,["--accent" as string]:t.accent}} className="min-h-screen antialiased">
-    <style>{`main button,main a{transition:transform .15s ease,filter .15s ease,border-color .15s ease}.solid:hover{filter:brightness(1.1);transform:translateY(-1px)}.card:hover{transform:translateY(-2px);border-color:var(--accent)!important}`}</style>
-    <header style={{background:theme==="dark"?"rgba(10,11,16,.88)":"rgba(251,252,255,.94)",borderColor:t.border}} className="sticky top-0 z-50 border-b backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
-        <div className="flex items-center gap-2 font-semibold"><span style={{background:t.accent,color:t.accentText}} className="rounded-md px-2 py-0.5 text-sm font-bold">T3</span><span className="text-sm" style={{color:t.muted}}>Sales Playbook</span></div>
-        <div className="flex items-center gap-2"><button onClick={()=>setTheme(theme==="dark"?"light":"dark")} style={{borderColor:t.border,color:t.muted}} className="rounded-full border px-3 py-1.5 text-xs">{theme==="dark"?"☀ Light":"☾ Dark"}</button><a href={CUSTOMER_PAGE} target="_blank" rel="noopener noreferrer" style={{background:t.accent,color:t.accentText}} className="solid rounded-full px-4 py-2 text-xs font-semibold">Open customer page</a></div>
-      </div>
-    </header>
+function money(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: value < 1000 ? 0 : 0,
+  }).format(value);
+}
 
-    <div className="mx-auto max-w-6xl px-5">
-      <section className="py-16 sm:py-20">
-        <p className="text-sm font-semibold uppercase tracking-[.2em]" style={{color:t.accentInk}}>Construction Sales Playbook</p>
-        <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-[1.08] sm:text-5xl">Find the opportunity. Ask the right questions. Show the right demo.</h1>
-        <p className="mt-6 max-w-3xl text-lg leading-8" style={{color:t.muted}}>Our current focus is construction — especially suppliers, manufacturers and trade businesses — because we already have strong roofing, flooring and cladding tools to demonstrate. The underlying service is broader: get found more, convert more and reduce unnecessary work.</p>
+function triScore(value: Tri | null) {
+  if (value === "yes") return 2;
+  if (value === "partly") return 1;
+  return 0;
+}
 
-        <div style={{background:t.accentSoft,borderColor:t.accentInk}} className="mt-8 rounded-2xl border p-6 sm:p-8">
-          <p className="text-sm font-semibold uppercase tracking-[.15em]" style={{color:t.accentInk}}>30-second version</p>
-          <p className="mt-3 max-w-4xl text-xl font-semibold leading-8">We help construction businesses give customers faster answers, make pricing and quoting easier, reduce repetitive staff work and publish more useful information that helps them stay visible as search changes. Customers can use guided tools themselves or simply ask a trained online sales assistant.</p>
-        </div>
+function addScore(scores: Record<AngleKey, number>, key: AngleKey, amount: number) {
+  scores[key] += amount;
+}
 
-        <div className="mt-8 grid gap-4 md:grid-cols-4">
-          {[["1","Find a lead"],["2","Audit the website"],["3","Uncover backend friction"],["4","Show the closest solution"]].map(([n,x])=><div key={n} style={{background:t.surface,borderColor:t.border}} className="rounded-2xl border p-5"><span style={{color:t.accentInk}} className="text-sm font-bold">{n}</span><p className="mt-2 font-semibold">{x}</p></div>)}
-        </div>
-      </section>
+function unique<T>(items: T[]) {
+  return Array.from(new Set(items));
+}
 
-      <section id="target" className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">1. Who to target</h2>
-        <p className="mt-4 max-w-3xl leading-7" style={{color:t.muted}}>Start with English-speaking construction markets. Roofing is the easiest current niche, followed by flooring, wall/cladding and broader construction suppliers. Do not assume a strong website means there is no opportunity — good businesses often have the best foundations to improve further.</p>
-        <div className="mt-7 grid gap-4 md:grid-cols-3">
-          <Card t={t} title="Best current prospects"><ul className="space-y-2"><li>• Roofing suppliers / manufacturers</li><li>• Flooring suppliers</li><li>• Cladding / wall-system suppliers</li><li>• General material suppliers</li><li>• Trade businesses doing lots of quoting</li></ul></Card>
-          <Card t={t} title="Good signs"><ul className="space-y-2"><li>• High-value products</li><li>• Customers need quantities or estimates</li><li>• Lots of enquiries or quoting</li><li>• Trade / contractor customers</li><li>• Useful technical knowledge</li></ul></Card>
-          <Card t={t} title="Important mindset"><p>We are not looking only for broken websites. A business may already do a lot well and still benefit from the final improvements that unlock more value from what it has already built.</p></Card>
-        </div>
-      </section>
+function getDemoRecommendation(input: LeadInput) {
+  if (input.industry === "roofing") return [DEMOS.roofing];
+  if (input.industry === "flooring") return [DEMOS.flooring];
+  if (input.industry === "cladding") return [DEMOS.cladding];
 
-      <section className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">2. Qualify them before you contact them</h2>
-        <p className="mt-4 max-w-3xl leading-7" style={{color:t.muted}}>Spend a few minutes on the website. You are not trying to diagnose the whole business — just find enough evidence to start a relevant conversation.</p>
-        <div className="mt-7 grid gap-4 lg:grid-cols-2">
-          <Card t={t} title="Look for obvious front-end gaps"><ul className="space-y-2"><li>• Is pricing visible or is it only “contact us”?</li><li>• Are products clearly listed and explained?</li><li>• Can customers calculate quantities?</li><li>• Can they estimate or quote online?</li><li>• Is the website easy to use on mobile?</li><li>• Are there calculators, selectors or useful tools?</li><li>• Is useful technical / educational information public?</li><li>• Could AI clearly understand what they sell, where and roughly what it costs?</li></ul></Card>
-          <Card t={t} title="What any of these can mean"><p>Any one gap can create an opportunity. Several gaps can create a larger one. The angle does not need to be different for each problem — the same custom solution can often improve pricing, conversion, staff workload and AI/search visibility at the same time.</p><p className="mt-3 font-semibold" style={{color:t.text}}>The job at this stage is simply to find a reason to talk.</p></Card>
-        </div>
-      </section>
+  if (input.industry === "construction") {
+    return [DEMOS.roofing, DEMOS.flooring, DEMOS.cladding];
+  }
 
-      <section className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">3. Once you speak to them, uncover what the website cannot show you</h2>
-        <p className="mt-4 max-w-3xl leading-7" style={{color:t.muted}}>The biggest opportunities are often behind the website: repetitive quoting, manual calculations, staff chasing information and disconnected workflows.</p>
-        <div className="mt-7 grid gap-4 md:grid-cols-2">
-          <Card t={t} title="Useful discovery questions"><ul className="space-y-2"><li>• How do customers currently get pricing?</li><li>• What happens after someone asks for a quote?</li><li>• What does your team repeatedly have to calculate or chase?</li><li>• What questions do customers ask over and over?</li><li>• How often do customers call or email just to ask for pricing or product advice?</li><li>• How many people really understand the full product range?</li><li>• What part of quoting takes longer than it should?</li><li>• What would you love customers or contractors to do themselves?</li><li>• Where do spreadsheets, emails or manual handoffs slow things down?</li></ul></Card>
-          <Card t={t} title="Listen for these themes"><ul className="space-y-2"><li>• Customers waiting for answers</li><li>• Too much staff back-and-forth</li><li>• Manual quantities / takeoffs / pricing</li><li>• Poor-quality enquiries</li><li>• Trade customers needing better tools</li><li>• Useful information trapped internally</li><li>• Large or complex catalogues customers struggle to navigate</li><li>• Experienced staff repeatedly answering the same product questions</li><li>• Existing systems that do not connect cleanly</li></ul></Card>
-        </div>
-      </section>
+  return [DEMOS.roofing];
+}
 
-      <section id="sell" className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">4. What we can sell</h2>
-        <p className="mt-4 max-w-3xl leading-7" style={{color:t.muted}}>Do not force a prospect into a fixed package. One business may need one tool; another may need several connected tools or a fully bespoke system.</p>
-        <div className="mt-7 grid gap-4 md:grid-cols-3">
-          <Card t={t} title="Custom T3 Labs solutions"><ul className="space-y-2"><li>• Pricing / estimating tools</li><li>• Takeoff / quantity tools</li><li>• Product selectors</li><li>• Quote workflows</li><li>• Trade/customer logins</li><li>• Internal staff tools</li><li>• Website rebuilds</li><li>• Bespoke integrations / platforms</li></ul></Card>
-          <Card t={t} title="QuoteCore Plus"><p>Our full SaaS workflow for measuring, quantifying, quoting, ordering, invoicing, sending, tracking and editing in one place.</p><p className="mt-3">Use it where the existing app already solves the customer&apos;s problem better than a bespoke build.</p></Card>
-          <Card t={t} title="Free tools"><p>If the prospect is not ready to buy, leave the conversation positively. Send the most relevant free tool. It gives them something useful and can still bring them back into the QuoteCore / T3 Labs ecosystem later.</p></Card>
-        </div>
+function getLeadResult(input: LeadInput) {
+  const scores: Record<AngleKey, number> = {
+    faster: 0,
+    buying: 0,
+    guidance: 0,
+    manual: 0,
+    mobile: 0,
+    visibility: 0,
+    icing: 0,
+  };
 
-        <div style={{background:t.accentSoft,borderColor:t.accentInk}} className="mt-5 rounded-2xl border p-6 sm:p-8">
-          <div className="grid gap-7 lg:grid-cols-[.9fr_1.1fr]">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[.15em]" style={{color:t.accentInk}}>Major capability</p>
-              <h3 className="mt-2 text-2xl font-bold">Intelligent Online Sales Assistant</h3>
-              <p className="mt-3 text-sm leading-6" style={{color:t.muted}}>
-                Think of it as a fully trained online sales assistant for that business — not a generic chatbot. It can understand the catalogue, pricing rules, compatibility, common questions and sales process, then guide a customer towards the right answer, preliminary price, enquiry or purchase.
-              </p>
-            </div>
-            <div style={{background:t.surface,borderColor:t.border}} className="rounded-xl border p-5">
-              <p className="font-semibold">Simple blended pitch</p>
-              <p className="mt-2 text-sm leading-6" style={{color:t.muted}}>
-                “Imagine if your website had its own trained sales assistant that knew the parts of your business a customer needs answers about. A customer can explain what they need, it asks the right questions, works through products and pricing, and either gives the answer or hands the conversation to your team when a person is needed.”
-              </p>
-            </div>
-          </div>
+  const solutions: string[] = [];
+  const questions: string[] = [];
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <div style={{background:t.surface,borderColor:t.border}} className="rounded-xl border p-4"><p className="text-sm font-semibold">20 or 20,000 products</p><p className="mt-1 text-xs leading-5" style={{color:t.muted}}>Configure the catalogue so it can search, compare and use the products properly.</p></div>
-            <div style={{background:t.surface,borderColor:t.border}} className="rounded-xl border p-4"><p className="text-sm font-semibold">Pricing & compatibility</p><p className="mt-1 text-xs leading-5" style={{color:t.muted}}>Use the business&apos;s real rules, calculations and product relationships.</p></div>
-            <div style={{background:t.surface,borderColor:t.border}} className="rounded-xl border p-4"><p className="text-sm font-semibold">Controlled answers</p><p className="mt-1 text-xs leading-5" style={{color:t.muted}}>Strong guardrails define what it can answer and when it must stop or escalate.</p></div>
-            <div style={{background:t.surface,borderColor:t.border}} className="rounded-xl border p-4"><p className="text-sm font-semibold">Sales handoff</p><p className="mt-1 text-xs leading-5" style={{color:t.muted}}>It can build a preliminary quote or basket, then hand the context to the real team.</p></div>
-          </div>
-        </div>
-      </section>
+  if (input.pricing === "no") {
+    addScore(scores, "faster", 5);
+    addScore(scores, "manual", 3);
+    addScore(scores, "visibility", 2);
+    solutions.push("Pricing or estimating tool", "Better quote or enquiry flow");
+    questions.push("How do customers currently get a useful price?");
+  } else if (input.pricing === "partly") {
+    addScore(scores, "faster", 3);
+    addScore(scores, "visibility", 1);
+    solutions.push("Improve pricing or estimating flow");
+  }
 
-      <section id="demos" className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">5. Show the closest demo</h2>
-        <p className="mt-4 max-w-3xl leading-7" style={{color:t.muted}}>Learn these well enough to screen-share them. The demos are examples of capability, not fixed products. Everything can be rebranded, simplified, expanded or rebuilt around the customer&apos;s own products, pricing and workflow.</p>
-        <div className="mt-7 grid gap-4 lg:grid-cols-3">
-          {DEMOS.map(([name,href,body])=><div key={name} style={{background:t.surface,borderColor:t.border}} className="card flex flex-col rounded-2xl border p-6"><h3 className="text-lg font-semibold">{name}</h3><p className="mt-3 flex-1 text-sm leading-6" style={{color:t.muted}}>{body}</p><a href={href} target="_blank" rel="noopener noreferrer" style={{color:t.accentInk}} className="mt-5 font-semibold hover:underline">Open demo →</a></div>)}
-        </div>
-        <div style={{background:t.accentSoft,borderColor:t.accentInk}} className="mt-5 rounded-2xl border p-5"><p className="font-semibold">Mixed construction business?</p><p className="mt-2 text-sm leading-6" style={{color:t.muted}}>Show whichever demo best matches the workflow you are discussing. Roofing, flooring and cladding can also be shown together to demonstrate how one business could use multiple tailored tools.</p></div>
-        <div style={{background:t.surface,borderColor:t.border}} className="mt-4 rounded-2xl border p-5">
-          <p className="font-semibold">Sales assistant demo / video</p>
-          <p className="mt-2 text-sm leading-6" style={{color:t.muted}}>
-            When the short sales-assistant clips are available, use them to show two things: first, a normal product or business question; second, a pricing conversation that ends in a preliminary quote or handoff to the real sales team. The important part is showing that the assistant does not just answer — it moves the customer towards the next sales step.
-          </p>
-        </div>
-      </section>
+  if (input.guidedChoice === "no") {
+    addScore(scores, "guidance", 5);
+    addScore(scores, "buying", 4);
+    addScore(scores, "manual", 2);
+    solutions.push("Product selector", "Intelligent Online Sales Assistant");
+    questions.push("How often do customers ask which product they need or what works together?");
+  } else if (input.guidedChoice === "partly") {
+    addScore(scores, "guidance", 3);
+    addScore(scores, "buying", 2);
+    solutions.push("Improve product selection", "Intelligent Online Sales Assistant");
+  }
 
-      <section className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">6. Pick the sales angle that matters most</h2>
-        <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card t={t} title="Online sales assistant">“How many questions or pricing requests could a trained website assistant handle before a person actually needs to get involved?”</Card>
-          <Card t={t} title="AI / Search">“How much useful product, pricing and technical information can AI currently get from your business?”</Card>
-          <Card t={t} title="Faster sales">“What happens when a customer wants a useful price now rather than tomorrow?”</Card>
-          <Card t={t} title="Staff time">“What does your team repeatedly calculate, answer or chase that could potentially happen before they get involved?”</Card>
-          <Card t={t} title="Better enquiries">“Could customers send you more complete project information before your team touches the enquiry?”</Card>
-          <Card t={t} title="Contractors">“What if your trade customers used your products and pricing every time they quoted a job?”</Card>
-          <Card t={t} title="Data advantage">“What useful market information could you build from hundreds or thousands of real estimates and quotes?”</Card>
-        </div>
-        <p className="mt-5 font-semibold">Lead with the pain they care about. Do not try to sell every angle at once.</p>
-      </section>
+  if (input.education === "no") {
+    addScore(scores, "visibility", 5);
+    addScore(scores, "guidance", 3);
+    solutions.push("Product education and technical content");
+    questions.push("Who inside the business holds the product knowledge customers rely on?");
+  } else if (input.education === "partly") {
+    addScore(scores, "visibility", 3);
+    addScore(scores, "guidance", 1);
+    solutions.push("Improve product and technical information");
+  }
 
-      <section className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">7. Advance the opportunity</h2>
-        <div className="mt-7 grid gap-4 md:grid-cols-3">
-          <Card t={t} title="Introduce it"><p>Get the right prospect into a conversation with T3 Labs. We handle discovery, proposal and closing.</p><p className="mt-3 font-semibold" style={{color:t.text}}>Lower commission / lowest involvement.</p></Card>
-          <Card t={t} title="Work it with us"><p>Qualify the opportunity, understand the problems and stay involved while we shape and close the deal together.</p><p className="mt-3 font-semibold" style={{color:t.text}}>Higher commission.</p></Card>
-          <Card t={t} title="Sell & close"><p>Own the sales process and hand T3 Labs a confirmed customer ready for delivery.</p><p className="mt-3 font-semibold" style={{color:t.text}}>Highest standard commission.</p></Card>
-        </div>
-        <div style={{background:t.surfaceAlt,borderColor:t.border}} className="mt-5 rounded-2xl border p-6"><p className="font-semibold">Commercial structures are flexible.</p><p className="mt-2 text-sm leading-6" style={{color:t.muted}}>Commission can be one-off, recurring, a mixture of both, or structured differently for larger opportunities. Customer projects can also range from relatively small focused tools through to major bespoke builds with recurring work.</p></div>
-      </section>
+  if (input.quoteReady === "no") {
+    addScore(scores, "manual", 5);
+    addScore(scores, "faster", 3);
+    solutions.push("Guided quote intake", "Customer estimating tool", "Internal staff workflow");
+    questions.push("What information does the team normally have to chase before a quote can start?");
+  } else if (input.quoteReady === "partly") {
+    addScore(scores, "manual", 3);
+    addScore(scores, "faster", 1);
+    solutions.push("Improve quote intake and handoff");
+  }
 
-      <section className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">How to frame the sales assistant</h2>
-        <div className="mt-7 grid gap-4 md:grid-cols-2">
-          <Card t={t} title="If they are comfortable with AI"><p>Keep it simple: “Do you use ChatGPT? Imagine that experience on your website, except it is trained around your business, products and pricing — and its job is to move the customer towards a sale.”</p></Card>
-          <Card t={t} title="If they are cautious"><p>Lead with control: “It is an online sales assistant with defined knowledge and strict rules. It handles the predictable questions it is allowed to handle, and anything uncertain gets handed to your team.”</p></Card>
-        </div>
-        <p className="mt-4 max-w-3xl text-sm leading-6" style={{color:t.muted}}>Do not oversell autonomy. Pricing should use the customer&apos;s configured catalogue, rules and calculations. The assistant handles the conversation; controlled business logic handles the parts that need to be deterministic.</p>
-      </section>
+  if (input.mobile === "no") {
+    addScore(scores, "mobile", 6);
+    addScore(scores, "buying", 2);
+    solutions.push("Mobile optimisation", "Mobile-first customer tool");
+    questions.push("How important are phone enquiries and mobile visitors to the business?");
+  } else if (input.mobile === "partly") {
+    addScore(scores, "mobile", 3);
+    solutions.push("Mobile journey improvements");
+  }
 
-      <section className="py-12 sm:py-16">
-        <h2 className="text-3xl font-bold sm:text-4xl">Quick objection: “We don&apos;t want competitors seeing our pricing.”</h2>
-        <p className="mt-4 max-w-3xl leading-7" style={{color:t.muted}}>They do not necessarily need to publish every trade rate or their best price. The public layer can use starting prices, indicative pricing, selected products or standard pricing, while logged-in trade/customer pricing remains private.</p>
-        <p className="mt-3 max-w-3xl font-semibold">The goal is simply to provide more useful buying information than “contact us for pricing”.</p>
-      </section>
+  if (input.store === "clunky") {
+    addScore(scores, "buying", 5);
+    addScore(scores, "guidance", 2);
+    solutions.push("Store UX improvements", "Product selector", "Intelligent Online Sales Assistant");
+    questions.push("Where do customers get stuck or abandon the buying journey?");
+  } else if (input.store === "none") {
+    addScore(scores, "faster", 1);
+  }
 
-      <section className="py-12 sm:py-20">
-        <div style={{background:t.surface,borderColor:t.border}} className="rounded-2xl border p-7 sm:p-10">
-          <p className="text-sm font-semibold uppercase tracking-[.15em]" style={{color:t.accentInk}}>The whole job in one line</p>
-          <p className="mt-4 text-xl font-semibold leading-8">Find a construction business → audit the website → identify a few possible gaps → start the conversation → uncover backend friction → show the closest demo → bring T3 Labs in or close it yourself.</p>
-          <div className="mt-7 flex flex-wrap gap-3"><a href={CUSTOMER_PAGE} target="_blank" rel="noopener noreferrer" style={{background:t.accent,color:t.accentText}} className="solid rounded-full px-7 py-3 font-semibold">Open customer page</a><a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" style={{borderColor:t.border}} className="rounded-full border px-7 py-3 font-semibold">Book T3 Labs into a call</a></div>
-        </div>
-      </section>
+  if (input.overall === "weak") {
+    addScore(scores, "buying", 3);
+    addScore(scores, "mobile", 1);
+    addScore(scores, "visibility", 2);
+    solutions.push("Website overhaul or rebuild");
+  } else if (input.overall === "mixed") {
+    addScore(scores, "buying", 2);
+    addScore(scores, "icing", 2);
+    solutions.push("Connect and improve existing website features");
+  } else if (input.overall === "strong") {
+    addScore(scores, "icing", 5);
+  }
+
+  const foundation =
+    triScore(input.pricing) +
+    triScore(input.guidedChoice) +
+    triScore(input.education) +
+    triScore(input.quoteReady) +
+    triScore(input.mobile);
+
+  if (input.overall === "strong" && foundation >= 8) {
+    addScore(scores, "icing", 5);
+    solutions.push("Targeted optimisation", "Connected tools or integrations", "First-party data and reporting");
+  }
+
+  const ranked = (Object.keys(scores) as AngleKey[])
+    .map((key) => ({ ...ANGLES[key], score: scores[key] }))
+    .sort((a, b) => b.score - a.score);
+
+  const meaningful = ranked.filter((a) => a.score > 0);
+  const angles = (meaningful.length ? meaningful : [{ ...ANGLES.icing, score: 1 }]).slice(0, 3);
+
+  if (!questions.length) {
+    questions.push(
+      "What part of the current customer journey still takes more staff time than you would like?",
+      "What would you most like customers to be able to do themselves?",
+      "Which part of the website or sales process do you think could work harder?"
+    );
+  } else {
+    questions.push(
+      "What does the team spend time doing repeatedly that they wish they did not?",
+      "If one part of this process could be improved first, which would create the most value?"
+    );
+  }
+
+  const demos = getDemoRecommendation(input);
+
+  return {
+    angles,
+    solutions: unique(solutions).slice(0, 6),
+    questions: unique(questions).slice(0, 4),
+    demos,
+  };
+}
+
+function ToggleGroup({
+  t,
+  value,
+  options,
+  onChange,
+}: {
+  t: Tokens;
+  value: string | null;
+  options: { value: string; label: string }[];
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="mt-3 grid gap-2 sm:flex sm:flex-wrap">
+      {options.map((option) => {
+        const active = value === option.value;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => onChange(option.value)}
+            style={
+              active
+                ? { background: t.accent, color: t.accentText, borderColor: t.accent }
+                : { background: t.surfaceAlt, color: t.text, borderColor: t.border }
+            }
+            className="finder-option min-h-10 rounded-full border px-4 text-sm font-semibold"
+          >
+            {option.label}
+          </button>
+        );
+      })}
     </div>
-  </main>
+  );
+}
+
+function LeadAngleFinder({ t }: { t: Tokens }) {
+  const [input, setInput] = useState<LeadInput>({
+    industry: "construction",
+    otherIndustry: "",
+    pricing: null,
+    guidedChoice: null,
+    education: null,
+    quoteReady: null,
+    mobile: null,
+    store: null,
+    overall: null,
+  });
+  const [showResult, setShowResult] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const complete =
+    input.pricing &&
+    input.guidedChoice &&
+    input.education &&
+    input.quoteReady &&
+    input.mobile &&
+    input.store &&
+    input.overall;
+
+  const result = getLeadResult(input);
+
+  const industryName =
+    input.industry === "other"
+      ? input.otherIndustry.trim() || "Other industry"
+      : input.industry.charAt(0).toUpperCase() + input.industry.slice(1);
+
+  const copyNotes = async () => {
+    const notes = [
+      `Lead industry: ${industryName}`,
+      `Primary angle: ${result.angles[0].title}`,
+      `Other angles: ${result.angles.slice(1).map((a) => a.title).join(", ") || "None needed"}`,
+      `Suggested opener: ${result.angles[0].opener}`,
+      `Possible solution fit: ${result.solutions.join(", ") || "Targeted custom solution"}`,
+      `Demo: ${result.demos.map((d) => d.name).join(", ")}`,
+      `Discovery questions: ${result.questions.join(" | ")}`,
+    ].join("\n");
+
+    try {
+      await navigator.clipboard.writeText(notes);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  const reset = () => {
+    setInput({
+      industry: "construction",
+      otherIndustry: "",
+      pricing: null,
+      guidedChoice: null,
+      education: null,
+      quoteReady: null,
+      mobile: null,
+      store: null,
+      overall: null,
+    });
+    setShowResult(false);
+  };
+
+  const triOptions = [
+    { value: "yes", label: "Yes" },
+    { value: "partly", label: "Partly" },
+    { value: "no", label: "No" },
+  ];
+
+  return (
+    <div className="grid gap-5 lg:grid-cols-[1.02fr_.98fr]">
+      <div style={{ background: t.surface, borderColor: t.border }} className="rounded-3xl border p-5 sm:p-7">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
+              Lead Angle Finder
+            </p>
+            <h3 className="mt-2 text-2xl font-bold">Audit the lead in under 2 minutes.</h3>
+          </div>
+          <button type="button" onClick={reset} className="text-sm font-semibold hover:underline" style={{ color: t.muted }}>
+            Reset
+          </button>
+        </div>
+
+        <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
+          Look at what is visible on the website. You are finding the best reason to start a conversation, not diagnosing the whole business.
+        </p>
+
+        <div className="mt-7">
+          <p className="text-sm font-semibold">Industry</p>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-5">
+            {[
+              ["construction", "Construction"],
+              ["roofing", "Roofing"],
+              ["flooring", "Flooring"],
+              ["cladding", "Cladding"],
+              ["other", "Other"],
+            ].map(([value, label]) => {
+              const active = input.industry === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setInput({ ...input, industry: value as Industry })}
+                  style={
+                    active
+                      ? { background: t.accent, color: t.accentText, borderColor: t.accent }
+                      : { background: t.surfaceAlt, color: t.text, borderColor: t.border }
+                  }
+                  className="finder-option min-h-10 rounded-full border px-3 text-sm font-semibold"
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+
+          {input.industry === "other" && (
+            <input
+              value={input.otherIndustry}
+              onChange={(e) => setInput({ ...input, otherIndustry: e.target.value })}
+              placeholder="Industry or niche"
+              style={{ background: t.surfaceAlt, color: t.text, borderColor: t.border }}
+              className="mt-3 min-h-11 w-full rounded-xl border px-4 text-sm outline-none"
+            />
+          )}
+        </div>
+
+        <div className="mt-7 space-y-6">
+          <div>
+            <p className="text-sm font-semibold">Can customers get useful pricing without contacting the team?</p>
+            <ToggleGroup
+              t={t}
+              value={input.pricing}
+              options={triOptions}
+              onChange={(v) => setInput({ ...input, pricing: v as Tri })}
+            />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold">Can customers explain what they need and be guided to the right products?</p>
+            <ToggleGroup
+              t={t}
+              value={input.guidedChoice}
+              options={triOptions}
+              onChange={(v) => setInput({ ...input, guidedChoice: v as Tri })}
+            />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold">Does the site clearly explain what products are for, how they are used and how they are measured?</p>
+            <ToggleGroup
+              t={t}
+              value={input.education}
+              options={triOptions}
+              onChange={(v) => setInput({ ...input, education: v as Tri })}
+            />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold">Can a customer send most of what is needed for a quote before staff get involved?</p>
+            <ToggleGroup
+              t={t}
+              value={input.quoteReady}
+              options={triOptions}
+              onChange={(v) => setInput({ ...input, quoteReady: v as Tri })}
+            />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold">Is the important customer journey genuinely easy on mobile?</p>
+            <ToggleGroup
+              t={t}
+              value={input.mobile}
+              options={[
+                { value: "yes", label: "Strong" },
+                { value: "partly", label: "Okay" },
+                { value: "no", label: "Poor" },
+              ]}
+              onChange={(v) => setInput({ ...input, mobile: v as Tri })}
+            />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold">If they offer online ordering, how easy is it?</p>
+            <ToggleGroup
+              t={t}
+              value={input.store}
+              options={[
+                { value: "easy", label: "Easy" },
+                { value: "clunky", label: "Clunky" },
+                { value: "none", label: "No store" },
+                { value: "not-relevant", label: "Not relevant" },
+              ]}
+              onChange={(v) => setInput({ ...input, store: v as StoreState })}
+            />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold">Overall, how would you describe the site and current digital setup?</p>
+            <ToggleGroup
+              t={t}
+              value={input.overall}
+              options={[
+                { value: "strong", label: "Strong" },
+                { value: "mixed", label: "Decent, but fragmented" },
+                { value: "weak", label: "Weak or outdated" },
+              ]}
+              onChange={(v) => setInput({ ...input, overall: v as OverallState })}
+            />
+          </div>
+        </div>
+
+        <button
+          type="button"
+          disabled={!complete}
+          onClick={() => setShowResult(true)}
+          style={{ background: complete ? t.accent : t.surfaceAlt, color: complete ? t.accentText : t.muted }}
+          className="solid mt-7 min-h-12 w-full rounded-full px-6 text-sm font-semibold disabled:cursor-not-allowed"
+        >
+          Find the lead angle
+        </button>
+
+        <p className="mt-3 text-xs leading-5" style={{ color: t.muted }}>
+          Important: there is almost always an angle. Missing features are an angle. Clunky features are an angle. A strong setup can still be an optimisation angle.
+        </p>
+      </div>
+
+      <div className="lg:sticky lg:top-20 lg:self-start">
+        {!showResult ? (
+          <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="rounded-3xl border p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
+              What you will get
+            </p>
+            <h3 className="mt-3 text-2xl font-bold">A usable reason to contact the lead.</h3>
+            <div className="mt-5 grid gap-3">
+              {[
+                "Primary angle and supporting angles",
+                "Suggested opener",
+                "Closest demo to show",
+                "Likely solution fit",
+                "Discovery questions for the call",
+              ].map((item) => (
+                <div key={item} style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border px-4 py-3 text-sm font-semibold">
+                  {item}
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-sm leading-6" style={{ color: t.muted }}>
+              The result is a hypothesis. The website gives you the opening angle. The conversation tells you what is actually costing the business time or money.
+            </p>
+          </div>
+        ) : (
+          <div style={{ background: t.surfaceAlt, borderColor: t.accentInk }} className="rounded-3xl border p-5 sm:p-7">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
+                  Lead result
+                </p>
+                <h3 className="mt-2 text-2xl font-bold">{industryName}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={copyNotes}
+                style={{ background: t.accent, color: t.accentText }}
+                className="solid rounded-full px-4 py-2 text-xs font-semibold"
+              >
+                {copied ? "Copied" : "Copy lead notes"}
+              </button>
+            </div>
+
+            <div className="mt-5">
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.muted }}>
+                Primary angle
+              </p>
+              <h4 className="mt-1 text-xl font-bold">{result.angles[0].title}</h4>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                {result.angles[0].short}
+              </p>
+            </div>
+
+            {result.angles.length > 1 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {result.angles.slice(1).map((angle) => (
+                  <span key={angle.key} style={{ background: t.surface, borderColor: t.border }} className="rounded-full border px-3 py-1.5 text-xs font-semibold">
+                    Also: {angle.title}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div style={{ background: t.surface, borderColor: t.border }} className="mt-5 rounded-2xl border p-5">
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>
+                Suggested opener
+              </p>
+              <p className="mt-2 text-sm leading-6">{result.angles[0].opener}</p>
+            </div>
+
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <div>
+                <p className="text-sm font-semibold">Possible solution fit</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {(result.solutions.length ? result.solutions : ["Targeted custom solution"]).map((item) => (
+                    <span key={item} style={{ background: t.surface, borderColor: t.border }} className="rounded-full border px-3 py-1.5 text-xs font-medium">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold">Recommended demo</p>
+                <div className="mt-2 space-y-2">
+                  {result.demos.map((demo) => (
+                    <a
+                      key={demo.name}
+                      href={demo.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: t.accentInk }}
+                      className="block text-sm font-semibold hover:underline"
+                    >
+                      {demo.name} →
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <p className="text-sm font-semibold">Ask next</p>
+              <div className="mt-2 grid gap-2">
+                {result.questions.map((question) => (
+                  <div key={question} style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border p-3 text-sm leading-6">
+                    {question}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <p className="mt-5 text-xs leading-5" style={{ color: t.muted }}>
+              Do not promise a specific build from this result. Use it to start the conversation, then let discovery determine the best solution.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+type Involvement = "refer" | "cowork" | "close";
+
+const COMMISSION = {
+  refer: {
+    title: "Refer the opportunity",
+    min: 0.15,
+    body: "You create the introduction or get the prospect onto a call. T3 Labs handles discovery, proposal and closing.",
+  },
+  cowork: {
+    title: "Work the deal with us",
+    min: 0.20,
+    body: "You qualify the lead, stay involved and help us move the opportunity through discovery and close.",
+  },
+  close: {
+    title: "Sell and close",
+    min: 0.30,
+    body: "You own the sales process and hand T3 Labs a confirmed customer ready for delivery.",
+  },
+};
+
+function EarningsCalculator({ t }: { t: Tokens }) {
+  const [amount, setAmount] = useState("5000");
+  const [involvement, setInvolvement] = useState<Involvement>("refer");
+
+  const parsed = Math.max(0, Number(amount.replace(/[^0-9.]/g, "")) || 0);
+  const minimum = parsed * COMMISSION[involvement].min;
+  const potentialMax = parsed * 0.5;
+
+  return (
+    <div style={{ background: t.surface, borderColor: t.border }} className="rounded-3xl border p-5 sm:p-7">
+      <div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
+            Earnings calculator
+          </p>
+          <h3 className="mt-2 text-2xl font-bold">What could this deal be worth to you?</h3>
+          <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
+            Minimum commission depends on your involvement. Higher rates can be agreed for individual deals, up to 50%.
+          </p>
+
+          <div className="mt-5">
+            <label className="text-sm font-semibold">Project value</label>
+            <div className="mt-2 flex items-center gap-2">
+              <span style={{ color: t.muted }} className="text-lg font-semibold">$</span>
+              <input
+                inputMode="decimal"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                style={{ background: t.surfaceAlt, borderColor: t.border, color: t.text }}
+                className="min-h-11 w-full rounded-xl border px-4 font-semibold outline-none"
+              />
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {["999", "5000", "10000"].map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => setAmount(preset)}
+                  style={{ background: t.surfaceAlt, borderColor: t.border }}
+                  className="finder-option rounded-full border px-3 py-1.5 text-xs font-semibold"
+                >
+                  {money(Number(preset))}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <p className="text-sm font-semibold">Your involvement</p>
+            <div className="mt-2 grid gap-2">
+              {(Object.keys(COMMISSION) as Involvement[]).map((key) => {
+                const active = involvement === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setInvolvement(key)}
+                    style={
+                      active
+                        ? { background: t.accent, color: t.accentText, borderColor: t.accent }
+                        : { background: t.surfaceAlt, color: t.text, borderColor: t.border }
+                    }
+                    className="finder-option rounded-xl border p-3 text-left"
+                  >
+                    <span className="block text-sm font-semibold">{COMMISSION[key].title}</span>
+                    <span className="mt-0.5 block text-xs opacity-75">Minimum {(COMMISSION[key].min * 100).toFixed(0)}%</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-6">
+            <p className="text-sm font-semibold">{COMMISSION[involvement].title}</p>
+            <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+              {COMMISSION[involvement].body}
+            </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border p-4">
+                <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>
+                  Minimum at this level
+                </p>
+                <p className="mt-2 text-3xl font-bold">{money(minimum)}</p>
+                <p className="mt-1 text-xs" style={{ color: t.muted }}>
+                  Based on {(COMMISSION[involvement].min * 100).toFixed(0)}%
+                </p>
+              </div>
+
+              <div style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border p-4">
+                <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>
+                  Potential upper rate
+                </p>
+                <p className="mt-2 text-3xl font-bold">{money(potentialMax)}</p>
+                <p className="mt-1 text-xs" style={{ color: t.muted }}>
+                  50% only where specifically agreed
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-5 text-xs leading-5" style={{ color: t.muted }}>
+              These are illustrations, not an automatic entitlement to 50%. Each paying customer will have a separate deal record or agreement that confirms the project value, your role, the agreed commission rate and payment terms.
+            </p>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            {[
+              ["$999 project", "Referral minimum", "$150"],
+              ["$5,000 project", "Close minimum", "$1,500"],
+              ["$10,000 project", "Close minimum", "$3,000"],
+            ].map(([title, label, value]) => (
+              <div key={title} style={{ background: t.surfaceAlt, borderColor: t.border }} className="rounded-xl border p-4">
+                <p className="text-xs font-semibold" style={{ color: t.muted }}>{title}</p>
+                <p className="mt-1 text-lg font-bold">{value}</p>
+                <p className="mt-1 text-xs" style={{ color: t.muted }}>{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function SalesResourcesPage() {
+  const [theme, setTheme] = useState<Theme>("dark");
+  const t = theme === "dark" ? dark : light;
+
+  return (
+    <main
+      style={{
+        background: t.bg,
+        color: t.text,
+        ["--accent" as string]: t.accent,
+        ["--accent-ink" as string]: t.accentInk,
+      }}
+      className="min-h-screen antialiased"
+    >
+      <style>{`
+        main button, main a { cursor:pointer; transition:transform .15s ease, filter .15s ease, border-color .15s ease, box-shadow .15s ease; }
+        .solid:hover { transform:translateY(-1px); filter:brightness(1.08); box-shadow:0 7px 22px rgba(215,255,0,.16); }
+        .outline:hover, .finder-option:hover { border-color:var(--accent-ink)!important; }
+        .hover-card { transition:transform .15s ease, border-color .15s ease; }
+        .hover-card:hover { transform:translateY(-2px); border-color:var(--accent-ink)!important; }
+        .nav-scroll { scrollbar-width:none; }
+        .nav-scroll::-webkit-scrollbar { display:none; }
+        table { border-collapse:separate; border-spacing:0; }
+        th, td { vertical-align:top; }
+      `}</style>
+
+      <header
+        style={{
+          background: theme === "dark" ? "rgba(10,11,16,.92)" : "rgba(251,252,255,.94)",
+          borderColor: t.border,
+        }}
+        className="sticky top-0 z-50 border-b backdrop-blur"
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-5">
+          <div className="flex shrink-0 items-center gap-2 font-semibold">
+            <span style={{ background: t.accent, color: t.accentText }} className="rounded-md px-2 py-0.5 text-sm font-bold">
+              T3
+            </span>
+            <span className="text-sm" style={{ color: t.muted }}>Sales Resources</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              style={{ borderColor: t.border, color: t.muted }}
+              className="outline rounded-full border px-3 py-1.5 text-xs"
+            >
+              {theme === "dark" ? "☀ Light" : "☾ Dark"}
+            </button>
+            <a
+              href={CUSTOMER_PAGE}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ background: t.accent, color: t.accentText }}
+              className="solid rounded-full px-4 py-2 text-xs font-semibold"
+            >
+              Customer page
+            </a>
+          </div>
+        </div>
+
+        <div className="nav-scroll mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 pb-3 sm:px-5">
+          {[
+            ["target", "Target"],
+            ["finder", "Angle Finder"],
+            ["contact", "Reach Them"],
+            ["discovery", "Discovery"],
+            ["sell", "What We Sell"],
+            ["demos", "Demos"],
+            ["earnings", "Earnings"],
+          ].map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => scrollToId(id)}
+              style={{ background: t.surfaceAlt, borderColor: t.border, color: t.muted }}
+              className="outline shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-5">
+        <section className="py-14 sm:py-20">
+          <p className="text-sm font-semibold uppercase tracking-[.2em]" style={{ color: t.accentInk }}>
+            T3 Labs Construction Sales Playbook
+          </p>
+
+          <h1 className="mt-4 max-w-5xl text-4xl font-bold leading-[1.06] tracking-tight sm:text-5xl lg:text-6xl">
+            Find the lead. Find the angle. Start the conversation.
+          </h1>
+
+          <p className="mt-6 max-w-4xl text-lg leading-8" style={{ color: t.muted }}>
+            We help businesses get found easier, then convert more of that traffic into paying customers using tools and systems that let customers find the answer they need quicker and easier. Those same systems can also soft-funnel them into the sales process and reduce repetitive work for the business.
+          </p>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-5">
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>Customer starting price</p>
+              <p className="mt-2 text-3xl font-bold">$999+</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                Focused custom projects can start from $999, then grow with the customer&apos;s needs.
+              </p>
+            </div>
+
+            <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-5">
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.muted }}>Your minimum commission</p>
+              <p className="mt-2 text-3xl font-bold">15%+</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                Even a referral can earn roughly $150 on a $999 project.
+              </p>
+            </div>
+
+            <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-5">
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.muted }}>If you close the deal</p>
+              <p className="mt-2 text-3xl font-bold">30%+</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                Higher rates can be agreed by deal, up to 50% depending on involvement and opportunity.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="mt-6 rounded-2xl border p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
+              30-second version
+            </p>
+            <p className="mt-3 max-w-5xl text-xl font-semibold leading-8">
+              Find businesses where customers still have to wait, search around, call, email or fill in a generic form to get a useful answer. We build custom tools and systems that remove that friction, make the website more useful, and can also reduce manual work behind the scenes.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-7">
+            {[
+              ["1", "Find"],
+              ["2", "Audit"],
+              ["3", "Angle"],
+              ["4", "Contact"],
+              ["5", "Discover"],
+              ["6", "Demo"],
+              ["7", "Advance"],
+            ].map(([n, label]) => (
+              <div key={n} style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border p-4">
+                <span className="text-xs font-bold" style={{ color: t.accentInk }}>{n}</span>
+                <p className="mt-1 text-sm font-semibold">{label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="target" className="scroll-mt-28 py-12 sm:py-16">
+          <div className="max-w-4xl">
+            <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>1. Who to target</p>
+            <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Start where the sales friction is easiest to see.</h2>
+            <p className="mt-4 leading-7" style={{ color: t.muted }}>
+              Construction and roofing are the current focus because we already have useful roofing, flooring and cladding demos. You are not limited to these industries. If you understand another niche and can recognise the same problems, use that knowledge.
+            </p>
+          </div>
+
+          <div className="mt-7 grid gap-4 md:grid-cols-3">
+            <Card t={t} title="Best places to start">
+              <ul className="space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• Roofing suppliers and manufacturers</li>
+                <li>• Flooring suppliers</li>
+                <li>• Cladding and wall-system suppliers</li>
+                <li>• Building product merchants and distributors</li>
+                <li>• Trade businesses doing frequent quoting</li>
+                <li>• Manufacturers with complex product ranges</li>
+              </ul>
+            </Card>
+
+            <Card t={t} title="Good commercial signals">
+              <ul className="space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• Meaningful order values</li>
+                <li>• Customers need pricing or estimates</li>
+                <li>• Quantities or measurements matter</li>
+                <li>• Products need explanation or compatibility checks</li>
+                <li>• Lots of enquiries or quotes</li>
+                <li>• Repeat trade customers</li>
+              </ul>
+            </Card>
+
+            <Card t={t} title="Do not over-filter">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                We are not only looking for bad websites. A strong business may have already paid for the heavy lifting and still be missing the final pieces that make everything work harder.
+              </p>
+              <p className="mt-3 text-sm font-semibold">
+                There is often an angle in both weak and strong setups.
+              </p>
+            </Card>
+          </div>
+        </section>
+
+        <section id="finder" className="scroll-mt-28 py-12 sm:py-16">
+          <LeadAngleFinder t={t} />
+        </section>
+
+        <section className="py-10 sm:py-14">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>Angle map</p>
+              <h2 className="mt-2 text-3xl font-bold">Use this if you do not need the finder.</h2>
+            </div>
+            <p className="max-w-xl text-sm leading-6" style={{ color: t.muted }}>
+              The website gives you the opening angle. Discovery tells you what the real project should become.
+            </p>
+          </div>
+
+          <div style={{ borderColor: t.border }} className="mt-6 overflow-x-auto rounded-2xl border">
+            <table className="min-w-[950px] w-full text-left text-sm">
+              <thead style={{ background: t.surfaceAlt }}>
+                <tr>
+                  {["Angle", "What you noticed", "Simple pitch", "Likely fit"].map((h) => (
+                    <th key={h} style={{ borderColor: t.border }} className="border-b px-4 py-3 font-semibold">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody style={{ background: t.surface }}>
+                {[
+                  ["Faster answers", "No useful pricing, generic quote form, phone or email required", "Give customers more of the answer now, then send staff a better enquiry.", "Pricing tool, estimator, quote intake, assistant"],
+                  ["Easier buying", "Store or products exist, but customers have to hunt or understand too much", "Make the journey guided instead of making the buyer figure it out alone.", "Product selector, store UX, guided tool"],
+                  ["Product guidance", "Large range, compatibility questions, specialist knowledge", "Turn product knowledge into something customers can use without waiting for the expert.", "Selector, education, sales assistant"],
+                  ["Reduce manual work", "Website appears to push the real work back onto staff", "Collect and calculate more before a person needs to get involved.", "Quote flow, staff tool, spreadsheet replacement"],
+                  ["Mobile journey", "Important actions are awkward or broken on a phone", "Make the first customer experience useful on the device they are already using.", "Mobile optimisation, rebuild, mobile-first tool"],
+                  ["Icing on the cake", "Strong site or store, but features are fragmented", "Get more value from what they have already paid to build.", "Optimisation, integrations, connected tools"],
+                ].map((row) => (
+                  <tr key={row[0]}>
+                    {row.map((cell, i) => (
+                      <td
+                        key={cell}
+                        style={{ borderColor: t.border, color: i === 0 ? t.text : t.muted }}
+                        className={`border-b px-4 py-4 leading-6 ${i === 0 ? "font-semibold" : ""}`}
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="contact" className="scroll-mt-28 py-12 sm:py-16">
+          <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>2. Reaching the lead</p>
+          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Lead with the thing you actually noticed.</h2>
+          <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
+            Do not send a generic technology pitch. Mention one real observation from the website, connect it to a useful outcome, then ask for the conversation.
+          </p>
+
+          <div className="mt-7 grid gap-4 lg:grid-cols-3">
+            <Card t={t} title="Cold call">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Best when the business is accessible and the pain is obvious. Keep the first 20 to 30 seconds specific.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                “I was looking through your website and noticed customers still have to contact you for [pricing / product help / a quote]. We build tools that can handle more of that online. Worth 30 seconds?”
+              </div>
+            </Card>
+
+            <Card t={t} title="Email">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Best when you can point to something specific or send the closest demo.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                “I noticed [specific friction] on your site. We build custom tools that give customers faster answers and reduce the amount your team has to handle manually. I thought this example might be relevant.”
+              </div>
+            </Card>
+
+            <Card t={t} title="LinkedIn">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Useful for finding the right person in larger businesses and creating a warmer route into the conversation.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                Keep it short. Mention the business, the website observation and why you think it may be relevant. Do not turn the first message into a full pitch.
+              </div>
+            </Card>
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_.9fr]">
+            <Card t={t} title="Who should you contact?">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Smaller business: owner, founder or managing director.
+              </p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                Larger business: sales, commercial, ecommerce, digital, marketing or operations leadership.
+              </p>
+              <p className="mt-3 text-sm font-semibold">
+                You need someone who owns revenue, customer experience, digital or operations. Do not waste hours hunting for the perfect job title.
+              </p>
+            </Card>
+
+            <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-5 sm:p-6">
+              <p className="text-sm font-semibold">Mobile is a useful angle, but check both devices.</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                A 2026 ecommerce benchmark cited by Shopify found mobile generated 70% of traffic, while desktop conversion averaged 3.4% versus 2.0% on mobile. The useful sales angle is simple: mobile often wins the first impression, while desktop can still be important when people evaluate and buy.
+              </p>
+              <p className="mt-3 text-xs leading-5" style={{ color: t.muted }}>
+                Treat this as an ecommerce benchmark, not the prospect&apos;s own analytics. Check their actual site on both devices.
+              </p>
+              <a
+                href="https://www.shopify.com/blog/mobile-vs-desktop-conversion-rates"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: t.accentInk }}
+                className="mt-3 inline-block text-xs font-semibold hover:underline"
+              >
+                Source: Shopify, 2026 →
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section id="discovery" className="scroll-mt-28 py-12 sm:py-16">
+          <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>3. Discovery</p>
+          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">The website shows the symptom. The conversation finds the real problem.</h2>
+          <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
+            Do not assume you know the backend from the public website. Ask where staff time goes, what customers repeatedly need and what slows down the sales process.
+          </p>
+
+          <div className="mt-7 grid gap-4 lg:grid-cols-2">
+            <Card t={t} title="Questions worth asking">
+              <ul className="space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• How do customers currently get pricing?</li>
+                <li>• What usually happens after someone requests a quote?</li>
+                <li>• What information does the team repeatedly have to chase?</li>
+                <li>• What do customers call or email about over and over?</li>
+                <li>• What calculations are still done manually?</li>
+                <li>• What important work still lives in spreadsheets?</li>
+                <li>• Who inside the business holds the product knowledge everyone relies on?</li>
+                <li>• What would you love customers or staff to be able to do more easily?</li>
+              </ul>
+            </Card>
+
+            <Card t={t} title="Listen for leverage">
+              <ul className="space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• Customers waiting for answers</li>
+                <li>• Low-value calls and emails</li>
+                <li>• Repetitive pricing or product questions</li>
+                <li>• Manual quantities, takeoffs or calculations</li>
+                <li>• Poor-quality or incomplete enquiries</li>
+                <li>• One or two people holding all the useful knowledge</li>
+                <li>• Spreadsheets that run important parts of the business</li>
+                <li>• Systems that exist but do not connect cleanly</li>
+              </ul>
+              <p className="mt-4 text-sm font-semibold">
+                The best first project is often the smallest change that removes a real bottleneck.
+              </p>
+            </Card>
+          </div>
+        </section>
+
+        <section id="sell" className="scroll-mt-28 py-12 sm:py-16">
+          <div className="grid gap-6 lg:grid-cols-[.75fr_1.25fr] lg:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>4. What we sell</p>
+              <h2 className="mt-3 text-3xl font-bold sm:text-4xl">One custom solution, many possible forms.</h2>
+            </div>
+            <p className="leading-7" style={{ color: t.muted }}>
+              Do not force the prospect into a fixed package. We can build one focused feature from $999 or combine several pieces into a larger bespoke system.
+            </p>
+          </div>
+
+          <div className="mt-7 grid gap-4 lg:grid-cols-3">
+            <Card t={t} title="Customer-facing sales tools">
+              <ul className="space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• Pricing and estimating tools</li>
+                <li>• Takeoff and quantity calculators</li>
+                <li>• Product selectors</li>
+                <li>• Quote builders</li>
+                <li>• Trade or customer portals</li>
+                <li>• Ordering flows</li>
+                <li>• Intelligent Online Sales Assistant</li>
+              </ul>
+            </Card>
+
+            <Card t={t} title="Website and buying journey">
+              <ul className="space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• Mobile optimisation</li>
+                <li>• Improve or rebuild the website</li>
+                <li>• Product and technical information</li>
+                <li>• Store UX improvements</li>
+                <li>• Better enquiry flows</li>
+                <li>• Connect existing website features</li>
+              </ul>
+            </Card>
+
+            <Card t={t} title="Internal business systems">
+              <ul className="space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• Staff quoting tools</li>
+                <li>• Workflow automation</li>
+                <li>• Spreadsheet replacement</li>
+                <li>• Pricing systems</li>
+                <li>• CRM or system integrations</li>
+                <li>• Dashboards and reporting</li>
+                <li>• Fully bespoke internal software</li>
+              </ul>
+            </Card>
+          </div>
+
+          <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="mt-5 rounded-2xl border p-6 sm:p-8">
+            <div className="grid gap-5 lg:grid-cols-[.8fr_1.2fr]">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[.15em]" style={{ color: t.accentInk }}>
+                  Major capability
+                </p>
+                <h3 className="mt-2 text-2xl font-bold">Intelligent Online Sales Assistant</h3>
+                <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
+                  A trained online sales assistant that understands the business, product catalogue, pricing rules, compatibility and common questions. It can answer customers, guide product selection, produce preliminary pricing and move the customer toward an enquiry, quote, purchase or human handoff.
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border p-4">
+                  <p className="text-sm font-semibold">AI-friendly prospect</p>
+                  <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                    “Imagine ChatGPT on your website, except it knows your business, products and pricing, and its job is to help customers buy from you.”
+                  </p>
+                </div>
+                <div style={{ background: t.surface, borderColor: t.border }} className="rounded-xl border p-4">
+                  <p className="text-sm font-semibold">AI-cautious prospect</p>
+                  <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                    “Think of it as a controlled online sales assistant. It works inside the knowledge and rules we configure, and if it cannot answer safely, it hands the customer to your team.”
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="mt-5 rounded-2xl border p-5">
+            <p className="text-sm font-semibold">$999 is the entry point, not a fixed package.</p>
+            <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+              Larger product catalogues, more complex calculations, integrations, website work, internal systems and sales-assistant functionality can increase the scope. Keep the first conversation focused on the problem and value. T3 Labs can help scope the right build.
+            </p>
+          </div>
+        </section>
+
+        <section id="demos" className="scroll-mt-28 py-12 sm:py-16">
+          <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>5. Demo the behaviour</p>
+          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Show the closest example. Do not sell the design.</h2>
+          <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
+            Learn the demos well enough to screen-share them. The point is to show what the customer can do, not to convince the prospect that the demo already looks like their business.
+          </p>
+
+          <div className="mt-7 grid gap-4 lg:grid-cols-3">
+            {(Object.keys(DEMOS) as (keyof typeof DEMOS)[]).map((key) => {
+              const demo = DEMOS[key];
+              return (
+                <a
+                  key={demo.name}
+                  href={demo.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ background: t.surface, borderColor: t.border }}
+                  className="hover-card rounded-2xl border p-6"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>
+                    {key}
+                  </p>
+                  <h3 className="mt-2 text-xl font-semibold">{demo.name}</h3>
+                  <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>{demo.note}</p>
+                  <p className="mt-5 text-sm font-semibold" style={{ color: t.accentInk }}>Open demo →</p>
+                </a>
+              );
+            })}
+          </div>
+
+          {ASSISTANT_DEMO_URL && (
+            <a
+              href={ASSISTANT_DEMO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ background: t.surface, borderColor: t.accentInk }}
+              className="hover-card mt-4 block rounded-2xl border p-6"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>
+                Online Sales Assistant
+              </p>
+              <h3 className="mt-2 text-xl font-semibold">Apex Roofing Sales Assistant</h3>
+              <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
+                Show a normal product question, then a pricing conversation that moves into a preliminary quote or handoff.
+              </p>
+              <p className="mt-5 text-sm font-semibold" style={{ color: t.accentInk }}>Open assistant demo →</p>
+            </a>
+          )}
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            <Card t={t} title="When to ask for a custom demo">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Do not ask T3 Labs to build a bespoke demo just because somebody is interested.
+              </p>
+              <ul className="mt-3 space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• The business is clearly qualified</li>
+                <li>• There is meaningful project potential</li>
+                <li>• The decision maker is engaged</li>
+                <li>• The existing demos cannot show the key idea properly</li>
+              </ul>
+            </Card>
+
+            <Card t={t} title="Mixed or different industry?">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Show whichever workflow best demonstrates the behaviour you are discussing. If none matches the industry, roofing is usually a good example of measurement, products, pricing and quote handoff.
+              </p>
+              <p className="mt-3 text-sm font-semibold">
+                Explain that everything can be rebuilt around their brand, products, rules and workflow.
+              </p>
+            </Card>
+          </div>
+        </section>
+
+        <section className="py-12 sm:py-16">
+          <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>6. Useful objections and proof</p>
+          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Know enough to support the pitch without overcomplicating it.</h2>
+
+          <div className="mt-7 grid gap-4 lg:grid-cols-2">
+            <Card t={t} title="“We do not want competitors seeing our pricing.”">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                They do not need to publish every trade rate or their best price. The public layer can use starting prices, indicative pricing, selected products or standard pricing, while private trade or customer pricing stays behind a login.
+              </p>
+              <p className="mt-3 text-sm font-semibold">
+                The goal is to give the buyer more useful information than “contact us for pricing”.
+              </p>
+            </Card>
+
+            <Card t={t} title="Proof you can cite live">
+              <ul className="space-y-3 text-sm leading-6" style={{ color: t.muted }}>
+                <li>
+                  <strong style={{ color: t.text }}>Google:</strong> AI Mode queries are around 3 times longer than traditional searches.
+                </li>
+                <li>
+                  <strong style={{ color: t.text }}>Invoca 2026 home services:</strong> 63% used generative AI to research a high-stakes purchase.
+                </li>
+                <li>
+                  <strong style={{ color: t.text }}>Speed:</strong> 79% said they would switch to a faster-responding competitor.
+                </li>
+                <li>
+                  <strong style={{ color: t.text }}>Information gap:</strong> 26% called because the information they needed was not available online.
+                </li>
+              </ul>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <a
+                  href="https://blog.google/products-and-platforms/products/search/ai-mode-us-insights/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: t.accentInk }}
+                  className="text-xs font-semibold hover:underline"
+                >
+                  Google source →
+                </a>
+                <a
+                  href="https://www.invoca.com/uk/reports/home-services-buyer-experience-report-2026"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: t.accentInk }}
+                  className="text-xs font-semibold hover:underline"
+                >
+                  Invoca source →
+                </a>
+              </div>
+            </Card>
+          </div>
+        </section>
+
+        <section id="earnings" className="scroll-mt-28 py-12 sm:py-16">
+          <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>7. What you can earn</p>
+          <h2 className="mt-3 max-w-4xl text-3xl font-bold sm:text-4xl">More involvement can mean materially more commission.</h2>
+          <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
+            The minimum rate depends on how much of the sales process you own. These are minimums, not caps. Stronger arrangements can be discussed for individual opportunities, up to a maximum of 50%.
+          </p>
+
+          <div className="mt-7 grid gap-4 lg:grid-cols-3">
+            {(Object.keys(COMMISSION) as Involvement[]).map((key) => (
+              <Card t={t} title={`${COMMISSION[key].title} · ${(COMMISSION[key].min * 100).toFixed(0)}% minimum`}>
+                <p className="text-sm leading-6" style={{ color: t.muted }}>{COMMISSION[key].body}</p>
+                <p className="mt-3 text-sm font-semibold">
+                  $5,000 project: {money(5000 * COMMISSION[key].min)} minimum
+                </p>
+              </Card>
+            ))}
+          </div>
+
+          <div className="mt-5">
+            <EarningsCalculator t={t} />
+          </div>
+        </section>
+
+        <section className="py-12 sm:py-16">
+          <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="rounded-3xl border p-6 sm:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>Another T3 Labs product</p>
+            <div className="mt-3 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <h2 className="text-2xl font-bold">QuoteCore Plus will have its own sales guide.</h2>
+                <p className="mt-3 max-w-3xl text-sm leading-6" style={{ color: t.muted }}>
+                  Keep this page focused on custom T3 Labs projects. If a business is a better fit for the existing QuoteCore Plus platform, use the separate product guide once it is available.
+                </p>
+              </div>
+              {QUOTECORE_SALES_GUIDE && (
+                <a
+                  href={QUOTECORE_SALES_GUIDE}
+                  style={{ background: t.accent, color: t.accentText }}
+                  className="solid rounded-full px-6 py-3 text-sm font-semibold"
+                >
+                  Open QuoteCore Plus guide
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12 sm:py-20">
+          <div style={{ background: t.surface, borderColor: t.accentInk }} className="rounded-3xl border p-7 sm:p-10">
+            <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>The whole job</p>
+            <p className="mt-4 max-w-5xl text-xl font-semibold leading-8 sm:text-2xl">
+              Find a business → audit the website → find the strongest angle → contact the right person → uncover the real bottleneck → show the closest demo → identify the first useful custom solution → bring T3 Labs in or close it yourself.
+            </p>
+
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={CUSTOMER_PAGE}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ background: t.accent, color: t.accentText }}
+                className="solid inline-flex min-h-12 items-center justify-center rounded-full px-7 text-sm font-semibold"
+              >
+                Open customer page
+              </a>
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ borderColor: t.border }}
+                className="outline inline-flex min-h-12 items-center justify-center rounded-full border px-7 text-sm font-semibold"
+              >
+                Book T3 Labs into the call
+              </a>
+            </div>
+
+            <p className="mt-5 text-xs leading-5" style={{ color: t.muted }}>
+              Next step after this sales page is final: add the formal rep agreement, define customer-specific deal agreements and commission payment terms, and collect the rep&apos;s payment details.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  );
 }
