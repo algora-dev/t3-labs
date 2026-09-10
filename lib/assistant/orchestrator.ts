@@ -268,6 +268,16 @@ const handlers: Record<string, ToolHandler> = {
   },
 };
 
+/* ---------- error kinds (spec 15.5: never leak provider dumps) ---------- */
+
+export type TurnErrorKind = 'timeout' | 'upstream' | 'unknown';
+
+export class TurnError extends Error {
+  constructor(public readonly kind: TurnErrorKind) {
+    super(`assistant turn failed: ${kind}`);
+  }
+}
+
 /* ---------- OpenAI streaming client (plain fetch, key never leaves server) ---------- */
 
 const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
@@ -293,7 +303,7 @@ async function streamCompletion(
       signal: controller.signal,
     });
     if (!res.ok || !res.body) {
-      throw new Error(`Upstream error ${res.status}`);
+      throw new TurnError('upstream');
     }
 
     const reader = res.body.getReader();
@@ -336,6 +346,12 @@ async function streamCompletion(
       }
     }
     return { content, toolCalls };
+  } catch (err) {
+    if (err instanceof TurnError) throw err;
+    if (err instanceof Error && (err.name === 'AbortError' || err.name === 'TimeoutError')) {
+      throw new TurnError('timeout');
+    }
+    throw new TurnError('unknown');
   } finally {
     clearTimeout(timer);
   }
@@ -359,6 +375,8 @@ export async function runAssistantTurn(
 
   const turnState: TurnState = { cards: [], actions: [], factsUpdated: false, latestEstimateId: null };
   let finalContent = '';
+  const turnStartedAt = Date.now();
+  const maxTurnDurationMs = config.turnTimeoutMs * 2; // overall cap across tool hops
 
   if (!apiKey) {
     return {
@@ -366,8 +384,11 @@ export async function runAssistantTurn(
     };
   }
 
-  // Up to 4 model round-trips per turn (tool loop)
+  // Up to 4 model round-trips per turn (tool loop), with an overall duration cap
   for (let hop = 0; hop < 4; hop++) {
+    if (Date.now() - turnStartedAt > maxTurnDurationMs) {
+      throw new TurnError('timeout');
+    }
     const outcome = await streamCompletion(apiKey, messages, onToken, config.turnTimeoutMs);
     finalContent = outcome.content || finalContent;
 

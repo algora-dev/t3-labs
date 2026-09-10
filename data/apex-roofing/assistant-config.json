@@ -6,6 +6,7 @@
   "maxClarificationQuestions": 2,
   "sessionTtlMinutes": 240,
   "rateLimit": { "maxMessagesPerMinute": 6, "maxMessagesPerHour": 80 },
+  "ipRateLimit": { "maxMessagesPerMinute": 15, "maxMessagesPerHour": 240 },
   "turnTimeoutMs": 30000,
   "starterPrompts": [
     "What roofing services do you offer?",

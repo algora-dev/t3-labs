@@ -209,6 +209,44 @@ export default function ApexRoofingPage() {
         </p>
       </section>
 
+      {/* Sales demo layer (spec 17): collapsed-by-default explainer for prospects */}
+      <section className="mx-auto max-w-6xl px-4 py-10" aria-label="How this demo works">
+        <details className="group rounded-xl border border-slate-200 bg-slate-50">
+          <summary className="cursor-pointer select-none px-5 py-3.5 text-sm font-semibold text-slate-700 hover:text-[#1769E0] transition-colors">
+            <span className="inline-flex items-center gap-2">
+              <svg className="w-4 h-4 text-[#1769E0] group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+              How this demo works
+            </span>
+          </summary>
+          <div className="px-5 pb-5 grid sm:grid-cols-2 gap-4 text-sm text-slate-600 leading-relaxed">
+            <div className="rounded-lg bg-white border border-slate-200 p-4">
+              <p className="font-semibold text-slate-800">Business knowledge from data files</p>
+              <p className="mt-1">Every answer about Apex&apos;s services, hours, areas, guarantees and FAQs comes from approved data files loaded on the server - the assistant never invents company facts.</p>
+            </div>
+            <div className="rounded-lg bg-white border border-slate-200 p-4">
+              <p className="font-semibold text-slate-800">Pricing data kept separate</p>
+              <p className="mt-1">Products and rates live in a structured pricing catalogue, separate from the business knowledge - so prices can be updated without touching anything else.</p>
+            </div>
+            <div className="rounded-lg bg-white border border-slate-200 p-4">
+              <p className="font-semibold text-slate-800">Deterministic calculations</p>
+              <p className="mt-1">Estimates are calculated by server-side code from approved rules and rates - never by the AI doing arithmetic. Same inputs always give the same price.</p>
+            </div>
+            <div className="rounded-lg bg-white border border-slate-200 p-4">
+              <p className="font-semibold text-slate-800">Only allowlisted actions</p>
+              <p className="mt-1">Buttons like &ldquo;Download PDF&rdquo;, &ldquo;Make an enquiry&rdquo; and page links are validated server-side against an approved list and site map. The AI can&apos;t run arbitrary actions or links.</p>
+            </div>
+            <div className="sm:col-span-2 rounded-lg border border-dashed border-slate-300 p-4 text-center">
+              <p className="font-semibold text-slate-800">Fully swappable per business</p>
+              <p className="mt-1 max-w-2xl mx-auto">
+                Everything you&apos;re seeing is driven by Apex&apos;s data files. For your business, we replace those with your services, products, prices, rules and workflows - the same assistant, trained on your business.
+              </p>
+            </div>
+          </div>
+        </details>
+      </section>
+
       {/* Footer */}
       <footer className="bg-[#1E293B] text-slate-400 text-xs">
         <div className="mx-auto max-w-6xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-2">

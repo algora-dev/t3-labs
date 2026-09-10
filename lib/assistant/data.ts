@@ -35,6 +35,7 @@ export interface AssistantConfig {
   maxClarificationQuestions: number;
   sessionTtlMinutes: number;
   rateLimit: { maxMessagesPerMinute: number; maxMessagesPerHour: number };
+  ipRateLimit?: { maxMessagesPerMinute: number; maxMessagesPerHour: number };
   turnTimeoutMs: number;
   starterPrompts: string[];
   tone: string;

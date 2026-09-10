@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAssistantConfig } from '@/lib/assistant/data';
 import { getOrCreateSession, checkGuards } from '@/lib/assistant/session';
-import { runAssistantTurn } from '@/lib/assistant/orchestrator';
+import { runAssistantTurn, TurnError } from '@/lib/assistant/orchestrator';
+import { checkIpRateLimit, clientIpFromHeaders } from '@/lib/assistant/rate-limit';
 import type { ChatStreamEvent } from '@/lib/assistant/types';
 
 export const runtime = 'nodejs';
@@ -26,6 +27,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
   }
   const message = typeof body.message === 'string' ? body.message : '';
+
+  // Per-IP rate limit (spec 15.5) - applies before session work
+  const ipGuard = checkIpRateLimit(clientIpFromHeaders(req.headers));
+  if (!ipGuard.ok) {
+    return NextResponse.json({ error: ipGuard.error }, { status: 429 });
+  }
 
   const session = await getOrCreateSession();
 
@@ -59,11 +66,23 @@ export async function POST(req: Request) {
 
         send({ type: 'turn', turn });
       } catch (err) {
-        console.error(`[assistant] session ${sid} turn failed:`, err instanceof Error ? err.message : err);
-        send({
-          type: 'error',
-          error: "Sorry - something went wrong on our side. Please try again in a moment.",
-        });
+        // Never leak provider error dumps to the visitor (spec 15.5)
+        if (err instanceof TurnError) {
+          console.error(`[assistant] session ${sid} turn failed (${err.kind})`);
+          send({
+            type: 'error',
+            error:
+              err.kind === 'timeout'
+                ? 'Sorry - the assistant took too long to reply. Please try again in a moment.'
+                : "Sorry - the assistant service is temporarily unavailable. Please try again shortly.",
+          });
+        } else {
+          console.error(`[assistant] session ${sid} turn failed:`, err instanceof Error ? err.message : err);
+          send({
+            type: 'error',
+            error: "Sorry - something went wrong on our side. Please try again in a moment.",
+          });
+        }
       } finally {
         controller.close();
       }

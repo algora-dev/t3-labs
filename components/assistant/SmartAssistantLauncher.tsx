@@ -178,6 +178,23 @@ export function SmartAssistantLauncher() {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, enquiryActive]);
 
+  // Escape closes the panel (spec 16 / phase 8 accessibility)
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
+  // Move focus into the chat when opened
+  useEffect(() => {
+    if (!open) return;
+    const t = setTimeout(() => inputRef.current?.focus(), 80);
+    return () => clearTimeout(t);
+  }, [open]);
+
   const sendMessage = useCallback(
     async (text: string) => {
       const trimmed = text.trim();
@@ -294,7 +311,11 @@ export function SmartAssistantLauncher() {
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-5 z-50 flex h-[min(600px,calc(100dvh-8rem))] w-[min(400px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-black/20">
+        <div
+          role="dialog"
+          aria-label="Apex Roofing Smart Assistant chat"
+          className="fixed bottom-24 right-5 z-50 flex h-[min(600px,calc(100dvh-8rem))] w-[min(400px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-black/20"
+        >
           {/* Header */}
           <div className="px-4 py-3 text-white" style={{ backgroundColor: BLUE }}>
             <div className="flex items-center justify-between gap-2">
@@ -317,7 +338,7 @@ export function SmartAssistantLauncher() {
               <EnquiryPanel onClose={() => setEnquiryActive(false)} />
             </div>
           ) : (
-          <div ref={listRef} className="flex-1 overflow-y-auto bg-slate-50 px-3.5 py-4">
+          <div ref={listRef} role="log" aria-live="polite" aria-label="Conversation messages" className="flex-1 overflow-y-auto bg-slate-50 px-3.5 py-4">
             {!hasMessages && !enquiryActive && (
               <div className="flex h-full flex-col items-center justify-center text-center px-4">
                 <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full text-white" style={{ backgroundColor: BLUE }}>
@@ -406,6 +427,7 @@ export function SmartAssistantLauncher() {
                   }
                 }}
                 rows={1}
+                aria-label="Type your message"
                 placeholder="Ask about services, pricing, or an estimate…"
                 className="max-h-28 min-h-[42px] flex-1 resize-none rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#1769E0] focus:outline-none"
               />
