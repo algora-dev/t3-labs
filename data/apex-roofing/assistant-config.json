@@ -1,0 +1,19 @@
+{
+  "assistantName": "Apex Roofing Smart Assistant",
+  "model": "gpt-4.1-mini",
+  "maxUserMessageChars": 1000,
+  "maxTurnsPerSession": 60,
+  "maxClarificationQuestions": 2,
+  "sessionTtlMinutes": 240,
+  "rateLimit": { "maxMessagesPerMinute": 6, "maxMessagesPerHour": 80 },
+  "turnTimeoutMs": 30000,
+  "starterPrompts": [
+    "What roofing services do you offer?",
+    "Do you handle insurance work?",
+    "What's the difference between a hip and gable roof?",
+    "How much is concrete re-roofing per m2?",
+    "Estimate a 200m2 roof replacement",
+    "Where can I read about your guarantees?"
+  ],
+  "tone": "helpful, capable, concise, plain English, confident when grounded, not overly chatty, not salesy on every turn"
+}

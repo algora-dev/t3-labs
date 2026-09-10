@@ -1,0 +1,36 @@
+{
+  "version": "2026-09-demo-1",
+  "slopeFactorsComment": "actualSlopeArea = planArea * (1 / cos(pitchRadians)). Used when the user gives a PLAN/footprint area; skipped when they give the actual roof surface area.",
+  "defaultPitchDegrees": 30,
+  "pitchPresets": {
+    "20": 1.064, "25": 1.103, "30": 1.155, "35": 1.221, "40": 1.305
+  },
+  "wasteFactorPct": 7.5,
+  "perimeterHeuristics": {
+    "comment": "When the user has not given linear dimensions, ridge/hip/valley/gutter lengths are estimated from roof area + shape with conservative ratios. Each assumption is stated on the estimate.",
+    "gable": { "ridgeLmPerSqm": 0.10, "valleyLmPerSqm": 0.05, "hipLmPerSqm": 0.0, "gutterLmPerSqm": 0.45 },
+    "hip": { "ridgeLmPerSqm": 0.05, "valleyLmPerSqm": 0.0, "hipLmPerSqm": 0.22, "gutterLmPerSqm": 0.55 },
+    "valley_complex": { "ridgeLmPerSqm": 0.06, "valleyLmPerSqm": 0.10, "hipLmPerSqm": 0.10, "gutterLmPerSqm": 0.55 },
+    "flat": { "ridgeLmPerSqm": 0.0, "valleyLmPerSqm": 0.0, "hipLmPerSqm": 0.0, "gutterLmPerSqm": 0.45 }
+  },
+  "defaultDownpipesPerGutterLm": 0.08,
+  "defaultMaterial": "reroof_concrete_tile",
+  "reroffBundles": {
+    "comment": "Re-roof per-m2 items already include underlay, battens, fixings, verge and labour. These components are itemised for transparency using their upgrade rates only when explicitly chosen.",
+    "includesByDefault": ["underlay", "battens", "fixings", "dry_verge", "disposal", "labour"]
+  },
+  "rounding": {
+    "rule": "Round each line subtotal and the total UP to the nearest 10 dollars (commercial conservative rounding). Quantities rounded up to the nearest 0.5 m2 / lm.",
+    "perLine": 10,
+    "quantityStepArea": 0.5,
+    "quantityStepLinear": 0.5
+  },
+  "disclaimer": "Indicative estimate only - not a formal quote. Subject to free site inspection, timber condition, and final material selection.",
+  "standardAssumptions": [
+    "Pitch assumed 30 degrees if not supplied",
+    "Linear component lengths (ridge, hips, valleys, gutters) estimated from area and roof shape - actual lengths may vary",
+    "Waste allowance of 7.5% included on covering material",
+    "No scaffolding beyond standard single-storey access",
+    "Existing roof structure assumed sound - timber repairs priced separately if needed"
+  ]
+}

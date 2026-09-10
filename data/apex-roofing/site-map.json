@@ -1,0 +1,8 @@
+[
+  { "id": "services", "title": "Our Services", "path": "/apex-roofing#services", "keywords": ["services", "what do you do", "offer", "replacement", "repair", "gutters", "inspection", "emergency"], "description": "Overview of all Apex Roofing services." },
+  { "id": "insurance", "title": "Insurance Roofing Work", "path": "/apex-roofing#insurance", "keywords": ["insurance", "claim", "storm damage", "hail", "adjuster"], "description": "How we handle insurance roofing claims." },
+  { "id": "guarantees", "title": "Guarantees & Warranties", "path": "/apex-roofing#guarantees", "keywords": ["guarantee", "guarantees", "warranty", "warranties", "workmanship"], "description": "Our workmanship and material warranties." },
+  { "id": "repairs", "title": "Roof Repairs", "path": "/apex-roofing#services", "keywords": ["repair", "leak", "leaking", "fix", "broken tile", "cracked"], "description": "Roof repair services and emergency callout." },
+  { "id": "pricing-tool", "title": "Instant Pricing Tool", "path": "https://app.quote-core.com/supplier-pricing-tool/apex-roofing", "keywords": ["pricing tool", "supplier tool", "instant pricing", "measure", "takeoff", "calculator"], "description": "Apex instant supply pricing tool - measure a roof and price materials live.", "external": true },
+  { "id": "contact", "title": "Contact Us", "path": "/apex-roofing#contact", "keywords": ["contact", "phone", "call", "email", "hours", "open", "location", "address"], "description": "Contact details and opening hours." }
+]
