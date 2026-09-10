@@ -171,7 +171,7 @@ function Card({
       style={{ background: t.surface, borderColor: t.border }}
       className={`rounded-2xl border p-5 sm:p-6 ${className}`}
     >
-      {title && <h3 className="text-lg font-semibold">{title}</h3>}
+      {title && <h3 className="text-xl font-semibold">{title}</h3>}
       <div className={title ? "mt-3" : ""}>{children}</div>
     </div>
   );
@@ -201,7 +201,7 @@ function CollapsibleTool({
         className="tool-toggle flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-7 sm:py-5"
       >
         <div>
-          <p className="text-lg font-semibold">{title}</p>
+          <p className="text-xl font-semibold">{title}</p>
           {subtitle && (
             <p className="mt-1 text-sm leading-6" style={{ color: t.muted }}>
               {subtitle}
@@ -512,7 +512,7 @@ function LeadAngleFinder({ t }: { t: Tokens }) {
             <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
               Website audit
             </p>
-            <h3 className="mt-2 text-2xl font-bold">Audit the lead in under 2 minutes.</h3>
+            <h3 className="mt-2 text-3xl font-bold">Audit the lead in under 2 minutes.</h3>
           </div>
           <button type="button" onClick={reset} className="text-sm font-semibold hover:underline" style={{ color: t.muted }}>
             Reset
@@ -669,7 +669,7 @@ function LeadAngleFinder({ t }: { t: Tokens }) {
             <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
               What you will get
             </p>
-            <h3 className="mt-3 text-2xl font-bold">A usable reason to contact the lead.</h3>
+            <h3 className="mt-3 text-3xl font-bold">A usable reason to contact the lead.</h3>
             <div className="mt-5 grid gap-3">
               {[
                 "Primary angle and supporting angles",
@@ -694,7 +694,7 @@ function LeadAngleFinder({ t }: { t: Tokens }) {
                 <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
                   Lead result
                 </p>
-                <h3 className="mt-2 text-2xl font-bold">{industryName}</h3>
+                <h3 className="mt-2 text-3xl font-bold">{industryName}</h3>
               </div>
               <button
                 type="button"
@@ -820,7 +820,7 @@ function EarningsCalculator({ t }: { t: Tokens }) {
           <p className="text-xs font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>
             Calculator
           </p>
-          <h3 className="mt-2 text-2xl font-bold">What could this deal be worth to you?</h3>
+          <h3 className="mt-2 text-3xl font-bold">What could this deal be worth to you?</h3>
           <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
             Minimum commission depends on your involvement. Higher rates can be agreed for individual deals, up to 50%. Recurring commission can also be included where the customer has ongoing fees.
           </p>
@@ -828,7 +828,7 @@ function EarningsCalculator({ t }: { t: Tokens }) {
           <div className="mt-5">
             <label className="text-sm font-semibold">Project value</label>
             <div className="mt-2 flex items-center gap-2">
-              <span style={{ color: t.muted }} className="text-lg font-semibold">$</span>
+              <span style={{ color: t.muted }} className="text-xl font-semibold">$</span>
               <input
                 inputMode="decimal"
                 value={amount}
@@ -920,7 +920,7 @@ function EarningsCalculator({ t }: { t: Tokens }) {
             ].map(([title, label, value]) => (
               <div key={title} style={{ background: t.surfaceAlt, borderColor: t.border }} className="rounded-xl border p-4">
                 <p className="text-xs font-semibold" style={{ color: t.muted }}>{title}</p>
-                <p className="mt-1 text-lg font-bold">{value}</p>
+                <p className="mt-1 text-xl font-bold">{value}</p>
                 <p className="mt-1 text-xs" style={{ color: t.muted }}>{label}</p>
               </div>
             ))}
@@ -1022,11 +1022,11 @@ export default function SalesResourcesPage() {
             T3 Labs Construction Sales Playbook
           </p>
 
-          <h1 className="mt-4 max-w-5xl text-4xl font-bold leading-[1.06] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-4 max-w-5xl text-3xl font-bold leading-[1.06] tracking-tight sm:text-5xl">
             Find the lead. Find the angle. Start the conversation.
           </h1>
 
-          <p className="mt-6 max-w-4xl text-lg leading-8" style={{ color: t.muted }}>
+          <p className="mt-6 max-w-4xl text-xl leading-8" style={{ color: t.muted }}>
             We help businesses get found easier, then convert more of that traffic into paying customers using tools and systems that let customers find the answer they need quicker and easier. Those same systems can also soft-funnel them into the sales process and reduce repetitive work for the business.
           </p>
 
@@ -1086,7 +1086,7 @@ export default function SalesResourcesPage() {
         <section id="target" className="sales-anchor py-12 sm:py-16">
           <div className="max-w-4xl">
             <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>1. Who to target</p>
-            <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Start where the sales friction is easiest to see.</h2>
+            <h2 className="mt-3 text-3xl font-bold">Start where the sales friction is easiest to see.</h2>
             <p className="mt-4 leading-7" style={{ color: t.muted }}>
               Construction and roofing are the current focus because we already have useful roofing, flooring and cladding demos. You are not limited to these industries. If you understand another niche and can recognise the same problems, use that knowledge.
             </p>
@@ -1185,7 +1185,7 @@ export default function SalesResourcesPage() {
 
         <section id="contact" className="sales-anchor py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>2. Reaching the lead</p>
-          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Lead with the thing you actually noticed.</h2>
+          <h2 className="mt-3 text-3xl font-bold">Lead with the thing you actually noticed.</h2>
           <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
             Do not send a generic technology pitch. Mention one real observation from the website, connect it to a useful outcome, then ask for the conversation.
           </p>
@@ -1255,7 +1255,7 @@ export default function SalesResourcesPage() {
 
         <section id="discovery" className="sales-anchor py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>3. Discovery</p>
-          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">The website shows the symptom. The conversation finds the real problem.</h2>
+          <h2 className="mt-3 text-3xl font-bold">The website shows the symptom. The conversation finds the real problem.</h2>
           <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
             Do not assume you know the backend from the public website. Ask where staff time goes, what customers repeatedly need and what slows down the sales process.
           </p>
@@ -1296,7 +1296,7 @@ export default function SalesResourcesPage() {
           <div className="grid gap-6 lg:grid-cols-[.75fr_1.25fr] lg:items-end">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>4. What we sell</p>
-              <h2 className="mt-3 text-3xl font-bold sm:text-4xl">One custom solution, many possible forms.</h2>
+              <h2 className="mt-3 text-3xl font-bold">One custom solution, many possible forms.</h2>
             </div>
             <p className="leading-7" style={{ color: t.muted }}>
               Do not force the prospect into a fixed package. $999 is only the entry point. Project value depends on the size of the business, how much tailored work is involved and how many features they need or want. Bespoke packages can easily reach $20,000+ and there is no fixed upper limit.
@@ -1346,7 +1346,7 @@ export default function SalesResourcesPage() {
                 <p className="text-xs font-semibold uppercase tracking-[.15em]" style={{ color: t.accentInk }}>
                   Major capability
                 </p>
-                <h3 className="mt-2 text-2xl font-bold">Intelligent Online Sales Assistant</h3>
+                <h3 className="mt-2 text-3xl font-bold">Intelligent Online Sales Assistant</h3>
                 <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
                   A trained online sales assistant that understands the business, product catalogue, pricing rules, compatibility and common questions. It can handle basic to complex enquiries, solve straightforward questions directly, work through product, quantity and indicative-pricing needs, then hand anything that needs a person to the human team with the context already collected. The goal is to reduce avoidable calls and emails without ever blocking the sale.
                 </p>
@@ -1379,7 +1379,7 @@ export default function SalesResourcesPage() {
 
         <section id="demos" className="sales-anchor py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>5. Demo the behaviour</p>
-          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Show the closest example. Do not sell the design.</h2>
+          <h2 className="mt-3 text-3xl font-bold">Show the closest example. Do not sell the design.</h2>
           <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
             Learn the demos well enough to screen-share them. The point is to show what the customer can do, not to convince the prospect that the demo already looks like their business.
           </p>
@@ -1452,7 +1452,7 @@ export default function SalesResourcesPage() {
 
         <section className="py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>6. Useful objections and proof</p>
-          <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Know enough to support the pitch without overcomplicating it.</h2>
+          <h2 className="mt-3 text-3xl font-bold">Know enough to support the pitch without overcomplicating it.</h2>
 
           <div className="mt-7 grid gap-4 lg:grid-cols-2">
             <Card t={t} title="“We do not want competitors seeing our pricing.”">
@@ -1505,7 +1505,7 @@ export default function SalesResourcesPage() {
 
         <section id="earnings" className="sales-anchor py-12 sm:py-16">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>7. What you can earn</p>
-          <h2 className="mt-3 max-w-4xl text-3xl font-bold sm:text-4xl">More involvement can mean materially more commission.</h2>
+          <h2 className="mt-3 max-w-4xl text-3xl font-bold">More involvement can mean materially more commission.</h2>
           <p className="mt-4 max-w-4xl leading-7" style={{ color: t.muted }}>
             The minimum rate depends on how much of the sales process you own. These are minimums, not caps. Stronger arrangements can be discussed for individual opportunities, up to a maximum of 50%. Commission can be one-off, recurring, or a combination where the deal supports it.
           </p>
@@ -1544,7 +1544,7 @@ export default function SalesResourcesPage() {
         <section className="py-12 sm:py-20">
           <div style={{ background: t.surface, borderColor: t.accentInk }} className="rounded-3xl border p-7 sm:p-10">
             <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>The whole job</p>
-            <p className="mt-4 max-w-5xl text-xl font-semibold leading-8 sm:text-2xl">
+            <p className="mt-4 max-w-5xl text-xl font-semibold leading-8">
               Find a business → audit the website → find the strongest angle → contact the right person → uncover the real bottleneck → show the closest demo → identify the first useful custom solution → bring T3 Labs in or close it yourself.
             </p>
 

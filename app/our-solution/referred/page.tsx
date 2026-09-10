@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import BuyerJourneyStory from "../buyer-journey-story";
 
 type Theme = "dark" | "light";
 type Tokens = {
@@ -96,7 +97,7 @@ function ExpandCard({
             Source: {source}
           </p>
         </div>
-        <span aria-hidden="true" style={{ color:t.accentInk }} className={`mt-1 text-lg transition-transform ${open ? "rotate-180" : ""}`}>⌄</span>
+        <span aria-hidden="true" style={{ color:t.accentInk }} className={`mt-1 text-xl transition-transform ${open ? "rotate-180" : ""}`}>⌄</span>
       </button>
       <div hidden={!open} className="px-5 pb-5 sm:px-6 sm:pb-6">
         <div className="border-t pt-4 text-sm leading-7" style={{ borderColor:t.border, color:t.muted }}>
@@ -144,7 +145,7 @@ function Assessment({ t }: { t:Tokens }) {
     return (
       <div style={{ background:t.surface, borderColor:t.border }} className="rounded-2xl border p-6 sm:p-8">
         <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color:t.accentInk }}>Your result</p>
-        <h3 className="mt-3 text-2xl font-bold sm:text-3xl">{result.title}</h3>
+        <h3 className="mt-3 text-3xl font-bold">{result.title}</h3>
         <p className="mt-4 max-w-2xl leading-7" style={{ color:t.muted }}>{result.body}</p>
         <div className="mt-7">
           <button
@@ -172,7 +173,7 @@ function Assessment({ t }: { t:Tokens }) {
       <div className="mt-4 flex gap-1.5" aria-hidden="true">
         {ASSESSMENT.map((q,i)=><span key={q.id} style={{ background:i<=step?t.accent:t.surfaceAlt }} className="h-1.5 flex-1 rounded-full" />)}
       </div>
-      <h3 className="mt-6 max-w-2xl text-xl font-semibold leading-8 sm:text-2xl">{ASSESSMENT[step].q}</h3>
+      <h3 className="mt-6 max-w-2xl text-xl font-semibold leading-8">{ASSESSMENT[step].q}</h3>
       <p className="mt-3 text-sm" style={{ color:t.muted }}>Choose what best describes your business today.</p>
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
         {[
@@ -264,18 +265,18 @@ export default function ConstructionSolutionPage(){
       <div className="mx-auto max-w-6xl px-5">
         <section className="py-20 sm:py-28">
           <p className="text-sm font-semibold uppercase tracking-[.2em]" style={{color:t.accentInk}}>Built for construction suppliers & trade businesses</p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-4 max-w-4xl text-3xl font-bold leading-[1.08] tracking-tight sm:text-5xl">
             Your customers want answers now. If they cannot get them from you, they keep looking.
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8" style={{color:t.muted}}>
+          <p className="mt-6 max-w-3xl text-xl leading-8" style={{color:t.muted}}>
             For years, a professional website, products or services list, and basic inquiry form were enough. Today, buyers increasingly expect basic, useful pricing, quantities, and product guidance instantly, because if you can&apos;t provide that, AI or your competitors will.
           </p>
-          <p className="mt-4 max-w-3xl text-lg leading-8" style={{color:t.muted}}>
+          <p className="mt-4 max-w-3xl text-xl leading-8" style={{color:t.muted}}>
             We help construction businesses get found more easily, give buyers better answers faster, and reduce the manual back-and-forth work for your team.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button type="button" onClick={()=>scrollToId("problem")} style={{background:t.accent,color:t.accentText}} className="btn-solid min-h-12 rounded-full px-8 text-base font-semibold">See how it works</button>
-            <button type="button" onClick={()=>scrollToId("pricing")} style={{borderColor:t.border}} className="btn-outline min-h-12 rounded-full border px-8 text-base font-semibold">View pricing</button>
+            <button type="button" onClick={()=>scrollToId("problem")} style={{background:t.accent,color:t.accentText}} className="btn-solid min-h-12 rounded-full px-8 text-sm font-semibold">See how it works</button>
+            <button type="button" onClick={()=>scrollToId("pricing")} style={{borderColor:t.border}} className="btn-outline min-h-12 rounded-full border px-8 text-sm font-semibold">View pricing</button>
           </div>
 
           <button
@@ -298,11 +299,13 @@ export default function ConstructionSolutionPage(){
           </div>
         </section>
 
-        <section id="problem" className="scroll-mt-20 py-14 sm:py-18">
+        <BuyerJourneyStory t={t} />
+
+      <section id="problem" className="scroll-mt-20 py-14 sm:py-18">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr]">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>The problem</p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">What used to look professional can now become a bottleneck.</h2>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight">What used to look professional can now become a bottleneck.</h2>
               <p className="mt-5 max-w-2xl leading-7" style={{color:t.muted}}>
                 If a buyer reaches your site and still has to call, email or submit a generic form just to understand price, quantities or the right product,
                 you are asking them to wait when they increasingly know they can get an answer somewhere else.
@@ -324,7 +327,7 @@ export default function ConstructionSolutionPage(){
           </div>
 
           <div style={{background:t.accentSoft,borderColor:t.accentInk}} className="mt-8 rounded-2xl border p-6 sm:p-8">
-            <p className="text-lg font-semibold">Search used to send people to websites to find the answer themselves. AI is now doing more of that work for them, using information it can find across the web.</p>
+            <p className="text-xl font-semibold">Search used to send people to websites to find the answer themselves. AI is now doing more of that work for them, using information it can find across the web.</p>
             <p className="mt-3 max-w-3xl leading-7" style={{color:t.muted}}>
               If your competitors make the useful answer easier to find and easier to act on, they have an advantage before the buyer even contacts anyone.
             </p>
@@ -348,7 +351,7 @@ export default function ConstructionSolutionPage(){
 
         <section id="solution" className="scroll-mt-20 py-14 sm:py-20">
           <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>The solution</p>
-          <h2 className="mt-3 max-w-4xl text-3xl font-bold tracking-tight sm:text-4xl">Turn your website into a place customers can actually get an answer.</h2>
+          <h2 className="mt-3 max-w-4xl text-3xl font-bold tracking-tight">Turn your website into a place customers can actually get an answer.</h2>
           <p className="mt-5 max-w-3xl leading-7" style={{color:t.muted}}>
             Instead of sending every buyer into the same inquiry form, give them a useful way to work out what they need, understand the likely price and take the next step.
           </p>
@@ -356,7 +359,7 @@ export default function ConstructionSolutionPage(){
           <div id="assistant" className="scroll-mt-20 mt-10">
             <div style={{background:t.surfaceAlt,borderColor:t.border}} className="rounded-3xl border p-6 sm:p-8 lg:p-10">
               <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>Two ways to get the answer</p>
-              <h3 className="mt-3 max-w-3xl text-2xl font-bold sm:text-3xl">Give buyers two simple paths to the same result.</h3>
+              <h3 className="mt-3 max-w-3xl text-3xl font-bold">Give buyers two simple paths to the same result.</h3>
 
               <div className="mt-7 grid gap-4 lg:grid-cols-2">
                 <div style={{background:t.surface,borderColor:t.border}} className="rounded-2xl border p-6">
@@ -408,11 +411,11 @@ export default function ConstructionSolutionPage(){
               <div className="grid gap-7 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>Simple starting point</p>
-                  <p className="mt-3 text-5xl font-bold tracking-tight sm:text-6xl">$999<span className="text-lg font-semibold" style={{color:t.muted}}>+</span></p>
+                  <p className="mt-3 text-5xl font-bold tracking-tight">$999<span className="text-xl font-semibold" style={{color:t.muted}}>+</span></p>
                   <p className="mt-2 text-sm font-semibold">Focused projects can start from $999.</p>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold sm:text-3xl">Start with the first useful version.</h3>
+                  <h3 className="text-3xl font-bold">Start with the first useful version.</h3>
                   <p className="mt-4 max-w-2xl text-sm leading-6" style={{color:t.muted}}>
                     A simple first build can include a focused customer tool, basic product setup and launch configuration. Add more products, calculations, assistant features, integrations or internal workflows only if they are useful.
                   </p>
@@ -427,7 +430,7 @@ export default function ConstructionSolutionPage(){
           <div className="mt-6">
             <div style={{background:t.accentSoft,borderColor:t.accentInk}} className="rounded-3xl border p-6 sm:p-8">
               <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>The better question</p>
-              <h3 className="mt-3 max-w-3xl text-2xl font-bold sm:text-3xl">What would this need to do to pay for itself?</h3>
+              <h3 className="mt-3 max-w-3xl text-3xl font-bold">What would this need to do to pay for itself?</h3>
               <div className="mt-6 grid gap-3 md:grid-cols-3">
                 {[
                   "How many extra sales would it need to create?",
@@ -448,7 +451,7 @@ export default function ConstructionSolutionPage(){
           <div id="demos" className="scroll-mt-20 mt-12">
             <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>Live examples</p>
             <div className="mt-2 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-              <h3 className="text-2xl font-bold sm:text-3xl">See the tools and sales assistant in action.</h3>
+              <h3 className="text-3xl font-bold">See the tools and sales assistant in action.</h3>
               <p className="max-w-xl text-sm leading-6" style={{color:t.muted}}>Examples of capability, not fixed products. The design, products, pricing, rules and workflow can all be tailored to your business.</p>
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -457,7 +460,7 @@ export default function ConstructionSolutionPage(){
                    onClick={()=>trackEvent("construction_demo_click",{demo:d.label})}
                    style={{background:t.surface,borderColor:t.border}} className="hover-card rounded-2xl border p-6">
                   <span style={{color:t.accentInk}} className="text-xs font-semibold uppercase tracking-[.15em]">{d.label}</span>
-                  <h4 className="mt-3 text-lg font-semibold">{d.name}</h4>
+                  <h4 className="mt-3 text-xl font-semibold">{d.name}</h4>
                   <p className="mt-3 text-sm leading-6" style={{color:t.muted}}>{d.problem}</p>
                   <p className="mt-5 text-sm font-semibold" style={{color:t.accentInk}}>Try the demo →</p>
                 </a>
@@ -470,7 +473,7 @@ export default function ConstructionSolutionPage(){
           <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>Quick check</p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">How much friction is still in your buying journey?</h2>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight">How much friction is still in your buying journey?</h2>
               <p className="mt-5 leading-7" style={{color:t.muted}}>Five quick questions will show where customers may still be waiting on your team when they could be getting an answer themselves.</p>
             </div>
             <Assessment t={t}/>
@@ -480,7 +483,7 @@ export default function ConstructionSolutionPage(){
         <section className="py-12 sm:py-16">
           <div style={{background:t.surface,borderColor:t.border}} className="rounded-3xl border p-6 sm:p-8 lg:p-10">
             <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>The longer-term upside</p>
-            <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl">What starts as one useful tool can become a real sales asset.</h2>
+            <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight">What starts as one useful tool can become a real sales asset.</h2>
             <p className="mt-4 max-w-3xl text-sm leading-6" style={{color:t.muted}}>
               More customers using the system can create better first-party data, better product information and new resources you can build on over time. That makes the advantage harder to copy than the tool alone.
             </p>
@@ -488,7 +491,7 @@ export default function ConstructionSolutionPage(){
               {["Useful Tool","More Users","Better Data","Better Information","More Value"].map((item,i,arr)=>(
                 <span key={item} className="flex items-center gap-2">
                   <span tabIndex={0} style={{background:t.surfaceAlt,borderColor:t.border}} className="loop-pill rounded-full border px-4 py-2 text-sm font-medium">{item}</span>
-                  {i<arr.length-1?<span style={{color:t.muted}} className="text-xs">→</span>:<span role="img" aria-label="The cycle repeats" style={{color:t.accentInk}} className="ml-1 text-3xl font-bold sm:text-4xl">↺</span>}
+                  {i<arr.length-1?<span style={{color:t.muted}} className="text-xs">→</span>:<span role="img" aria-label="The cycle repeats" style={{color:t.accentInk}} className="ml-1 text-3xl font-bold">↺</span>}
                 </span>
               ))}
             </div>
@@ -498,7 +501,7 @@ export default function ConstructionSolutionPage(){
         <section id="start" className="scroll-mt-20 py-16 sm:py-24">
           <div id="next-step" style={{background:t.surfaceAlt,borderColor:t.border}} className="scroll-mt-24 rounded-3xl border p-6 sm:p-10 lg:p-12">
             <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>Want to explore it?</p>
-            <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="mt-3 max-w-3xl text-3xl font-bold tracking-tight">
               Continue with the person who shared this page with you.
             </h2>
             <p className="mt-5 max-w-3xl leading-7" style={{color:t.muted}}>
@@ -506,7 +509,7 @@ export default function ConstructionSolutionPage(){
             </p>
 
             <div style={{background:t.surface,borderColor:t.border}} className="mt-7 rounded-2xl border p-6">
-              <p className="text-lg font-semibold">Your next step is simple.</p>
+              <p className="text-xl font-semibold">Your next step is simple.</p>
               <p className="mt-2 max-w-3xl text-sm leading-6" style={{color:t.muted}}>
                 Reply to, call, or message the representative who sent you this page and tell them which part feels most relevant to your business.
               </p>
