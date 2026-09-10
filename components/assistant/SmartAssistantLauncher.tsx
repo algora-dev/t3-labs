@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AssistantAction, AssistantCard, AssistantTurn } from '@/lib/assistant/types';
 import type { Estimate } from '@/lib/pricing/estimate-engine';
+import { EnquiryPanel } from './EnquiryPanel';
 
 /**
  * Apex Roofing Smart Assistant - floating launcher + chat panel (Phase B).
@@ -101,10 +102,11 @@ function EstimateCard({ estimate }: { estimate: Estimate }) {
 
 /* ---------------- Action buttons ---------------- */
 
-function ActionButton({ action, onFollowUp, onInquiry }: {
+function ActionButton({ action, onFollowUp, onInquiry, onDownload }: {
   action: AssistantAction;
   onFollowUp: (msg: string) => void;
   onInquiry: () => void;
+  onDownload: (estimateId: string) => void;
 }) {
   const base =
     'text-xs font-medium rounded-full px-3.5 py-2 border transition-colors inline-flex items-center gap-1.5';
@@ -136,12 +138,20 @@ function ActionButton({ action, onFollowUp, onInquiry }: {
       </button>
     );
   }
-  // DOWNLOAD_OUTPUT arrives in a later phase; render harmless link-styled button for now
-  return (
-    <button disabled className={`${base} border-slate-200 text-slate-400 cursor-not-allowed`}>
-      {action.label}
-    </button>
-  );
+  if (action.type === 'DOWNLOAD_OUTPUT') {
+    return (
+      <button
+        onClick={() => onDownload(action.estimateId)}
+        className={`${base} border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50`}
+      >
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+        </svg>
+        {action.label}
+      </button>
+    );
+  }
+  return null;
 }
 
 /* ---------------- Main component ---------------- */
@@ -242,6 +252,22 @@ export function SmartAssistantLauncher() {
     setEnquiryActive(true);
   }, []);
 
+  const handleDownload = useCallback(async (estimateId: string) => {
+    try {
+      const res = await fetch('/api/outputs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estimateId }),
+      });
+      if (!res.ok) throw new Error();
+      const data = (await res.json()) as { outputId?: string };
+      if (!data.outputId) throw new Error();
+      window.location.href = `/api/outputs?id=${encodeURIComponent(data.outputId)}`;
+    } catch {
+      setError('Sorry - the PDF could not be generated. Please try again.');
+    }
+  }, []);
+
   const hasMessages = messages.length > 0;
   const starters = config?.starterPrompts ?? [];
 
@@ -285,7 +311,12 @@ export function SmartAssistantLauncher() {
             </div>
           </div>
 
-          {/* Messages */}
+          {/* Enquiry flow replaces the conversation area (spec 13) */}
+          {enquiryActive ? (
+            <div className="flex-1 bg-slate-50">
+              <EnquiryPanel onClose={() => setEnquiryActive(false)} />
+            </div>
+          ) : (
           <div ref={listRef} className="flex-1 overflow-y-auto bg-slate-50 px-3.5 py-4">
             {!hasMessages && !enquiryActive && (
               <div className="flex h-full flex-col items-center justify-center text-center px-4">
@@ -323,7 +354,7 @@ export function SmartAssistantLauncher() {
                   {m.turn?.actions && m.turn.actions.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-2">
                       {m.turn.actions.map((a, i) => (
-                        <ActionButton key={i} action={a} onFollowUp={sendMessage} onInquiry={handleInquiry} />
+                        <ActionButton key={i} action={a} onFollowUp={sendMessage} onInquiry={handleInquiry} onDownload={handleDownload} />
                       ))}
                     </div>
                   )}
@@ -331,30 +362,14 @@ export function SmartAssistantLauncher() {
               </div>
             ))}
 
-            {enquiryActive && (
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3.5">
-                <p className="text-sm font-medium text-emerald-900">Enquiry started</p>
-                <p className="mt-1 text-xs text-emerald-800">
-                  Everything you&apos;ve told me in this chat is attached to your enquiry. In the full demo this opens a
-                  pre-filled enquiry form - for now your intent has been saved to this session.
-                </p>
-                <button
-                  onClick={() => sendMessage('I would like to make an enquiry about my roof.')}
-                  className="mt-2.5 text-xs font-medium rounded-full px-3.5 py-2 text-white hover:opacity-90"
-                  style={{ backgroundColor: BLUE }}
-                >
-                  Continue in chat
-                </button>
-              </div>
-            )}
-
             {error && (
               <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">{error}</div>
             )}
           </div>
+          )}
 
           {/* Starter chips */}
-          {!hasMessages && starters.length > 0 && (
+          {!enquiryActive && !hasMessages && starters.length > 0 && (
             <div className="border-t border-slate-200 bg-white px-3.5 py-2.5">
               <div className="flex flex-wrap gap-1.5">
                 {starters.map((s) => (
@@ -372,7 +387,7 @@ export function SmartAssistantLauncher() {
           )}
 
           {/* Composer */}
-          <div className="border-t border-slate-200 bg-white p-3">
+          <div className={`border-t border-slate-200 bg-white p-3 ${enquiryActive ? 'hidden' : ''}`}>
             <form
               onSubmit={(e) => {
                 e.preventDefault();

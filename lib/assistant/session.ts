@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { getAssistantConfig } from './data';
+import type { Estimate } from '../pricing/estimate-engine';
 
 /**
  * In-memory per-session store (demo-grade, spec section 9).
@@ -32,9 +33,21 @@ export interface SessionLead {
   phone: string | null;
 }
 
-export interface StoredEstimateRef {
+/** Canonical estimates owned by this session, keyed by estimate id (spec 14.2). */
+export type EstimateStore = Record<string, Estimate>;
+
+/** A generated downloadable output (PDF) tied to this session. */
+export interface SessionOutputRef {
+  id: string; // outputId
+  estimateId: string;
+  createdAt: string;
+}
+
+/** A submitted demo enquiry (spec 13.5 - stored in-session only). */
+export interface InquiryRecord {
   id: string;
   createdAt: string;
+  payload: Record<string, unknown>;
 }
 
 export interface AssistantSession {
@@ -46,8 +59,9 @@ export interface AssistantSession {
   facts: SessionFacts;
   estimateFlow: EstimateFlow;
   lead: SessionLead;
-  outputs: StoredEstimateRef[];
-  inquiries: string[];
+  estimates: EstimateStore;
+  outputs: SessionOutputRef[];
+  inquiries: InquiryRecord[];
   turnCount: number;
   messageTimestamps: number[];
 }
@@ -75,6 +89,7 @@ function newSession(sessionId: string): AssistantSession {
     },
     estimateFlow: { active: false, clarificationCount: 0, latestEstimateId: null },
     lead: { name: null, email: null, phone: null },
+    estimates: {},
     outputs: [],
     inquiries: [],
     turnCount: 0,
@@ -106,6 +121,14 @@ export function touchSession(session: AssistantSession): void {
   const now = Date.now();
   session.lastActiveAt = new Date(now).toISOString();
   session.expiresAt = now + getAssistantConfig().sessionTtlMinutes * 60_000;
+}
+
+/** Read the current session WITHOUT creating one (for lightweight GETs like /api/session). */
+export async function peekSession(): Promise<AssistantSession | null> {
+  const cookieStore = await cookies();
+  const sid = cookieStore.get(SESSION_COOKIE)?.value;
+  if (!sid) return null;
+  return getSession(sid);
 }
 
 /** Get-or-create the session for the current request, using the httpOnly cookie. */

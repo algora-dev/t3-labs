@@ -194,7 +194,9 @@ const handlers: Record<string, ToolHandler> = {
     if (str(args.material)) f.material = str(args.material);
     if (extras.length) f.extras = [...new Set([...f.extras, ...extras])];
     session.estimateFlow = { active: false, clarificationCount: session.estimateFlow.clarificationCount, latestEstimateId: estimate.id };
-    session.outputs.push({ id: estimate.id, createdAt: new Date().toISOString() });
+    // Keep the canonical estimate server-side so the PDF is rendered from
+    // validated data only (spec 14.2) and outputs can be session-validated.
+    session.estimates[estimate.id] = estimate;
 
     turn.cards.push({ type: 'estimate', estimate });
     turn.latestEstimateId = estimate.id;
@@ -236,8 +238,7 @@ const handlers: Record<string, ToolHandler> = {
     return { ok: true, title: entry.title, path: entry.path };
   },
 
-  open_inquiry(_args, session, turn) {
-    session.inquiries.push(new Date().toISOString());
+  open_inquiry(_args, _session, turn) {
     turn.actions.push({ type: 'OPEN_INQUIRY', label: 'Make an enquiry' });
     turn.cards.push({ type: 'handoff', summary: 'Your conversation details will be attached to the enquiry.' });
     return { ok: true, message: 'The UI will show an enquiry button with conversation context attached.' };
@@ -397,7 +398,8 @@ export async function runAssistantTurn(
 
   // Attach standard follow-up actions when an estimate was produced
   if (turnState.latestEstimateId) {
-    turnState.actions.push({ type: 'OPEN_INQUIRY', label: 'Make an enquiry' });
+    turnState.actions.push({ type: 'DOWNLOAD_OUTPUT', label: 'Download PDF', estimateId: turnState.latestEstimateId });
+    turnState.actions.push({ type: 'OPEN_INQUIRY', label: 'Make an enquiry from this estimate' });
     turnState.actions.push({
       type: 'ADD_ESTIMATE_OPTION',
       label: 'Add gutter replacement',
