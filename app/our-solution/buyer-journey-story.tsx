@@ -242,7 +242,7 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
                       <p className="mt-1 text-sm font-bold">Ask the assistant</p>
                       <div className="mt-2 space-y-1.5">
                         <div className="h-2 w-1/2 rounded" style={{ background: t.border }} />
-                        <div className="ml-auto h-2 w-2/5 rounded" style={{ background: t.accentSoft, border: `1px solid ${t.accent}` }} />
+                        <div className="ml-auto h-2 w-2/5 rounded" style={{ background: t.border }} />
                         <div className="h-2 w-3/5 rounded" style={{ background: t.border }} />
                       </div>
                     </div>
