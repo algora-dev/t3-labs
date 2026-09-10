@@ -47,7 +47,7 @@ const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
 const CUSTOMER_PAGE = "/our-solution/referred";
 
 // Ron: swap this to the confirmed /public logo asset if the filename differs.
-const LOGO_SRC = "/assets/t3-logo.jpg";
+const LOGO_SRC = "/assets/t3-logo-white.png";
 
 // Add this when the Apex Roofing assistant demo is live.
 const ASSISTANT_DEMO_URL = "";
@@ -968,7 +968,7 @@ export default function SalesResourcesPage() {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-5">
           <div className="flex min-w-0 shrink-0 items-center gap-3">
-            <img src={LOGO_SRC} alt="T3 Labs" className="h-7 w-auto max-w-[130px] object-contain" />
+            <img src={LOGO_SRC} alt="T3 Labs" className="h-8 w-auto object-contain rounded-md" style={{background:"#0a0b10",padding:"3px"}} />
             <span className="hidden text-sm font-semibold sm:inline" style={{ color: t.muted }}>Sales Resources</span>
           </div>
 

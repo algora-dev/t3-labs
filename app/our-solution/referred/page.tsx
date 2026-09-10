@@ -227,7 +227,7 @@ export default function ConstructionSolutionPage(){
       <header style={{background:theme==="dark"?"rgba(10,11,16,.88)":"rgba(251,252,255,.92)",borderColor:t.border}} className="sticky top-0 z-50 border-b backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
           <div className="flex items-center gap-2 font-semibold" aria-label="T3 Labs">
-            <span style={{background:t.accent,color:t.accentText}} className="rounded-md px-2 py-0.5 text-sm font-bold">T3</span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg" style={{background:"#0a0b10"}}><img src="/assets/t3-logo-white.png" alt="T3 Labs" className="h-7 w-7" /></span>
             <span className="hidden text-sm sm:inline" style={{color:t.muted}}>Labs</span>
           </div>
           <nav className="hidden items-center gap-5 text-sm lg:flex" style={{color:t.muted}}>
