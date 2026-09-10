@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 
 const BASE_URL = "https://www.t3labs.tech";
 
-const TITLE = "AI Visibility & Digital Sales Tools for Suppliers | T3 Labs";
+const TITLE = "Construction Digital Tools & AI Visibility | T3 Labs";
 const DESCRIPTION =
-  "T3 Labs builds pricing, estimating and quoting tools that help suppliers get found, give customers faster answers, reduce quoting workload and build stronger AI and search visibility.";
+  "T3 Labs builds pricing, estimating and quoting tools for construction suppliers and trade businesses — help customers price and buy faster, reduce repetitive quoting work and get found as search shifts to AI.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE }, // absolute: root layout template would append "| T3 Labs" again

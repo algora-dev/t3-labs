@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/proposal/", "/business-audit/api/", "/dashboard", "/api/"],
+        disallow: ["/proposal/", "/business-audit/api/", "/dashboard", "/api/", "/sales-resources"],
       },
     ],
     sitemap: "https://www.t3labs.tech/sitemap.xml",
