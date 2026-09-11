@@ -1,14 +1,16 @@
 import { getItemById } from '../pricing/catalog';
 import {
   HEURISTIC_COMPONENT_IDS,
+  type AreaType,
   type EstimateDraft,
   type EstimateDraftComponent,
   type PitchBandId,
   type PricedDraft,
   type ProjectType,
+  type RoofShape,
   type SizeBandId,
 } from '../pricing/estimate-engine';
-import { getV4Rules } from '../pricing/rules';
+import { getEstimateRules, getV4Rules } from '../pricing/rules';
 
 /**
  * Server-side validation of client-submitted guided-estimator drafts (V4 brief section 8).
@@ -22,6 +24,8 @@ const PROJECT_TYPES: ProjectType[] = ['new_roof', 'reroof'];
 const MODES: EstimateDraft['mode'][] = ['unit_rate', 'quick_ballpark', 'guided'];
 const SIZE_BANDS = Object.keys(getV4Rules().sizeBands) as SizeBandId[];
 const PITCH_BANDS = Object.keys(getV4Rules().pitchBands) as PitchBandId[];
+const AREA_TYPES: AreaType[] = ['actual_roof_area', 'plan_area'];
+const ROOF_SHAPES: RoofShape[] = ['gable', 'hip', 'valley_complex', 'flat', 'unknown'];
 
 function num(v: unknown): number | null {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
@@ -82,12 +86,13 @@ export function validateEstimateDraftInput(value: unknown): DraftValidation {
   const exactM2 = num(area.exactM2);
   const band = typeof area.band === 'string' ? (area.band as SizeBandId) : undefined;
   const source = area.source === 'configured_band' ? 'configured_band' : 'user_exact';
+  const areaType = AREA_TYPES.includes(area.areaType as AreaType) ? (area.areaType as AreaType) : 'actual_roof_area';
 
   let draftArea: EstimateDraft['area'];
   if (exactM2 != null && exactM2 > 0 && exactM2 <= 100000) {
-    draftArea = { exactM2, source: 'user_exact' };
+    draftArea = { exactM2, source: 'user_exact', areaType };
   } else if (band && SIZE_BANDS.includes(band)) {
-    draftArea = { band, source: 'configured_band' };
+    draftArea = { band, source: 'configured_band', areaType };
   } else {
     return { ok: false, error: 'Enter an exact roof area or choose a size band.' };
   }
@@ -105,10 +110,22 @@ export function validateEstimateDraftInput(value: unknown): DraftValidation {
     }
   }
 
+  if (draftPitch.degrees == null && !draftPitch.band) {
+    return { ok: false, error: 'Choose a pitch range or enter the roof pitch in degrees.' };
+  }
+
   const materialId = typeof obj.materialId === 'string' ? obj.materialId : '';
   const materialItem = getItemById(materialId);
   if (!materialItem || materialItem.category !== 'reroofing') {
     return { ok: false, error: 'Choose a roof covering from the approved catalogue.' };
+  }
+
+  const roofShape = ROOF_SHAPES.includes(obj.roofShape as RoofShape) ? (obj.roofShape as RoofShape) : 'unknown';
+
+  const pitchDegreesForValidation = draftPitch.degrees ?? (draftPitch.band ? getV4Rules().pitchBands[draftPitch.band].representativeDegrees : undefined);
+  const pitchRule = getEstimateRules().materialPitchRules?.[materialItem.id];
+  if (pitchRule && pitchDegreesForValidation != null && pitchDegreesForValidation < pitchRule.minPitchDegrees) {
+    return { ok: false, error: `${materialItem.name} is not configured below ${pitchRule.minPitchDegrees} degrees. Choose another covering or adjust the pitch.` };
   }
 
   const componentsResult = validateComponents(obj.components);
@@ -121,6 +138,7 @@ export function validateEstimateDraftInput(value: unknown): DraftValidation {
       mode,
       area: draftArea,
       pitch: draftPitch,
+      roofShape,
       materialId: materialItem.id,
       components: componentsResult.components,
     },
@@ -167,11 +185,12 @@ export function draftSummaryLines(draft: EstimateDraft): string[] {
   const v4 = getV4Rules();
   const lines: string[] = [];
   lines.push(draft.projectType === 'reroof' ? 'Re-roof / roof replacement' : 'New roof');
-  if (draft.area.exactM2 != null) lines.push(`${draft.area.exactM2.toLocaleString()} m2`);
+  if (draft.area.exactM2 != null) lines.push(`${draft.area.exactM2.toLocaleString()} m2 ${draft.area.areaType === 'plan_area' ? 'plan / footprint area' : 'actual roof area'}`);
   else if (draft.area.band) {
     const band = v4.sizeBands[draft.area.band];
     lines.push(`${band.label} size band (${band.minM2}-${band.maxM2} m2, indicative)`);
   }
+  if (draft.roofShape && draft.roofShape !== 'unknown') lines.push(`Roof shape: ${draft.roofShape.replace(/_/g, ' ')}`);
   if (draft.pitch.degrees != null) lines.push(`Pitch ${draft.pitch.degrees} degrees`);
   else if (draft.pitch.band) lines.push(`Pitch band: ${v4.pitchBands[draft.pitch.band].label}`);
   const material = draft.materialId ? getItemById(draft.materialId) : null;

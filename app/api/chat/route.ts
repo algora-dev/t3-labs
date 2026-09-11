@@ -5,8 +5,8 @@ import { runAssistantTurn, TurnError } from '@/lib/assistant/orchestrator';
 import { checkIpRateLimit, clientIpFromHeaders } from '@/lib/assistant/rate-limit';
 import { describePricedDraft, validateEstimateDraftInput } from '@/lib/assistant/estimate-draft';
 import { priceDraft, HEURISTIC_COMPONENT_IDS, type EstimateDraft } from '@/lib/pricing/estimate-engine';
-import { getActiveItems } from '@/lib/pricing/catalog';
-import { getV4Rules } from '@/lib/pricing/rules';
+import { getActiveItems, getCatalog } from '@/lib/pricing/catalog';
+import { getEstimateRules, getV4Rules } from '@/lib/pricing/rules';
 import type { ChatStreamEvent, AssistantTurn } from '@/lib/assistant/types';
 
 export const runtime = 'nodejs';
@@ -39,13 +39,14 @@ function buildEstimatorConfig() {
   return {
     coverings: catalog
       .filter((i) => i.category === 'reroofing')
-      .map((i) => ({ id: i.id, name: i.name, blurb: i.description })),
+      .map((i) => ({ id: i.id, name: i.name, blurb: i.description, minPitchDegrees: getEstimateRules().materialPitchRules?.[i.id]?.minPitchDegrees })),
     components: catalog
       .filter((i) => i.category === 'component')
       .map((i) => ({ id: i.id, name: i.name, unit: i.unit, estimable: (HEURISTIC_COMPONENT_IDS as readonly string[]).includes(i.id) })),
     sizeBands: Object.entries(v4.sizeBands).map(([id, band]) => ({ id, ...band })),
-    pitchBands: Object.entries(v4.pitchBands).map(([id, band]) => ({ id, label: band.label, minDegrees: band.minDegrees, maxDegrees: band.maxDegrees })),
+    pitchBands: Object.entries(v4.pitchBands).map(([id, band]) => ({ id, label: band.label, minDegrees: band.minDegrees, maxDegrees: band.maxDegrees, representativeDegrees: band.representativeDegrees })),
     removal: v4.reroofAllowances,
+    currencySymbol: getCatalog().symbol,
   };
 }
 
@@ -90,6 +91,10 @@ export async function POST(req: Request) {
     session.facts.projectType = draft.projectType;
     session.facts.material = draft.materialId ?? null;
     if (draft.area.exactM2 != null) session.facts.roofArea = draft.area.exactM2;
+    session.facts.areaType = draft.area.areaType;
+    session.facts.roofShape = draft.roofShape ?? 'unknown';
+    if (draft.pitch.degrees != null) session.facts.pitchDegrees = draft.pitch.degrees;
+    else if (draft.pitch.band) session.facts.pitchDegrees = getV4Rules().pitchBands[draft.pitch.band].representativeDegrees;
     session.facts.estimateScope = draft.components.some((c) => c.selected)
       ? draft.components.some((c) => c.selected && c.quantity == null)
         ? 'estimated_components'
@@ -102,7 +107,12 @@ export async function POST(req: Request) {
     const estimates = result.mode === 'single' ? [result.estimate] : [result.low, result.high];
     for (const estimate of estimates) session.estimates[estimate.id] = estimate;
     const latest = estimates[estimates.length - 1];
-    session.estimateFlow = { active: false, clarificationCount: session.estimateFlow.clarificationCount, latestEstimateId: latest.id };
+    session.estimateFlow = {
+      active: false,
+      clarificationCount: session.estimateFlow.clarificationCount,
+      latestEstimateId: latest.id,
+      latestEstimateIds: estimates.map((estimate) => estimate.id),
+    };
     session.messages.push({ role: 'user', content: '[Completed the guided estimate form]' });
     session.messages.push({ role: 'assistant', content: describePricedDraft(result) });
     session.turnCount += 1;
@@ -115,7 +125,7 @@ export async function POST(req: Request) {
       actions: [
         { type: 'OPEN_INQUIRY', label: 'Request Official Quote' },
         { type: 'ADJUST_ESTIMATE', label: 'Adjust Estimate' },
-        { type: 'DOWNLOAD_OUTPUT', label: 'Download PDF', estimateId: latest.id },
+        { type: 'DOWNLOAD_OUTPUT', label: 'Download PDF', estimateId: latest.id, estimateIds: estimates.map((estimate) => estimate.id) },
       ],
       sessionFactsUpdated: true,
     };

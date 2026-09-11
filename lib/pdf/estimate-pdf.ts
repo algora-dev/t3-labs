@@ -23,6 +23,12 @@ function fmtMoney(n: number, symbol: string): string {
   return `${symbol}${n.toLocaleString('en-GB')}`;
 }
 
+function projectTypeLabel(value: Estimate['project']['projectType']): string {
+  if (value === 'new_roof') return 'New roof';
+  if (value === 'reroof') return 'Re-roof / roof replacement';
+  return 'Not specified';
+}
+
 interface Ctx {
   page: PDFPage;
   y: number;
@@ -104,6 +110,7 @@ export async function renderEstimatePdf(estimate: Estimate): Promise<Uint8Array>
   ctx.y -= 16;
   const p = estimate.project;
   const rows: [string, string][] = [
+    ['Project', projectTypeLabel(p.projectType)],
     ['Roof area', `${p.roofArea.toLocaleString('en-GB')} m2 (${p.areaType.replace(/_/g, ' ')})`],
     ['Roof shape', p.roofShape === 'unknown' ? 'Not specified' : p.roofShape.replace(/_/g, ' ')],
     ['Pitch', `${p.pitchDegrees} degrees`],
@@ -183,6 +190,151 @@ export async function renderEstimatePdf(estimate: Estimate): Promise<Uint8Array>
   text(ctx, 'Want a formal, site-accurate quote?', { size: 11, bold: true });
   ctx.y -= 15;
   text(ctx, `Reply in the assistant or use the enquiry form to continue with the ${business.business.name} team${business.business.demo ? ' (demo)' : ''}.`, {
+    size: 9, color: GREY,
+  });
+
+  return doc.save();
+}
+
+
+/**
+ * Render a size-band result as an honest range rather than silently turning the
+ * upper bound into a precise-looking single estimate.
+ */
+export async function renderEstimateRangePdf(low: Estimate, high: Estimate): Promise<Uint8Array> {
+  const business = getBusiness();
+  const config = getAssistantConfig();
+  const BLUE = colourFromHex(config.accentColor ?? '#1769E0');
+  const doc = await PDFDocument.create();
+  const regular = await doc.embedFont(StandardFonts.Helvetica);
+  const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+
+  doc.setTitle(`${business.business.name} - Indicative Estimate Range`);
+  doc.setAuthor(business.business.name);
+  doc.setSubject('Interactive demo - indicative estimate range only');
+
+  const page = doc.addPage([PAGE_W, PAGE_H]);
+  const ctx: Ctx = { page, y: PAGE_H - MARGIN, doc, regular, bold };
+
+  ctx.page.drawRectangle({ x: 0, y: PAGE_H - 92, width: PAGE_W, height: 92, color: BLUE });
+  ctx.page.drawText(business.business.name, { x: MARGIN, y: PAGE_H - 46, size: 20, font: bold, color: rgb(1, 1, 1) });
+  ctx.page.drawText('Indicative Roofing Estimate Range', { x: MARGIN, y: PAGE_H - 64, size: 11, font: regular, color: rgb(1, 1, 1) });
+  ctx.page.drawText('Interactive Demo - fictional company', {
+    x: MARGIN, y: PAGE_H - 80, size: 8, font: regular, color: rgb(0.85, 0.9, 1),
+  });
+  ctx.y = PAGE_H - 116;
+
+  const created = new Date().toLocaleString('en-GB', { dateStyle: 'long', timeStyle: 'short' });
+  text(ctx, `Estimate references: ${low.id} / ${high.id}`, { size: 9, bold: true });
+  ctx.y -= 14;
+  text(ctx, `Date: ${created}`, { size: 9, color: GREY });
+  text(ctx, `Pricing catalogue: ${high.catalogVersion}`, { size: 9, color: GREY, x: PAGE_W - MARGIN - 190 });
+  ctx.y -= 24;
+
+  text(ctx, 'Project details', { size: 12, bold: true });
+  ctx.y -= 16;
+  const p = high.project;
+  const minArea = Math.min(low.project.roofArea, high.project.roofArea);
+  const maxArea = Math.max(low.project.roofArea, high.project.roofArea);
+  const rows: [string, string][] = [
+    ['Project', projectTypeLabel(p.projectType)],
+    ['Roof area range', `${minArea.toLocaleString('en-GB')} - ${maxArea.toLocaleString('en-GB')} m2 (${p.areaType.replace(/_/g, ' ')})`],
+    ['Roof shape', p.roofShape === 'unknown' ? 'Not specified' : p.roofShape.replace(/_/g, ' ')],
+    ['Pitch', `${p.pitchDegrees} degrees`],
+    ['Material', p.materialLabel],
+    ['Scope', p.componentScope.replace(/_/g, ' ')],
+    ['Status', 'Indicative range - not a formal quote'],
+  ];
+  for (const [k, v] of rows) {
+    text(ctx, `${k}:`, { size: 10, color: GREY });
+    text(ctx, v, { size: 10, bold: true, x: MARGIN + 120 });
+    ctx.y -= 15;
+  }
+  ctx.y -= 14;
+
+  text(ctx, 'Pricing breakdown', { size: 12, bold: true });
+  ctx.y -= 16;
+  const colQ = 286;
+  const colR = 410;
+  const colS = PAGE_W - MARGIN;
+  ctx.page.drawRectangle({ x: MARGIN, y: ctx.y - 4, width: PAGE_W - MARGIN * 2, height: 18, color: LIGHT });
+  text(ctx, 'Item', { size: 9, bold: true });
+  text(ctx, 'Quantity / rate', { size: 9, bold: true, x: colQ });
+  text(ctx, 'Range', { size: 9, bold: true, x: colR });
+  ctx.y -= 20;
+
+  const lowById = new Map(low.lineItems.map((item) => [item.catalogItemId, item]));
+  const highById = new Map(high.lineItems.map((item) => [item.catalogItemId, item]));
+  const ids = Array.from(new Set([...low.lineItems, ...high.lineItems].map((item) => item.catalogItemId)));
+  for (const id of ids) {
+    ensureSpace(ctx, 22);
+    const lo = lowById.get(id);
+    const hi = highById.get(id);
+    const item = hi ?? lo;
+    if (!item) continue;
+    const qLo = lo?.quantity ?? 0;
+    const qHi = hi?.quantity ?? qLo;
+    const qty = qLo === qHi
+      ? `${qHi.toLocaleString('en-GB')} ${item.unit}`
+      : `${Math.min(qLo, qHi).toLocaleString('en-GB')} - ${Math.max(qLo, qHi).toLocaleString('en-GB')} ${item.unit}`;
+    const source = (lo?.quantitySource === 'heuristic' || hi?.quantitySource === 'heuristic') ? ' allowance' : '';
+    const rate = `${fmtMoney(item.rate, high.symbol)}/${item.unit}`;
+    const subLo = lo?.subtotal ?? 0;
+    const subHi = hi?.subtotal ?? subLo;
+    const subtotal = subLo === subHi
+      ? fmtMoney(subHi, high.symbol)
+      : `${fmtMoney(Math.min(subLo, subHi), high.symbol)} - ${fmtMoney(Math.max(subLo, subHi), high.symbol)}`;
+    text(ctx, item.label, { size: 8.5 });
+    text(ctx, `${qty} x ${rate}${source}`, { size: 8.5, x: colQ });
+    text(ctx, subtotal, { size: 8.5, x: colR });
+    ctx.y -= 15;
+  }
+
+  ctx.y -= 6;
+  ensureSpace(ctx, 42);
+  ctx.page.drawRectangle({ x: MARGIN, y: ctx.y - 6, width: PAGE_W - MARGIN * 2, height: 26, color: BLUE });
+  const totalLabel = 'Indicative range';
+  const totalStr = `${fmtMoney(Math.min(low.total, high.total), high.symbol)} - ${fmtMoney(Math.max(low.total, high.total), high.symbol)} ${high.currency}`;
+  text(ctx, totalLabel, { size: 12, bold: true, color: rgb(1, 1, 1) });
+  text(ctx, totalStr, {
+    size: 12, bold: true, color: rgb(1, 1, 1), x: colS - bold.widthOfTextAtSize(totalStr, 12),
+  });
+  ctx.y -= 34;
+
+  const assumptions = Array.from(new Set([...low.assumptions, ...high.assumptions]));
+  ensureSpace(ctx, 60);
+  text(ctx, 'Assumptions', { size: 12, bold: true });
+  ctx.y -= 15;
+  for (const assumption of assumptions) {
+    ensureSpace(ctx, 16);
+    text(ctx, `- ${assumption}`, { size: 9, color: GREY });
+    ctx.y -= 13;
+  }
+  ctx.y -= 10;
+
+  const exclusions = Array.from(new Set([...low.exclusions, ...high.exclusions]));
+  if (exclusions.length) {
+    ensureSpace(ctx, 55);
+    text(ctx, 'Exclusions', { size: 12, bold: true });
+    ctx.y -= 15;
+    for (const exclusion of exclusions) {
+      ensureSpace(ctx, 16);
+      text(ctx, `- ${exclusion}`, { size: 9, color: GREY });
+      ctx.y -= 13;
+    }
+    ctx.y -= 10;
+  }
+
+  ensureSpace(ctx, 90);
+  text(ctx, high.disclaimer, { size: 8, color: GREY });
+  ctx.y -= 18;
+  text(ctx, `Interactive demo by T3 Labs. ${business.business.demo ? business.business.name + ' is fictional; no real quote or contact will follow.' : ''}`, {
+    size: 8, color: GREY,
+  });
+  ctx.y -= 26;
+  text(ctx, 'Want a formal, site-accurate quote?', { size: 11, bold: true });
+  ctx.y -= 15;
+  text(ctx, `Continue in the assistant to prepare an enquiry for the ${business.business.name} team${business.business.demo ? ' (demo)' : ''}.`, {
     size: 9, color: GREY,
   });
 

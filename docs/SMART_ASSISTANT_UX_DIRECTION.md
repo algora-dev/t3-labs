@@ -234,4 +234,4 @@ For a T3 Labs prospect: "I can immediately see how this could work for my busine
 
 > Instead of making users learn how to navigate the website, let them describe what they want and turn that intent into the correct answer, page, calculation, document or enquiry.
 
-Note: this demo uses USD currency (not GBP as shown in the original examples).
+Note: this demo uses GBP currency throughout.

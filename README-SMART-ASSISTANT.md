@@ -1,8 +1,8 @@
-# Smart Assistant — T3 Labs (Apex Roofing Demo)
+# Smart Assistant - T3 Labs (Apex Roofing Demo)
 
-An interactive **Smart Assistant** demo for the fictional company **Apex Roofing**, built by T3 Labs. It is not "a chatbot with a company prompt" — it is a controlled **business knowledge, calculation, action and conversion engine** with a conversational interface.
+An interactive **Smart Assistant** demo for the fictional company **Apex Roofing**, built by T3 Labs. It is not "a chatbot with a company prompt" - it is a controlled **business knowledge, calculation, action and conversion engine** with a conversational interface.
 
-Live page: `/apex-roofing`
+Live page: `/demo/roofing-site`
 
 Full build spec: [`docs/SMART_ASSISTANT_SPEC.md`](docs/SMART_ASSISTANT_SPEC.md)
 
@@ -10,12 +10,12 @@ Full build spec: [`docs/SMART_ASSISTANT_SPEC.md`](docs/SMART_ASSISTANT_SPEC.md)
 
 ## What it is
 
-A visitor to `/apex-roofing` can:
+A visitor to `/demo/roofing-site` can:
 
 - Ask business questions (services, hours, insurance work, guarantees) and get **grounded answers** from approved data.
 - Ask roofing knowledge questions (hip vs gable, roof pitch, plan vs actual area) answered from an **approved knowledge base**.
 - Ask for **exact catalogue prices** ("how much is concrete re-roofing per m2?").
-- Request an **indicative estimate** (e.g. 200 m² re-roof) — the assistant uses a short guided flow with up to **three concise clarification turns** when needed, then a **deterministic server-side engine** calculates the itemised estimate. The customer must explicitly choose whether to price covering only, specified components, or geometry-based component allowances.
+- Request an **indicative estimate** (e.g. 200 m² re-roof) using a guided flow that collects project type, size, pitch, covering and component scope. Complex pricing can use up to **seven concise clarification turns** when genuinely needed, while simple questions stay at 0-2. A **deterministic server-side engine** calculates the itemised estimate. The customer must explicitly choose whether to price covering only, specified components, or geometry-based component allowances.
 - Click real buttons to **add options** (gutters), **download an estimate PDF**, and **make a pre-filled enquiry** from facts already captured in conversation.
 - Ask "where can I read about your guarantees?" and get a **validated navigation button** to the right page section.
 - Ask an unsupported question and get a **clean, honest handoff** instead of a hallucinated answer.
@@ -33,9 +33,9 @@ Every visitor gets an isolated cookie-backed session. Local development uses mem
 | **3. Rules / Calculation** | Deterministic estimate engine + rounding/waste/perimeter rules | `lib/pricing/`, `data/apex-roofing/estimate-rules.json` |
 | **4. Conversation** | Orchestrated LLM pipeline: model classifies/extracts via tool calls, server executes | `lib/assistant/orchestrator.ts`, `prompts.ts` |
 | **5. Action** | Allowlisted server actions: estimate, enquiry, PDF output, navigation | `app/api/outputs/`, `app/api/inquiry/`, site-map resolution |
-| **6. Presentation** | Chat UI rendering only structured turn payloads (cards/actions) — never parses prose | `components/assistant/` |
+| **6. Presentation** | Chat UI rendering only structured turn payloads (cards/actions) - never parses prose | `components/assistant/` |
 
-Key safety property: **the AI interprets; software calculates and acts.** The model can never set a price, invent a URL, or execute an unlisted action — every numeric answer and every button comes from validated server code.
+Key safety property: **the AI interprets; software calculates and acts.** The model can never set a price, invent a URL, or execute an unlisted action - every numeric answer and every button comes from validated server code.
 
 ---
 
@@ -43,7 +43,8 @@ Key safety property: **the AI interprets; software calculates and acts.** The mo
 
 ```
 app/
-  apex-roofing/page.tsx          Demo site + "How this demo works" sales panel
+  demo/roofing-site/             Canonical Apex demo website + 16 shared content pages
+  apex-roofing/page.tsx          Legacy route redirect to the canonical demo
   api/chat/route.ts              SSE chat endpoint (session guards, IP + session rate limits)
   api/session/route.ts           Read-only session prefill for the enquiry form
   api/inquiry/route.ts           Demo enquiry submission (session-scoped)
@@ -66,13 +67,15 @@ lib/pricing/
 lib/pdf/estimate-pdf.ts          Deterministic PDF renderer from the estimate object
 data/apex-roofing/
   business.json                  Business profile + FAQs
+  website-pages.json             Shared content used by both website pages and assistant knowledge
   roofing-knowledge.md           Approved technical roofing knowledge
   pricing.json                   Pricing catalogue (only price source)
   estimate-rules.json            Pitch presets, ratios, waste, rounding, assumptions
   site-map.json                  Allowlisted navigation destinations
   assistant-config.json          Model, limits, rate limits, starter prompts, tone
 tests/
-  pricing.test.mjs               Deterministic estimate-engine tests (node --test)
+  pricing.test.mjs               Deterministic estimate-engine + draft validation tests
+  demo-data.test.mjs              Demo identity, navigation and pricing-data consistency tests
   acceptance-checklist.md        Manual acceptance checklist (spec 19 / 26)
 ```
 
@@ -83,7 +86,7 @@ tests/
 The assistant data layer is selected by `T3_ASSISTANT_BUSINESS_SLUG` and defaults to `apex-roofing`. To re-skill it:
 
 1. Copy `data/apex-roofing/` to `data/<your-business>/`.
-2. Replace `business.json`, `roofing-knowledge.md`, `pricing.json`, `estimate-rules.json`, `site-map.json` and `assistant-config.json`.
+2. Replace `business.json`, `website-pages.json`, `roofing-knowledge.md`, `pricing.json`, `estimate-rules.json`, `site-map.json` and `assistant-config.json`.
 3. Set `T3_ASSISTANT_BUSINESS_SLUG=<your-business>`.
 4. Build a branded landing page for that business and mount `SmartAssistantLauncher`.
 5. Verify pricing tests and the manual acceptance checklist.
@@ -110,7 +113,7 @@ Set the OpenAI key locally. For Vercel/serverless, also connect a Redis-compatib
 ```bash
 npm install
 printf "OPENAI_API_KEY=sk-...\nT3_ASSISTANT_BUSINESS_SLUG=apex-roofing\n" > .env.local
-npm run dev          # http://localhost:3000/apex-roofing
+npm run dev          # http://localhost:3000/demo/roofing-site
 ```
 
 Checks before shipping:
@@ -136,7 +139,7 @@ Do not run the dev server while recording the demo; use `npm run build && npm st
 
 ## Sales narrative
 
-Use the collapsible **"How this demo works"** panel on `/apex-roofing` plus [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) for scripted conversations. Key line:
+Use `/demo/roofing-site` plus [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) for scripted conversations. Key line:
 
 > "Everything you're seeing here is driven by Apex's data files. For your business, we replace those with your services, products, prices, rules and workflows."
 

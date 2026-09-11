@@ -334,7 +334,7 @@ export function Services({ site }: { site: ActRoofingSiteConfig }) {
                     <div className="flex flex-col gap-4 pb-6 pl-10 sm:flex-row sm:items-center sm:justify-between">
                       <p className="max-w-xl text-[0.98rem] leading-7 text-[#475467]">{service.summary}</p>
                       {service.linkLabel ? (
-                        <a href="#contact" className="inline-flex shrink-0 items-center gap-2 text-[0.9rem] font-semibold text-[#1769E0] transition hover:gap-3">
+                        <a href={service.linkHref ?? "#contact"} className="inline-flex shrink-0 items-center gap-2 text-[0.9rem] font-semibold text-[#1769E0] transition hover:gap-3">
                           {service.linkLabel}
                           <ArrowIcon />
                         </a>
@@ -765,7 +765,7 @@ export function Contact({ site }: { site: ActRoofingSiteConfig }) {
               </button>
             </div>
             <div className="mt-6 grid gap-4">
-              {/* Tool option — featured */}
+              {/* Tool option - featured */}
               <a href={site.estimateTool.ctaHref} className="group relative overflow-hidden rounded-[18px] border-2 border-[#1769E0] bg-[#F0F7FF] p-6 transition hover:border-[#1257BC] hover:shadow-lg">
                 <div className="flex items-start gap-4">
                   <div className="flex-1">
@@ -780,7 +780,7 @@ export function Contact({ site }: { site: ActRoofingSiteConfig }) {
                   </div>
                 </div>
               </a>
-              {/* Form option — secondary */}
+              {/* Form option - secondary */}
               <button type="button" onClick={openQuoteFormFromChoice} className="group relative cursor-pointer overflow-hidden rounded-[18px] border border-[#E5E7EB] bg-[#F7F8FA] p-6 text-left transition hover:border-[#98A2B3] hover:bg-white">
                 <div className="flex items-start gap-4">
                   <div className="flex-1">

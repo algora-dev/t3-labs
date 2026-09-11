@@ -1,6 +1,7 @@
 'use client';
 
 import { type PointerEvent as ReactPointerEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { AssistantAction, AssistantCard, AssistantTurn } from '@/lib/assistant/types';
 import type { Estimate, EstimateDraft } from '@/lib/pricing/estimate-engine';
 import { EnquiryPanel } from './EnquiryPanel';
@@ -142,7 +143,7 @@ interface ActionHandlers {
   pinned: boolean;
   onFollowUp: (msg: string) => void;
   onInquiry: () => void;
-  onDownload: (estimateId: string) => void;
+  onDownload: (estimateId: string, estimateIds?: string[]) => void;
   onEstimator: () => void;
   onNavigate: (url: string) => void;
 }
@@ -163,8 +164,8 @@ function ActionButton({ action, handlers: h }: { action: AssistantAction; handle
 
   const base = 'inline-flex items-center justify-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold transition disabled:opacity-50';
   if (action.type === 'NAVIGATE_INTERNAL') {
-    if (action.external || !h.pinned) {
-      return <a href={action.url} target={action.external ? '_blank' : undefined} rel={action.external ? 'noopener noreferrer' : undefined} className={`${base} text-white hover:opacity-90`} style={{ backgroundColor: h.accentColor, borderColor: h.accentColor }}>{action.label} <span aria-hidden>→</span></a>;
+    if (action.external) {
+      return <a href={action.url} target="_blank" rel="noopener noreferrer" className={`${base} text-white hover:opacity-90`} style={{ backgroundColor: h.accentColor, borderColor: h.accentColor }}>{action.label} <span aria-hidden>→</span></a>;
     }
     return <button disabled={h.busy} onClick={() => h.onNavigate(action.url)} className={`${base} text-white hover:opacity-90`} style={{ backgroundColor: h.accentColor, borderColor: h.accentColor }}>{action.label} <span aria-hidden>→</span></button>;
   }
@@ -178,7 +179,7 @@ function ActionButton({ action, handlers: h }: { action: AssistantAction; handle
     return <button disabled={h.busy} onClick={h.onEstimator} className={`${base} text-white hover:opacity-90`} style={{ backgroundColor: h.accentColor, borderColor: h.accentColor }}>{action.label}</button>;
   }
   return (
-    <button disabled={h.busy} onClick={() => h.onDownload(action.estimateId)} className={`${base} border-slate-300 bg-white text-slate-700 hover:bg-slate-50`}>
+    <button disabled={h.busy} onClick={() => h.onDownload(action.estimateId, action.estimateIds)} className={`${base} border-slate-300 bg-white text-slate-700 hover:bg-slate-50`}>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
       {action.label}
     </button>
@@ -232,6 +233,8 @@ function OpeningScreen({ config, busy, onAction }: { config: PublicConfig; busy:
 }
 
 export function SmartAssistantLauncher() {
+  const router = useRouter();
+  const [embeddedFrame, setEmbeddedFrame] = useState(false);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -240,6 +243,7 @@ export function SmartAssistantLauncher() {
   const [error, setError] = useState<string | null>(null);
   const [enquiryActive, setEnquiryActive] = useState(false);
   const [estimatorActive, setEstimatorActive] = useState(false);
+  const [estimatorDraft, setEstimatorDraft] = useState<EstimateDraft | null>(null);
   const [pinned, setPinned] = useState(false);
   const [siteHref, setSiteHref] = useState<string | null>(null);
   const [iframePath, setIframePath] = useState<string | null>(null);
@@ -251,6 +255,10 @@ export function SmartAssistantLauncher() {
   const panelRef = useRef<HTMLDivElement>(null);
   const dragOffset = useRef<{ dx: number; dy: number } | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    setEmbeddedFrame(window.self !== window.top);
+  }, []);
 
   useEffect(() => {
     const openFromPage = (event: MouseEvent) => {
@@ -415,14 +423,15 @@ export function SmartAssistantLauncher() {
   }, [runTurn, currentPagePath]);
 
   const submitDraft = useCallback((draft: EstimateDraft) => {
+    setEstimatorDraft(draft);
     setEstimatorActive(false);
     runTurn('Here are my estimate details from the guided form.', { clientAction: { type: 'ESTIMATE_DRAFT_SUBMIT', draft }, currentPagePath: currentPagePath() });
   }, [runTurn, currentPagePath]);
 
-  const handleDownload = useCallback(async (estimateId: string) => {
+  const handleDownload = useCallback(async (estimateId: string, estimateIds?: string[]) => {
     setError(null);
     try {
-      const create = await fetch('/api/outputs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estimateId }) });
+      const create = await fetch('/api/outputs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estimateId, estimateIds }) });
       const created = (await create.json().catch(() => null)) as { outputId?: string; error?: string } | null;
       if (!create.ok || !created?.outputId) throw new Error(created?.error ?? 'Could not prepare the PDF.');
       const download = await fetch(`/api/outputs?id=${encodeURIComponent(created.outputId)}`, { cache: 'no-store' });
@@ -434,7 +443,7 @@ export function SmartAssistantLauncher() {
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = `indicative-estimate-${estimateId}.pdf`;
+      anchor.download = estimateIds && estimateIds.length > 1 ? 'indicative-estimate-range.pdf' : `indicative-estimate-${estimateId}.pdf`;
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
@@ -452,29 +461,47 @@ export function SmartAssistantLauncher() {
     } catch { /* the session cookie will still be replaced on next request */ }
     setMessages([]);
     setEstimatorActive(false);
+    setEstimatorDraft(null);
     setEnquiryActive(false);
     setInput('');
   }, []);
 
-  const openEstimator = useCallback(() => {
+  const openEstimator = useCallback(async () => {
     setError(null);
     setEnquiryActive(false);
+    try {
+      const response = await fetch('/api/session', { cache: 'no-store' });
+      if (response.ok) {
+        const data = await response.json() as { draft?: EstimateDraft | null };
+        setEstimatorDraft(data.draft ?? null);
+      }
+    } catch {
+      // The estimator can still start blank if session prefill is unavailable.
+    }
     setEstimatorActive(true);
   }, []);
 
   const navigateSite = useCallback((url: string) => {
     if (pinned) {
-      const href = new URL(url, window.location.origin).href;
-      setSiteHref(href);
+      const href = new URL(url, window.location.origin);
+      setSiteHref(href.href);
+      setIframePath(href.pathname);
     } else {
-      window.location.assign(url);
+      router.push(url);
     }
-  }, [pinned]);
+  }, [pinned, router]);
 
   const handlePin = () => {
     if (window.innerWidth < 1024) return;
-    if (!pinned) setSiteHref(window.location.href);
-    setPinned((p) => !p);
+    if (!pinned) {
+      setSiteHref(window.location.href);
+      setIframePath(window.location.pathname);
+      setPinned(true);
+      return;
+    }
+    const destination = iframePath ?? (siteHref ? new URL(siteHref).pathname : null);
+    setPinned(false);
+    if (destination && destination !== window.location.pathname) router.push(destination);
   };
 
   const hasMessages = messages.length > 0;
@@ -562,6 +589,7 @@ export function SmartAssistantLauncher() {
                 config={config.estimator}
                 accentColor={config.accentColor}
                 busy={busy}
+                initialDraft={estimatorDraft}
                 onSubmit={submitDraft}
                 onChat={sendMessage}
                 onCancel={() => setEstimatorActive(false)}
@@ -593,6 +621,8 @@ export function SmartAssistantLauncher() {
       )}
     </>
   );
+
+  if (embeddedFrame) return null;
 
   return (
     <>

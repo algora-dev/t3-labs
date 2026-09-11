@@ -19,7 +19,7 @@ const BASE = {
 test('catalogue version and currency are preserved', () => {
   const est = createEstimate(BASE);
   assert.equal(est.catalogVersion, '2026-09-demo-1');
-  assert.equal(est.currency, 'USD');
+  assert.equal(est.currency, 'GBP');
   assert.equal(est.status, 'indicative');
 });
 
@@ -135,7 +135,7 @@ test('size bands produce a price RANGE at the configured band min and max', () =
   const result = priceDraft({
     projectType: 'reroof',
     mode: 'guided',
-    area: { band: 'medium', source: 'configured_band' },
+    area: { band: 'medium', source: 'configured_band', areaType: 'actual_roof_area' },
     pitch: { band: 'medium', source: 'user_band' },
     materialId: 'reroof_concrete_tile',
     components: [],
@@ -157,7 +157,7 @@ test('exact area gives a single figure, and pitch bands use the configured repre
   const single = priceDraft({
     projectType: 'new_roof',
     mode: 'quick_ballpark',
-    area: { exactM2: 185, source: 'user_exact' },
+    area: { exactM2: 185, source: 'user_exact', areaType: 'actual_roof_area' },
     pitch: { degrees: 27, source: 'user_exact' },
     materialId: 'reroof_slate',
     components: [],
@@ -169,20 +169,57 @@ test('exact area gives a single figure, and pitch bands use the configured repre
   const banded = priceDraft({
     projectType: 'new_roof',
     mode: 'guided',
-    area: { exactM2: 185, source: 'user_exact' },
-    pitch: { band: 'flat', source: 'user_band' },
-    materialId: 'reroof_slate',
+    area: { exactM2: 185, source: 'user_exact', areaType: 'actual_roof_area' },
+    pitch: { band: 'medium', source: 'user_band' },
+    materialId: 'reroof_concrete_tile',
     components: [],
   });
   assert.equal(banded.mode, 'single');
-  assert.equal(banded.estimate.project.pitchDegrees, 12); // flat band representative
+  assert.equal(banded.estimate.project.pitchDegrees, 27); // medium band representative
+});
+
+test('configured pitch compatibility blocks unsuitable roof coverings', () => {
+  assert.throws(
+    () => priceDraft({
+      projectType: 'new_roof',
+      mode: 'guided',
+      area: { exactM2: 185, source: 'user_exact', areaType: 'actual_roof_area' },
+      pitch: { band: 'flat', source: 'user_band' },
+      materialId: 'reroof_slate',
+      components: [],
+    }),
+    /not configured for pitches below/
+  );
+});
+
+test('guided plan area uses pitch to convert footprint to sloped roof area', () => {
+  const plan = priceDraft({
+    projectType: 'new_roof',
+    mode: 'guided',
+    area: { exactM2: 100, source: 'user_exact', areaType: 'plan_area' },
+    pitch: { degrees: 30, source: 'user_exact' },
+    materialId: 'reroof_concrete_tile',
+    components: [],
+  });
+  const actual = priceDraft({
+    projectType: 'new_roof',
+    mode: 'guided',
+    area: { exactM2: 100, source: 'user_exact', areaType: 'actual_roof_area' },
+    pitch: { degrees: 30, source: 'user_exact' },
+    materialId: 'reroof_concrete_tile',
+    components: [],
+  });
+  assert.equal(plan.mode, 'single');
+  assert.equal(actual.mode, 'single');
+  assert.ok(plan.estimate.total > actual.estimate.total);
+  assert.ok(plan.estimate.assumptions.some((a) => a.toLowerCase().includes('plan area')));
 });
 
 test('component quantity sources: user quantities are user-sourced, authorised heuristics are labelled', () => {
   const withUserQty = priceDraft({
     projectType: 'new_roof',
     mode: 'guided',
-    area: { exactM2: 200, source: 'user_exact' },
+    area: { exactM2: 200, source: 'user_exact', areaType: 'actual_roof_area' },
     pitch: { band: 'medium', source: 'user_band' },
     materialId: 'reroof_concrete_tile',
     components: [{ componentId: 'ridge_hip_system', selected: true, quantity: 12, unit: 'lm', quantitySource: 'user' }],
@@ -195,7 +232,7 @@ test('component quantity sources: user quantities are user-sourced, authorised h
   const withHeuristic = priceDraft({
     projectType: 'new_roof',
     mode: 'guided',
-    area: { exactM2: 200, source: 'user_exact' },
+    area: { exactM2: 200, source: 'user_exact', areaType: 'actual_roof_area' },
     pitch: { band: 'medium', source: 'user_band' },
     materialId: 'reroof_concrete_tile',
     components: [{ componentId: 'gutter_replacement', selected: true, quantity: null, unit: 'lm', quantitySource: 'heuristic' }],
@@ -210,7 +247,7 @@ test('draft validation refuses unauthorised heuristic component quantities', () 
   const draftBase = {
     projectType: 'reroof',
     mode: 'guided',
-    area: { exactM2: 185, source: 'user_exact' },
+    area: { exactM2: 185, source: 'user_exact', areaType: 'actual_roof_area' },
     pitch: { band: 'medium', source: 'user_band' },
     materialId: 'reroof_concrete_tile',
   };
@@ -238,4 +275,18 @@ test('draft validation refuses unauthorised heuristic component quantities', () 
   // Unknown material ids never pass validation.
   const badMaterial = validateEstimateDraftInput({ ...draftBase, materialId: 'gold_plated_titanium' });
   assert.equal(badMaterial.ok, false);
+});
+
+
+test('guided draft validation requires a pitch range or exact pitch', () => {
+  const result = validateEstimateDraftInput({
+    projectType: 'reroof',
+    mode: 'guided',
+    area: { exactM2: 185, source: 'user_exact', areaType: 'actual_roof_area' },
+    pitch: { source: 'user_band' },
+    materialId: 'reroof_concrete_tile',
+    components: [],
+  });
+  assert.equal(result.ok, false);
+  if (!result.ok) assert.match(result.error, /pitch/i);
 });

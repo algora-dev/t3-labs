@@ -1,10 +1,10 @@
-/* Apex Roofing demo site styles — scoped to /demo/roofing-site routes.
+/* Apex Roofing demo site styles - scoped to /demo/roofing-site routes.
    Tailwind is already compiled at the t3-labs root; the @source directives from
    the standalone app are not needed here (the compiled vendor package ships
    pre-built class names, and this site's own classes are defined below). */
 
 #act-demo-root {
-  /* Apex Roofing design tokens — re-themable per client */
+  /* Apex Roofing design tokens - re-themable per client */
   --ink: #101828;
   --muted: #667085;
   --line: #e5e7eb;

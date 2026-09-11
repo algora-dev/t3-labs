@@ -26,6 +26,7 @@ export interface EstimateRules {
   };
   disclaimer: string;
   standardAssumptions: string[];
+  materialPitchRules?: Record<string, { minPitchDegrees: number; maxPitchDegrees?: number; note?: string }>;
   v4?: V4Rules;
 }
 

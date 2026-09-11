@@ -28,7 +28,7 @@ The Apex demo must prove that the assistant can:
 1. Answer grounded business questions.
 2. Understand useful roofing terminology and domain concepts.
 3. Retrieve simple prices from approved pricing data.
-4. Ask at most three intelligent clarification questions for a complex estimate, only when needed to confirm material, scope, and one final component/geometry detail.
+4. Use task-specific clarification. General questions should normally need 0-2 clarifications; complex whole-roof pricing may use up to seven concise steps when needed to establish project type, size, pitch, material, scope and any geometry required for explicitly authorised component estimates.
 5. Calculate an estimate using deterministic code, not LLM arithmetic.
 6. Explain the result and assumptions clearly.
 7. Remember useful facts from the current user's conversation/session.
@@ -128,7 +128,7 @@ The final demo should support a showcase journey similar to:
 5. User asks how much concrete re-roofing costs per square metre.
 6. Assistant retrieves the rate from structured pricing.
 7. User asks for a price for a roughly 200m2 roof replacement.
-8. Assistant asks no more than three useful clarification questions, and does not ask for information the user has already provided.
+8. Assistant minimises customer effort and never re-asks known information. General requests normally use 0-2 clarifications; complex whole-roof estimates may use the configured higher clarification budget when each step is required for a safe estimate.
 9. Assistant creates a deterministic estimate with line items and assumptions.
 10. Assistant offers useful next actions such as:
  - Download estimate PDF
@@ -168,7 +168,7 @@ The demo must make these flows feel like one natural assistant rather than separ
 - Roofing domain Q&A from approved knowledge.
 - Simple pricing retrieval.
 - Complex estimate flow.
-- Maximum three clarification questions in an estimate flow, used only when necessary to confirm material, pricing scope, and a final geometry/component detail.
+- Clarification is task-specific: simple requests stay concise; complex whole-roof estimates may use the configured higher budget to capture project type, size, pitch, material, scope and required component geometry.
 - Structured estimate card.
 - In-chat action buttons.
 - Pre-filled enquiry flow.
@@ -263,7 +263,7 @@ Exact filenames may vary, but preserve this separation of concerns.
  /pdf
  estimate-pdf.ts
 /data
- /apex-roofing
+ /demo/roofing-site
  business.json
  knowledge.md or knowledge.json
  roofing-knowledge.md or roofing-knowledge.json
@@ -429,7 +429,7 @@ Not every field is required for every estimate.
 For pricing/estimate requests:
 
 1. Determine the most important missing information.
-2. Ask a maximum of **three clarification questions total** in that estimate flow. Use them only for high-value missing information such as material, estimate scope, and one final geometry/component detail.
+2. Use the configured complex-estimate clarification budget only for information that materially affects the result. For Apex this can be up to **seven concise clarification turns**, while simple questions should remain at 0-2.
 3. Prefer questions that materially change the price.
 4. After two questions, create an estimate using clearly stated assumptions instead of continuing to interrogate.
 
@@ -991,7 +991,7 @@ Verify:
 
 Verify:
 - ambiguous estimate asks a useful question.
-- no estimate flow asks more than three clarification questions, and each question resolves information required for a safe estimate.
+- clarification count stays within the configured task-specific budget, and every question resolves information required for a safe estimate.
 - after two questions the assistant commits with assumptions.
 
 ## 19.4 Inquiry tests
@@ -1103,7 +1103,7 @@ Build:
 Exit criteria:
 - simple rate lookup works,
 - 200m2 estimate works repeatedly,
-- at most three necessary clarification questions,
+- only necessary clarification questions, within the configured task-specific budget,
 - model never supplies unvalidated price values.
 
 ## Phase 4 - Structured actions and conversation facts
@@ -1222,7 +1222,7 @@ The assistant should:
 - Never invent Apex facts.
 - Never invent prices.
 - Ask clarification only when it materially improves an estimate.
-- Ask no more than three necessary clarification questions per estimate flow.
+- Keep simple requests to 0-2 clarifications; complex whole-roof estimates may use the configured higher budget when each step materially improves the estimate.
 - State assumptions when committing with incomplete information.
 - Call pricing/estimate functions for numeric commercial answers.
 - Offer a useful next step after a substantial estimate, but not after every trivial answer.
@@ -1356,7 +1356,7 @@ The Apex Roofing demo is ready to show prospective clients when a visitor can:
 4. Ask useful roofing technical questions and receive reliable approved explanations.
 5. Ask a simple pricing question and receive the exact structured catalogue price.
 6. Ask for a complex roof estimate.
-7. Be asked no more than three useful clarification questions, only when each is needed to produce a safe estimate.
+7. Be asked only useful clarification questions: normally 0-2 for simple requests, with the configured higher budget available for complex whole-roof estimates.
 8. Receive a deterministic, itemized indicative estimate.
 9. Click a real button to modify/add an estimate option.
 10. Click a real button to generate/download an estimate PDF.

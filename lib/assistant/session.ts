@@ -32,6 +32,8 @@ export interface EstimateFlow {
   active: boolean;
   clarificationCount: number;
   latestEstimateId: string | null;
+  /** One id for an exact estimate, two ids for a configured size-band range. */
+  latestEstimateIds?: string[];
 }
 
 export interface SessionLead {
@@ -44,7 +46,10 @@ export type EstimateStore = Record<string, Estimate>;
 
 export interface SessionOutputRef {
   id: string;
-  estimateId: string;
+  /** Kept for backwards compatibility with existing single-estimate sessions. */
+  estimateId?: string;
+  /** One estimate id for an exact PDF, two for a range PDF. */
+  estimateIds?: string[];
   createdAt: string;
 }
 
@@ -119,7 +124,7 @@ function newSession(sessionId: string): AssistantSession {
       components: [],
       extras: [],
     },
-    estimateFlow: { active: false, clarificationCount: 0, latestEstimateId: null },
+    estimateFlow: { active: false, clarificationCount: 0, latestEstimateId: null, latestEstimateIds: [] },
     lead: { name: null, email: null, phone: null },
     estimates: {},
     outputs: [],

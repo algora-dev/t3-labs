@@ -1,23 +1,235 @@
 {
   "catalogVersion": "2026-09-demo-1",
-  "currency": "USD",
-  "symbol": "$",
+  "currency": "GBP",
+  "symbol": "\u00a3",
   "taxLabel": null,
-  "note": "Fictional demo pricing. All rates supply and installed unless stated.",
+  "note": "Fictional UK demo pricing. Rates are supply and installed unless stated. Base roof-system rates exclude stripping and disposal of an existing roof; re-roof removal allowances are added separately by the deterministic estimate engine.",
   "items": [
-    { "id": "reroof_concrete_tile", "name": "Concrete tile re-roofing (Marley Edgemere)", "category": "reroofing", "unit": "m2", "rate": 62, "minimumCharge": 4500, "description": "Full tear-off and re-roof in Marley concrete tile, including underlay, battens, fixings, dry verge, and disposal of old roof.", "includes": ["Tear-off and disposal", "Underlay", "Battens", "Fixings", "Dry verge", "Labour"], "excludes": ["Gutter replacement", "Scaffolding beyond single-storey standard"], "active": true },
-    { "id": "reroof_clay_tile", "name": "Clay tile re-roofing", "category": "reroofing", "unit": "m2", "rate": 78, "minimumCharge": 5500, "description": "Full tear-off and re-roof in clay tile, including underlay, battens, fixings, dry verge, and disposal.", "includes": ["Tear-off and disposal", "Underlay", "Battens", "Fixings", "Dry verge", "Labour"], "excludes": ["Gutter replacement"], "active": true },
-    { "id": "reroof_slate", "name": "Natural slate re-roofing (CUPA Spanish slate)", "category": "reroofing", "unit": "m2", "rate": 115, "minimumCharge": 8500, "description": "Full roof covering system in CUPA natural Spanish slate 500x250mm, including underlay, battens, copper fixings, dry verge, and installation. Removal of an existing roof is priced separately as an indicative allowance on re-roofs.", "includes": ["Breathable membrane", "Battens", "Copper slate nails", "Dry verge", "Labour"], "excludes": ["Gutter replacement", "Removal of the existing roof (added as a separate allowance for re-roofs)"], "active": true },
-    { "id": "underlay_membrane", "name": "Breathable membrane upgrade", "category": "component", "unit": "m2", "rate": 4.5, "minimumCharge": 0, "description": "Upgrade from standard underlay to air-permeable membrane (Permavent Apex).", "includes": ["Material and install"], "excludes": [], "active": true },
-    { "id": "ridge_hip_system", "name": "Dry-fix ridge and hip system", "category": "component", "unit": "lm", "rate": 24, "minimumCharge": 0, "description": "Mechanically fixed dry ridge/hip kit with roll-top ventilation, replaces mortar bedding.", "includes": ["Kit and install"], "excludes": [], "active": true },
-    { "id": "valley_trough", "name": "GRP valley trough replacement", "category": "component", "unit": "lm", "rate": 32, "minimumCharge": 0, "description": "GRP valley trough, supply and installed, as part of a re-roof or repair.", "includes": ["Trough, flashings, install"], "excludes": [], "active": true },
-    { "id": "flashings", "name": "Lead/aluminium flashings", "category": "component", "unit": "lm", "rate": 28, "minimumCharge": 0, "description": "Apron, step, or chimney flashings, supply and installed.", "includes": ["Material and install"], "excludes": [], "active": true },
-    { "id": "gutter_replacement", "name": "Seamless gutter replacement", "category": "component", "unit": "lm", "rate": 18, "minimumCharge": 850, "description": "Half-round PVC seamless gutter, 4m sections, black, supply and installed.", "includes": ["Gutter, brackets, joints, install"], "excludes": ["Downpipes"], "active": true },
-    { "id": "downpipe", "name": "Downpipe replacement", "category": "component", "unit": "count", "rate": 95, "minimumCharge": 0, "description": "76mm round downpipe, supply and installed, including offsets and brackets.", "includes": ["Pipe, brackets, install"], "excludes": [], "active": true },
-    { "id": "fascia_soffit", "name": "Fascia and soffit replacement", "category": "component", "unit": "lm", "rate": 22, "minimumCharge": 0, "description": "UPVC fascia and vented soffit boards, supply and installed.", "includes": ["Boards, joints, install"], "excludes": ["Guttering"], "active": true },
-    { "id": "insulation_upgrade", "name": "Roof insulation upgrade", "category": "component", "unit": "m2", "rate": 14, "minimumCharge": 0, "description": "Insulation upgrade at re-roof time, supply and installed.", "includes": ["Material and install"], "excludes": [], "active": true },
-    { "id": "roof_repair", "name": "Roof repair (tile/slate/flashing)", "category": "service", "unit": "fixed", "rate": 280, "minimumCharge": 280, "description": "Standard repair visit: leak investigation, replacement of up to 10 tiles/slates or minor flashing repair.", "includes": ["Materials and labour"], "excludes": ["Major structural work"], "active": true },
-    { "id": "emergency_callout", "name": "Emergency callout", "category": "service", "unit": "fixed", "rate": 195, "minimumCharge": 195, "description": "24/7 emergency callout including tarping and temporary protection. Fee credited against follow-on repair work.", "includes": ["Site visit, temporary protection"], "excludes": ["Permanent repairs"], "active": true },
-    { "id": "roof_inspection", "name": "Full roof inspection", "category": "service", "unit": "fixed", "rate": 0, "minimumCharge": 0, "description": "Free full roof inspection with photo report.", "includes": ["Inspection and written photo report"], "excludes": [], "active": true }
+    {
+      "id": "reroof_concrete_tile",
+      "name": "Concrete tile roof system (Marley Edgemere)",
+      "category": "reroofing",
+      "unit": "m2",
+      "rate": 62,
+      "minimumCharge": 4500,
+      "description": "Concrete tile roof covering system including breathable underlay, battens, fixings, dry verge and installation. Existing-roof strip and disposal are priced separately for re-roofs.",
+      "includes": [
+        "Breathable underlay",
+        "Battens",
+        "Fixings",
+        "Dry verge",
+        "Labour"
+      ],
+      "excludes": [
+        "Existing roof strip and disposal",
+        "Gutter replacement",
+        "Scaffolding beyond standard single-storey access"
+      ],
+      "active": true
+    },
+    {
+      "id": "reroof_clay_tile",
+      "name": "Clay tile roof system",
+      "category": "reroofing",
+      "unit": "m2",
+      "rate": 78,
+      "minimumCharge": 5500,
+      "description": "Clay tile roof covering system including breathable underlay, battens, fixings, dry verge and installation. Existing-roof strip and disposal are priced separately for re-roofs.",
+      "includes": [
+        "Breathable underlay",
+        "Battens",
+        "Fixings",
+        "Dry verge",
+        "Labour"
+      ],
+      "excludes": [
+        "Existing roof strip and disposal",
+        "Gutter replacement"
+      ],
+      "active": true
+    },
+    {
+      "id": "reroof_slate",
+      "name": "Natural slate roof system (CUPA Spanish slate)",
+      "category": "reroofing",
+      "unit": "m2",
+      "rate": 115,
+      "minimumCharge": 8500,
+      "description": "Full roof covering system in CUPA natural Spanish slate 500x250mm, including underlay, battens, copper fixings, dry verge, and installation. Removal of an existing roof is priced separately as an indicative allowance on re-roofs.",
+      "includes": [
+        "Breathable membrane",
+        "Battens",
+        "Copper slate nails",
+        "Dry verge",
+        "Labour"
+      ],
+      "excludes": [
+        "Gutter replacement",
+        "Removal of the existing roof (added as a separate allowance for re-roofs)"
+      ],
+      "active": true
+    },
+    {
+      "id": "underlay_membrane",
+      "name": "Breathable membrane upgrade",
+      "category": "component",
+      "unit": "m2",
+      "rate": 4.5,
+      "minimumCharge": 0,
+      "description": "Upgrade from standard underlay to air-permeable membrane (Permavent Apex).",
+      "includes": [
+        "Material and install"
+      ],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "ridge_hip_system",
+      "name": "Dry-fix ridge and hip system",
+      "category": "component",
+      "unit": "lm",
+      "rate": 24,
+      "minimumCharge": 0,
+      "description": "Mechanically fixed dry ridge/hip kit with roll-top ventilation, replaces mortar bedding.",
+      "includes": [
+        "Kit and install"
+      ],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "valley_trough",
+      "name": "GRP valley trough replacement",
+      "category": "component",
+      "unit": "lm",
+      "rate": 32,
+      "minimumCharge": 0,
+      "description": "GRP valley trough, supply and installed, as part of a re-roof or repair.",
+      "includes": [
+        "Trough, flashings, install"
+      ],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "flashings",
+      "name": "Lead/aluminium flashings",
+      "category": "component",
+      "unit": "lm",
+      "rate": 28,
+      "minimumCharge": 0,
+      "description": "Apron, step, or chimney flashings, supply and installed.",
+      "includes": [
+        "Material and install"
+      ],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "gutter_replacement",
+      "name": "PVC gutter replacement",
+      "category": "component",
+      "unit": "lm",
+      "rate": 18,
+      "minimumCharge": 850,
+      "description": "Half-round PVC gutter system, supply and installed.",
+      "includes": [
+        "Gutter, brackets, joints, install"
+      ],
+      "excludes": [
+        "Downpipes"
+      ],
+      "active": true
+    },
+    {
+      "id": "downpipe",
+      "name": "Downpipe replacement",
+      "category": "component",
+      "unit": "count",
+      "rate": 95,
+      "minimumCharge": 0,
+      "description": "76mm round downpipe, supply and installed, including offsets and brackets.",
+      "includes": [
+        "Pipe, brackets, install"
+      ],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "fascia_soffit",
+      "name": "Fascia and soffit replacement",
+      "category": "component",
+      "unit": "lm",
+      "rate": 22,
+      "minimumCharge": 0,
+      "description": "UPVC fascia and vented soffit boards, supply and installed.",
+      "includes": [
+        "Boards, joints, install"
+      ],
+      "excludes": [
+        "Guttering"
+      ],
+      "active": true
+    },
+    {
+      "id": "insulation_upgrade",
+      "name": "Roof insulation upgrade",
+      "category": "component",
+      "unit": "m2",
+      "rate": 14,
+      "minimumCharge": 0,
+      "description": "Insulation upgrade at re-roof time, supply and installed.",
+      "includes": [
+        "Material and install"
+      ],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "roof_repair",
+      "name": "Roof repair (tile/slate/flashing)",
+      "category": "service",
+      "unit": "fixed",
+      "rate": 280,
+      "minimumCharge": 280,
+      "description": "Standard repair visit: leak investigation, replacement of up to 10 tiles/slates or minor flashing repair.",
+      "includes": [
+        "Materials and labour"
+      ],
+      "excludes": [
+        "Major structural work"
+      ],
+      "active": true
+    },
+    {
+      "id": "emergency_callout",
+      "name": "Emergency callout",
+      "category": "service",
+      "unit": "fixed",
+      "rate": 195,
+      "minimumCharge": 195,
+      "description": "Emergency roofing callout including temporary protection where practical. Fee credited against follow-on repair work when configured by the business.",
+      "includes": [
+        "Site visit, temporary protection"
+      ],
+      "excludes": [
+        "Permanent repairs"
+      ],
+      "active": true
+    },
+    {
+      "id": "roof_inspection",
+      "name": "Full roof inspection",
+      "category": "service",
+      "unit": "fixed",
+      "rate": 0,
+      "minimumCharge": 0,
+      "description": "Free full roof inspection with photo report.",
+      "includes": [
+        "Inspection and written photo report"
+      ],
+      "excludes": [],
+      "active": true
+    }
   ]
 }

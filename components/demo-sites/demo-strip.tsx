@@ -5,8 +5,10 @@ import Image from "next/image";
 
 export function DemoSiteStrip({ siteLabel }: { siteLabel: string }) {
   const [hidden, setHidden] = useState(false);
+  const [embedded, setEmbedded] = useState(false);
 
   useEffect(() => {
+    setEmbedded(window.self !== window.top);
     let ticking = false;
     function update() {
       setHidden(window.scrollY > 40);
@@ -21,6 +23,8 @@ export function DemoSiteStrip({ siteLabel }: { siteLabel: string }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  if (embedded) return null;
 
   return (
     <div
@@ -40,7 +44,7 @@ export function DemoSiteStrip({ siteLabel }: { siteLabel: string }) {
           />
         </span>
         <p className="text-xs font-semibold tracking-wide sm:text-sm">
-          {siteLabel} — demo website built by <span className="text-[#d7ff00]">T3 Labs</span>
+          {siteLabel} - demo website built by <span className="text-[#d7ff00]">T3 Labs</span>
         </p>
       </div>
       <a

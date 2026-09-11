@@ -1,4 +1,4 @@
-import { getAssistantConfig, getBusiness, getRoofingKnowledge, getSiteMap } from './data';
+import { getAssistantConfig, getBusiness, getRoofingKnowledge, getSiteMap, getWebsitePages } from './data';
 import type { AssistantSession } from './session';
 import { getActiveItems } from '../pricing/catalog';
 
@@ -6,6 +6,7 @@ export function buildSystemPrompt(session: AssistantSession): string {
   const config = getAssistantConfig();
   const biz = getBusiness();
   const knowledge = getRoofingKnowledge();
+  const websitePages = getWebsitePages();
   const topics = getSiteMap()
     .map((s) => `- id: "${s.id}" -> ${s.title} (${s.path})${s.external ? ' [external]' : ''}`)
     .join('\n');
@@ -67,9 +68,11 @@ RED: unsupported facts, structural judgement, legal matters, exact site-specific
 - NEVER invent or calculate a price in prose.
 - Direct rates must come from retrieve_price.
 - Job estimates must come from create_estimate.
-- Whole-roof estimates must establish new_roof vs reroof via projectType. Re-roofs automatically add the configured strip and disposal allowances (the server adds them - never quote them yourself beyond reading the tool result).
+- Whole-roof estimates must establish new_roof vs reroof via projectType. If it is missing, ask using ask_clarification(kind="project_type"). Re-roofs automatically add the configured strip and disposal allowances (the server adds them - never quote them yourself beyond reading the tool result).
 - If the customer gives a size band (Small/Medium/Large) instead of an exact area, call create_estimate with areaBand so the server returns a price RANGE. Never turn a band into a single figure.
+- If roof size is missing, ask using ask_clarification(kind="roof_area") or open the guided estimator.
 - If the customer gives a pitch band (Flat-Low/Medium/Steep), pass pitchBand. Never invent pitch multipliers.
+- Whole-job estimates need a pitch range or exact pitch. If it is missing, ask using ask_clarification(kind="pitch"); do not silently assume 30 degrees.
 - NEVER add ridge, hip, valley, flashing, gutter, insulation or other separate component charges unless the customer explicitly chose that scope or component.
 - A roof shape does NOT authorise you to add component charges by itself.
 - "covering_only" means main roof covering only.
@@ -85,8 +88,8 @@ RED: unsupported facts, structural judgement, legal matters, exact site-specific
 There is NO global two-question limit. Use task-specific clarification:
 - General questions: 0-2 questions.
 - Simple pricing (a direct rate question): 0-1 questions, or answer immediately from the catalogue.
-- Whole-job estimates: use the guided flow until enough information exists (project type, size, material, scope). Never re-ask anything already captured in SESSION FACTS or the DRAFT.
-Broad questions like "how much will a new roof cost" should establish the desired result first using ask_clarification(kind="pricing_entry"): Quick Price (catalogue rates), Quick Ballpark (few details), or Guided estimate (start_estimator opens the interactive guided estimator).
+- Whole-job estimates: collect enough information for a useful result (project type, size, pitch, material and scope; roof shape only when component geometry needs it). Never re-ask anything already captured in SESSION FACTS or the DRAFT.
+Broad questions like "how much will a roof cost" should establish the desired result first using ask_clarification(kind="pricing_entry"): Quick Price (catalogue rates), Quick Ballpark (few details), or Guided estimate (start_estimator opens the interactive guided estimator).
 If the clarification budget is reached and essential scope or material is still unknown, do not fabricate an estimate. Offer covering-only if the user explicitly agrees, or prepare an enquiry.
 Do not re-ask facts already in SESSION FACTS.
 
@@ -100,7 +103,7 @@ Use these ids when calling create_estimate. Do not invent component ids.
 1. retrieve_price({ catalogItemIdOrQuery }) for exact approved rates.
 2. create_estimate({ roofArea, areaBand, areaType, roofShape, pitchDegrees, pitchBand, projectType, material, componentScope, components, extras }). The server does all maths. Size bands return a price range.
 3. start_estimator({}) to open the interactive guided estimator for detailed estimate requests.
-4. ask_clarification({ question, kind }) for one short question. Kinds: pricing_entry, material, estimate_scope, roof_shape, area_type, components or generic.
+4. ask_clarification({ question, kind }) for one short question. Kinds: pricing_entry, project_type, roof_area, pitch, material, estimate_scope, roof_shape, area_type, components or generic.
 5. navigate({ topicId }) when the user wants a website page. Valid topic ids:\n${topics}\nNever invent URLs.
 6. open_inquiry({}) for buying intent, human judgement or RED-zone questions.
 7. update_facts(...) whenever the user supplies useful project details or explicitly chooses estimate scope/components.
@@ -130,6 +133,10 @@ ${factsSummary}
 
 # BUSINESS DATA
 ${JSON.stringify(biz, null, 1)}
+
+# WEBSITE CONTENT
+The following is the same approved content rendered on the Apex website. Use it when answering questions about pages, services and information. If a matching site-map destination exists, you may also offer the navigate tool.
+${JSON.stringify(websitePages, null, 1)}
 
 # ROOFING KNOWLEDGE
 ${knowledge}`;

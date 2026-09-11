@@ -3,7 +3,7 @@
 The assistant answers roofing EDUCATIONAL questions from this document. This source is authoritative for the demo; where it conflicts with general model training, this document wins. It explains concepts only - actual job pricing always comes from the pricing catalogue via the estimate engine.
 
 ## Roof pitch
-Roof pitch is the angle of the roof surface from horizontal, usually given in degrees (e.g. 30 degrees). Sometimes expressed in the US as rise-over-run (e.g. 6/12 means the roof rises 6 inches per 12 inches of horizontal run). Pitch matters because: steeper roofs need more material for the same footprint, are harder/slower to work on, and some materials have minimum pitch ratings.
+Roof pitch is the angle of the roof surface from horizontal, usually given in degrees (e.g. 30 degrees). Pitch matters because: steeper roofs need more material for the same footprint, are harder/slower to work on, and some materials have minimum pitch ratings.
 
 ## Plan area vs actual (sloped) roof area
 The plan area is the roof's footprint measured on a level (like from plans or a map). The actual sloped roof surface area is larger. Conversion: actual = plan area x slope factor, where slope factor = 1 / cos(pitch in radians). Examples: 20 deg = 1.064, 25 deg = 1.103, 30 deg = 1.155, 35 deg = 1.221, 40 deg = 1.305. A 200 m2 plan-area roof at 30 deg has about 231 m2 of actual roof surface. Material quantities should always be based on the sloped area.
@@ -21,13 +21,13 @@ A valley is the internal angle where two roof planes meet sloping downward towar
 Rafters are the sloped timbers forming the roof skeleton. Common rafters run straight from the ridge to the wall plate at a constant pitch. Hip rafters run along the hip line from the ridge end down to the corner. Valley rafters run along the valley lines. Hip/valley rafters are longer and cut at compound angles, so they are more skilled work.
 
 ## Flat and low-slope roofs
-Roofs at roughly 10 degrees or less. Water drains slowly, so covering systems must be continuous membranes (e.g. EPDM rubber, TPO, modified bitumen), not tiles or slate. Tiles and slate generally have minimum pitch requirements (typically 20-30 degrees depending on product). Apex handles flat/low-slope roofs for repairs only.
+Roofs at roughly 10 degrees or less. Water drains slowly, so covering systems must be continuous membranes (e.g. EPDM rubber, TPO, modified bitumen), not tiles or slate. Tiles and slate generally have minimum pitch requirements (typically 20-30 degrees depending on product). Apex installs and repairs suitable flat and low-slope roofing systems, including GRP fibreglass and EPDM membrane systems. Tile and slate systems are not used below their configured minimum pitch.
 
 ## Battens
 Horizontal timber strips fixed across the rafters (over the underlay) that tiles or slate are hooked/nailed onto. Batten spacing (gauge) is set by the tile/slate size and the roof pitch.
 
 ## Underlay / membrane
-A water-shedding layer under the tiles, directly on the rafters or over insulation boards. Traditional bitumen felt versus modern breathable (air-permeable) membranes which let moisture escape while blocking water. We install both; breathable membrane is an upgrade option.
+A water-shedding layer under the tiles, directly on the rafters or over insulation boards. Traditional bitumen felt versus modern breathable (air-permeable) membranes which let moisture escape while blocking water. Apex uses breathable membrane as standard in the configured full roof systems for this demo.
 
 ## Flashings
 Metal (lead, aluminium, or galvanised) formed pieces that waterproof junctions: where a roof meets a wall (apron flashing), around chimneys (step and counter flashings), and at abutments. Flashing failure is one of the most common causes of leaks.
@@ -42,7 +42,7 @@ The fascia is the board along the lower roof edge that gutters fix to; the soffi
 - Concrete tiles: durable, cost-effective, heavy; 30-50 year life.
 - Clay tiles: warmer look, long life, moderately higher cost.
 - Natural slate (CUPA Spanish): premium, 75-100+ year life, requires skilled installation and copper fixings.
-- Asphalt shingles: common in the region; Apex repairs but does not fully re-roof in shingle.
+- GRP fibreglass and EPDM membrane systems: used for suitable flat and low-slope roofs.
 
 ## Why pitch/material compatibility matters
 Each covering has a minimum pitch: below it, water can be driven back up the laps and leak. Slate and interlocking tiles typically need 20-30 degrees minimum. Using the wrong material below its minimum pitch voids manufacturer warranties.

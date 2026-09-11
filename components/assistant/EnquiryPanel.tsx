@@ -26,7 +26,6 @@ interface PendingAttachment {
   name: string;
   contentType: string;
   sizeBytes: number;
-  dataBase64: string;
 }
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf', 'text/plain'];
@@ -124,13 +123,9 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
         setError(`"${file.name}" is too large - please keep files under 2.5 MB.`);
         continue;
       }
-      const dataBase64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(String(reader.result ?? '').split(',')[1] ?? '');
-        reader.onerror = () => reject(new Error('read failed'));
-        reader.readAsDataURL(file);
-      }).catch(() => '');
-      if (dataBase64) next.push({ name: file.name, contentType: file.type, sizeBytes: file.size, dataBase64 });
+      // Demo mode stores safe metadata only. A live client deployment should upload
+      // the file to object storage and retain a file reference, not base64 in session JSON.
+      next.push({ name: file.name, contentType: file.type, sizeBytes: file.size });
     }
     setAttachments((current) => [...current, ...next].slice(0, 5));
   };

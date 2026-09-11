@@ -69,6 +69,7 @@ export interface BusinessData {
     roofTypes: string[];
     materials: string[];
     handoffMessage: string;
+    trustSignals?: string[];
   };
   faqs: { q: string; a: string }[];
 }
@@ -79,6 +80,19 @@ export function getBusiness(): BusinessData {
 
 export function getRoofingKnowledge(): string {
   return loadText('roofing-knowledge.md');
+}
+
+export interface WebsitePageData {
+  slug: string;
+  group: 'services' | 'information' | 'commercial';
+  title: string;
+  metaDescription: string;
+  intro: string;
+  sections: Array<{ heading?: string; body?: string[]; bullets?: string[] }>;
+}
+
+export function getWebsitePages(): WebsitePageData[] {
+  return loadJson<WebsitePageData[]>('website-pages.json');
 }
 
 export interface SiteMapEntry {

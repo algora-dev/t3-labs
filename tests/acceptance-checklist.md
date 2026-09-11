@@ -1,61 +1,81 @@
-# Acceptance Checklist - Apex Roofing Smart Assistant V2
+# Acceptance Checklist - Apex Roofing Smart Assistant V4.1
 
-Run automated pricing checks first:
+Run automated checks first:
 
 ```bash
 npm test
 ```
 
-## Core experience
+## Demo identity and website
 
 | # | Requirement | Manual check |
 |---|---|---|
-| 1 | First impression is clearly smarter than normal chat | Teaser appears once, explains the Smart Website idea, shows a strong example question, and never blocks the whole page. |
-| 2 | Launcher feels like a business assistant | Launcher says Ask Apex with a value subtitle, not generic Chat with us. Opening screen has estimate, question, navigation and enquiry actions. |
-| 3 | Grounded business Q&A | Ask about insurance, areas, hours and warranties. Answers must match `business.json`. |
-| 4 | Roofing knowledge is grounded | Ask about hip vs gable, pitch and plan vs actual roof area. Answers must match `roofing-knowledge.md`. |
-| 5 | Direct catalogue pricing is exact | Ask concrete, clay and slate rates. Values must come from `pricing.json`. |
+| 1 | One Apex identity | Website, assistant, PDFs and estimates use Leeds / UK context and GBP. No Portland/Oregon/USD copy appears. |
+| 2 | Canonical demo route | `/demo/roofing-site` is the main demo. `/apex-roofing` redirects there. |
+| 3 | Shared page knowledge | The 16 Apex content pages render from `website-pages.json`, and the assistant can answer from that same content. |
+| 4 | Pages feel like one site | Detail pages use the Apex header/branding and link cleanly back to the main demo. |
+| 5 | Homepage service links work | Service cards navigate to relevant real content pages instead of only `#contact`. |
 
-## Estimate flow
+## Core Smart Assistant experience
 
 | # | Requirement | Manual check |
 |---|---|---|
-| 6 | No unrequested roof components | Ask for a 200 m² roof price. After material choice, the assistant must ask estimate scope before adding ridge, hip, valley, flashing, gutter or insulation line items. |
-| 7 | Covering-only is truly covering-only | Choose Roof covering only. Estimate card must contain the main covering line only. |
-| 8 | User-specified components work | Choose Add components I know. Give ridge/hip and valley lengths. Estimate must price only those selected components and use the supplied lengths. |
-| 9 | Geometry allowances require explicit permission | Choose Estimate roof components. If shape is needed, the assistant asks. Result labels geometry-derived quantities as estimated allowances. |
-| 10 | Gable roof does not invent valleys | A simple gable with estimated components may include ridge but must not automatically add a valley line. |
-| 11 | Estimate assumptions are truthful | No Pitch assumed 30 degrees line when the user supplied pitch. No linear-component assumption on covering-only estimates. |
-| 12 | Follow-up buttons are contextual | Add estimated gutters only appears when gutters are absent. Add roof components only appears when the current scope is covering-only. |
+| 6 | Smart Website first impression | Teaser appears once, explains the value quickly, shows a strong roofing example and does not block the page. |
+| 7 | Launcher feels like an assistant | Opening screen offers estimate, roofing question, site finding and enquiry actions. |
+| 8 | Grounded business Q&A | Ask about insurance, areas, hours and warranties. Answers match approved data. |
+| 9 | Grounded website navigation | Ask where insurance, pitch, materials or guarantees are explained. Buttons come from `site-map.json`. |
+| 10 | Technical roofing knowledge | Ask hip vs gable, pitch, valleys and plan vs sloped area. Answers match approved knowledge. |
+| 11 | Direct catalogue pricing is exact | Ask concrete/clay/slate installed roof-system rates. Values come only from `pricing.json`. |
+
+## Guided and conversational estimate flow
+
+| # | Requirement | Manual check |
+|---|---|---|
+| 12 | Project type is required | Whole-roof estimate distinguishes New Roof vs Re-roof before final pricing. |
+| 13 | Re-roof removal is separate | Re-roof adds configured strip-per-m² and fixed disposal allowances once only. New Roof adds neither. |
+| 14 | Roof size supports fast choices | Small/Medium/Large returns a price range. Exact m² returns a single-area estimate. |
+| 15 | Area meaning is explicit | Exact area can be Actual roof area or Footprint / plan area. Plan area uses pitch to convert to sloped area. |
+| 16 | Pitch is required | User can select Flat/Low, Medium, Steep or enter degrees. Whole-job pricing does not silently assume 30°. |
+| 17 | Material/pitch compatibility | Incompatible tile/slate choices are disabled/rejected. Flat/low pitch does not receive a made-up tiled-roof price. |
+| 18 | No unrequested components | Ridge/hip/valley/flashing/gutter/insulation are never charged unless explicitly selected or authorised for estimation. |
+| 19 | Covering-only is truly covering-only | Choose Roof covering only. No separate optional component lines appear. |
+| 20 | User quantities stay exact | Choose components and enter known lengths/counts. Engine uses exactly those quantities. |
+| 21 | Missing quantities need permission | Estimate missing quantities works only after explicit authorisation; non-estimable items require user quantities. |
+| 22 | Roofline estimation asks shape | Estimate roofline components requires Gable, Hip or Hip + valley before geometry allowances are created. |
+| 23 | Gable does not invent valleys | Gable geometry may add ridge when authorised but never a valley allowance. |
+| 24 | Estimate assumptions are truthful | User-supplied pitch is not replaced by a default. Heuristic quantities are visibly labelled. |
+| 25 | Adjust Estimate preserves context | Reopening the estimator pre-fills the current project/draft instead of starting from zero. |
 
 ## Outputs and conversion
 
 | # | Requirement | Manual check |
 |---|---|---|
-| 13 | PDF works | Click Download estimate PDF. The file downloads successfully and every line/total matches the canonical estimate card. |
-| 14 | Enquiry review is pre-filled | Click Request a formal quote. Review shows captured area, material, shape/pitch when known, estimate scope, total and line items without retyping. |
-| 15 | Looks good and Edit details behave differently | Looks good goes directly to the minimal contact step. Edit details opens the project editor. |
-| 16 | Contact step is minimal | After review, only name plus email or phone are required. Optional note is available. |
-| 17 | Submitted enquiry includes useful context | Server payload contains project facts, full estimate breakdown, assumptions and recent conversation context. |
-| 18 | Navigation actions are allowlisted | Ask where insurance or guarantees are. Button must resolve from `site-map.json`, never an invented URL. |
-| 19 | Unsupported question hands off cleanly | Ask something outside approved knowledge. Assistant must not invent and should offer an enquiry when useful. |
+| 26 | PDF works | Download PDF succeeds and matches the canonical estimate object exactly. |
+| 27 | Enquiry review is pre-filled | Official quote request shows project type, area, pitch, material, components, estimate and assumptions. |
+| 28 | Looks Good vs Edit Details | Looks Good goes to minimal contact details. Edit Details opens the project editor. |
+| 29 | Attachments are safe in demo | Selecting files stores only validated metadata in session JSON; no base64 blobs are written to Redis/session state. |
+| 30 | Submitted enquiry is useful | Payload contains project facts, estimate breakdown, assumptions, attachments metadata and recent conversation context. |
 
-## Session and deployment
+## Workspace, memory and navigation
 
 | # | Requirement | Manual check |
 |---|---|---|
-| 20 | Two visitors are isolated | Open two private/incognito sessions. Give different roof data. Estimates, PDFs and enquiry prefill must never cross. |
-| 21 | Hosted state survives separate server requests | With Redis REST env vars configured, create estimate, wait/refresh relevant UI, download PDF and open enquiry. Data must remain available. |
-| 22 | Local fallback still works | Without Redis env vars, local `npm run dev` uses in-memory sessions for development. |
-| 23 | Business data is swappable | Set `T3_ASSISTANT_BUSINESS_SLUG` to another valid data folder. Loaders use that folder without editing pricing/data loader code. |
-| 24 | Mobile assistant is usable | On narrow viewport assistant is full-screen, composer remains usable, actions are easy to tap, and body behind it does not scroll. |
+| 31 | Floating panel can move | Desktop assistant can be dragged and reset without blocking basic interaction. |
+| 32 | Pinned mode works | Pinning creates website + assistant split view with no nested second assistant or duplicate demo strip. |
+| 33 | Pinned navigation is live | Assistant navigation loads the requested Apex page in the website panel and keeps chat context. |
+| 34 | Unpin preserves browsing destination | After browsing in pinned mode, unpinning returns the main page to the current internal destination where practical. |
+| 35 | Back to Chat retains context | Leaving estimate/enquiry views and returning to chat keeps project memory. |
+| 36 | Start New Conversation clears memory | Reset warning appears. After confirmation, old messages, facts, estimates, enquiry draft and output refs are not available to the new session. |
+| 37 | Two visitors are isolated | Two private/incognito sessions with different projects never share facts, estimates, PDFs or enquiries. |
+| 38 | Hosted state is shared | With Redis/Upstash REST configured, estimate -> PDF -> enquiry works across separate serverless requests. |
 
 ## Guardrails
 
-- API key stays server-side.
-- Model never calculates prices.
-- `componentScope` is required by the deterministic estimate engine.
-- Maximum configured clarification turns are respected.
-- User prompt injection cannot reveal system prompts, configuration or keys.
-- No arbitrary URL/action execution.
-- UI copy and assistant comments use normal hyphens rather than em dashes.
+- API keys stay server-side.
+- The model never computes commercial prices.
+- Unknown materials never fall back to another product.
+- Whole-job estimates require a project type, size, pitch, approved material and explicit component scope.
+- Complex estimate clarification can use the configured higher budget; simple requests should remain concise.
+- No arbitrary URLs or unstructured frontend regex actions.
+- Unsupported facts hand off rather than hallucinate.
+- UI text/comments use normal hyphens rather than em dashes.

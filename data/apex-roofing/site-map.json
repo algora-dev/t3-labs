@@ -1,25 +1,278 @@
 [
-  { "id": "home", "title": "Apex Roofing Home", "path": "/demo/roofing-site", "keywords": ["home", "apex", "start", "overview"], "description": "Apex Roofing home page." },
-  { "id": "services", "title": "Our Services", "path": "/demo/roofing-site/services/roof-replacement", "keywords": ["services", "what do you do", "offer", "replacement", "reroof", "re-roof"], "description": "Apex roof replacement and re-roofing service." },
-
-  { "id": "roof-replacement", "title": "Roof Replacement / Re-Roofing", "path": "/demo/roofing-site/services/roof-replacement", "keywords": ["replacement", "reroof", "re-roof", "new tiles", "tear off", "old roof"], "description": "Full roof replacement and re-roofing: process, materials, timelines." },
-  { "id": "new-roof-installation", "title": "New Roof Installation", "path": "/demo/roofing-site/services/new-roof-installation", "keywords": ["new roof", "new build", "installation", "self build", "extension roof"], "description": "New roof installation for new builds, extensions and conversions." },
-  { "id": "roof-repairs", "title": "Roof Repairs", "path": "/demo/roofing-site/services/roof-repairs", "keywords": ["repair", "leak", "leaking", "fix", "broken tile", "cracked", "slipped tile"], "description": "Roof repair services: leaks, tiles, slates, flashings." },
-  { "id": "flat-roofing", "title": "Flat Roofing", "path": "/demo/roofing-site/services/flat-roofing", "keywords": ["flat roof", "low slope", "membrane", "garage roof", "extension", "fibreglass", "grp"], "description": "Flat and low-slope roofing systems." },
-  { "id": "guttering", "title": "Guttering & Downpipes", "path": "/demo/roofing-site/services/guttering", "keywords": ["gutter", "gutters", "guttering", "downpipe", "spouting", "fascia", "soffit"], "description": "Gutter, downpipe, fascia and soffit replacement." },
-  { "id": "storm-emergency", "title": "Storm & Emergency Roofing", "path": "/demo/roofing-site/services/storm-emergency-roofing", "keywords": ["emergency", "storm", "urgent", "leaking now", "24/7", "callout", "tarp"], "description": "24/7 storm damage and emergency roofing response." },
-  { "id": "insurance", "title": "Insurance Roofing Work", "path": "/demo/roofing-site/services/insurance-work", "keywords": ["insurance", "claim", "storm damage", "hail", "adjuster", "loss adjuster"], "description": "How Apex handles insurance roofing claims end to end." },
-
-  { "id": "roofing-materials", "title": "Roofing Materials", "path": "/demo/roofing-site/information/roofing-materials", "keywords": ["materials", "tile", "slate", "membrane", "options", "products"], "description": "Guide to the roofing materials Apex installs." },
-  { "id": "material-comparison", "title": "Concrete vs Clay vs Slate", "path": "/demo/roofing-site/information/concrete-vs-clay-vs-slate", "keywords": ["concrete", "clay", "slate", "compare", "comparison", "difference", "which tile", "best material"], "description": "Side-by-side comparison of concrete tile, clay tile and natural slate." },
-  { "id": "roof-pitch-guide", "title": "Roof Pitch Guide", "path": "/demo/roofing-site/information/roof-pitch-guide", "keywords": ["pitch", "degrees", "slope", "angle", "low pitch", "steep"], "description": "What roof pitch means and why it matters for material choice." },
-  { "id": "how-estimates-work", "title": "How Roofing Estimates Work", "path": "/demo/roofing-site/information/how-estimates-work", "keywords": ["estimate", "quote", "pricing", "how priced", "ballpark", "survey"], "description": "How Apex builds estimates and what affects the price." },
-  { "id": "roofing-faq", "title": "Roofing FAQ", "path": "/demo/roofing-site/information/roofing-faq", "keywords": ["faq", "questions", "how long", "scaffolding", "weather", "mess", "insurance"], "description": "Frequently asked roofing questions." },
-  { "id": "guarantees", "title": "Warranties & Guarantees", "path": "/demo/roofing-site/information/warranties-guarantees", "keywords": ["guarantee", "guarantees", "warranty", "warranties", "workmanship", "insurance backed"], "description": "Apex workmanship and material warranties." },
-  { "id": "service-areas", "title": "Service Areas", "path": "/demo/roofing-site/information/service-areas", "keywords": ["areas", "area", "coverage", "where", "location", "portland", "near me", "serve"], "description": "Towns and areas Apex Roofing serves." },
-
-  { "id": "request-a-quote", "title": "Request a Quote", "path": "/demo/roofing-site/request-a-quote", "keywords": ["quote", "request", "book", "survey", "inspection", "formal quote", "estimate to quote"], "description": "Request a formal quote or free roof inspection." },
-  { "id": "contact", "title": "Contact Apex", "path": "/demo/roofing-site/contact", "keywords": ["contact", "phone", "call", "email", "hours", "open", "address"], "description": "Contact details and opening hours." },
-
-  { "id": "pricing-tool", "title": "Instant Pricing Tool", "path": "https://app.quote-core.com/supplier-pricing-tool/apex-roofing", "keywords": ["pricing tool", "supplier tool", "instant pricing", "measure", "takeoff", "calculator", "materials only"], "description": "Apex instant supply pricing tool - measure a roof and price materials live.", "external": true }
+  {
+    "id": "home",
+    "title": "Apex Roofing Home",
+    "path": "/demo/roofing-site",
+    "keywords": [
+      "home",
+      "apex",
+      "start",
+      "overview"
+    ],
+    "description": "Apex Roofing home page."
+  },
+  {
+    "id": "services",
+    "title": "Our Services",
+    "path": "/demo/roofing-site/services/roof-replacement",
+    "keywords": [
+      "services",
+      "what do you do",
+      "offer",
+      "replacement",
+      "reroof",
+      "re-roof"
+    ],
+    "description": "Apex roof replacement and re-roofing service."
+  },
+  {
+    "id": "roof-replacement",
+    "title": "Roof Replacement / Re-Roofing",
+    "path": "/demo/roofing-site/services/roof-replacement",
+    "keywords": [
+      "replacement",
+      "reroof",
+      "re-roof",
+      "new tiles",
+      "tear off",
+      "old roof"
+    ],
+    "description": "Full roof replacement and re-roofing: process, materials, timelines."
+  },
+  {
+    "id": "new-roof-installation",
+    "title": "New Roof Installation",
+    "path": "/demo/roofing-site/services/new-roof-installation",
+    "keywords": [
+      "new roof",
+      "new build",
+      "installation",
+      "self build",
+      "extension roof"
+    ],
+    "description": "New roof installation for new builds, extensions and conversions."
+  },
+  {
+    "id": "roof-repairs",
+    "title": "Roof Repairs",
+    "path": "/demo/roofing-site/services/roof-repairs",
+    "keywords": [
+      "repair",
+      "leak",
+      "leaking",
+      "fix",
+      "broken tile",
+      "cracked",
+      "slipped tile"
+    ],
+    "description": "Roof repair services: leaks, tiles, slates, flashings."
+  },
+  {
+    "id": "flat-roofing",
+    "title": "Flat Roofing",
+    "path": "/demo/roofing-site/services/flat-roofing",
+    "keywords": [
+      "flat roof",
+      "low slope",
+      "membrane",
+      "garage roof",
+      "extension",
+      "fibreglass",
+      "grp"
+    ],
+    "description": "Flat and low-slope roofing systems."
+  },
+  {
+    "id": "guttering",
+    "title": "Guttering & Downpipes",
+    "path": "/demo/roofing-site/services/guttering",
+    "keywords": [
+      "gutter",
+      "gutters",
+      "guttering",
+      "downpipe",
+      "spouting",
+      "fascia",
+      "soffit"
+    ],
+    "description": "Gutter, downpipe, fascia and soffit replacement."
+  },
+  {
+    "id": "storm-emergency",
+    "title": "Storm & Emergency Roofing",
+    "path": "/demo/roofing-site/services/storm-emergency-roofing",
+    "keywords": [
+      "emergency",
+      "storm",
+      "urgent",
+      "leaking now",
+      "24/7",
+      "callout",
+      "tarp"
+    ],
+    "description": "24/7 storm damage and emergency roofing response."
+  },
+  {
+    "id": "insurance",
+    "title": "Insurance Roofing Work",
+    "path": "/demo/roofing-site/services/insurance-work",
+    "keywords": [
+      "insurance",
+      "claim",
+      "storm damage",
+      "hail",
+      "adjuster",
+      "loss adjuster"
+    ],
+    "description": "How Apex handles insurance roofing claims end to end."
+  },
+  {
+    "id": "roofing-materials",
+    "title": "Roofing Materials",
+    "path": "/demo/roofing-site/information/roofing-materials",
+    "keywords": [
+      "materials",
+      "tile",
+      "slate",
+      "membrane",
+      "options",
+      "products"
+    ],
+    "description": "Guide to the roofing materials Apex installs."
+  },
+  {
+    "id": "material-comparison",
+    "title": "Concrete vs Clay vs Slate",
+    "path": "/demo/roofing-site/information/concrete-vs-clay-vs-slate",
+    "keywords": [
+      "concrete",
+      "clay",
+      "slate",
+      "compare",
+      "comparison",
+      "difference",
+      "which tile",
+      "best material"
+    ],
+    "description": "Side-by-side comparison of concrete tile, clay tile and natural slate."
+  },
+  {
+    "id": "roof-pitch-guide",
+    "title": "Roof Pitch Guide",
+    "path": "/demo/roofing-site/information/roof-pitch-guide",
+    "keywords": [
+      "pitch",
+      "degrees",
+      "slope",
+      "angle",
+      "low pitch",
+      "steep"
+    ],
+    "description": "What roof pitch means and why it matters for material choice."
+  },
+  {
+    "id": "how-estimates-work",
+    "title": "How Roofing Estimates Work",
+    "path": "/demo/roofing-site/information/how-estimates-work",
+    "keywords": [
+      "estimate",
+      "quote",
+      "pricing",
+      "how priced",
+      "ballpark",
+      "survey"
+    ],
+    "description": "How Apex builds estimates and what affects the price."
+  },
+  {
+    "id": "roofing-faq",
+    "title": "Roofing FAQ",
+    "path": "/demo/roofing-site/information/roofing-faq",
+    "keywords": [
+      "faq",
+      "questions",
+      "how long",
+      "scaffolding",
+      "weather",
+      "mess",
+      "insurance"
+    ],
+    "description": "Frequently asked roofing questions."
+  },
+  {
+    "id": "guarantees",
+    "title": "Warranties & Guarantees",
+    "path": "/demo/roofing-site/information/warranties-guarantees",
+    "keywords": [
+      "guarantee",
+      "guarantees",
+      "warranty",
+      "warranties",
+      "workmanship",
+      "insurance backed"
+    ],
+    "description": "Apex workmanship and material warranties."
+  },
+  {
+    "id": "service-areas",
+    "title": "Service Areas",
+    "path": "/demo/roofing-site/information/service-areas",
+    "keywords": [
+      "areas",
+      "area",
+      "coverage",
+      "where",
+      "location",
+      "leeds",
+      "near me",
+      "serve"
+    ],
+    "description": "Towns and areas Apex Roofing serves."
+  },
+  {
+    "id": "request-a-quote",
+    "title": "Request a Quote",
+    "path": "/demo/roofing-site/request-a-quote",
+    "keywords": [
+      "quote",
+      "request",
+      "book",
+      "survey",
+      "inspection",
+      "formal quote",
+      "estimate to quote"
+    ],
+    "description": "Request a formal quote or free roof inspection."
+  },
+  {
+    "id": "contact",
+    "title": "Contact Apex",
+    "path": "/demo/roofing-site/contact",
+    "keywords": [
+      "contact",
+      "phone",
+      "call",
+      "email",
+      "hours",
+      "open",
+      "address"
+    ],
+    "description": "Contact details and opening hours."
+  },
+  {
+    "id": "pricing-tool",
+    "title": "Instant Pricing Tool",
+    "path": "https://app.quote-core.com/supplier-pricing-tool/apex-roofing",
+    "keywords": [
+      "pricing tool",
+      "supplier tool",
+      "instant pricing",
+      "measure",
+      "takeoff",
+      "calculator",
+      "materials only"
+    ],
+    "description": "Apex instant supply pricing tool - measure a roof and price materials live.",
+    "external": true
+  }
 ]

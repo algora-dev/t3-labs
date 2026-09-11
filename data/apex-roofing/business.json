@@ -3,10 +3,19 @@
     "name": "Apex Roofing",
     "demo": true,
     "tagline": "Quality roofing, done right the first time",
-    "description": "Apex Roofing is a full-service residential roofing company serving the Greater Portland area. We handle everything from minor repairs to complete roof replacements, using quality materials and experienced crews.",
-    "phone": "(503) 555-0142",
-    "email": "hello@apexroofing-demo.com",
-    "serviceAreas": ["Portland", "Beaverton", "Hillsboro", "Tigard", "Lake Oswego", "Vancouver WA", "Gresham", "Milwaukie"],
+    "description": "Apex Roofing is a full-service residential roofing company serving Leeds and surrounding areas. We handle everything from minor repairs and flat roofing to complete roof replacements and new roof installations, using quality materials and experienced crews.",
+    "phone": "0808 157 0426",
+    "email": "hello@apexroofing.example",
+    "serviceAreas": [
+      "Leeds",
+      "Harrogate",
+      "Wakefield",
+      "Bradford",
+      "Horsforth",
+      "Wetherby",
+      "Otley",
+      "Pudsey"
+    ],
     "hours": {
       "monday": "7:00 AM - 6:00 PM",
       "tuesday": "7:00 AM - 6:00 PM",
@@ -16,7 +25,7 @@
       "saturday": "8:00 AM - 2:00 PM",
       "sunday": "Emergency calls only"
     },
-    "emergencyProcess": "For storm damage or active leaks, call our 24/7 emergency line at (503) 555-0142. We aim to have a technician on site within 4 hours for tarping and temporary protection, with permanent repairs scheduled after assessment.",
+    "emergencyProcess": "For storm damage or active leaks, call our emergency line on 0808 157 0426. We aim to arrange urgent temporary protection as quickly as practical, followed by an assessment for permanent repairs.",
     "insuranceWork": "Yes, we handle insurance roofing work. We work with all major insurers, provide detailed damage assessments with photos, and can meet your adjuster on site. We guide you through the claim process from initial inspection to final sign-off.",
     "guarantees": [
       "10-year workmanship warranty on all full roof replacements",
@@ -32,29 +41,115 @@
       "5. Final inspection, cleanup, and written warranty"
     ],
     "services": [
-      { "id": "roof_replacement", "name": "Roof Replacement", "summary": "Complete tear-off and re-roofing in concrete tile, clay tile, or natural slate." },
-      { "id": "roof_repair", "name": "Roof Repairs", "summary": "Leak detection, tile/slate replacement, flashing repairs, and storm damage repair." },
-      { "id": "gutters", "name": "Gutters & Downpipes", "summary": "Seamless gutter replacement, downpipe installation, and gutter guard fitting." },
-      { "id": "insurance", "name": "Insurance Roofing Work", "summary": "Storm and hail damage claims, adjuster meetings, and documented assessments." },
-      { "id": "emergency", "name": "Emergency Callout", "summary": "24/7 emergency response for active leaks and storm damage, typically on site within 4 hours." },
-      { "id": "inspection", "name": "Roof Inspections", "summary": "Free full roof inspections with photo report, suitable for home purchase or maintenance planning." }
+      {
+        "id": "roof_replacement",
+        "name": "Roof Replacement",
+        "summary": "Complete roof replacement and new roof installation in concrete tile, clay tile, or natural slate."
+      },
+      {
+        "id": "roof_repair",
+        "name": "Roof Repairs",
+        "summary": "Leak detection, tile/slate replacement, flashing repairs, and storm damage repair."
+      },
+      {
+        "id": "flat_roofing",
+        "name": "Flat Roofing",
+        "summary": "GRP and EPDM flat-roof systems for extensions, garages and low-slope roofs."
+      },
+      {
+        "id": "gutters",
+        "name": "Gutters & Downpipes",
+        "summary": "PVC gutter replacement, downpipe installation, fascia and soffit work."
+      },
+      {
+        "id": "insurance",
+        "name": "Insurance Roofing Work",
+        "summary": "Storm and hail damage claims, adjuster meetings, and documented assessments."
+      },
+      {
+        "id": "emergency",
+        "name": "Emergency Callout",
+        "summary": "24/7 emergency response for active leaks and storm damage, typically on site within 4 hours."
+      },
+      {
+        "id": "inspection",
+        "name": "Roof Inspections",
+        "summary": "Free full roof inspections with photo report, suitable for home purchase or maintenance planning."
+      }
     ],
-    "roofTypes": ["Concrete tile", "Clay tile", "Natural slate", "Asphalt shingle repairs", "Flat and low-slope (repairs only)"],
-    "materials": ["Marley concrete tiles", "Clay tile", "CUPA natural Spanish slate", "Synthetic underlay and breathable membranes", "Aluminium dry verge systems", "GRP valley troughs", "PVC guttering systems"],
-    "handoffMessage": "I want to make sure you get an accurate answer from the Apex team. I can pass along everything you've told me so far - would you like me to prepare an enquiry?"
+    "roofTypes": [
+      "Concrete tile",
+      "Clay tile",
+      "Natural slate",
+      "Flat and low-slope membrane systems",
+      "Roof repairs across common pitched-roof coverings"
+    ],
+    "materials": [
+      "Marley concrete tiles",
+      "Clay tile",
+      "CUPA natural Spanish slate",
+      "Breathable membranes",
+      "Dry-fix ridge, hip and verge systems",
+      "GRP valley troughs",
+      "PVC guttering systems",
+      "GRP and EPDM flat-roof systems"
+    ],
+    "handoffMessage": "I want to make sure you get an accurate answer from the Apex team. I can pass along everything you've told me so far - would you like me to prepare an enquiry?",
+    "trustSignals": [
+      "20+ years roofing experience",
+      "500+ roofs completed",
+      "Fully insured",
+      "10-year workmanship guarantee on full roof replacements"
+    ]
   },
   "faqs": [
-    { "q": "How much does a roof replacement cost?", "a": "It depends on size, material, and roof complexity. As a guide, concrete tile re-roofing starts around $62 per square metre supply and installed. Ask me for an estimate - tell me your approximate roof area and preferred material and I'll break it down." },
-    { "q": "How long does a roof replacement take?", "a": "Most residential full replacements take 2-4 working days from tear-off to final inspection, weather permitting." },
-    { "q": "Do you offer free quotes?", "a": "Yes - consultation and full roof inspection are free, with a written itemized quote within 48 hours." },
-    { "q": "What areas do you serve?", "a": "Portland, Beaverton, Hillsboro, Tigard, Lake Oswego, Gresham, Milwaukie, and Vancouver WA." },
-    { "q": "Are you open weekends?", "a": "We're open Saturday 8:00 AM - 2:00 PM. Sundays are emergency calls only." },
-    { "q": "Do you handle insurance claims?", "a": "Yes. We provide documented damage assessments, work with all major insurers, and can meet your adjuster on site." },
-    { "q": "What warranty do you offer?", "a": "10-year workmanship warranty on full replacements, 2-year on repairs, plus manufacturer material warranties of 30-50 years." },
-    { "q": "Do you do emergency callouts?", "a": "Yes - 24/7. Call (503) 555-0142. We aim to be on site within 4 hours for tarping and temporary protection." },
-    { "q": "What materials do you install?", "a": "Concrete tile (Marley), clay tile, and natural Spanish slate (CUPA), with matching dry-fix ridge, hip, verge, and valley systems." },
-    { "q": "How do I know if I need a repair or a full replacement?", "a": "If you have isolated cracked tiles or a flashing leak, a repair usually works. Widespread cracking, sagging, or a roof near the end of its life (25+ years for tiles) points to replacement. Our free inspection gives you a definite answer." },
-    { "q": "Do you replace gutters too?", "a": "Yes - seamless PVC and aluminium gutter systems, downpipes, and gutter guards, either as part of a re-roof or standalone." },
-    { "q": "Is Apex Roofing a real company?", "a": "Apex Roofing is a fictional business - this website is an interactive demo built by T3 Labs to showcase a Smart Assistant trained on a business's own knowledge, products, and pricing." }
+    {
+      "q": "How much does a roof replacement cost?",
+      "a": "It depends on size, pitch, material, project type and any additional roof components. As a guide, concrete tile roof systems start around £62 per square metre supply and installed before re-roof strip/disposal allowances. Ask me for a guided ballpark and I can break it down."
+    },
+    {
+      "q": "How long does a roof replacement take?",
+      "a": "Most residential full replacements take 2-4 working days from tear-off to final inspection, weather permitting."
+    },
+    {
+      "q": "Do you offer free quotes?",
+      "a": "Yes - consultation and full roof inspection are free, with a written itemized quote within 48 hours."
+    },
+    {
+      "q": "What areas do you serve?",
+      "a": "Leeds, Harrogate, Wakefield, Bradford, Horsforth, Wetherby, Otley and Pudsey."
+    },
+    {
+      "q": "Are you open weekends?",
+      "a": "We're open Saturday 8:00 AM - 2:00 PM. Sundays are emergency calls only."
+    },
+    {
+      "q": "Do you handle insurance claims?",
+      "a": "Yes. We provide documented damage assessments, work with all major insurers, and can meet your adjuster on site."
+    },
+    {
+      "q": "What warranty do you offer?",
+      "a": "10-year workmanship warranty on full replacements, 2-year on repairs, plus manufacturer material warranties of 30-50 years."
+    },
+    {
+      "q": "Do you do emergency callouts?",
+      "a": "Yes. Call 0808 157 0426 for urgent storm damage or active leaks. We will arrange temporary protection and assessment as quickly as practical."
+    },
+    {
+      "q": "What materials do you install?",
+      "a": "Concrete tile (including Marley systems), clay tile, natural Spanish slate (CUPA), plus GRP and EPDM systems for suitable flat and low-slope roofs."
+    },
+    {
+      "q": "How do I know if I need a repair or a full replacement?",
+      "a": "If you have isolated cracked tiles or a flashing leak, a repair usually works. Widespread cracking, sagging, or a roof near the end of its life (25+ years for tiles) points to replacement. Our free inspection gives you a definite answer."
+    },
+    {
+      "q": "Do you replace gutters too?",
+      "a": "Yes - PVC gutter systems, downpipes, fascia and soffit work can be included with a roofing project or handled separately."
+    },
+    {
+      "q": "Is Apex Roofing a real company?",
+      "a": "Apex Roofing is a fictional business - this website is an interactive demo built by T3 Labs to showcase a Smart Assistant trained on a business's own knowledge, products, and pricing."
+    }
   ]
 }

@@ -39,19 +39,8 @@
   },
   "defaultDownpipesPerGutterLm": 0.08,
   "defaultMaterial": "reroof_concrete_tile",
-  "reroffBundles": {
-    "comment": "Re-roof per-m2 items already include underlay, battens, fixings, verge and labour. These components are itemised for transparency using their upgrade rates only when explicitly chosen.",
-    "includesByDefault": [
-      "underlay",
-      "battens",
-      "fixings",
-      "dry_verge",
-      "disposal",
-      "labour"
-    ]
-  },
   "rounding": {
-    "rule": "Round each line subtotal and the total UP to the nearest 10 dollars (commercial conservative rounding). Quantities rounded up to the nearest 0.5 m2 / lm.",
+    "rule": "Round each line subtotal and the total UP to the nearest 10 pounds (commercial conservative rounding). Quantities rounded up to the nearest 0.5 m2 / lm.",
     "perLine": 10,
     "quantityStepArea": 0.5,
     "quantityStepLinear": 0.5
@@ -66,20 +55,71 @@
       "assumptionNote": "Strip and disposal are indicative allowances. Site conditions, hazardous materials, difficult access, structural work or unusual disposal requirements are not included."
     },
     "sizeBands": {
-      "small": { "label": "Small", "minM2": 50, "maxM2": 100 },
-      "medium": { "label": "Medium", "minM2": 100, "maxM2": 200 },
-      "large": { "label": "Large", "minM2": 200, "maxM2": 300 }
+      "small": {
+        "label": "Small",
+        "minM2": 50,
+        "maxM2": 100
+      },
+      "medium": {
+        "label": "Medium",
+        "minM2": 100,
+        "maxM2": 200
+      },
+      "large": {
+        "label": "Large",
+        "minM2": 200,
+        "maxM2": 300
+      }
     },
     "pitchBands": {
-      "flat": { "label": "Flat / Low", "minDegrees": 0, "maxDegrees": 15, "representativeDegrees": 12 },
-      "medium": { "label": "Medium", "minDegrees": 16, "maxDegrees": 35, "representativeDegrees": 27 },
-      "steep": { "label": "Steep", "minDegrees": 36, "maxDegrees": 85, "representativeDegrees": 45 }
+      "flat": {
+        "label": "Flat / Low",
+        "minDegrees": 0,
+        "maxDegrees": 15,
+        "representativeDegrees": 12
+      },
+      "medium": {
+        "label": "Medium",
+        "minDegrees": 16,
+        "maxDegrees": 35,
+        "representativeDegrees": 27
+      },
+      "steep": {
+        "label": "Steep",
+        "minDegrees": 36,
+        "maxDegrees": 85,
+        "representativeDegrees": 45
+      }
     }
   },
-  "disclaimer": "Indicative estimate only - not a formal quote. Subject to free site inspection, timber condition, and final material selection.",
+  "disclaimer": "Indicative estimate only - not a formal quote. Subject to free site inspection, confirmed measurements, access, timber condition and final material selection.",
   "standardAssumptions": [
     "Waste allowance of 7.5% included on the main roof covering quantity",
     "No scaffolding beyond standard single-storey access",
     "Existing roof structure assumed sound - timber repairs priced separately if needed"
-  ]
+  ],
+  "materialPitchRules": {
+    "reroof_concrete_tile": {
+      "minPitchDegrees": 17.5,
+      "note": "Demo minimum pitch for this configured concrete tile system."
+    },
+    "reroof_clay_tile": {
+      "minPitchDegrees": 22.5,
+      "note": "Demo minimum pitch for this configured clay tile system."
+    },
+    "reroof_slate": {
+      "minPitchDegrees": 25,
+      "note": "Demo minimum pitch for this configured natural slate system."
+    }
+  },
+  "reroofBundles": {
+    "comment": "Base roof-system rates include underlay, battens, fixings, dry verge and labour. Existing-roof strip and disposal are separate configurable re-roof allowances.",
+    "includesByDefault": [
+      "underlay",
+      "battens",
+      "fixings",
+      "dry_verge",
+      "labour"
+    ]
+  }
 }

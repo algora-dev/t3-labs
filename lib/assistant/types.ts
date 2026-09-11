@@ -10,7 +10,7 @@ export type AssistantAction =
   | { type: 'OPEN_INQUIRY'; label: string }
   | { type: 'ADD_ESTIMATE_OPTION'; label: string; followUpMessage: string }
   | { type: 'QUICK_REPLY'; label: string; message: string; description?: string; emphasis?: 'primary' | 'secondary' }
-  | { type: 'DOWNLOAD_OUTPUT'; label: string; estimateId: string }
+  | { type: 'DOWNLOAD_OUTPUT'; label: string; estimateId: string; estimateIds?: string[] }
   | { type: 'START_GUIDED_ESTIMATE'; label: string }
   | { type: 'ADJUST_ESTIMATE'; label: string };
 

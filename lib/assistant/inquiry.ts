@@ -50,10 +50,9 @@ export interface InquiryAttachment {
   name: string;
   contentType: string;
   sizeBytes: number;
-  dataBase64: string;
 }
 
-/** Attachments are optional (V4 brief section 12) and stay inside this session's enquiry record. */
+/** Attachments are optional. Demo mode keeps metadata only; live deployments should store files in object storage and retain references. */
 function validateAttachments(value: unknown): string | null {
   if (value == null) return null;
   if (!Array.isArray(value)) return 'Invalid attachments.';
@@ -64,11 +63,9 @@ function validateAttachments(value: unknown): string | null {
     const name = str(a.name);
     const contentType = str(a.contentType);
     const sizeBytes = typeof a.sizeBytes === 'number' ? a.sizeBytes : NaN;
-    const dataBase64 = typeof a.dataBase64 === 'string' ? a.dataBase64 : '';
     if (!name || name.length > 200) return 'One of the attachments has an invalid file name.';
     if (!contentType || !ALLOWED_ATTACHMENT_TYPES.includes(contentType)) return `"${name}" is not a supported file type (images, PDF or text).`;
     if (!Number.isFinite(sizeBytes) || sizeBytes <= 0 || sizeBytes > MAX_ATTACHMENT_BYTES) return `"${name}" is too large - please keep files under 2.5 MB.`;
-    if (!dataBase64) return `"${name}" could not be read.`;
   }
   return null;
 }
@@ -81,9 +78,9 @@ function normaliseAttachments(value: unknown): InquiryAttachment[] {
     const a = raw as Record<string, unknown>;
     const name = str(a.name);
     const contentType = str(a.contentType);
-    const dataBase64 = typeof a.dataBase64 === 'string' ? a.dataBase64 : '';
-    if (!name || !contentType || !dataBase64) continue;
-    out.push({ name: name.slice(0, 200), contentType, sizeBytes: typeof a.sizeBytes === 'number' ? a.sizeBytes : dataBase64.length, dataBase64 });
+    const sizeBytes = typeof a.sizeBytes === 'number' ? a.sizeBytes : 0;
+    if (!name || !contentType || sizeBytes <= 0) continue;
+    out.push({ name: name.slice(0, 200), contentType, sizeBytes });
   }
   return out;
 }
@@ -153,6 +150,7 @@ export function buildInquiryPayload(session: AssistantSession, sub: InquirySubmi
         mode: session.draft.mode,
         area: session.draft.area,
         pitch: session.draft.pitch,
+        roofShape: session.draft.roofShape,
         materialId: session.draft.materialId,
         components: session.draft.components.filter((c) => c.selected),
       }
@@ -166,8 +164,7 @@ export function buildInquiryPayload(session: AssistantSession, sub: InquirySubmi
     project,
     draft: draftPayload,
     estimate: estimatePayload,
-    attachments: attachments.map((a) => ({ name: a.name, contentType: a.contentType, sizeBytes: a.sizeBytes })),
-    attachmentFiles: attachments,
+    attachments,
     pricingAssumptions: estimate ? estimate.assumptions.slice(0, 8) : [],
     customerNote: str(sub.question),
     conversationContext: session.messages.slice(-12),

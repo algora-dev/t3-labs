@@ -138,6 +138,13 @@ export function createEstimate(input: EstimateInput): Estimate {
 
   const materialItem = resolveMaterial(input.material);
   const material = materialItem.id;
+  const pitchRule = rules.materialPitchRules?.[materialItem.id];
+  if (pitchRule && pitch < pitchRule.minPitchDegrees) {
+    throw new Error(`${materialItem.name} is not configured for pitches below ${pitchRule.minPitchDegrees} degrees.`);
+  }
+  if (pitchRule?.maxPitchDegrees != null && pitch > pitchRule.maxPitchDegrees) {
+    throw new Error(`${materialItem.name} is not configured for pitches above ${pitchRule.maxPitchDegrees} degrees.`);
+  }
   materialItem.excludes.forEach((e) => exclusions.add(e));
 
   let actualArea: number;
@@ -301,6 +308,7 @@ export interface EstimateDraftArea {
   exactM2?: number;
   band?: SizeBandId;
   source: 'user_exact' | 'configured_band';
+  areaType: AreaType;
 }
 
 export interface EstimateDraftPitch {
@@ -322,6 +330,7 @@ export interface EstimateDraft {
   mode: 'unit_rate' | 'quick_ballpark' | 'guided';
   area: EstimateDraftArea;
   pitch: EstimateDraftPitch;
+  roofShape?: RoofShape;
   materialId?: string;
   components: EstimateDraftComponent[];
 }
@@ -357,7 +366,16 @@ export function priceDraft(draft: EstimateDraft): PricedDraft {
   const selections: EstimateComponentSelection[] = selected.map((c) => ({ catalogItemId: c.componentId, quantity: c.quantity ?? null }));
 
   const build = (roofArea: number): Estimate =>
-    createEstimate({ roofArea, areaType: 'actual_roof_area', roofShape: 'unknown', pitchDegrees, material: draft.materialId!, componentScope, components: selections, projectType: draft.projectType });
+    createEstimate({
+      roofArea,
+      areaType: draft.area.areaType ?? 'actual_roof_area',
+      roofShape: draft.roofShape ?? 'unknown',
+      pitchDegrees,
+      material: draft.materialId!,
+      componentScope,
+      components: selections,
+      projectType: draft.projectType,
+    });
 
   const indicative = draft.area.source === 'configured_band' || anyHeuristic;
   if (areas.length === 1) return { mode: 'single', estimate: build(areas[0]), indicative };

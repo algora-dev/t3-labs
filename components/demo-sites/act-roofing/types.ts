@@ -60,6 +60,7 @@ export type ActRoofingSiteConfig = {
     title: string;
     summary: string;
     linkLabel?: string;
+    linkHref?: string;
     image?: SiteImage;
   }>;
   estimateTool: {

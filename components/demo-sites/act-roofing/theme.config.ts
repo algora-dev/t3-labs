@@ -24,7 +24,7 @@ const config: ThemeConfig = {
     headerTitle: 'Roof Takeoff Calculator',
     heroTitle: 'Know roughly what your new roof could cost',
     heroSubtitle: 'Answer a few quick questions about your property and get an estimated price range instantly.',
-    footerText: 'Apex Roofing 2026 — demonstration site',
+    footerText: 'Apex Roofing 2026 - demonstration site',
     poweredBy: null,
   },
 };

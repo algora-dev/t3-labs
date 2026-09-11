@@ -5,7 +5,7 @@ const asset = (name: string) => `/assets/demo-act-roofing/${name}`;
 export const actRoofingSite = {
   companyName: "Apex Roofing",
   demoDisclaimer:
-    "Demonstration website — Apex Roofing is a fictional business created to showcase website and tool design.",
+    "Demonstration website - Apex Roofing is a fictional business created to showcase website and tool design.",
   seo: {
     title: "Apex Roofing | Roofing Done Properly",
     description:
@@ -57,7 +57,7 @@ export const actRoofingSite = {
   featuredReview: {
     summary:
       "Replaced our full slate roof in nine days. Neat, tidy and exactly the price they quoted. Easily the best trades experience we've had.",
-    source: "Sarah T. — Leeds",
+    source: "Sarah T. - Leeds",
     rating: 5,
   },
   hero: {
@@ -100,36 +100,42 @@ export const actRoofingSite = {
       summary:
         "Complete roof replacements built to last, using quality materials and experienced workmanship.",
       linkLabel: "Find out more",
+      linkHref: "/demo/roofing-site/services/roof-replacement",
     },
     {
       title: "Roof Repairs",
       summary:
-        "Fast, effective repairs for leaks, slipped tiles and storm damage — sorted before they get worse.",
+        "Fast, effective repairs for leaks, slipped tiles and storm damage - sorted before they get worse.",
       linkLabel: "Find out more",
+      linkHref: "/demo/roofing-site/services/roof-repairs",
     },
     {
       title: "Flat Roofing",
       summary:
         "Modern flat roofing systems installed and maintained for lasting weather protection.",
       linkLabel: "Find out more",
+      linkHref: "/demo/roofing-site/services/flat-roofing",
     },
     {
       title: "Slate & Tiling",
       summary:
         "Traditional slate and tile work, finished to a standard you can be proud of.",
       linkLabel: "Find out more",
+      linkHref: "/demo/roofing-site/information/roofing-materials",
     },
     {
       title: "Leadwork & Chimneys",
       summary:
         "Careful leadwork and chimney repairs where good weatherproofing matters most.",
       linkLabel: "Find out more",
+      linkHref: "/demo/roofing-site/services/roof-repairs",
     },
     {
       title: "Inspections & Maintenance",
       summary:
         "Regular roof inspections and maintenance that keep small issues from becoming big bills.",
       linkLabel: "Find out more",
+      linkHref: "/demo/roofing-site/information/roofing-faq",
     },
   ],
   estimateTool: {
@@ -146,12 +152,12 @@ export const actRoofingSite = {
     ctaLabel: "Calculate My Roof Price",
     ctaHref: "/demo/roofing-site/takeoff",
     previewSteps: [
-      { label: "Add your roof", hint: "Enter the roof area and known components — ridges, hips, valleys, barges" },
+      { label: "Add your roof", hint: "Enter the roof area and known components - ridges, hips, valleys, barges" },
       { label: "Choose products", hint: "Apply the materials you want to each area and component" },
       { label: "Get your estimate", hint: "See calculated areas, lengths, materials and pricing instantly" },
       { label: "Send or print", hint: "Print the estimate or send it to our team for a full quote" },
     ],
-    previewNote: "Guided entry — no technical knowledge needed. Print your estimate or send it to the team for a full quote.",
+    previewNote: "Guided entry - no technical knowledge needed. Print your estimate or send it to the team for a full quote.",
   },
   projectsIntro: {
     eyebrow: "Our work",
@@ -162,7 +168,7 @@ export const actRoofingSite = {
   projects: [
     {
       src: asset("apex-aerial.webp"),
-      label: "Complete slate roof replacement — Leeds",
+      label: "Complete slate roof replacement - Leeds",
       alt: "Aerial view of a completed dark slate roof on a UK residential property",
     },
   ],
@@ -188,19 +194,19 @@ export const actRoofingSite = {
       {
         summary:
           "From the first call to the final clean-up, the whole team were brilliant. The new slate roof looks fantastic and they left the place spotless.",
-        source: "Sarah T. — Leeds",
+        source: "Sarah T. - Leeds",
         rating: 5,
       },
       {
         summary:
           "Had a leak two days before Christmas. They came out, found the problem and fixed it the same morning. Can't ask for more than that.",
-        source: "James H. — Harrogate",
+        source: "James H. - Harrogate",
         rating: 5,
       },
       {
         summary:
           "Really clear from start to finish. The estimate tool gave us a sensible ballpark, the final price matched, and the job ran exactly to plan.",
-        source: "Priya M. — Wakefield",
+        source: "Priya M. - Wakefield",
         rating: 5,
       },
     ],
@@ -273,7 +279,7 @@ export const actRoofingSite = {
     description:
       "Call, email or use the demonstration form to tell us about the roofing work you have in mind.",
     formStatus:
-      "Thanks — this demonstration has validated your details successfully. Nothing has been sent or stored.",
+      "Thanks - this demonstration has validated your details successfully. Nothing has been sent or stored.",
     generalFormTitle: "Send a demonstration enquiry",
   },
   quoteRequest: {
@@ -309,7 +315,7 @@ export const actRoofingSite = {
   quoteModal: {
     toolTitle: "Get an Instant Roof Estimate",
     toolDescription:
-      "Answer a few quick questions about your property and get an estimated price range instantly — no obligation.",
+      "Answer a few quick questions about your property and get an estimated price range instantly - no obligation.",
     formTitle: "Send a Quick Enquiry",
     formDescription:
       "Send your project details to our team and we'll come back to you, usually within a couple of days.",
