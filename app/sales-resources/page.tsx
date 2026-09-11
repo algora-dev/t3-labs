@@ -1574,6 +1574,56 @@ export default function SalesResourcesPage() {
             </p>
           </div>
         </section>
+
+        <section className="pb-14 sm:pb-20">
+          <CollapsibleTool
+            t={t}
+            title="More opportunities"
+            subtitle="Not every construction prospect needs a custom build. QuoteCore+ gives you a ready-made product to sell to contractors."
+            defaultOpen={false}
+          >
+            <a
+              href="/careers"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ background: t.surface, borderColor: t.border }}
+              className="hover-card block rounded-2xl border p-5 sm:p-6"
+            >
+              <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>
+                    QuoteCore+
+                  </p>
+                  <h3 className="mt-2 text-xl font-semibold">A ready-made measuring, estimating and quoting system for contractors.</h3>
+                  <p className="mt-3 max-w-4xl text-sm leading-6" style={{ color: t.muted }}>
+                    QuoteCore+ replaces disconnected spreadsheets, printed-plan measuring and repeated admin with digital takeoff, reusable pricing logic and one connected quote workflow. The strongest sales path is Done-For-You setup for contractors who want a better system but do not want the hassle of configuring it themselves.
+                  </p>
+                  <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
+                    You can also refer self-serve subscribers, earn recurring commission under the current rep terms, and use genuinely free QuoteCore+ tools as a useful first step when a prospect is not ready to buy.
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {["Done-For-You setup", "Self-serve referrals", "Free tools", "Rep resources"].map((item) => (
+                      <span
+                        key={item}
+                        style={{ background: t.surfaceAlt, borderColor: t.border, color: t.muted }}
+                        className="rounded-full border px-3 py-1 text-xs font-semibold"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <span
+                  style={{ background: t.accent, color: t.accentText }}
+                  className="solid inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold"
+                >
+                  Open QuoteCore+ sales guide →
+                </span>
+              </div>
+            </a>
+          </CollapsibleTool>
+        </section>
       </div>
     </main>
   );
