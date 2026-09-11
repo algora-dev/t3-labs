@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { getAssistantConfig } from './data';
-import type { Estimate, EstimateComponentSelection, EstimateScope } from '../pricing/estimate-engine';
+import type { Estimate, EstimateComponentSelection, EstimateDraft, EstimateScope } from '../pricing/estimate-engine';
 
 /**
  * Per-session assistant state.
@@ -66,6 +66,8 @@ export interface AssistantSession {
   estimates: EstimateStore;
   outputs: SessionOutputRef[];
   inquiries: InquiryRecord[];
+  draft: EstimateDraft | null;
+  currentPagePath: string | null;
   turnCount: number;
   messageTimestamps: number[];
 }
@@ -122,6 +124,8 @@ function newSession(sessionId: string): AssistantSession {
     estimates: {},
     outputs: [],
     inquiries: [],
+    draft: null,
+    currentPagePath: null,
     turnCount: 0,
     messageTimestamps: [],
   };
@@ -135,6 +139,8 @@ function normaliseSession(session: AssistantSession): AssistantSession {
   session.estimates ??= {};
   session.outputs ??= [];
   session.inquiries ??= [];
+  session.draft ??= null;
+  session.currentPagePath ??= null;
   session.messageTimestamps ??= [];
   return session;
 }
@@ -214,6 +220,38 @@ export async function getOrCreateSession(): Promise<AssistantSession> {
   touchSession(session);
   await saveSession(session);
 
+  cookieStore.set(SESSION_COOKIE, session.sessionId, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    maxAge: config.sessionTtlMinutes * 60,
+  });
+  return session;
+}
+
+/**
+ * Start New Conversation (V4 brief section 14): clears conversation history,
+ * facts, estimates, outputs, enquiries, draft and page context, and issues a
+ * brand-new session id so no hidden context survives the reset.
+ */
+export async function resetSession(): Promise<AssistantSession> {
+  const config = getAssistantConfig();
+  const old = await peekSession();
+  if (old) {
+    // Drop the previous server-side state entirely (best effort for Redis).
+    try {
+      const cfg = redisConfig();
+      if (cfg) await redisCommand(['DEL', `${REDIS_PREFIX}${old.sessionId}`]);
+      else sessions.delete(old.sessionId);
+    } catch {
+      // Expiry will clean up if the delete fails.
+    }
+  }
+  const session = newSession(`s_${crypto.randomUUID()}`);
+  touchSession(session);
+  await saveSession(session);
+  const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE, session.sessionId, {
     httpOnly: true,
     sameSite: 'lax',

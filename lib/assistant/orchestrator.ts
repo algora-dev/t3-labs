@@ -5,12 +5,19 @@ import { recentMessages } from './session';
 import type { AssistantAction, AssistantCard, AssistantTurn } from './types';
 import {
   createEstimate,
+  priceDraft,
   type AreaType,
   type EstimateComponentSelection,
+  type EstimateDraft,
   type EstimateScope,
+  type PitchBandId,
+  type PricedDraft,
+  type ProjectType,
   type RoofShape,
+  type SizeBandId,
 } from '../pricing/estimate-engine';
 import { findItem, getCatalog, getItemById } from '../pricing/catalog';
+import { getV4Rules } from '../pricing/rules';
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant' | 'tool';
@@ -32,6 +39,10 @@ interface TurnState {
 const AREA_TYPES: AreaType[] = ['actual_roof_area', 'plan_area', 'unknown'];
 const ROOF_SHAPES: RoofShape[] = ['gable', 'hip', 'valley_complex', 'flat', 'unknown'];
 const ESTIMATE_SCOPES: EstimateScope[] = ['covering_only', 'specified_components', 'estimated_components'];
+const PROJECT_TYPES: ProjectType[] = ['new_roof', 'reroof'];
+const SIZE_BANDS = Object.keys(getV4Rules().sizeBands) as SizeBandId[];
+const PITCH_BANDS = Object.keys(getV4Rules().pitchBands) as PitchBandId[];
+const ALLOWANCE_LINE_IDS = new Set(['reroof_strip_allowance', 'reroof_disposal_allowance']);
 
 function str(v: unknown): string | null {
   return typeof v === 'string' && v.trim() ? v.trim() : null;
@@ -65,7 +76,10 @@ function toolDefinitions() {
         parameters: {
           type: 'object',
           properties: {
-            roofArea: { type: 'number', description: 'Roof area in m2.' },
+            roofArea: { type: 'number', description: 'Roof area in m2. Omit when the customer only gave a size band.' },
+            areaBand: { type: 'string', enum: SIZE_BANDS, description: 'Size band when the customer chose Small/Medium/Large instead of an exact area. Produces a price range.' },
+            pitchBand: { type: 'string', enum: PITCH_BANDS, description: 'Pitch band when the customer chose Flat-Low/Medium/Steep instead of exact degrees.' },
+            projectType: { type: 'string', enum: PROJECT_TYPES, description: 'new_roof or reroof. Re-roofs add the configured strip and disposal allowances.' },
             areaType: { type: 'string', enum: AREA_TYPES },
             roofShape: { type: 'string', enum: ROOF_SHAPES },
             pitchDegrees: { type: 'number' },
@@ -109,6 +123,14 @@ function toolDefinitions() {
           },
           required: ['question'],
         },
+      },
+    },
+    {
+      type: 'function',
+      function: {
+        name: 'start_estimator',
+        description: 'Open the interactive guided estimator (step-by-step cards: project type, size, pitch, covering, components). Use for guided estimate requests.',
+        parameters: { type: 'object', properties: {}, required: [] },
       },
     },
     {
@@ -179,6 +201,13 @@ function mergeComponents(existing: EstimateComponentSelection[], incoming: Estim
 }
 
 function addClarificationActions(kind: string | null, turn: TurnState) {
+  if (kind === 'pricing_entry') {
+    turn.actions.push(
+      { type: 'QUICK_REPLY', label: 'Quick price', description: 'Show material / installed rates', message: 'Show me the approved material rates per square metre.', emphasis: 'primary' },
+      { type: 'QUICK_REPLY', label: 'Quick ballpark', description: 'A fast whole-job estimate', message: 'Give me a quick ballpark for the whole job.' },
+      { type: 'QUICK_REPLY', label: 'Guided estimate', description: 'Step-by-step with size, pitch and components', message: "I'd like a more detailed guided estimate." }
+    );
+  }
   if (kind === 'material') {
     turn.actions.push(
       { type: 'QUICK_REPLY', label: 'Concrete tile', description: 'Good value and durable', message: 'Use concrete tile for the estimate.', emphasis: 'primary' },
@@ -237,7 +266,66 @@ const handlers: Record<string, ToolHandler> = {
   },
 
   create_estimate(args, session, turn) {
+    const projectType = PROJECT_TYPES.includes(args.projectType as ProjectType) ? (args.projectType as ProjectType) : null;
     const roofArea = num(args.roofArea) ?? session.facts.roofArea;
+    const areaBand = SIZE_BANDS.includes(args.areaBand as SizeBandId) ? (args.areaBand as SizeBandId) : null;
+    const pitchBand = PITCH_BANDS.includes(args.pitchBand as PitchBandId) ? (args.pitchBand as PitchBandId) : null;
+
+    // Size-band path (V4): price a deterministic RANGE at the band min and max.
+    if (!roofArea && areaBand) {
+      const materialQuery = str(args.material) ?? session.facts.material;
+      const materialItem = materialQuery ? findItem(materialQuery) : null;
+      if (!materialItem || materialItem.category !== 'reroofing') {
+        return { error: 'MISSING_MATERIAL', instruction: 'Ask which roofing material they want (ask_clarification kind material) before pricing a size band.' };
+      }
+      if (!projectType) {
+        return { error: 'MISSING_PROJECT_TYPE', instruction: 'Ask whether this is a new roof or a re-roof before pricing (a re-roof adds removal allowances).' };
+      }
+      const requestedScope = ESTIMATE_SCOPES.includes(args.componentScope as EstimateScope)
+        ? (args.componentScope as EstimateScope)
+        : session.facts.estimateScope;
+      const incoming = parseComponents(args.components);
+      const draftComponents = incoming.map((c) => ({
+        componentId: c.catalogItemId,
+        selected: true,
+        quantity: c.quantity ?? null,
+        quantitySource: (c.quantity ? 'user' : 'heuristic') as 'user' | 'heuristic',
+      }));
+      if (requestedScope && requestedScope !== 'covering_only' && draftComponents.length === 0) {
+        return { error: 'MISSING_COMPONENTS', instruction: 'Ask which components to include, or price covering only.' };
+      }
+      if (requestedScope && requestedScope !== 'covering_only' && requestedScope !== 'estimated_components') {
+        const missingQty = draftComponents.some((c) => c.quantity == null);
+        if (missingQty) {
+          return { error: 'MISSING_COMPONENT_QUANTITY', instruction: 'Ask for approximate lengths, or get explicit permission to estimate them.' };
+        }
+      }
+      const draft: EstimateDraft = {
+        projectType,
+        mode: 'guided',
+        area: { band: areaBand, source: 'configured_band' },
+        pitch: pitchBand ? { band: pitchBand, source: 'user_band' } : session.facts.pitchDegrees != null ? { degrees: session.facts.pitchDegrees, source: 'user_exact' } : { source: 'user_band' },
+        materialId: materialItem.id,
+        components: requestedScope === 'covering_only' ? [] : draftComponents,
+      };
+      const result: PricedDraft = priceDraft(draft);
+      session.draft = draft;
+      session.facts.material = materialItem.id;
+      session.facts.projectType = projectType;
+      if (requestedScope) session.facts.estimateScope = requestedScope;
+      const estimates = result.mode === 'single' ? [result.estimate] : [result.low, result.high];
+      for (const estimate of estimates) session.estimates[estimate.id] = estimate;
+      const latest = estimates[estimates.length - 1];
+      session.estimateFlow = { active: false, clarificationCount: session.estimateFlow.clarificationCount, latestEstimateId: latest.id };
+      turn.cards.push({ type: 'estimate_result', result });
+      turn.latestEstimateId = latest.id;
+      turn.factsUpdated = true;
+      return {
+        result,
+        message: 'Summarise the indicative range or total and the scope in one or two short sentences. The UI shows the full breakdown. Never restate different numbers than the tool result.',
+      };
+    }
+
     if (roofArea == null || roofArea <= 0 || roofArea > 100000) {
       return { error: 'MISSING_ROOF_AREA', instruction: 'Ask for the approximate roof area before estimating.' };
     }
@@ -326,32 +414,52 @@ const handlers: Record<string, ToolHandler> = {
       ? args.extras.filter((e): e is string => typeof e === 'string' && !!findItem(e))
       : [];
 
+    const effectivePitch = num(args.pitchDegrees)
+      ?? session.facts.pitchDegrees
+      ?? (pitchBand != null ? getV4Rules().pitchBands[pitchBand].representativeDegrees : undefined);
+
     const estimate = createEstimate({
       roofArea,
       areaType,
       roofShape,
-      pitchDegrees: num(args.pitchDegrees) ?? session.facts.pitchDegrees,
+      pitchDegrees: effectivePitch,
       material,
       componentScope: requestedScope,
       components,
       extras,
+      projectType,
     });
 
     const f = session.facts;
     f.roofArea = roofArea;
     f.areaType = areaType;
     f.roofShape = roofShape;
-    const pd = num(args.pitchDegrees);
+    if (projectType) f.projectType = projectType;
+    const pd = num(args.pitchDegrees) ?? effectivePitch;
     if (pd != null) f.pitchDegrees = pd;
     f.material = material;
     f.estimateScope = requestedScope;
     f.components = estimate.lineItems
-      .filter((line) => line.catalogItemId !== estimate.project.material)
+      .filter((line) => line.catalogItemId !== estimate.project.material && !ALLOWANCE_LINE_IDS.has(line.catalogItemId))
       .map((line) => ({
         catalogItemId: line.catalogItemId,
         quantity: line.quantitySource === 'user' ? line.quantity : null,
       }));
     if (extras.length) f.extras = [...new Set([...f.extras, ...extras])];
+
+    session.draft = {
+      projectType: projectType ?? (f.projectType === 'new_roof' ? 'new_roof' : 'reroof'),
+      mode: 'quick_ballpark',
+      area: { exactM2: roofArea, source: 'user_exact' },
+      pitch: effectivePitch != null ? { degrees: effectivePitch, source: 'user_exact' } : { source: 'user_band' },
+      materialId: material,
+      components: f.components.map((c) => ({
+        componentId: c.catalogItemId,
+        selected: true,
+        quantity: c.quantity ?? null,
+        quantitySource: (c.quantity ? 'user' : 'heuristic') as 'user' | 'heuristic',
+      })),
+    };
 
     session.estimateFlow = { active: false, clarificationCount: session.estimateFlow.clarificationCount, latestEstimateId: estimate.id };
     session.estimates[estimate.id] = estimate;
@@ -391,6 +499,11 @@ const handlers: Record<string, ToolHandler> = {
     if (!entry) return { error: `Unknown topicId "${topicId}". Use only approved ids.` };
     turn.actions.push({ type: 'NAVIGATE_INTERNAL', label: entry.external ? `Open ${entry.title}` : `View ${entry.title}`, url: entry.path, external: entry.external === true });
     return { ok: true, title: entry.title, path: entry.path };
+  },
+
+  start_estimator(_args, _session, turn) {
+    turn.actions.push({ type: 'START_GUIDED_ESTIMATE', label: 'Start guided estimate' });
+    return { ok: true, instruction: 'Tell the customer the guided estimator is open and takes about 60 seconds. Do not list the steps yourself - the UI handles them.' };
   },
 
   open_inquiry(_args, _session, turn) {
@@ -526,6 +639,7 @@ export async function runAssistantTurn(session: AssistantSession, userMessage: s
     const estimate = session.estimates[turnState.latestEstimateId];
     turnState.actions.push({ type: 'DOWNLOAD_OUTPUT', label: 'Download estimate PDF', estimateId: turnState.latestEstimateId });
     turnState.actions.push({ type: 'OPEN_INQUIRY', label: 'Request a formal quote' });
+    turnState.actions.push({ type: 'ADJUST_ESTIMATE', label: 'Adjust estimate' });
     if (estimate && !estimate.lineItems.some((li) => li.catalogItemId === 'gutter_replacement')) {
       turnState.actions.push({
         type: 'ADD_ESTIMATE_OPTION',

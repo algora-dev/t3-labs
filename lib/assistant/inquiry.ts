@@ -6,6 +6,7 @@ export interface InquirySubmission {
   email?: unknown;
   phone?: unknown;
   question?: unknown;
+  attachments?: unknown;
   project?: {
     projectType?: unknown;
     roofArea?: unknown;
@@ -36,7 +37,55 @@ export function validateInquirySubmission(sub: InquirySubmission): { ok: true } 
   if (!email && !phone) return { ok: false, error: 'Please provide an email address or phone number so the team can respond.' };
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return { ok: false, error: 'That email address does not look right - please check it.' };
   if (phone && phone.replace(/[^\d]/g, '').length < 7) return { ok: false, error: 'That phone number does not look right - please check it.' };
+  const attachmentsError = validateAttachments(sub.attachments);
+  if (attachmentsError) return { ok: false, error: attachmentsError };
   return { ok: true };
+}
+
+const MAX_ATTACHMENTS = 5;
+const MAX_ATTACHMENT_BYTES = 2_500_000;
+const ALLOWED_ATTACHMENT_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf', 'text/plain'];
+
+export interface InquiryAttachment {
+  name: string;
+  contentType: string;
+  sizeBytes: number;
+  dataBase64: string;
+}
+
+/** Attachments are optional (V4 brief section 12) and stay inside this session's enquiry record. */
+function validateAttachments(value: unknown): string | null {
+  if (value == null) return null;
+  if (!Array.isArray(value)) return 'Invalid attachments.';
+  if (value.length > MAX_ATTACHMENTS) return `Please attach no more than ${MAX_ATTACHMENTS} files.`;
+  for (const raw of value) {
+    if (!raw || typeof raw !== 'object') return 'Invalid attachment.';
+    const a = raw as Record<string, unknown>;
+    const name = str(a.name);
+    const contentType = str(a.contentType);
+    const sizeBytes = typeof a.sizeBytes === 'number' ? a.sizeBytes : NaN;
+    const dataBase64 = typeof a.dataBase64 === 'string' ? a.dataBase64 : '';
+    if (!name || name.length > 200) return 'One of the attachments has an invalid file name.';
+    if (!contentType || !ALLOWED_ATTACHMENT_TYPES.includes(contentType)) return `"${name}" is not a supported file type (images, PDF or text).`;
+    if (!Number.isFinite(sizeBytes) || sizeBytes <= 0 || sizeBytes > MAX_ATTACHMENT_BYTES) return `"${name}" is too large - please keep files under 2.5 MB.`;
+    if (!dataBase64) return `"${name}" could not be read.`;
+  }
+  return null;
+}
+
+function normaliseAttachments(value: unknown): InquiryAttachment[] {
+  if (!Array.isArray(value)) return [];
+  const out: InquiryAttachment[] = [];
+  for (const raw of value.slice(0, MAX_ATTACHMENTS)) {
+    if (!raw || typeof raw !== 'object') continue;
+    const a = raw as Record<string, unknown>;
+    const name = str(a.name);
+    const contentType = str(a.contentType);
+    const dataBase64 = typeof a.dataBase64 === 'string' ? a.dataBase64 : '';
+    if (!name || !contentType || !dataBase64) continue;
+    out.push({ name: name.slice(0, 200), contentType, sizeBytes: typeof a.sizeBytes === 'number' ? a.sizeBytes : dataBase64.length, dataBase64 });
+  }
+  return out;
 }
 
 function buildProjectSummary(project: Record<string, unknown>, estimateTotal: string | null): string {
@@ -80,6 +129,8 @@ export function buildInquiryPayload(session: AssistantSession, sub: InquirySubmi
     extras: extrasRaw,
   };
 
+  const attachments = normaliseAttachments(sub.attachments);
+
   const estimatePayload = estimate
     ? {
         id: estimate.id,
@@ -96,13 +147,28 @@ export function buildInquiryPayload(session: AssistantSession, sub: InquirySubmi
     : null;
   const estimateTotal = estimate ? `${estimate.symbol}${estimate.total.toLocaleString()} ${estimate.currency}` : null;
 
+  const draftPayload = session.draft
+    ? {
+        projectType: session.draft.projectType,
+        mode: session.draft.mode,
+        area: session.draft.area,
+        pitch: session.draft.pitch,
+        materialId: session.draft.materialId,
+        components: session.draft.components.filter((c) => c.selected),
+      }
+    : null;
+
   return {
     business: getBusiness().business.name,
     channel: 'smart-assistant-demo',
     contact: { name, email: email ?? null, phone: phone ?? null },
     summary: buildProjectSummary(project, estimateTotal),
     project,
+    draft: draftPayload,
     estimate: estimatePayload,
+    attachments: attachments.map((a) => ({ name: a.name, contentType: a.contentType, sizeBytes: a.sizeBytes })),
+    attachmentFiles: attachments,
+    pricingAssumptions: estimate ? estimate.assumptions.slice(0, 8) : [],
     customerNote: str(sub.question),
     conversationContext: session.messages.slice(-12),
     submittedAt: new Date().toISOString(),

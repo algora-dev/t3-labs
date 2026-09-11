@@ -18,8 +18,18 @@ interface SessionPrefill {
   };
   lead: { name: string | null; email: string | null; phone: string | null };
   latestEstimate: Estimate | null;
+  draftSummary: string[];
   recentUserMessages: string[];
 }
+
+interface PendingAttachment {
+  name: string;
+  contentType: string;
+  sizeBytes: number;
+  dataBase64: string;
+}
+
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf', 'text/plain'];
 
 type Phase = 'loading' | 'review' | 'edit' | 'contact' | 'submitting' | 'success';
 
@@ -61,6 +71,8 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
+  const [draftSummary, setDraftSummary] = useState<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -85,6 +97,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
         setName(data.lead.name ?? '');
         setEmail(data.lead.email ?? '');
         setPhone(data.lead.phone ?? '');
+        setDraftSummary(Array.isArray(data.draftSummary) ? data.draftSummary : []);
         setPhase('review');
       })
       .catch(() => {
@@ -97,6 +110,30 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
       cancelled = true;
     };
   }, []);
+
+  const onFilesChosen = async (fileList: FileList | null) => {
+    setError(null);
+    if (!fileList) return;
+    const next: PendingAttachment[] = [];
+    for (const file of Array.from(fileList).slice(0, 5)) {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        setError(`"${file.name}" is not a supported file type (images, PDF or text).`);
+        continue;
+      }
+      if (file.size > 2_500_000) {
+        setError(`"${file.name}" is too large - please keep files under 2.5 MB.`);
+        continue;
+      }
+      const dataBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result ?? '').split(',')[1] ?? '');
+        reader.onerror = () => reject(new Error('read failed'));
+        reader.readAsDataURL(file);
+      }).catch(() => '');
+      if (dataBase64) next.push({ name: file.name, contentType: file.type, sizeBytes: file.size, dataBase64 });
+    }
+    setAttachments((current) => [...current, ...next].slice(0, 5));
+  };
 
   const submit = async () => {
     setError(null);
@@ -122,6 +159,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
             components: prefill?.facts.components ?? [],
             extras: extras.split(',').map((e) => e.trim()).filter(Boolean),
           },
+          attachments,
         }),
       });
       const data = (await res.json()) as { ok?: boolean; error?: string };
@@ -187,6 +225,15 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
             {location && <Row label="Location" value={location} />}
           </div>
 
+          {draftSummary.length > 0 && (
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+              <p className="text-[11px] font-bold text-slate-700">Guided estimate draft</p>
+              <ul className="mt-1.5 space-y-1">
+                {draftSummary.map((line) => <li key={line} className="text-[11px] leading-relaxed text-slate-500">- {line}</li>)}
+              </ul>
+            </div>
+          )}
+
           {estimate && (
             <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               <div className="flex items-center justify-between bg-slate-900 px-4 py-3 text-white">
@@ -201,6 +248,14 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
                   <Row key={`${line.catalogItemId}-${line.quantity}`} label={line.label} value={`${line.quantity.toLocaleString()} ${line.unit} - ${estimate.symbol}${line.subtotal.toLocaleString()}`} />
                 ))}
               </div>
+              {estimate.assumptions.length > 0 && (
+                <div className="border-t border-slate-100 px-4 py-2">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Pricing assumptions</p>
+                  <ul className="mt-1 space-y-1">
+                    {estimate.assumptions.slice(0, 5).map((a, i) => <li key={i} className="text-[10px] leading-relaxed text-slate-500">- {a}</li>)}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
 
@@ -325,6 +380,22 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
             <textarea className={`${inputCls} min-h-[72px] resize-none`} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add any note for the team" />
           </div>
         </div>
+
+          <div className="mt-3">
+            <label className={labelCls}>Attachments (optional)</label>
+            <input type="file" multiple className={`${inputCls} py-2 text-xs`} onChange={(e) => { void onFilesChosen(e.target.files); e.target.value = ''; }} />
+            <p className="mt-1 text-[10px] leading-relaxed text-slate-400">Roof photos, plans, an existing quote, a survey or measurements. Up to 5 files, 2.5 MB each. Never required.</p>
+            {attachments.length > 0 && (
+              <ul className="mt-2 space-y-1">
+                {attachments.map((file, i) => (
+                  <li key={`${file.name}-${i}`} className="flex items-center justify-between gap-2 rounded-lg bg-slate-100 px-2.5 py-1.5 text-[11px] text-slate-600">
+                    <span className="truncate">{file.name} ({Math.max(1, Math.round(file.sizeBytes / 1024))} KB)</span>
+                    <button onClick={() => setAttachments((current) => current.filter((_, idx) => idx !== i))} className="shrink-0 font-semibold text-slate-400 hover:text-slate-700" aria-label={`Remove ${file.name}`}>x</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
         {estimate && (
           <div className="mt-3 rounded-xl bg-slate-100 px-3 py-2 text-[11px] text-slate-600">

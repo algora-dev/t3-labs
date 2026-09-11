@@ -1,5 +1,5 @@
 import { findItem, getCatalog, getItemById, type CatalogItem } from './catalog';
-import { getEstimateRules, type PerimeterRatios } from './rules';
+import { getEstimateRules, getV4Rules, type PerimeterRatios, type PitchBandId, type SizeBandId } from './rules';
 
 /**
  * Deterministic estimate engine.
@@ -9,6 +9,12 @@ import { getEstimateRules, type PerimeterRatios } from './rules';
 export type AreaType = 'actual_roof_area' | 'plan_area' | 'unknown';
 export type RoofShape = 'gable' | 'hip' | 'valley_complex' | 'flat' | 'unknown';
 export type EstimateScope = 'covering_only' | 'specified_components' | 'estimated_components';
+export type ProjectType = 'new_roof' | 'reroof';
+
+/** Component ids the engine can safely estimate from geometry when the customer explicitly authorises it. */
+export const HEURISTIC_COMPONENT_IDS = ['ridge_hip_system', 'valley_trough', 'gutter_replacement', 'downpipe', 'insulation_upgrade'];
+
+export type { PitchBandId, SizeBandId, SizeBand, PitchBand } from './rules';
 
 export interface EstimateComponentSelection {
   catalogItemId: string;
@@ -24,6 +30,7 @@ export interface EstimateInput {
   componentScope: EstimateScope;
   components?: EstimateComponentSelection[];
   extras?: string[];
+  projectType?: ProjectType | null;
 }
 
 export interface EstimateLineItem {
@@ -43,6 +50,7 @@ export interface Estimate {
   symbol: string;
   status: 'indicative';
   project: {
+    projectType: ProjectType | null;
     roofArea: number;
     areaType: AreaType;
     roofShape: RoofShape;
@@ -174,6 +182,22 @@ export function createEstimate(input: EstimateInput): Estimate {
 
   addLine(materialItem, coveringQty, 'area');
 
+  // Re-roof removal allowances (V4): configured in estimate-rules.json, never hardcoded.
+  if (input.projectType === 'reroof') {
+    const v4 = getV4Rules();
+    const allowance = v4.reroofAllowances;
+    const stripQty = roundUpToStep(actualArea, rules.rounding.quantityStepArea);
+    addRawLine('reroof_strip_allowance', allowance.stripLabel, stripQty, 'm2', allowance.stripRatePerM2, 'area');
+    addRawLine('reroof_disposal_allowance', allowance.disposalLabel, 1, 'fixed', allowance.disposalAllowancePerJob, 'fixed');
+    assumptions.push(allowance.assumptionNote);
+  }
+
+  function addRawLine(id: string, label: string, qty: number, unit: CatalogItem['unit'], rate: number, quantitySource: EstimateLineItem['quantitySource']) {
+    if (qty <= 0) return;
+    const subtotal = roundUpTo(qty * rate, rules.rounding.perLine);
+    lineItems.push({ catalogItemId: id, label, quantity: qty, unit, rate, subtotal, quantitySource });
+  }
+
   const components = normaliseComponents(input.components);
 
   if (input.componentScope === 'covering_only') {
@@ -248,11 +272,12 @@ export function createEstimate(input: EstimateInput): Estimate {
     symbol: catalog.symbol,
     status: 'indicative',
     project: {
+      projectType: input.projectType ?? null,
       roofArea: input.roofArea,
       areaType: input.areaType,
       roofShape: input.roofShape,
       pitchDegrees: pitch,
-      material,
+      material: materialItem.id,
       materialLabel: materialItem.name,
       componentScope: input.componentScope,
       components,
@@ -265,4 +290,79 @@ export function createEstimate(input: EstimateInput): Estimate {
     exclusions: [...exclusions],
     disclaimer: rules.disclaimer,
   };
+}
+
+/**
+ * V4 guided-estimator draft state (SMART_ASSISTANT_V4_BRIEF section 8).
+ * Only validated structured drafts are priced here - the LLM never computes money.
+ */
+
+export interface EstimateDraftArea {
+  exactM2?: number;
+  band?: SizeBandId;
+  source: 'user_exact' | 'configured_band';
+}
+
+export interface EstimateDraftPitch {
+  degrees?: number;
+  band?: PitchBandId;
+  source: 'user_exact' | 'user_band';
+}
+
+export interface EstimateDraftComponent {
+  componentId: string;
+  selected: boolean;
+  quantity?: number | null;
+  unit?: string | null;
+  quantitySource?: 'user' | 'heuristic';
+}
+
+export interface EstimateDraft {
+  projectType: ProjectType;
+  mode: 'unit_rate' | 'quick_ballpark' | 'guided';
+  area: EstimateDraftArea;
+  pitch: EstimateDraftPitch;
+  materialId?: string;
+  components: EstimateDraftComponent[];
+}
+
+export type PricedDraft =
+  | { mode: 'single'; estimate: Estimate; indicative: boolean }
+  | { mode: 'range'; low: Estimate; high: Estimate; indicative: true; band: SizeBandId };
+
+export function resolvePitchDegrees(pitch: EstimateDraftPitch): number | undefined {
+  if (typeof pitch.degrees === 'number' && Number.isFinite(pitch.degrees)) return pitch.degrees;
+  if (pitch.band) return getV4Rules().pitchBands[pitch.band].representativeDegrees;
+  return undefined;
+}
+
+export function priceDraft(draft: EstimateDraft): PricedDraft {
+  if (!draft.materialId) throw new Error('EstimateDraft needs a materialId from the approved catalogue');
+  const v4 = getV4Rules();
+
+  const pitchDegrees = resolvePitchDegrees(draft.pitch);
+  const areas: number[] = [];
+  let band: SizeBandId | undefined;
+  if (typeof draft.area.exactM2 === 'number' && draft.area.exactM2 > 0) {
+    areas.push(draft.area.exactM2);
+  } else if (draft.area.band) {
+    band = draft.area.band;
+    areas.push(v4.sizeBands[band].minM2, v4.sizeBands[band].maxM2);
+  }
+  if (!areas.length) throw new Error('EstimateDraft needs an exact area or a configured size band');
+
+  const selected = draft.components.filter((c) => c.selected);
+  const anyHeuristic = selected.some((c) => c.quantitySource === 'heuristic');
+  const componentScope: EstimateScope = selected.length === 0 ? 'covering_only' : anyHeuristic ? 'estimated_components' : 'specified_components';
+  const selections: EstimateComponentSelection[] = selected.map((c) => ({ catalogItemId: c.componentId, quantity: c.quantity ?? null }));
+
+  const build = (roofArea: number): Estimate =>
+    createEstimate({ roofArea, areaType: 'actual_roof_area', roofShape: 'unknown', pitchDegrees, material: draft.materialId!, componentScope, components: selections, projectType: draft.projectType });
+
+  const indicative = draft.area.source === 'configured_band' || anyHeuristic;
+  if (areas.length === 1) return { mode: 'single', estimate: build(areas[0]), indicative };
+
+  const low = build(areas[0]);
+  const high = build(areas[1]);
+  return { mode: 'range', low, high, indicative: true, band: band! };
 }

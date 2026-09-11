@@ -1,0 +1,409 @@
+/**
+ * Apex Roofing demo content pages (V4 brief section 19).
+ * Services x7, information x7, commercial x2. Rendered by ApexContentPage
+ * via the catch-all route at /demo/roofing-site/[...slug].
+ * No em dashes anywhere in this content.
+ */
+
+export interface ApexPageSection {
+  heading?: string;
+  body?: string[];
+  bullets?: string[];
+}
+
+export interface ApexPage {
+  slug: string;
+  group: 'services' | 'information' | 'commercial';
+  title: string;
+  metaDescription: string;
+  intro: string;
+  sections: ApexPageSection[];
+}
+
+export const APEX_PAGES: ApexPage[] = [
+  {
+    slug: 'services/roof-replacement',
+    group: 'services',
+    title: 'Roof Replacement / Re-Roofing',
+    metaDescription: 'Apex Roofing full roof replacement and re-roofing: process, materials, timelines and warranties.',
+    intro: 'A complete re-roof is the biggest roofing decision most homeowners make. We make it straightforward: documented inspection, an itemised written quote, and most homes finished in 2 to 4 days.',
+    sections: [
+      {
+        heading: 'What a re-roof includes',
+        bullets: [
+          'Full strip of the existing roof covering',
+          'Inspection of timbers and repairs quoted transparently',
+          'Breathable underlay, battens and new fixings',
+          'Your choice of concrete tile, clay tile or natural slate',
+          'Dry verge and mechanically fixed ridge system',
+          'Removal and disposal of all old materials, site left clean',
+        ],
+      },
+      {
+        heading: 'How the price is built',
+        body: ['Roof size, pitch, material and access drive the price. Strip and disposal are allowance-based and confirmed after inspection. Our Smart Assistant can give you an indicative ballpark in about a minute - just ask.'],
+      },
+      {
+        heading: 'Timelines',
+        body: ['Most single-storey and two-storey homes are stripped and re-covered in 2 to 4 working days, weather permitting. Scaffolding goes up the day before and comes down within a week of completion.'],
+      },
+    ],
+  },
+  {
+    slug: 'services/new-roof-installation',
+    group: 'services',
+    title: 'New Roof Installation',
+    metaDescription: 'New roof installation for new builds, extensions and conversions by Apex Roofing.',
+    intro: 'Building new? We install complete roof systems for new builds, extensions, garages and conversions, working alongside your builder to your drawings and specification.',
+    sections: [
+      {
+        heading: 'What we cover',
+        bullets: [
+          'New build roofs to architect specification',
+          'Extension and conversion roofs',
+          'Tile, slate and flat membrane systems',
+          'Fascia, soffit, guttering and downpipes',
+          'Insulation integrated at installation time',
+        ],
+      },
+      {
+        heading: 'Working with your build schedule',
+        body: ['We coordinate with your main contractor so the roof is watertight at the right stage of the build. Fixed-price quotes from drawings, with any variations agreed in writing before work proceeds.'],
+      },
+    ],
+  },
+  {
+    slug: 'services/roof-repairs',
+    group: 'services',
+    title: 'Roof Repairs',
+    metaDescription: 'Roof repair services: leaks, slipped tiles and slates, flashing and valley repairs by Apex Roofing.',
+    intro: 'Most roof problems are smaller than they look from the ground. We find the real cause, fix it properly, and back repairs with a 2-year workmanship warranty.',
+    sections: [
+      {
+        heading: 'Common repairs',
+        bullets: [
+          'Leak tracing and permanent fixes',
+          'Slipped, cracked or broken tiles and slates',
+          'Ridge and hip repointing or dry-fix upgrade',
+          'Flashing and chimney repairs',
+          'Valley trough repair and replacement',
+          'Storm damage make-safe and follow-on repairs',
+        ],
+      },
+      {
+        heading: 'Pricing',
+        body: ['A standard repair visit is a fixed fee covering investigation and replacement of up to 10 tiles or slates or a minor flashing repair. Larger work is quoted after inspection. Ask the Smart Assistant for the current repair rate.'],
+      },
+    ],
+  },
+  {
+    slug: 'services/flat-roofing',
+    group: 'services',
+    title: 'Flat Roofing',
+    metaDescription: 'Flat and low-slope roofing systems: GRP fibreglass, EPDM and membrane by Apex Roofing.',
+    intro: 'Flat roofs fail when they are poorly detailed, not when they are flat. We install modern systems with correct falls and detailing so garages, extensions and dormers stay dry for decades.',
+    sections: [
+      {
+        heading: 'Systems we install',
+        bullets: [
+          'GRP fibreglass - seamless and extremely durable',
+          'EPDM rubber membrane - flexible and long-lived',
+          'High-performance felt systems for budget-sensitive projects',
+          'Insulated warm-deck upgrades',
+        ],
+      },
+      {
+        heading: 'Pitch matters',
+        body: ['Flat roofs are never truly flat. Building a minimum fall avoids ponding, which is the main cause of premature failure. We check and correct falls during installation.'],
+      },
+    ],
+  },
+  {
+    slug: 'services/guttering',
+    group: 'services',
+    title: 'Guttering & Downpipes',
+    metaDescription: 'Gutter, downpipe, fascia and soffit replacement by Apex Roofing, standalone or with a re-roof.',
+    intro: 'Gutters protect more than the roof. We replace guttering, downpipes, fascias and soffits either as a standalone job or as part of your re-roof, when access is already in place.',
+    sections: [
+      {
+        heading: 'What we install',
+        bullets: [
+          'Seamless half-round gutters in black or brown',
+          '76mm downpipes with offsets and brackets',
+          'UPVC fascia and vented soffit boards',
+          'Gutter guards and leaf protection',
+        ],
+      },
+      {
+        heading: 'Good value with a re-roof',
+        body: ['Adding gutters during a re-roof saves scaffolding and labour. If you are pricing a re-roof, ask the Smart Assistant to add an estimated gutter allowance to your indicative estimate.'],
+      },
+    ],
+  },
+  {
+    slug: 'services/storm-emergency-roofing',
+    group: 'services',
+    title: 'Storm & Emergency Roofing',
+    metaDescription: '24/7 emergency roof response: tarping, make-safe and storm damage repair by Apex Roofing.',
+    intro: 'Active leak or storm damage? Our emergency line operates 24/7, every day of the year. We aim to have a roofer on site within 4 hours to make your home safe.',
+    sections: [
+      {
+        heading: 'What emergency callout covers',
+        bullets: [
+          'Site attendance and damage assessment',
+          'Temporary tarping and weather protection',
+          'Photo documentation for insurers',
+          'A written plan and quote for permanent repairs',
+        ],
+      },
+      {
+        heading: 'Fees',
+        body: ['The emergency callout fee is credited in full against follow-on repair work carried out by Apex. Ask the Smart Assistant for the current callout rate.'],
+      },
+    ],
+  },
+  {
+    slug: 'services/insurance-work',
+    group: 'services',
+    title: 'Insurance Roofing Work',
+    metaDescription: 'How Apex Roofing handles insurance roofing claims: documentation, adjuster meetings and full claim support.',
+    intro: 'Yes, we handle insurance roofing work. Storm and hail claims are far less stressful when your roofer speaks the insurer\'s language and documents everything properly.',
+    sections: [
+      {
+        heading: 'What we do for your claim',
+        bullets: [
+          'Documented damage assessment with photos',
+          'We meet your insurance adjuster on site',
+          'Support with all major insurers',
+          'Full claim guidance from inspection to final sign-off',
+        ],
+      },
+      {
+        heading: 'The process',
+        bullets: [
+          '1. Free consultation and roof inspection',
+          '2. Written itemised quote within 48 hours',
+          '3. Material selection and scheduling',
+          '4. Installation, most replacements in 2 to 4 days',
+          '5. Final inspection, cleanup and written warranty',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'information/roofing-materials',
+    group: 'information',
+    title: 'Roofing Materials',
+    metaDescription: 'Guide to the roofing materials Apex installs: concrete tile, clay tile, natural slate and flat roof systems.',
+    intro: 'The material you choose drives cost, appearance and lifespan. These are the systems Apex installs and stands behind.',
+    sections: [
+      {
+        heading: 'Concrete tile',
+        body: ['The workhorse of modern roofing. Durable, good value and available in a wide range of profiles and colours. Typical installed life of 40 years or more.'],
+      },
+      {
+        heading: 'Clay tile',
+        body: ['Classic character that weathers beautifully. Slightly higher cost than concrete, with a lifespan commonly quoted at 50 years or more.'],
+      },
+      {
+        heading: 'Natural slate',
+        body: ['The premium choice. CUPA Spanish slate is dense, fire-resistant and can outlast the building it sits on when correctly fixed with copper nails.'],
+      },
+      {
+        heading: 'Flat roof systems',
+        body: ['GRP fibreglass and EPDM membranes for low-slope roofs, garages and extensions. Seamless, flexible and detailed to avoid ponding.'],
+      },
+      { heading: 'Not sure?', body: ['Ask the Smart Assistant to compare options for your budget, roof pitch and desired look, or start a guided estimate.'] },
+    ],
+  },
+  {
+    slug: 'information/concrete-vs-clay-vs-slate',
+    group: 'information',
+    title: 'Concrete vs Clay vs Slate',
+    metaDescription: 'Side-by-side comparison of concrete tile, clay tile and natural slate roofing.',
+    intro: 'Three great coverings, three different trade-offs. Here is the honest comparison.',
+    sections: [
+      {
+        heading: 'Cost',
+        body: ['Concrete is the most economical per square metre, clay sits in the middle, and natural slate is the premium option. All three are installed to the same standard by Apex.'],
+      },
+      {
+        heading: 'Appearance',
+        body: ['Concrete tiles suit most modern homes. Clay has warmth and character that improves with age. Slate delivers a sharp, premium look favoured on period and high-end properties.'],
+      },
+      {
+        heading: 'Lifespan and durability',
+        bullets: [
+          'Concrete tile: around 40+ years, very low maintenance',
+          'Clay tile: around 50+ years, colour-stable',
+          'Natural slate: 75 to 100+ years, exceptional when properly fixed',
+        ],
+      },
+      {
+        heading: 'Pitch suitability',
+        body: ['All three need adequate roof pitch. Slate in particular generally requires a steeper roof than interlocking concrete tiles. Very low-pitch roofs are better served by membrane systems. See our roof pitch guide.'],
+      },
+    ],
+  },
+  {
+    slug: 'information/roof-pitch-guide',
+    group: 'information',
+    title: 'Roof Pitch Guide',
+    metaDescription: 'What roof pitch means, typical pitch bands, and why pitch affects material choice and price.',
+    intro: 'Pitch is the angle of your roof slope, measured in degrees from horizontal. It changes which materials you can use and how the roof is priced.',
+    sections: [
+      {
+        heading: 'Typical bands',
+        bullets: [
+          'Flat / Low: 0 to 15 degrees',
+          'Medium: 16 to 35 degrees - most family homes',
+          'Steep: 36 degrees and above - period properties, complex roofs',
+        ],
+      },
+      {
+        heading: 'Why pitch matters',
+        bullets: [
+          'Material minimum pitches: slate needs a steeper roof than interlocking concrete tiles',
+          'Steeper roofs have more actual roof area per square metre of floor, so covering costs more',
+          'Steep roofs are slower and safer-access work can affect labour',
+          'Very low slopes need membrane systems rather than tiles',
+        ],
+      },
+      {
+        heading: 'Plan area vs roof area',
+        body: ['A 100 m² footprint at a steeper pitch has more actual sloped roof area than the same footprint at a low pitch. Our estimator accounts for this when you tell us the pitch.'],
+      },
+    ],
+  },
+  {
+    slug: 'information/how-estimates-work',
+    group: 'information',
+    title: 'How Roofing Estimates Work',
+    metaDescription: 'How Apex Roofing builds estimates: roof area, material, pitch, components and allowances.',
+    intro: 'A credible estimate is built from measurable inputs, not guesswork. Here is exactly what goes into ours.',
+    sections: [
+      {
+        heading: 'The inputs',
+        bullets: [
+          'Roof area, and whether it is the actual sloped area or the footprint',
+          'Pitch, exact or by band',
+          'Covering material: concrete, clay or slate',
+          'Project type: new roof or re-roof',
+          'Optional components: ridges, valleys, gutters, insulation',
+        ],
+      },
+      {
+        heading: 'New roof vs re-roof',
+        body: ['A new roof prices the covering system, installation and your chosen components. A re-roof adds strip and disposal allowances, confirmed after inspection because access and site conditions vary.'],
+      },
+      {
+        heading: 'Indicative vs formal',
+        body: ['Our Smart Assistant gives indicative ballparks instantly from approved rates. A formal quotation follows a free site inspection and confirmed measurements. Want a quick figure? Ask the assistant for a guided estimate.'],
+      },
+    ],
+  },
+  {
+    slug: 'information/roofing-faq',
+    group: 'information',
+    title: 'Roofing FAQ',
+    metaDescription: 'Frequently asked roofing questions answered by Apex Roofing.',
+    intro: 'The questions we hear most, answered plainly.',
+    sections: [
+      { heading: 'How long does a re-roof take?', body: ['Most homes are completed in 2 to 4 working days, weather permitting.'] },
+      { heading: 'Will you need scaffolding?', body: ['Usually yes for full replacements. Standard single-storey access is included in our rates. Anything beyond that is quoted transparently.'] },
+      { heading: 'What if it rains during the work?', body: ['We strip and re-cover in sections and use temporary protection so your home stays watertight overnight.'] },
+      { heading: 'How messy is it?', body: ['Messy for a day or two, but all waste is removed and the site swept before handover.'] },
+      { heading: 'Do you offer finance?', body: ['Not directly. In a live deployment this answer would come from the business\'s approved data - ask the Smart Assistant for current options.'] },
+      { heading: 'Do you work in winter?', body: ['Yes, with common-sense limits. Frost and heavy rain can delay tiling for safety and quality reasons.'] },
+      { heading: 'How accurate are online estimates?', body: ['Indicative estimates use approved rates and your inputs. Final prices follow a free inspection, because timber condition and access cannot be seen from a photo.'] },
+    ],
+  },
+  {
+    slug: 'information/warranties-guarantees',
+    group: 'information',
+    title: 'Warranties & Guarantees',
+    metaDescription: 'Apex Roofing workmanship and material warranties explained.',
+    intro: 'A warranty is only worth the paper it is written on if the company is still standing behind it. Apex has been roofing for over 20 years.',
+    sections: [
+      {
+        heading: 'Our warranties',
+        bullets: [
+          '10-year workmanship warranty on all full roof replacements',
+          '2-year workmanship warranty on repairs',
+          'Manufacturer material warranties of 30 to 50 years depending on product line',
+          'Written warranty documents issued with every completed job',
+        ],
+      },
+      {
+        heading: 'What is covered',
+        body: ['Workmanship warranties cover installation defects. Material warranties come from the manufacturer. Timber rot, storm damage and third-party damage are insurance matters rather than warranty matters.'],
+      },
+    ],
+  },
+  {
+    slug: 'information/service-areas',
+    group: 'information',
+    title: 'Service Areas',
+    metaDescription: 'Towns and areas served by Apex Roofing in the Greater Portland area and Vancouver WA.',
+    intro: 'We serve the Greater Portland area and neighbouring communities.',
+    sections: [
+      {
+        heading: 'Where we work',
+        bullets: ['Portland', 'Beaverton', 'Hillsboro', 'Tigard', 'Lake Oswego', 'Gresham', 'Milwaukie', 'Vancouver WA'],
+      },
+      {
+        heading: 'Outside these areas?',
+        body: ['Projects slightly outside our normal area are sometimes accepted. Contact us with your location and we will confirm honestly whether we can serve you well.'],
+      },
+    ],
+  },
+  {
+    slug: 'request-a-quote',
+    group: 'commercial',
+    title: 'Request a Quote',
+    metaDescription: 'Request a formal quote or free roof inspection from Apex Roofing.',
+    intro: 'The fastest route to a formal quote: tell the Smart Assistant about your project. It carries everything it learns straight into your enquiry, so you never fill in a long blank form.',
+    sections: [
+      {
+        heading: 'What happens next',
+        bullets: [
+          '1. We review your enquiry and project details',
+          '2. Free roof inspection arranged at your convenience',
+          '3. Written itemised quote within 48 hours of inspection',
+          '4. No pressure, no obligation',
+        ],
+      },
+      {
+        heading: 'Already have an estimate?',
+        body: ['If the Smart Assistant has already built your indicative estimate, choosing Request Official Quote attaches it, along with your roof details, to the enquiry automatically.'],
+      },
+    ],
+  },
+  {
+    slug: 'contact',
+    group: 'commercial',
+    title: 'Contact Apex',
+    metaDescription: 'Contact Apex Roofing: phone, email, hours and service areas.',
+    intro: 'Reach the team directly, or ask the Smart Assistant anything first - it answers instantly, around the clock.',
+    sections: [
+      {
+        heading: 'Phone',
+        body: ['(503) 555-0142. 24/7 emergency line.'],
+      },
+      { heading: 'Email', body: ['hello@apexroofing-demo.com'] },
+      {
+        heading: 'Hours',
+        bullets: ['Mon to Fri: 7:00 AM to 6:00 PM', 'Sat: 8:00 AM to 2:00 PM', 'Sun: emergency only'],
+      },
+      {
+        heading: 'Address',
+        body: ['Apex Roofing (fictional demo business). Serving Portland, Beaverton, Hillsboro, Tigard, Lake Oswego, Gresham, Milwaukie and Vancouver WA.'],
+      },
+    ],
+  },
+];
+
+export function findApexPage(slugSegments: string[]): ApexPage | null {
+  const slug = slugSegments.join('/');
+  return APEX_PAGES.find((page) => page.slug === slug) ?? null;
+}

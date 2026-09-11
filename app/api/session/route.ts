@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { peekSession } from '@/lib/assistant/session';
+import { peekSession, resetSession } from '@/lib/assistant/session';
+import { draftSummaryLines } from '@/lib/assistant/estimate-draft';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -22,6 +23,9 @@ export async function GET() {
       },
       lead: { name: null, email: null, phone: null },
       latestEstimate: null,
+      draft: null,
+      draftSummary: [],
+      currentPagePath: null,
       recentUserMessages: [],
       inquiryCount: 0,
     });
@@ -38,7 +42,20 @@ export async function GET() {
     facts: session.facts,
     lead: session.lead,
     latestEstimate: estimate,
+    draft: session.draft,
+    draftSummary: session.draft ? draftSummaryLines(session.draft) : [],
+    currentPagePath: session.currentPagePath,
     recentUserMessages,
     inquiryCount: session.inquiries.length,
   });
+}
+
+/**
+ * DELETE /api/session - Start New Conversation (V4 brief section 14).
+ * Clears messages, facts, estimates, outputs, enquiries, draft and page context,
+ * and issues a brand-new session id.
+ */
+export async function DELETE() {
+  await resetSession();
+  return NextResponse.json({ ok: true });
 }

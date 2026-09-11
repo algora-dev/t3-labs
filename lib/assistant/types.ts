@@ -1,7 +1,8 @@
-import type { Estimate } from '../pricing/estimate-engine';
+import type { Estimate, PricedDraft } from '../pricing/estimate-engine';
 
 export type AssistantCard =
   | { type: 'estimate'; estimate: Estimate }
+  | { type: 'estimate_result'; result: PricedDraft }
   | { type: 'handoff'; summary: string };
 
 export type AssistantAction =
@@ -9,7 +10,9 @@ export type AssistantAction =
   | { type: 'OPEN_INQUIRY'; label: string }
   | { type: 'ADD_ESTIMATE_OPTION'; label: string; followUpMessage: string }
   | { type: 'QUICK_REPLY'; label: string; message: string; description?: string; emphasis?: 'primary' | 'secondary' }
-  | { type: 'DOWNLOAD_OUTPUT'; label: string; estimateId: string };
+  | { type: 'DOWNLOAD_OUTPUT'; label: string; estimateId: string }
+  | { type: 'START_GUIDED_ESTIMATE'; label: string }
+  | { type: 'ADJUST_ESTIMATE'; label: string };
 
 export interface AssistantTurn {
   message: string;

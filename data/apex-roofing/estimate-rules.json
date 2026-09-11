@@ -56,6 +56,26 @@
     "quantityStepArea": 0.5,
     "quantityStepLinear": 0.5
   },
+  "v4": {
+    "comment": "V4 guided-estimator configuration. These commercial values must never be hardcoded in components - always read them from here.",
+    "reroofAllowances": {
+      "stripRatePerM2": 10,
+      "stripLabel": "Strip existing roof",
+      "disposalAllowancePerJob": 1000,
+      "disposalLabel": "Removal / disposal allowance",
+      "assumptionNote": "Strip and disposal are indicative allowances. Site conditions, hazardous materials, difficult access, structural work or unusual disposal requirements are not included."
+    },
+    "sizeBands": {
+      "small": { "label": "Small", "minM2": 50, "maxM2": 100 },
+      "medium": { "label": "Medium", "minM2": 100, "maxM2": 200 },
+      "large": { "label": "Large", "minM2": 200, "maxM2": 300 }
+    },
+    "pitchBands": {
+      "flat": { "label": "Flat / Low", "minDegrees": 0, "maxDegrees": 15, "representativeDegrees": 12 },
+      "medium": { "label": "Medium", "minDegrees": 16, "maxDegrees": 35, "representativeDegrees": 27 },
+      "steep": { "label": "Steep", "minDegrees": 36, "maxDegrees": 85, "representativeDegrees": 45 }
+    }
+  },
   "disclaimer": "Indicative estimate only - not a formal quote. Subject to free site inspection, timber condition, and final material selection.",
   "standardAssumptions": [
     "Waste allowance of 7.5% included on the main roof covering quantity",

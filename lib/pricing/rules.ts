@@ -26,6 +26,7 @@ export interface EstimateRules {
   };
   disclaimer: string;
   standardAssumptions: string[];
+  v4?: V4Rules;
 }
 
 export interface PerimeterRatios {
@@ -33,6 +34,41 @@ export interface PerimeterRatios {
   valleyLmPerSqm: number;
   hipLmPerSqm: number;
   gutterLmPerSqm: number;
+}
+
+export type SizeBandId = 'small' | 'medium' | 'large';
+export type PitchBandId = 'flat' | 'medium' | 'steep';
+
+export interface SizeBand {
+  label: string;
+  minM2: number;
+  maxM2: number;
+}
+
+export interface PitchBand {
+  label: string;
+  minDegrees: number;
+  maxDegrees: number;
+  representativeDegrees: number;
+}
+
+export interface V4Rules {
+  comment: string;
+  reroofAllowances: {
+    stripRatePerM2: number;
+    stripLabel: string;
+    disposalAllowancePerJob: number;
+    disposalLabel: string;
+    assumptionNote: string;
+  };
+  sizeBands: Record<SizeBandId, SizeBand>;
+  pitchBands: Record<PitchBandId, PitchBand>;
+}
+
+export function getV4Rules(): V4Rules {
+  const rules = getEstimateRules();
+  if (!rules.v4) throw new Error('estimate-rules.json is missing the v4 guided-estimator configuration');
+  return rules.v4;
 }
 
 let cached: EstimateRules | null = null;
