@@ -81,10 +81,10 @@ const pathCards = [
     number: "03",
     eyebrow: "VALUE-FIRST PATH",
     title: "Free tools",
-    who: "They are not ready to buy, change systems or commit to setup.",
+    who: "They are worried it is too technical, not ready to spend, or not ready to switch systems.",
     action:
-      "End the conversation with something genuinely useful. Match the free tool to the problem you just discussed and let them experience the QuoteCore+ approach without buying anything.",
-    next: "A useful free outcome keeps the relationship warm and gives them a natural route back into the full product later.",
+      "The free tools combine a selection of the app's features and work exactly the same way. A prospect can test the system on their next real job for free, with no signup and nothing to pay. They can even keep using the free tools as their new workflow; the app joins everything together, saves it in one place and adds more.",
+    next: "If they are simply not interested, the free tools are still a clean, no-strings exit that solves real problems and teaches them how the app works.",
     href: QC.freeTools,
     cta: "Open free tools",
   },
@@ -131,7 +131,7 @@ const resourceGroups = [
   },
   {
     title: "They are not ready to buy",
-    body: "Give them the free tool that matches the job they are trying to do. Helpful is better than pushy.",
+    body: "Send the free tool that matches the pain. They can quote a real job with it, free and without an account, so the demonstration does the selling for you.",
     links: [["Free tools directory", QC.freeTools]],
   },
 ];
@@ -558,7 +558,7 @@ export default function CareersPage() {
           <div className="mt-5 rounded-2xl border border-[#d7ff00]/30 bg-[#d7ff00]/5 p-6">
             <h3 className="text-xl font-semibold">Free tools are a real sales path.</h3>
             <p className="mt-3 max-w-4xl text-sm leading-7 text-white/65">
-              If somebody is not ready to buy, match the conversation to a free takeoff, calculator, quote, invoice or purchase-order tool. The core free tools can be used without an account, so the prospect gets value immediately.
+              Two reasons they matter. First, they are a free, low-risk way to demonstrate the app: the core tools are built from the app's own features, work exactly the same way and can be used without an account, so a hesitant prospect can quote their next real job with the actual system before spending anything. Second, if they are not interested or not spending right now, they are a genuine no-strings parting gift that still solves problems and teaches how the app works.
             </p>
             <ExternalLink
               href={QC.freeTools}
