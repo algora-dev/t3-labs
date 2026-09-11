@@ -22,12 +22,12 @@ export const metadata: Metadata = {
   title: "QuoteCore+ Sales Guide | T3 Labs",
   description:
     "T3 Labs sales guide for QuoteCore+: who to target, what to listen for, how to qualify Done-For-You setup, self-serve referrals and free-tool opportunities.",
-  alternates: { canonical: `${BASE_URL}/careers` },
+  alternates: { canonical: `${BASE_URL}/qcp-careers` },
   openGraph: {
     title: "QuoteCore+ Sales Guide | T3 Labs",
     description:
       "A practical sales guide for selling QuoteCore+ to roofing and construction contractors.",
-    url: `${BASE_URL}/careers`,
+    url: `${BASE_URL}/qcp-careers`,
     siteName: "T3 Labs",
     type: "website",
   },

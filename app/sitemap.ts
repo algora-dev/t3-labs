@@ -28,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${BASE_URL}/careers`,
+      url: `${BASE_URL}/qcp-careers`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.7,

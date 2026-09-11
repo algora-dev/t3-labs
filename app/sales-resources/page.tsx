@@ -1689,7 +1689,7 @@ export default function SalesResourcesPage() {
                   muted={t.muted}
                 >
                   <a
-                    href="/careers"
+                    href="/qcp-careers"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ background: t.surface, borderColor: t.border }}
