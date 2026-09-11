@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Manrope } from "next/font/google";
 import { DemoSiteStrip } from "@/components/demo-sites/demo-strip";
+import { SmartAssistantLauncher } from "@/components/assistant/SmartAssistantLauncher";
 import "./act.css";
 
 const manrope = Manrope({
@@ -28,6 +29,7 @@ export default function ApexRoofingDemoLayout({ children }: { children: ReactNod
     <div id="act-demo-root" className={manrope.variable}>
       <DemoSiteStrip siteLabel="Apex Roofing" />
       {children}
+      <SmartAssistantLauncher />
     </div>
   );
 }
