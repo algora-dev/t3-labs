@@ -1,14 +1,19 @@
 import { cookies } from 'next/headers';
 import { getAssistantConfig } from './data';
-import type { Estimate } from '../pricing/estimate-engine';
+import type { Estimate, EstimateComponentSelection, EstimateScope } from '../pricing/estimate-engine';
 
 /**
- * In-memory per-session store (demo-grade, spec section 9).
- * Module-level Map keyed by opaque random session id from an httpOnly cookie.
- * Two simultaneous visitors never share state.
+ * Per-session assistant state.
+ *
+ * Development defaults to a process-local Map. Hosted deployments can use any
+ * Upstash/Vercel Redis REST endpoint by setting KV_REST_API_URL +
+ * KV_REST_API_TOKEN (or UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN).
+ * This prevents serverless requests from losing estimates, outputs or enquiry
+ * context when consecutive requests land on different instances.
  */
 
-export const SESSION_COOKIE = 'apex_sid';
+export const SESSION_COOKIE = 't3_sa_sid';
+const REDIS_PREFIX = 't3:smart-assistant:session:';
 
 export interface SessionFacts {
   projectType: string | null;
@@ -18,6 +23,8 @@ export interface SessionFacts {
   pitchDegrees: number | null;
   material: string | null;
   location: string | null;
+  estimateScope: EstimateScope | null;
+  components: EstimateComponentSelection[];
   extras: string[];
 }
 
@@ -33,17 +40,14 @@ export interface SessionLead {
   phone: string | null;
 }
 
-/** Canonical estimates owned by this session, keyed by estimate id (spec 14.2). */
 export type EstimateStore = Record<string, Estimate>;
 
-/** A generated downloadable output (PDF) tied to this session. */
 export interface SessionOutputRef {
-  id: string; // outputId
+  id: string;
   estimateId: string;
   createdAt: string;
 }
 
-/** A submitted demo enquiry (spec 13.5 - stored in-session only). */
 export interface InquiryRecord {
   id: string;
   createdAt: string;
@@ -54,7 +58,7 @@ export interface AssistantSession {
   sessionId: string;
   createdAt: string;
   lastActiveAt: string;
-  expiresAt: number; // epoch ms
+  expiresAt: number;
   messages: { role: 'user' | 'assistant'; content: string }[];
   facts: SessionFacts;
   estimateFlow: EstimateFlow;
@@ -67,6 +71,30 @@ export interface AssistantSession {
 }
 
 const sessions = new Map<string, AssistantSession>();
+
+function redisConfig() {
+  const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
+  return url && token ? { url: url.replace(/\/$/, ''), token } : null;
+}
+
+async function redisCommand(args: Array<string | number>): Promise<unknown> {
+  const cfg = redisConfig();
+  if (!cfg) throw new Error('Redis session store is not configured');
+  const res = await fetch(cfg.url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${cfg.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(args),
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(`Redis session store returned ${res.status}`);
+  const payload = (await res.json()) as { result?: unknown; error?: string };
+  if (payload.error) throw new Error(payload.error);
+  return payload.result;
+}
 
 function newSession(sessionId: string): AssistantSession {
   const now = Date.now();
@@ -85,6 +113,8 @@ function newSession(sessionId: string): AssistantSession {
       pitchDegrees: null,
       material: null,
       location: null,
+      estimateScope: null,
+      components: [],
       extras: [],
     },
     estimateFlow: { active: false, clarificationCount: 0, latestEstimateId: null },
@@ -97,8 +127,19 @@ function newSession(sessionId: string): AssistantSession {
   };
 }
 
-/** Periodically purge expired sessions (cheap lazy sweep on each access). */
-function sweep() {
+function normaliseSession(session: AssistantSession): AssistantSession {
+  // Backward-compatible defaults for sessions created by an older build.
+  session.facts.estimateScope ??= null;
+  session.facts.components ??= [];
+  session.facts.extras ??= [];
+  session.estimates ??= {};
+  session.outputs ??= [];
+  session.inquiries ??= [];
+  session.messageTimestamps ??= [];
+  return session;
+}
+
+function sweepMemory() {
   if (sessions.size < 200) return;
   const now = Date.now();
   for (const [id, s] of sessions) {
@@ -106,15 +147,45 @@ function sweep() {
   }
 }
 
-export function getSession(sessionId: string): AssistantSession | null {
-  sweep();
-  const s = sessions.get(sessionId);
-  if (!s) return null;
-  if (s.expiresAt < Date.now()) {
+export async function getSession(sessionId: string): Promise<AssistantSession | null> {
+  const cfg = redisConfig();
+  if (cfg) {
+    try {
+      const raw = await redisCommand(['GET', `${REDIS_PREFIX}${sessionId}`]);
+      if (typeof raw !== 'string' || !raw) return null;
+      const session = normaliseSession(JSON.parse(raw) as AssistantSession);
+      if (session.expiresAt < Date.now()) {
+        await redisCommand(['DEL', `${REDIS_PREFIX}${sessionId}`]);
+        return null;
+      }
+      return session;
+    } catch (error) {
+      console.error('[assistant] Redis session read failed, falling back to local memory:', error instanceof Error ? error.message : error);
+    }
+  }
+
+  sweepMemory();
+  const session = sessions.get(sessionId);
+  if (!session) return null;
+  if (session.expiresAt < Date.now()) {
     sessions.delete(sessionId);
     return null;
   }
-  return s;
+  return normaliseSession(session);
+}
+
+export async function saveSession(session: AssistantSession): Promise<void> {
+  const ttlSeconds = Math.max(60, Math.ceil((session.expiresAt - Date.now()) / 1000));
+  const cfg = redisConfig();
+  if (cfg) {
+    try {
+      await redisCommand(['SET', `${REDIS_PREFIX}${session.sessionId}`, JSON.stringify(session), 'EX', ttlSeconds]);
+      return;
+    } catch (error) {
+      console.error('[assistant] Redis session write failed, falling back to local memory:', error instanceof Error ? error.message : error);
+    }
+  }
+  sessions.set(session.sessionId, session);
 }
 
 export function touchSession(session: AssistantSession): void {
@@ -123,7 +194,6 @@ export function touchSession(session: AssistantSession): void {
   session.expiresAt = now + getAssistantConfig().sessionTtlMinutes * 60_000;
 }
 
-/** Read the current session WITHOUT creating one (for lightweight GETs like /api/session). */
 export async function peekSession(): Promise<AssistantSession | null> {
   const cookieStore = await cookies();
   const sid = cookieStore.get(SESSION_COOKIE)?.value;
@@ -131,19 +201,18 @@ export async function peekSession(): Promise<AssistantSession | null> {
   return getSession(sid);
 }
 
-/** Get-or-create the session for the current request, using the httpOnly cookie. */
 export async function getOrCreateSession(): Promise<AssistantSession> {
   const config = getAssistantConfig();
   const cookieStore = await cookies();
   let sid = cookieStore.get(SESSION_COOKIE)?.value;
-  let session = sid ? getSession(sid) : null;
+  let session = sid ? await getSession(sid) : null;
 
   if (!session) {
     sid = `s_${crypto.randomUUID()}`;
     session = newSession(sid);
-    sessions.set(sid, session);
   }
   touchSession(session);
+  await saveSession(session);
 
   cookieStore.set(SESSION_COOKIE, session.sessionId, {
     httpOnly: true,
@@ -155,56 +224,32 @@ export async function getOrCreateSession(): Promise<AssistantSession> {
   return session;
 }
 
-/* ---------- guardrails (spec 15.5) ---------- */
-
 export type GuardResult = { ok: true } | { ok: false; error: string; status: number };
 
 export function checkGuards(session: AssistantSession, message: string): GuardResult {
   const config = getAssistantConfig();
 
-  if (!message.trim()) {
-    return { ok: false, error: 'Please type a message.', status: 400 };
-  }
+  if (!message.trim()) return { ok: false, error: 'Please type a message.', status: 400 };
   if (message.length > config.maxUserMessageChars) {
-    return {
-      ok: false,
-      error: `That message is too long - please keep it under ${config.maxUserMessageChars} characters.`,
-      status: 400,
-    };
+    return { ok: false, error: `That message is too long - please keep it under ${config.maxUserMessageChars} characters.`, status: 400 };
   }
   if (session.turnCount >= config.maxTurnsPerSession) {
-    return {
-      ok: false,
-      error: 'This demo session has reached its conversation limit. Please start a fresh session.',
-      status: 429,
-    };
+    return { ok: false, error: 'This demo session has reached its conversation limit. Please start a fresh session.', status: 429 };
   }
 
-  // Rate limiting (in-memory, per session)
   const now = Date.now();
-  session.messageTimestamps = session.messageTimestamps.filter(
-    (t) => now - t < 60 * 60_000
-  );
+  session.messageTimestamps = session.messageTimestamps.filter((t) => now - t < 60 * 60_000);
   const lastMinute = session.messageTimestamps.filter((t) => now - t < 60_000).length;
   if (lastMinute >= config.rateLimit.maxMessagesPerMinute) {
-    return {
-      ok: false,
-      error: "You're sending messages a bit quickly - please wait a moment and try again.",
-      status: 429,
-    };
+    return { ok: false, error: "You're sending messages a bit quickly - please wait a moment and try again.", status: 429 };
   }
   if (session.messageTimestamps.length >= config.rateLimit.maxMessagesPerHour) {
-    return {
-      ok: false,
-      error: 'This demo session has hit its hourly message limit. Please try again later.',
-      status: 429,
-    };
+    return { ok: false, error: 'This demo session has hit its hourly message limit. Please try again later.', status: 429 };
   }
   session.messageTimestamps.push(now);
   return { ok: true };
 }
 
-/** Keep only recent messages in the model context to bound cost. */
 export function recentMessages(session: AssistantSession, max = 24) {
   return session.messages.slice(-max);
 }

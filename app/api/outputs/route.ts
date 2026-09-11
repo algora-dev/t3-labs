@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getOrCreateSession } from '@/lib/assistant/session';
+import { getOrCreateSession, saveSession } from '@/lib/assistant/session';
 import { renderEstimatePdf } from '@/lib/pdf/estimate-pdf';
 
 export const runtime = 'nodejs';
@@ -33,6 +33,7 @@ export async function POST(req: Request) {
   const outputId = existing?.id ?? `out_${crypto.randomUUID().slice(0, 10)}`;
   if (!existing) {
     session.outputs.push({ id: outputId, estimateId, createdAt: new Date().toISOString() });
+    await saveSession(session);
   }
 
   return NextResponse.json({ ok: true, outputId });
@@ -53,10 +54,10 @@ export async function GET(req: Request) {
   }
 
   const pdf = await renderEstimatePdf(estimate);
-  return new Response(pdf as unknown as BodyInit, {
+  return new Response(Buffer.from(pdf), {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="apex-indicative-estimate-${estimate.id}.pdf"`,
+      'Content-Disposition': `attachment; filename="indicative-estimate-${estimate.id}.pdf"`,
       'Cache-Control': 'no-store',
     },
   });

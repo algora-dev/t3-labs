@@ -2,23 +2,27 @@ import { findItem, getCatalog, getItemById, type CatalogItem } from './catalog';
 import { getEstimateRules, type PerimeterRatios } from './rules';
 
 /**
- * Deterministic estimate engine (spec section 8).
- * The model NEVER computes prices - it only submits structured inputs.
- * All maths happens here from pricing.json + estimate-rules.json.
+ * Deterministic estimate engine.
+ * The LLM interprets intent but never performs pricing maths.
  */
 
 export type AreaType = 'actual_roof_area' | 'plan_area' | 'unknown';
 export type RoofShape = 'gable' | 'hip' | 'valley_complex' | 'flat' | 'unknown';
+export type EstimateScope = 'covering_only' | 'specified_components' | 'estimated_components';
+
+export interface EstimateComponentSelection {
+  catalogItemId: string;
+  quantity?: number | null;
+}
 
 export interface EstimateInput {
   roofArea: number;
   areaType: AreaType;
   roofShape: RoofShape;
   pitchDegrees?: number | null;
-  material?: string | null;
-  includeGutters?: boolean;
-  includeInsulation?: boolean;
-  includeFlashings?: boolean;
+  material: string;
+  componentScope: EstimateScope;
+  components?: EstimateComponentSelection[];
   extras?: string[];
 }
 
@@ -29,6 +33,7 @@ export interface EstimateLineItem {
   unit: CatalogItem['unit'];
   rate: number;
   subtotal: number;
+  quantitySource: 'area' | 'user' | 'heuristic' | 'fixed';
 }
 
 export interface Estimate {
@@ -44,6 +49,8 @@ export interface Estimate {
     pitchDegrees: number;
     material: string;
     materialLabel: string;
+    componentScope: EstimateScope;
+    components: EstimateComponentSelection[];
   };
   lineItems: EstimateLineItem[];
   subtotal: number;
@@ -53,8 +60,6 @@ export interface Estimate {
   exclusions: string[];
   disclaimer: string;
 }
-
-/* ---------- helpers ---------- */
 
 function roundUpToStep(qty: number, step: number): number {
   if (qty <= 0) return 0;
@@ -66,7 +71,6 @@ function roundUpTo(value: number, nearest: number): number {
   return Math.ceil(value / nearest) * nearest;
 }
 
-/** Slope factor from pitchPresets when available, otherwise 1/cos. */
 export function slopeFactor(pitchDegrees: number): number {
   const rules = getEstimateRules();
   const preset = rules.pitchPresets[String(Math.round(pitchDegrees))];
@@ -74,13 +78,10 @@ export function slopeFactor(pitchDegrees: number): number {
   return 1 / Math.cos((pitchDegrees * Math.PI) / 180);
 }
 
-function resolveMaterial(material: string | null | undefined): CatalogItem {
-  const rules = getEstimateRules();
-  if (material) {
-    const item = findItem(material);
-    if (item && item.category === 'reroofing') return item;
-  }
-  return getItemById(rules.defaultMaterial) ?? findItem('concrete tile')!;
+function resolveMaterial(material: string): CatalogItem {
+  const item = findItem(material);
+  if (item && item.category === 'reroofing') return item;
+  throw new Error(`Unknown approved roofing material: ${material}`);
 }
 
 function ratiosFor(shape: RoofShape): { ratios: PerimeterRatios; assumed: boolean } {
@@ -89,7 +90,6 @@ function ratiosFor(shape: RoofShape): { ratios: PerimeterRatios; assumed: boolea
   if (shape === 'valley_complex') return { ratios: h.valley_complex, assumed: false };
   if (shape === 'flat') return { ratios: h.flat, assumed: false };
   if (shape === 'gable') return { ratios: h.gable, assumed: false };
-  // unknown -> conservative gable ratios, stated as an assumption
   return { ratios: h.gable, assumed: true };
 }
 
@@ -98,126 +98,147 @@ function makeEstimateId(): string {
   return `est_${Date.now().toString(36)}${rand}`;
 }
 
-/* ---------- main entry ---------- */
+function normaliseComponents(input: EstimateComponentSelection[] | undefined): EstimateComponentSelection[] {
+  const seen = new Set<string>();
+  const out: EstimateComponentSelection[] = [];
+  for (const component of input ?? []) {
+    if (!component || typeof component.catalogItemId !== 'string') continue;
+    const item = getItemById(component.catalogItemId);
+    if (!item || item.category !== 'component' || seen.has(item.id)) continue;
+    const quantity = typeof component.quantity === 'number' && Number.isFinite(component.quantity) && component.quantity > 0
+      ? component.quantity
+      : null;
+    seen.add(item.id);
+    out.push({ catalogItemId: item.id, quantity });
+  }
+  return out;
+}
 
 export function createEstimate(input: EstimateInput): Estimate {
+  if (!['covering_only', 'specified_components', 'estimated_components'].includes(input.componentScope)) {
+    throw new Error('A valid componentScope is required for every estimate.');
+  }
   const rules = getEstimateRules();
   const catalog = getCatalog();
   const assumptions: string[] = [];
   const exclusions = new Set<string>();
 
   const pitch = input.pitchDegrees ?? rules.defaultPitchDegrees;
-  const pitchAssumed = input.pitchDegrees == null;
-  if (pitchAssumed) assumptions.push(`Pitch assumed ${rules.defaultPitchDegrees} degrees as it was not supplied`);
+  if (input.pitchDegrees == null) {
+    assumptions.push(`Pitch not supplied - ${rules.defaultPitchDegrees} degrees used where a pitch value was required`);
+  }
 
-  // Material
   const materialItem = resolveMaterial(input.material);
   const material = materialItem.id;
   materialItem.excludes.forEach((e) => exclusions.add(e));
 
-  // Area: apply slope factor when the user gave a PLAN (footprint) area.
   let actualArea: number;
-  let areaAssumedPlan = false;
   if (input.areaType === 'plan_area') {
     const sf = slopeFactor(pitch);
     actualArea = roundUpToStep(input.roofArea * sf, rules.rounding.quantityStepArea);
     assumptions.push(
-      `Plan/footprint area of ${input.roofArea} m² converted to actual sloped area using slope factor ${sf.toFixed(3)} at ${pitch}° → ${actualArea} m²`
+      `Plan area ${input.roofArea} m² converted to ${actualArea} m² sloped area using a ${sf.toFixed(3)} slope factor at ${pitch} degrees`
     );
   } else {
     actualArea = roundUpToStep(input.roofArea, rules.rounding.quantityStepArea);
-    if (input.areaType === 'unknown') areaAssumedPlan = true;
-  }
-  if (areaAssumedPlan) {
-    assumptions.push(`Roof area of ${input.roofArea} m² treated as the actual sloped roof area`);
+    if (input.areaType === 'unknown') {
+      assumptions.push(`Area type was not specified - ${input.roofArea} m² treated as actual roof surface area`);
+    }
   }
 
-  // Covering quantity with waste allowance
   const wasteMultiplier = 1 + rules.wasteFactorPct / 100;
   const coveringQty = roundUpToStep(actualArea * wasteMultiplier, rules.rounding.quantityStepArea);
-
   const { ratios, assumed: shapeAssumed } = ratiosFor(input.roofShape);
-  if (shapeAssumed) assumptions.push('Roof shape not specified - simple gable proportions assumed');
-  const ridgeHipLm = roundUpToStep((ratios.ridgeLmPerSqm + ratios.hipLmPerSqm) * actualArea, rules.rounding.quantityStepLinear);
+
+  const ridgeHipLm = roundUpToStep(
+    (ratios.ridgeLmPerSqm + ratios.hipLmPerSqm) * actualArea,
+    rules.rounding.quantityStepLinear
+  );
   const valleyLm = roundUpToStep(ratios.valleyLmPerSqm * actualArea, rules.rounding.quantityStepLinear);
   const gutterLm = roundUpToStep(ratios.gutterLmPerSqm * actualArea, rules.rounding.quantityStepLinear);
 
   const lineItems: EstimateLineItem[] = [];
 
-  function addLine(item: CatalogItem, qty: number, unitOverride?: CatalogItem['unit']) {
+  function addLine(item: CatalogItem, qty: number, quantitySource: EstimateLineItem['quantitySource'], unitOverride?: CatalogItem['unit']) {
     if (qty <= 0) return;
     const unit = unitOverride ?? item.unit;
     let subtotal = qty * item.rate;
     if (item.minimumCharge > 0 && subtotal < item.minimumCharge) {
       subtotal = item.minimumCharge;
-      assumptions.push(`${item.name}: priced at the $${item.minimumCharge} minimum charge`);
+      assumptions.push(`${item.name}: minimum charge of ${catalog.symbol}${item.minimumCharge.toLocaleString()} applied`);
     }
     subtotal = roundUpTo(subtotal, rules.rounding.perLine);
-    lineItems.push({ catalogItemId: item.id, label: item.name, quantity: qty, unit, rate: item.rate, subtotal });
+    lineItems.push({ catalogItemId: item.id, label: item.name, quantity: qty, unit, rate: item.rate, subtotal, quantitySource });
     item.excludes.forEach((e) => exclusions.add(e));
   }
 
-  // Main covering
-  addLine(materialItem, coveringQty);
+  addLine(materialItem, coveringQty, 'area');
 
-  // Dry-fix ridge/hip system (not on flat roofs)
-  if (ridgeHipLm > 0 && input.roofShape !== 'flat') {
-    const ridgeItem = getItemById('ridge_hip_system');
-    if (ridgeItem) addLine(ridgeItem, ridgeHipLm);
+  const components = normaliseComponents(input.components);
+
+  if (input.componentScope === 'covering_only') {
+    assumptions.push('Estimate scope is the main roof covering only - no separate ridge, hip, valley, flashing, gutter or insulation line items added');
   }
 
-  // Valleys
-  if (valleyLm > 0) {
-    const valleyItem = getItemById('valley_trough');
-    if (valleyItem) addLine(valleyItem, valleyLm);
-  }
-
-  // Optional: flashings
-  if (input.includeFlashings) {
-    const flashItem = getItemById('flashings');
-    if (flashItem) {
-      const flashLm = roundUpToStep(Math.max(ridgeHipLm, gutterLm * 0.3), rules.rounding.quantityStepLinear);
-      addLine(flashItem, flashLm);
-      assumptions.push('Flashing length estimated from roof geometry');
-    }
-  }
-
-  // Optional: gutters + downpipes
-  if (input.includeGutters) {
-    const gutterItem = getItemById('gutter_replacement');
-    if (gutterItem) {
-      addLine(gutterItem, gutterLm);
-      assumptions.push(`Gutter length estimated at ${gutterLm} lm from roof area and shape`);
-      const downpipeItem = getItemById('downpipe');
-      if (downpipeItem) {
-        const count = Math.max(1, Math.round(gutterLm * rules.defaultDownpipesPerGutterLm));
-        addLine(downpipeItem, count, 'count');
-        assumptions.push(`${count} downpipe${count === 1 ? '' : 's'} assumed (1 per ~12.5 lm of gutter)`);
+  if (input.componentScope === 'specified_components') {
+    assumptions.push('Additional components included only where the customer supplied or selected them');
+    for (const selection of components) {
+      const item = getItemById(selection.catalogItemId);
+      if (!item) continue;
+      let qty = selection.quantity ?? 0;
+      let source: EstimateLineItem['quantitySource'] = 'user';
+      if (!qty && item.unit === 'm2') {
+        qty = actualArea;
+        source = 'area';
+        assumptions.push(`${item.name}: quantity matched to the calculated roof area`);
       }
+      if (!qty && item.unit === 'fixed') {
+        qty = 1;
+        source = 'fixed';
+      }
+      if (!qty) continue;
+      addLine(item, roundUpToStep(qty, item.unit === 'm2' ? rules.rounding.quantityStepArea : rules.rounding.quantityStepLinear), source);
     }
   }
 
-  // Optional: insulation
-  if (input.includeInsulation) {
-    const insItem = getItemById('insulation_upgrade');
-    if (insItem) addLine(insItem, actualArea);
+  if (input.componentScope === 'estimated_components') {
+    if (shapeAssumed) assumptions.push('Roof shape not supplied - simple gable proportions used only for requested component estimates');
+    assumptions.push('Selected roof component quantities are geometry-based allowances, not measured takeoff quantities');
+
+    // With no explicit list, estimate only roof-system components implied by shape.
+    const requested = components.length
+      ? components.map((c) => c.catalogItemId)
+      : ['ridge_hip_system', 'valley_trough'];
+
+    for (const id of requested) {
+      const item = getItemById(id);
+      if (!item) continue;
+      const supplied = components.find((c) => c.catalogItemId === id)?.quantity;
+      if (supplied && supplied > 0) {
+        addLine(item, roundUpToStep(supplied, rules.rounding.quantityStepLinear), 'user');
+        continue;
+      }
+
+      if (id === 'ridge_hip_system') addLine(item, ridgeHipLm, 'heuristic');
+      else if (id === 'valley_trough') addLine(item, valleyLm, 'heuristic');
+      else if (id === 'gutter_replacement') addLine(item, gutterLm, 'heuristic');
+      else if (id === 'downpipe') {
+        const count = Math.max(1, Math.round(gutterLm * rules.defaultDownpipesPerGutterLm));
+        addLine(item, count, 'heuristic', 'count');
+      } else if (id === 'insulation_upgrade') addLine(item, actualArea, 'area');
+      // Flashings and other linear details are deliberately not guessed.
+    }
   }
 
-  // Extras (validated catalogue ids only)
+  // Backward-compatible extras are explicit catalogue additions. Never infer quantities for unknown linear items.
   for (const extraId of input.extras ?? []) {
     const item = getItemById(extraId);
-    if (!item) continue;
-    const qty = item.unit === 'm2' ? actualArea : item.unit === 'lm' ? gutterLm : 1;
-    addLine(item, qty);
+    if (!item || lineItems.some((li) => li.catalogItemId === item.id)) continue;
+    if (item.unit === 'm2') addLine(item, actualArea, 'area');
+    else if (item.unit === 'fixed') addLine(item, 1, 'fixed');
   }
 
-  // Totals with consistent rounding
-  const subtotal = roundUpTo(
-    lineItems.reduce((sum, li) => sum + li.subtotal, 0),
-    rules.rounding.perLine
-  );
-
-  // Standard assumptions (append the data-driven ones)
+  const subtotal = roundUpTo(lineItems.reduce((sum, li) => sum + li.subtotal, 0), rules.rounding.perLine);
   const allAssumptions = [...assumptions, ...rules.standardAssumptions];
 
   return {
@@ -233,6 +254,8 @@ export function createEstimate(input: EstimateInput): Estimate {
       pitchDegrees: pitch,
       material,
       materialLabel: materialItem.name,
+      componentScope: input.componentScope,
+      components,
     },
     lineItems,
     subtotal,

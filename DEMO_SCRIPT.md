@@ -1,97 +1,108 @@
-# DEMO_SCRIPT.md — Apex Roofing Smart Assistant
+# Apex Roofing Smart Assistant - Demo Script V2
 
-Seven scripted conversations for screen recording or live demos, mapped to the spec's definition of done (section 26). Open `/apex-roofing`, click the blue chat bubble, and send the exact messages below. Expected timings: each reply streams in 2–6 seconds.
+Use a fresh private/incognito session for the cleanest recording. The strongest single demo is the end-to-end story at the bottom.
 
-**Setup tip:** record in a fresh incognito window so the session is clean. Refresh the page between demos 1–6 if you want isolated flows; demos 4→5→6 work best as one continuous conversation.
+## 1. Show grounded business knowledge
 
----
+**User:** Do you handle insurance work?
 
-## Demo 1 — General FAQ (grounded business answer)
+Expected: concise answer from `business.json`, with no invented detail.
 
-> **User:** Do you handle insurance work?
+**User:** Where can I read more about that?
 
-**Expected:** The assistant answers confidently from `business.json` — yes, Apex supports insurance work, documented damage assessments, adjuster meetings, all major insurers, full claim guidance. No hedging, no invented details beyond approved data.
+Expected: a real navigation button from `site-map.json` that takes the visitor to the insurance section.
 
-> **User:** What areas do you cover?
+## 2. Show technical roofing knowledge
 
-**Expected:** Lists the approved service areas (Portland, Beaverton, Hillsboro, Tigard, Lake Oswego, Gresham, Milwaukie, Vancouver WA) exactly. Emphasise to the prospect: *this list lives in a data file, not in the AI.*
+**User:** What is the difference between a hip roof and a gable roof?
 
----
+Expected: short, accurate answer from `roofing-knowledge.md`.
 
-## Demo 2 — Roofing knowledge question (approved domain knowledge)
+## 3. Show exact catalogue pricing
 
-> **User:** What's the difference between a hip and a gable roof?
+**User:** How much is concrete tile re-roofing per m2?
 
-**Expected:** A concise, accurate explanation from `roofing-knowledge.md` — gable: two sloping planes meeting at a ridge with triangular end walls; hip: slopes on all four sides meeting at hips, more wind-stable, more complex to roof. Plain English.
+Expected: exact approved catalogue rate. The model never calculates or invents the number.
 
-> **User:** Does roof pitch change how much material I need?
+## 4. Show the new estimate scope flow
 
-**Expected:** Explains plan area vs actual sloped area and the slope factor (actual = plan × 1/cos(pitch)). This sets up demo 4 — the same maths runs deterministically in the estimate engine.
+**User:** I have a 200 m² roof that needs replacing. Roughly what would it cost?
 
----
+Expected sequence:
 
-## Demo 3 — Simple pricing (exact catalogue rate)
+1. If material is missing, the assistant asks and shows structured material choices.
+2. After material is known, it asks what to include in the estimate and shows three choices:
+   - Roof covering only
+   - Add components I know
+   - Estimate roof components
 
-> **User:** How much is concrete re-roofing per m2?
+### Path A - covering only
 
-**Expected:** The assistant calls the pricing tool and quotes **exactly** the catalogue rate: **$62 per m²** (Marley Edgemere concrete tile, supply and installed, min charge $4,500), plus what's included (tear-off, disposal, underlay, battens, fixings, dry verge, labour). The number always matches `pricing.json` — the model is not allowed to invent prices.
+Choose **Roof covering only**.
 
----
+Expected: the estimate contains the main covering only. It must not silently add ridge, hip, valley, flashing, gutters or insulation.
 
-## Demo 4 — Complex estimate with clarification questions
+Point out to the prospect: this is deliberate control. The assistant does not assume chargeable work the customer did not request.
 
-> **User:** How much would it cost to replace the roof on my house? It's about 200 square metres.
+### Path B - customer-supplied components
 
-**Expected:** The assistant asks **at most two** clarification questions that materially change the price, e.g. *"Is that 200 m² the actual roof surface area or the ground footprint?"* and *"Which material — concrete tile, clay, or slate?"*
+On a fresh estimate choose **Add components I know**.
 
-> **User:** It's the ground footprint, and concrete tile is fine. It's a 30 degree pitch gable roof.
+**User:** Add about 18 metres of ridge/hip and 9 metres of valley.
 
-**Expected:** An **estimate card** appears with line items (concrete tile covering with 7.5% waste, dry-fix ridge/hip system, GRP valley troughs), the indicative total, and assumptions (plan→actual conversion at 30° slope factor 1.155, linear lengths estimated from area/shape). The prose summary mentions the total and key assumptions only.
+Expected: only those approved components are added at the supplied quantities.
 
-**Note for the recording:** if you keep answering vaguely, the assistant stops after two questions and commits with stated assumptions — that behaviour is deliberate (spec 8.3).
+### Path C - geometry-based allowances
 
----
+On a fresh estimate choose **Estimate roof components**.
 
-## Demo 5 — Estimate options + PDF download
+If needed, choose **Hip** when asked for roof shape.
 
-*(continues from demo 4)*
+Expected: the assistant adds only the roof components it has been explicitly authorised to estimate, with geometry-based quantities labelled as indicative allowances.
 
-> **User clicks the "Add gutter replacement" action button.**
+## 5. Show useful output actions
 
-**Expected:** The button sends a follow-up message automatically; the assistant creates an updated estimate including seamless gutters and downpipes (a new estimate card, higher total).
+From an estimate:
 
-> **User clicks the "Download PDF" action button.*
+- Click **Download estimate PDF**.
+- Confirm the downloaded PDF matches the estimate card exactly.
+- If gutters are absent, click **Add estimated gutters** and confirm a revised estimate is produced.
 
-**Expected:** A PDF downloads immediately — Apex branding, "Interactive Demo" disclaimer, estimate reference, date, project inputs, line items, totals, assumptions, exclusions, and a call-to-action for a formal quote. **Every number on the PDF comes from the same server-side estimate object shown in chat** — nothing is re-generated by the AI.
+## 6. Show memory and enquiry conversion
 
----
+Click **Request a formal quote**.
 
-## Demo 6 — Pre-filled enquiry (conversion)
+Expected review screen:
 
-*(continues from demo 4/5)*
+- Project details already captured
+- Roof area/material/shape/pitch when known
+- Estimate scope
+- Full indicative estimate line items and total
 
-> **User:** I'd like to get a proper quote for this.
+Then demonstrate the difference between the buttons:
 
-**Expected:** The assistant offers/opens the enquiry. The enquiry panel shows **"Here's what I know so far"** — project type, 200 m² footprint, gable, 30°, concrete tile, gutters added, indicative estimate reference and total — all pre-filled from the conversation. Only **name, email/phone** are blank.
+- **Looks good** goes straight to the minimal contact step.
+- **Edit details** opens the editable project information.
 
-**Action:** edit one field (e.g. correct the material), fill in contact details, submit.
+At the contact step, only name plus email or phone are required. Submit the demo enquiry and show the success state.
 
-**Expected:** Friendly success message explaining that in a live deployment this would go straight into the business's enquiry/CRM workflow (Apex is fictional, no one will actually call).
+## 7. Show honest boundaries
 
----
+**User:** Who is the best roofer in Portland and what do your competitors charge?
 
-## Demo 7 — Navigation button + unsupported-question handoff
+Expected: no invented competitor information. The assistant explains it does not have approved information for that and can prepare an enquiry where useful.
 
-> **User:** Where can I read about your guarantees?
+## Flagship single-take story
 
-**Expected:** A short answer plus a real **"View: Guarantees & Warranties"** button (URL from `site-map.json` — the model can never emit an arbitrary link). Clicking scrolls to the guarantees section.
+1. Land on the page and let the Smart Website teaser appear.
+2. Open Ask Apex from the teaser or the hero button.
+3. Ask: **I have a 200 m² hip roof and want concrete tiles. Roughly what would replacement cost?**
+4. Choose **Roof covering only** first and show the clean estimate.
+5. Click **Add roof components**, then authorise estimated ridge/hip/valley allowances.
+6. Download the PDF.
+7. Request a formal quote.
+8. Show the pre-filled review, choose **Looks good**, add contact details and submit.
+9. Ask for the insurance page and click the navigation button.
+10. Ask an unsupported competitor question to show the handoff boundary.
 
-> **User:** Can you tell me what your competitors charge for a slate roof in Beaverton, and who is the best roofer in Portland?
-
-**Expected:** A clean refusal to invent — the assistant says it doesn't have approved information for that, and offers to pass the question to the human team (**"Make an enquiry"** handoff with the original question attached). No hallucination, no awkward silence: the RED-zone boundary is a feature. Close with the sales line: *"Notice it would rather hand off than guess — that's what builds trust with your customers."*
-
----
-
-## Flagship end-to-end story (one continuous take)
-
-For a single-take recording: run demos 3 → 4 → 5 → 6 → 7 back-to-back in one session. The narrative arc is: *exact price → full estimate → PDF → enquiry → honest handoff.* Then open a second incognito window to show the first visitor's conversation is completely absent (session isolation).
+The story should feel like: **ask naturally -> get a controlled answer -> calculate -> act -> convert**.

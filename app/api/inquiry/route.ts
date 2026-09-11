@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getOrCreateSession } from '@/lib/assistant/session';
+import { getOrCreateSession, saveSession } from '@/lib/assistant/session';
 import { buildInquiryPayload, validateInquirySubmission, type InquirySubmission } from '@/lib/assistant/inquiry';
 
 export const runtime = 'nodejs';
@@ -33,11 +33,12 @@ export async function POST(req: Request) {
     payload,
   };
   session.inquiries.push(inquiry);
+  await saveSession(session);
 
   return NextResponse.json({
     ok: true,
     inquiryId: inquiry.id,
     message:
-      "Thanks - your enquiry has been prepared successfully. In a live deployment this would be sent directly into the business's enquiry/CRM workflow. (Apex Roofing is a fictional demo business, so no one will actually contact you.)",
+      "Thanks - your enquiry has been prepared successfully. In a live deployment this would now be sent into the business enquiry or CRM workflow.",
   });
 }

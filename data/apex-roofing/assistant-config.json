@@ -3,17 +3,32 @@
   "model": "gpt-4.1-mini",
   "maxUserMessageChars": 1000,
   "maxTurnsPerSession": 60,
-  "maxClarificationQuestions": 2,
+  "maxClarificationQuestions": 3,
   "sessionTtlMinutes": 240,
-  "rateLimit": { "maxMessagesPerMinute": 6, "maxMessagesPerHour": 80 },
-  "ipRateLimit": { "maxMessagesPerMinute": 15, "maxMessagesPerHour": 240 },
+  "rateLimit": {
+    "maxMessagesPerMinute": 6,
+    "maxMessagesPerHour": 80
+  },
+  "ipRateLimit": {
+    "maxMessagesPerMinute": 15,
+    "maxMessagesPerHour": 240
+  },
   "turnTimeoutMs": 30000,
   "starterPrompts": [
-    "I have a 200m² hip roof and I'm thinking about concrete tiles. Roughly what would replacement cost?",
+    "I have a 200m\u00b2 hip roof and I'm thinking about concrete tiles. Roughly what would replacement cost?",
     "What's the difference between slate and concrete tiles?",
     "Do you handle insurance work?",
     "Where can I find your roof repair service?",
     "Can you prepare an enquiry for my project?"
   ],
-  "tone": "a competent member of the Apex team: warm, concise, confident, professional - never fluffy, never salesy"
+  "tone": "a competent member of the Apex team: warm, concise, confident, professional - never fluffy, never salesy",
+  "assistantLabel": "Ask Apex",
+  "brandName": "Apex Roofing",
+  "accentColor": "#1769E0",
+  "launcherSubtitle": "Instant roofing advice and pricing",
+  "teaserTitle": "This is a Smart Website",
+  "teaserText": "Instead of searching through pages, ask the Smart Assistant. It can answer questions, price jobs, find the right page and help prepare an enquiry.",
+  "teaserExample": "I have a 200m\u00b2 hip roof and want concrete tiles. Roughly what would replacement cost?",
+  "openingIntro": "I know Apex Roofing's services, roofing information and pricing. Ask me like you would ask a member of the team.",
+  "demoFooter": "Apex Roofing is fictional - interactive demo by T3 Labs"
 }

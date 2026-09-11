@@ -1,34 +1,40 @@
 import fs from 'fs';
 import path from 'path';
 
-/**
- * Server-side loaders for the Apex Roofing data layer.
- * All business facts, prices and rules come from /data/apex-roofing - never hardcoded.
- */
+/** Server-side loaders for the active Smart Assistant business data layer. */
 
-const DATA_DIR = path.join(process.cwd(), 'data', 'apex-roofing');
+export const BUSINESS_SLUG = process.env.T3_ASSISTANT_BUSINESS_SLUG || 'apex-roofing';
+export const DATA_DIR = path.join(process.cwd(), 'data', BUSINESS_SLUG);
 
 type Cache = { [k: string]: unknown };
 const cache: Cache = {};
 
 function loadJson<T>(file: string): T {
-  if (!cache[file]) {
+  const key = `${BUSINESS_SLUG}:${file}`;
+  if (!cache[key]) {
     const raw = fs.readFileSync(path.join(DATA_DIR, file), 'utf-8');
-    cache[file] = JSON.parse(raw);
+    cache[key] = JSON.parse(raw);
   }
-  return cache[file] as T;
+  return cache[key] as T;
 }
 
 function loadText(file: string): string {
-  if (!cache[file]) {
-    cache[file] = fs.readFileSync(path.join(DATA_DIR, file), 'utf-8');
-  }
-  return cache[file] as string;
+  const key = `${BUSINESS_SLUG}:${file}`;
+  if (!cache[key]) cache[key] = fs.readFileSync(path.join(DATA_DIR, file), 'utf-8');
+  return cache[key] as string;
 }
 
-/* ---------- assistant-config.json ---------- */
 export interface AssistantConfig {
   assistantName: string;
+  assistantLabel?: string;
+  brandName?: string;
+  accentColor?: string;
+  launcherSubtitle?: string;
+  teaserTitle?: string;
+  teaserText?: string;
+  teaserExample?: string;
+  openingIntro?: string;
+  demoFooter?: string;
   model: string;
   maxUserMessageChars: number;
   maxTurnsPerSession: number;
@@ -45,7 +51,6 @@ export function getAssistantConfig(): AssistantConfig {
   return loadJson<AssistantConfig>('assistant-config.json');
 }
 
-/* ---------- business.json ---------- */
 export interface BusinessData {
   business: {
     name: string;
@@ -72,12 +77,10 @@ export function getBusiness(): BusinessData {
   return loadJson<BusinessData>('business.json');
 }
 
-/* ---------- roofing-knowledge.md ---------- */
 export function getRoofingKnowledge(): string {
   return loadText('roofing-knowledge.md');
 }
 
-/* ---------- site-map.json ---------- */
 export interface SiteMapEntry {
   id: string;
   title: string;

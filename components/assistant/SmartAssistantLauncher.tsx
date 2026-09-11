@@ -1,16 +1,10 @@
 'use client';
 
-import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AssistantAction, AssistantCard, AssistantTurn } from '@/lib/assistant/types';
 import type { Estimate } from '@/lib/pricing/estimate-engine';
 import { EnquiryPanel } from './EnquiryPanel';
 import { SmartAssistantTeaser } from './SmartAssistantTeaser';
-
-/**
- * "Ask Apex" Smart Assistant - premium workspace panel (UX brief).
- * Renders only structured turn payloads (cards/actions) from /api/chat SSE;
- * never parses assistant prose for UI. All API contracts unchanged.
- */
 
 interface ChatMessage {
   id: string;
@@ -22,593 +16,197 @@ interface ChatMessage {
 
 interface PublicConfig {
   assistantName: string;
+  assistantLabel: string;
+  brandName: string;
+  accentColor: string;
+  launcherSubtitle: string;
+  teaserTitle: string;
+  teaserText: string;
+  teaserExample: string;
+  openingIntro: string;
+  demoFooter: string;
   starterPrompts: string[];
   maxUserMessageChars: number;
 }
 
-const BLUE = '#1769E0';
-const SLATE = '#1E293B';
+const FALLBACK_CONFIG: PublicConfig = {
+  assistantName: 'Smart Assistant',
+  assistantLabel: 'Smart Assistant',
+  brandName: 'the business',
+  accentColor: '#1769E0',
+  launcherSubtitle: 'Answers, pricing and help',
+  teaserTitle: 'This is a Smart Website',
+  teaserText: 'Instead of searching through pages, just ask the Smart Assistant.',
+  teaserExample: 'Can you give me an indicative price for my project?',
+  openingIntro: 'Ask me anything about this business.',
+  demoFooter: 'Interactive demo by T3 Labs',
+  starterPrompts: [],
+  maxUserMessageChars: 1000,
+};
+const SLATE = '#0F172A';
 
-function uid() {
-  return Math.random().toString(36).slice(2, 10);
-}
-
-/* ---------------- Opening action cards (brief section 3) ---------------- */
+function uid() { return Math.random().toString(36).slice(2, 10); }
 
 const OPENING_ACTIONS: { title: string; blurb: string; message: string; icon: ReactNode }[] = [
   {
-    title: 'Get an estimate',
-    blurb: 'Work out an indicative project price.',
-    message: "I'd like an indicative estimate for a roof replacement.",
-    icon: (
-      <>
-        <path d="M12 3v18M3 7.5L12 21l9-13.5" />
-        <path d="M12 3l4 4.5M12 3L8 7.5" />
-      </>
-    ),
+    title: 'Get an estimate', blurb: 'Tell me what you are pricing and I will guide you.', message: "I'd like an indicative roof estimate.",
+    icon: <><path d="M4 19h16M6 16l3-9 3 6 3-10 3 13" /></>,
   },
   {
-    title: 'Ask a roofing question',
-    blurb: 'Materials, roof types, repairs, pitch, guarantees and more.',
-    message: 'I have a question about roofing.',
-    icon: (
-      <>
-        <path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-4-1L3 20l1-5.5a8.5 8.5 0 1 1 17-3z" />
-        <path d="M8.5 10.5h7M8.5 13.5h4" />
-      </>
-    ),
+    title: 'Ask a roofing question', blurb: 'Materials, roof types, repairs, pitch and more.', message: 'I have a roofing question.',
+    icon: <><path d="M21 12a8.5 8.5 0 01-9 8.5A9.5 9.5 0 014 19l-1 2 1-5A8.5 8.5 0 1121 12z" /><path d="M9.5 9a2.6 2.6 0 015 1c0 2-2.5 2-2.5 4M12 17h.01" /></>,
   },
   {
-    title: 'Find something on the site',
-    blurb: "Tell me what you need and I'll take you there.",
-    message: 'Can you help me find something on the website?',
-    icon: (
-      <>
-        <circle cx="11" cy="11" r="7" />
-        <path d="M21 21l-4.35-4.35" />
-      </>
-    ),
+    title: 'Find something', blurb: 'Tell me what page or information you need.', message: 'Help me find something on this website.',
+    icon: <><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></>,
   },
   {
-    title: 'Start an enquiry',
-    blurb: "I'll help prepare the details for the Apex team.",
-    message: "I'd like to make an enquiry.",
-    icon: (
-      <>
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
-      </>
-    ),
+    title: 'Prepare an enquiry', blurb: 'I will carry what we already know into the form.', message: "I'd like to prepare an enquiry.",
+    icon: <><path d="M6 3h9l4 4v14H6z" /><path d="M14 3v5h5M9 13h6M9 17h6" /></>,
   },
 ];
 
-/* ---------------- Material option cards (brief section 5) ---------------- */
-
-const MATERIAL_OPTIONS: { name: string; blurb: string; cta: string; message: string }[] = [
-  { name: 'Concrete Tile', blurb: 'Good value · durable', cta: 'Select', message: 'Concrete tiles, please.' },
-  { name: 'Clay', blurb: 'Classic look · long lifespan', cta: 'Select', message: 'Clay tiles, please.' },
-  { name: 'Slate', blurb: 'Premium · longest lifespan', cta: 'Select', message: 'Slate, please.' },
-  { name: 'Not Sure', blurb: 'Help me choose', cta: 'Help Me Decide', message: "I'm not sure which material - can you help me decide?" },
-];
-
-function asksAboutMaterial(text: string): boolean {
-  return /(which|what)\s+(material|tile|slate)|material\s+(would|do|did)\s+you|choose.{0,20}material/i.test(text);
+function scopeText(estimate: Estimate) {
+  if (estimate.project.componentScope === 'covering_only') return 'Roof covering only';
+  if (estimate.project.componentScope === 'specified_components') return 'Specified components included';
+  return 'Estimated roof components included';
 }
 
-const ESTIMATE_INTENT = /estimat|quote|pricing|price|cost|how much|re-?roof|replac/i;
-
-/* ---------------- Estimate card (brief section 5) ---------------- */
-
-function EstimateCard({ estimate }: { estimate: Estimate }) {
+function EstimateCard({ estimate, accentColor }: { estimate: Estimate; accentColor: string }) {
   return (
     <section className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="px-4 py-3 text-white" style={{ backgroundColor: SLATE }}>
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-sm font-semibold">Indicative Estimate</span>
-          <span className="rounded-full bg-white/15 px-2.5 py-1 text-[10px] uppercase tracking-wide">
-            {estimate.status}
-          </span>
-        </div>
-        <div className="mt-1 text-[11px] text-slate-300">
-          {estimate.project.roofArea.toLocaleString()} m² · {estimate.project.roofShape.replace('_', ' ')} ·{' '}
-          {estimate.project.pitchDegrees}° pitch · {estimate.project.materialLabel} · ref {estimate.id}
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-sm font-bold">Indicative estimate</p>
+            <p className="mt-1 text-[11px] text-slate-300">{estimate.project.roofArea.toLocaleString()} m² · {estimate.project.materialLabel}</p>
+          </div>
+          <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-slate-200">{scopeText(estimate)}</span>
         </div>
       </div>
 
       <div className="px-4 py-3.5">
-        <dl className="w-full text-xs">
+        <div className="space-y-0.5">
           {estimate.lineItems.map((li, i) => (
-            <div
-              key={li.catalogItemId + li.quantity + i}
-              className="flex items-baseline justify-between gap-3 border-b border-slate-100 py-1.5 last:border-0"
-            >
-              <dt className="text-slate-700">{li.label}</dt>
-              <dd className="flex items-baseline gap-3 whitespace-nowrap">
-                <span className="hidden text-[11px] text-slate-400 sm:inline">
-                  {li.quantity.toLocaleString()} {li.unit} × {estimate.symbol}
-                  {li.rate}
-                </span>
-                <span className="font-medium text-slate-900">
-                  {estimate.symbol}
-                  {li.subtotal.toLocaleString()}
-                </span>
-              </dd>
+            <div key={`${li.catalogItemId}-${li.quantity}-${i}`} className="flex items-start justify-between gap-3 border-b border-slate-100 py-2 last:border-0">
+              <div className="min-w-0">
+                <p className="text-xs font-medium text-slate-800">{li.label}</p>
+                <p className="mt-0.5 text-[10px] text-slate-400">
+                  {li.quantity.toLocaleString()} {li.unit} × {estimate.symbol}{li.rate.toLocaleString()}
+                  {li.quantitySource === 'heuristic' ? ' · estimated allowance' : ''}
+                </p>
+              </div>
+              <span className="shrink-0 text-xs font-semibold text-slate-900">{estimate.symbol}{li.subtotal.toLocaleString()}</span>
             </div>
           ))}
-        </dl>
-
-        <div className="mt-3 flex items-center justify-between border-t-2 border-slate-900/80 pt-2.5">
-          <span className="text-sm font-bold text-slate-900">Estimated total</span>
-          <span className="text-lg font-bold" style={{ color: BLUE }}>
-            {estimate.symbol}
-            {estimate.total.toLocaleString()} {estimate.currency}
-          </span>
         </div>
 
-        <details className="mt-2.5 group">
-          <summary className="cursor-pointer select-none text-[11px] text-slate-500 hover:text-slate-700">
-            Assumptions &amp; disclaimer
-          </summary>
-          <ul className="mt-1.5 space-y-1">
-            {estimate.assumptions.map((a, i) => (
-              <li key={i} className="flex gap-1.5 text-[11px] text-slate-500">
-                <span className="shrink-0 text-amber-500">•</span>
-                {a}
-              </li>
-            ))}
+        <div className="mt-3 flex items-end justify-between border-t-2 border-slate-900 pt-3">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Indicative total</p>
+            <p className="mt-0.5 text-[10px] text-slate-400">Ref {estimate.id}</p>
+          </div>
+          <span className="text-xl font-black" style={{ color: accentColor }}>{estimate.symbol}{estimate.total.toLocaleString()} <span className="text-xs font-semibold">{estimate.currency}</span></span>
+        </div>
+
+        <details className="mt-3 rounded-xl bg-slate-50 px-3 py-2">
+          <summary className="cursor-pointer select-none text-[11px] font-semibold text-slate-600">Assumptions and exclusions</summary>
+          <ul className="mt-2 space-y-1.5">
+            {estimate.assumptions.map((a, i) => <li key={i} className="text-[10px] leading-relaxed text-slate-500">• {a}</li>)}
           </ul>
-          {estimate.exclusions.length > 0 && (
-            <p className="mt-1.5 text-[11px] text-slate-400">Excludes: {estimate.exclusions.join('; ')}.</p>
-          )}
-          <p className="mt-1.5 text-[11px] italic text-slate-400">{estimate.disclaimer}</p>
+          {estimate.exclusions.length > 0 && <p className="mt-2 text-[10px] leading-relaxed text-slate-400">Excludes: {estimate.exclusions.join('; ')}.</p>}
+          <p className="mt-2 text-[10px] italic leading-relaxed text-slate-400">{estimate.disclaimer}</p>
         </details>
       </div>
     </section>
   );
 }
 
-/* ---------------- Action buttons ---------------- */
+function CardRenderer({ card, accentColor }: { card: AssistantCard; accentColor: string }) {
+  if (card.type === 'estimate') return <EstimateCard estimate={card.estimate} accentColor={accentColor} />;
+  return (
+    <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs leading-relaxed text-slate-600">
+      {card.summary}
+    </div>
+  );
+}
 
-function ActionButton({ action, onFollowUp, onInquiry, onDownload }: {
+function ActionButton({ action, accentColor, busy, onFollowUp, onInquiry, onDownload }: {
   action: AssistantAction;
+  accentColor: string;
+  busy: boolean;
   onFollowUp: (msg: string) => void;
   onInquiry: () => void;
   onDownload: (estimateId: string) => void;
 }) {
-  const base =
-    'rounded-full px-3.5 py-2 text-xs font-semibold border transition-colors inline-flex items-center gap-1.5';
-
-  if (action.type === 'NAVIGATE_INTERNAL') {
+  if (action.type === 'QUICK_REPLY') {
     return (
-      <a
-        href={action.url}
-        target={action.external ? '_blank' : undefined}
-        rel={action.external ? 'noopener noreferrer' : undefined}
-        className={`${base} text-white hover:opacity-90`}
-        style={{ backgroundColor: BLUE, borderColor: BLUE }}
+      <button
+        disabled={busy}
+        onClick={() => onFollowUp(action.message)}
+        className="group rounded-xl border border-slate-200 bg-white p-3 text-left shadow-sm transition hover:-translate-y-px hover:border-slate-300 hover:shadow-md disabled:opacity-50"
       >
-        {action.label} →
-      </a>
+        <span className="block text-xs font-bold text-slate-900">{action.label}</span>
+        {action.description && <span className="mt-0.5 block text-[10px] leading-snug text-slate-500">{action.description}</span>}
+      </button>
     );
+  }
+
+  const base = 'inline-flex items-center justify-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-semibold transition disabled:opacity-50';
+  if (action.type === 'NAVIGATE_INTERNAL') {
+    return <a href={action.url} target={action.external ? '_blank' : undefined} rel={action.external ? 'noopener noreferrer' : undefined} className={`${base} text-white hover:opacity-90`} style={{ backgroundColor: accentColor, borderColor: accentColor }}>{action.label} <span aria-hidden>→</span></a>;
   }
   if (action.type === 'OPEN_INQUIRY') {
-    return (
-      <button onClick={onInquiry} className={`${base} text-white hover:opacity-90`} style={{ backgroundColor: BLUE, borderColor: BLUE }}>
-        {action.label}
-      </button>
-    );
+    return <button disabled={busy} onClick={onInquiry} className={`${base} text-white hover:opacity-90`} style={{ backgroundColor: accentColor, borderColor: accentColor }}>{action.label}</button>;
   }
   if (action.type === 'ADD_ESTIMATE_OPTION') {
-    return (
-      <button onClick={() => onFollowUp(action.followUpMessage)} className={`${base} border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50`}>
-        {action.label}
-      </button>
-    );
+    return <button disabled={busy} onClick={() => onFollowUp(action.followUpMessage)} className={`${base} border-slate-300 bg-white text-slate-700 hover:bg-slate-50`}>{action.label}</button>;
   }
-  if (action.type === 'DOWNLOAD_OUTPUT') {
-    return (
-      <button
-        onClick={() => onDownload(action.estimateId)}
-        className={`${base} border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50`}
-      >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-        </svg>
-        {action.label}
-      </button>
-    );
-  }
-  return null;
-}
-
-/* ---------------- Main component ---------------- */
-
-export function SmartAssistantLauncher() {
-  const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [config, setConfig] = useState<PublicConfig | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [enquiryActive, setEnquiryActive] = useState(false);
-  const listRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  /** ids of assistant messages for which material option cards were already used */
-  const materialCardsUsed = useRef<Set<string>>(new Set());
-
-  useEffect(() => {
-    fetch('/api/chat')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((c: PublicConfig | null) => c && setConfig(c))
-      .catch(() => undefined);
-  }, []);
-
-  useEffect(() => {
-    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
-  }, [messages, enquiryActive]);
-
-  // Escape closes the panel (a11y)
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
-
-  // Move focus into the chat when opened
-  useEffect(() => {
-    if (!open) return;
-    const t = setTimeout(() => inputRef.current?.focus(), 80);
-    return () => clearTimeout(t);
-  }, [open]);
-
-  const sendMessage = useCallback(
-    async (text: string) => {
-      const trimmed = text.trim();
-      if (!trimmed || busy) return;
-      setError(null);
-      setEnquiryActive(false);
-      setInput('');
-      setBusy(true);
-
-      const userMsg: ChatMessage = { id: uid(), role: 'user', text: trimmed };
-      const assistantId = uid();
-      setMessages((m) => [...m, userMsg, { id: assistantId, role: 'assistant', text: '', streaming: true }]);
-
-      try {
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: trimmed }),
-        });
-
-        if (!res.ok || !res.body) {
-          const data = (await res.json().catch(() => null)) as { error?: string } | null;
-          throw new Error(data?.error ?? 'Something went wrong. Please try again.');
-        }
-
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        const applyToken = (t: string) =>
-          setMessages((m) => m.map((msg) => (msg.id === assistantId ? { ...msg, text: msg.text + t } : msg)));
-
-        for (;;) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const parts = buffer.split('\n\n');
-          buffer = parts.pop() ?? '';
-          for (const part of parts) {
-            const line = part.split('\n').find((l) => l.startsWith('data: '));
-            if (!line) continue;
-            let evt: { type: string; text?: string; turn?: AssistantTurn; error?: string };
-            try {
-              evt = JSON.parse(line.slice(6));
-            } catch {
-              continue;
-            }
-            if (evt.type === 'token' && evt.text) {
-              applyToken(evt.text);
-            } else if (evt.type === 'turn' && evt.turn) {
-              setMessages((m) =>
-                m.map((msg) => (msg.id === assistantId ? { ...msg, text: evt.turn!.message, turn: evt.turn, streaming: false } : msg))
-              );
-            } else if (evt.type === 'error') {
-              throw new Error(evt.error ?? 'Something went wrong. Please try again.');
-            }
-          }
-        }
-        setMessages((m) => m.map((msg) => (msg.id === assistantId ? { ...msg, streaming: false } : msg)));
-      } catch (e) {
-        const msgText = e instanceof Error ? e.message : 'Something went wrong. Please try again.';
-        setError(msgText);
-        setMessages((m) => m.filter((msg) => msg.id !== assistantId || msg.text.length > 0));
-      } finally {
-        setBusy(false);
-      }
-    },
-    [busy]
-  );
-
-  const handleInquiry = useCallback(() => {
-    setEnquiryActive(true);
-  }, []);
-
-  const handleDownload = useCallback(async (estimateId: string) => {
-    try {
-      const res = await fetch('/api/outputs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ estimateId }),
-      });
-      if (!res.ok) throw new Error();
-      const data = (await res.json()) as { outputId?: string };
-      if (!data.outputId) throw new Error();
-      window.location.href = `/api/outputs?id=${encodeURIComponent(data.outputId)}`;
-    } catch {
-      setError('Sorry - the PDF could not be generated. Please try again.');
-    }
-  }, []);
-
-  const hasMessages = messages.length > 0;
-  const lastMsg = messages[messages.length - 1];
-  const lastUser = [...messages].reverse().find((m) => m.role === 'user');
-  const awaitingEstimate = busy && lastMsg?.role === 'assistant' && !lastMsg.text && !!lastUser && ESTIMATE_INTENT.test(lastUser.text);
-  const showMaterialOptions =
-    !busy &&
-    lastMsg?.role === 'assistant' &&
-    lastMsg.turn &&
-    !lastMsg.turn.cards?.length &&
-    !lastMsg.streaming &&
-    !materialCardsUsed.current.has(lastMsg.id) &&
-    lastMsg.text.length < 400 &&
-    asksAboutMaterial(lastMsg.text);
-
   return (
-    <>
-      {/* Teaser (once per session) + branded launcher */}
-      {!open && <SmartAssistantTeaser onOpenAssistant={() => setOpen(true)} />}
-
-      <button
-        aria-label={open ? 'Close Ask Apex' : 'Open Ask Apex - instant roofing advice and pricing'}
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-        className="group fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-2xl py-2.5 pl-3 pr-4 text-left text-white shadow-xl shadow-slate-900/25 transition-all hover:shadow-2xl hover:shadow-slate-900/30 active:scale-[0.98] sm:bottom-5 sm:right-5"
-        style={{ backgroundColor: open ? SLATE : BLUE }}
-      >
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15">
-          {open ? (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          ) : (
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2l2.4 5.4L20 9.3l-4 4 .9 5.9L12 16.6 7.1 19.2l.9-5.9-4-4 5.6-1.9L12 2z" />
-            </svg>
-          )}
-        </span>
-        <span className="hidden sm:block">
-          <span className="block text-sm font-bold leading-tight tracking-tight">{open ? 'Close' : 'Ask Apex'}</span>
-          <span className="block text-[10px] leading-tight text-white/80">Instant roofing advice &amp; pricing</span>
-        </span>
-      </button>
-
-      {/* Workspace panel */}
-      {open && (
-        <div
-          role="dialog"
-          aria-label="Ask Apex - Smart Assistant"
-          className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-slate-50 shadow-2xl shadow-black/25 sm:inset-auto sm:bottom-24 sm:right-5 sm:h-[min(680px,calc(100dvh-8rem))] sm:w-[min(520px,calc(100vw-2.5rem))] sm:rounded-2xl sm:border sm:border-slate-200"
-        >
-          {/* Sticky header */}
-          <div className="shrink-0 px-4 py-3.5 text-white" style={{ backgroundColor: BLUE }}>
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <div className="text-base font-bold leading-tight tracking-tight">Ask Apex</div>
-                <div className="mt-0.5 truncate text-[11px] text-white/85">
-                  Ask me like you&apos;d ask a member of the Apex team.
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="hidden items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[10px] sm:flex">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                  Online
-                </span>
-                <button
-                  onClick={() => setOpen(false)}
-                  aria-label="Close"
-                  className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-white/15 sm:hidden"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-                    <path d="M6 6l12 12M18 6L6 18" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Enquiry flow replaces the conversation area */}
-          {enquiryActive ? (
-            <div className="flex-1 bg-slate-50">
-              <EnquiryPanel onClose={() => setEnquiryActive(false)} />
-            </div>
-          ) : (
-            <div
-              ref={listRef}
-              role="log"
-              aria-live="polite"
-              aria-label="Conversation messages"
-              className="flex-1 overflow-y-auto px-4 py-4"
-            >
-              {!hasMessages && <OpeningScreen onAction={sendMessage} starters={config?.starterPrompts ?? []} busy={busy} />}
-
-              {messages.map((m) => (
-                <div key={m.id}>
-                  {m.role === 'user' ? (
-                    <div className="flex justify-end">
-                      <div className="max-w-[85%] rounded-2xl rounded-br-md px-4 py-2.5 text-sm text-white" style={{ backgroundColor: BLUE }}>
-                        {m.text}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-4 first:mt-0">
-                      {/* Estimate-ready moment (brief section 7) */}
-                      {m.turn?.cards?.some((c) => c.type === 'estimate') && !m.streaming && (
-                        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: BLUE }}>
-                          ✓ Your estimate is ready
-                        </p>
-                      )}
-                      <div className="text-sm leading-relaxed text-slate-800">
-                        {m.text || (awaitingEstimate && m.id === lastMsg?.id ? <PreparingEstimate /> : <ThinkingDots />)}
-                        {m.streaming && m.text ? (
-                          <span className="ml-0.5 inline-block h-3.5 w-[2px] animate-pulse bg-slate-400 align-middle" />
-                        ) : null}
-                      </div>
-
-                      {m.turn?.cards?.map((card, i) => (
-                        <CardRenderer key={i} card={card} />
-                      ))}
-
-                      {m.turn?.actions && m.turn.actions.length > 0 && !m.streaming && (
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {m.turn.actions.map((a, i) => (
-                            <ActionButton key={i} action={a} onFollowUp={sendMessage} onInquiry={handleInquiry} onDownload={handleDownload} />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              {showMaterialOptions && lastMsg && (
-                <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {MATERIAL_OPTIONS.map((opt) => (
-                    <div key={opt.name} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-                      <p className="text-sm font-semibold text-slate-900">{opt.name}</p>
-                      <p className="mt-0.5 text-[11px] text-slate-500">{opt.blurb}</p>
-                      <button
-                        onClick={() => {
-                          materialCardsUsed.current.add(lastMsg.id);
-                          sendMessage(opt.message);
-                        }}
-                        disabled={busy}
-                        className="mt-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50"
-                        style={{ borderColor: BLUE, color: BLUE }}
-                      >
-                        {opt.cta}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {error && (
-                <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">{error}</div>
-              )}
-            </div>
-          )}
-
-          {/* Composer (sticky, hidden during enquiry) */}
-          {!enquiryActive && (
-            <div className="shrink-0 border-t border-slate-200 bg-white p-3">
-              {!hasMessages && (
-                <p className="mb-2 text-center text-[11px] font-medium text-slate-400">Or just ask me anything…</p>
-              )}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  sendMessage(input);
-                }}
-                className="flex items-end gap-2"
-              >
-                <textarea
-                  ref={inputRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value.slice(0, config?.maxUserMessageChars ?? 1000))}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      sendMessage(input);
-                    }
-                  }}
-                  rows={1}
-                  aria-label="Type your message"
-                  placeholder="Ask about services, pricing, or an estimate…"
-                  className="max-h-28 min-h-[44px] flex-1 resize-none rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#1769E0] focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  disabled={busy || !input.trim()}
-                  aria-label="Send message"
-                  className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl text-white transition-opacity hover:opacity-90 disabled:opacity-40"
-                  style={{ backgroundColor: BLUE }}
-                >
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                  </svg>
-                </button>
-              </form>
-              <p className="mt-1.5 text-center text-[10px] text-slate-400">
-                Apex Roofing is a fictional business · Interactive demo by T3 Labs
-              </p>
-            </div>
-          )}
-        </div>
-      )}
-    </>
+    <button disabled={busy} onClick={() => onDownload(action.estimateId)} className={`${base} border-slate-300 bg-white text-slate-700 hover:bg-slate-50`}>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
+      {action.label}
+    </button>
   );
 }
 
-/* ---------------- Opening screen (brief section 3) ---------------- */
+function ThinkingDots() {
+  return <span className="inline-flex items-center gap-1 py-1"><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400" /><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:120ms]" /><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:240ms]" /></span>;
+}
 
-function OpeningScreen({ onAction, starters, busy }: {
-  onAction: (msg: string) => void;
-  starters: string[];
-  busy: boolean;
-}) {
+function OpeningScreen({ config, busy, onAction }: { config: PublicConfig; busy: boolean; onAction: (message: string) => void }) {
   return (
     <div>
-      <p className="text-sm leading-relaxed text-slate-600">
-        I know Apex Roofing&apos;s services, roofing information and pricing. I can answer questions, estimate
-        projects, find pages on the website and help prepare an enquiry.
-      </p>
+      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl text-white" style={{ backgroundColor: config.accentColor }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.2 5 5.3 1.8-3.8 3.8.9 5.4-4.6-2.5L7.4 18l.9-5.4-3.8-3.8L9.8 7 12 2z" /></svg>
+          </span>
+          <div>
+            <p className="text-sm font-bold text-slate-950">Ask me instead of searching</p>
+            <p className="text-[10px] font-medium text-slate-400">Answers are grounded in the business data loaded for this demo</p>
+          </div>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-slate-600">{config.openingIntro}</p>
+      </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-        {OPENING_ACTIONS.map((a) => (
-          <button
-            key={a.title}
-            onClick={() => onAction(a.message)}
-            disabled={busy}
-            className="rounded-2xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition-all hover:border-[#1769E0] hover:shadow-md disabled:opacity-50"
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50" style={{ color: BLUE }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                {a.icon}
-              </svg>
-            </span>
-            <p className="mt-2 text-sm font-semibold text-slate-900">{a.title}</p>
-            <p className="mt-0.5 text-[11px] leading-snug text-slate-500">{a.blurb}</p>
+      <div className="mt-3 grid grid-cols-2 gap-2.5">
+        {OPENING_ACTIONS.map((action) => (
+          <button key={action.title} disabled={busy} onClick={() => onAction(action.message)} className="rounded-2xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition hover:-translate-y-px hover:border-slate-300 hover:shadow-md disabled:opacity-50">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100" style={{ color: config.accentColor }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">{action.icon}</svg></span>
+            <span className="mt-2 block text-xs font-bold text-slate-900">{action.title}</span>
+            <span className="mt-0.5 block text-[10px] leading-snug text-slate-500">{action.blurb}</span>
           </button>
         ))}
       </div>
 
-      {starters.length > 0 && (
+      {config.starterPrompts.length > 0 && (
         <div className="mt-4">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Try asking</p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {starters.slice(0, 3).map((s) => (
-              <button
-                key={s}
-                onClick={() => onAction(s)}
-                disabled={busy}
-                className="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] text-slate-700 transition-colors hover:border-slate-400 hover:bg-slate-50 disabled:opacity-50"
-              >
-                {s}
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Try a real question</p>
+          <div className="mt-2 space-y-1.5">
+            {config.starterPrompts.slice(0, 3).map((prompt) => (
+              <button key={prompt} disabled={busy} onClick={() => onAction(prompt)} className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left text-xs text-slate-700 hover:border-slate-300 hover:bg-slate-50 disabled:opacity-50">
+                <span>{prompt}</span><span className="shrink-0 text-slate-400">→</span>
               </button>
             ))}
           </div>
@@ -618,37 +216,224 @@ function OpeningScreen({ onAction, starters, busy }: {
   );
 }
 
-/* ---------------- helpers ---------------- */
+export function SmartAssistantLauncher() {
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [config, setConfig] = useState<PublicConfig>(FALLBACK_CONFIG);
+  const [error, setError] = useState<string | null>(null);
+  const [enquiryActive, setEnquiryActive] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
-function CardRenderer({ card }: { card: AssistantCard }) {
-  if (card.type === 'estimate') return <EstimateCard estimate={card.estimate} />;
-  return (
-    <div className="mt-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-600 shadow-sm">
-      <span className="font-medium text-slate-800">Handoff: </span>
-      {card.summary}
-    </div>
-  );
-}
+  useEffect(() => {
+    const openFromPage = (event: MouseEvent) => {
+      const target = event.target instanceof Element ? event.target.closest('[data-open-smart-assistant]') : null;
+      if (!target) return;
+      event.preventDefault();
+      setOpen(true);
+    };
+    document.addEventListener('click', openFromPage);
+    return () => document.removeEventListener('click', openFromPage);
+  }, []);
 
-function ThinkingDots() {
-  return (
-    <span className="inline-flex items-center gap-1 py-1">
-      {[0, 1, 2].map((i) => (
-        <span
-          key={i}
-          className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400"
-          style={{ animationDelay: `${i * 0.15}s` }}
-        />
-      ))}
-    </span>
-  );
-}
+  useEffect(() => {
+    fetch('/api/chat', { cache: 'no-store' })
+      .then((r) => r.ok ? r.json() : null)
+      .then((value: PublicConfig | null) => value && setConfig({ ...FALLBACK_CONFIG, ...value }))
+      .catch(() => undefined);
+  }, []);
 
-function PreparingEstimate() {
+  useEffect(() => { listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' }); }, [messages, enquiryActive]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKey);
+    const previous = document.body.style.overflow;
+    if (window.innerWidth < 640) document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = previous; };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || enquiryActive) return;
+    const timer = setTimeout(() => inputRef.current?.focus(), 100);
+    return () => clearTimeout(timer);
+  }, [open, enquiryActive]);
+
+  const sendMessage = useCallback(async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed || busy) return;
+    setError(null);
+    setEnquiryActive(false);
+    setInput('');
+    setBusy(true);
+    const userMsg: ChatMessage = { id: uid(), role: 'user', text: trimmed };
+    const assistantId = uid();
+    setMessages((current) => [...current, userMsg, { id: assistantId, role: 'assistant', text: '', streaming: true }]);
+
+    try {
+      const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: trimmed }) });
+      if (!res.ok || !res.body) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(data?.error ?? 'Something went wrong. Please try again.');
+      }
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split('\n\n');
+        buffer = parts.pop() ?? '';
+        for (const part of parts) {
+          const line = part.split('\n').find((l) => l.startsWith('data: '));
+          if (!line) continue;
+          let event: { type: string; text?: string; turn?: AssistantTurn; error?: string };
+          try { event = JSON.parse(line.slice(6)); } catch { continue; }
+          if (event.type === 'token' && event.text) {
+            setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: message.text + event.text } : message));
+          } else if (event.type === 'turn' && event.turn) {
+            setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: event.turn!.message, turn: event.turn, streaming: false } : message));
+          } else if (event.type === 'error') {
+            throw new Error(event.error ?? 'Something went wrong. Please try again.');
+          }
+        }
+      }
+      setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, streaming: false } : message));
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Something went wrong. Please try again.';
+      setError(message);
+      setMessages((current) => current.filter((item) => item.id !== assistantId || item.text.length > 0));
+    } finally {
+      setBusy(false);
+    }
+  }, [busy]);
+
+  const handleDownload = useCallback(async (estimateId: string) => {
+    setError(null);
+    try {
+      const create = await fetch('/api/outputs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estimateId }) });
+      const created = (await create.json().catch(() => null)) as { outputId?: string; error?: string } | null;
+      if (!create.ok || !created?.outputId) throw new Error(created?.error ?? 'Could not prepare the PDF.');
+      const download = await fetch(`/api/outputs?id=${encodeURIComponent(created.outputId)}`, { cache: 'no-store' });
+      if (!download.ok) {
+        const data = (await download.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(data?.error ?? 'Could not download the PDF.');
+      }
+      const blob = await download.blob();
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `indicative-estimate-${estimateId}.pdf`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Sorry, the PDF could not be generated. Please try again.');
+    }
+  }, []);
+
+  const hasMessages = messages.length > 0;
+  const quickReplyActions = useMemo(() => {
+    const last = messages[messages.length - 1];
+    return last?.role === 'assistant' && !last.streaming ? last.turn?.actions?.filter((a) => a.type === 'QUICK_REPLY') ?? [] : [];
+  }, [messages]);
+
   return (
-    <span className="inline-flex items-center gap-2 py-1 text-slate-500">
-      <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-300 border-t-[#1769E0]" />
-      Preparing your estimate…
-    </span>
+    <>
+      {!open && <SmartAssistantTeaser config={{ assistantLabel: config.assistantLabel, accentColor: config.accentColor, teaserTitle: config.teaserTitle, teaserText: config.teaserText, teaserExample: config.teaserExample }} onOpenAssistant={() => setOpen(true)} />}
+
+      {!open && (
+        <button
+          aria-label={`Open ${config.assistantLabel}`}
+          onClick={() => setOpen(true)}
+          className="fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-2xl py-2.5 pl-3 pr-4 text-left text-white shadow-xl shadow-slate-900/25 transition hover:-translate-y-px hover:shadow-2xl active:translate-y-0 sm:bottom-5 sm:right-5"
+          style={{ backgroundColor: config.accentColor }}
+        >
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.2 5 5.3 1.8-3.8 3.8.9 5.4-4.6-2.5L7.4 18l.9-5.4-3.8-3.8L9.8 7 12 2z" /></svg></span>
+          <span className="hidden sm:block"><span className="block text-sm font-black leading-tight">{config.assistantLabel}</span><span className="block text-[10px] leading-tight text-white/80">{config.launcherSubtitle}</span></span>
+        </button>
+      )}
+
+      {open && (
+        <div role="dialog" aria-modal="true" aria-label={config.assistantName} className="fixed inset-0 z-[60] flex flex-col overflow-hidden bg-slate-50 shadow-2xl sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(760px,calc(100dvh-2.5rem))] sm:w-[min(560px,calc(100vw-2.5rem))] sm:rounded-[22px] sm:border sm:border-slate-200">
+          <header className="shrink-0 border-b border-white/10 px-4 py-3.5 text-white" style={{ background: `linear-gradient(135deg, ${SLATE}, ${config.accentColor})` }}>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.2 5 5.3 1.8-3.8 3.8.9 5.4-4.6-2.5L7.4 18l.9-5.4-3.8-3.8L9.8 7 12 2z" /></svg></span>
+                <div className="min-w-0"><p className="truncate text-sm font-black">{config.assistantLabel}</p><p className="truncate text-[10px] text-white/75">Ask me like you would ask the team</p></div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="hidden items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-white/80 sm:flex"><span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />Business data connected</span>
+                <button onClick={() => setOpen(false)} aria-label="Close assistant" className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+              </div>
+            </div>
+          </header>
+
+          {enquiryActive ? (
+            <div className="min-h-0 flex-1"><EnquiryPanel onClose={() => setEnquiryActive(false)} accentColor={config.accentColor} /></div>
+          ) : (
+            <>
+              <div ref={listRef} role="log" aria-live="polite" className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-5">
+                {!hasMessages && <OpeningScreen config={config} busy={busy} onAction={sendMessage} />}
+
+                <div className="space-y-4">
+                  {messages.map((message) => (
+                    <div key={message.id}>
+                      {message.role === 'user' ? (
+                        <div className="flex justify-end"><div className="max-w-[88%] rounded-2xl rounded-br-md px-3.5 py-2.5 text-sm leading-relaxed text-white" style={{ backgroundColor: config.accentColor }}>{message.text}</div></div>
+                      ) : (
+                        <div>
+                          {message.turn?.cards?.some((card) => card.type === 'estimate') && !message.streaming && <p className="mb-1.5 text-[10px] font-black uppercase tracking-wider" style={{ color: config.accentColor }}>Estimate ready</p>}
+                          <div className="text-sm leading-relaxed text-slate-800">{message.text || <ThinkingDots />}{message.streaming && message.text ? <span className="ml-0.5 inline-block h-3.5 w-[2px] animate-pulse bg-slate-400 align-middle" /> : null}</div>
+                          {message.turn?.cards?.map((card, i) => <CardRenderer key={i} card={card} accentColor={config.accentColor} />)}
+
+                          {message.turn?.actions && message.turn.actions.some((a) => a.type !== 'QUICK_REPLY') && !message.streaming && (
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              {message.turn.actions.filter((a) => a.type !== 'QUICK_REPLY').map((action, i) => <ActionButton key={i} action={action} accentColor={config.accentColor} busy={busy} onFollowUp={sendMessage} onInquiry={() => setEnquiryActive(true)} onDownload={handleDownload} />)}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {quickReplyActions.length > 0 && (
+                  <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {quickReplyActions.map((action, i) => <ActionButton key={i} action={action} accentColor={config.accentColor} busy={busy} onFollowUp={sendMessage} onInquiry={() => setEnquiryActive(true)} onDownload={handleDownload} />)}
+                  </div>
+                )}
+
+                {error && <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-relaxed text-amber-800">{error}</div>}
+              </div>
+
+              <footer className="shrink-0 border-t border-slate-200 bg-white p-3 sm:p-4">
+                <form onSubmit={(e) => { e.preventDefault(); sendMessage(input); }} className="flex items-end gap-2 rounded-2xl border border-slate-300 bg-white p-1.5 focus-within:border-slate-400 focus-within:shadow-sm">
+                  <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value.slice(0, config.maxUserMessageChars))}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input); } }}
+                    rows={1}
+                    aria-label="Ask the Smart Assistant"
+                    placeholder={`Ask anything about ${config.brandName}...`}
+                    className="max-h-28 min-h-[42px] flex-1 resize-none border-0 bg-transparent px-2.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                  />
+                  <button type="submit" disabled={busy || !input.trim()} aria-label="Send message" className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-xl text-white hover:opacity-90 disabled:opacity-35" style={{ backgroundColor: config.accentColor }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
+                  </button>
+                </form>
+                <p className="mt-2 text-center text-[9px] font-medium text-slate-400">{config.demoFooter}</p>
+              </footer>
+            </>
+          )}
+        </div>
+      )}
+    </>
   );
 }

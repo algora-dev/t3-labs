@@ -15,12 +15,12 @@ A visitor to `/apex-roofing` can:
 - Ask business questions (services, hours, insurance work, guarantees) and get **grounded answers** from approved data.
 - Ask roofing knowledge questions (hip vs gable, roof pitch, plan vs actual area) answered from an **approved knowledge base**.
 - Ask for **exact catalogue prices** ("how much is concrete re-roofing per m2?").
-- Request an **indicative estimate** (e.g. 200 m² re-roof) — the assistant asks **at most two clarification questions**, then a **deterministic server-side engine** calculates the itemised estimate.
+- Request an **indicative estimate** (e.g. 200 m² re-roof) — the assistant uses a short guided flow with up to **three concise clarification turns** when needed, then a **deterministic server-side engine** calculates the itemised estimate. The customer must explicitly choose whether to price covering only, specified components, or geometry-based component allowances.
 - Click real buttons to **add options** (gutters), **download an estimate PDF**, and **make a pre-filled enquiry** from facts already captured in conversation.
 - Ask "where can I read about your guarantees?" and get a **validated navigation button** to the right page section.
 - Ask an unsupported question and get a **clean, honest handoff** instead of a hallucinated answer.
 
-Every visitor gets an isolated session (cookie-based); messages, facts, estimates, enquiries and PDFs never cross between visitors.
+Every visitor gets an isolated cookie-backed session. Local development uses memory; hosted deployments should configure the built-in Redis REST session adapter so messages, facts, estimates, enquiries and PDFs remain available across serverless instances.
 
 ---
 
@@ -54,7 +54,7 @@ components/assistant/
 lib/assistant/
   orchestrator.ts                Tool-calling pipeline, OpenAI streaming client, timeouts
   prompts.ts                     System prompt builder (authority model, guardrails)
-  session.ts                     Cookie-based isolated sessions, TTL, guards, rate limits
+  session.ts                     Cookie-based isolated sessions, Redis REST persistence, TTL and guards
   rate-limit.ts                  Per-IP rate limiting
   data.ts                        Server-side loaders for the data layer
   inquiry.ts                     Enquiry payload builder/validation
@@ -80,20 +80,15 @@ tests/
 
 ## Swapping Apex data for another business
 
-Everything business-specific lives in `data/apex-roofing/`. To re-skill the assistant:
+The assistant data layer is selected by `T3_ASSISTANT_BUSINESS_SLUG` and defaults to `apex-roofing`. To re-skill it:
 
-1. **Copy the data folder**: `data/apex-roofing/` → `data/<your-business>/`.
-2. **Replace `business.json`** — name, description, contact details, service areas, hours, emergency process, insurance policy, guarantees, process, services, FAQs. Keep the same shape (see `lib/assistant/data.ts` for the interface).
-3. **Replace `roofing-knowledge.md`** with your trade/domain knowledge (or keep it empty-ish for a pure business assistant). This file is authoritative for educational questions.
-4. **Replace `pricing.json`** — your products/services with `id`, `name`, `category`, `unit` (`m2` | `lm` | `count` | `fixed`), `rate`, `minimumCharge`, `includes`/`excludes`. Bump `catalogVersion` whenever prices change; it is stamped on every estimate and PDF.
-5. **Tune `estimate-rules.json`** — default pitch, perimeter heuristics per roof/job shape, waste factor, rounding rule, standard assumptions, disclaimer. (For non-roofing businesses this becomes your calculation-rules file; extend `lib/pricing/estimate-engine.ts` if your maths differs.)
-6. **Update `site-map.json`** — id, title, path, keywords for every page/section the assistant may link to. **Only these paths can ever become navigation buttons.**
-7. **Update `assistant-config.json`** — assistant name, model, message/turn/session limits, rate limits, starter prompts, tone.
-8. **Point the loaders** at the new folder: change `DATA_DIR` in `lib/assistant/data.ts`, `catalog.ts`, and `rules.ts` (one path constant each), plus the `DATA_DIR` references to `estimate-rules.json`/`pricing.json`.
-9. **Re-brand the demo page** (`app/apex-roofing/page.tsx` or a new route) and the chat panel colours (`BLUE` constant in `components/assistant/SmartAssistantLauncher.tsx`).
-10. **Verify**: `npm run typecheck && npm run build`, then run `node --test tests/` and walk through `tests/acceptance-checklist.md`.
+1. Copy `data/apex-roofing/` to `data/<your-business>/`.
+2. Replace `business.json`, `roofing-knowledge.md`, `pricing.json`, `estimate-rules.json`, `site-map.json` and `assistant-config.json`.
+3. Set `T3_ASSISTANT_BUSINESS_SLUG=<your-business>`.
+4. Build a branded landing page for that business and mount `SmartAssistantLauncher`.
+5. Verify pricing tests and the manual acceptance checklist.
 
-No pricing or business answers are hardcoded in components or prompts — if you find yourself editing a React component to change a price or an answer, something is wrong.
+The reusable assistant components now read customer-facing labels, accent colour, teaser copy and starter prompts from `assistant-config.json`. Business/pricing answers should not be hardcoded into React components.
 
 ---
 
@@ -101,9 +96,12 @@ No pricing or business answers are hardcoded in components or prompts — if you
 
 | Variable | Required | Purpose |
 |---|---|---|
-| `OPENAI_API_KEY` | Yes (for chat) | Server-side OpenAI key used by the orchestrator. Never exposed to the client. Without it the site and enquiry flow still work; chat returns a friendly "not configured" message. |
+| `OPENAI_API_KEY` | Yes (for chat) | Server-side OpenAI key used by the orchestrator. Never exposed to the client. |
+| `T3_ASSISTANT_BUSINESS_SLUG` | No | Data folder to load. Defaults to `apex-roofing`. |
+| `KV_REST_API_URL` + `KV_REST_API_TOKEN` | Recommended for hosted demos | Shared Redis REST session store for serverless deployments. |
+| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | Alternative | Equivalent Upstash variable names supported by the same adapter. |
 
-Set it in `.env.local` for development and in your Vercel project settings for deployment.
+Set the OpenAI key locally. For Vercel/serverless, also connect a Redis-compatible KV store and add its REST URL/token. Without Redis the app falls back to in-memory sessions, which is suitable for local development but not reliable across serverless instances.
 
 ---
 
@@ -111,7 +109,7 @@ Set it in `.env.local` for development and in your Vercel project settings for d
 
 ```bash
 npm install
-echo "OPENAI_API_KEY=sk-..." > .env.local
+printf "OPENAI_API_KEY=sk-...\nT3_ASSISTANT_BUSINESS_SLUG=apex-roofing\n" > .env.local
 npm run dev          # http://localhost:3000/apex-roofing
 ```
 
@@ -120,7 +118,7 @@ Checks before shipping:
 ```bash
 npm run typecheck    # tsc --noEmit
 npm run build        # production build must pass
-node --test tests/pricing.test.mjs   # deterministic estimate-engine tests
+npm test             # deterministic estimate-engine tests
 ```
 
 Do not run the dev server while recording the demo; use `npm run build && npm start` for realistic behaviour.
@@ -131,7 +129,8 @@ Do not run the dev server while recording the demo; use `npm run build && npm st
 
 1. Push the repo to GitHub and import it into Vercel (or use the existing project).
 2. Set `OPENAI_API_KEY` in Project → Settings → Environment Variables.
-3. Deploy. Sessions are in-memory per server instance, which is fine for a demo; for heavier traffic swap the `sessions` Map in `lib/assistant/session.ts` for Redis/KV keyed the same way (interface stays identical).
+3. Connect Vercel KV / Upstash Redis and set the REST URL/token environment variables.
+4. Deploy and verify that an estimate can still be downloaded and pre-filled into an enquiry after separate requests.
 
 ---
 

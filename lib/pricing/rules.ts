@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { BUSINESS_SLUG } from '../assistant/data';
 
 /** Server-side loader for estimate-rules.json (deterministic estimate rules). */
 
@@ -39,7 +40,7 @@ let cached: EstimateRules | null = null;
 export function getEstimateRules(): EstimateRules {
   if (!cached) {
     const raw = fs.readFileSync(
-      path.join(process.cwd(), 'data', 'apex-roofing', 'estimate-rules.json'),
+      path.join(process.cwd(), 'data', BUSINESS_SLUG, 'estimate-rules.json'),
       'utf-8'
     );
     cached = JSON.parse(raw) as EstimateRules;

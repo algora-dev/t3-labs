@@ -1,14 +1,17 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib';
 import type { Estimate } from '../pricing/estimate-engine';
-import { getBusiness } from '../assistant/data';
+import { getAssistantConfig, getBusiness } from '../assistant/data';
 
 /**
  * Indicative Roofing Estimate PDF (spec 14).
- * Rendered EXCLUSIVELY from the canonical estimate object - the model never
- * supplies document content. Blue Apex branding #1769E0, demo disclaimers.
+ * Rendered exclusively from the canonical estimate object. The model never
+ * supplies document pricing content.
  */
 
-const BLUE = rgb(0x17 / 255, 0x69 / 255, 0xe0 / 255);
+function colourFromHex(hex: string) {
+  const clean = /^#[0-9a-fA-F]{6}$/.test(hex) ? hex.slice(1) : '1769E0';
+  return rgb(parseInt(clean.slice(0, 2), 16) / 255, parseInt(clean.slice(2, 4), 16) / 255, parseInt(clean.slice(4, 6), 16) / 255);
+}
 const DARK = rgb(0.11, 0.13, 0.17);
 const GREY = rgb(0.45, 0.5, 0.58);
 const LIGHT = rgb(0.96, 0.97, 0.99);
@@ -66,11 +69,13 @@ function text(
 
 export async function renderEstimatePdf(estimate: Estimate): Promise<Uint8Array> {
   const business = getBusiness();
+  const config = getAssistantConfig();
+  const BLUE = colourFromHex(config.accentColor ?? '#1769E0');
   const doc = await PDFDocument.create();
   const regular = await doc.embedFont(StandardFonts.Helvetica);
   const bold = await doc.embedFont(StandardFonts.HelveticaBold);
 
-  doc.setTitle(`Indicative Roofing Estimate ${estimate.id}`);
+  doc.setTitle(`${business.business.name} - Indicative Estimate ${estimate.id}`);
   doc.setAuthor(business.business.name);
   doc.setSubject('Interactive demo - indicative estimate only');
 
@@ -100,9 +105,10 @@ export async function renderEstimatePdf(estimate: Estimate): Promise<Uint8Array>
   const p = estimate.project;
   const rows: [string, string][] = [
     ['Roof area', `${p.roofArea.toLocaleString('en-GB')} m2 (${p.areaType.replace(/_/g, ' ')})`],
-    ['Roof shape', p.roofShape === 'unknown' ? 'Not specified (gable proportions assumed)' : p.roofShape],
+    ['Roof shape', p.roofShape === 'unknown' ? 'Not specified' : p.roofShape.replace(/_/g, ' ')],
     ['Pitch', `${p.pitchDegrees} degrees`],
     ['Material', p.materialLabel],
+    ['Scope', p.componentScope.replace(/_/g, ' ')],
     ['Status', 'Indicative estimate - not a formal quote'],
   ];
   for (const [k, v] of rows) {
@@ -126,7 +132,7 @@ export async function renderEstimatePdf(estimate: Estimate): Promise<Uint8Array>
   for (const li of estimate.lineItems) {
     ensureSpace(ctx, 20);
     text(ctx, li.label, { size: 9 });
-    text(ctx, `${li.quantity.toLocaleString('en-GB')} ${li.unit} x ${fmtMoney(li.rate, estimate.symbol)}`, { size: 9, x: colQ });
+    text(ctx, `${li.quantity.toLocaleString('en-GB')} ${li.unit} x ${fmtMoney(li.rate, estimate.symbol)}${li.quantitySource === 'heuristic' ? ' (allowance)' : ''}`, { size: 9, x: colQ });
     const s = fmtMoney(li.subtotal, estimate.symbol);
     text(ctx, s, { size: 9, x: colS - regular.widthOfTextAtSize(s, 9) });
     ctx.y -= 15;
@@ -170,13 +176,13 @@ export async function renderEstimatePdf(estimate: Estimate): Promise<Uint8Array>
   ensureSpace(ctx, 90);
   text(ctx, estimate.disclaimer, { size: 8, color: GREY });
   ctx.y -= 18;
-  text(ctx, 'Interactive demo by T3 Labs. Apex Roofing is a fictional business; no real quote or contact will follow.', {
+  text(ctx, `Interactive demo by T3 Labs. ${business.business.demo ? business.business.name + ' is fictional; no real quote or contact will follow.' : ''}`, {
     size: 8, color: GREY,
   });
   ctx.y -= 26;
   text(ctx, 'Want a formal, site-accurate quote?', { size: 11, bold: true });
   ctx.y -= 15;
-  text(ctx, 'Reply in the chat or use the enquiry form to arrange a free site survey with the Apex team (demo).', {
+  text(ctx, `Reply in the assistant or use the enquiry form to continue with the ${business.business.name} team${business.business.demo ? ' (demo)' : ''}.`, {
     size: 9, color: GREY,
   });
 

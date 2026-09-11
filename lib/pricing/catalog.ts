@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { BUSINESS_SLUG } from '../assistant/data';
 
 /** Server-side pricing catalogue loader (pricing.json is the only price source). */
 
@@ -30,7 +31,7 @@ let cached: PricingCatalog | null = null;
 export function getCatalog(): PricingCatalog {
   if (!cached) {
     const raw = fs.readFileSync(
-      path.join(process.cwd(), 'data', 'apex-roofing', 'pricing.json'),
+      path.join(process.cwd(), 'data', BUSINESS_SLUG, 'pricing.json'),
       'utf-8'
     );
     cached = JSON.parse(raw) as PricingCatalog;

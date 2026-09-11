@@ -89,12 +89,13 @@ export default function ApexRoofingPage() {
             >
               Book a free inspection
             </a>
-            <a
-              href="#pricing-tool"
+            <button
+              type="button"
+              data-open-smart-assistant
               className="rounded-full border border-white/60 text-white font-semibold px-7 py-3 text-sm hover:bg-white/10 transition"
             >
-              Get instant pricing
-            </a>
+              Ask Apex for a price
+            </button>
           </div>
         </div>
       </section>
