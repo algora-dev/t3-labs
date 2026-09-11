@@ -193,7 +193,7 @@ function CollapsibleTool({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div style={{ background: t.surfaceAlt, borderColor: t.border }} className="overflow-hidden rounded-3xl border">
+    <div style={{ background: t.surfaceAlt, borderColor: t.accent }} className="overflow-hidden rounded-3xl border">
       <button
         type="button"
         aria-expanded={open}
@@ -218,6 +218,60 @@ function CollapsibleTool({
       </button>
       {open && (
         <div style={{ borderColor: t.border }} className="border-t p-3 sm:p-5">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function InnerDisclosure({
+  title,
+  eyebrow,
+  accent,
+  border,
+  surface,
+  surfaceAlt,
+  muted,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  eyebrow: string;
+  accent: string;
+  border: string;
+  surface: string;
+  surfaceAlt: string;
+  muted: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div style={{ background: surfaceAlt, borderColor: border }} className="overflow-hidden rounded-2xl border">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        className="tool-toggle flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+      >
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: accent }}>
+            {eyebrow}
+          </p>
+          <p className="mt-1 text-xl font-semibold">{title}</p>
+        </div>
+        <span
+          aria-hidden="true"
+          style={{ color: accent }}
+          className={`shrink-0 text-xl transition-transform ${open ? "rotate-180" : ""}`}
+        >
+          ⌄
+        </span>
+      </button>
+      {open && (
+        <div style={{ borderColor: border, background: surface }} className="border-t p-5">
           {children}
         </div>
       )}
@@ -1579,49 +1633,104 @@ export default function SalesResourcesPage() {
           <CollapsibleTool
             t={t}
             title="More opportunities"
-            subtitle="Not every construction prospect needs a custom build. QuoteCore+ gives you a ready-made product to sell to contractors."
+            subtitle="Beyond this playbook: two more ways to earn from the same conversation."
             defaultOpen={false}
           >
-            <a
-              href="/careers"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ background: t.surface, borderColor: t.border }}
-              className="hover-card block rounded-2xl border p-5 sm:p-6"
+            <div
+              style={{ borderColor: t.accent }}
+              className="rounded-3xl border p-3 sm:p-5"
             >
-              <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>
-                    QuoteCore+
-                  </p>
-                  <h3 className="mt-2 text-xl font-semibold">A ready-made measuring, estimating and quoting system for contractors.</h3>
-                  <p className="mt-3 max-w-4xl text-sm leading-6" style={{ color: t.muted }}>
-                    QuoteCore+ replaces disconnected spreadsheets, printed-plan measuring and repeated admin with digital takeoff, reusable pricing logic and one connected quote workflow. The strongest sales path is Done-For-You setup for contractors who want a better system but do not want the hassle of configuring it themselves.
-                  </p>
-                  <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
-                    You can also refer self-serve subscribers, earn recurring commission under the current rep terms, and use genuinely free QuoteCore+ tools as a useful first step when a prospect is not ready to buy.
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {["Done-For-You setup", "Self-serve referrals", "Free tools", "Rep resources"].map((item) => (
-                      <span
-                        key={item}
-                        style={{ background: t.surfaceAlt, borderColor: t.border, color: t.muted }}
-                        className="rounded-full border px-3 py-1 text-xs font-semibold"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
+              <InnerDisclosure
+                title="What else we can build"
+                eyebrow="T3 LABS SERVICES"
+                accent="#d7ff00"
+                border={t.border}
+                surface={t.surface}
+                surfaceAlt={t.surfaceAlt}
+                muted={t.muted}
+                defaultOpen
+              >
+                <p className="text-sm leading-7" style={{ color: t.muted }}>
+                  T3 Labs is a digital software builder. Beyond the solutions on this page, if a business needs a tech solution for anything, we can likely build it. Everything below works as a standalone service or as an add-on that strengthens a larger package deal.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {[
+                    "Complete websites",
+                    "Website improvements",
+                    "Mobile optimisation",
+                    "SEO & GEO",
+                    "Ongoing support",
+                    "Sales strategy",
+                    "Video production",
+                    "Custom tech, any problem",
+                  ].map((item) => (
+                    <span
+                      key={item}
+                      style={{ background: t.surfaceAlt, borderColor: t.border, color: t.muted }}
+                      className="rounded-full border px-3 py-1 text-xs font-semibold"
+                    >
+                      {item}
+                    </span>
+                  ))}
                 </div>
+                <p className="mt-4 text-sm leading-6" style={{ color: t.muted }}>
+                  If a prospect has one visible problem, they often have several of these too. Ask. A bigger package means a better result for the customer, more commission for you and more work for T3 Labs.
+                </p>
+              </InnerDisclosure>
 
-                <span
-                  style={{ background: t.accent, color: t.accentText }}
-                  className="solid inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold"
+              <div className="mt-3">
+                <InnerDisclosure
+                  title="QuoteCore+"
+                  eyebrow="READY-MADE PRODUCT"
+                  accent="#FF6B35"
+                  border={t.border}
+                  surface={t.surface}
+                  surfaceAlt={t.surfaceAlt}
+                  muted={t.muted}
                 >
-                  Open QuoteCore+ sales guide →
-                </span>
+                  <a
+                    href="/careers"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ background: t.surface, borderColor: t.border }}
+                    className="hover-card block rounded-2xl border p-5 sm:p-6"
+                  >
+                    <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[.14em] text-[#FF6B35]">
+                          QuoteCore+
+                        </p>
+                        <h3 className="mt-2 text-xl font-semibold">A ready-made measuring, estimating and quoting system for contractors.</h3>
+                        <p className="mt-3 max-w-4xl text-sm leading-6" style={{ color: t.muted }}>
+                          QuoteCore+ replaces disconnected spreadsheets, printed-plan measuring and repeated admin with digital takeoff, reusable pricing logic and one connected quote workflow. The strongest sales path is Done-For-You setup for contractors who want a better system but do not want the hassle of configuring it themselves.
+                        </p>
+                        <p className="mt-3 text-sm leading-6" style={{ color: t.muted }}>
+                          You can also refer self-serve subscribers, earn recurring commission under the current rep terms, and use genuinely free QuoteCore+ tools as a useful first step when a prospect is not ready to buy.
+                        </p>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {["Done-For-You setup", "Self-serve referrals", "Free tools", "Rep resources"].map((item) => (
+                            <span
+                              key={item}
+                              style={{ background: t.surfaceAlt, borderColor: t.border, color: t.muted }}
+                              className="rounded-full border px-3 py-1 text-xs font-semibold"
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <span
+                        style={{ background: "#FF6B35", color: "#0a0b10" }}
+                        className="solid inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold"
+                      >
+                        Open QuoteCore+ sales guide →
+                      </span>
+                    </div>
+                  </a>
+                </InnerDisclosure>
               </div>
-            </a>
+            </div>
           </CollapsibleTool>
         </section>
       </div>
