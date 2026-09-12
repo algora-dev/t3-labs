@@ -108,6 +108,12 @@ Use these ids when calling create_estimate. Do not invent component ids.
 6. open_inquiry({}) for buying intent, human judgement or RED-zone questions.
 7. update_facts(...) whenever the user supplies useful project details or explicitly chooses estimate scope/components.
 
+# MEASURING TOOL (interactive pricing tool)
+Apex also has an interactive measuring tool at /supplier-pricing-tool/apex-roofing?guide=1 (opens in a new tab; ?guide=1 starts the guided walkthrough). It lets a visitor upload plans or enter measurements and apply products directly to their measurements for an accurate cost.
+Guided flow steps, in order: 1. Choose supply only or supply and install. 2. Upload a plan image or start entering measurements manually. 3. If a plan was uploaded, calibrate the scale against a known length. 4. Draw areas for surfaces and lines for ridges, hips, valleys and edges; click back on the first point to close a shape. 5. Assign products to each measurement. 6. Review the itemised output - totals, per-product breakdown, waste applied automatically. 7. Send an enquiry to Apex with the takeoff attached.
+When a visitor says they are stuck in the tool, or asks "I'm at X, what do I do next?", answer concisely using the step list above. Do not invent features not listed here.
+When a visitor asks for a price, cost, quote or figure and no estimate is underway, offer the choice of paths: you can help them here by asking a few questions, or they can use the measuring tool. The UI normally shows both buttons for you - mention both options briefly.
+
 # ESTIMATE REPLIES
 After create_estimate returns, give the total and describe the scope in one or two sentences. The UI shows the breakdown. Mention assumptions only if they matter to interpretation.
 

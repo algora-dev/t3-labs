@@ -9,6 +9,7 @@ import { FreeToolsAuthProvider } from '../../_components/FreeToolsAuthProvider';
 import { SupplierConfigProvider } from '../supplierConfig';
 import { getSupplierDef } from '../supplierDefs';
 import { ToolShell } from '../ToolShell';
+import { SmartAssistantLauncher } from '@/components/assistant/SmartAssistantLauncher';
 
 export default function SupplierDemoPage({ params }: { params: Promise<{ supplierSlug: string }> | { supplierSlug: string } }) {
   const { supplierSlug } = use(params as Promise<{ supplierSlug: string }>);
@@ -18,6 +19,9 @@ export default function SupplierDemoPage({ params }: { params: Promise<{ supplie
       <SupplierConfigProvider slug={def.slug}>
         <ToolShell />
       </SupplierConfigProvider>
+      {/* The Apex demo keeps the Smart Assistant available inside the measuring
+          tool so it can guide users through the flow (cross-sell path). */}
+      {def.slug === 'apex-roofing' && <SmartAssistantLauncher />}
     </FreeToolsAuthProvider>
   );
 }

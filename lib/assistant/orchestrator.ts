@@ -706,6 +706,22 @@ async function streamCompletion(apiKey: string, messages: ChatMessage[], onToken
   }
 }
 
+const MEASURING_TOOL_URL = '/supplier-pricing-tool/apex-roofing?guide=1';
+
+/** Deterministic cross-sell fork: the FIRST whole-job price request with no
+ *  estimate underway offers two clickable paths - chat-assisted estimating
+ *  here, or the interactive measuring tool. Simple per-unit rate questions
+ *  are left to the model (retrieve_price). */
+function isInitialPriceRequest(userMessage: string, session: AssistantSession): boolean {
+  const m = userMessage.toLowerCase();
+  if (session.draft || session.estimateFlow.active) return false;
+  if (session.estimates && Object.keys(session.estimates).length > 0) return false;
+  if (/per (m2|m²|sq|square)/.test(m)) return false; // direct rate question
+  const priceIntent = /(how much|what('| re)?s the (price|cost|damage)|price|pricing|cost|quote|estimate|figure me|give me a figure)/.test(m);
+  const jobContext = /(roof|job|re-?roof|replacement|install|repair|extension|project|work)/.test(m);
+  return priceIntent && jobContext;
+}
+
 export async function runAssistantTurn(session: AssistantSession, userMessage: string, onToken: (t: string) => void): Promise<AssistantTurn> {
   const apiKey = process.env.OPENAI_API_KEY;
   const config = getAssistantConfig();
@@ -719,6 +735,16 @@ export async function runAssistantTurn(session: AssistantSession, userMessage: s
   const started = Date.now();
 
   if (!apiKey) return { message: 'Sorry - the assistant is temporarily unavailable. The demo API key is not configured.' };
+
+  if (isInitialPriceRequest(userMessage, session)) {
+    return {
+      message: 'Great, I can help you with that. Two quick options:\n\nI can ask you a few questions and give you a range estimate right here, or you can use our interactive measuring tool - upload plans or enter your measurements and apply products directly to them for an accurate cost. Which would you prefer?',
+      actions: [
+        { type: 'START_GUIDED_ESTIMATE', label: 'Ask me a few questions' },
+        { type: 'NAVIGATE_INTERNAL', label: 'Use the interactive measuring tool', url: MEASURING_TOOL_URL, external: true },
+      ],
+    };
+  }
 
   for (let hop = 0; hop < 5; hop++) {
     if (Date.now() - started > config.turnTimeoutMs * 2) throw new TurnError('timeout');

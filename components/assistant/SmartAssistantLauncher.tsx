@@ -247,6 +247,7 @@ export function SmartAssistantLauncher() {
   const [pinned, setPinned] = useState(false);
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef<any>(null);
+  const stoppedManuallyRef = useRef(false);
   const [siteHref, setSiteHref] = useState<string | null>(null);
   const [iframePath, setIframePath] = useState<string | null>(null);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
@@ -523,19 +524,39 @@ export function SmartAssistantLauncher() {
   const toggleListening = () => {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) { setError('Voice input is not supported in this browser. Try Chrome or Edge.'); return; }
-    if (listening) { recognitionRef.current?.stop(); return; }
-    const rec = new SR();
-    rec.lang = 'en-GB';
-    rec.interimResults = true;
-    rec.continuous = false;
+    if (listening) {
+      // Manual stop: silence auto-restarts must not kick in.
+      stoppedManuallyRef.current = true;
+      recognitionRef.current?.stop();
+      setListening(false);
+      return;
+    }
+    stoppedManuallyRef.current = false;
     let finalText = '';
-    rec.onresult = (event: any) => {
-      finalText = '';
-      for (let i = 0; i < event.results.length; i++) finalText += event.results[i][0].transcript;
-      setInput(finalText.slice(0, config.maxUserMessageChars));
+    const buildRec = (): any => {
+      const rec = new SR();
+      rec.lang = 'en-GB';
+      rec.interimResults = true;
+      rec.continuous = true;
+      rec.onresult = (event: any) => {
+        finalText = '';
+        for (let i = 0; i < event.results.length; i++) finalText += event.results[i][0].transcript;
+        setInput(finalText.slice(0, config.maxUserMessageChars));
+      };
+      rec.onerror = (event: any) => {
+        // "no-speech" is expected during pauses - onend handles the restart.
+        if (event?.error && event.error !== 'no-speech' && event.error !== 'aborted') setListening(false);
+      };
+      rec.onend = () => {
+        // The browser cuts recognition after a silence pause (typically ~1s).
+        // Restart while the user has not stopped manually so short thinking
+        // breaks of a few seconds do not end the session.
+        if (stoppedManuallyRef.current) { setListening(false); return; }
+        try { recognitionRef.current = buildRec(); recognitionRef.current.start(); } catch { setListening(false); }
+      };
+      return rec;
     };
-    rec.onend = () => setListening(false);
-    rec.onerror = () => setListening(false);
+    const rec = buildRec();
     recognitionRef.current = rec;
     setListening(true);
     rec.start();

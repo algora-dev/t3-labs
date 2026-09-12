@@ -329,6 +329,14 @@ export function TakeoffWorkstation({
   // DEMO Guide Me: multi-step tutorial modal. Auto-opens after the AI scan
   // lands (scan mode); reopenable any time from the toolbar "Guide me" button.
   const [guideOpen, setGuideOpen] = useState(false);
+  // Deep link support: /supplier-pricing-tool/<slug>?guide=1 auto-opens the
+  // guided walkthrough (used by the Smart Assistant cross-sell path).
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('guide') === '1') {
+      const t = setTimeout(() => setGuideOpen(true), 300);
+      return () => clearTimeout(t);
+    }
+  }, []);
   // DEMO pre-scan modal - shown when scan mode opens, fires handleAiScan on
   // "Scan plan now".
   const [showScanStartModal, setShowScanStartModal] = useState(false);
