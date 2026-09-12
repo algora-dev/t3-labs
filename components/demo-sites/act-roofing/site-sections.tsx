@@ -27,6 +27,15 @@ function PhoneIcon() {
   );
 }
 
+function EmailIcon() {
+  return (
+    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 20 20" fill="none">
+      <rect x="2.5" y="4" width="15" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="m3.5 5.5 6.5 5 6.5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function StarIcon({ filled = true }: { filled?: boolean }) {
   return (
     <svg aria-hidden="true" className={`h-4 w-4 ${filled ? "text-[#F59E0B]" : "text-[#D0D5DD]"}`} viewBox="0 0 20 20" fill="currentColor">
@@ -143,12 +152,32 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
         </a>
         <nav className="hidden items-center gap-8 text-[0.95rem] font-medium text-[#475467] lg:flex" aria-label="Main navigation">
           {site.navigation.map(({ label, href }) => (
-            <a key={label} className="transition hover:text-[#101828]" href={href}>
+            <a
+              key={label}
+              className="inline-block transition duration-200 ease-out hover:scale-[1.08] hover:text-[#1769E0] hover:[text-shadow:0_0_14px_rgba(23,105,224,0.5)]"
+              href={href}
+            >
               {label}
             </a>
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
+          <a
+            href={site.contact.telephoneHref}
+            aria-label={`Call ${site.companyName} on ${site.contact.telephone}`}
+            title={site.contact.telephone}
+            className="grid h-10 w-10 place-items-center rounded-full border border-[#D0D5DD] bg-white text-[#475467] transition duration-200 ease-out hover:scale-110 hover:border-[#1769E0] hover:text-[#1769E0] hover:shadow-[0_0_14px_rgba(23,105,224,0.35)]"
+          >
+            <PhoneIcon />
+          </a>
+          <a
+            href={`mailto:${site.contact.email}`}
+            aria-label={`Email ${site.companyName} at ${site.contact.email}`}
+            title={site.contact.email}
+            className="grid h-10 w-10 place-items-center rounded-full border border-[#D0D5DD] bg-white text-[#475467] transition duration-200 ease-out hover:scale-110 hover:border-[#1769E0] hover:text-[#1769E0] hover:shadow-[0_0_14px_rgba(23,105,224,0.35)]"
+          >
+            <EmailIcon />
+          </a>
           <ButtonLink href={site.estimateTool.ctaHref} className="header-quote-button !min-h-[44px]">
             {site.callsToAction.estimate}
           </ButtonLink>

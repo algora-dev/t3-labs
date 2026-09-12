@@ -43,7 +43,7 @@ export const actRoofingSite = {
     { label: "Our Work", href: "#projects" },
     { label: "Roof Estimate", href: "#estimate" },
     { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: "Products", href: "/demo/roofing-site/price-list" },
   ],
   mobileNavigation: [
     { label: "Home", href: "#top" },
@@ -52,7 +52,7 @@ export const actRoofingSite = {
     { label: "Roof Estimate", href: "#estimate" },
     { label: "Reviews", href: "#reviews" },
     { label: "Areas", href: "#areas" },
-    { label: "Contact", href: "#contact" },
+    { label: "Products", href: "/demo/roofing-site/price-list" },
   ],
   featuredReview: {
     summary:
@@ -70,8 +70,8 @@ export const actRoofingSite = {
       alt: "Completed dark slate roof on an attractive UK residential home",
     },
     secondaryCta: {
-      label: "View Our Work",
-      href: "#projects",
+      label: "View Products",
+      href: "/demo/roofing-site/price-list",
     },
   },
   trustStrip: [
