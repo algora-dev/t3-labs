@@ -17,7 +17,7 @@ export default function RequestPricePage() {
           </div>
           <aside><strong>Prefer to speak to someone?</strong><p>Call our roofing team during office hours.</p><a href="tel:+448081570426">0808 157 0426</a><small>Mon-Sat, 7:30am-6:00pm</small></aside>
         </section>
-        <div className="legacy-shell form-notice"><strong>Before you begin</strong><span>This form normally takes around 5-10 minutes to complete. Fields marked * are required. Prices are subject to review and may require a site visit.</span></div>
+        <div className="legacy-shell form-notice"><strong>Before you begin</strong><span>Fields marked * are required. Prices are subject to review and may require a site visit.</span></div>
         <div className="legacy-shell"><RequestPriceForm /></div>
       </main>
       <OldApexFooter />
