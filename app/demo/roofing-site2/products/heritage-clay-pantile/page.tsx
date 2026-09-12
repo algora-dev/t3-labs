@@ -33,7 +33,7 @@ export default function HeritageClayPantilePage() {
             <div className="product-top-grid">
               <div className="product-image-panel">
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Terracotta_clay_tile_%28Unsplash%29.jpg/960px-Terracotta_clay_tile_%28Unsplash%29.jpg"
+                  src="/assets/demo-act-roofing/heritage-clay-pantile-new.png"
                   alt="Terracotta clay roof tiles"
                 />
                 <div className="thumbnail-row"><button>Image 1</button><button>Colours</button><button>Roof example</button></div>

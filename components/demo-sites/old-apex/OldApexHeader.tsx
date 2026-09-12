@@ -179,12 +179,11 @@ export function OldApexHeader() {
                       <div
                         key={item}
                         className={`mega-primary-item ${isProducts && productsOpen ? "active" : ""}`}
-                        onMouseEnter={() => isProducts && setProductsOpen(true)}
                       >
                         {isProducts ? (
                           <button
                             type="button"
-                            onClick={() => setProductsOpen(true)}
+                            onClick={() => setProductsOpen((v) => !v)}
                             className="menu-row-button"
                           >
                             <span>{item}</span><b>›</b>
