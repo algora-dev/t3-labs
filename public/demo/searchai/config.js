@@ -1,36 +1,47 @@
 
 window.DEMO_CONFIG = {
-  // Change this to wherever your "old / busy Apex Roofing" demo is hosted.
   apexTargetUrl: "https://www.t3labs.tech/demo/roofing-site2",
+
+  searchPreset: "roof replacement leeds",
+  aiPreset: "I need to replace a 180m² concrete tile roof in Leeds. What might it cost, and who could do it?",
+
+  timings: {
+    typeMin: 28,
+    typeMax: 58,
+    searchDelay: 360,
+    aiThinking: 520,
+    aiBlockDelay: 310
+  },
 
   searchResults: [
     {
-      name: "Northern Roofcare Ltd",
-      url: "northernroofcare.example/roof-replacement",
+      site: "Northern Roofcare",
+      host: "northernroofcare.example",
+      path: "roof-replacement",
       title: "Roof Replacement & Re-Roofing in Leeds",
-      description: "Local roofing specialists covering Leeds and West Yorkshire. Roof replacement, repairs, flat roofing and maintenance.",
-      badge: ""
+      description: "Roof replacement, repairs and maintenance across Leeds and West Yorkshire. Request a survey or speak with the team."
     },
     {
-      name: "Apex Roofing",
-      url: "apexroofing.example/roof-replacement",
-      title: "Apex Roofing | Roof Replacement, Repairs & Re-Roofing",
-      description: "Professional roofing services across Leeds. Concrete tile, clay tile, slate, repairs, re-roofing and more.",
-      badge: "Apex Roofing"
+      site: "Apex Roofing",
+      host: "apexroofing.example",
+      path: "services/roof-replacement",
+      title: "Apex Roofing | Roof Replacement & Re-Roofing",
+      description: "Roof replacement, concrete tile, clay tile, slate and repair services for homes across Leeds.",
+      apex: true
     },
     {
-      name: "West Yorkshire Roofing Group",
-      url: "wyroofing.example/services",
-      title: "Roofing Services Across West Yorkshire",
-      description: "Roof repairs, replacement roofs, gutters, fascias and commercial roofing services.",
-      badge: ""
+      site: "West Yorkshire Roofing",
+      host: "wyroofing.example",
+      path: "services",
+      title: "Residential Roofing Services Across West Yorkshire",
+      description: "Re-roofing, roof repairs, gutters, fascias and maintenance for residential properties."
     },
     {
-      name: "Leeds Home Improvements",
-      url: "leedshome.example/roofing",
+      site: "Leeds Home Improvements",
+      host: "leedshome.example",
+      path: "roofing",
       title: "Roofing & Exterior Home Improvements",
-      description: "Roofing, windows, cladding, insulation and exterior improvement services across the region.",
-      badge: ""
+      description: "Roofing, cladding, insulation and exterior improvement services in Leeds and surrounding areas."
     }
   ]
 };
