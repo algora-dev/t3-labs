@@ -13,6 +13,14 @@ const nextConfig: NextConfig = {
         source: "/proposal-assets/:path*",
         destination: "/assets/:path*",
       },
+      {
+        source: "/demo/searchai",
+        destination: "/demo/searchai/index.html",
+      },
+      {
+        source: "/demo/searchgoogle",
+        destination: "/demo/searchgoogle/index.html",
+      },
     ];
   },
   async redirects() {

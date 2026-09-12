@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>AI Answer Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="ai-page">
+  <div class="example-badge">Example AI interface · not a live AI response</div>
+  <aside class="ai-sidebar">
+    <div class="ai-logo">AI Assistant</div>
+    <div class="ai-nav-item active">New conversation</div>
+    <div class="ai-nav-item">Search history</div>
+    <div class="ai-nav-item">Saved</div>
+  </aside>
+
+  <main class="ai-main">
+    <div class="ai-inner">
+      <section id="startView">
+        <div class="ai-title">What would you like to know?</div>
+        <div class="ai-composer">
+          <textarea id="prompt" placeholder="Ask a detailed question..."></textarea>
+          <div class="ai-actions"><button id="send" class="send-btn">↑</button></div>
+        </div>
+        <div class="helper">Press Enter to send · Shift+Enter for a new line</div>
+      </section>
+
+      <section id="thread" class="ai-thread">
+        <div id="userBubble" class="user-bubble"></div>
+        <div id="answer" class="ai-answer"></div>
+      </section>
+    </div>
+
+    <div id="bottomComposer" class="ai-bottom" style="display:none">
+      <div class="ai-composer">
+        <textarea placeholder="Ask a follow-up..." rows="1"></textarea>
+        <div class="ai-actions"><button class="send-btn">↑</button></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    const promptEl = document.getElementById('prompt');
+    const sendBtn = document.getElementById('send');
+    const startView = document.getElementById('startView');
+    const thread = document.getElementById('thread');
+    const userBubble = document.getElementById('userBubble');
+    const answer = document.getElementById('answer');
+    const bottomComposer = document.getElementById('bottomComposer');
+
+    const paragraphs = [
+      `For a 180m² concrete-tile roof replacement in Leeds, a reasonable ballpark can vary considerably depending on pitch, access, stripping and disposal, underlay/battens, ridge or hip details, scaffolding and the exact tile system.`,
+      `A useful next step is to compare a few local roofing businesses that clearly explain their re-roofing process and can price the job from your actual measurements.`,
+      `<div class="answer-highlight"><strong>Apex Roofing</strong> is one option covering Leeds. Their site includes roof replacement information and tools for estimating roofing work from project details or measurements.</div>`,
+      `<h3>What I would check before choosing:</h3>
+       <p>• whether the estimate includes stripping and disposal<br>
+       • whether scaffolding and roof components are included<br>
+       • warranty / guarantee terms<br>
+       • whether the final price is confirmed after inspection</p>`,
+      `<div class="source-row">
+        <div class="source-card" id="apexSource"><strong>Apex Roofing</strong><span>Roof replacement · Leeds</span></div>
+        <div class="source-card"><strong>Northern Roofcare</strong><span>Re-roofing services</span></div>
+        <div class="source-card"><strong>West Yorkshire Roofing</strong><span>Roofing services</span></div>
+       </div>`
+    ];
+
+    function getApexUrl(){
+      const u = new URLSearchParams(location.search).get('target');
+      return u || window.DEMO_CONFIG.apexTargetUrl;
+    }
+
+    function resetScene(){
+      promptEl.value = '';
+      startView.style.display = '';
+      thread.style.display = 'none';
+      bottomComposer.style.display = 'none';
+      answer.innerHTML = '';
+      promptEl.focus();
+    }
+
+    async function run(){
+      const q = promptEl.value.trim();
+      if(!q) return;
+      startView.style.display = 'none';
+      thread.style.display = 'block';
+      bottomComposer.style.display = 'block';
+      userBubble.textContent = q;
+      answer.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+
+      await wait(650);
+      answer.innerHTML = '';
+
+      for(let i=0;i<paragraphs.length;i++){
+        const wrap = document.createElement('div');
+        wrap.className = 'slide-up';
+        wrap.innerHTML = `<p>${paragraphs[i]}</p>`;
+        answer.appendChild(wrap);
+        await wait(i === 2 ? 520 : 420);
+      }
+
+      const apex = document.getElementById('apexSource');
+      if(apex) apex.addEventListener('click', ()=> window.location.href = getApexUrl());
+    }
+
+    function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+
+    sendBtn.addEventListener('click', run);
+    promptEl.addEventListener('keydown', e=>{
+      if(e.key==='Enter' && !e.shiftKey){
+        e.preventDefault(); run();
+      }
+    });
+    document.addEventListener('keydown', e=>{
+      if(e.key.toLowerCase()==='r' && document.activeElement !== promptEl) resetScene();
+    });
+    promptEl.focus();
+  </script>
+</body>
+</html>

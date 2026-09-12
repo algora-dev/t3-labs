@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Search Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="search-page">
+  <div class="example-badge">Example search interface · not live results</div>
+  <header class="search-top">
+    <div class="search-wrap">
+      <div class="search-row">
+        <div class="search-brand">Search</div>
+        <form id="searchForm" class="search-box">
+          <input id="query" autocomplete="off" spellcheck="false" placeholder="Search">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
+          </svg>
+        </form>
+      </div>
+      <div class="tabs"><span class="active">All</span><span>Images</span><span>News</span><span>Maps</span><span>More</span></div>
+    </div>
+  </header>
+
+  <main class="results-shell">
+    <div id="results" class="result-column">
+      <div class="result-meta">Type a search and press Enter</div>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    const form = document.getElementById('searchForm');
+    const input = document.getElementById('query');
+    const results = document.getElementById('results');
+
+    function resetScene(){
+      input.value = '';
+      results.innerHTML = '<div class="result-meta">Type a search and press Enter</div>';
+      input.focus();
+    }
+
+    function showLoading(){
+      results.innerHTML = `
+        <div class="result-meta">Searching...</div>
+        <div class="search-loading">
+          ${[1,2,3].map(()=>`
+            <div style="margin-bottom:26px">
+              <div class="skeleton line short"></div>
+              <div class="skeleton line mid" style="height:18px"></div>
+              <div class="skeleton line wide"></div>
+              <div class="skeleton line mid"></div>
+            </div>`).join('')}
+        </div>`;
+    }
+
+    function renderResults(q){
+      const data = window.DEMO_CONFIG.searchResults;
+      results.innerHTML = `<div class="result-meta">About 4,820 results for <strong>${escapeHtml(q)}</strong></div>`;
+      data.forEach((r, i) => {
+        const el = document.createElement('article');
+        el.className = 'result slide-up';
+        el.style.animationDelay = `${i * 70}ms`;
+        el.innerHTML = `
+          <div class="result-source">${r.name}${r.badge ? `<span class="apex-chip">${r.badge}</span>`:''}</div>
+          <div class="result-url">${r.url}</div>
+          <div class="result-title">${r.title}</div>
+          <div class="result-desc">${r.description}</div>`;
+        if(r.badge){
+          el.addEventListener('click', () => window.location.href = getApexUrl());
+        }
+        results.appendChild(el);
+      });
+    }
+
+    function escapeHtml(str){
+      return str.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    function getApexUrl(){
+      const u = new URLSearchParams(location.search).get('target');
+      return u || window.DEMO_CONFIG.apexTargetUrl;
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const q = input.value.trim();
+      if(!q) return;
+      showLoading();
+      setTimeout(()=>renderResults(q), 720);
+    });
+
+    document.addEventListener('keydown', e => {
+      if(e.key.toLowerCase()==='r' && document.activeElement !== input) resetScene();
+    });
+
+    input.focus();
+  </script>
+</body>
+</html>
