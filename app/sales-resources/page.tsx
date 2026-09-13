@@ -1187,7 +1187,7 @@ export default function SalesResourcesPage() {
             <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>High intent leads</p>
             <h2 className="mt-3 text-3xl font-bold">What does a high intent lead look like?</h2>
             <p className="mt-4 leading-7" style={{ color: t.muted }}>
-              Run the business through this checklist before you spend time on it. Each box you can tick is both a signal they are worth pursuing and an angle you can lead with.
+              Run the business through this checklist before you spend time on it. Each box you can tick is both a signal they are worth pursuing and an angle you can lead with. The theme underneath all of them: AI only recommends businesses it can find and trust, with reliable pricing and consistent information on the official website.
             </p>
           </div>
 
@@ -1196,21 +1196,21 @@ export default function SalesResourcesPage() {
               <p className="text-sm leading-6" style={{ color: t.muted }}>
                 Products or services are shown, but no prices anywhere. Customers cannot even get a ballpark without talking to someone.
               </p>
-              <p className="mt-3 text-sm font-semibold">Angle: give customers instant indicative pricing online.</p>
+              <p className="mt-3 text-sm font-semibold">Angle: give customers instant indicative pricing online. AI assistants and AI search will not mention you unless they can find reliable pricing on your official website.</p>
             </Card>
 
             <Card t={t} title="Busy or hard to find products">
               <p className="text-sm leading-6" style={{ color: t.muted }}>
                 Large or messy product range. Hard to work out what to buy, what fits together, or where to start.
               </p>
-              <p className="mt-3 text-sm font-semibold">Angle: guided product selection that does the thinking for the customer.</p>
+              <p className="mt-3 text-sm font-semibold">Angle: guided product selection that does the thinking for the customer, and gives AI a clear, consistent picture of what you sell.</p>
             </Card>
 
             <Card t={t} title="Call or enquire for pricing">
               <p className="text-sm leading-6" style={{ color: t.muted }}>
                 "Contact us for a quote" everywhere. Every enquiry costs staff time, and half of them go nowhere.
               </p>
-              <p className="mt-3 text-sm font-semibold">Angle: pre-qualify enquiries automatically so staff only handle real buyers.</p>
+              <p className="mt-3 text-sm font-semibold">Angle: pre-qualify enquiries automatically so staff only handle real buyers, and AI has reliable pricing to recommend you by.</p>
             </Card>
 
             <Card t={t} title="Proof they pay for traffic">
@@ -1451,10 +1451,10 @@ export default function SalesResourcesPage() {
               muted={t.muted}
             >
               <p className="text-sm leading-6" style={{ color: t.muted }}>
-                It does not have to be a price list plastered everywhere. We only need generic pricing on some main products, and it can live inside a tool rather than on a page. That matters because people now ask ChatGPT and AI search for a rough price, and you want to at least be mentioned. You also never put your best price up: show a basic price, then offer a discount at the end of the flow. The customer feels they got a deal and is more likely to buy.
+                It does not have to be a price list plastered everywhere. We only need generic pricing on some main products, and it can live inside a tool rather than on a page. That matters because AI assistants and AI search only recommend businesses they can find reliable pricing for, and without it you are simply not mentioned. You also never put your best price up: show a basic price, then offer a discount at the end of the flow. The customer feels they got a deal and is more likely to buy.
               </p>
               <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
-                Say it like this: “We wouldn’t publish your full price list either. Generic pricing on your main products, hidden inside a tool, so AI search can mention you, and the customer finishes the flow feeling they got a deal.”
+                Say it like this: “Right now ChatGPT and AI search cannot recommend you, because they cannot find reliable pricing on your website. We would not publish your full price list either, just generic pricing on main products, hidden inside a tool, so AI starts mentioning you and the customer finishes the flow feeling they got a deal.”
               </div>
             </InnerDisclosure>
 
