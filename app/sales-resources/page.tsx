@@ -1054,6 +1054,7 @@ export default function SalesResourcesPage() {
             ["finder", "Angle Finder"],
             ["contact", "Reach Them"],
             ["discovery", "Discovery"],
+            ["pushback", "Pushback"],
             ["sell", "What We Sell"],
             ["demos", "Demos"],
             ["earnings", "Earnings"],
@@ -1218,6 +1219,16 @@ export default function SalesResourcesPage() {
               </p>
               <p className="mt-3 text-sm font-semibold">Angle: they already spend on getting traffic, so converting more of it is an easy sell.</p>
             </Card>
+
+            <div className="md:col-span-2">
+              <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-5">
+                <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>Bonus signal - strongest of all</p>
+                <p className="mt-2 text-xl font-semibold">Bad reviews about quotes or the website</p>
+                <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>
+                  A review complaining about slow quotes, never hearing back, or a confusing website is a very high intent lead. Find a real review on Google or elsewhere and bring it up gently. Not to rub salt in the wound, frame it as: we found this review, and we build tools that turn reviews like these into positive ones and into buyers.
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -1244,6 +1255,10 @@ export default function SalesResourcesPage() {
                 <li>• Google the products or services plus the area, then open the ads at the top of the results. Every ad is a business already paying for traffic.</li>
                 <li>• Check the "call or enquire for pricing" pattern on supplier and trade websites in your niche.</li>
                 <li>• Look at local flyers, radio spots, vehicle signage and directory listings. Anything paid points to a business hungry for customers.</li>
+                <li>• Check recent reviews for complaints about slow quotes, being ignored or a hard-to-use website. That is proof the manual process is leaking money.</li>
+                <li>• Job ads or hiring posts mean a growing business with budget.</li>
+                <li>• A recently redesigned website or new branding means they invest in online and will again.</li>
+                <li>• A competitor with an instant pricing or quote tool gives you a keeping-up angle.</li>
                 <li>• Cross-reference: a business doing paid promotion with no pricing on its website is the strongest combination on this page.</li>
               </ul>
             </Card>
@@ -1413,6 +1428,137 @@ export default function SalesResourcesPage() {
                 The best first project is often the smallest change that removes a real bottleneck.
               </p>
             </Card>
+          </div>
+        </section>
+
+        <section id="pushback" className="sales-anchor py-12 sm:py-16">
+          <div className="max-w-4xl">
+            <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>3. Expected pushback</p>
+            <h2 className="mt-3 text-3xl font-bold">The pushback you will hear, and how to turn it around.</h2>
+            <p className="mt-4 leading-7" style={{ color: t.muted }}>
+              Every objection below is a buying signal in disguise. Expand a row for the response and a one-liner you can deliver in your own words. Do not argue, reframe.
+            </p>
+          </div>
+
+          <div className="mt-7 grid gap-3">
+            <InnerDisclosure
+              title="“We don’t want our pricing online.”"
+              eyebrow="Pushback 1"
+              accent={t.accentInk}
+              border={t.border}
+              surface={t.surface}
+              surfaceAlt={t.surfaceAlt}
+              muted={t.muted}
+            >
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                It does not have to be a price list plastered everywhere. We only need generic pricing on some main products, and it can live inside a tool rather than on a page. That matters because people now ask ChatGPT and AI search for a rough price, and you want to at least be mentioned. You also never put your best price up: show a basic price, then offer a discount at the end of the flow. The customer feels they got a deal and is more likely to buy.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                Say it like this: “We wouldn’t publish your full price list either. Generic pricing on your main products, hidden inside a tool, so AI search can mention you, and the customer finishes the flow feeling they got a deal.”
+              </div>
+            </InnerDisclosure>
+
+            <InnerDisclosure
+              title="“We can’t justify the cost right now.”"
+              eyebrow="Pushback 2"
+              accent={t.accentInk}
+              border={t.border}
+              surface={t.surface}
+              surfaceAlt={t.surfaceAlt}
+              muted={t.muted}
+            >
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Tools start from $999, one-off. Then flip it: what are you spending on ads and getting people to your website? If they are paying for traffic and visitors leave because the answer is not there, that money is leaking. And this is not about their website being bad. The way people get answers is changing fast, AI chat and AI search answer before anyone reaches a website. Keep them, convert them, or someone else gets the click.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                Say it like this: “You are already paying for traffic that lands and leaves to find the answer elsewhere. One tool that keeps them on your page until they find it costs less than a month of that ad spend.”
+              </div>
+            </InnerDisclosure>
+
+            <InnerDisclosure
+              title="“We don’t want a chatbot or AI thing on our site.”"
+              eyebrow="Pushback 3"
+              accent={t.accentInk}
+              border={t.border}
+              surface={t.surface}
+              surfaceAlt={t.surfaceAlt}
+              muted={t.muted}
+            >
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Totally fine, that is not what we build. We make human-controlled sales tools: guided flows that take measurements, products and pricing and turn them into a proper enquiry for your team. No chatbot, no AI answers. The goal is simple, push the customer towards an official inquiry with your people.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                Say it like this: “No chatbot. A guided tool that walks the customer through measurements and pricing and hands your team a ready enquiry. Your people stay in control the whole way.”
+              </div>
+            </InnerDisclosure>
+
+            <InnerDisclosure
+              title="“Our customers are old-school, they just call us.”"
+              eyebrow="Pushback 4"
+              accent={t.accentInk}
+              border={t.border}
+              surface={t.surface}
+              surfaceAlt={t.surfaceAlt}
+              muted={t.muted}
+            >
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Today’s callers are checking you online first, and tomorrow’s buyers grew up with instant answers. The old-school customer is not the one you are losing, the next generation of buyers is. Meet them where they already are.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                Say it like this: “Even your old-school customers look you up before they call. A tool gives them the answer instantly and makes calling the easy next step instead of the only option.”
+              </div>
+            </InnerDisclosure>
+
+            <InnerDisclosure
+              title="“We already have a web guy / agency.”"
+              eyebrow="Pushback 5"
+              accent={t.accentInk}
+              border={t.border}
+              surface={t.surface}
+              surfaceAlt={t.surfaceAlt}
+              muted={t.muted}
+            >
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Great, keep them. They build websites, we build tools that do actual work for the customer. It is complementary, not a replacement, and most agencies simply cannot build what we build.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                Say it like this: “Keep your web guy, we are not competing with him. He makes the site look good, we make it actually answer and qualify customers.”
+              </div>
+            </InnerDisclosure>
+
+            <InnerDisclosure
+              title="“We tried something like this before and it didn’t work.”"
+              eyebrow="Pushback 6"
+              accent={t.accentInk}
+              border={t.border}
+              surface={t.surface}
+              surfaceAlt={t.surfaceAlt}
+              muted={t.muted}
+            >
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Not surprised. Off-the-shelf plugins are generic and customers smell it. Everything we build is custom to your products and process, and you see a working demo before the balance is due, so the risk is on us, not you.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                Say it like this: “That was a generic plugin. We build around your actual products and pricing, and you approve a working demo before paying the balance.”
+              </div>
+            </InnerDisclosure>
+
+            <InnerDisclosure
+              title="“We get all our work from referrals anyway.”"
+              eyebrow="Pushback 7"
+              accent={t.accentInk}
+              border={t.border}
+              surface={t.surface}
+              surfaceAlt={t.surfaceAlt}
+              muted={t.muted}
+            >
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Referrals are the warmest leads you can get, and they still check your website before calling. A tool converts them faster, and a happy customer can just send a link instead of hoping the prospect remembers your number.
+              </p>
+              <div style={{ background: t.surfaceAlt }} className="mt-4 rounded-xl p-4 text-sm leading-6">
+                Say it like this: “Referrals are your best leads, so make the most of them. They check you out online first, a tool closes them on the spot.”
+              </div>
+            </InnerDisclosure>
           </div>
         </section>
 
