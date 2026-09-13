@@ -9,7 +9,7 @@ export const actRoofingSite = {
   seo: {
     title: "Apex Roofing | Roofing Done Properly",
     description:
-      "Roof replacements, repairs and specialist roofing work carried out by a trusted local team. Get an instant roof estimate online in around 60 seconds.",
+      "Roofing supplies and products, new roofs, re-roofs, repairs and everything in between. Get an instant roof estimate online in around 60 seconds.",
   },
   brand: {
     logo: {
@@ -64,7 +64,7 @@ export const actRoofingSite = {
     eyebrow: "Trusted local roofing specialists",
     title: "Roofing built to protect what matters.",
     description:
-      "Roof replacements, repairs and specialist roofing work carried out by a trusted local team.",
+      "Roofing supplies and products, new roofs, re-roofs, repairs and everything in between - supply, install and repair from one trusted local team.",
     image: {
       src: asset("apex-hero.webp"),
       alt: "Completed dark slate roof on an attractive UK residential home",

@@ -14,7 +14,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: { absolute: "Apex Roofing | Roofing Done Properly" },
   description:
-    "Roof replacements, repairs and specialist roofing work carried out by a trusted local team. Get an instant roof estimate online in around 60 seconds.",
+    "Roofing supplies and products, new roofs, re-roofs, repairs and everything in between. Get an instant roof estimate online in around 60 seconds.",
   robots: {
     index: false,
     follow: false,
