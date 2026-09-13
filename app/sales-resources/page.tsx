@@ -1050,6 +1050,7 @@ export default function SalesResourcesPage() {
         <div style={{ borderColor: t.border }} className="nav-scroll mx-auto flex max-w-7xl gap-1 overflow-x-auto border-t px-4 py-2.5 sm:px-5">
           {[
             ["target", "Target"],
+            ["intent", "High Intent"],
             ["finder", "Angle Finder"],
             ["contact", "Reach Them"],
             ["discovery", "Discovery"],
@@ -1176,6 +1177,75 @@ export default function SalesResourcesPage() {
               <p className="mt-3 text-sm font-semibold">
                 There is often an angle in both weak and strong setups.
               </p>
+            </Card>
+          </div>
+        </section>
+
+        <section id="intent" className="sales-anchor py-12 sm:py-16">
+          <div className="max-w-4xl">
+            <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{ color: t.accentInk }}>High intent leads</p>
+            <h2 className="mt-3 text-3xl font-bold">What does a high intent lead look like?</h2>
+            <p className="mt-4 leading-7" style={{ color: t.muted }}>
+              Run the business through this checklist before you spend time on it. Each box you can tick is both a signal they are worth pursuing and an angle you can lead with.
+            </p>
+          </div>
+
+          <div className="mt-7 grid gap-4 md:grid-cols-2">
+            <Card t={t} title="No pricing on the website">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Products or services are shown, but no prices anywhere. Customers cannot even get a ballpark without talking to someone.
+              </p>
+              <p className="mt-3 text-sm font-semibold">Angle: give customers instant indicative pricing online.</p>
+            </Card>
+
+            <Card t={t} title="Busy or hard to find products">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Large or messy product range. Hard to work out what to buy, what fits together, or where to start.
+              </p>
+              <p className="mt-3 text-sm font-semibold">Angle: guided product selection that does the thinking for the customer.</p>
+            </Card>
+
+            <Card t={t} title="Call or enquire for pricing">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                "Contact us for a quote" everywhere. Every enquiry costs staff time, and half of them go nowhere.
+              </p>
+              <p className="mt-3 text-sm font-semibold">Angle: pre-qualify enquiries automatically so staff only handle real buyers.</p>
+            </Card>
+
+            <Card t={t} title="Proof they pay for traffic">
+              <p className="text-sm leading-6" style={{ color: t.muted }}>
+                Any evidence the business pays to be seen: Google or Facebook ads, flyers, radio, vehicle wraps, directories, sponsorships, anything that pushes people to call or visit the website.
+              </p>
+              <p className="mt-3 text-sm font-semibold">Angle: they already spend on getting traffic, so converting more of it is an easy sell.</p>
+            </Card>
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <div style={{ background: t.surface, borderColor: t.border }} className="rounded-2xl border p-5">
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.muted }}>Any 1 checked</p>
+              <p className="mt-2 text-xl font-bold">Good lead</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>Worth a look. Lead with that single angle.</p>
+            </div>
+            <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-5">
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>3 checked</p>
+              <p className="mt-2 text-xl font-bold">High intent lead</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>Prioritise. Multiple angles to pitch and real money already being spent.</p>
+            </div>
+            <div style={{ background: t.accentSoft, borderColor: t.accentInk }} className="rounded-2xl border p-5">
+              <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{ color: t.accentInk }}>All 4 checked</p>
+              <p className="mt-2 text-xl font-bold">Very high intent</p>
+              <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>Contact today. They are paying for traffic that cannot convert properly.</p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <Card t={t} title="How to find these leads">
+              <ul className="space-y-2 text-sm leading-6" style={{ color: t.muted }}>
+                <li>• Google the products or services plus the area, then open the ads at the top of the results. Every ad is a business already paying for traffic.</li>
+                <li>• Check the "call or enquire for pricing" pattern on supplier and trade websites in your niche.</li>
+                <li>• Look at local flyers, radio spots, vehicle signage and directory listings. Anything paid points to a business hungry for customers.</li>
+                <li>• Cross-reference: a business doing paid promotion with no pricing on its website is the strongest combination on this page.</li>
+              </ul>
             </Card>
           </div>
         </section>
