@@ -150,7 +150,7 @@ export const actRoofingSite = {
       "Simple guided questions",
     ],
     ctaLabel: "Calculate My Roof Price",
-    ctaHref: "/demo/roofing-site/takeoff",
+    ctaHref: "/supplier-pricing-tool/apex-roofing",
     previewSteps: [
       { label: "Add your roof", hint: "Enter the roof area and known components - ridges, hips, valleys, barges" },
       { label: "Choose products", hint: "Apply the materials you want to each area and component" },
