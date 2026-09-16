@@ -42,7 +42,9 @@ type AudienceStory = {
 
 type BusinessProfile = {
   label: string;
-  intro: string;
+  opportunityQuestion: string;
+  opportunityItems: string[];
+  reflection: string;
   controlLine: string;
   audience: Record<Audience, AudienceStory>;
 };
@@ -50,7 +52,16 @@ type BusinessProfile = {
 const PROFILES: Record<Business, BusinessProfile> = {
   manufacturer: {
     label: "Manufacturer",
-    intro: "Help people understand your roofing systems, specify the right products and send your team better-prepared enquiries.",
+    opportunityQuestion: "What if more of your customers, contractors or specifiers could get the answers they need from your website before your team had to get involved?",
+    opportunityItems: [
+      "Answer common product and technical questions",
+      "Know which roofing system suits a particular application",
+      "Know which products and accessories work together",
+      "Understand how products are measured, packaged or specified",
+      "Build a preliminary product list or system recommendation",
+      "Send a better-prepared technical or sales enquiry",
+    ],
+    reflection: "How much of this knowledge currently depends on someone from your team explaining it manually?",
     controlLine: "Your approved systems, compatibility rules, technical knowledge and chosen sales handoff.",
     audience: {
       visitor: {
@@ -84,7 +95,16 @@ const PROFILES: Record<Business, BusinessProfile> = {
   },
   supplier: {
     label: "Supplier",
-    intro: "Help people understand what they need, get useful pricing and turn more website visits into prepared roofing enquiries.",
+    opportunityQuestion: "What if more of your customers could get the answers they need from your website before your team had to get involved?",
+    opportunityItems: [
+      "Get basic or indicative pricing",
+      "Work out how much material they need",
+      "Know which products suit the job",
+      "Know which products and accessories work together",
+      "Build a multi-product estimate or preliminary quote",
+      "Send a more complete enquiry or order request",
+    ],
+    reflection: "How many of these currently become a phone call, email or manual quote?",
     controlLine: "Your catalogue, coverage rules, public pricing, private trade rates and chosen handoff rules.",
     audience: {
       visitor: {
@@ -118,7 +138,16 @@ const PROFILES: Record<Business, BusinessProfile> = {
   },
   "supply-install": {
     label: "Supply + install",
-    intro: "Help prospective customers understand likely costs, prepare better jobs and give your team a stronger starting point for supply-and-install quoting.",
+    opportunityQuestion: "What if more of your potential customers could get a useful starting answer from your website before your team had to get involved?",
+    opportunityItems: [
+      "Get an early idea of what their roofing project may cost",
+      "Know which roofing system may suit the job",
+      "Enter measurements or measure from a plan",
+      "Build a preliminary supply-and-install estimate",
+      "Ask common product or project questions",
+      "Send a better-qualified project enquiry",
+    ],
+    reflection: "How much further could a potential customer get before one of your team needed to step in?",
     controlLine: "Your products, labour assumptions, exclusions, qualification rules and when a person or site visit is required.",
     audience: {
       visitor: {
@@ -390,24 +419,82 @@ export default function RoofingLandingPageV2() {
 
           {profile && (
             <div className="roof-intro-reveal" aria-live="polite">
-              <div className="roof-intro-copy">
-                <p className="roof-kicker">Built around your business</p>
-                <h2>We configure the system around what you want it to know and do.</h2>
-                <p>{profile.intro}</p>
+              <div className="roof-opportunity">
+                <p className="roof-kicker">For a {profile.label.toLowerCase()}</p>
+                <h2>{profile.opportunityQuestion}</h2>
+
+                <div className="roof-opportunity-list">
+                  {profile.opportunityItems.map((item) => (
+                    <div key={item}>
+                      <span aria-hidden="true">✓</span>
+                      <strong>{item}</strong>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="roof-reflection">{profile.reflection}</p>
               </div>
 
-              <div className="roof-control-strip">
-                <div><span>Products + knowledge</span><strong>Your approved information</strong></div>
-                <div><span>Pricing + calculations</span><strong>Your rules and permissions</strong></div>
-                <div><span>Answers + handoff</span><strong>Your limits and escalation</strong></div>
+              <div className="roof-build-bridge">
+                <p>If even a few of those would help your business, that is exactly the kind of problem we build for.</p>
+                <h2>We build the tools that make it possible.</h2>
               </div>
 
-              <p className="roof-control-line">For your business: {profile.controlLine}</p>
+              <div className="roof-solution-pair">
+                <article>
+                  <span>Interactive tools</span>
+                  <h3>Let customers work through it themselves.</h3>
+                  <p>Measure, select, calculate, price and prepare an enquiry through a guided workflow.</p>
+                  <div className="roof-mini-flow" aria-label="Interactive tool workflow">
+                    <b>Measure</b><i>→</i><b>Select</b><i>→</i><b>Calculate</b><i>→</i><b>Price</b><i>→</i><b>Enquire</b>
+                  </div>
+                </article>
 
-              <Disclosure title="How do we keep it controlled?">
-                <p>We first learn how your business sells, prices and answers common questions. Then we configure the products, calculations, public information, private information and handoff rules you approve.</p>
-                <p>The goal is not to let a tool or assistant make things up. If information is missing, uncertain or outside the agreed scope, it can ask for more detail or pass the enquiry to your team.</p>
-              </Disclosure>
+                <article>
+                  <span>Online sales assistant</span>
+                  <h3>Or let them simply ask what they need.</h3>
+                  <p>The assistant can clarify the question, use your approved information and guide the customer towards an answer, estimate or handoff.</p>
+                  <div className="roof-mini-flow" aria-label="Online sales assistant workflow">
+                    <b>Ask</b><i>→</i><b>Clarify</b><i>→</i><b>Answer</b><i>→</i><b>Estimate</b><i>→</i><b>Handoff</b>
+                  </div>
+                </article>
+              </div>
+
+              <p className="roof-either-note">Use either approach, or both together.</p>
+
+              <div className="roof-config-block">
+                <div className="roof-config-intro">
+                  <p className="roof-kicker">Built around your business</p>
+                  <h2>Not a generic calculator. Not a generic chatbot.</h2>
+                  <p>Before we build anything, we learn how your business works and decide with you what the system should know, what rules it should follow and when your team should take over.</p>
+                </div>
+
+                <div className="roof-config-grid">
+                  <div>
+                    <span>01</span>
+                    <strong>Your products</strong>
+                    <p>What you sell, how products are used and what works together.</p>
+                  </div>
+                  <div>
+                    <span>02</span>
+                    <strong>Your pricing + calculations</strong>
+                    <p>How quantities, pricing, packaging, waste or other calculations should work.</p>
+                  </div>
+                  <div>
+                    <span>03</span>
+                    <strong>Your approved answers</strong>
+                    <p>The product and business information you are happy for customers to receive.</p>
+                  </div>
+                  <div>
+                    <span>04</span>
+                    <strong>Your handoff rules</strong>
+                    <p>What the system can handle itself and when it should send the customer to your team.</p>
+                  </div>
+                </div>
+
+                <p className="roof-control-line">For your business: {profile.controlLine}</p>
+                <p className="roof-config-reassurance">The goal is to give customers faster answers using the information and rules you approve, then move them towards the right next step.</p>
+              </div>
 
               <a className="roof-continue" href="#roof-people">See who it could help <Arrow /></a>
             </div>
@@ -600,14 +687,35 @@ html[data-theme="light"] .roof-page,.light .roof-page{
 .roof-business-grid button[aria-pressed="true"]>strong{color:var(--roof-accent-ink)}
 .roof-selection-hint{margin-top:16px!important;font-size:13px;color:var(--roof-muted)}
 .roof-intro-reveal{margin-top:42px;max-width:980px;padding-top:34px;border-top:1px solid var(--roof-border)}
-.roof-intro-copy{max-width:730px}
-.roof-intro-copy h2,.roof-section-head h2,.roof-price-copy h2{margin-top:10px;font-size:clamp(1.8rem,3.3vw,2.7rem);line-height:1.12;letter-spacing:-.03em}
-.roof-intro-copy>p:last-child,.roof-section-head>p:last-child,.roof-price-copy>p:last-child{margin-top:15px!important;max-width:720px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
-.roof-control-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:28px;border:1px solid var(--roof-border);border-radius:14px;overflow:hidden;background:var(--roof-border)}
-.roof-control-strip>div{padding:17px 18px;background:var(--roof-surface)}
-.roof-control-strip span{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--roof-muted)}
-.roof-control-strip strong{display:block;margin-top:6px;font-size:13px;line-height:1.45}
-.roof-control-line{margin-top:13px!important;font-size:12px;line-height:1.65;color:var(--roof-muted)}
+.roof-opportunity{max-width:820px}
+.roof-opportunity h2,.roof-build-bridge h2,.roof-config-intro h2,.roof-section-head h2,.roof-price-copy h2{margin-top:10px;font-size:clamp(1.8rem,3.3vw,2.7rem);line-height:1.12;letter-spacing:-.03em}
+.roof-opportunity-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:24px}
+.roof-opportunity-list>div{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;border:1px solid var(--roof-border);border-radius:11px;background:var(--roof-surface)}
+.roof-opportunity-list span{flex:0 0 auto;margin-top:1px;color:var(--roof-accent-ink);font-size:11px;font-weight:800}
+.roof-opportunity-list strong{font-size:12px;line-height:1.5}
+.roof-reflection{margin-top:18px!important;padding-left:13px;border-left:2px solid var(--roof-accent-ink);font-size:13px;font-weight:700;line-height:1.65;color:var(--roof-ink)!important}
+.roof-build-bridge{margin-top:46px;max-width:760px}
+.roof-build-bridge>p{font-size:13px;line-height:1.7;color:var(--roof-muted)}
+.roof-solution-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.roof-solution-pair article{padding:22px;border:1px solid var(--roof-border);border-radius:14px;background:var(--roof-surface)}
+.roof-solution-pair article>span{display:block;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--roof-accent-ink)}
+.roof-solution-pair h3{margin-top:7px;font-size:17px;line-height:1.35}
+.roof-solution-pair p{margin-top:9px;font-size:12px;line-height:1.7;color:var(--roof-muted)}
+.roof-mini-flow{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:16px;padding-top:14px;border-top:1px solid var(--roof-border)}
+.roof-mini-flow b{font-size:9px;line-height:1.4;color:var(--roof-ink)}
+.roof-mini-flow i{font-style:normal;font-size:9px;color:var(--roof-accent-ink)}
+.roof-either-note{margin-top:13px!important;font-size:11.5px;font-weight:700;text-align:center;color:var(--roof-muted)}
+.roof-config-block{margin-top:52px;padding-top:34px;border-top:1px solid var(--roof-border)}
+.roof-config-intro{max-width:780px}
+.roof-config-intro>p:last-child{margin-top:15px!important;max-width:720px;font-size:13px;line-height:1.75;color:var(--roof-muted)}
+.roof-config-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}
+.roof-config-grid>div{padding:17px;border:1px solid var(--roof-border);border-radius:12px;background:var(--roof-surface)}
+.roof-config-grid span{display:block;font-size:9px;font-weight:700;color:var(--roof-accent-ink)}
+.roof-config-grid strong{display:block;margin-top:7px;font-size:12px;line-height:1.4}
+.roof-config-grid p{margin-top:7px;font-size:10.5px;line-height:1.65;color:var(--roof-muted)}
+.roof-control-line{margin-top:14px!important;font-size:11.5px;line-height:1.65;color:var(--roof-muted)}
+.roof-config-reassurance{margin-top:10px!important;max-width:760px;font-size:12px;font-weight:700;line-height:1.65;color:var(--roof-ink)!important}
+.roof-section-head>p:last-child,.roof-price-copy>p:last-child{margin-top:15px!important;max-width:720px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
 .roof-disclosure{margin-top:16px;border-top:1px solid var(--roof-border)}
 .roof-disclosure summary{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:50px;list-style:none;font-size:12px;font-weight:700;color:var(--roof-ink)}
 .roof-disclosure summary::-webkit-details-marker{display:none}
@@ -703,8 +811,9 @@ html[data-theme="light"] .roof-page,.light .roof-page{
 .roof-price-card>.roof-disclosure{max-width:620px;margin:24px auto 0;text-align:left}
 @media(max-width:860px){
   .roof-section{padding:72px 0}
-  .roof-business-grid,.roof-control-strip,.roof-method-grid,.roof-benefit-grid{grid-template-columns:1fr}
+  .roof-business-grid,.roof-method-grid,.roof-benefit-grid{grid-template-columns:1fr}
   .roof-business-grid{max-width:none}
+  .roof-config-grid{grid-template-columns:1fr 1fr}
   .roof-audience-card{grid-template-columns:1fr;gap:24px}
   .roof-flow{max-width:620px}
   .roof-method-grid{gap:16px}
@@ -721,9 +830,11 @@ html[data-theme="light"] .roof-page,.light .roof-page{
   .roof-business-grid{gap:8px;margin-top:26px}
   .roof-business-grid button{min-height:62px;padding:14px 15px}
   .roof-intro-reveal{margin-top:32px;padding-top:28px}
-  .roof-control-strip{gap:0}
-  .roof-control-strip>div{padding:14px 15px;border-bottom:1px solid var(--roof-border)}
-  .roof-control-strip>div:last-child{border-bottom:0}
+  .roof-opportunity-list,.roof-solution-pair,.roof-config-grid{grid-template-columns:1fr}
+  .roof-build-bridge{margin-top:38px}
+  .roof-config-block{margin-top:42px;padding-top:28px}
+  .roof-solution-pair article{padding:18px}
+  .roof-config-grid>div{padding:15px}
   .roof-section-head{margin-bottom:22px}
   .roof-audience-selector{gap:5px}
   .roof-audience-selector button{min-height:58px;display:block;padding:10px;text-align:center}
