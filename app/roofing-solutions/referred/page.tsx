@@ -4,11 +4,9 @@ import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
 /*
- * T3 Labs roofing landing page v2.
- * Intentionally contains NO custom site header or section menu.
- * The implementation agent should use the real T3 Labs header, navigation,
- * typography and theme handling from the existing /our-solution and
- * /sales-resources pages.
+ * T3 Labs roofing landing page v3 — refinement pass (2026-09-16).
+ * Font scale: 12 / 14 / 20 / 30 / 48 (5 sizes max).
+ * Global rule: space over density. If copy only fits tiny, simplify the copy.
  */
 
 type Business = "manufacturer" | "supplier" | "supply-install";
@@ -21,8 +19,9 @@ type Clip = {
 };
 
 const CONFIG = {
-  apexDemoUrl: "/supplier-pricing-tool/apex-roofing",
-  seanContactUrl: "https://calendly.com/cece-t3labs/20min", // AGENT: replace with Sean's actual booking/contact URL if different.
+  // Main Apex Roofing demo site (starts at the beginning of the experience).
+  apexDemoUrl: "/demo/roofing-site",
+  shaunContactUrl: "https://calendly.com/cece-t3labs/20min",
   clips: {
     known: { src: "", poster: "" },
     plan: { src: "", poster: "" },
@@ -52,13 +51,13 @@ type BusinessProfile = {
 const PROFILES: Record<Business, BusinessProfile> = {
   manufacturer: {
     label: "Manufacturer",
-    opportunityQuestion: "What if more of your customers, contractors or specifiers could get the answers they need from your website before your team had to get involved?",
+    opportunityQuestion: "What if more of your customers could get the answers they need from your website before your team had to get involved?",
     opportunityItems: [
       "Answer common product and technical questions",
-      "Know which roofing system suits a particular application",
+      "Know which roofing system suits the job",
       "Know which products and accessories work together",
-      "Understand how products are measured, packaged or specified",
-      "Build a preliminary product list or system recommendation",
+      "Handle measurement and specification",
+      "Build a preliminary product list",
       "Send a better-prepared technical or sales enquiry",
     ],
     reflection: "How much of this knowledge currently depends on someone from your team explaining it manually?",
@@ -66,8 +65,8 @@ const PROFILES: Record<Business, BusinessProfile> = {
     audience: {
       visitor: {
         label: "A new website visitor",
-        quote: "What roofing system suits this project, and what would I need?",
-        body: "They can start with a known measurement, measure from a plan, or ask the assistant. The experience can guide them through approved systems and product information before your team gets involved.",
+        quote: "What might a new roof cost for my property?",
+        body: "They can enter known measurements, measure from a plan, use a guided tool or ask the Smart Assistant, and get a useful first result before making a better-prepared enquiry.",
         input: "Project + roof details",
         output: "Suitable system + product guidance",
         next: "Stockist, technical or sales enquiry",
@@ -104,22 +103,22 @@ const PROFILES: Record<Business, BusinessProfile> = {
       "Build a multi-product estimate or preliminary quote",
       "Send a more complete enquiry or order request",
     ],
-    reflection: "How many of these currently become a phone call, email or manual quote?",
+    reflection: "How many of these currently turn into a phone call, email or manual quote?",
     controlLine: "Your catalogue, coverage rules, public pricing, private trade rates and chosen handoff rules.",
     audience: {
       visitor: {
         label: "A new website visitor",
-        quote: "I have a 180 m² roof. What do I need and roughly what will it cost?",
-        body: "They can enter a known measurement, measure from a plan, or simply ask the assistant. Your configured products and pricing rules turn that into a useful starting answer.",
+        quote: "What might a new roof cost for my property?",
+        body: "They can enter known measurements, measure from a plan, use a guided tool or ask the Smart Assistant, and get a useful first result before making a better-prepared enquiry.",
         input: "Roof size + product preference",
         output: "Quantities + indicative pricing",
         next: "Prepared enquiry for your team",
         question: "What if a new buyer could get this far before your phone rang?",
       },
       contractor: {
-        label: "A roofer or trade customer",
+        label: "A roofing customer / contractor",
         quote: "Price this job using the products I normally buy.",
-        body: "A trade customer can use approved products, quantities and account pricing to prepare a job before sending the material requirements through to you.",
+        body: "The contractor does more of the work themselves: enter or measure the job, use preferred products and approved trade pricing, build quantities, create a preliminary quote or material list, then send the completed job through.",
         input: "Job measurements + account",
         output: "Materials + approved pricing",
         next: "Customer quote, enquiry or order",
@@ -128,7 +127,7 @@ const PROFILES: Record<Business, BusinessProfile> = {
       team: {
         label: "Your own team",
         quote: "Build the supply quote and apply this customer's rates.",
-        body: "The same underlying products and calculations can support staff pricing, customer-specific rates and quote preparation without re-entering the same job.",
+        body: "T3 Labs can create an internal staff version of the same tools with different permissions, pricing, margins and approvals, all connected to the same products and job information.",
         input: "Prepared job + customer record",
         output: "Staff pricing + quote",
         next: "Review, approve and send",
@@ -144,16 +143,16 @@ const PROFILES: Record<Business, BusinessProfile> = {
       "Know which roofing system may suit the job",
       "Enter measurements or measure from a plan",
       "Build a preliminary supply-and-install estimate",
-      "Ask common product or project questions",
+      "Ask common project questions",
       "Send a better-qualified project enquiry",
     ],
-    reflection: "How much further could a potential customer get before one of your team needed to step in?",
+    reflection: "What would it mean for your business if a potential customer could get this far before your team needed to step in?",
     controlLine: "Your products, labour assumptions, exclusions, qualification rules and when a person or site visit is required.",
     audience: {
       visitor: {
         label: "A new website visitor",
         quote: "What might a new roof cost for my property?",
-        body: "They can enter known measurements, work from a plan, or ask the assistant. The system can gather the basics and provide an approved preliminary estimate before a formal review.",
+        body: "They can enter known measurements, measure from a plan, use a guided tool or ask the Smart Assistant, and get a useful first result before making a better-qualified enquiry.",
         input: "Roof + project details",
         output: "Preliminary estimate",
         next: "Qualified enquiry or site review",
@@ -161,8 +160,8 @@ const PROFILES: Record<Business, BusinessProfile> = {
       },
       contractor: {
         label: "A builder or project partner",
-        quote: "Can you price the roof on this build?",
-        body: "Repeat partners can provide plans, measurements and roofing requirements in a structured way before your estimator needs to take over.",
+        quote: "Price this job using the products I normally buy.",
+        body: "The partner does more of the work themselves: provide plans or measurements, use preferred systems, build quantities, and send a better-prepared roofing brief through for review.",
         input: "Plans + project requirements",
         output: "Prepared roofing brief",
         next: "Estimator review",
@@ -171,7 +170,7 @@ const PROFILES: Record<Business, BusinessProfile> = {
       team: {
         label: "Your own team",
         quote: "Build this quote using our materials, labour and pricing rules.",
-        body: "Configure an internal workflow around your own assumptions, rates and approvals while leaving exceptions and professional judgement with the team.",
+        body: "An internal staff version of the same tools can carry your own rates, labour, margins, overrides and approvals, connected to the same products and job information.",
         input: "Measured job + customer details",
         output: "Materials + labour + quote",
         next: "Review, approve and send",
@@ -184,9 +183,9 @@ const PROFILES: Record<Business, BusinessProfile> = {
 const AUDIENCES: Audience[] = ["visitor", "contractor", "team"];
 
 const AUDIENCE_LABELS: Record<Audience, string> = {
-  visitor: "New visitor",
-  contractor: "Roofing customer",
-  team: "Your team",
+  visitor: "1 of 3 — New visitor",
+  contractor: "2 of 3 — Roofing customer",
+  team: "3 of 3 — Your team",
 };
 
 const METHODS: {
@@ -199,19 +198,19 @@ const METHODS: {
     id: "known",
     eyebrow: "01",
     title: "Enter what they already know",
-    text: "Start with a known roof area or dimensions, then apply the products, quantities and rules your business has approved.",
+    text: "Start with a known roof area or dimensions, then apply your approved products, quantities and rules.",
   },
   {
     id: "plan",
     eyebrow: "02",
     title: "Measure from a plan",
-    text: "Use a guided takeoff to turn a plan into useful measurements, then carry those details into the job or estimate.",
+    text: "Use a guided takeoff to turn a plan into useful measurements, then carry those into the job or estimate.",
   },
   {
     id: "assistant",
     eyebrow: "03",
-    title: "Just ask the assistant",
-    text: "Let the customer explain what they need. The assistant can ask for missing details, answer approved questions and move them toward pricing or a human handoff.",
+    title: "Just ask the Smart Assistant",
+    text: "Let the customer explain what they need. The assistant asks for missing details, answers approved questions and moves them toward pricing or a human handoff.",
   },
 ];
 
@@ -331,8 +330,8 @@ function AudienceCarousel({ profile }: { profile: BusinessProfile }) {
             aria-selected={audience === item}
             onClick={() => setAudience(item)}
           >
-            <span>{String(i + 1).padStart(2, "0")}</span>
-            <strong>{AUDIENCE_LABELS[item]}</strong>
+            <span>{i + 1} of 3</span>
+            <strong>{AUDIENCE_LABELS[item].split(" — ")[1]}</strong>
           </button>
         ))}
       </div>
@@ -351,29 +350,24 @@ function AudienceCarousel({ profile }: { profile: BusinessProfile }) {
       </div>
 
       <div className="roof-audience-controls">
-        <button type="button" onClick={() => move(-1)} aria-label="Previous audience"><Arrow left /></button>
-        <div className="roof-dots" aria-label={`Slide ${index + 1} of ${AUDIENCES.length}`}>
+        <button type="button" onClick={() => move(-1)} aria-label="Previous example"><Arrow left /></button>
+        <div className="roof-dots" aria-label={`Example ${index + 1} of ${AUDIENCES.length}`}>
           {AUDIENCES.map((item) => <span key={item} className={audience === item ? "active" : ""} />)}
         </div>
-        <button type="button" onClick={() => move(1)} aria-label="Next audience"><Arrow /></button>
+        <button type="button" onClick={() => move(1)} aria-label="Next example"><Arrow /></button>
       </div>
     </div>
   );
 }
 
-export default function RoofingLandingPageV2() {
+export default function RoofingLandingPageV3() {
   const [business, setBusiness] = useState<Business | null>(null);
-  // Real T3 Labs header theming (same dark/light treatment as /our-solution).
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const t =
     theme === "dark"
       ? { border: "rgba(255,255,255,.12)", muted: "#acb3c4" }
       : { border: "rgba(17,21,31,.14)", muted: "#50596b" };
   const profile = useMemo(() => (business ? PROFILES[business] : null), [business]);
-
-  const chooseBusiness = (next: Business) => {
-    setBusiness(next);
-  };
 
   return (
     <div className={theme === "light" ? "light" : "dark"}>
@@ -405,7 +399,7 @@ export default function RoofingLandingPageV2() {
                 key={key}
                 type="button"
                 aria-pressed={business === key}
-                onClick={() => chooseBusiness(key)}
+                onClick={() => setBusiness(key)}
               >
                 <span>{PROFILES[key].label}</span>
                 <strong>{business === key ? "Selected" : "Choose"}</strong>
@@ -419,6 +413,7 @@ export default function RoofingLandingPageV2() {
 
           {profile && (
             <div className="roof-intro-reveal" aria-live="polite">
+              {/* 1. Tailored question + six examples */}
               <div className="roof-opportunity">
                 <p className="roof-kicker">For a {profile.label.toLowerCase()}</p>
                 <h2>{profile.opportunityQuestion}</h2>
@@ -431,30 +426,38 @@ export default function RoofingLandingPageV2() {
                     </div>
                   ))}
                 </div>
-
-                <p className="roof-reflection">{profile.reflection}</p>
               </div>
 
+              {/* 2. Reflection — standalone pause */}
+              <div className="roof-reflection-box">
+                <p>{profile.reflection}</p>
+              </div>
+
+              {/* 3. Bridge — own short statement */}
               <div className="roof-build-bridge">
-                <p>If even a few of those would help your business, that is exactly the kind of problem we build for.</p>
-                <h2>We build the tools that make it possible.</h2>
+                <p>Even if just one of those would improve your customer journey or save your team time, we can build around that problem.</p>
+              </div>
+
+              {/* 4. What we build — new chapter */}
+              <div className="roof-chapter">
+                <h2 className="roof-chapter-heading">We build the tools that make it possible.</h2>
               </div>
 
               <div className="roof-solution-pair">
                 <article>
-                  <span>Interactive tools</span>
+                  <span>Interactive Tools</span>
                   <h3>Let customers work through it themselves.</h3>
-                  <p>Measure, select, calculate, price and prepare an enquiry through a guided workflow.</p>
+                  <p>A guided workflow on your website.</p>
                   <div className="roof-mini-flow" aria-label="Interactive tool workflow">
                     <b>Measure</b><i>→</i><b>Select</b><i>→</i><b>Calculate</b><i>→</i><b>Price</b><i>→</i><b>Enquire</b>
                   </div>
                 </article>
 
                 <article>
-                  <span>Online sales assistant</span>
-                  <h3>Or let them simply ask what they need.</h3>
-                  <p>The assistant can clarify the question, use your approved information and guide the customer towards an answer, estimate or handoff.</p>
-                  <div className="roof-mini-flow" aria-label="Online sales assistant workflow">
+                  <span>Smart Assistant</span>
+                  <h3>Let customers simply ask what they need.</h3>
+                  <p>Answers grounded in your approved information.</p>
+                  <div className="roof-mini-flow" aria-label="Smart Assistant workflow">
                     <b>Ask</b><i>→</i><b>Clarify</b><i>→</i><b>Answer</b><i>→</i><b>Estimate</b><i>→</i><b>Handoff</b>
                   </div>
                 </article>
@@ -462,38 +465,38 @@ export default function RoofingLandingPageV2() {
 
               <p className="roof-either-note">Use either approach, or both together.</p>
 
+              {/* 5. Built around your business */}
               <div className="roof-config-block">
                 <div className="roof-config-intro">
                   <p className="roof-kicker">Built around your business</p>
                   <h2>Not a generic calculator. Not a generic chatbot.</h2>
-                  <p>Before we build anything, we learn how your business works and decide with you what the system should know, what rules it should follow and when your team should take over.</p>
+                  <p>T3 Labs first learns how the business works, then configures the tools and Smart Assistant around the products, pricing, knowledge, rules and handoff boundaries the business approves.</p>
                 </div>
 
                 <div className="roof-config-grid">
                   <div>
                     <span>01</span>
                     <strong>Your products</strong>
-                    <p>What you sell, how products are used and what works together.</p>
+                    <p>What you sell and what works together.</p>
                   </div>
                   <div>
                     <span>02</span>
                     <strong>Your pricing + calculations</strong>
-                    <p>How quantities, pricing, packaging, waste or other calculations should work.</p>
+                    <p>How quantities, pricing and other rules should work.</p>
                   </div>
                   <div>
                     <span>03</span>
                     <strong>Your approved answers</strong>
-                    <p>The product and business information you are happy for customers to receive.</p>
+                    <p>The information you are happy for customers to receive.</p>
                   </div>
                   <div>
                     <span>04</span>
                     <strong>Your handoff rules</strong>
-                    <p>What the system can handle itself and when it should send the customer to your team.</p>
+                    <p>When the system hands the customer to your team.</p>
                   </div>
                 </div>
 
                 <p className="roof-control-line">For your business: {profile.controlLine}</p>
-                <p className="roof-config-reassurance">The goal is to give customers faster answers using the information and rules you approve, then move them towards the right next step.</p>
               </div>
 
               <a className="roof-continue" href="#roof-people">See who it could help <Arrow /></a>
@@ -507,7 +510,7 @@ export default function RoofingLandingPageV2() {
               <div className="roof-section-head">
                 <p className="roof-kicker">One system, three people</p>
                 <h2>Different users. The same business knowledge underneath.</h2>
-                <p>The selector is deliberate: there are three examples to view.</p>
+                <p>There are three examples. View all of them.</p>
               </div>
               <AudienceCarousel key={business} profile={profile} />
             </section>
@@ -516,7 +519,7 @@ export default function RoofingLandingPageV2() {
               <div className="roof-section-head roof-section-head-narrow">
                 <p className="roof-kicker">Three ways to get an answer</p>
                 <h2>Let them start with whatever is easiest.</h2>
-                <p>Use one route or combine all three. There are no hidden steps inside these cards.</p>
+                <p>Use one route or combine all three.</p>
               </div>
 
               <div className="roof-method-grid">
@@ -532,7 +535,7 @@ export default function RoofingLandingPageV2() {
                 ))}
               </div>
 
-              <p className="roof-method-note">A visitor can use the tool themselves, talk to the assistant, or move between both. Your own team can use the same underlying products and rules with different permissions.</p>
+              <p className="roof-method-note">A visitor can use the tool themselves, talk to the Smart Assistant, or move between both. Your team can use the same underlying products and rules with different permissions.</p>
             </section>
 
             <section className="roof-section" id="roof-value">
@@ -558,7 +561,7 @@ export default function RoofingLandingPageV2() {
                 </article>
                 <article>
                   <strong>Better enquiries</strong>
-                  <p>Your team can receive measurements, selections and useful context instead of starting from a vague request.</p>
+                  <p>Your team receives measurements, selections and useful context instead of a vague request.</p>
                 </article>
                 <article>
                   <strong>Less repetitive work</strong>
@@ -570,40 +573,40 @@ export default function RoofingLandingPageV2() {
                 <div className="roof-journey roof-journey-before">
                   <span>Typical today</span>
                   <strong>Visitor arrives</strong>
-                  <b>→</b>
+                  <b aria-hidden="true">↓</b>
                   <strong>Cannot get enough information</strong>
-                  <b>→</b>
-                  <strong>Leaves, or sends a basic enquiry</strong>
-                  <b>→</b>
+                  <b aria-hidden="true">↓</b>
+                  <strong>Leaves or sends a basic enquiry</strong>
+                  <b aria-hidden="true">↓</b>
                   <strong>Your team starts from scratch</strong>
                 </div>
                 <div className="roof-journey roof-journey-after">
                   <span>With a useful system</span>
                   <strong>Visitor arrives</strong>
-                  <b>→</b>
+                  <b aria-hidden="true">↓</b>
                   <strong>Measures, enters details or asks</strong>
-                  <b>→</b>
+                  <b aria-hidden="true">↓</b>
                   <strong>Gets a useful first result</strong>
-                  <b>→</b>
-                  <strong>Your team receives better context</strong>
+                  <b aria-hidden="true">↓</b>
+                  <strong>Your team starts with useful context</strong>
                 </div>
               </div>
 
               <Disclosure title="What else can the same system improve?">
                 <div className="roof-more-benefits">
                   <p><strong>Contractor loyalty.</strong> Make your products easier for roofing customers to price, specify and use again.</p>
-                  <p><strong>Internal quoting.</strong> Reuse the same underlying product and calculation logic for staff workflows where useful.</p>
-                  <p><strong>Better data.</strong> See what people ask about, price and select, then use that information to improve your process and resources.</p>
-                  <p><strong>A more useful website.</strong> Instead of only telling people what you sell, help them solve more of the problem they arrived with.</p>
+                  <p><strong>Internal quoting.</strong> Reuse the same product and calculation logic for staff workflows where useful.</p>
+                  <p><strong>Better data.</strong> See what people ask about, price and select, then improve your process and resources.</p>
+                  <p><strong>A more useful website.</strong> Help people solve more of the problem they arrived with.</p>
                 </div>
               </Disclosure>
 
               <div className="roof-discovery-note">
                 <div>
                   <p className="roof-kicker">A side benefit</p>
-                  <h3>More useful public information can also make you easier to discover.</h3>
+                  <h3>More useful public information can also make the business easier to discover.</h3>
                 </div>
-                <p>Search and AI systems can only work with information they can access. We can make selected public product, pricing and technical information available around these tools while keeping private trade rates and internal logic private.</p>
+                <p>Search and AI systems can only work with information they can access. Selected public product, pricing and technical information can be made accessible around these tools, while private trade rates and internal logic remain private.</p>
               </div>
             </section>
 
@@ -621,13 +624,12 @@ export default function RoofingLandingPageV2() {
                 </div>
 
                 <div className="roof-final-actions">
-                  <a className="roof-primary-button" href={CONFIG.seanContactUrl} target="_blank" rel="noopener noreferrer">Talk to Sean <Arrow /></a>
+                  <a className="roof-primary-button" href={CONFIG.shaunContactUrl} target="_blank" rel="noopener noreferrer">Talk to Shaun <Arrow /></a>
                   <a className="roof-secondary-link" href={CONFIG.apexDemoUrl} target="_blank" rel="noopener noreferrer">Try the Apex Roofing demo ↗</a>
                 </div>
 
-                <Disclosure title="Who's Sean?">
-                  <p>Sean is an ex-roofer with 20 years of experience across roofing and technology. He now helps build solutions for roofing businesses around how they actually work.</p>
-                  <p>The conversation is about understanding your process and where a focused tool could help, not pushing you into something you do not need.</p>
+                <Disclosure title="Who's Shaun?">
+                  <p>Shaun is an ex-roofer with around 20 years of experience across roofing and technology. He now helps build solutions for roofing businesses around how they actually work.</p>
                 </Disclosure>
               </div>
             </section>
@@ -673,188 +675,186 @@ html[data-theme="light"] .roof-page,.light .roof-page{
 .roof-page a{color:inherit;text-decoration:none}
 .roof-page button:focus-visible,.roof-page a:focus-visible,.roof-page summary:focus-visible{outline:3px solid var(--roof-accent-ink);outline-offset:4px}
 .roof-shell{width:min(1080px,calc(100% - 40px));margin:0 auto}
-.roof-section{padding:92px 0;border-bottom:1px solid var(--roof-border);scroll-margin-top:120px}
-.roof-opening{padding-top:82px}
+.roof-section{padding:110px 0;border-bottom:1px solid var(--roof-border);scroll-margin-top:120px}
+.roof-opening{padding-top:90px}
 .roof-kicker{font-size:12px;line-height:1.4;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--roof-accent-ink)!important}
-.roof-opening h1{max-width:760px;margin-top:12px;font-size:clamp(2.35rem,5vw,4.15rem);line-height:1.03;letter-spacing:-.045em}
-.roof-opening-copy{margin-top:18px!important;max-width:620px;font-size:16px;line-height:1.7;color:var(--roof-muted)}
-.roof-business-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:34px;max-width:880px}
-.roof-business-grid button{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:72px;padding:18px 20px;border:1px solid var(--roof-border);border-radius:14px;background:var(--roof-surface);color:var(--roof-ink);text-align:left;transition:.16s ease}
+.roof-opening h1{max-width:760px;margin-top:14px;font-size:clamp(2.5rem,5vw,3rem);line-height:1.08;letter-spacing:-.045em}
+.roof-opening-copy{margin-top:20px!important;max-width:620px;font-size:14px;line-height:1.7;color:var(--roof-muted)}
+.roof-business-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px;max-width:880px}
+.roof-business-grid button{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:84px;padding:22px 24px;border:1px solid var(--roof-border);border-radius:14px;background:var(--roof-surface);color:var(--roof-ink);text-align:left;transition:.16s ease}
 .roof-business-grid button:hover{border-color:var(--roof-accent-ink);transform:translateY(-1px)}
 .roof-business-grid button[aria-pressed="true"]{background:var(--roof-soft);border-color:var(--roof-accent-ink)}
-.roof-business-grid button>span{font-size:15px;font-weight:700}
-.roof-business-grid button>strong{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--roof-muted)}
+.roof-business-grid button>span{font-size:14px;font-weight:700}
+.roof-business-grid button>strong{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--roof-muted)}
 .roof-business-grid button[aria-pressed="true"]>strong{color:var(--roof-accent-ink)}
-.roof-selection-hint{margin-top:16px!important;font-size:13px;color:var(--roof-muted)}
-.roof-intro-reveal{margin-top:42px;max-width:980px;padding-top:34px;border-top:1px solid var(--roof-border)}
+.roof-selection-hint{margin-top:18px!important;font-size:14px;color:var(--roof-muted)}
+.roof-intro-reveal{margin-top:56px;max-width:980px;padding-top:48px;border-top:1px solid var(--roof-border)}
 .roof-opportunity{max-width:820px}
-.roof-opportunity h2,.roof-build-bridge h2,.roof-config-intro h2,.roof-section-head h2,.roof-price-copy h2{margin-top:10px;font-size:clamp(1.8rem,3.3vw,2.7rem);line-height:1.12;letter-spacing:-.03em}
-.roof-opportunity-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:24px}
-.roof-opportunity-list>div{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;border:1px solid var(--roof-border);border-radius:11px;background:var(--roof-surface)}
-.roof-opportunity-list span{flex:0 0 auto;margin-top:1px;color:var(--roof-accent-ink);font-size:11px;font-weight:800}
-.roof-opportunity-list strong{font-size:12px;line-height:1.5}
-.roof-reflection{margin-top:18px!important;padding-left:13px;border-left:2px solid var(--roof-accent-ink);font-size:13px;font-weight:700;line-height:1.65;color:var(--roof-ink)!important}
-.roof-build-bridge{margin-top:46px;max-width:760px}
-.roof-build-bridge>p{font-size:13px;line-height:1.7;color:var(--roof-muted)}
-.roof-solution-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
-.roof-solution-pair article{padding:22px;border:1px solid var(--roof-border);border-radius:14px;background:var(--roof-surface)}
-.roof-solution-pair article>span{display:block;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--roof-accent-ink)}
-.roof-solution-pair h3{margin-top:7px;font-size:17px;line-height:1.35}
-.roof-solution-pair p{margin-top:9px;font-size:12px;line-height:1.7;color:var(--roof-muted)}
-.roof-mini-flow{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:16px;padding-top:14px;border-top:1px solid var(--roof-border)}
-.roof-mini-flow b{font-size:9px;line-height:1.4;color:var(--roof-ink)}
-.roof-mini-flow i{font-style:normal;font-size:9px;color:var(--roof-accent-ink)}
-.roof-either-note{margin-top:13px!important;font-size:11.5px;font-weight:700;text-align:center;color:var(--roof-muted)}
-.roof-config-block{margin-top:52px;padding-top:34px;border-top:1px solid var(--roof-border)}
+.roof-opportunity h2,.roof-config-intro h2,.roof-section-head h2,.roof-price-copy h2{margin-top:12px;font-size:clamp(1.5rem,3vw,1.875rem);line-height:1.18;letter-spacing:-.02em}
+.roof-opportunity-list{display:grid;grid-template-columns:1fr;gap:12px;margin-top:32px;max-width:680px}
+.roof-opportunity-list>div{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border:1px solid var(--roof-border);border-radius:12px;background:var(--roof-surface)}
+.roof-opportunity-list span{flex:0 0 auto;margin-top:2px;color:var(--roof-accent-ink);font-size:14px;font-weight:800}
+.roof-opportunity-list strong{font-size:14px;line-height:1.6}
+.roof-reflection-box{margin:64px 0;padding:44px 40px;border:1px solid var(--roof-accent-ink);border-radius:16px;background:var(--roof-soft);text-align:center}
+.roof-reflection-box>p{max-width:640px;margin:0 auto!important;font-size:clamp(1.25rem,2.4vw,1.5rem);line-height:1.4;font-weight:700;letter-spacing:-.01em}
+.roof-build-bridge{max-width:720px;margin:0 auto;padding:0 8px;text-align:center}
+.roof-build-bridge>p{font-size:14px;line-height:1.8;color:var(--roof-muted);font-weight:600}
+.roof-chapter{margin-top:72px;text-align:center}
+.roof-chapter-heading{font-size:clamp(1.75rem,3.6vw,2.2rem);line-height:1.15;letter-spacing:-.025em;font-weight:800}
+.roof-solution-pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px;align-items:stretch}
+.roof-solution-pair article{display:flex;flex-direction:column;padding:32px;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
+.roof-solution-pair article>span{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--roof-accent-ink)}
+.roof-solution-pair h3{margin-top:10px;font-size:20px;line-height:1.35}
+.roof-solution-pair p{margin-top:10px;font-size:14px;line-height:1.7;color:var(--roof-muted)}
+.roof-mini-flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:auto;padding-top:20px;border-top:1px solid var(--roof-border)}
+.roof-mini-flow b{font-size:12px;line-height:1.4;color:var(--roof-ink)}
+.roof-mini-flow i{font-style:normal;font-size:12px;color:var(--roof-accent-ink)}
+.roof-either-note{margin-top:24px!important;font-size:14px;font-weight:700;text-align:center;color:var(--roof-muted)}
+.roof-config-block{margin-top:80px;padding-top:52px;border-top:1px solid var(--roof-border)}
 .roof-config-intro{max-width:780px}
-.roof-config-intro>p:last-child{margin-top:15px!important;max-width:720px;font-size:13px;line-height:1.75;color:var(--roof-muted)}
-.roof-config-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}
-.roof-config-grid>div{padding:17px;border:1px solid var(--roof-border);border-radius:12px;background:var(--roof-surface)}
-.roof-config-grid span{display:block;font-size:9px;font-weight:700;color:var(--roof-accent-ink)}
-.roof-config-grid strong{display:block;margin-top:7px;font-size:12px;line-height:1.4}
-.roof-config-grid p{margin-top:7px;font-size:10.5px;line-height:1.65;color:var(--roof-muted)}
-.roof-control-line{margin-top:14px!important;font-size:11.5px;line-height:1.65;color:var(--roof-muted)}
-.roof-config-reassurance{margin-top:10px!important;max-width:760px;font-size:12px;font-weight:700;line-height:1.65;color:var(--roof-ink)!important}
-.roof-section-head>p:last-child,.roof-price-copy>p:last-child{margin-top:15px!important;max-width:720px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
-.roof-disclosure{margin-top:16px;border-top:1px solid var(--roof-border)}
-.roof-disclosure summary{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:50px;list-style:none;font-size:12px;font-weight:700;color:var(--roof-ink)}
+.roof-config-intro>p:last-child{margin-top:16px!important;max-width:720px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
+.roof-config-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px;max-width:820px}
+.roof-config-grid>div{padding:24px;border:1px solid var(--roof-border);border-radius:14px;background:var(--roof-surface)}
+.roof-config-grid span{display:block;font-size:12px;font-weight:700;color:var(--roof-accent-ink)}
+.roof-config-grid strong{display:block;margin-top:8px;font-size:14px;line-height:1.4;font-weight:700}
+.roof-config-grid p{margin-top:8px;font-size:12px;line-height:1.65;color:var(--roof-muted)}
+.roof-control-line{margin-top:20px!important;max-width:760px;font-size:12px;line-height:1.7;color:var(--roof-muted)}
+.roof-disclosure{margin-top:24px;border-top:1px solid var(--roof-border)}
+.roof-disclosure summary{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:60px;list-style:none;font-size:14px;font-weight:700;color:var(--roof-ink)}
 .roof-disclosure summary::-webkit-details-marker{display:none}
-.roof-disclosure summary>span:last-child{font-size:18px;font-weight:400;color:var(--roof-accent-ink);transition:.15s ease}
+.roof-disclosure summary>span:last-child{font-size:20px;font-weight:400;color:var(--roof-accent-ink);transition:.15s ease}
 .roof-disclosure[open] summary>span:last-child{transform:rotate(45deg)}
-.roof-disclosure-body{padding:0 0 14px;max-width:760px;font-size:12px;line-height:1.75;color:var(--roof-muted)}
-.roof-disclosure-body p+p{margin-top:9px}
-.roof-continue{display:inline-flex;align-items:center;gap:10px;margin-top:20px;font-size:12px;font-weight:700;color:var(--roof-accent-ink)!important}
-.roof-section-head{max-width:790px;margin-bottom:30px}
+.roof-disclosure-body{padding:0 0 18px;max-width:760px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
+.roof-disclosure-body p+p{margin-top:12px}
+.roof-continue{display:inline-flex;align-items:center;gap:10px;margin-top:40px;font-size:14px;font-weight:700;color:var(--roof-accent-ink)!important}
+.roof-section-head{max-width:790px;margin-bottom:44px}
 .roof-section-head-narrow{max-width:690px}
-.roof-audience-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.roof-audience-selector button{display:flex;align-items:center;gap:12px;min-height:54px;padding:12px 15px;border:1px solid var(--roof-border);border-radius:11px;background:var(--roof-surface);color:var(--roof-ink);text-align:left}
-.roof-audience-selector button>span{font-size:9px;color:var(--roof-muted)}
-.roof-audience-selector button>strong{font-size:12px}
+.roof-section-head>p:last-child,.roof-price-copy>p:last-child{margin-top:16px!important;max-width:720px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
+.roof-audience-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.roof-audience-selector button{display:flex;align-items:center;gap:12px;min-height:64px;padding:14px 18px;border:1px solid var(--roof-border);border-radius:12px;background:var(--roof-surface);color:var(--roof-ink);text-align:left}
+.roof-audience-selector button>span{font-size:12px;font-weight:700;color:var(--roof-muted)}
+.roof-audience-selector button>strong{font-size:14px}
 .roof-audience-selector button[aria-selected="true"]{border-color:var(--roof-accent-ink);background:var(--roof-soft)}
 .roof-audience-selector button[aria-selected="true"]>span{color:var(--roof-accent-ink)}
-.roof-audience-card{display:grid;grid-template-columns:1.05fr .95fr;gap:38px;margin-top:12px;padding:30px;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
-.roof-slide-meta{display:flex;align-items:center;gap:12px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
+.roof-audience-card{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;margin-top:16px;padding:40px;border:1px solid var(--roof-border);border-radius:18px;background:var(--roof-surface)}
+.roof-slide-meta{display:flex;align-items:center;gap:12px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
 .roof-slide-meta>span:first-child{color:var(--roof-accent-ink);font-weight:700}
-.roof-audience-copy blockquote{margin-top:15px;font-size:clamp(1.35rem,2.5vw,1.85rem);line-height:1.3;letter-spacing:-.02em;font-weight:700}
-.roof-audience-copy>p:not(.roof-question){margin-top:15px;font-size:13px;line-height:1.75;color:var(--roof-muted)}
-.roof-question{margin-top:18px!important;padding-left:12px;border-left:2px solid var(--roof-accent-ink);font-size:12px;font-weight:700;line-height:1.6;color:var(--roof-ink)!important}
-.roof-flow{align-self:center;display:flex;align-items:stretch;gap:8px}
-.roof-flow>div{flex:1;min-width:0;padding:14px;border:1px solid var(--roof-border);border-radius:11px;background:var(--roof-raised)}
-.roof-flow small{display:block;font-size:9px;line-height:1.4;text-transform:uppercase;letter-spacing:.06em;color:var(--roof-muted)}
-.roof-flow strong{display:block;margin-top:6px;font-size:11px;line-height:1.5}
-.roof-flow>span{align-self:center;color:var(--roof-accent-ink);font-size:13px}
-.roof-audience-controls{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:14px}
-.roof-audience-controls button{width:40px;height:40px;border:1px solid var(--roof-border);border-radius:999px;background:var(--roof-surface);color:var(--roof-ink)}
+.roof-audience-copy blockquote{margin-top:18px;font-size:clamp(1.35rem,2.5vw,1.6rem);line-height:1.35;letter-spacing:-.02em;font-weight:700}
+.roof-audience-copy>p:not(.roof-question){margin-top:18px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
+.roof-question{margin-top:22px!important;padding-left:14px;border-left:2px solid var(--roof-accent-ink);font-size:14px;font-weight:700;line-height:1.6;color:var(--roof-ink)!important}
+.roof-flow{align-self:center;display:flex;align-items:stretch;gap:10px}
+.roof-flow>div{flex:1;min-width:0;padding:18px;border:1px solid var(--roof-border);border-radius:12px;background:var(--roof-raised)}
+.roof-flow small{display:block;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.06em;color:var(--roof-muted)}
+.roof-flow strong{display:block;margin-top:8px;font-size:12px;line-height:1.5}
+.roof-flow>span{align-self:center;color:var(--roof-accent-ink);font-size:14px}
+.roof-audience-controls{display:flex;justify-content:flex-end;align-items:center;gap:16px;margin-top:18px}
+.roof-audience-controls button{width:48px;height:48px;border:1px solid var(--roof-border);border-radius:999px;background:var(--roof-surface);color:var(--roof-ink);font-size:16px}
 .roof-audience-controls button:hover{border-color:var(--roof-accent-ink)}
-.roof-dots{display:flex;gap:6px}
-.roof-dots span{width:6px;height:6px;border-radius:999px;background:var(--roof-border)}
-.roof-dots span.active{width:18px;background:var(--roof-accent)}
-.roof-method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.roof-method-card{overflow:hidden;border:1px solid var(--roof-border);border-radius:15px;background:var(--roof-surface)}
-.roof-method-media{min-height:225px;padding:18px;background:var(--roof-raised);border-bottom:1px solid var(--roof-border)}
-.roof-method-copy{padding:19px 20px 22px}
-.roof-method-copy>span{font-size:9px;font-weight:700;color:var(--roof-accent-ink)}
-.roof-method-copy h3{margin-top:6px;font-size:16px;line-height:1.35}
-.roof-method-copy p{margin-top:9px;font-size:12px;line-height:1.7;color:var(--roof-muted)}
-.roof-method-note{margin:18px auto 0!important;max-width:760px;text-align:center;font-size:11.5px;line-height:1.65;color:var(--roof-muted)}
-.roof-visual,.roof-method-video{width:100%;height:100%;min-height:188px;border-radius:11px;border:1px solid var(--roof-border);background:var(--roof-bg)}
+.roof-dots{display:flex;gap:8px}
+.roof-dots span{width:8px;height:8px;border-radius:999px;background:var(--roof-border)}
+.roof-dots span.active{width:24px;background:var(--roof-accent)}
+.roof-method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+.roof-method-card{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
+.roof-method-media{aspect-ratio:16/10;padding:20px;background:var(--roof-raised);border-bottom:1px solid var(--roof-border);display:flex;align-items:stretch}
+.roof-method-copy{padding:26px 26px 30px;flex:1;display:flex;flex-direction:column}
+.roof-method-copy>span{font-size:12px;font-weight:700;color:var(--roof-accent-ink)}
+.roof-method-copy h3{margin-top:8px;font-size:20px;line-height:1.35}
+.roof-method-copy p{margin-top:10px;font-size:14px;line-height:1.7;color:var(--roof-muted)}
+.roof-method-note{margin:24px auto 0!important;max-width:760px;text-align:center;font-size:12px;line-height:1.7;color:var(--roof-muted)}
+.roof-visual,.roof-method-video{width:100%;flex:1;border-radius:12px;border:1px solid var(--roof-border);background:var(--roof-bg)}
 .roof-method-video{display:block;object-fit:cover}
-.roof-known{padding:20px}
-.roof-ui-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
-.roof-ui-input{margin-top:8px;padding:10px 12px;border:1px solid var(--roof-border);border-radius:8px;font-size:19px;font-weight:700}
-.roof-ui-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--roof-border);font-size:10px;color:var(--roof-muted)}
+.roof-known{padding:20px;display:flex;flex-direction:column;justify-content:center}
+.roof-ui-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
+.roof-ui-input{margin-top:8px;padding:10px 12px;border:1px solid var(--roof-border);border-radius:8px;font-size:20px;font-weight:700}
+.roof-ui-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--roof-border);font-size:12px;color:var(--roof-muted)}
 .roof-ui-row strong{color:var(--roof-ink)}
-.roof-ui-result{margin-top:13px;padding:10px;border-radius:8px;background:var(--roof-soft);font-size:10px;font-weight:700;color:var(--roof-accent-ink);text-align:center}
-.roof-plan{position:relative;padding:16px}
-.roof-plan svg{width:100%;height:125px}
+.roof-ui-result{margin-top:14px;padding:10px;border-radius:8px;background:var(--roof-soft);font-size:12px;font-weight:700;color:var(--roof-accent-ink);text-align:center}
+.roof-plan{position:relative;padding:16px;display:flex;align-items:center}
+.roof-plan svg{width:100%;height:auto;max-height:100%}
 .roof-plan path{fill:none;stroke:var(--roof-ink);stroke-width:2}
 .roof-plan circle{fill:var(--roof-accent)}
-.roof-plan-tag{position:absolute;left:15px;bottom:16px;padding:6px 8px;border:1px solid var(--roof-border);border-radius:99px;background:var(--roof-surface);font-size:9px;color:var(--roof-muted)}
+.roof-plan-tag{position:absolute;left:15px;bottom:16px;padding:6px 10px;border:1px solid var(--roof-border);border-radius:99px;background:var(--roof-surface);font-size:12px;color:var(--roof-muted)}
 .roof-plan-tag-two{left:auto;right:15px;color:var(--roof-accent-ink)}
-.roof-chat{padding:16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
-.roof-chat-bubble{max-width:89%;padding:9px 11px;border-radius:10px 10px 10px 3px;background:var(--roof-surface);border:1px solid var(--roof-border);font-size:10px;line-height:1.55;color:var(--roof-ink)}
+.roof-chat{padding:18px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.roof-chat-bubble{max-width:89%;padding:10px 12px;border-radius:10px 10px 10px 3px;background:var(--roof-surface);border:1px solid var(--roof-border);font-size:12px;line-height:1.55;color:var(--roof-ink)}
 .roof-chat-user{align-self:flex-end;border-radius:10px 10px 3px 10px;background:var(--roof-soft)}
-.roof-chat-action{align-self:flex-start;font-size:9px;color:var(--roof-accent-ink)}
-.roof-human-question{padding:24px 26px;border:1px solid var(--roof-border);border-radius:15px;background:var(--roof-surface)}
-.roof-human-question>p{font-size:17px;line-height:1.45;font-weight:700;color:var(--roof-ink)}
-.roof-human-question>div{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
-.roof-human-question span{padding:7px 10px;border-radius:999px;background:var(--roof-raised);border:1px solid var(--roof-border);font-size:10px;color:var(--roof-muted)}
-.roof-benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
-.roof-benefit-grid article{padding:19px 20px;border-top:2px solid var(--roof-accent-ink);border-radius:12px;background:var(--roof-surface);border-left:1px solid var(--roof-border);border-right:1px solid var(--roof-border);border-bottom:1px solid var(--roof-border)}
-.roof-benefit-grid strong{font-size:14px}
-.roof-benefit-grid p{margin-top:8px;font-size:12px;line-height:1.7;color:var(--roof-muted)}
-.roof-journeys{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
-.roof-journey{display:grid;grid-template-columns:auto auto auto auto auto auto auto;align-items:center;gap:8px;padding:18px;border:1px solid var(--roof-border);border-radius:13px;background:var(--roof-surface)}
-.roof-journey>span{grid-column:1/-1;margin-bottom:4px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
-.roof-journey strong{font-size:10px;line-height:1.4;font-weight:600}
-.roof-journey b{font-weight:400;color:var(--roof-muted)}
+.roof-chat-action{align-self:flex-start;font-size:12px;color:var(--roof-accent-ink)}
+.roof-human-question{padding:48px 40px;border:1px solid var(--roof-accent-ink);border-radius:18px;background:var(--roof-soft);text-align:center}
+.roof-human-question>p{max-width:640px;margin:0 auto!important;font-size:clamp(1.25rem,2.4vw,1.5rem);line-height:1.4;font-weight:700;letter-spacing:-.01em}
+.roof-human-question>div{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:24px}
+.roof-human-question span{padding:8px 14px;border-radius:999px;background:var(--roof-surface);border:1px solid var(--roof-border);font-size:12px;color:var(--roof-muted)}
+.roof-benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;align-items:stretch}
+.roof-benefit-grid article{padding:28px;border-top:2px solid var(--roof-accent-ink);border-radius:14px;background:var(--roof-surface);border-left:1px solid var(--roof-border);border-right:1px solid var(--roof-border);border-bottom:1px solid var(--roof-border)}
+.roof-benefit-grid strong{font-size:20px}
+.roof-benefit-grid p{margin-top:10px;font-size:14px;line-height:1.7;color:var(--roof-muted)}
+.roof-journeys{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px;align-items:stretch}
+.roof-journey{display:flex;flex-direction:column;gap:10px;padding:28px;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
+.roof-journey>span{margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--roof-muted)}
+.roof-journey strong{font-size:14px;line-height:1.5;font-weight:600}
+.roof-journey b{font-weight:400;color:var(--roof-muted);line-height:.6}
 .roof-journey-after{border-color:var(--roof-accent-ink);background:var(--roof-soft)}
 .roof-journey-after>span{color:var(--roof-accent-ink)}
-.roof-more-benefits{display:grid;grid-template-columns:1fr 1fr;gap:12px 22px}
-.roof-more-benefits p{font-size:12px;line-height:1.7;color:var(--roof-muted)}
+.roof-more-benefits{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+.roof-more-benefits p{font-size:14px;line-height:1.7;color:var(--roof-muted)}
 .roof-more-benefits strong{color:var(--roof-ink)}
-.roof-discovery-note{display:grid;grid-template-columns:.8fr 1.2fr;gap:30px;align-items:start;margin-top:34px;padding-top:28px;border-top:1px solid var(--roof-border)}
-.roof-discovery-note h3{margin-top:8px;font-size:18px;line-height:1.35}
-.roof-discovery-note>p{font-size:12px;line-height:1.75;color:var(--roof-muted)}
-.roof-final{border-bottom:0;padding-bottom:110px}
-.roof-price-card{max-width:880px;margin:0 auto;padding:38px;border:1px solid var(--roof-border);border-top:2px solid var(--roof-accent-ink);border-radius:18px;background:var(--roof-surface);text-align:center}
+.roof-discovery-note{display:grid;grid-template-columns:.8fr 1.2fr;gap:32px;align-items:start;margin-top:48px;padding:32px;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
+.roof-discovery-note h3{margin-top:8px;font-size:20px;line-height:1.35}
+.roof-discovery-note>p{font-size:14px;line-height:1.75;color:var(--roof-muted)}
+.roof-final{border-bottom:0;padding-bottom:130px}
+.roof-price-card{max-width:880px;margin:0 auto;padding:48px;border:1px solid var(--roof-border);border-top:2px solid var(--roof-accent-ink);border-radius:20px;background:var(--roof-surface);text-align:center}
 .roof-price-copy{max-width:680px;margin:0 auto}
 .roof-price-copy h2 span{color:var(--roof-accent-ink)}
-.roof-price-number{margin-top:28px}
-.roof-price-number small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
-.roof-price-number strong{display:block;margin-top:4px;font-size:clamp(3.7rem,8vw,6rem);line-height:1;letter-spacing:-.06em}
-.roof-final-actions{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:28px}
-.roof-primary-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 24px;border-radius:999px;background:var(--roof-accent);color:#0a0b10!important;font-size:12px;font-weight:800}
+.roof-price-number{margin-top:32px}
+.roof-price-number small{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
+.roof-price-number strong{display:block;margin-top:6px;font-size:clamp(3.7rem,8vw,6rem);line-height:1;letter-spacing:-.06em}
+.roof-final-actions{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:36px}
+.roof-primary-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border-radius:999px;background:var(--roof-accent);color:#0a0b10!important;font-size:14px;font-weight:800}
 .roof-primary-button:hover{filter:brightness(1.05);transform:translateY(-1px)}
-.roof-secondary-link{font-size:11px;font-weight:700;color:var(--roof-muted)!important}
+.roof-secondary-link{font-size:14px;font-weight:700;color:var(--roof-muted)!important}
 .roof-secondary-link:hover{color:var(--roof-accent-ink)!important}
-.roof-price-card>.roof-disclosure{max-width:620px;margin:24px auto 0;text-align:left}
+.roof-price-card>.roof-disclosure{max-width:620px;margin:28px auto 0;text-align:left}
 @media(max-width:860px){
-  .roof-section{padding:72px 0}
+  .roof-section{padding:88px 0}
   .roof-business-grid,.roof-method-grid,.roof-benefit-grid{grid-template-columns:1fr}
   .roof-business-grid{max-width:none}
   .roof-config-grid{grid-template-columns:1fr 1fr}
-  .roof-audience-card{grid-template-columns:1fr;gap:24px}
+  .roof-audience-card{grid-template-columns:1fr;gap:28px}
   .roof-flow{max-width:620px}
-  .roof-method-grid{gap:16px}
-  .roof-method-media{min-height:205px}
   .roof-journeys{grid-template-columns:1fr}
-  .roof-discovery-note{grid-template-columns:1fr;gap:12px}
+  .roof-discovery-note{grid-template-columns:1fr;gap:16px}
 }
 @media(max-width:620px){
   .roof-shell{width:calc(100% - 30px)}
-  .roof-section{padding:58px 0}
-  .roof-opening{padding-top:50px}
-  .roof-opening h1{font-size:2.45rem}
+  .roof-section{padding:68px 0}
+  .roof-opening{padding-top:56px}
+  .roof-opening h1{font-size:2rem}
   .roof-opening-copy{font-size:14px}
-  .roof-business-grid{gap:8px;margin-top:26px}
-  .roof-business-grid button{min-height:62px;padding:14px 15px}
-  .roof-intro-reveal{margin-top:32px;padding-top:28px}
+  .roof-business-grid{gap:10px;margin-top:28px}
+  .roof-business-grid button{min-height:70px;padding:16px 18px}
+  .roof-intro-reveal{margin-top:36px;padding-top:32px}
   .roof-opportunity-list,.roof-solution-pair,.roof-config-grid{grid-template-columns:1fr}
-  .roof-build-bridge{margin-top:38px}
-  .roof-config-block{margin-top:42px;padding-top:28px}
-  .roof-solution-pair article{padding:18px}
-  .roof-config-grid>div{padding:15px}
-  .roof-section-head{margin-bottom:22px}
-  .roof-audience-selector{gap:5px}
-  .roof-audience-selector button{min-height:58px;display:block;padding:10px;text-align:center}
+  .roof-reflection-box{margin:48px 0;padding:32px 24px}
+  .roof-chapter{margin-top:56px}
+  .roof-config-block{margin-top:56px;padding-top:36px}
+  .roof-solution-pair article{padding:24px}
+  .roof-config-grid>div{padding:20px}
+  .roof-section-head{margin-bottom:28px}
+  .roof-audience-selector{gap:6px}
+  .roof-audience-selector button{min-height:64px;display:block;padding:12px;text-align:center}
   .roof-audience-selector button>span{display:block;margin-bottom:4px}
-  .roof-audience-selector button>strong{font-size:10px;line-height:1.25}
-  .roof-audience-card{padding:19px}
+  .roof-audience-selector button>strong{font-size:12px;line-height:1.25}
+  .roof-audience-card{padding:24px}
   .roof-audience-copy blockquote{font-size:1.3rem}
-  .roof-flow{display:grid;grid-template-columns:1fr;gap:5px}
+  .roof-flow{display:grid;grid-template-columns:1fr;gap:6px}
   .roof-flow>span{transform:rotate(90deg);justify-self:center}
   .roof-audience-controls{justify-content:space-between}
-  .roof-method-media{min-height:190px}
-  .roof-human-question{padding:19px}
-  .roof-human-question>p{font-size:15px}
-  .roof-benefit-grid{gap:9px}
-  .roof-benefit-grid article{padding:16px 17px}
-  .roof-journey{grid-template-columns:1fr;gap:5px;padding:16px}
-  .roof-journey>b{transform:rotate(90deg);justify-self:start;margin-left:16px}
-  .roof-more-benefits{grid-template-columns:1fr;gap:10px}
-  .roof-price-card{padding:28px 20px}
-  .roof-final-actions{flex-direction:column;gap:12px}
+  .roof-human-question{padding:32px 24px}
+  .roof-benefit-grid{gap:14px}
+  .roof-benefit-grid article{padding:22px}
+  .roof-journey{padding:22px}
+  .roof-more-benefits{grid-template-columns:1fr;gap:12px}
+  .roof-price-card{padding:32px 20px}
+  .roof-final-actions{flex-direction:column;gap:14px}
   .roof-primary-button{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.roof-page *{scroll-behavior:auto!important;transition:none!important}}
