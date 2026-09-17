@@ -230,6 +230,37 @@
     "description": "Towns and areas Apex Roofing serves."
   },
   {
+    "id": "products-and-prices",
+    "title": "Products & Prices",
+    "path": "/demo/roofing-site/information/products-and-prices",
+    "keywords": [
+      "products",
+      "price list",
+      "prices",
+      "rates",
+      "how much",
+      "cost",
+      "catalogue",
+      "product list"
+    ],
+    "description": "Full product list with transparent supply-and-installed rates."
+  },
+  {
+    "id": "reroof-cost-guide",
+    "title": "Re-Roof Cost Guide",
+    "path": "/demo/roofing-site/information/reroof-cost-guide",
+    "keywords": [
+      "reroof cost",
+      "re-roof cost",
+      "how much to reroof",
+      "replacement cost",
+      "strip",
+      "disposal",
+      "worked example"
+    ],
+    "description": "What a re-roof costs and what is involved: allowances, rates and a worked example."
+  },
+  {
     "id": "request-a-quote",
     "title": "Request a Quote",
     "path": "/demo/roofing-site/request-a-quote",

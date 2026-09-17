@@ -19,7 +19,7 @@ test('Apex demo has one Leeds / GBP identity across structured business data', (
 });
 
 test('every shared Apex content page has an assistant navigation destination', () => {
-  assert.equal(pages.length, 16);
+  assert.equal(pages.length, 18); // 16 original + products-and-prices + reroof-cost-guide
   const internalPaths = new Set(siteMap.filter((entry) => entry.path?.startsWith('/demo/roofing-site/')).map((entry) => entry.path));
   for (const page of pages) {
     assert.ok(internalPaths.has(`/demo/roofing-site/${page.slug}`), `Missing site-map path for ${page.slug}`);
@@ -38,3 +38,4 @@ test('configured roof-system rates keep re-roof removal as separate allowances',
 test('complex estimate clarification budget supports the full guided conversation', () => {
   assert.ok(config.maxClarificationQuestions >= 7);
 });
+
