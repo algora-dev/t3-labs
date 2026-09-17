@@ -1,101 +1,173 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
 
 /*
- * T3 Labs roofing landing page v3 — refinement pass (2026-09-16).
- * Font scale: 12 / 14 / 20 / 30 / 48 (5 sizes max).
- * Global rule: space over density. If copy only fits tiny, simplify the copy.
+ * Roofing conversion pass, based on the supplied referred page shell.
+ * The supplied header is preserved. All new body styles are scoped to .rp-content.
+ * No new runtime dependencies. Do not remove the existing noindex route layout.
  */
 
+type Theme = "dark" | "light";
 type Business = "manufacturer" | "supplier" | "supply-install";
-type Audience = "visitor" | "contractor" | "team";
+type Audience = "visitor" | "trade" | "team";
 type Method = "known" | "plan" | "assistant";
-
-type Clip = {
+type Currency = "GBP" | "USD";
+type ContactMode = "representative" | "direct";
+type Tokens = {
+  bg: string; surface: string; surfaceAlt: string; border: string;
+  text: string; muted: string; accent: string; accentText: string;
+  accentInk: string; accentSoft: string;
+};
+type MediaAsset = {
   src: string;
-  poster?: string;
+  fullSrc?: string;
+  alt: string;
+  videoSrc?: string;
 };
 
+const dark: Tokens = {
+  bg: "#0a0b10", surface: "#101219", surfaceAlt: "#161927", border: "#262a3a",
+  text: "#e8eaf2", muted: "#9aa1b5", accent: "#d7ff00", accentText: "#0a0b10",
+  accentInk: "#d7ff00", accentSoft: "rgba(215,255,0,.08)",
+};
+const light: Tokens = {
+  bg: "#fbfcff", surface: "#fff", surfaceAlt: "#f3f5fa", border: "#e7e9ef",
+  text: "#0a0b10", muted: "#5a6172", accent: "#d7ff00", accentText: "#0a0b10",
+  accentInk: "#809000", accentSoft: "rgba(215,255,0,.18)",
+};
+
+// IMPLEMENTATION: confirm these settings before publishing. No URLs are inferred.
 const CONFIG = {
-  // Main Apex Roofing demo site (starts at the beginning of the experience).
-  apexDemoUrl: "/demo/roofing-site",
-  shaunContactUrl: "https://calendly.com/cece-t3labs/20min",
-  clips: {
-    known: { src: "", poster: "" },
-    plan: { src: "", poster: "" },
-    assistant: { src: "", poster: "" },
-  } as Record<Method, Clip>,
+  // Keep the supplied referral page safe. Set to "direct" only on a direct T3 page.
+  contactMode: "representative" as ContactMode,
+  // Existing T3 booking URL from the supplied direct page. Confirm it reaches Shaun.
+  shaunBookingUrl: "https://calendly.com/cece-t3labs/20min",
+  // Optional, approved representative contact URL. Never read this from user query input.
+  representativeContactUrl: "",
+  // Must be the MAIN Apex demo website. The supplied deep tool link was not reused.
+  apexDemoHomeUrl: "https://t3labs.tech/demo/roofing-site",
+  currencyEndpoint: "/api/roofing-region",
+  currencyPreferenceKey: "t3-roofing-price-currency",
+  // Real screenshots were not included. Blank entries show labelled illustrations.
+  media: {
+    known: { src: "", fullSrc: "", videoSrc: "", alt: "Roofing tool showing a roof measurement, selected products and a preliminary result" },
+    plan: { src: "", fullSrc: "", videoSrc: "", alt: "Roofing plan measurement tool with measured areas ready to use in an estimate" },
+    assistant: { src: "", fullSrc: "", videoSrc: "", alt: "Smart Assistant answering a roofing product question and preparing the next step" },
+  } satisfies Record<Method, MediaAsset>,
+  // Optional page explainer. Hidden until supplied. Use a direct media URL, not a watch-page URL.
+  explainer: { src: "", poster: "", captions: "" },
 };
 
-type AudienceStory = {
+// These are the two agreed regional entry prices, not an exchange-rate conversion.
+const PRICES: Record<Currency, { amount: string; name: string }> = {
+  GBP: { amount: "£749", name: "GBP" },
+  USD: { amount: "US$999", name: "USD" },
+};
+
+const BUSINESS_CHOICES: { id: Business; label: string }[] = [
+  { id: "manufacturer", label: "Manufacturer" },
+  { id: "supplier", label: "Supplier" },
+  { id: "supply-install", label: "Supply + install" },
+];
+
+type Story = {
   label: string;
-  quote: string;
-  body: string;
-  input: string;
-  output: string;
-  next: string;
+  benefit: string;
   question: string;
+  body: string;
+  result: string;
+  businessBenefit: string;
 };
-
-type BusinessProfile = {
+type Profile = {
   label: string;
-  opportunityQuestion: string;
-  opportunityItems: string[];
+  question: string;
+  examples: string[];
   reflection: string;
-  controlLine: string;
-  audience: Record<Audience, AudienceStory>;
+  stories: Record<Audience, Story>;
 };
 
-const PROFILES: Record<Business, BusinessProfile> = {
+const BASE_STORIES: Record<Audience, Story> = {
+  visitor: {
+    label: "New visitors", benefit: "An answer before calling",
+    question: "What do I need, and roughly what might it cost?",
+    body: "A visitor can enter measurements, measure a plan or ask the Smart Assistant. They get product guidance or a preliminary estimate before deciding whether to enquire.",
+    result: "A useful first answer",
+    businessBenefit: "A clearer starting point if they contact your team.",
+  },
+  trade: {
+    label: "Roofing customers", benefit: "Prepare their own jobs",
+    question: "Let me price this job using the products I normally buy.",
+    body: "A roofing customer can work out quantities, use approved products and account pricing, then prepare a material list or quote themselves.",
+    result: "A prepared job or material list",
+    businessBenefit: "Less work to place the next order with you.",
+  },
+  team: {
+    label: "Your team", benefit: "Staff features and controls",
+    question: "Use our pricing and rules to prepare this quote.",
+    body: "A staff version can add different rates, margins, permissions and quote features while using the same underlying product and job information.",
+    result: "A quote ready for staff review",
+    businessBenefit: "Less repeated entry and calculation.",
+  },
+};
+
+const GENERAL: Profile = {
+  label: "Roofing businesses",
+  question: "What if customers could get product answers, quantities and useful pricing before your team had to get involved?",
+  examples: [
+    "Get answers to common roofing questions",
+    "Know which products suit their job",
+    "Know which products and accessories work together",
+    "Work out quantities from measurements or a plan",
+    "Build a multi-product estimate or preliminary quote",
+    "Send your team a better-prepared enquiry",
+  ],
+  reflection: "Which of these is taking up your team's time today?",
+  stories: BASE_STORIES,
+};
+
+const PROFILES: Record<Business, Profile> = {
   manufacturer: {
-    label: "Manufacturer",
-    opportunityQuestion: "What if more of your customers could get the answers they need from your website before your team had to get involved?",
-    opportunityItems: [
-      "Answer common product and technical questions",
-      "Know which roofing system suits the job",
+    label: "Roofing manufacturers",
+    question: "What if customers could understand your roofing systems and know what works together before calling your team?",
+    examples: [
+      "Get answers to product and technical questions",
+      "Know which roofing system suits an application",
       "Know which products and accessories work together",
-      "Handle measurement and specification",
-      "Build a preliminary product list",
+      "Understand coverage, packaging and quantities",
+      "Prepare a multi-product material list",
       "Send a better-prepared technical or sales enquiry",
     ],
-    reflection: "How much of this knowledge currently depends on someone from your team explaining it manually?",
-    controlLine: "Your approved systems, compatibility rules, technical knowledge and chosen sales handoff.",
-    audience: {
+    reflection: "How much of this knowledge depends on one or two people explaining it again?",
+    stories: {
       visitor: {
-        label: "A new website visitor",
-        quote: "What might a new roof cost for my property?",
-        body: "They can enter known measurements, measure from a plan, use a guided tool or ask the Smart Assistant, and get a useful first result before making a better-prepared enquiry.",
-        input: "Project + roof details",
-        output: "Suitable system + product guidance",
-        next: "Stockist, technical or sales enquiry",
-        question: "What if buyers understood your system before they called?",
+        label: "New visitors", benefit: "Understand your systems",
+        question: "Which roofing system suits this project?",
+        body: "A visitor can ask a product question or work through a guided tool using your approved information before contacting sales or technical support.",
+        result: "Product guidance and a clearer requirement",
+        businessBenefit: "Less basic explanation at the start of an enquiry.",
       },
-      contractor: {
-        label: "A roofer or trade customer",
-        quote: "Which products and accessories make up this system?",
-        body: "Make approved combinations, quantities and technical details easier to work with, so specifying your products takes less effort.",
-        input: "Chosen system + job details",
-        output: "Product schedule + accessories",
-        next: "Trade enquiry or chosen sales channel",
-        question: "Would simpler specification make your products easier to choose again?",
+      trade: {
+        label: "Roofers & specifiers", benefit: "Build their own product list",
+        question: "Which products and accessories do I need for this system?",
+        body: "They can enter or measure the job, select an approved system and prepare quantities and a product list themselves.",
+        result: "A prepared system and material list",
+        businessBenefit: "Make your products easier to specify and choose again.",
       },
       team: {
-        label: "Your own team",
-        quote: "Build the product schedule for this project.",
-        body: "The same configured knowledge can support internal workflows, with the permissions and review steps your business wants.",
-        input: "Project details + approved system",
-        output: "Consistent product schedule",
-        next: "Technical review or commercial quote",
-        question: "How often is your team rebuilding the same product information?",
+        label: "Your team", benefit: "Staff features and controls",
+        question: "Build the product schedule using our approved systems.",
+        body: "An internal version can add staff permissions, product options and review steps while sharing the same catalogue and calculations.",
+        result: "A product schedule ready for review",
+        businessBenefit: "Less time rebuilding the same product information.",
       },
     },
   },
   supplier: {
-    label: "Supplier",
-    opportunityQuestion: "What if more of your customers could get the answers they need from your website before your team had to get involved?",
-    opportunityItems: [
+    label: "Roofing suppliers",
+    question: "What if customers could get product answers, quantities and useful pricing before your team had to get involved?",
+    examples: [
       "Get basic or indicative pricing",
       "Work out how much material they need",
       "Know which products suit the job",
@@ -103,759 +175,740 @@ const PROFILES: Record<Business, BusinessProfile> = {
       "Build a multi-product estimate or preliminary quote",
       "Send a more complete enquiry or order request",
     ],
-    reflection: "How many of these currently turn into a phone call, email or manual quote?",
-    controlLine: "Your catalogue, coverage rules, public pricing, private trade rates and chosen handoff rules.",
-    audience: {
-      visitor: {
-        label: "A new website visitor",
-        quote: "What might a new roof cost for my property?",
-        body: "They can enter known measurements, measure from a plan, use a guided tool or ask the Smart Assistant, and get a useful first result before making a better-prepared enquiry.",
-        input: "Roof size + product preference",
-        output: "Quantities + indicative pricing",
-        next: "Prepared enquiry for your team",
-        question: "What if a new buyer could get this far before your phone rang?",
-      },
-      contractor: {
-        label: "A roofing customer / contractor",
-        quote: "Price this job using the products I normally buy.",
-        body: "The contractor does more of the work themselves: enter or measure the job, use preferred products and approved trade pricing, build quantities, create a preliminary quote or material list, then send the completed job through.",
-        input: "Job measurements + account",
-        output: "Materials + approved pricing",
-        next: "Customer quote, enquiry or order",
-        question: "Would being easier to quote with help you keep the next order?",
-      },
-      team: {
-        label: "Your own team",
-        quote: "Build the supply quote and apply this customer's rates.",
-        body: "T3 Labs can create an internal staff version of the same tools with different permissions, pricing, margins and approvals, all connected to the same products and job information.",
-        input: "Prepared job + customer record",
-        output: "Staff pricing + quote",
-        next: "Review, approve and send",
-        question: "Where is your team doing the same calculation more than once?",
-      },
-    },
+    reflection: "How many of these currently become a phone call, email or manual quote?",
+    stories: BASE_STORIES,
   },
   "supply-install": {
-    label: "Supply + install",
-    opportunityQuestion: "What if more of your potential customers could get a useful starting answer from your website before your team had to get involved?",
-    opportunityItems: [
-      "Get an early idea of what their roofing project may cost",
-      "Know which roofing system may suit the job",
-      "Enter measurements or measure from a plan",
-      "Build a preliminary supply-and-install estimate",
-      "Ask common project questions",
-      "Send a better-qualified project enquiry",
+    label: "Supply + install businesses",
+    question: "What if customers could get roofing answers and an initial project estimate before your team had to get involved?",
+    examples: [
+      "Get answers to common roofing questions",
+      "Know which products may suit their project",
+      "Enter measurements or measure a plan",
+      "Get a preliminary supply-and-install estimate",
+      "Know what information a formal quote needs",
+      "Send a better-prepared project enquiry",
     ],
-    reflection: "What would it mean for your business if a potential customer could get this far before your team needed to step in?",
-    controlLine: "Your products, labour assumptions, exclusions, qualification rules and when a person or site visit is required.",
-    audience: {
+    reflection: "What would it mean if the first conversation started with a better-prepared customer?",
+    stories: {
       visitor: {
-        label: "A new website visitor",
-        quote: "What might a new roof cost for my property?",
-        body: "They can enter known measurements, measure from a plan, use a guided tool or ask the Smart Assistant, and get a useful first result before making a better-qualified enquiry.",
-        input: "Roof + project details",
-        output: "Preliminary estimate",
-        next: "Qualified enquiry or site review",
-        question: "Could a clearer starting answer make the first conversation more useful?",
+        label: "New visitors", benefit: "A clearer idea of the job",
+        question: "What might a new roof cost for my property?",
+        body: "They can enter measurements, measure a plan or ask the Smart Assistant. It gathers the basics for a preliminary estimate, with site-specific decisions left to your team.",
+        result: "An initial estimate and project details",
+        businessBenefit: "A more useful first conversation or site visit.",
       },
-      contractor: {
-        label: "A builder or project partner",
-        quote: "Price this job using the products I normally buy.",
-        body: "The partner does more of the work themselves: provide plans or measurements, use preferred systems, build quantities, and send a better-prepared roofing brief through for review.",
-        input: "Plans + project requirements",
-        output: "Prepared roofing brief",
-        next: "Estimator review",
-        question: "What if repeat partners sent the right details the first time?",
+      trade: {
+        label: "Roofing customers", benefit: "Prepare their own estimates",
+        question: "Let me prepare this roof estimate using our usual specification.",
+        body: "Repeat customers can measure the job, select your products and use permitted rates to prepare an estimate themselves before sending it for confirmation.",
+        result: "A prepared estimate, not just an uploaded plan",
+        businessBenefit: "Your estimator starts further along, with less chasing.",
       },
       team: {
-        label: "Your own team",
-        quote: "Build this quote using our materials, labour and pricing rules.",
-        body: "An internal staff version of the same tools can carry your own rates, labour, margins, overrides and approvals, connected to the same products and job information.",
-        input: "Measured job + customer details",
-        output: "Materials + labour + quote",
-        next: "Review, approve and send",
-        question: "How much preparation could happen before your estimator starts?",
+        label: "Your team", benefit: "Staff features and controls",
+        question: "Prepare this quote with our materials, labour and margins.",
+        body: "A staff version can add labour, margins, pricing overrides and approvals while sharing the same products, calculations and job details.",
+        result: "A supply-and-install quote for review",
+        businessBenefit: "Less duplicate work, with judgement kept in the team.",
       },
     },
   },
 };
 
-const AUDIENCES: Audience[] = ["visitor", "contractor", "team"];
-
-const AUDIENCE_LABELS: Record<Audience, string> = {
-  visitor: "1 of 3 — New visitor",
-  contractor: "2 of 3 — Roofing customer",
-  team: "3 of 3 — Your team",
-};
-
-const METHODS: {
-  id: Method;
-  eyebrow: string;
-  title: string;
-  text: string;
-}[] = [
-  {
-    id: "known",
-    eyebrow: "01",
-    title: "Enter what they already know",
-    text: "Start with a known roof area or dimensions, then apply your approved products, quantities and rules.",
-  },
-  {
-    id: "plan",
-    eyebrow: "02",
-    title: "Measure from a plan",
-    text: "Use a guided takeoff to turn a plan into useful measurements, then carry those into the job or estimate.",
-  },
-  {
-    id: "assistant",
-    eyebrow: "03",
-    title: "Just ask the Smart Assistant",
-    text: "Let the customer explain what they need. The assistant asks for missing details, answers approved questions and moves them toward pricing or a human handoff.",
-  },
+const AUDIENCES: Audience[] = ["visitor", "trade", "team"];
+const METHODS: { id: Method; title: string; body: string }[] = [
+  { id: "known", title: "Enter measurements", body: "Turn known dimensions into quantities and preliminary pricing." },
+  { id: "plan", title: "Measure a plan", body: "Carry measured quantities into an estimate or enquiry." },
+  { id: "assistant", title: "Ask the Smart Assistant", body: "Get product answers or preliminary pricing, with human handoff when needed." },
 ];
+
+function scrollToId(id: string) {
+  if (typeof window === "undefined") return;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+}
 
 function Disclosure({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <details className="roof-disclosure">
-      <summary>
-        <span>{title}</span>
-        <span aria-hidden="true">+</span>
-      </summary>
-      <div className="roof-disclosure-body">{children}</div>
+    <details className="rp-disclosure">
+      <summary><span>{title}</span><span className="rp-plus" aria-hidden="true">+</span></summary>
+      <div className="rp-disclosure-body">{children}</div>
     </details>
   );
 }
 
-function Arrow({ left = false }: { left?: boolean }) {
-  return <span aria-hidden="true">{left ? "←" : "→"}</span>;
-}
-
-function FlowVisual({ story }: { story: AudienceStory }) {
-  return (
-    <div className="roof-flow" aria-label="Example workflow">
-      <div>
-        <small>Starts with</small>
-        <strong>{story.input}</strong>
-      </div>
-      <span aria-hidden="true">→</span>
-      <div>
-        <small>System helps produce</small>
-        <strong>{story.output}</strong>
-      </div>
-      <span aria-hidden="true">→</span>
-      <div>
-        <small>Next step</small>
-        <strong>{story.next}</strong>
-      </div>
-    </div>
-  );
-}
-
-function MethodIllustration({ method }: { method: Method }) {
-  if (method === "known") {
-    return (
-      <div className="roof-visual roof-known" aria-hidden="true">
-        <div className="roof-ui-label">Roof area</div>
-        <div className="roof-ui-input">180 m²</div>
-        <div className="roof-ui-row"><span>Product system</span><strong>Selected</strong></div>
-        <div className="roof-ui-row"><span>Quantities</span><strong>Calculated</strong></div>
-        <div className="roof-ui-result">Indicative result</div>
-      </div>
-    );
+function AudienceExamples({ profile }: { profile: Profile }) {
+  const [active, setActive] = useState<Audience>("visitor");
+  const index = AUDIENCES.indexOf(active);
+  function activate(next: number, focus = false) {
+    const id = AUDIENCES[(next + AUDIENCES.length) % AUDIENCES.length];
+    setActive(id);
+    if (focus) document.getElementById(`rp-tab-${id}`)?.focus();
   }
-
-  if (method === "plan") {
-    return (
-      <div className="roof-visual roof-plan" aria-hidden="true">
-        <svg viewBox="0 0 360 180">
-          <path d="M50 132 L91 47 L185 25 L307 75 L264 149 L142 153 Z" />
-          <path d="M91 47 L142 153" />
-          <path d="M185 25 L264 149" />
-          <path d="M307 75 L50 132" />
-          <circle cx="91" cy="47" r="5" />
-          <circle cx="264" cy="149" r="5" />
-        </svg>
-        <div className="roof-plan-tag">Known scale</div>
-        <div className="roof-plan-tag roof-plan-tag-two">Measured roof areas</div>
-      </div>
-    );
+  function onKey(event: KeyboardEvent<HTMLButtonElement>, tabIndex: number) {
+    if (event.key === "ArrowRight") { event.preventDefault(); activate(tabIndex + 1, true); }
+    if (event.key === "ArrowLeft") { event.preventDefault(); activate(tabIndex - 1, true); }
+    if (event.key === "Home") { event.preventDefault(); activate(0, true); }
+    if (event.key === "End") { event.preventDefault(); activate(AUDIENCES.length - 1, true); }
   }
-
   return (
-    <div className="roof-visual roof-chat" aria-hidden="true">
-      <div className="roof-chat-bubble roof-chat-user">I need materials for a 180 m² metal roof. Can you help?</div>
-      <div className="roof-chat-bubble">Yes. Is 180 m² the measured roof area, and which system are you considering?</div>
-      <div className="roof-chat-action">Uses configured products + rules</div>
-    </div>
-  );
-}
-
-function MethodMedia({ method }: { method: Method }) {
-  const clip = CONFIG.clips[method];
-  if (!clip.src) return <MethodIllustration method={method} />;
-
-  return (
-    <video
-      className="roof-method-video"
-      src={clip.src}
-      poster={clip.poster || undefined}
-      muted
-      loop
-      playsInline
-      controls
-      preload="metadata"
-      aria-label={`${method} roofing workflow example`}
-    />
-  );
-}
-
-function AudienceCarousel({ profile }: { profile: BusinessProfile }) {
-  const [audience, setAudience] = useState<Audience>("visitor");
-  const index = AUDIENCES.indexOf(audience);
-  const story = profile.audience[audience];
-
-  const move = (direction: number) => {
-    const next = AUDIENCES[(index + direction + AUDIENCES.length) % AUDIENCES.length];
-    setAudience(next);
-  };
-
-  return (
-    <div className="roof-audience-wrap">
-      <div className="roof-audience-selector" role="tablist" aria-label="Who could use the system">
-        {AUDIENCES.map((item, i) => (
-          <button
-            type="button"
-            key={item}
-            role="tab"
-            aria-selected={audience === item}
-            onClick={() => setAudience(item)}
-          >
-            <span>{i + 1} of 3</span>
-            <strong>{AUDIENCE_LABELS[item].split(" — ")[1]}</strong>
+    <div className="rp-audience">
+      <div className="rp-tabs" role="tablist" aria-label="Who benefits from the tools">
+        {AUDIENCES.map((id, i) => (
+          <button type="button" key={id} id={`rp-tab-${id}`} role="tab"
+            aria-selected={active === id} aria-controls={`rp-panel-${id}`}
+            tabIndex={active === id ? 0 : -1} onClick={() => setActive(id)} onKeyDown={e => onKey(e, i)}>
+            <strong>{profile.stories[id].label}</strong><span>{profile.stories[id].benefit}</span>
           </button>
         ))}
       </div>
-
-      <div className="roof-audience-card" role="tabpanel">
-        <div className="roof-audience-copy">
-          <div className="roof-slide-meta">
-            <span>{index + 1} of {AUDIENCES.length}</span>
-            <span>{story.label}</span>
+      {AUDIENCES.map(id => {
+        const story = profile.stories[id];
+        return (
+          <div key={id} id={`rp-panel-${id}`} role="tabpanel" aria-labelledby={`rp-tab-${id}`}
+            hidden={id !== active} tabIndex={0} className="rp-audience-panel">
+            <div>
+              <blockquote>“{story.question}”</blockquote>
+              <p>{story.body}</p>
+            </div>
+            <div className="rp-result">
+              <p className="rp-meta">Useful result</p><strong>{story.result}</strong>
+              <p className="rp-result-benefit">{story.businessBenefit}</p>
+            </div>
           </div>
-          <blockquote>“{story.quote}”</blockquote>
-          <p>{story.body}</p>
-          <p className="roof-question">{story.question}</p>
-        </div>
-        <FlowVisual story={story} />
-      </div>
-
-      <div className="roof-audience-controls">
-        <button type="button" onClick={() => move(-1)} aria-label="Previous example"><Arrow left /></button>
-        <div className="roof-dots" aria-label={`Example ${index + 1} of ${AUDIENCES.length}`}>
-          {AUDIENCES.map((item) => <span key={item} className={audience === item ? "active" : ""} />)}
-        </div>
-        <button type="button" onClick={() => move(1)} aria-label="Next example"><Arrow /></button>
+        );
+      })}
+      <div className="rp-carousel-controls">
+        <button className="rp-text-button" type="button" onClick={() => activate(index - 1)} aria-label="Previous user example">← Previous</button>
+        <span role="status" aria-live="polite">{index + 1} of {AUDIENCES.length}</span>
+        <button className="rp-text-button" type="button" onClick={() => activate(index + 1)} aria-label="Next user example">Next →</button>
       </div>
     </div>
   );
 }
 
-export default function RoofingLandingPageV3() {
-  const [business, setBusiness] = useState<Business | null>(null);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const t =
-    theme === "dark"
-      ? { border: "rgba(255,255,255,.12)", muted: "#acb3c4" }
-      : { border: "rgba(17,21,31,.14)", muted: "#50596b" };
-  const profile = useMemo(() => (business ? PROFILES[business] : null), [business]);
-
+// Illustrations are deliberately not labelled as screenshots or live product results.
+function Illustration({ method }: { method: Method }) {
   return (
-    <div className={theme === "light" ? "light" : "dark"}>
+    <div className={`rp-illustration rp-illustration-${method}`} aria-hidden="true">
+      {method === "known" && <>
+        <div className="rp-illustration-top">Known roof area <strong>180 m²</strong></div>
+        <div className="rp-illustration-row"><span>Your products</span><b>Selected</b></div>
+        <div className="rp-illustration-row"><span>Quantities</span><b>Prepared</b></div>
+        <div className="rp-illustration-answer">Preliminary result → Enquiry</div>
+      </>}
+      {method === "plan" && <>
+        <div className="rp-illustration-top">Plan measurement <strong>Known scale</strong></div>
+        <svg viewBox="0 0 340 140" focusable="false">
+          <path d="M45 105 L82 34 L173 18 L291 62 L261 120 L139 126 Z" />
+          <path d="M82 34 L139 126 M173 18 L261 120 M45 105 L291 62" />
+          <circle cx="82" cy="34" r="5" /><circle cx="261" cy="120" r="5" />
+        </svg>
+        <div className="rp-illustration-answer">Measured areas → Quantities</div>
+      </>}
+      {method === "assistant" && <>
+        <div className="rp-illustration-top">Smart Assistant</div>
+        <div className="rp-bubble rp-bubble-user">Which accessories go with this product?</div>
+        <div className="rp-bubble">Which product and roofing system are you using?</div>
+        <div className="rp-illustration-answer">Approved guidance → Next step</div>
+      </>}
+    </div>
+  );
+}
+
+function Screenshot({ method, expanded = false }: { method: Method; expanded?: boolean }) {
+  const asset: MediaAsset = CONFIG.media[method];
+  const [failed, setFailed] = useState(false);
+  const src = expanded ? asset.fullSrc || asset.src : asset.src;
+  if (!src || failed) return <Illustration method={method} />;
+  return <img src={src} alt={asset.alt} loading={expanded ? "eager" : "lazy"}
+    decoding="async" onError={() => setFailed(true)} className="rp-screenshot" />;
+}
+
+function MediaDialog({ method, onClose }: { method: Method; onClose: () => void }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const asset: MediaAsset = CONFIG.media[method];
+  const title = METHODS.find(item => item.id === method)!.title;
+  useEffect(() => {
+    const element = dialog.current;
+    if (!element) return;
+    const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    element.showModal();
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      element.close();
+      previousFocus?.focus({ preventScroll: true });
+    };
+  }, []);
+  return (
+    <dialog ref={dialog} className="rp-dialog" aria-labelledby="rp-dialog-title"
+      onCancel={event => { event.preventDefault(); onClose(); }}
+      onClick={event => {
+        if (event.target !== event.currentTarget) return;
+        const r = event.currentTarget.getBoundingClientRect();
+        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) onClose();
+      }}>
+      <div className="rp-dialog-top"><h2 id="rp-dialog-title">{title}</h2>
+        <button type="button" onClick={onClose} className="rp-outline" autoFocus aria-label="Close enlarged example">Close ×</button>
+      </div>
+      <div className="rp-dialog-media">
+        {asset.videoSrc && !videoFailed ? <video src={asset.videoSrc} poster={asset.src || undefined} controls playsInline preload="metadata"
+          onError={() => setVideoFailed(true)} aria-label={`${title} demonstration`} /> : <Screenshot method={method} expanded />}
+      </div>
+      <p className="rp-media-note">{!asset.src && !asset.videoSrc ? "Workflow illustration, not a live quote or product screenshot." : "Example workflow. Products, pricing and setup can be tailored to your business."}</p>
+      {videoFailed && <p className="rp-media-note" role="status">The video could not load. The still example is shown instead.</p>}
+    </dialog>
+  );
+}
+
+function MediaExamples() {
+  const [open, setOpen] = useState<Method | null>(null);
+  return (
+    <>
+      <div className="rp-media-grid">
+        {METHODS.map(item => {
+          const asset: MediaAsset = CONFIG.media[item.id];
+          return (
+            <article key={item.id} className="rp-media-card">
+              <button className="rp-media-trigger" type="button" onClick={() => setOpen(item.id)} aria-haspopup="dialog"
+                aria-label={`Enlarge ${item.title.toLowerCase()} example`}>
+                <div className="rp-media-frame"><Screenshot method={item.id} /></div>
+                <span className="rp-media-action">{asset.videoSrc ? "Play example" : "View larger"}<span aria-hidden="true">↗</span></span>
+              </button>
+              <div className="rp-media-copy"><h3>{item.title}</h3><p>{item.body}</p>
+                {!asset.src && !asset.videoSrc && <span className="rp-meta">Workflow illustration</span>}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+      {open && <MediaDialog key={open} method={open} onClose={() => setOpen(null)} />}
+    </>
+  );
+}
+
+function useCurrency() {
+  const [currency, setCurrency] = useState<Currency | null>(null);
+  const manuallyChosen = useRef(false);
+  useEffect(() => {
+    let saved: string | null = null;
+    try { saved = window.localStorage.getItem(CONFIG.currencyPreferenceKey); } catch { /* Storage can be blocked. */ }
+    if (saved === "GBP" || saved === "USD") { manuallyChosen.current = true; setCurrency(saved); return; }
+    const controller = new AbortController();
+    let alive = true;
+    const timeout = window.setTimeout(() => controller.abort(), 3000);
+    async function resolve() {
+      let next: Currency = "USD";
+      try {
+        const response = await fetch(CONFIG.currencyEndpoint, { cache: "no-store", credentials: "same-origin", signal: controller.signal });
+        if (!response.ok) throw new Error("Country unavailable");
+        const data: unknown = await response.json();
+        if (data && typeof data === "object" && "currency" in data && data.currency === "GBP") next = "GBP";
+      } catch { /* Clear, manually changeable USD fallback. No third-party IP lookup. */ }
+      finally {
+        window.clearTimeout(timeout);
+        if (alive && !manuallyChosen.current) setCurrency(next);
+      }
+    }
+    void resolve();
+    return () => { alive = false; controller.abort(); window.clearTimeout(timeout); };
+  }, []);
+  function choose(next: Currency) {
+    manuallyChosen.current = true;
+    setCurrency(next);
+    try { window.localStorage.setItem(CONFIG.currencyPreferenceKey, next); } catch { /* Preference still works for this visit. */ }
+  }
+  return { currency, choose };
+}
+
+function PricingClose({ businessLabel }: { businessLabel: string }) {
+  const { currency, choose } = useCurrency();
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
+  const replyInput = useRef<HTMLTextAreaElement>(null);
+  const isReferral = CONFIG.contactMode === "representative";
+  const reply = `I'd like to explore this for our roofing business${businessLabel ? ` (${businessLabel.toLowerCase()})` : ""}. Could we arrange a free call with Shaun to discuss which tool would be useful, what it could cost and how soon a first version could be ready?`;
+  function showReply() {
+    setReplyOpen(true);
+    // Focus only after this intentionally opened area has been rendered.
+    window.requestAnimationFrame(() => document.getElementById("rp-rep-reply")?.focus({ preventScroll: true }));
+  }
+  async function copyReply() {
+    try {
+      await navigator.clipboard.writeText(reply);
+      setCopyStatus("Copied. Send it to the person who shared this page.");
+    } catch {
+      replyInput.current?.focus(); replyInput.current?.select();
+      setCopyStatus("Select and copy the message, then reply to your representative.");
+    }
+  }
+  return (
+    <section className="rp-section rp-close" id="pricing" aria-labelledby="rp-price-title">
+      <div className="rp-close-inner" id="next-step">
+        <p className="rp-eyebrow">Start with one useful improvement</p>
+        <h2 id="rp-price-title">Start with one useful improvement.</h2>
+        <div className="rp-price-block">
+          <p>Focused roofing solutions from</p>
+          <div className="rp-price" aria-live="polite" aria-atomic="true">
+            {currency ? PRICES[currency].amount : <span className="rp-price-loading">Loading price…</span>}
+          </div>
+          <div className="rp-currency" role="group" aria-label="Choose pricing currency">
+            <button type="button" aria-pressed={currency === "GBP"} onClick={() => choose("GBP")}>GBP £</button>
+            <button type="button" aria-pressed={currency === "USD"} onClick={() => choose("USD")}>USD US$</button>
+          </div>
+        </div>
+        <p className="rp-close-lead">A focused tool, configured around your products and rules.</p>
+        <p className="rp-turnaround">Some basic setups can be live within days once your information is ready. We confirm scope and timing before starting.</p>
+        <p className="rp-payment"><strong>Flexible payment options available.</strong></p>
+        <p className="rp-smallprint">Starting price is for a focused setup. Tax and any ongoing costs are confirmed in your quote.</p>
+        <div className="rp-close-action">
+          {isReferral ? <>
+            {CONFIG.representativeContactUrl ? <a className="rp-primary" href={CONFIG.representativeContactUrl}>Arrange a free call with Shaun <span aria-hidden="true">→</span></a>
+              : <button type="button" className="rp-primary" onClick={showReply} aria-expanded={replyOpen} aria-controls="rp-rep-reply">Arrange a free call with Shaun <span aria-hidden="true">→</span></button>}
+            <p>Your representative can arrange it and remain your point of contact.</p>
+          </> : <>
+            <a className="rp-primary" href={CONFIG.shaunBookingUrl} target="_blank" rel="noopener noreferrer">Book a free call with Shaun <span aria-hidden="true">→</span></a>
+            <p>Discuss what would help, what it could cost and how soon it could be ready. No obligation.</p>
+          </>}
+        </div>
+        {isReferral && replyOpen && <div id="rp-rep-reply" className="rp-rep-reply" tabIndex={-1}>
+          <h3>Reply to the person who shared this page.</h3>
+          <p>They can bring Shaun into the conversation. No need to start again with someone else.</p>
+          <label htmlFor="rp-reply-text" className="rp-meta">Suggested message</label>
+          <textarea id="rp-reply-text" ref={replyInput} readOnly value={reply} rows={4} />
+          <button type="button" className="rp-outline" onClick={copyReply}>Copy message</button>
+          <p role="status" className="rp-meta">{copyStatus}</p>
+        </div>}
+        <Disclosure title="Who's Shaun?">
+          <p>Shaun is an ex-roofer with 20 years of experience across roofing and technology. He now builds solutions around how roofing businesses work.</p>
+          <p>The conversation is about finding what would help, not selling you features you do not need.</p>
+        </Disclosure>
+      </div>
+    </section>
+  );
+}
+
+export default function RoofingReferredPage() {
+  const [theme, setTheme] = useState<Theme>("dark");
+  const [business, setBusiness] = useState<Business | null>(null);
+  const t = theme === "dark" ? dark : light;
+  const profile = business ? PROFILES[business] : GENERAL;
+  const style = {
+    background: t.bg, color: t.text,
+    "--accent": t.accent, "--accent-ink": t.accentInk,
+    "--rp-bg": t.bg, "--rp-surface": t.surface, "--rp-raised": t.surfaceAlt,
+    "--rp-border": t.border, "--rp-text": t.text, "--rp-muted": t.muted,
+    "--rp-accent": t.accent, "--rp-accent-ink": theme === "light" ? "#5d6b00" : t.accentInk,
+    "--rp-soft": t.accentSoft,
+  } as CSSProperties;
+  return (
+    <main style={style} className="min-h-screen antialiased">
+      <style>{HEADER_STYLES}</style>
       <header style={{background:theme==="dark"?"rgba(10,11,16,.88)":"rgba(251,252,255,.92)",borderColor:t.border}} className="sticky top-0 z-50 border-b backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
-          <a href="https://www.t3labs.tech" className="flex items-center gap-2 font-semibold">
+          <div className="flex items-center gap-2 font-semibold" aria-label="T3 Labs">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg" style={{background:"#0a0b10"}}><img src="/assets/t3-logo-white.png" alt="T3 Labs" className="h-7 w-7" /></span>
             <span className="hidden text-sm sm:inline" style={{color:t.muted}}>Labs</span>
-          </a>
+          </div>
+          <nav className="hidden items-center gap-5 text-sm lg:flex" style={{color:t.muted}}>
+            <button onClick={()=>scrollToId("problem")}>The Problem</button>
+            <button onClick={()=>scrollToId("solution")}>The Solution</button>
+            <button onClick={()=>scrollToId("assistant")}>How It Works</button>
+            <button onClick={()=>scrollToId("pricing")}>Pricing</button>
+            <button onClick={()=>scrollToId("demos")}>Demos</button>
+            <button onClick={()=>scrollToId("assessment")}>Quick Check</button>
+          </nav>
           <div className="flex items-center gap-2">
-            <button type="button" onClick={()=>setTheme(theme==="dark"?"light":"dark")} style={{borderColor:t.border,color:t.muted}} className="rounded-full border px-3 py-1.5 text-xs font-medium">
+            <button type="button" onClick={()=>setTheme(theme==="dark"?"light":"dark")} style={{borderColor:t.border,color:t.muted}} className="btn-outline rounded-full border px-3 py-1.5 text-xs font-medium">
               {theme==="dark"?"☀ Light":"☾ Dark"}
+            </button>
+            <button
+              type="button"
+              onClick={()=>scrollToId("next-step")}
+              style={{background:t.accent,color:t.accentText}}
+              className="btn-solid hidden rounded-full px-4 py-1.5 text-xs font-semibold sm:inline-flex"
+            >
+              Next step
             </button>
           </div>
         </div>
       </header>
-      <main className="roof-page">
-      <style>{STYLES}</style>
-
-      <div className="roof-shell">
-        <section className="roof-section roof-opening" id="roof-start">
-          <p className="roof-kicker">T3 Labs roofing solutions</p>
-          <h1>Which best describes your roofing business?</h1>
-          <p className="roof-opening-copy">Choose one. The examples below will adapt to the way you sell.</p>
-
-          <div className="roof-business-grid" role="group" aria-label="Choose your roofing business type">
-            {(Object.keys(PROFILES) as Business[]).map((key) => (
-              <button
-                key={key}
-                type="button"
-                aria-pressed={business === key}
-                onClick={() => setBusiness(key)}
-              >
-                <span>{PROFILES[key].label}</span>
-                <strong>{business === key ? "Selected" : "Choose"}</strong>
-              </button>
-            ))}
-          </div>
-
-          {!profile && (
-            <p className="roof-selection-hint">Select your business type to continue.</p>
-          )}
-
-          {profile && (
-            <div className="roof-intro-reveal" aria-live="polite">
-              {/* 1. Tailored question + six examples */}
-              <div className="roof-opportunity">
-                <p className="roof-kicker">For a {profile.label.toLowerCase()}</p>
-                <h2>{profile.opportunityQuestion}</h2>
-
-                <div className="roof-opportunity-list">
-                  {profile.opportunityItems.map((item) => (
-                    <div key={item}>
-                      <span aria-hidden="true">✓</span>
-                      <strong>{item}</strong>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 2. Reflection — standalone pause */}
-              <div className="roof-reflection-box">
-                <p>{profile.reflection}</p>
-              </div>
-
-              {/* 3. Bridge — own short statement */}
-              <div className="roof-build-bridge">
-                <p>Even if just one of those would improve your customer journey or save your team time, we can build around that problem.</p>
-              </div>
-
-              {/* 4. What we build — new chapter */}
-              <div className="roof-chapter">
-                <h2 className="roof-chapter-heading">We build the tools that make it possible.</h2>
-              </div>
-
-              <div className="roof-solution-pair">
-                <article>
-                  <span>Interactive Tools</span>
-                  <h3>Let customers work through it themselves.</h3>
-                  <p>A guided workflow on your website.</p>
-                  <div className="roof-mini-flow" aria-label="Interactive tool workflow">
-                    <b>Measure</b><i>→</i><b>Select</b><i>→</i><b>Calculate</b><i>→</i><b>Price</b><i>→</i><b>Enquire</b>
-                  </div>
-                </article>
-
-                <article>
-                  <span>Smart Assistant</span>
-                  <h3>Let customers simply ask what they need.</h3>
-                  <p>Answers grounded in your approved information.</p>
-                  <div className="roof-mini-flow" aria-label="Smart Assistant workflow">
-                    <b>Ask</b><i>→</i><b>Clarify</b><i>→</i><b>Answer</b><i>→</i><b>Estimate</b><i>→</i><b>Handoff</b>
-                  </div>
-                </article>
-              </div>
-
-              <p className="roof-either-note">Use either approach, or both together.</p>
-
-              {/* 5. Built around your business */}
-              <div className="roof-config-block">
-                <div className="roof-config-intro">
-                  <p className="roof-kicker">Built around your business</p>
-                  <h2>Not a generic calculator. Not a generic chatbot.</h2>
-                  <p>T3 Labs first learns how the business works, then configures the tools and Smart Assistant around the products, pricing, knowledge, rules and handoff boundaries the business approves.</p>
-                </div>
-
-                <div className="roof-config-grid">
-                  <div>
-                    <span>01</span>
-                    <strong>Your products</strong>
-                    <p>What you sell and what works together.</p>
-                  </div>
-                  <div>
-                    <span>02</span>
-                    <strong>Your pricing + calculations</strong>
-                    <p>How quantities, pricing and other rules should work.</p>
-                  </div>
-                  <div>
-                    <span>03</span>
-                    <strong>Your approved answers</strong>
-                    <p>The information you are happy for customers to receive.</p>
-                  </div>
-                  <div>
-                    <span>04</span>
-                    <strong>Your handoff rules</strong>
-                    <p>When the system hands the customer to your team.</p>
-                  </div>
-                </div>
-
-                <p className="roof-control-line">For your business: {profile.controlLine}</p>
-              </div>
-
-              <a className="roof-continue" href="#roof-people">See who it could help <Arrow /></a>
+      <div className="rp-content" data-theme={theme}>
+        <style>{STYLES}</style>
+        {CONFIG.contactMode === "representative" && <div className="rp-referral-note">Shared by your T3 Labs representative. They remain your point of contact.</div>}
+        <div className="rp-shell">
+          <section className="rp-section rp-opening" aria-labelledby="rp-title">
+            <p className="rp-eyebrow">T3 Labs roofing solutions</p>
+            <h1 id="rp-title">Which best describes your roofing business?</h1>
+            <p className="rp-opening-copy">Help customers get roofing answers, quantities and pricing before calling. Choose your business type to see relevant examples.</p>
+            <div className="rp-business" role="group" aria-label="Choose your roofing business type">
+              {BUSINESS_CHOICES.map(item => <button type="button" key={item.id} aria-pressed={business === item.id}
+                onClick={() => setBusiness(item.id)}><span>{item.label}</span><span className="rp-select-status">{business === item.id ? "Selected" : "Choose →"}</span></button>)}
             </div>
-          )}
-        </section>
+            <p className="rp-choice-note">Or keep reading for the general roofing examples.</p>
+            <span className="rp-sr-only" role="status">{business ? `Examples updated for ${profile.label.toLowerCase()}.` : "General roofing examples shown."}</span>
+            {CONFIG.explainer.src && <details className="rp-explainer">
+              <summary>Prefer to watch? See the 90-second overview <span aria-hidden="true">▶</span></summary>
+              <video src={CONFIG.explainer.src} poster={CONFIG.explainer.poster || undefined} controls playsInline preload="none">
+                {CONFIG.explainer.captions && <track kind="captions" src={CONFIG.explainer.captions} srcLang="en" label="English" default />}
+              </video>
+            </details>}
+            <div className="rp-opportunity" id="problem">
+              <p className="rp-eyebrow">For {profile.label.toLowerCase()}</p>
+              <h2>{profile.question}</h2>
+              <ul className="rp-examples">{profile.examples.map(item => <li key={item}><span aria-hidden="true">✓</span><span>{item}</span></li>)}</ul>
+              <div className="rp-reflection"><p>{profile.reflection}</p></div>
+            </div>
+            <p className="rp-bridge">Even if just one of these would help, we can build a solution around it.</p>
+          </section>
 
-        {profile && (
-          <>
-            <section className="roof-section" id="roof-people">
-              <div className="roof-section-head">
-                <p className="roof-kicker">One system, three people</p>
-                <h2>Different users. The same business knowledge underneath.</h2>
-                <p>There are three examples. View all of them.</p>
-              </div>
-              <AudienceCarousel key={business} profile={profile} />
-            </section>
+          <section className="rp-section" id="solution" aria-labelledby="rp-solution-title">
+            <div className="rp-section-heading"><p className="rp-eyebrow">Two ways to help</p><h2 id="rp-solution-title">We build the tools that make it possible.</h2></div>
+            <div className="rp-solutions">
+              <article><h3>Interactive tools</h3><p>Customers measure a job, choose your products and get quantities or preliminary pricing.</p></article>
+              <article id="assistant"><h3>Smart Assistant</h3><p>Customers ask a question. It uses your approved information to answer, clarify or pass the enquiry to your team.</p></article>
+            </div>
+            <p className="rp-shared-outcome">Either route can lead to a better-prepared enquiry. Use one, or both.</p>
+            <div className="rp-setup">
+              <h3>You explain how you work. We handle the setup.</h3>
+              <p>We use your existing product information and focused conversations to agree the answers, pricing and handoffs. We handle the build and setup.</p>
+              <p className="rp-setup-promise">A focused first version can work alongside your current website and enquiry process.</p>
+              <Disclosure title="What would you need from us?">
+                <p>For a basic setup, we aim to keep your input to a few focused conversations and a review. We agree what is needed before starting, rather than asking your team to manage a software project.</p>
+                <ul>
+                  <li><strong>Your products:</strong> the information, uses and compatible accessories you approve.</li>
+                  <li><strong>Your pricing:</strong> quantities, coverage, packaging, waste and rates to use.</li>
+                  <li><strong>Your answers:</strong> what can be shared publicly and what must stay private.</li>
+                  <li><strong>Your handoff:</strong> when to gather more details or involve a person.</li>
+                </ul>
+                <p>We configure and test around those rules. Missing information or questions outside the agreed scope should lead to clarification or a human handoff, not an invented answer.</p>
+              </Disclosure>
+            </div>
+          </section>
 
-            <section className="roof-section" id="roof-methods">
-              <div className="roof-section-head roof-section-head-narrow">
-                <p className="roof-kicker">Three ways to get an answer</p>
-                <h2>Let them start with whatever is easiest.</h2>
-                <p>Use one route or combine all three.</p>
-              </div>
+          <section className="rp-section" id="roof-people" aria-labelledby="rp-people-title">
+            <div className="rp-section-heading"><p className="rp-eyebrow">One system, three users</p><h2 id="rp-people-title">Useful for customers. Useful for your team.</h2><p>Select an example, or use the arrows.</p></div>
+            <AudienceExamples profile={profile} />
+          </section>
 
-              <div className="roof-method-grid">
-                {METHODS.map((method) => (
-                  <article key={method.id} className="roof-method-card">
-                    <div className="roof-method-media"><MethodMedia method={method.id} /></div>
-                    <div className="roof-method-copy">
-                      <span>{method.eyebrow}</span>
-                      <h3>{method.title}</h3>
-                      <p>{method.text}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
+          <section className="rp-section" id="demos" aria-labelledby="rp-demos-title">
+            <div className="rp-section-heading"><p className="rp-eyebrow">See how it works</p><h2 id="rp-demos-title">Three ways to get a useful result.</h2><p>Open any example to see it larger. Each can use your products and rules.</p></div>
+            <MediaExamples />
+            {CONFIG.apexDemoHomeUrl && <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-link">Explore the Apex Roofing demo website ↗</a>}
+          </section>
 
-              <p className="roof-method-note">A visitor can use the tool themselves, talk to the Smart Assistant, or move between both. Your team can use the same underlying products and rules with different permissions.</p>
-            </section>
-
-            <section className="roof-section" id="roof-value">
-              <div className="roof-section-head roof-section-head-narrow">
-                <p className="roof-kicker">What changes for the business?</p>
-                <h2>Give people more of the answer before your team has to step in.</h2>
-              </div>
-
-              <div className="roof-human-question">
-                <p>How many of these interactions genuinely need a person from the beginning?</p>
-                <div>
-                  <span>“How much is this?”</span>
-                  <span>“How much do I need?”</span>
-                  <span>“Which product should I use?”</span>
-                  <span>“Can you quote this?”</span>
-                </div>
-              </div>
-
-              <div className="roof-benefit-grid">
-                <article>
-                  <strong>Faster answers</strong>
-                  <p>Customers can keep moving while they are interested instead of waiting for a call or email.</p>
-                </article>
-                <article>
-                  <strong>Better enquiries</strong>
-                  <p>Your team receives measurements, selections and useful context instead of a vague request.</p>
-                </article>
-                <article>
-                  <strong>Less repetitive work</strong>
-                  <p>Basic questions, quantities and early pricing do not always need to become another task for a sales rep.</p>
-                </article>
-              </div>
-
-              <div className="roof-journeys">
-                <div className="roof-journey roof-journey-before">
-                  <span>Typical today</span>
-                  <strong>Visitor arrives</strong>
-                  <b aria-hidden="true">↓</b>
-                  <strong>Cannot get enough information</strong>
-                  <b aria-hidden="true">↓</b>
-                  <strong>Leaves or sends a basic enquiry</strong>
-                  <b aria-hidden="true">↓</b>
-                  <strong>Your team starts from scratch</strong>
-                </div>
-                <div className="roof-journey roof-journey-after">
-                  <span>With a useful system</span>
-                  <strong>Visitor arrives</strong>
-                  <b aria-hidden="true">↓</b>
-                  <strong>Measures, enters details or asks</strong>
-                  <b aria-hidden="true">↓</b>
-                  <strong>Gets a useful first result</strong>
-                  <b aria-hidden="true">↓</b>
-                  <strong>Your team starts with useful context</strong>
-                </div>
-              </div>
-
-              <Disclosure title="What else can the same system improve?">
-                <div className="roof-more-benefits">
-                  <p><strong>Contractor loyalty.</strong> Make your products easier for roofing customers to price, specify and use again.</p>
-                  <p><strong>Internal quoting.</strong> Reuse the same product and calculation logic for staff workflows where useful.</p>
-                  <p><strong>Better data.</strong> See what people ask about, price and select, then improve your process and resources.</p>
-                  <p><strong>A more useful website.</strong> Help people solve more of the problem they arrived with.</p>
+          <section className="rp-section" id="roof-value" aria-labelledby="rp-value-title">
+            <div className="rp-section-heading"><p className="rp-eyebrow">The practical difference</p><h2 id="rp-value-title">Less waiting for them. Less chasing for you.</h2></div>
+            <div className="rp-benefits">
+              <article><h3>Faster answers</h3><p>Help interested buyers take the next step instead of waiting or looking elsewhere.</p></article>
+              <article><h3>Better enquiries</h3><p>Receive the roof details, product choices and questions already gathered.</p></article>
+              <article><h3>Less repeat work</h3><p>Keep your team focused on advice and quoting that need their experience.</p></article>
+            </div>
+            <div className="rp-journeys">
+              <article className="rp-journey rp-journey-before">
+                <h3>When the website stops at “enquire”</h3>
+                <ol>
+                  <li><strong>A buyer needs an answer.</strong><span>They search your site but still have questions.</span></li>
+                  <li><strong>Some leave. Others enquire.</strong><span>Those enquiries now become a task for your team.</span></li>
+                  <li><strong>Staff chase the basics.</strong><span>Measurements, product choices and missing details.</span></li>
+                  <li><strong>The quote starts later.</strong><span>Time spent, with no sale confirmed.</span></li>
+                </ol>
+                <p className="rp-journey-summary">Waiting and extra work before quoting.</p>
+              </article>
+              <article className="rp-journey rp-journey-after">
+                <h3>With a tool or Smart Assistant</h3>
+                <ol>
+                  <li><strong>A buyer asks or enters job details.</strong><span>The tool gathers the relevant details.</span></li>
+                  <li><strong>They get a useful first answer.</strong><span>Product guidance, quantities or a preliminary estimate.</span></li>
+                  <li><strong>They choose to send an enquiry.</strong><span>The details already collected go with it.</span></li>
+                  <li><strong>Your team reviews a prepared job.</strong><span>Less chasing. A clearer next sales conversation.</span></li>
+                </ol>
+                <p className="rp-journey-summary">A useful answer and a better starting point.</p>
+              </article>
+            </div>
+            <p className="rp-journey-note">Customers can still call or enquire. The difference is what they can do before they need to.</p>
+            <div className="rp-discover">
+              <h3>Make more of your roofing knowledge easy to find.</h3>
+              <p>Publish selected product information, pricing and guidance. Keep private trade rates private.</p>
+              <Disclosure title="Search visibility, useful data and the longer-term benefit">
+                <p>Useful public information gives search engines and AI services more material to work with. It does not guarantee a mention, ranking or citation.</p>
+                <p>Tool use can also reveal what gets asked about, selected and quoted. With appropriate permissions and aggregation, those insights can inform better resources and product decisions. Quote activity is not the same as completed sales.</p>
+                <p>Google says established SEO practices remain relevant to its AI search features. OpenAI describes how public websites can be discovered and cited in ChatGPT search.</p>
+                <div className="rp-source-links">
+                  <a href="https://developers.google.com/search/docs/appearance/ai-features" target="_blank" rel="noopener noreferrer">Google guidance ↗</a>
+                  <a href="https://help.openai.com/en/articles/12627856" target="_blank" rel="noopener noreferrer">OpenAI guidance ↗</a>
                 </div>
               </Disclosure>
+            </div>
+          </section>
 
-              <div className="roof-discovery-note">
-                <div>
-                  <p className="roof-kicker">A side benefit</p>
-                  <h3>More useful public information can also make the business easier to discover.</h3>
-                </div>
-                <p>Search and AI systems can only work with information they can access. Selected public product, pricing and technical information can be made accessible around these tools, while private trade rates and internal logic remain private.</p>
-              </div>
-            </section>
+          <section className="rp-section rp-roi" id="assessment" aria-labelledby="rp-roi-title">
+            <p className="rp-eyebrow">Before you look at the price</p>
+            <h2 id="rp-roi-title">What would make this a worthwhile investment?</h2>
+            <p className="rp-roi-question">How many staff hours would it need to save, or how much extra profit would it need to help generate, for you to say: this was worth it?</p>
+            <p>Think about one part of the business, not a complete transformation.</p>
+          </section>
 
-            <section className="roof-section roof-final" id="roof-price">
-              <div className="roof-price-card">
-                <div className="roof-price-copy">
-                  <p className="roof-kicker">The part you are probably waiting for</p>
-                  <h2>What if you could gain these kinds of benefits from <span>$999?</span></h2>
-                  <p>Start with one focused problem. We scope the rest around what your roofing business actually needs.</p>
-                </div>
-
-                <div className="roof-price-number">
-                  <small>Focused solutions from</small>
-                  <strong>$999</strong>
-                </div>
-
-                <div className="roof-final-actions">
-                  <a className="roof-primary-button" href={CONFIG.shaunContactUrl} target="_blank" rel="noopener noreferrer">Talk to Shaun <Arrow /></a>
-                  <a className="roof-secondary-link" href={CONFIG.apexDemoUrl} target="_blank" rel="noopener noreferrer">Try the Apex Roofing demo ↗</a>
-                </div>
-
-                <Disclosure title="Who's Shaun?">
-                  <p>Shaun is an ex-roofer with around 20 years of experience across roofing and technology. He now helps build solutions for roofing businesses around how they actually work.</p>
-                </Disclosure>
-              </div>
-            </section>
-          </>
-        )}
+          <PricingClose businessLabel={business ? BUSINESS_CHOICES.find(item => item.id === business)!.label : ""} />
+        </div>
       </div>
+      <footer style={{borderColor:t.border}} className="border-t">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm sm:flex-row sm:items-center sm:justify-between" style={{color:t.muted}}>
+          <p>© T3 Labs</p><p>Roofing tools · Smart Assistant · Better-prepared enquiries</p>
+        </div>
+      </footer>
     </main>
-    </div>
   );
 }
 
+// Header hover treatment retained from the supplied page; body styles do not target it.
+const HEADER_STYLES = `
+.btn-solid:hover{transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 7px 22px rgba(215,255,0,.18)}
+.btn-outline:hover{transform:translateY(-1px);border-color:var(--accent-ink)!important}
+`;
+
 const STYLES = String.raw`
-.roof-page{
-  --roof-bg:#0a0b10;
-  --roof-surface:#101219;
-  --roof-raised:#171b26;
-  --roof-border:#2b3040;
-  --roof-ink:#f0f2f7;
-  --roof-muted:#a9b0c0;
-  --roof-accent:#d7ff00;
-  --roof-accent-ink:#d7ff00;
-  --roof-soft:rgba(215,255,0,.07);
-  background:var(--roof-bg);
-  color:var(--roof-ink);
-  min-height:100vh;
-  font-family:inherit;
+.rp-content {
+  --rp-meta: .875rem;
+  --rp-body: 1.0625rem;
+  --rp-card: 1.25rem;
+  --rp-heading: clamp(1.75rem,3vw,2.25rem);
+  --rp-display: clamp(2.125rem,4.6vw,3.375rem);
+  font-family: inherit; font-size: var(--rp-body); line-height: 1.65;
+  background:var(--rp-bg); color:var(--rp-text);
 }
-html[data-theme="light"] .roof-page,.light .roof-page{
-  --roof-bg:#fbfcff;
-  --roof-surface:#fff;
-  --roof-raised:#f2f4f8;
-  --roof-border:#d9dde6;
-  --roof-ink:#11151f;
-  --roof-muted:#586173;
-  --roof-accent:#d7ff00;
-  --roof-accent-ink:#5d6b00;
-  --roof-soft:rgba(139,164,0,.08);
+.rp-content *{box-sizing:border-box}
+.rp-content [hidden]{display:none!important}
+.rp-content :is(h1,h2,h3,p,blockquote,ul,ol){margin:0}
+.rp-content :is(h1,h2,h3){text-wrap:balance;font-weight:700;letter-spacing:-.025em}
+.rp-content h1{font-size:var(--rp-display);line-height:1.13;max-width:850px}
+.rp-content h2{font-size:var(--rp-heading);line-height:1.23;max-width:850px}
+.rp-content h3{font-size:var(--rp-card);line-height:1.4}
+.rp-content p{color:var(--rp-muted)}
+.rp-content :is(button,a,summary){font:inherit;-webkit-tap-highlight-color:transparent}
+.rp-content button{cursor:pointer;color:inherit}
+.rp-content a{color:inherit}
+.rp-content button,.rp-content a{touch-action:manipulation}
+.rp-content :is(button,a,summary,textarea,[tabindex]):focus-visible{outline:3px solid var(--rp-accent-ink);outline-offset:4px}
+.rp-content [id]{scroll-margin-top:96px}
+.rp-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.rp-section{padding:52px 0;border-bottom:1px solid var(--rp-border)}
+.rp-section-heading{max-width:820px;margin-bottom:28px}
+.rp-section-heading p:not(.rp-eyebrow){margin-top:14px;max-width:750px}
+.rp-eyebrow{font-size:var(--rp-meta);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rp-accent-ink)!important;margin-bottom:12px!important}
+.rp-meta,.rp-smallprint,.rp-media-note{font-size:var(--rp-meta);line-height:1.6;color:var(--rp-muted)}
+.rp-referral-note{padding:12px 20px;font-size:var(--rp-meta);text-align:center;color:var(--rp-muted);border-bottom:1px solid var(--rp-border)}
+.rp-opening{padding-top:48px}
+.rp-opening-copy{margin-top:20px!important;max-width:760px}
+.rp-business{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px;max-width:960px}
+.rp-business button{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:18px 20px;border:1px solid var(--rp-border);border-radius:12px;background:var(--rp-surface);font-weight:700;transition:border-color .16s ease,background .16s ease}
+.rp-business button[aria-pressed=true]{background:var(--rp-soft);border-color:var(--rp-accent-ink)}
+.rp-select-status{font-size:var(--rp-meta);font-weight:500;color:var(--rp-muted);white-space:nowrap}
+.rp-business button[aria-pressed=true] .rp-select-status{color:var(--rp-accent-ink)}
+.rp-choice-note{font-size:var(--rp-meta);margin-top:12px!important}
+.rp-opportunity{margin-top:32px;padding-top:28px;border-top:1px solid var(--rp-border)}
+.rp-examples{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;list-style:none;padding:0;margin-top:28px!important;max-width:1020px}
+.rp-examples li{display:flex;gap:14px;align-items:flex-start;line-height:1.55;padding:4px 0}
+.rp-examples li>span:first-child{flex-shrink:0;color:var(--rp-accent-ink);font-weight:700}
+.rp-reflection{padding:24px 28px;background:var(--rp-soft);border-left:3px solid var(--rp-accent-ink);border-radius:0 12px 12px 0;margin-top:32px;max-width:960px}
+.rp-reflection p{font-size:var(--rp-card);font-weight:600;line-height:1.5;color:var(--rp-text)}
+.rp-bridge{margin-top:30px!important;font-size:var(--rp-card);max-width:790px;color:var(--rp-text)!important}
+.rp-solutions{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.rp-solutions article{padding:28px;border:1px solid var(--rp-border);border-radius:16px;background:var(--rp-surface)}
+.rp-solutions h3{color:var(--rp-accent-ink)}
+.rp-solutions p{margin-top:14px;max-width:45ch}
+.rp-shared-outcome{margin-top:18px!important}
+.rp-setup{margin-top:36px;padding-top:30px;border-top:1px solid var(--rp-border);max-width:900px}
+.rp-setup>h3{font-size:var(--rp-heading)}
+.rp-setup>p{margin-top:16px;max-width:790px}
+.rp-setup-promise{font-weight:600;color:var(--rp-text)!important}
+.rp-disclosure{margin-top:22px;border-top:1px solid var(--rp-border)}
+.rp-disclosure summary{min-height:56px;padding:14px 0;display:flex;align-items:center;justify-content:space-between;gap:20px;cursor:pointer;font-weight:600;list-style:none;color:var(--rp-text)}
+.rp-disclosure summary::-webkit-details-marker{display:none}
+.rp-plus{font-size:var(--rp-card);color:var(--rp-accent-ink);transition:transform .15s ease}
+.rp-disclosure[open] .rp-plus{transform:rotate(45deg)}
+.rp-disclosure-body{padding:4px 0 20px;max-width:820px}
+.rp-disclosure-body p+p,.rp-disclosure-body ul+p{margin-top:14px}
+.rp-disclosure-body ul{padding-left:22px;margin:16px 0}
+.rp-disclosure-body li{margin-top:12px;color:var(--rp-muted)}
+.rp-disclosure-body strong{color:var(--rp-text)}
+.rp-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.rp-tabs button{min-height:108px;padding:20px;border:1px solid var(--rp-border);border-radius:12px;background:var(--rp-surface);text-align:left;line-height:1.45}
+.rp-tabs strong{display:block;font-size:var(--rp-card)}
+.rp-tabs span{display:block;margin-top:7px;color:var(--rp-muted)}
+.rp-tabs button[aria-selected=true]{background:var(--rp-soft);border-color:var(--rp-accent-ink)}
+.rp-tabs button[aria-selected=true] strong{color:var(--rp-accent-ink)}
+.rp-audience-panel{display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:start;padding:30px 0 18px}
+.rp-audience-panel blockquote{font-size:var(--rp-card);font-weight:600;line-height:1.5}
+.rp-audience-panel>div>p{margin-top:16px}
+.rp-result{border-left:2px solid var(--rp-border);padding:0 0 0 26px}
+.rp-result>.rp-meta{margin-top:0!important}
+.rp-result strong{display:block;font-size:var(--rp-card);line-height:1.5;margin-top:10px}
+.rp-result-benefit{margin-top:12px!important}
+.rp-carousel-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--rp-border);padding-top:16px;color:var(--rp-muted)}
+.rp-text-button{border:0;background:transparent;padding:8px 0;min-height:44px;font-weight:600!important;color:var(--rp-text)!important}
+.rp-media-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:20px;align-items:stretch}
+.rp-media-card{display:flex;flex-direction:column;border:1px solid var(--rp-border);border-radius:16px;overflow:hidden;background:var(--rp-surface)}
+.rp-media-trigger{display:block;width:100%;padding:0;border:0;background:var(--rp-raised);text-align:left}
+.rp-media-frame{width:100%;aspect-ratio:4/3;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:14px;border-bottom:1px solid var(--rp-border)}
+.rp-screenshot{display:block;width:100%;height:100%;object-fit:contain}
+.rp-media-action{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 20px;min-height:44px;font-size:var(--rp-meta);font-weight:600;color:var(--rp-accent-ink)}
+.rp-media-copy{padding:22px;display:flex;flex-direction:column;flex:1}
+.rp-media-copy h3{min-height:2.8em}
+.rp-media-copy p{margin-top:10px}
+.rp-media-copy>.rp-meta{margin-top:auto;padding-top:14px}
+.rp-illustration{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:10px;background:var(--rp-bg);border:1px solid var(--rp-border);border-radius:10px;padding:15px;text-align:left;font-size:var(--rp-meta);line-height:1.4}
+.rp-illustration-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;color:var(--rp-muted)}
+.rp-illustration-top strong{color:var(--rp-text);font-size:var(--rp-card)}
+.rp-illustration-row{display:flex;justify-content:space-between;gap:8px;padding-top:9px;border-top:1px solid var(--rp-border);color:var(--rp-muted)}
+.rp-illustration-row b{color:var(--rp-text)}
+.rp-illustration-answer{padding:9px 10px;background:var(--rp-soft);border-radius:6px;color:var(--rp-accent-ink);font-weight:600;text-align:center;margin-top:auto}
+.rp-illustration-plan svg{width:100%;height:95px;flex:1;min-height:50px}
+.rp-illustration-plan path{fill:none;stroke:var(--rp-text);stroke-width:2}
+.rp-illustration-plan circle{fill:var(--rp-accent)}
+.rp-bubble{background:var(--rp-surface);border:1px solid var(--rp-border);border-radius:8px;padding:8px 10px;max-width:95%}
+.rp-bubble-user{align-self:flex-end;background:var(--rp-soft)}
+.rp-dialog{position:fixed;inset:0;width:min(1100px,calc(100% - 24px));max-width:none;max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--rp-border);border-radius:18px;background:var(--rp-surface);color:var(--rp-text);overflow:auto;margin:auto;box-shadow:0 24px 80px rgba(0,0,0,.45)}
+.rp-dialog::backdrop{background:rgba(0,0,0,.78)}
+.rp-dialog-top{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 24px;border-bottom:1px solid var(--rp-border);background:var(--rp-surface);z-index:2}
+.rp-dialog h2{font-size:var(--rp-card)}
+.rp-dialog-media{display:flex;align-items:center;justify-content:center;min-height:250px;padding:24px;background:var(--rp-bg)}
+.rp-dialog-media :is(img,video){max-height:65dvh;width:100%;height:auto;object-fit:contain;display:block}
+.rp-dialog-media .rp-illustration{width:min(650px,100%);aspect-ratio:4/3;height:auto;padding:30px;gap:20px;font-size:var(--rp-body)}
+.rp-dialog-media .rp-illustration-plan svg{min-height:170px}
+.rp-media-note{padding:16px 24px}
+.rp-demo-link{display:inline-block;margin-top:22px;font-weight:600;color:var(--rp-accent-ink)!important;text-underline-offset:5px}
+.rp-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.rp-benefits article{border-top:2px solid var(--rp-border);padding:20px 0 0}
+.rp-benefits h3{color:var(--rp-text)}
+.rp-benefits p{margin-top:12px}
+.rp-journeys{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:36px}
+.rp-journey{padding:28px;border:1px solid var(--rp-border);border-radius:16px;background:var(--rp-surface)}
+.rp-journey-after{border-color:var(--rp-accent-ink);background:var(--rp-soft)}
+.rp-journey-after>h3{color:var(--rp-accent-ink)}
+.rp-journey>h3{min-height:2.8em}
+.rp-journey ol{list-style:none;padding:0;margin-top:24px;display:flex;flex-direction:column;gap:0}
+.rp-journey li{position:relative;min-height:114px;padding-bottom:38px}
+.rp-journey li:not(:last-child)::after{content:'↓';position:absolute;bottom:8px;left:0;font-size:var(--rp-card);color:var(--rp-muted)}
+.rp-journey-after li:not(:last-child)::after{color:var(--rp-accent-ink)}
+.rp-journey li:last-child{min-height:0;padding-bottom:0}
+.rp-journey strong{display:block;line-height:1.5}
+.rp-journey li span{display:block;color:var(--rp-muted);margin-top:6px;line-height:1.55}
+.rp-journey-summary{border-top:1px solid var(--rp-border);padding-top:18px;margin-top:20px!important;font-weight:600}
+.rp-journey-after .rp-journey-summary{color:var(--rp-text)}
+.rp-journey-note{margin-top:20px!important;max-width:800px}
+.rp-discover{margin-top:36px;padding-top:30px;border-top:1px solid var(--rp-border);max-width:900px}
+.rp-discover>p{margin-top:12px;max-width:800px}
+.rp-source-links{display:flex;flex-wrap:wrap;gap:14px 24px;margin-top:16px}
+.rp-source-links a{color:var(--rp-accent-ink);text-underline-offset:5px}
+.rp-roi{padding-top:64px;padding-bottom:64px}
+.rp-roi h2{max-width:800px}
+.rp-roi-question{font-size:var(--rp-card);line-height:1.6;max-width:820px;color:var(--rp-text)!important;margin-top:24px!important}
+.rp-roi>p:last-child{margin-top:16px}
+.rp-close{border-bottom:0;padding-bottom:88px}
+.rp-close-inner{max-width:820px;margin:0 auto;text-align:center;padding:30px;border:1px solid var(--rp-border);border-top:3px solid var(--rp-accent-ink);border-radius:18px;background:var(--rp-surface)}
+.rp-close h2{margin:auto;max-width:650px}
+.rp-price-block{margin-top:26px}
+.rp-price{font-size:var(--rp-display);font-weight:750;line-height:1.15;letter-spacing:-.045em;color:var(--rp-accent-ink);margin-top:10px;min-height:64px;display:flex;justify-content:center;align-items:center;font-variant-numeric:tabular-nums}
+.rp-price-loading{font-size:var(--rp-card);letter-spacing:0;color:var(--rp-muted)}
+.rp-currency{display:inline-flex;gap:6px;padding:4px;border:1px solid var(--rp-border);border-radius:999px;margin-top:16px}
+.rp-currency button{min-height:40px;padding:6px 16px;border:1px solid transparent;border-radius:999px;font-size:var(--rp-meta);background:transparent;color:var(--rp-muted);font-weight:600}
+.rp-currency button[aria-pressed=true]{background:var(--rp-soft);border-color:var(--rp-accent-ink);color:var(--rp-accent-ink)}
+.rp-close-lead{color:var(--rp-text)!important;margin-top:24px!important}
+.rp-turnaround{margin:16px auto 0!important;max-width:600px}
+.rp-payment{margin-top:18px!important;color:var(--rp-text)!important}
+.rp-smallprint{margin:16px auto 0!important;max-width:590px}
+.rp-close-action{margin-top:28px}
+.rp-close-action p{margin:14px auto 0;max-width:590px}
+.rp-primary,.rp-outline{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:50px;padding:12px 22px;border-radius:999px;font-size:var(--rp-body);line-height:1.4;font-weight:600;text-decoration:none}
+.rp-primary{border:1px solid var(--rp-accent);background:var(--rp-accent);color:#0a0b10!important}
+.rp-outline{border:1px solid var(--rp-border);background:transparent;color:var(--rp-text)}
+.rp-close .rp-disclosure{text-align:left;margin-top:28px}
+.rp-rep-reply{text-align:left;border-top:1px solid var(--rp-border);margin-top:26px;padding-top:24px}
+.rp-rep-reply p{margin-top:12px}
+.rp-rep-reply label{display:block;margin-top:18px}
+.rp-rep-reply textarea{display:block;resize:vertical;width:100%;margin:8px 0 16px;min-height:170px;padding:14px;border:1px solid var(--rp-border);border-radius:10px;color:var(--rp-text);background:var(--rp-bg);font:inherit;line-height:1.6}
+.rp-explainer{max-width:880px;margin-top:24px}
+.rp-explainer summary{display:flex;justify-content:space-between;gap:16px;cursor:pointer;font-weight:600;list-style:none;padding:12px 0}
+.rp-explainer summary::-webkit-details-marker{display:none}
+.rp-explainer video{margin-top:16px;display:block;width:100%;aspect-ratio:16/9;border-radius:14px;background:#000}
+.rp-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(hover:hover){
+  .rp-business button:hover,.rp-tabs button:hover,.rp-outline:hover{border-color:var(--rp-accent-ink)}
+  .rp-media-trigger:hover .rp-media-action{background:var(--rp-soft)}
+  .rp-primary:hover{filter:brightness(1.05)}
+  .rp-text-button:hover{color:var(--rp-accent-ink)!important}
 }
-.roof-page *{box-sizing:border-box}
-.roof-page h1,.roof-page h2,.roof-page h3,.roof-page p,.roof-page blockquote{margin:0}
-.roof-page button,.roof-page a,.roof-page summary{font:inherit}
-.roof-page button,.roof-page summary{cursor:pointer}
-.roof-page a{color:inherit;text-decoration:none}
-.roof-page button:focus-visible,.roof-page a:focus-visible,.roof-page summary:focus-visible{outline:3px solid var(--roof-accent-ink);outline-offset:4px}
-.roof-shell{width:min(1080px,calc(100% - 40px));margin:0 auto}
-.roof-section{padding:110px 0;border-bottom:1px solid var(--roof-border);scroll-margin-top:120px}
-.roof-opening{padding-top:90px}
-.roof-kicker{font-size:12px;line-height:1.4;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--roof-accent-ink)!important}
-.roof-opening h1{max-width:760px;margin-top:14px;font-size:clamp(2.5rem,5vw,3rem);line-height:1.08;letter-spacing:-.045em}
-.roof-opening-copy{margin-top:20px!important;max-width:620px;font-size:14px;line-height:1.7;color:var(--roof-muted)}
-.roof-business-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px;max-width:880px}
-.roof-business-grid button{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:84px;padding:22px 24px;border:1px solid var(--roof-border);border-radius:14px;background:var(--roof-surface);color:var(--roof-ink);text-align:left;transition:.16s ease}
-.roof-business-grid button:hover{border-color:var(--roof-accent-ink);transform:translateY(-1px)}
-.roof-business-grid button[aria-pressed="true"]{background:var(--roof-soft);border-color:var(--roof-accent-ink)}
-.roof-business-grid button>span{font-size:14px;font-weight:700}
-.roof-business-grid button>strong{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--roof-muted)}
-.roof-business-grid button[aria-pressed="true"]>strong{color:var(--roof-accent-ink)}
-.roof-selection-hint{margin-top:18px!important;font-size:14px;color:var(--roof-muted)}
-.roof-intro-reveal{margin-top:56px;max-width:980px;padding-top:48px;border-top:1px solid var(--roof-border)}
-.roof-opportunity{max-width:820px}
-.roof-opportunity h2,.roof-config-intro h2,.roof-section-head h2,.roof-price-copy h2{margin-top:12px;font-size:clamp(1.5rem,3vw,1.875rem);line-height:1.18;letter-spacing:-.02em}
-.roof-opportunity-list{display:grid;grid-template-columns:1fr;gap:12px;margin-top:32px;max-width:680px}
-.roof-opportunity-list>div{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border:1px solid var(--roof-border);border-radius:12px;background:var(--roof-surface)}
-.roof-opportunity-list span{flex:0 0 auto;margin-top:2px;color:var(--roof-accent-ink);font-size:14px;font-weight:800}
-.roof-opportunity-list strong{font-size:14px;line-height:1.6}
-.roof-reflection-box{margin:64px 0;padding:44px 40px;border:1px solid var(--roof-accent-ink);border-radius:16px;background:var(--roof-soft);text-align:center}
-.roof-reflection-box>p{max-width:640px;margin:0 auto!important;font-size:clamp(1.25rem,2.4vw,1.5rem);line-height:1.4;font-weight:700;letter-spacing:-.01em}
-.roof-build-bridge{max-width:720px;margin:0 auto;padding:0 8px;text-align:center}
-.roof-build-bridge>p{font-size:14px;line-height:1.8;color:var(--roof-muted);font-weight:600}
-.roof-chapter{margin-top:72px;text-align:center}
-.roof-chapter-heading{font-size:clamp(1.75rem,3.6vw,2.2rem);line-height:1.15;letter-spacing:-.025em;font-weight:800}
-.roof-solution-pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px;align-items:stretch}
-.roof-solution-pair article{display:flex;flex-direction:column;padding:32px;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
-.roof-solution-pair article>span{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--roof-accent-ink)}
-.roof-solution-pair h3{margin-top:10px;font-size:20px;line-height:1.35}
-.roof-solution-pair p{margin-top:10px;font-size:14px;line-height:1.7;color:var(--roof-muted)}
-.roof-mini-flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:auto;padding-top:20px;border-top:1px solid var(--roof-border)}
-.roof-mini-flow b{font-size:12px;line-height:1.4;color:var(--roof-ink)}
-.roof-mini-flow i{font-style:normal;font-size:12px;color:var(--roof-accent-ink)}
-.roof-either-note{margin-top:24px!important;font-size:14px;font-weight:700;text-align:center;color:var(--roof-muted)}
-.roof-config-block{margin-top:80px;padding-top:52px;border-top:1px solid var(--roof-border)}
-.roof-config-intro{max-width:780px}
-.roof-config-intro>p:last-child{margin-top:16px!important;max-width:720px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
-.roof-config-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px;max-width:820px}
-.roof-config-grid>div{padding:24px;border:1px solid var(--roof-border);border-radius:14px;background:var(--roof-surface)}
-.roof-config-grid span{display:block;font-size:12px;font-weight:700;color:var(--roof-accent-ink)}
-.roof-config-grid strong{display:block;margin-top:8px;font-size:14px;line-height:1.4;font-weight:700}
-.roof-config-grid p{margin-top:8px;font-size:12px;line-height:1.65;color:var(--roof-muted)}
-.roof-control-line{margin-top:20px!important;max-width:760px;font-size:12px;line-height:1.7;color:var(--roof-muted)}
-.roof-disclosure{margin-top:24px;border-top:1px solid var(--roof-border)}
-.roof-disclosure summary{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:60px;list-style:none;font-size:14px;font-weight:700;color:var(--roof-ink)}
-.roof-disclosure summary::-webkit-details-marker{display:none}
-.roof-disclosure summary>span:last-child{font-size:20px;font-weight:400;color:var(--roof-accent-ink);transition:.15s ease}
-.roof-disclosure[open] summary>span:last-child{transform:rotate(45deg)}
-.roof-disclosure-body{padding:0 0 18px;max-width:760px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
-.roof-disclosure-body p+p{margin-top:12px}
-.roof-continue{display:inline-flex;align-items:center;gap:10px;margin-top:40px;font-size:14px;font-weight:700;color:var(--roof-accent-ink)!important}
-.roof-section-head{max-width:790px;margin-bottom:44px}
-.roof-section-head-narrow{max-width:690px}
-.roof-section-head>p:last-child,.roof-price-copy>p:last-child{margin-top:16px!important;max-width:720px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
-.roof-audience-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.roof-audience-selector button{display:flex;align-items:center;gap:12px;min-height:64px;padding:14px 18px;border:1px solid var(--roof-border);border-radius:12px;background:var(--roof-surface);color:var(--roof-ink);text-align:left}
-.roof-audience-selector button>span{font-size:12px;font-weight:700;color:var(--roof-muted)}
-.roof-audience-selector button>strong{font-size:14px}
-.roof-audience-selector button[aria-selected="true"]{border-color:var(--roof-accent-ink);background:var(--roof-soft)}
-.roof-audience-selector button[aria-selected="true"]>span{color:var(--roof-accent-ink)}
-.roof-audience-card{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;margin-top:16px;padding:40px;border:1px solid var(--roof-border);border-radius:18px;background:var(--roof-surface)}
-.roof-slide-meta{display:flex;align-items:center;gap:12px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
-.roof-slide-meta>span:first-child{color:var(--roof-accent-ink);font-weight:700}
-.roof-audience-copy blockquote{margin-top:18px;font-size:clamp(1.35rem,2.5vw,1.6rem);line-height:1.35;letter-spacing:-.02em;font-weight:700}
-.roof-audience-copy>p:not(.roof-question){margin-top:18px;font-size:14px;line-height:1.75;color:var(--roof-muted)}
-.roof-question{margin-top:22px!important;padding-left:14px;border-left:2px solid var(--roof-accent-ink);font-size:14px;font-weight:700;line-height:1.6;color:var(--roof-ink)!important}
-.roof-flow{align-self:center;display:flex;align-items:stretch;gap:10px}
-.roof-flow>div{flex:1;min-width:0;padding:18px;border:1px solid var(--roof-border);border-radius:12px;background:var(--roof-raised)}
-.roof-flow small{display:block;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.06em;color:var(--roof-muted)}
-.roof-flow strong{display:block;margin-top:8px;font-size:12px;line-height:1.5}
-.roof-flow>span{align-self:center;color:var(--roof-accent-ink);font-size:14px}
-.roof-audience-controls{display:flex;justify-content:flex-end;align-items:center;gap:16px;margin-top:18px}
-.roof-audience-controls button{width:48px;height:48px;border:1px solid var(--roof-border);border-radius:999px;background:var(--roof-surface);color:var(--roof-ink);font-size:16px}
-.roof-audience-controls button:hover{border-color:var(--roof-accent-ink)}
-.roof-dots{display:flex;gap:8px}
-.roof-dots span{width:8px;height:8px;border-radius:999px;background:var(--roof-border)}
-.roof-dots span.active{width:24px;background:var(--roof-accent)}
-.roof-method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
-.roof-method-card{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
-.roof-method-media{aspect-ratio:16/10;padding:20px;background:var(--roof-raised);border-bottom:1px solid var(--roof-border);display:flex;align-items:stretch}
-.roof-method-copy{padding:26px 26px 30px;flex:1;display:flex;flex-direction:column}
-.roof-method-copy>span{font-size:12px;font-weight:700;color:var(--roof-accent-ink)}
-.roof-method-copy h3{margin-top:8px;font-size:20px;line-height:1.35}
-.roof-method-copy p{margin-top:10px;font-size:14px;line-height:1.7;color:var(--roof-muted)}
-.roof-method-note{margin:24px auto 0!important;max-width:760px;text-align:center;font-size:12px;line-height:1.7;color:var(--roof-muted)}
-.roof-visual,.roof-method-video{width:100%;flex:1;border-radius:12px;border:1px solid var(--roof-border);background:var(--roof-bg)}
-.roof-method-video{display:block;object-fit:cover}
-.roof-known{padding:20px;display:flex;flex-direction:column;justify-content:center}
-.roof-ui-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
-.roof-ui-input{margin-top:8px;padding:10px 12px;border:1px solid var(--roof-border);border-radius:8px;font-size:20px;font-weight:700}
-.roof-ui-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--roof-border);font-size:12px;color:var(--roof-muted)}
-.roof-ui-row strong{color:var(--roof-ink)}
-.roof-ui-result{margin-top:14px;padding:10px;border-radius:8px;background:var(--roof-soft);font-size:12px;font-weight:700;color:var(--roof-accent-ink);text-align:center}
-.roof-plan{position:relative;padding:16px;display:flex;align-items:center}
-.roof-plan svg{width:100%;height:auto;max-height:100%}
-.roof-plan path{fill:none;stroke:var(--roof-ink);stroke-width:2}
-.roof-plan circle{fill:var(--roof-accent)}
-.roof-plan-tag{position:absolute;left:15px;bottom:16px;padding:6px 10px;border:1px solid var(--roof-border);border-radius:99px;background:var(--roof-surface);font-size:12px;color:var(--roof-muted)}
-.roof-plan-tag-two{left:auto;right:15px;color:var(--roof-accent-ink)}
-.roof-chat{padding:18px;display:flex;flex-direction:column;justify-content:center;gap:10px}
-.roof-chat-bubble{max-width:89%;padding:10px 12px;border-radius:10px 10px 10px 3px;background:var(--roof-surface);border:1px solid var(--roof-border);font-size:12px;line-height:1.55;color:var(--roof-ink)}
-.roof-chat-user{align-self:flex-end;border-radius:10px 10px 3px 10px;background:var(--roof-soft)}
-.roof-chat-action{align-self:flex-start;font-size:12px;color:var(--roof-accent-ink)}
-.roof-human-question{padding:48px 40px;border:1px solid var(--roof-accent-ink);border-radius:18px;background:var(--roof-soft);text-align:center}
-.roof-human-question>p{max-width:640px;margin:0 auto!important;font-size:clamp(1.25rem,2.4vw,1.5rem);line-height:1.4;font-weight:700;letter-spacing:-.01em}
-.roof-human-question>div{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:24px}
-.roof-human-question span{padding:8px 14px;border-radius:999px;background:var(--roof-surface);border:1px solid var(--roof-border);font-size:12px;color:var(--roof-muted)}
-.roof-benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;align-items:stretch}
-.roof-benefit-grid article{padding:28px;border-top:2px solid var(--roof-accent-ink);border-radius:14px;background:var(--roof-surface);border-left:1px solid var(--roof-border);border-right:1px solid var(--roof-border);border-bottom:1px solid var(--roof-border)}
-.roof-benefit-grid strong{font-size:20px}
-.roof-benefit-grid p{margin-top:10px;font-size:14px;line-height:1.7;color:var(--roof-muted)}
-.roof-journeys{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px;align-items:stretch}
-.roof-journey{display:flex;flex-direction:column;gap:10px;padding:28px;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
-.roof-journey>span{margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--roof-muted)}
-.roof-journey strong{font-size:14px;line-height:1.5;font-weight:600}
-.roof-journey b{font-weight:400;color:var(--roof-muted);line-height:.6}
-.roof-journey-after{border-color:var(--roof-accent-ink);background:var(--roof-soft)}
-.roof-journey-after>span{color:var(--roof-accent-ink)}
-.roof-more-benefits{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
-.roof-more-benefits p{font-size:14px;line-height:1.7;color:var(--roof-muted)}
-.roof-more-benefits strong{color:var(--roof-ink)}
-.roof-discovery-note{display:grid;grid-template-columns:.8fr 1.2fr;gap:32px;align-items:start;margin-top:48px;padding:32px;border:1px solid var(--roof-border);border-radius:16px;background:var(--roof-surface)}
-.roof-discovery-note h3{margin-top:8px;font-size:20px;line-height:1.35}
-.roof-discovery-note>p{font-size:14px;line-height:1.75;color:var(--roof-muted)}
-.roof-final{border-bottom:0;padding-bottom:130px}
-.roof-price-card{max-width:880px;margin:0 auto;padding:48px;border:1px solid var(--roof-border);border-top:2px solid var(--roof-accent-ink);border-radius:20px;background:var(--roof-surface);text-align:center}
-.roof-price-copy{max-width:680px;margin:0 auto}
-.roof-price-copy h2 span{color:var(--roof-accent-ink)}
-.roof-price-number{margin-top:32px}
-.roof-price-number small{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--roof-muted)}
-.roof-price-number strong{display:block;margin-top:6px;font-size:clamp(3.7rem,8vw,6rem);line-height:1;letter-spacing:-.06em}
-.roof-final-actions{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:36px}
-.roof-primary-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border-radius:999px;background:var(--roof-accent);color:#0a0b10!important;font-size:14px;font-weight:800}
-.roof-primary-button:hover{filter:brightness(1.05);transform:translateY(-1px)}
-.roof-secondary-link{font-size:14px;font-weight:700;color:var(--roof-muted)!important}
-.roof-secondary-link:hover{color:var(--roof-accent-ink)!important}
-.roof-price-card>.roof-disclosure{max-width:620px;margin:28px auto 0;text-align:left}
-@media(max-width:860px){
-  .roof-section{padding:88px 0}
-  .roof-business-grid,.roof-method-grid,.roof-benefit-grid{grid-template-columns:1fr}
-  .roof-business-grid{max-width:none}
-  .roof-config-grid{grid-template-columns:1fr 1fr}
-  .roof-audience-card{grid-template-columns:1fr;gap:28px}
-  .roof-flow{max-width:620px}
-  .roof-journeys{grid-template-columns:1fr}
-  .roof-discovery-note{grid-template-columns:1fr;gap:16px}
+@media(max-width:1000px){
+  .rp-business button{padding:16px;flex-wrap:wrap;gap:6px}
+  .rp-media-grid{gap:14px}
+  .rp-media-frame{padding:10px;aspect-ratio:1/1}
+  .rp-illustration{padding:11px;gap:8px}
+  .rp-illustration-top{display:block}
+  .rp-illustration-top strong{display:block;margin-top:4px}
+  .rp-media-copy{padding:20px}
 }
-@media(max-width:620px){
-  .roof-shell{width:calc(100% - 30px)}
-  .roof-section{padding:68px 0}
-  .roof-opening{padding-top:56px}
-  .roof-opening h1{font-size:2rem}
-  .roof-opening-copy{font-size:14px}
-  .roof-business-grid{gap:10px;margin-top:28px}
-  .roof-business-grid button{min-height:70px;padding:16px 18px}
-  .roof-intro-reveal{margin-top:36px;padding-top:32px}
-  .roof-opportunity-list,.roof-solution-pair,.roof-config-grid{grid-template-columns:1fr}
-  .roof-reflection-box{margin:48px 0;padding:32px 24px}
-  .roof-chapter{margin-top:56px}
-  .roof-config-block{margin-top:56px;padding-top:36px}
-  .roof-solution-pair article{padding:24px}
-  .roof-config-grid>div{padding:20px}
-  .roof-section-head{margin-bottom:28px}
-  .roof-audience-selector{gap:6px}
-  .roof-audience-selector button{min-height:64px;display:block;padding:12px;text-align:center}
-  .roof-audience-selector button>span{display:block;margin-bottom:4px}
-  .roof-audience-selector button>strong{font-size:12px;line-height:1.25}
-  .roof-audience-card{padding:24px}
-  .roof-audience-copy blockquote{font-size:1.3rem}
-  .roof-flow{display:grid;grid-template-columns:1fr;gap:6px}
-  .roof-flow>span{transform:rotate(90deg);justify-self:center}
-  .roof-audience-controls{justify-content:space-between}
-  .roof-human-question{padding:32px 24px}
-  .roof-benefit-grid{gap:14px}
-  .roof-benefit-grid article{padding:22px}
-  .roof-journey{padding:22px}
-  .roof-more-benefits{grid-template-columns:1fr;gap:12px}
-  .roof-price-card{padding:32px 20px}
-  .roof-final-actions{flex-direction:column;gap:14px}
-  .roof-primary-button{width:100%}
+@media(max-width:760px){
+  .rp-shell{width:calc(100% - 36px)}
+  .rp-section{padding:52px 0}
+  .rp-opening{padding-top:42px}
+  .rp-opening-copy{margin-top:16px!important}
+  .rp-business{gap:8px;margin-top:24px}
+  .rp-business button{padding:14px 12px;align-content:flex-start;min-height:94px}
+  .rp-select-status{font-size:var(--rp-meta)}
+  .rp-opportunity{margin-top:30px;padding-top:28px}
+  .rp-examples{grid-template-columns:1fr;gap:16px;margin-top:24px!important}
+  .rp-reflection{padding:22px;margin-top:28px}
+  .rp-bridge{margin-top:28px!important}
+  .rp-solutions{grid-template-columns:1fr;gap:16px}
+  .rp-solutions article{padding:24px}
+  .rp-setup{margin-top:30px;padding-top:26px}
+  .rp-tabs{gap:8px}
+  .rp-tabs button{padding:16px 12px;min-height:122px}
+  .rp-tabs strong{font-size:var(--rp-body)}
+  .rp-tabs span{font-size:var(--rp-meta)}
+  .rp-audience-panel{grid-template-columns:1fr;gap:22px;padding:24px 0}
+  .rp-result{padding:18px 0 0;border-left:0;border-top:1px solid var(--rp-border)}
+  .rp-media-grid{grid-template-columns:1fr;gap:16px;max-width:560px;margin:0 auto}
+  .rp-media-card{display:grid;grid-template-columns:minmax(115px,.85fr) minmax(0,1.15fr);min-height:230px}
+  .rp-media-trigger{align-self:stretch;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--rp-border)}
+  .rp-media-frame{aspect-ratio:4/3;padding:10px;border-bottom:0}
+  .rp-media-action{padding:10px;justify-content:center;gap:6px}
+  .rp-media-frame .rp-illustration{padding:10px;gap:8px}
+  .rp-media-frame .rp-illustration-top{display:none}
+  .rp-media-frame .rp-illustration-row{display:none}
+  .rp-media-frame .rp-bubble{display:none}
+  .rp-media-frame .rp-illustration-answer{margin:auto 0;padding:8px 4px}
+  .rp-media-frame .rp-illustration-plan svg{height:50px}
+  .rp-media-frame .rp-illustration-plan .rp-illustration-answer{display:none}
+  .rp-media-copy h3{min-height:0}
+  .rp-media-copy{padding:18px 14px}
+  .rp-media-copy>.rp-meta{font-size:var(--rp-meta)}
+  .rp-dialog-top{padding:16px}
+  .rp-dialog-media{padding:16px}
+  .rp-dialog-media .rp-illustration{padding:18px;gap:14px}
+  .rp-dialog-media .rp-illustration-plan svg{min-height:100px}
+  .rp-media-note{padding:14px 16px}
+  .rp-benefits{grid-template-columns:1fr;gap:24px}
+  .rp-benefits article{padding-top:16px}
+  .rp-journeys{grid-template-columns:1fr;gap:22px;margin-top:30px}
+  .rp-journey{padding:24px}
+  .rp-journey>h3{min-height:0}
+  .rp-journey li{min-height:0;padding-bottom:44px}
+  .rp-journey li:last-child{padding-bottom:0}
+  .rp-roi{padding-top:60px;padding-bottom:60px}
+  .rp-close-inner{padding:30px 22px}
+  .rp-close .rp-primary{width:100%}
 }
-@media(prefers-reduced-motion:reduce){.roof-page *{scroll-behavior:auto!important;transition:none!important}}
+@media(max-width:370px){
+  .rp-business{grid-template-columns:1fr}
+  .rp-business button{flex-wrap:nowrap;min-height:60px}
+  .rp-tabs{gap:6px}
+  .rp-tabs button{padding:12px 8px}
+}
+@media(prefers-reduced-motion:reduce){.rp-content *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 `;
