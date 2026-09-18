@@ -20,12 +20,8 @@ type Tokens = {
   text: string; muted: string; accent: string; accentText: string;
   accentInk: string; accentSoft: string;
 };
-type MediaAsset = {
-  src: string;
-  fullSrc?: string;
-  alt: string;
-  videoSrc?: string;
-};
+type MediaShot = { src: string; alt: string };
+type MediaSet = { shots: MediaShot[] };
 
 const dark: Tokens = {
   bg: "#0a0b10", surface: "#101219", surfaceAlt: "#161927", border: "#262a3a",
@@ -50,12 +46,31 @@ const CONFIG = {
   apexDemoHomeUrl: "https://t3labs.tech/demo/roofing-site",
   currencyEndpoint: "/api/roofing-region",
   currencyPreferenceKey: "t3-roofing-price-currency",
-  // Real screenshots were not included. Blank entries show labelled illustrations.
+  // Real screenshots from the Apex Roofing demo, ordered as a short flick-through story per card.
   media: {
-    known: { src: "", fullSrc: "", videoSrc: "", alt: "Roofing tool showing a roof measurement, selected products and a preliminary result" },
-    plan: { src: "", fullSrc: "", videoSrc: "", alt: "Roofing plan measurement tool with measured areas ready to use in an estimate" },
-    assistant: { src: "", fullSrc: "", videoSrc: "", alt: "Smart Assistant answering a roofing product question and preparing the next step" },
-  } satisfies Record<Method, MediaAsset>,
+    plan: {
+      shots: [
+        { src: "/assets/roofing-solutions/plan-1-takeoff-canvas.jpg", alt: "Digital takeoff canvas with a roof plan and ridges, hips, valleys and eaves measured as coloured lines" },
+        { src: "/assets/roofing-solutions/plan-2-measurement-choice.jpg", alt: "Choice between entering actual measurements or measuring from a plan with pitch-adjusted lengths" },
+        { src: "/assets/roofing-solutions/result-quote-output.jpg", alt: "Result screen with materials and labour totals and next actions, including continuing in QuoteCore+" },
+      ],
+    },
+    known: {
+      shots: [
+        { src: "/assets/roofing-solutions/known-1-roof-area-entry.jpg", alt: "Guided roof area entry with width by length, product selection and waste allowance" },
+        { src: "/assets/roofing-solutions/known-2-pricing-choice.jpg", alt: "Choice between material only and material and install pricing, with the job type selected" },
+        { src: "/assets/roofing-solutions/result-quote-output.jpg", alt: "Result screen with materials and labour totals and next actions, including continuing in QuoteCore+" },
+      ],
+    },
+    assistant: {
+      shots: [
+        { src: "/assets/roofing-solutions/assistant-1-start-options.jpg", alt: "Smart Assistant start screen offering an estimate, a roofing question, finding something or preparing an enquiry" },
+        { src: "/assets/roofing-solutions/assistant-2-enquiry-questions.jpg", alt: "Smart Assistant gathering job details conversationally, asking about roof pitch and roof shape" },
+        { src: "/assets/roofing-solutions/assistant-3-product-question.jpg", alt: "Smart Assistant answering a product question about underlay for a tiled roof" },
+        { src: "/assets/roofing-solutions/assistant-4-saving-code.jpg", alt: "Saving code offer shown to the customer before completing the enquiry" },
+      ],
+    },
+  } satisfies Record<Method, MediaSet>,
   // Optional page explainer. Hidden until supplied. Use a direct media URL, not a watch-page URL.
   explainer: { src: "", poster: "", captions: "" },
 };
@@ -218,8 +233,8 @@ const PROFILES: Record<Business, Profile> = {
 
 const AUDIENCES: Audience[] = ["visitor", "trade", "team"];
 const METHODS: { id: Method; title: string; body: string }[] = [
-  { id: "known", title: "Enter measurements", body: "Turn known dimensions into quantities and preliminary pricing." },
   { id: "plan", title: "Measure a plan", body: "Carry measured quantities into an estimate or enquiry." },
+  { id: "known", title: "Enter measurements", body: "Turn known dimensions into quantities and preliminary pricing." },
   { id: "assistant", title: "Ask the Smart Assistant", body: "Get product answers or preliminary pricing, with human handoff when needed." },
 ];
 
@@ -317,19 +332,56 @@ function Illustration({ method }: { method: Method }) {
   );
 }
 
-function Screenshot({ method, expanded = false }: { method: Method; expanded?: boolean }) {
-  const asset: MediaAsset = CONFIG.media[method];
+function MethodCarousel({ method, expanded = false, title }: { method: Method; expanded?: boolean; title: string }) {
+  const shots = CONFIG.media[method].shots;
+  const count = shots.length;
+  const [index, setIndex] = useState(0);
   const [failed, setFailed] = useState(false);
-  const src = expanded ? asset.fullSrc || asset.src : asset.src;
-  if (!src || failed) return <Illustration method={method} />;
-  return <img src={src} alt={asset.alt} loading={expanded ? "eager" : "lazy"}
-    decoding="async" onError={() => setFailed(true)} className="rp-screenshot" />;
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  function go(next: number) { if (count) setIndex(((next % count) + count) % count); }
+  function onTouchStart(event: React.TouchEvent) {
+    touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+  }
+  function onTouchEnd(event: React.TouchEvent) {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const dx = event.changedTouches[0].clientX - start.x;
+    const dy = event.changedTouches[0].clientY - start.y;
+    if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) go(index + (dx < 0 ? 1 : -1));
+  }
+  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "ArrowRight") { event.preventDefault(); go(index + 1); }
+    if (event.key === "ArrowLeft") { event.preventDefault(); go(index - 1); }
+  }
+  const shot = shots[index];
+  return (
+    <div className="rp-carousel" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onKeyDown={onKeyDown}
+      tabIndex={0} role="group" aria-roledescription="carousel" aria-label={`${title} example (${index + 1} of ${count})`}>
+      <div className="rp-carousel-track">
+        {!shot || failed ? <Illustration method={method} /> : (
+          <img key={`${shot.src}-${index}`} src={shot.src} alt={shot.alt}
+            loading={expanded ? "eager" : "lazy"} decoding="async"
+            onError={() => setFailed(true)} className="rp-screenshot" />
+        )}
+      </div>
+      {count > 1 && <div className="rp-carousel-nav">
+        <button type="button" className="rp-carousel-arrow" onClick={() => go(index - 1)} aria-label="Previous example">←</button>
+        <div className="rp-carousel-dots" role="group" aria-label="Choose example">
+          {shots.map((s, i) => (
+            <button key={`${s.src}-${i}`} type="button" className={i === index ? "rp-dot rp-dot-active" : "rp-dot"}
+              aria-label={`Example ${i + 1} of ${count}`} aria-current={i === index} onClick={() => go(i)} />
+          ))}
+        </div>
+        <button type="button" className="rp-carousel-arrow" onClick={() => go(index + 1)} aria-label="Next example">→</button>
+        <span className="rp-sr-only" role="status" aria-live="polite">{index + 1} of {count}</span>
+      </div>}
+    </div>
+  );
 }
 
 function MediaDialog({ method, onClose }: { method: Method; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
-  const [videoFailed, setVideoFailed] = useState(false);
-  const asset: MediaAsset = CONFIG.media[method];
   const title = METHODS.find(item => item.id === method)!.title;
   useEffect(() => {
     const element = dialog.current;
@@ -356,11 +408,9 @@ function MediaDialog({ method, onClose }: { method: Method; onClose: () => void 
         <button type="button" onClick={onClose} className="rp-outline" autoFocus aria-label="Close enlarged example">Close ×</button>
       </div>
       <div className="rp-dialog-media">
-        {asset.videoSrc && !videoFailed ? <video src={asset.videoSrc} poster={asset.src || undefined} controls playsInline preload="metadata"
-          onError={() => setVideoFailed(true)} aria-label={`${title} demonstration`} /> : <Screenshot method={method} expanded />}
+        <MethodCarousel method={method} expanded title={title} />
       </div>
-      <p className="rp-media-note">{!asset.src && !asset.videoSrc ? "Workflow illustration, not a live quote or product screenshot." : "Example workflow. Products, pricing and setup can be tailored to your business."}</p>
-      {videoFailed && <p className="rp-media-note" role="status">The video could not load. The still example is shown instead.</p>}
+      <p className="rp-media-note">Example workflow from the Apex Roofing demo. Products, pricing and setup can be tailored to your business.</p>
     </dialog>
   );
 }
@@ -371,16 +421,16 @@ function MediaExamples() {
     <>
       <div className="rp-media-grid">
         {METHODS.map(item => {
-          const asset: MediaAsset = CONFIG.media[item.id];
+          const shots = CONFIG.media[item.id].shots;
           return (
             <article key={item.id} className="rp-media-card">
+              <div className="rp-media-frame"><MethodCarousel method={item.id} title={item.title} /></div>
               <button className="rp-media-trigger" type="button" onClick={() => setOpen(item.id)} aria-haspopup="dialog"
                 aria-label={`Enlarge ${item.title.toLowerCase()} example`}>
-                <div className="rp-media-frame"><Screenshot method={item.id} /></div>
-                <span className="rp-media-action">{asset.videoSrc ? "Play example" : "View larger"}<span aria-hidden="true">↗</span></span>
+                <span className="rp-media-action">View larger<span aria-hidden="true">↗</span></span>
               </button>
               <div className="rp-media-copy"><h3>{item.title}</h3><p>{item.body}</p>
-                {!asset.src && !asset.videoSrc && <span className="rp-meta">Workflow illustration</span>}
+                {!shots.length && <span className="rp-meta">Workflow illustration</span>}
               </div>
             </article>
           );
@@ -754,6 +804,14 @@ const STYLES = String.raw`
 .rp-media-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:20px;align-items:stretch}
 .rp-media-card{display:flex;flex-direction:column;border:1px solid var(--rp-border);border-radius:16px;overflow:hidden;background:var(--rp-surface)}
 .rp-media-trigger{display:block;width:100%;padding:0;border:0;background:var(--rp-raised);text-align:left}
+.rp-carousel{width:100%;height:100%;display:flex;flex-direction:column;outline:none}
+.rp-carousel:focus-visible{outline:3px solid var(--rp-accent-ink);outline-offset:2px}
+.rp-carousel-track{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.rp-carousel-nav{display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 8px 0}
+.rp-carousel-arrow{min-width:34px;min-height:34px;padding:0 10px;border:1px solid var(--rp-border);border-radius:999px;background:var(--rp-surface);color:var(--rp-text);font-weight:700;line-height:1}
+.rp-carousel-dots{display:flex;gap:8px;align-items:center}
+.rp-dot{width:9px;height:9px;min-height:0;padding:0;border:0;border-radius:999px;background:var(--rp-border);display:inline-block}
+.rp-dot-active{background:var(--rp-accent-ink)}
 .rp-media-frame{width:100%;aspect-ratio:4/3;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:14px;border-bottom:1px solid var(--rp-border)}
 .rp-screenshot{display:block;width:100%;height:100%;object-fit:contain}
 .rp-media-action{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 20px;min-height:44px;font-size:var(--rp-meta);font-weight:600;color:var(--rp-accent-ink)}
@@ -778,6 +836,9 @@ const STYLES = String.raw`
 .rp-dialog h2{font-size:var(--rp-card)}
 .rp-dialog-media{display:flex;align-items:center;justify-content:center;min-height:250px;padding:24px;background:var(--rp-bg)}
 .rp-dialog-media :is(img,video){max-height:65dvh;width:100%;height:auto;object-fit:contain;display:block}
+.rp-dialog-media .rp-carousel{width:100%}
+.rp-dialog-media .rp-carousel-track{align-items:flex-start}
+.rp-dialog-media .rp-carousel-arrow{min-width:40px;min-height:40px}
 .rp-dialog-media .rp-illustration{width:min(650px,100%);aspect-ratio:4/3;height:auto;padding:30px;gap:20px;font-size:var(--rp-body)}
 .rp-dialog-media .rp-illustration-plan svg{min-height:170px}
 .rp-media-note{padding:16px 24px}
@@ -838,7 +899,7 @@ const STYLES = String.raw`
 .rp-explainer video{margin-top:16px;display:block;width:100%;aspect-ratio:16/9;border-radius:14px;background:#000}
 .rp-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 @media(hover:hover){
-  .rp-business button:hover,.rp-tabs button:hover,.rp-outline:hover{border-color:var(--rp-accent-ink)}
+  .rp-business button:hover,.rp-tabs button:hover,.rp-outline:hover,.rp-carousel-arrow:hover,.rp-dot:hover{border-color:var(--rp-accent-ink)}
   .rp-media-trigger:hover .rp-media-action{background:var(--rp-soft)}
   .rp-primary:hover{filter:brightness(1.05)}
   .rp-text-button:hover{color:var(--rp-accent-ink)!important}
@@ -874,9 +935,8 @@ const STYLES = String.raw`
   .rp-audience-panel{grid-template-columns:1fr;gap:22px;padding:24px 0}
   .rp-result{padding:18px 0 0;border-left:0;border-top:1px solid var(--rp-border)}
   .rp-media-grid{grid-template-columns:1fr;gap:16px;max-width:560px;margin:0 auto}
-  .rp-media-card{display:grid;grid-template-columns:minmax(115px,.85fr) minmax(0,1.15fr);min-height:230px}
-  .rp-media-trigger{align-self:stretch;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--rp-border)}
-  .rp-media-frame{aspect-ratio:4/3;padding:10px;border-bottom:0}
+  .rp-media-card{display:flex;flex-direction:column}
+  .rp-media-frame{aspect-ratio:4/3;padding:10px}
   .rp-media-action{padding:10px;justify-content:center;gap:6px}
   .rp-media-frame .rp-illustration{padding:10px;gap:8px}
   .rp-media-frame .rp-illustration-top{display:none}
