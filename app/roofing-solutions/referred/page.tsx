@@ -332,7 +332,7 @@ function Illustration({ method }: { method: Method }) {
   );
 }
 
-function MethodCarousel({ method, expanded = false, title }: { method: Method; expanded?: boolean; title: string }) {
+function MethodCarousel({ method, expanded = false, title, onImageClick }: { method: Method; expanded?: boolean; title: string; onImageClick?: () => void }) {
   const shots = CONFIG.media[method].shots;
   const count = shots.length;
   const [index, setIndex] = useState(0);
@@ -359,7 +359,14 @@ function MethodCarousel({ method, expanded = false, title }: { method: Method; e
     <div className="rp-carousel" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onKeyDown={onKeyDown}
       tabIndex={0} role="group" aria-roledescription="carousel" aria-label={`${title} example (${index + 1} of ${count})`}>
       <div className="rp-carousel-track">
-        {!shot || failed ? <Illustration method={method} /> : (
+        {!shot || failed ? <Illustration method={method} /> : onImageClick ? (
+          <button type="button" className="rp-media-open" onClick={onImageClick} aria-haspopup="dialog"
+            aria-label={`Enlarge ${title.toLowerCase()} example`}>
+            <img key={`${shot.src}-${index}`} src={shot.src} alt={shot.alt}
+              loading={expanded ? "eager" : "lazy"} decoding="async"
+              onError={() => setFailed(true)} className="rp-screenshot" />
+          </button>
+        ) : (
           <img key={`${shot.src}-${index}`} src={shot.src} alt={shot.alt}
             loading={expanded ? "eager" : "lazy"} decoding="async"
             onError={() => setFailed(true)} className="rp-screenshot" />
@@ -424,11 +431,9 @@ function MediaExamples() {
           const shots = CONFIG.media[item.id].shots;
           return (
             <article key={item.id} className="rp-media-card">
-              <div className="rp-media-frame"><MethodCarousel method={item.id} title={item.title} /></div>
-              <button className="rp-media-trigger" type="button" onClick={() => setOpen(item.id)} aria-haspopup="dialog"
-                aria-label={`Enlarge ${item.title.toLowerCase()} example`}>
-                <span className="rp-media-action">View larger<span aria-hidden="true">↗</span></span>
-              </button>
+              <div className="rp-media-frame">
+                <MethodCarousel method={item.id} title={item.title} onImageClick={() => setOpen(item.id)} />
+              </div>
               <div className="rp-media-copy"><h3>{item.title}</h3><p>{item.body}</p>
                 {!shots.length && <span className="rp-meta">Workflow illustration</span>}
               </div>
@@ -803,7 +808,8 @@ const STYLES = String.raw`
 .rp-text-button{border:0;background:transparent;padding:8px 0;min-height:44px;font-weight:600!important;color:var(--rp-text)!important}
 .rp-media-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:20px;align-items:stretch}
 .rp-media-card{display:flex;flex-direction:column;border:1px solid var(--rp-border);border-radius:16px;overflow:hidden;background:var(--rp-surface)}
-.rp-media-trigger{display:block;width:100%;padding:0;border:0;background:var(--rp-raised);text-align:left}
+.rp-media-open{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer}
+.rp-media-open img{transition:transform .18s ease}
 .rp-carousel{width:100%;height:100%;display:flex;flex-direction:column;outline:none}
 .rp-carousel:focus-visible{outline:3px solid var(--rp-accent-ink);outline-offset:2px}
 .rp-carousel-track{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
@@ -900,6 +906,7 @@ const STYLES = String.raw`
 .rp-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 @media(hover:hover){
   .rp-business button:hover,.rp-tabs button:hover,.rp-outline:hover,.rp-carousel-arrow:hover,.rp-dot:hover{border-color:var(--rp-accent-ink)}
+  .rp-media-open:hover .rp-screenshot{transform:scale(1.035)}
   .rp-media-trigger:hover .rp-media-action{background:var(--rp-soft)}
   .rp-primary:hover{filter:brightness(1.05)}
   .rp-text-button:hover{color:var(--rp-accent-ink)!important}
