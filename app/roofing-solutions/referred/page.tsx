@@ -607,6 +607,7 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
               <h3>You explain how you work. We handle the setup.</h3>
               <p>We use your existing product information and focused conversations to agree the answers, pricing and handoffs. We handle the build and setup.</p>
               <p className="rp-setup-promise">A focused first version can work alongside your current website and enquiry process.</p>
+              {variant === "direct" && <a className="rp-demo-btn" href="/roofing-business-tools">See the roofing business tools <span aria-hidden="true">→</span></a>}
               <Disclosure title="What would you need from us?">
                 <p>For a basic setup, we aim to keep your input to a few focused conversations and a review. We agree what is needed before starting, rather than asking your team to manage a software project.</p>
                 <ul>
