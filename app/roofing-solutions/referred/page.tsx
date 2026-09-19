@@ -890,7 +890,7 @@ const STYLES = String.raw`
 .rp-rep-reply p{margin-top:12px}
 .rp-rep-reply label{display:block;margin-top:18px}
 .rp-rep-reply textarea{display:block;resize:vertical;width:100%;margin:8px 0 16px;min-height:170px;padding:14px;border:1px solid var(--rp-border);border-radius:10px;color:var(--rp-text);background:var(--rp-bg);font:inherit;line-height:1.6}
-.rp-explainer-video{max-width:880px;margin-top:24px}
+.rp-explainer-video{max-width:960px;margin-top:24px}
 .rp-explainer-caption{font-weight:600;font-size:.95rem}
 .rp-explainer-frame{margin-top:12px;position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid var(--rp-border);background:#000}
 .rp-explainer-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
