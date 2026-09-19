@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSolutionCurrency, SOLUTION_PRICES } from "../use-solution-currency";
 import BuyerJourneyStory from "../buyer-journey-story";
 
 type Theme = "dark" | "light";
@@ -210,6 +211,8 @@ function ExplainerVideo({ t }:{ t:Tokens }) {
 
 export default function ConstructionSolutionPage(){
   const [theme,setTheme]=useState<Theme>("dark");
+  const { currency, choose } = useSolutionCurrency();
+  const price = currency ? SOLUTION_PRICES[currency] : "US$999";
   const t=theme==="dark"?dark:light;
 
   return (
@@ -285,7 +288,7 @@ export default function ConstructionSolutionPage(){
             style={{color:t.muted}}
             className="mt-5 inline-flex items-center gap-2 text-sm font-semibold hover:underline"
           >
-            <span style={{color:t.accentInk}}>Focused projects can start from $999</span>
+          <span style={{color:t.accentInk}}>Focused projects can start from {price}</span>
             <span>See pricing ↓</span>
           </button>
 
@@ -411,8 +414,12 @@ export default function ConstructionSolutionPage(){
               <div className="grid gap-7 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>Simple starting point</p>
-                  <p className="mt-3 text-5xl font-bold tracking-tight">$999<span className="text-xl font-semibold" style={{color:t.muted}}>+</span></p>
-                  <p className="mt-2 text-sm font-semibold">Focused projects can start from $999.</p>
+                  <p className="mt-3 text-5xl font-bold tracking-tight">{price}<span className="text-xl font-semibold" style={{color:t.muted}}>+</span></p>
+                  <p className="mt-2 text-sm font-semibold">Focused projects can start from {price}.</p>
+                  <div className="mt-3 flex gap-2" role="group" aria-label="Choose pricing currency">
+                    <button type="button" aria-pressed={currency === "GBP"} onClick={() => choose("GBP")} style={{borderColor:currency==="GBP"?t.accentInk:t.border,color:currency==="GBP"?t.accentInk:t.muted}} className="rounded-full border px-3 py-1 text-xs font-semibold">GBP £</button>
+                    <button type="button" aria-pressed={currency === "USD"} onClick={() => choose("USD")} style={{borderColor:currency==="USD"?t.accentInk:t.border,color:currency==="USD"?t.accentInk:t.muted}} className="rounded-full border px-3 py-1 text-xs font-semibold">USD US$</button>
+                  </div>
                 </div>
                 <div>
                   <h3 className="text-3xl font-bold">Start with the first useful version.</h3>

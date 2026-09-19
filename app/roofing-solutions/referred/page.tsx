@@ -107,22 +107,22 @@ const BASE_STORIES: Record<Audience, Story> = {
     label: "New visitors", benefit: "An answer before calling",
     question: "What do I need, and roughly what might it cost?",
     body: "A visitor can enter measurements, measure a plan or ask the Smart Assistant. They get product guidance or a preliminary estimate before deciding whether to enquire.",
-    result: "A useful first answer",
-    businessBenefit: "A clearer starting point if they contact your team.",
+    result: "A useful answer, faster than elsewhere",
+    businessBenefit: "More likely to enquire or purchase.",
   },
   trade: {
     label: "Roofing customers", benefit: "Prepare their own jobs",
-    question: "Let me price this job using the products I normally buy.",
-    body: "A roofing customer can work out quantities, use approved products and account pricing, then prepare a material list or quote themselves.",
-    result: "A prepared job or material list",
-    businessBenefit: "Less work to place the next order with you.",
+    question: "Let me measure and quote using the products I normally buy.",
+    body: "A roofing customer can work out quantities, products and pricing using tools on your website.",
+    result: "More roofers using your tools, more likely to purchase your products",
+    businessBenefit: "(Trade pricing available for different customers.)",
   },
   team: {
     label: "Your team", benefit: "Staff features and controls",
-    question: "Use our pricing and rules to prepare this quote.",
-    body: "A staff version can add different rates, margins, permissions and quote features while using the same underlying product and job information.",
-    result: "A quote ready for staff review",
-    businessBenefit: "Less repeated entry and calculation.",
+    question: "Prepare estimates, pricing and quotes in one place.",
+    body: "Public-facing tools or back-end-only tools that let your team gain estimates, pricing and quotes using the same system, built around the way you already work.",
+    result: "Faster, better quoting with less back-end work",
+    businessBenefit: "(Everything connected to the same system.)",
   },
 };
 
@@ -287,7 +287,7 @@ function AudienceExamples({ profile }: { profile: Profile }) {
               <p>{story.body}</p>
             </div>
             <div className="rp-result">
-              <p className="rp-meta">Useful result</p><strong>{story.result}</strong>
+              <p className="rp-result-label">Result</p><strong>{story.result}</strong>
               <p className="rp-result-benefit">{story.businessBenefit}</p>
             </div>
           </div>
@@ -799,7 +799,7 @@ const STYLES = String.raw`
 .rp-audience-panel blockquote{font-size:var(--rp-card);font-weight:600;line-height:1.5}
 .rp-audience-panel>div>p{margin-top:16px}
 .rp-result{border-left:2px solid var(--rp-border);padding:0 0 0 26px}
-.rp-result>.rp-meta{margin-top:0!important}
+.rp-result-label{margin:0!important;font-size:var(--rp-meta);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rp-accent-ink)!important}
 .rp-result strong{display:block;font-size:var(--rp-card);line-height:1.5;margin-top:10px}
 .rp-result-benefit{margin-top:12px!important}
 .rp-carousel-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--rp-border);padding-top:16px;color:var(--rp-muted)}
@@ -912,7 +912,7 @@ const STYLES = String.raw`
 .rp-video-modal-box{position:relative;width:min(960px,100%);aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden}
 .rp-video-modal-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .rp-video-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border:0;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:16px;cursor:pointer}
-.rp-demo-card{margin-top:28px;max-width:480px;margin-inline:auto;text-align:center}
+.rp-demo-card{margin-top:28px;max-width:720px;margin-inline:auto;text-align:center}
 .rp-demo-shot{display:block;overflow:hidden;border:1px solid var(--rp-border);border-radius:14px;transition:transform .15s ease,box-shadow .15s ease}
 .rp-demo-shot img{display:block;width:100%;height:auto}
 .rp-demo-shot:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(215,255,0,.15)}
