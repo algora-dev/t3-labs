@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, type FormEvent } from "react";
+import { useState, useEffect } from "react";
 import AnimatedHero from "@/components/t3-home/animated-hero";
 import MissionStatement from "@/components/t3-home/mission-statement";
 import AIServicesSection from "@/components/t3-home/ai-services-section";
@@ -15,31 +15,33 @@ import "@/app/intake-modal.css";
 /* ------------------------------------------------------------------ */
 
 const NAV_LINKS = [
-  { href: "#positioning", label: "Approach" },
   { href: "#work", label: "Work" },
   { href: "#custom-solutions", label: "Custom" },
   { href: "#testimonials", label: "Reviews" },
-  { href: "#send-message", label: "Contact" },
+  { href: "#contact", label: "Contact" },
 ];
 
 const WORK_CARDS = [
   {
     num: "01",
     title: "QuoteCore+",
-    desc: "Construction quoting and job-management software built to simplify messy trade workflows.",
+    desc: "A fully functional, feature-packed construction quoting and job-management SaaS app. From large software products like this to small focused tools - a clear picture of what we can build.",
+    img: "/assets/quotecore-accepted.png",
     link: { href: "https://quote-core.com/", label: "View QuoteCore+" },
   },
   {
     num: "02",
     title: "Roofing Website Demo",
     desc: "A demo roofing website showcasing the tools we build to create solutions - measuring, quoting, pricing and an AI Smart Assistant.",
+    img: "/assets/roofing-solutions/apex-demo-home.jpg",
     link: { href: "/demo/roofing-site", label: "View the demo site" },
   },
   {
     num: "03",
     title: "Custom Systems",
     desc: "Websites, dashboards, analytics, SEO, marketing systems, automation workflows, and AI-powered tools built around real business problems.",
-    link: { href: "/business-audit", label: "Example: Business Audit tool" },
+    img: "/assets/hero-audit-phone.png",
+    link: { href: "/business-audit", label: "Business Audit tool", note: "(one example)" },
   },
 ];
 
@@ -103,9 +105,6 @@ const TESTIMONIALS = [
 
 export default function Home() {
   const [navOpen, setNavOpen] = useState(false);
-  const [formSubmitting, setFormSubmitting] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
 
   function openIntake() {
     openIntakeModal({
@@ -131,59 +130,6 @@ export default function Home() {
     setNavOpen(false);
   }
 
-  async function handleContactSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const name = (form.elements.namedItem("name") as HTMLInputElement).value.trim();
-    const email = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
-    const businessType = (form.elements.namedItem("businessType") as HTMLInputElement).value.trim();
-    const website = (form.elements.namedItem("website") as HTMLInputElement).value.trim();
-    const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value.trim();
-    const consent = (form.elements.namedItem("consent") as HTMLInputElement).checked;
-
-    if (!name || !email || !message) {
-      const missing: string[] = [];
-      if (!name) missing.push("name");
-      if (!email) missing.push("email");
-      if (!message) missing.push("message");
-      alert("Please fill in: " + missing.join(", "));
-      return;
-    }
-
-    if (!consent) {
-      alert("Please agree to be contacted before sending your message.");
-      return;
-    }
-
-    setFormSubmitting(true);
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, businessType, website, message, consent }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Something went wrong.");
-      }
-
-      setFormSubmitted(true);
-      setTimeout(() => {
-        formRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 100);
-    } catch (err) {
-      alert(
-        (err as Error).message ||
-          "Something went wrong. Please email us directly at insights@t3labs.co.uk"
-      );
-    } finally {
-      setFormSubmitting(false);
-    }
-  }
-
   return (
     <>
       <Header navOpen={navOpen} onToggle={toggleNav} onClose={closeNav} />
@@ -194,19 +140,11 @@ export default function Home() {
         <div className="mb-[104px]">
           <T3OutcomeAnimation />
         </div>
-        <IntroStrip />
         <WorkSection />
         <AIServicesSection />
         <CustomSolutionsSection onCtaClick={() => openIntakeFromPageCta("Start a project")} />
         <Testimonials />
         <CTASection onCtaClick={() => openIntakeFromPageCta("Get in touch")} />
-        <ContactForm
-          formRef={formRef}
-          submitting={formSubmitting}
-          submitted={formSubmitted}
-          onSubmit={handleContactSubmit}
-        />
-        <CallStrip />
       </main>
 
       <IntakeModalMount />
@@ -287,40 +225,6 @@ function Header({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Intro Strip                                                       */
-/* ------------------------------------------------------------------ */
-
-function IntroStrip() {
-  return (
-    <section
-      id="positioning"
-      className="grid gap-7 items-start mb-[104px] p-8.5 border border-[var(--line)] rounded-lg bg-white w-[min(1180px,calc(100%-40px))] mx-auto md:[grid-template-columns:minmax(0,1fr)_auto] max-md:grid-cols-1"
-    >
-      <div>
-        <h2 className="max-w-[880px] mb-4.5 text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-none">
-          We do not start with a fixed service list.
-          <br />
-          We start with the problem.
-        </h2>
-        <p className="max-w-[820px] mb-3.5 text-[#373c4c] text-[1.08rem]">
-          Some problems need software. Some need automation. Some need AI. Some
-          need a game system, a smart contract, a dashboard, or a completely
-          custom product.
-        </p>
-        <p className="max-w-[820px] mb-3.5 text-[#373c4c] text-[1.08rem]">
-          T3 Labs exists to figure out what the solution should be - then builds it.
-        </p>
-      </div>
-      <span className="text-[var(--blue)] text-xs font-semibold tracking-[0.08em] leading-relaxed text-right uppercase">
-        Find the problem.
-        <br />
-        Build the tool.
-      </span>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /*  Work / Built                                                       */
 /* ------------------------------------------------------------------ */
 
@@ -342,25 +246,37 @@ function WorkSection() {
             key={card.num}
             className="flex flex-col min-h-[330px] p-7 pb-6 border border-[var(--line)] rounded-lg bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.055),transparent_11rem),rgba(255,255,255,0.92)] shadow-[0_10px_32px_rgba(24,31,51,0.05)] hover:border-[#e3e8bc] hover:bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.11),transparent_11rem),#fbfff0] hover:shadow-[0_14px_34px_rgba(24,31,51,0.07)] transition-all duration-200"
           >
-            <span className="inline-grid w-[42px] h-[42px] mb-[42px] place-items-center border border-[#d7ff00] rounded-lg bg-[#d7ff00] text-[var(--ink)] text-[13px] font-bold shadow-[0_5px_16px_rgba(20,25,40,0.04)]">
-              {card.num}
-            </span>
+            {card.img && (
+              <div className="mb-5 overflow-hidden rounded-lg border border-[var(--line)] bg-[#f6f8f0]">
+                <img
+                  src={card.img}
+                  alt={`${card.title} preview`}
+                  loading="lazy"
+                  className="block aspect-[16/10] w-full object-cover object-top"
+                />
+              </div>
+            )}
             <h3 className="max-w-[260px] mb-3.5 text-[1.45rem] font-semibold leading-[1.15]">
               {card.title}
             </h3>
             <p className="mb-0 text-[var(--muted)] text-base leading-[1.65]">{card.desc}</p>
             {card.link && (
-              <a
-                href={card.link.href}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-[180px] min-h-[32px] mt-auto px-2.5 py-1.5 border border-[var(--line)] rounded-lg bg-white text-[var(--ink)] text-xs font-semibold shadow-[0_8px_18px_rgba(16,24,40,0.04)] hover:-translate-y-px hover:border-[#e3e8bc] hover:bg-[#fbfff0] hover:text-black hover:shadow-[0_12px_24px_rgba(16,24,40,0.07)] transition-all duration-200"
-              >
-                {card.link.label}
-                <span className="inline-grid w-[18px] h-[18px] place-items-center rounded-full bg-[#d7ff00] text-[var(--ink)] text-[10px]">
-                  &rarr;
-                </span>
-              </a>
+              <div className="mt-auto flex flex-wrap items-center gap-2.5 pt-6">
+                <a
+                  href={card.link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 w-auto min-h-[32px] px-3.5 py-1.5 border border-[var(--line)] rounded-lg bg-white text-[var(--ink)] text-xs font-semibold shadow-[0_8px_18px_rgba(16,24,40,0.04)] hover:-translate-y-px hover:border-[#e3e8bc] hover:bg-[#fbfff0] hover:text-black hover:shadow-[0_12px_24px_rgba(16,24,40,0.07)] transition-all duration-200"
+                >
+                  {card.link.label}
+                  <span className="inline-grid w-[18px] h-[18px] place-items-center rounded-full bg-[#d7ff00] text-[var(--ink)] text-[10px]">
+                    &rarr;
+                  </span>
+                </a>
+                {card.link.note && (
+                  <span className="text-[var(--muted)] text-xs font-medium">{card.link.note}</span>
+                )}
+              </div>
             )}
           </article>
         ))}
@@ -527,7 +443,7 @@ function CustomSolutionsSection({
           </p>
         </div>
         <a
-          href="#send-message"
+          href="#contact"
           onClick={(e) => { e.preventDefault(); onCtaClick(); }}
           className="inline-flex min-h-[48px] items-center justify-center gap-3 px-5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform whitespace-nowrap"
         >
@@ -625,172 +541,6 @@ function CTASection({ onCtaClick }: { onCtaClick: () => void }) {
         >
           Book a free call
         </a>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Contact Form                                                      */
-/* ------------------------------------------------------------------ */
-
-function ContactForm({
-  formRef,
-  submitting,
-  submitted,
-  onSubmit,
-}: {
-  formRef: React.RefObject<HTMLFormElement | null>;
-  submitting: boolean;
-  submitted: boolean;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-}) {
-  return (
-    <section id="send-message" className="mb-8.5 w-[min(1180px,calc(100%-40px))] mx-auto">
-      <div
-        className="grid gap-13 items-start p-13 border border-[var(--line)] rounded-2xl bg-[radial-gradient(circle_at_8%_12%,rgba(215,255,0,0.05),transparent_20rem),white] shadow-[0_26px_80px_rgba(24,31,51,0.12)] md:[grid-template-columns:minmax(0,0.9fr)_minmax(0,1.1fr)] max-md:grid-cols-1 max-md:p-7 max-md:gap-8"
-      >
-        <div>
-          <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
-            Not ready for a call?
-          </p>
-          <h2 className="mb-4.5 text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-none">
-            Tell us about your problem.
-          </h2>
-          <p className="mb-5 text-[var(--muted)] text-[1.08rem] leading-[1.7]">
-            Not everyone wants to jump straight onto a call - and that&rsquo;s fine. Send us a message about what you&rsquo;re dealing with and we&rsquo;ll come back to you with thoughts on what might be possible. No pressure, no commitment.
-          </p>
-          <ul className="flex flex-col gap-2 m-0 p-0 list-none">
-            <li className="text-[#4a5063] text-sm font-semibold">&#9679; We reply within 24 hours</li>
-            <li className="text-[#4a5063] text-sm font-semibold">&#9679; No jargon, no sales pitch</li>
-            <li className="text-[#4a5063] text-sm font-semibold">&#9679; Free initial advice</li>
-          </ul>
-        </div>
-
-        {submitted ? (
-          <div className="flex flex-col items-center justify-center gap-2 p-8 border border-[rgba(215,255,0,0.4)] rounded-xl bg-[rgba(215,255,0,0.08)] text-center">
-            <div className="flex w-11 h-11 items-center justify-center rounded-full bg-[#d7ff00] text-[var(--ink)] text-[1.2rem] font-bold">
-              &#10003;
-            </div>
-            <strong className="text-[var(--ink)] text-[1.08rem]">Message sent.</strong>
-            <p className="m-0 text-[var(--muted)] text-base">
-              Thanks for reaching out. We&rsquo;ll reply within 24 hours.
-            </p>
-          </div>
-        ) : (
-          <form ref={formRef} onSubmit={onSubmit} noValidate className="flex flex-col gap-4.5">
-            <FormField label="Your name" required id="cf-name" name="name" type="text" placeholder="First name or full name" />
-            <FormField label="Email address" required id="cf-email" name="email" type="email" placeholder="you@company.com" />
-            <FormField label="Business type" id="cf-btype" name="businessType" type="text" placeholder="e.g. Construction, Retail, Agency" optional />
-            <FormField label="Business website" id="cf-url" name="website" type="url" placeholder="https://yourwebsite.com" optional />
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="cf-message" className="text-[var(--ink)] text-sm font-semibold">
-                Tell us about your problem <span className="text-[#e03e3e]">*</span>
-              </label>
-              <textarea
-                id="cf-message"
-                name="message"
-                rows={5}
-                required
-                placeholder="Describe what you're trying to solve. The more detail the better - there are no wrong answers."
-                className="w-full px-3.5 py-3 border border-[var(--line)] rounded-lg outline-none bg-[#fafbfd] text-[var(--ink)] font-[inherit] text-base leading-[1.5] resize-y focus:border-[#e3e8bc] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)] transition-all duration-150"
-              />
-            </div>
-            <div className="mb-1">
-              <label className="flex items-start gap-2.5 cursor-pointer text-base text-[var(--muted)] leading-[1.5]">
-                <input
-                  type="checkbox"
-                  id="cf-consent"
-                  name="consent"
-                  required
-                  className="shrink-0 w-[18px] h-[18px] mt-0.5 accent-[#d7ff00] cursor-pointer"
-                />
-                <span className="select-none">
-                  I agree to be contacted by T3 Labs about my enquiry. See our{" "}
-                  <a href="/privacy" className="text-[var(--ink)] underline">Privacy Notice</a>.
-                </span>
-              </label>
-            </div>
-            <div className="flex flex-col gap-2.5">
-              <button
-                type="submit"
-                disabled={submitting}
-                className="inline-flex self-start min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform border-0 cursor-pointer disabled:opacity-60"
-              >
-                {submitting ? "Sending..." : "Send message"} {!submitting && <span>&rarr;</span>}
-              </button>
-              <p className="m-0 text-[#9aa0af] text-xs">We&rsquo;ll reply within 24 hours. No spam, ever.</p>
-            </div>
-          </form>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function FormField({
-  label,
-  id,
-  name,
-  type,
-  placeholder,
-  required,
-  optional,
-}: {
-  label: string;
-  id: string;
-  name: string;
-  type: string;
-  placeholder?: string;
-  required?: boolean;
-  optional?: boolean;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-[var(--ink)] text-sm font-semibold">
-        {label}{" "}
-        {required && <span className="text-[#e03e3e]">*</span>}
-        {optional && <span className="text-[var(--muted)] text-xs font-normal">(optional)</span>}
-      </label>
-      <input
-        type={type}
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        required={required}
-        className="w-full px-3.5 py-3 border border-[var(--line)] rounded-lg outline-none bg-[#fafbfd] text-[var(--ink)] text-base leading-[1.5] focus:border-[#e3e8bc] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)] transition-all duration-150"
-      />
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Call Strip                                                        */
-/* ------------------------------------------------------------------ */
-
-function CallStrip() {
-  return (
-    <section id="book-call" className="mb-8.5 w-[min(1180px,calc(100%-40px))] mx-auto">
-      <div className="grid gap-7 p-12 px-13 border border-[var(--line)] rounded-2xl bg-[radial-gradient(circle_at_8%_20%,rgba(215,255,0,0.06),transparent_20rem),radial-gradient(circle_at_88%_70%,rgba(17,19,24,0.04),transparent_18rem),white] shadow-[0_26px_80px_rgba(24,31,51,0.12)]">
-        <div className="max-w-[720px]">
-          <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
-            Free discovery call
-          </p>
-          <h2 className="mb-4.5 text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-none">
-            Let&rsquo;s talk about your business.
-          </h2>
-          <p className="max-w-[620px] mb-7 text-[var(--muted)] text-[1.08rem] leading-[1.65]">
-            Book a free 20-minute call and we&rsquo;ll explore how new technology could solve your biggest operational challenge. No pitch, no obligation - just a straight conversation about what&rsquo;s possible for your business.
-          </p>
-          <a
-            href="https://calendly.com/insights-t3labs/20-minute-meeting"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex min-h-[52px] min-w-[200px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform"
-          >
-            Book a free call <span>&rarr;</span>
-          </a>
-        </div>
       </div>
     </section>
   );
