@@ -32,10 +32,16 @@ const APEX_ASSISTANT_DEMO_URL = "";
 
 const BASE_DEMOS = [
   {
+    name: "Apex Roofing Demo",
+    label: "Roofing demo",
+    problem: "Our Apex Roofing demo website shows the kind of site we build: an AI Smart Assistant plus manual tools, like measuring from a plan or adding measurements to gain pricing.",
+    href: "/demo/roofing-site",
+  },
+  {
     name: "Roofing Supplier Tool",
     label: "Roofing",
     problem: "Let customers measure a roof, calculate quantities, apply your products and get useful pricing before your team touches the enquiry.",
-    href: "/supplier-pricing-tool/apex-roofing",
+    href: "/demo/roofing-site/takeoff",
   },
   {
     name: "Flooring Supplier Tool",
@@ -294,7 +300,7 @@ export default function ConstructionSolutionPage(){
 
           <ExplainerVideo t={t}/>
 
-          <div style={{background:t.surfaceAlt,borderColor:t.border}} className="mt-8 max-w-4xl rounded-2xl border p-5 sm:p-6">
+          <div style={{background:t.surfaceAlt,borderColor:t.border}} className="mt-8 rounded-2xl border p-5 sm:p-6">
             <p className="text-sm font-semibold" style={{color:t.accentInk}}>This shift is already happening.</p>
             <p className="mt-2 text-sm leading-6" style={{color:t.muted}}>
               The opportunity is to improve the buying journey while many competitors still rely on basic enquiry forms and manual follow-up. The earlier you improve it, the longer that advantage has to compound.

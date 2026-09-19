@@ -32,13 +32,14 @@ const WORK_CARDS = [
   {
     num: "02",
     title: "Roofing Website Demo",
-    desc: "A demo roofing website showcasing the tools we build to create solutions — measuring, quoting, pricing and an AI Smart Assistant.",
+    desc: "A demo roofing website showcasing the tools we build to create solutions - measuring, quoting, pricing and an AI Smart Assistant.",
     link: { href: "/demo/roofing-site", label: "View the demo site" },
   },
   {
     num: "03",
     title: "Custom Systems",
-    desc: "Websites, dashboards, analytics, SEO, marketing systems, automation workflows, and AI-powered tools — like our Business Audit questionnaire — built around real business problems.",
+    desc: "Websites, dashboards, analytics, SEO, marketing systems, automation workflows, and AI-powered tools built around real business problems.",
+    link: { href: "/business-audit", label: "Example: Business Audit tool" },
   },
 ];
 
@@ -604,7 +605,7 @@ function CTASection({ onCtaClick }: { onCtaClick: () => void }) {
           out the sensible next step.
         </p>
         <p className="mb-0 text-sm leading-[1.6] text-[#515763]">
-          Speak it or type it — no technical brief needed. A real person at T3
+          Speak it or type it - no technical brief needed. A real person at T3
           Labs reviews every enquiry.
         </p>
       </div>

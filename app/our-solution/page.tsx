@@ -34,10 +34,16 @@ const APEX_ASSISTANT_DEMO_URL = "";
 
 const BASE_DEMOS = [
   {
+    name: "Apex Roofing Demo",
+    label: "Roofing demo",
+    problem: "Our Apex Roofing demo website shows the kind of site we build: an AI Smart Assistant plus manual tools, like measuring from a plan or adding measurements to gain pricing.",
+    href: "/demo/roofing-site",
+  },
+  {
     name: "Roofing Supplier Tool",
     label: "Roofing",
     problem: "Let customers measure a roof, calculate quantities, apply your products and get useful pricing before your team touches the enquiry.",
-    href: "/supplier-pricing-tool/apex-roofing",
+    href: "/demo/roofing-site/takeoff",
   },
   {
     name: "Flooring Supplier Tool",
@@ -251,7 +257,7 @@ function ExplainerVideo({ t }:{ t:Tokens }) {
     <div style={{background:t.surface,borderColor:t.border}} className="mt-10 overflow-hidden rounded-2xl border">
       <iframe
         src={`https://www.youtube-nocookie.com/embed/${EXPLAINER_VIDEO_ID}?rel=0`}
-        title="The problem and our solution — 90-second explainer"
+        title="The problem and our solution - 90-second explainer"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
         loading="lazy"
@@ -339,7 +345,7 @@ export default function ConstructionSolutionPage(){
 
           <ExplainerVideo t={t}/>
 
-          <div style={{background:t.surfaceAlt,borderColor:t.border}} className="mt-8 max-w-4xl rounded-2xl border p-5 sm:p-6">
+          <div style={{background:t.surfaceAlt,borderColor:t.border}} className="mt-8 rounded-2xl border p-5 sm:p-6">
             <p className="text-sm font-semibold" style={{color:t.accentInk}}>This shift is already happening.</p>
             <p className="mt-2 text-sm leading-6" style={{color:t.muted}}>
               The opportunity is to improve the buying journey while many competitors still rely on basic enquiry forms and manual follow-up. The earlier you improve it, the longer that advantage has to compound.
@@ -574,13 +580,13 @@ export default function ConstructionSolutionPage(){
         <section aria-labelledby="t3-mission-heading" className="pb-16">
           <h2 id="t3-mission-heading" className="sr-only">The T3 Labs mission</h2>
           <details style={{background:t.surface,borderColor:t.border}} className="mx-auto max-w-4xl rounded-2xl border p-5 sm:p-6">
-            <summary className="cursor-pointer text-sm font-semibold" style={{color:t.accentInk}}>Why we build this way — the T3 Labs mission</summary>
+            <summary className="cursor-pointer text-sm font-semibold" style={{color:t.accentInk}}>Why we build this way - the T3 Labs mission</summary>
             <div className="mt-4 space-y-3">
               <p className="text-sm leading-6" style={{color:t.muted}}>
                 T3 Labs helps you stand out by getting more of the right people to your business, helping them get answers and take action without waiting for your team, and reducing the work required behind the scenes.
               </p>
               <p className="text-sm leading-6" style={{color:t.muted}}>
-                As search evolves into AI-driven conversations, we help make your business part of those answers — using tools, data and digital experiences built around your business and difficult for competitors to replicate.
+                As search evolves into AI-driven conversations, we help make your business part of those answers - using tools, data and digital experiences built around your business and difficult for competitors to replicate.
               </p>
               <p className="text-sm font-semibold">More customers. Better enquiries. Less work.</p>
             </div>

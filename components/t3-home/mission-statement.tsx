@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Homepage mission statement teaser — sits between the animated hero and the
+ * Homepage mission statement teaser - sits between the animated hero and the
  * outcomes animation. Collapsed by default: bold opener + one supporting line,
  * expands to the full T3 Labs mission (version 2 wording).
  */
@@ -60,7 +60,7 @@ export default function MissionStatement() {
             </p>
             <p className="mt-4 text-sm leading-7 text-white/70">
               As search evolves into AI-driven conversations, we help make your
-              business part of those answers — using tools, data and digital
+              business part of those answers - using tools, data and digital
               experiences built around your business and difficult for
               competitors to replicate.
             </p>

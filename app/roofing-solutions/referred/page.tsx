@@ -598,7 +598,7 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
                 <div className="rp-video-modal-box" onClick={event => event.stopPropagation()}>
                   <iframe
                     src="https://www.youtube-nocookie.com/embed/FIqNbi3bG7A?rel=0&autoplay=1"
-                    title="The problem and our solution — short explainer"
+                    title="The problem and our solution - short explainer"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                   />
@@ -684,7 +684,7 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
                 <p className="rp-journey-summary">A useful answer and a better starting point.</p>
               </article>
             </div>
-            <div className="rp-reflection rp-journey-note"><p>Customers can still call or enquire, but can gain their answer without needing to — or enquire with far more useful information for your team.</p></div>
+            <div className="rp-reflection rp-journey-note"><p>Customers can still call or enquire, but can gain their answer without needing to - or enquire with far more useful information for your team.</p></div>
             <div className="rp-discover">
               <h3>Make more of your roofing knowledge easy to find.</h3>
               <p>Publish selected product information, pricing and guidance. Keep private trade rates private.</p>
@@ -708,9 +708,9 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
 
           <PricingClose businessLabel={business ? BUSINESS_CHOICES.find(item => item.id === business)!.label : ""} variant={variant} />
           {variant === "direct" && <div className="rp-mission">
-            <Disclosure title="Why we build this way — the T3 Labs mission">
+            <Disclosure title="Why we build this way - the T3 Labs mission">
               <p>T3 Labs helps you stand out by getting more of the right people to your business, helping them get answers and take action without waiting for your team, and reducing the work required behind the scenes.</p>
-              <p>As search evolves into AI-driven conversations, we help make your business part of those answers — using tools, data and digital experiences built around your business and difficult for competitors to replicate.</p>
+              <p>As search evolves into AI-driven conversations, we help make your business part of those answers - using tools, data and digital experiences built around your business and difficult for competitors to replicate.</p>
               <p><strong>More customers. Better enquiries. Less work.</strong></p>
             </Disclosure>
           </div>}
@@ -774,7 +774,7 @@ const STYLES = String.raw`
 .rp-examples{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;list-style:none;padding:0;margin-top:28px!important;max-width:1020px}
 .rp-examples li{display:flex;gap:14px;align-items:flex-start;line-height:1.55;padding:4px 0}
 .rp-examples li>span:first-child{flex-shrink:0;color:var(--rp-accent-ink);font-weight:700}
-.rp-reflection{padding:24px 28px;background:var(--rp-soft);border-left:3px solid var(--rp-accent-ink);border-radius:0 12px 12px 0;margin-top:32px;max-width:960px}
+.rp-reflection{padding:24px 28px;background:var(--rp-soft);border-left:3px solid var(--rp-accent-ink);border-radius:0 12px 12px 0;margin-top:32px}
 .rp-reflection p{font-size:var(--rp-card);font-weight:600;line-height:1.5;color:var(--rp-text)}
 .rp-bridge{margin-top:30px!important;font-size:var(--rp-card);max-width:790px;color:var(--rp-text)!important}
 .rp-solutions{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -872,13 +872,13 @@ const STYLES = String.raw`
 .rp-journey li span{display:block;color:var(--rp-muted);margin-top:6px;line-height:1.55}
 .rp-journey-summary{border-top:1px solid var(--rp-border);padding-top:18px;margin-top:20px!important;font-weight:600}
 .rp-journey-after .rp-journey-summary{color:var(--rp-text)}
-.rp-journey-note{margin-top:20px!important;max-width:800px}
+.rp-journey-note{margin-top:20px!important}
 .rp-glow-word{text-shadow:0 0 16px rgba(215,255,0,.55),0 0 5px rgba(215,255,0,.3)}
 .rp-mission{padding:0 0 52px;max-width:900px}
 .rp-roi h2{white-space:nowrap;font-size:clamp(1.35rem,2.8vw,2rem)}
 @media (max-width:640px){.rp-roi h2{white-space:normal}}
-.rp-discover{margin-top:36px;padding-top:30px;border-top:1px solid var(--rp-border);max-width:900px}
-.rp-discover>p{margin-top:12px;max-width:800px}
+.rp-discover{margin-top:36px;padding-top:30px;border-top:1px solid var(--rp-border)}
+.rp-discover>p{margin-top:12px}
 .rp-source-links{display:flex;flex-wrap:wrap;gap:14px 24px;margin-top:16px}
 .rp-source-links a{color:var(--rp-accent-ink);text-underline-offset:5px}
 .rp-roi{padding-top:64px;padding-bottom:64px}
