@@ -46,6 +46,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${BASE_URL}/roofing-solutions`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    {
       url: `${BASE_URL}/privacy`,
       lastModified,
       changeFrequency: "monthly" as const,

@@ -479,74 +479,44 @@ function useCurrency() {
   return { currency, choose };
 }
 
-function PricingClose({ businessLabel }: { businessLabel: string }) {
+function PricingClose({ businessLabel, variant }: { businessLabel: string; variant: "referred" | "direct" }) {
   const { currency, choose } = useCurrency();
-  const [replyOpen, setReplyOpen] = useState(false);
-  const [copyStatus, setCopyStatus] = useState("");
-  const replyInput = useRef<HTMLTextAreaElement>(null);
-  const isReferral = CONFIG.contactMode === "representative";
-  const reply = `I'd like to explore this for our roofing business${businessLabel ? ` (${businessLabel.toLowerCase()})` : ""}. Could we arrange a free call with Shaun to discuss which tool would be useful, what it could cost and how soon a first version could be ready?`;
-  function showReply() {
-    setReplyOpen(true);
-    // Focus only after this intentionally opened area has been rendered.
-    window.requestAnimationFrame(() => document.getElementById("rp-rep-reply")?.focus({ preventScroll: true }));
-  }
-  async function copyReply() {
-    try {
-      await navigator.clipboard.writeText(reply);
-      setCopyStatus("Copied. Send it to the person who shared this page.");
-    } catch {
-      replyInput.current?.focus(); replyInput.current?.select();
-      setCopyStatus("Select and copy the message, then reply to your representative.");
-    }
-  }
   return (
     <section className="rp-section rp-close" id="pricing" aria-labelledby="rp-price-title">
       <div className="rp-close-inner" id="next-step">
-        <p className="rp-eyebrow">Start with one useful improvement</p>
         <h2 id="rp-price-title">Start with one useful improvement.</h2>
         <div className="rp-price-block">
           <p>Focused roofing solutions from</p>
           <div className="rp-price" aria-live="polite" aria-atomic="true">
             {currency ? PRICES[currency].amount : <span className="rp-price-loading">Loading price…</span>}
           </div>
+          {currency && <p className="rp-price-note">Excludes any tax or ongoing costs.</p>}
           <div className="rp-currency" role="group" aria-label="Choose pricing currency">
             <button type="button" aria-pressed={currency === "GBP"} onClick={() => choose("GBP")}>GBP £</button>
             <button type="button" aria-pressed={currency === "USD"} onClick={() => choose("USD")}>USD US$</button>
           </div>
         </div>
         <p className="rp-close-lead">A focused tool, configured around your products and rules.</p>
-        <p className="rp-turnaround">Some basic setups can be live within days once your information is ready. We confirm scope and timing before starting.</p>
+        <p className="rp-turnaround">Basic setups can be live within days after receiving the relevant information from you.</p>
         <p className="rp-payment"><strong>Flexible payment options available.</strong></p>
-        <p className="rp-smallprint">Starting price is for a focused setup. Tax and any ongoing costs are confirmed in your quote.</p>
         <div className="rp-close-action">
-          {isReferral ? <>
-            {CONFIG.representativeContactUrl ? <a className="rp-primary" href={CONFIG.representativeContactUrl}>Arrange a free call with Shaun <span aria-hidden="true">→</span></a>
-              : <button type="button" className="rp-primary" onClick={showReply} aria-expanded={replyOpen} aria-controls="rp-rep-reply">Arrange a free call with Shaun <span aria-hidden="true">→</span></button>}
-            <p>Your representative can arrange it and remain your point of contact.</p>
+          {variant === "referred" ? <>
+            <div className="rp-reflection rp-close-rep"><p>Arrange a meeting with T3 Labs via your current contact person.</p></div>
           </> : <>
             <a className="rp-primary" href={CONFIG.shaunBookingUrl} target="_blank" rel="noopener noreferrer">Book a free call with Shaun <span aria-hidden="true">→</span></a>
             <p>Discuss what would help, what it could cost and how soon it could be ready. No obligation.</p>
           </>}
         </div>
-        {isReferral && replyOpen && <div id="rp-rep-reply" className="rp-rep-reply" tabIndex={-1}>
-          <h3>Reply to the person who shared this page.</h3>
-          <p>They can bring Shaun into the conversation. No need to start again with someone else.</p>
-          <label htmlFor="rp-reply-text" className="rp-meta">Suggested message</label>
-          <textarea id="rp-reply-text" ref={replyInput} readOnly value={reply} rows={4} />
-          <button type="button" className="rp-outline" onClick={copyReply}>Copy message</button>
-          <p role="status" className="rp-meta">{copyStatus}</p>
-        </div>}
-        <Disclosure title="Who's Shaun?">
+        {variant === "direct" && <Disclosure title="Who's Shaun?">
           <p>Shaun is an ex-roofer with 20 years of experience across roofing and technology. He now builds solutions around how roofing businesses work.</p>
           <p>The conversation is about finding what would help, not selling you features you do not need.</p>
-        </Disclosure>
+        </Disclosure>}
       </div>
     </section>
   );
 }
 
-export default function RoofingReferredPage() {
+export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direct" }) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [business, setBusiness] = useState<Business | null>(null);
   const [videoOpen, setVideoOpen] = useState(false);
@@ -601,7 +571,7 @@ export default function RoofingReferredPage() {
       </header>
       <div className="rp-content" data-theme={theme}>
         <style>{STYLES}</style>
-        {CONFIG.contactMode === "representative" && <div className="rp-referral-note">Shared by your T3 Labs representative. They remain your point of contact.</div>}
+        {variant === "referred" && <div className="rp-referral-note">Shared by your T3 Labs representative. They remain your point of contact.</div>}
         <div className="rp-shell">
           <section className="rp-section rp-opening" aria-labelledby="rp-title">
             <p className="rp-eyebrow">T3 Labs roofing solutions</p>
@@ -732,12 +702,11 @@ export default function RoofingReferredPage() {
 
           <section className="rp-section rp-roi" id="assessment" aria-labelledby="rp-roi-title">
             <p className="rp-eyebrow">Before you look at the price</p>
-            <h2 id="rp-roi-title">What would make this a worthwhile investment?</h2>
+            <h2 id="rp-roi-title">What would make this a worthwhile <span className="rp-glow-word">investment?</span></h2>
             <p className="rp-roi-question">How many staff hours would it need to save, or how much extra profit would it need to help generate, for you to say: this was worth it?</p>
-            <p>Think about one part of the business, not a complete transformation.</p>
           </section>
 
-          <PricingClose businessLabel={business ? BUSINESS_CHOICES.find(item => item.id === business)!.label : ""} />
+          <PricingClose businessLabel={business ? BUSINESS_CHOICES.find(item => item.id === business)!.label : ""} variant={variant} />
         </div>
       </div>
       <footer style={{borderColor:t.border}} className="border-t">
@@ -897,6 +866,9 @@ const STYLES = String.raw`
 .rp-journey-summary{border-top:1px solid var(--rp-border);padding-top:18px;margin-top:20px!important;font-weight:600}
 .rp-journey-after .rp-journey-summary{color:var(--rp-text)}
 .rp-journey-note{margin-top:20px!important;max-width:800px}
+.rp-glow-word{text-shadow:0 0 16px rgba(215,255,0,.55),0 0 5px rgba(215,255,0,.3)}
+.rp-roi h2{white-space:nowrap;font-size:clamp(1.35rem,2.8vw,2rem)}
+@media (max-width:640px){.rp-roi h2{white-space:normal}}
 .rp-discover{margin-top:36px;padding-top:30px;border-top:1px solid var(--rp-border);max-width:900px}
 .rp-discover>p{margin-top:12px;max-width:800px}
 .rp-source-links{display:flex;flex-wrap:wrap;gap:14px 24px;margin-top:16px}
@@ -910,6 +882,7 @@ const STYLES = String.raw`
 .rp-close h2{margin:auto;max-width:650px}
 .rp-price-block{margin-top:26px}
 .rp-price{font-size:var(--rp-display);font-weight:750;line-height:1.15;letter-spacing:-.045em;color:var(--rp-accent-ink);margin-top:10px;min-height:64px;display:flex;justify-content:center;align-items:center;font-variant-numeric:tabular-nums}
+.rp-price-note{font-size:var(--rp-meta);margin-top:2px;color:var(--rp-muted)}
 .rp-price-loading{font-size:var(--rp-card);letter-spacing:0;color:var(--rp-muted)}
 .rp-currency{display:inline-flex;gap:6px;padding:4px;border:1px solid var(--rp-border);border-radius:999px;margin-top:16px}
 .rp-currency button{min-height:40px;padding:6px 16px;border:1px solid transparent;border-radius:999px;font-size:var(--rp-meta);background:transparent;color:var(--rp-muted);font-weight:600}
@@ -933,17 +906,17 @@ const STYLES = String.raw`
 .rp-explainer-copy{flex:1;font-size:.95rem;line-height:1.55;color:var(--rp-text)}
 .rp-explainer-cta{display:block;margin-top:6px;font-weight:600;color:var(--rp-accent-ink)}
 .rp-explainer-thumb{position:relative;flex:0 0 168px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000}
-.rp-explainer-thumb img{display:block;width:100%;height:100%;object-fit:cover}
-.rp-explainer-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;background:rgba(0,0,0,.3)}
+.rp-explainer-thumb img{display:block;width:100%;height:100%;object-fit:cover;filter:brightness(1.4) saturate(1.08)}
+.rp-explainer-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;background:rgba(0,0,0,.12)}
 .rp-video-modal{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(2px)}
 .rp-video-modal-box{position:relative;width:min(960px,100%);aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden}
 .rp-video-modal-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .rp-video-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border:0;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:16px;cursor:pointer}
-.rp-demo-card{margin-top:28px;max-width:960px}
+.rp-demo-card{margin-top:28px;max-width:480px;margin-inline:auto;text-align:center}
 .rp-demo-shot{display:block;overflow:hidden;border:1px solid var(--rp-border);border-radius:14px;transition:transform .15s ease,box-shadow .15s ease}
 .rp-demo-shot img{display:block;width:100%;height:auto}
 .rp-demo-shot:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(215,255,0,.15)}
-.rp-demo-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:12px 24px;border-radius:999px;background:var(--rp-accent);color:#0a0b10;font-weight:600;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+.rp-demo-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:12px 24px;border-radius:999px;background:var(--rp-accent);color:#0a0b10!important;font-weight:600;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
 .rp-demo-btn:hover{transform:translateY(-1px);box-shadow:0 7px 22px rgba(215,255,0,.35)}
 .rp-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 @media(hover:hover){
@@ -1022,3 +995,7 @@ const STYLES = String.raw`
 }
 @media(prefers-reduced-motion:reduce){.rp-content *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 `;
+
+export default function ReferredPage() {
+  return <RoofingSolutionsPage variant="referred" />;
+}
