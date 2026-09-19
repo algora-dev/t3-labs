@@ -27,7 +27,9 @@ export default function MissionStatement() {
         >
           Easier to find. Easier to buy from. Easier to run.
         </h2>
-        <p className="mx-auto mt-4 max-w-[640px] text-sm leading-6 text-white/60">
+        <p
+          className={`mx-auto mt-4 max-w-[640px] text-sm leading-6 text-white/60 transition-all duration-300 ${open ? "max-h-0 -mt-2 overflow-hidden opacity-0" : "max-h-16 opacity-100"}`}
+        >
           Most businesses compete with the same websites, content and marketing
           tactics. We help you stand out.
         </p>
@@ -46,9 +48,9 @@ export default function MissionStatement() {
             id="t3-mission-full"
             className="mx-auto mt-8 max-w-[760px] rounded-xl border border-white/10 bg-black/30 p-6 text-left sm:p-8"
           >
-            <p className="text-sm leading-7 text-white/70">
+            <p className="mission-reveal text-sm leading-7 text-white/70">
               Most businesses compete with the same websites, content and
-              marketing tactics.
+              marketing tactics. We help you stand out.
             </p>
             <p className="mt-4 text-base font-medium leading-7 text-white">
               T3 Labs helps you stand out by getting more of the right people

@@ -31,14 +31,14 @@ const WORK_CARDS = [
   },
   {
     num: "02",
-    title: "Business Audit Tool",
-    desc: "A simple diagnostic product that helps business owners spot the real bottleneck slowing growth and decide what to fix next.",
-    link: { href: "/business-audit", label: "View Audit Tool" },
+    title: "Roofing Website Demo",
+    desc: "A demo roofing website showcasing the tools we build to create solutions — measuring, quoting, pricing and an AI Smart Assistant.",
+    link: { href: "/demo/roofing-site", label: "View the demo site" },
   },
   {
     num: "03",
     title: "Custom Systems",
-    desc: "Websites, dashboards, analytics, SEO, marketing systems, automation workflows, internal tools, and custom builds designed around real business problems.",
+    desc: "Websites, dashboards, analytics, SEO, marketing systems, automation workflows, and AI-powered tools — like our Business Audit questionnaire — built around real business problems.",
   },
 ];
 
