@@ -16,6 +16,8 @@ export interface IntakeOpenContext {
   source_page: string;
   cta_text?: string;
   problem_category?: string;
+  /** Open directly at the plain contact form (skips the AI flow). */
+  startAt?: "contact";
 }
 
 export type IntakeEventName =

@@ -139,6 +139,19 @@ export default function IntakeModal({ open, onClose, context }: IntakeModalProps
   useEffect(() => {
     if (!open) return;
     contextRef.current = context;
+    if (context?.startAt === "contact") {
+      setBrief({
+        can_likely_help: true,
+        headline: "Direct enquiry",
+        problem: "Sent directly from the Email us button.",
+        desired_outcome: "To be confirmed in conversation.",
+        likely_solution: "To be confirmed in conversation.",
+        relevant_areas: [],
+        important_context: ["No AI brief taken - visitor chose to email directly."],
+        internal_handoff_summary: "Direct enquiry via Email us button. No AI brief.",
+      });
+      setStage("contact");
+    }
     trackIntakeEvent("intake_open", {
       trigger: context?.trigger ?? "nav",
       source_page: context?.source_page ?? window.location.pathname,

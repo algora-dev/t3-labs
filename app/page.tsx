@@ -26,7 +26,7 @@ const WORK_CARDS = [
     num: "01",
     title: "QuoteCore+",
     desc: "A fully functional, feature-packed construction quoting and job-management SaaS app. From large software products like this to small focused tools - a clear picture of what we can build.",
-    img: "/assets/quotecore-accepted.png",
+    img: "/assets/quotecore-card.jpg",
     link: { href: "https://quote-core.com/", label: "View QuoteCore+" },
   },
   {
@@ -114,11 +114,12 @@ export default function Home() {
     });
   }
 
-  function openIntakeFromPageCta(ctaText: string) {
+function openIntakeFromPageCta(ctaText: string, startAt?: "contact") {
     openIntakeModal({
       trigger: "page-cta",
       source_page: "/",
       cta_text: ctaText,
+      startAt,
     });
   }
 
@@ -144,7 +145,7 @@ export default function Home() {
         <AIServicesSection />
         <CustomSolutionsSection onCtaClick={() => openIntakeFromPageCta("Start a project")} />
         <Testimonials />
-        <CTASection onCtaClick={() => openIntakeFromPageCta("Get in touch")} />
+        <CTASection onCtaClick={() => openIntakeFromPageCta("Get in touch")} onEmailClick={() => openIntakeFromPageCta("Email us", "contact")} />
       </main>
 
       <IntakeModalMount />
@@ -244,15 +245,15 @@ function WorkSection() {
         {WORK_CARDS.map((card) => (
           <article
             key={card.num}
-            className="flex flex-col min-h-[330px] p-7 pb-6 border border-[var(--line)] rounded-lg bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.055),transparent_11rem),rgba(255,255,255,0.92)] shadow-[0_10px_32px_rgba(24,31,51,0.05)] hover:border-[#e3e8bc] hover:bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.11),transparent_11rem),#fbfff0] hover:shadow-[0_14px_34px_rgba(24,31,51,0.07)] transition-all duration-200"
+            className="group flex flex-col min-h-[330px] p-7 pb-6 border border-[var(--line)] rounded-lg bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.055),transparent_11rem),rgba(255,255,255,0.92)] shadow-[0_10px_32px_rgba(24,31,51,0.05)] hover:border-[#e3e8bc] hover:bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.11),transparent_11rem),#fbfff0] hover:shadow-[0_14px_34px_rgba(24,31,51,0.07)] transition-all duration-200"
           >
             {card.img && (
-              <div className="mb-5 overflow-hidden rounded-lg border border-[var(--line)] bg-[#f6f8f0]">
+              <div className="mb-5 overflow-hidden rounded-lg border border-[var(--line)] bg-[#f6f8f0] transition-all duration-200 group-hover:border-[#e3e8bc] group-hover:shadow-[0_10px_28px_rgba(215,255,0,0.35)]">
                 <img
                   src={card.img}
                   alt={`${card.title} preview`}
                   loading="lazy"
-                  className="block aspect-[16/10] w-full object-cover object-top"
+                  className="block aspect-[16/10] w-full object-cover object-top transition-transform duration-200 group-hover:scale-[1.04]"
                 />
               </div>
             )}
@@ -502,7 +503,7 @@ function Testimonials() {
 /*  CTA                                                               */
 /* ------------------------------------------------------------------ */
 
-function CTASection({ onCtaClick }: { onCtaClick: () => void }) {
+function CTASection({ onCtaClick, onEmailClick }: { onCtaClick: () => void; onEmailClick: () => void }) {
   return (
     <section
       id="contact"
@@ -541,6 +542,13 @@ function CTASection({ onCtaClick }: { onCtaClick: () => void }) {
         >
           Book a free call
         </a>
+        <button
+          type="button"
+          onClick={onEmailClick}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-[rgba(17,19,24,0.2)] px-5.5 py-2.5 text-sm font-semibold text-[#050608] transition hover:border-[#050608]/50 cursor-pointer"
+        >
+          Email us
+        </button>
       </div>
     </section>
   );
