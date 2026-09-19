@@ -105,6 +105,7 @@ const TESTIMONIALS = [
 
 export default function Home() {
   const [navOpen, setNavOpen] = useState(false);
+  const [emailOpen, setEmailOpen] = useState(false);
 
   function openIntake() {
     openIntakeModal({
@@ -114,12 +115,11 @@ export default function Home() {
     });
   }
 
-function openIntakeFromPageCta(ctaText: string, startAt?: "contact") {
+function openIntakeFromPageCta(ctaText: string) {
     openIntakeModal({
       trigger: "page-cta",
       source_page: "/",
       cta_text: ctaText,
-      startAt,
     });
   }
 
@@ -145,10 +145,11 @@ function openIntakeFromPageCta(ctaText: string, startAt?: "contact") {
         <AIServicesSection />
         <CustomSolutionsSection onCtaClick={() => openIntakeFromPageCta("Start a project")} />
         <Testimonials />
-        <CTASection onCtaClick={() => openIntakeFromPageCta("Get in touch")} onEmailClick={() => openIntakeFromPageCta("Email us", "contact")} />
+        <CTASection onCtaClick={() => openIntakeFromPageCta("Get in touch")} onEmailClick={() => setEmailOpen(true)} />
       </main>
 
       <IntakeModalMount />
+      <EmailUsModal open={emailOpen} onClose={() => setEmailOpen(false)} />
       <Footer />
     </>
   );
@@ -496,6 +497,132 @@ function Testimonials() {
         ))}
       </div>
     </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Email Us Modal                                                    */
+/* ------------------------------------------------------------------ */
+
+function EmailUsModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: globalThis.KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    if (!email || !message) {
+      setError("Please add your email address and a message.");
+      return;
+    }
+    setSending(true);
+    try {
+      const res = await fetch("/api/email-us", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, subject, message }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error || "Something went wrong.");
+      setSent(true);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setSending(false);
+    }
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Email T3 Labs"
+    >
+      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        {sent ? (
+          <div className="py-6 text-center">
+            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#d7ff00] text-lg font-bold">&#10003;</div>
+            <strong className="block text-lg text-[#050505]">Message sent.</strong>
+            <p className="mt-1 text-sm text-[var(--muted)]">We&apos;ll reply within 24 hours.</p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="mt-5 min-h-[44px] rounded-lg border border-[rgba(17,19,24,0.2)] px-5 text-sm font-semibold text-[#050608] transition hover:border-[#050608]/50 cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={submit} noValidate className="flex flex-col gap-3.5">
+            <div className="flex items-center justify-between">
+              <strong className="text-lg text-[#050505]">Email us</strong>
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close"
+                className="grid h-8 w-8 place-items-center rounded-full border border-[var(--line)] text-[var(--muted)] hover:border-[#e3e8bc] cursor-pointer"
+              >
+                &#10005;
+              </button>
+            </div>
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--ink)]">
+              Your email address
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="you@company.com"
+                className="rounded-lg border border-[var(--line)] bg-[#fafbfd] px-3.5 py-3 text-base font-normal text-[var(--ink)] outline-none focus:border-[#e3e8bc] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
+              />
+            </label>
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--ink)]">
+              Subject
+              <input
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="What's this about?"
+                className="rounded-lg border border-[var(--line)] bg-[#fafbfd] px-3.5 py-3 text-base font-normal text-[var(--ink)] outline-none focus:border-[#e3e8bc] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
+              />
+            </label>
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--ink)]">
+              Message
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+                rows={5}
+                placeholder="Write your message here."
+                className="resize-y rounded-lg border border-[var(--line)] bg-[#fafbfd] px-3.5 py-3 text-base font-normal text-[var(--ink)] outline-none focus:border-[#e3e8bc] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
+              />
+            </label>
+            {error && <p className="m-0 text-sm font-medium text-[#e03e3e]">{error}</p>}
+            <button
+              type="submit"
+              disabled={sending}
+              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(10,11,16,0.16)] transition hover:-translate-y-0.5 cursor-pointer disabled:opacity-60"
+            >
+              {sending ? "Sending..." : "Send message"} {!sending && <span>&rarr;</span>}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
   );
 }
 
