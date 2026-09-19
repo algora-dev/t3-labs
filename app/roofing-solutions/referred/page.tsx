@@ -549,6 +549,14 @@ function PricingClose({ businessLabel }: { businessLabel: string }) {
 export default function RoofingReferredPage() {
   const [theme, setTheme] = useState<Theme>("dark");
   const [business, setBusiness] = useState<Business | null>(null);
+  const [videoOpen, setVideoOpen] = useState(false);
+
+  useEffect(() => {
+    if (!videoOpen) return;
+    const onKey = (event: globalThis.KeyboardEvent) => { if (event.key === "Escape") setVideoOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [videoOpen]);
   const t = theme === "dark" ? dark : light;
   const profile = business ? PROFILES[business] : GENERAL;
   const style = {
@@ -605,18 +613,29 @@ export default function RoofingReferredPage() {
             </div>
             <p className="rp-choice-note">Or keep reading for the general roofing examples.</p>
             <span className="rp-sr-only" role="status">{business ? `Examples updated for ${profile.label.toLowerCase()}.` : "General roofing examples shown."}</span>
-            <figure className="rp-explainer-video">
-              <figcaption className="rp-explainer-caption">Prefer to watch? The short video explains the problem and our solution.</figcaption>
-              <div className="rp-explainer-frame">
-                <iframe
-                  src="https://www.youtube-nocookie.com/embed/FIqNbi3bG7A?rel=0"
-                  title="The problem and our solution — short explainer"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  loading="lazy"
-                />
+            <button type="button" className="rp-explainer-row" onClick={() => setVideoOpen(true)} aria-haspopup="dialog">
+              <span className="rp-explainer-copy">
+                <strong>Prefer to watch?</strong> The short video explains the problem and our solution.
+                <span className="rp-explainer-cta">Watch the video →</span>
+              </span>
+              <span className="rp-explainer-thumb" aria-hidden="true">
+                <img src="https://i.ytimg.com/vi/FIqNbi3bG7A/hqdefault.jpg" alt="" loading="lazy" />
+                <span className="rp-explainer-play">▶</span>
+              </span>
+            </button>
+            {videoOpen && (
+              <div className="rp-video-modal" role="dialog" aria-modal="true" aria-label="Explainer video" onClick={() => setVideoOpen(false)}>
+                <div className="rp-video-modal-box" onClick={event => event.stopPropagation()}>
+                  <iframe
+                    src="https://www.youtube-nocookie.com/embed/FIqNbi3bG7A?rel=0&autoplay=1"
+                    title="The problem and our solution — short explainer"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                  <button type="button" className="rp-video-close" onClick={() => setVideoOpen(false)} aria-label="Close video">✕</button>
+                </div>
               </div>
-            </figure>
+            )}
             <div className="rp-opportunity" id="problem">
               <p className="rp-eyebrow">For {profile.label.toLowerCase()}</p>
               <h2>{profile.question}</h2>
@@ -632,7 +651,7 @@ export default function RoofingReferredPage() {
               <article><h3>Interactive tools</h3><p>Customers measure a job, choose your products and get quantities or preliminary pricing.</p></article>
               <article id="assistant"><h3>Smart Assistant</h3><p>Customers ask a question. It uses your approved information to answer, clarify or pass the enquiry to your team.</p></article>
             </div>
-            <p className="rp-shared-outcome">Either route can lead to a better-prepared enquiry. Use one, or both.</p>
+            <div className="rp-reflection rp-shared-outcome"><p>Either route is designed to give the customer a faster answer, or push them to your team with a better-prepared enquiry.</p></div>
             <div className="rp-setup">
               <h3>You explain how you work. We handle the setup.</h3>
               <p>We use your existing product information and focused conversations to agree the answers, pricing and handoffs. We handle the build and setup.</p>
@@ -658,7 +677,12 @@ export default function RoofingReferredPage() {
           <section className="rp-section" id="demos" aria-labelledby="rp-demos-title">
             <div className="rp-section-heading"><p className="rp-eyebrow">See how it works</p><h2 id="rp-demos-title">Three ways to get a useful result.</h2><p>Open any example to see it larger. Each can use your products and rules.</p></div>
             <MediaExamples />
-            {CONFIG.apexDemoHomeUrl && <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-link">Explore the Apex Roofing demo website ↗</a>}
+            {CONFIG.apexDemoHomeUrl && <div className="rp-demo-card">
+              <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-shot" aria-label="Open the Apex Roofing demo website">
+                <img src="/assets/roofing-solutions/apex-demo-home.jpg" alt="Apex Roofing demo website homepage" loading="lazy" />
+              </a>
+              <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-btn">Explore the Apex Roofing demo website ↗</a>
+            </div>}
           </section>
 
           <section className="rp-section" id="roof-value" aria-labelledby="rp-value-title">
@@ -690,7 +714,7 @@ export default function RoofingReferredPage() {
                 <p className="rp-journey-summary">A useful answer and a better starting point.</p>
               </article>
             </div>
-            <p className="rp-journey-note">Customers can still call or enquire. The difference is what they can do before they need to.</p>
+            <div className="rp-reflection rp-journey-note"><p>Customers can still call or enquire, but can gain their answer without needing to — or enquire with far more useful information for your team.</p></div>
             <div className="rp-discover">
               <h3>Make more of your roofing knowledge easy to find.</h3>
               <p>Publish selected product information, pricing and guidance. Keep private trade rates private.</p>
@@ -904,10 +928,23 @@ const STYLES = String.raw`
 .rp-rep-reply p{margin-top:12px}
 .rp-rep-reply label{display:block;margin-top:18px}
 .rp-rep-reply textarea{display:block;resize:vertical;width:100%;margin:8px 0 16px;min-height:170px;padding:14px;border:1px solid var(--rp-border);border-radius:10px;color:var(--rp-text);background:var(--rp-bg);font:inherit;line-height:1.6}
-.rp-explainer-video{max-width:880px;margin-top:24px}
-.rp-explainer-caption{font-weight:600;font-size:.95rem}
-.rp-explainer-frame{margin-top:12px;position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid var(--rp-border);background:#000}
-.rp-explainer-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.rp-explainer-row{display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;max-width:880px;margin-top:24px;padding:14px 16px;background:var(--rp-surface);border:1px solid var(--rp-border);border-radius:14px;text-align:left;cursor:pointer;transition:border-color .16s ease,box-shadow .16s ease}
+.rp-explainer-row:hover{border-color:var(--rp-accent-ink);box-shadow:0 6px 18px rgba(215,255,0,.12)}
+.rp-explainer-copy{flex:1;font-size:.95rem;line-height:1.55;color:var(--rp-text)}
+.rp-explainer-cta{display:block;margin-top:6px;font-weight:600;color:var(--rp-accent-ink)}
+.rp-explainer-thumb{position:relative;flex:0 0 168px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000}
+.rp-explainer-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.rp-explainer-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;background:rgba(0,0,0,.3)}
+.rp-video-modal{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(2px)}
+.rp-video-modal-box{position:relative;width:min(960px,100%);aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden}
+.rp-video-modal-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.rp-video-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border:0;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:16px;cursor:pointer}
+.rp-demo-card{margin-top:28px;max-width:960px}
+.rp-demo-shot{display:block;overflow:hidden;border:1px solid var(--rp-border);border-radius:14px;transition:transform .15s ease,box-shadow .15s ease}
+.rp-demo-shot img{display:block;width:100%;height:auto}
+.rp-demo-shot:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(215,255,0,.15)}
+.rp-demo-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:12px 24px;border-radius:999px;background:var(--rp-accent);color:#0a0b10;font-weight:600;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+.rp-demo-btn:hover{transform:translateY(-1px);box-shadow:0 7px 22px rgba(215,255,0,.35)}
 .rp-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 @media(hover:hover){
   .rp-business button:hover,.rp-tabs button:hover,.rp-outline:hover,.rp-carousel-arrow:hover,.rp-dot:hover{border-color:var(--rp-accent-ink)}
@@ -934,6 +971,7 @@ const STYLES = String.raw`
   .rp-business button{padding:14px 12px;align-content:flex-start;min-height:94px}
   .rp-select-status{font-size:var(--rp-meta)}
   .rp-opportunity{margin-top:30px;padding-top:28px}
+@media (max-width:640px){.rp-explainer-row{flex-direction:row;align-items:center}.rp-explainer-thumb{flex-basis:120px}.rp-video-modal{padding:12px}}
   .rp-examples{grid-template-columns:1fr;gap:16px;margin-top:24px!important}
   .rp-reflection{padding:22px;margin-top:28px}
   .rp-bridge{margin-top:28px!important}
