@@ -25,7 +25,7 @@ const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
 
 // Add the 90-second page explainer when it is ready.
 // The video block stays hidden until a URL is provided.
-const EXPLAINER_VIDEO_URL = "";
+const EXPLAINER_VIDEO_ID = "FIqNbi3bG7A";
 
 // Add the dedicated Apex Roofing sales assistant demo URL when it is live.
 // Until then, the fourth demo card remains visible but is not clickable.
@@ -245,12 +245,17 @@ function EnquiryForm({ t }:{ t:Tokens }) {
 }
 
 function ExplainerVideo({ t }:{ t:Tokens }) {
-  if(!EXPLAINER_VIDEO_URL) return null;
+  if(!EXPLAINER_VIDEO_ID) return null;
   return (
     <div style={{background:t.surface,borderColor:t.border}} className="mt-10 overflow-hidden rounded-2xl border">
-      <video controls playsInline preload="metadata" className="aspect-video w-full bg-black">
-        <source src={EXPLAINER_VIDEO_URL}/>
-      </video>
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${EXPLAINER_VIDEO_ID}?rel=0`}
+        title="The problem and our solution — 90-second explainer"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+        loading="lazy"
+        className="aspect-video w-full bg-black"
+      />
       <div className="flex flex-col gap-1 p-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm font-semibold">Prefer to watch?</p>
         <p className="text-sm" style={{color:t.muted}}>The 90-second explainer covers the same story as this page.</p>

@@ -71,8 +71,7 @@ const CONFIG = {
       ],
     },
   } satisfies Record<Method, MediaSet>,
-  // Optional page explainer. Hidden until supplied. Use a direct media URL, not a watch-page URL.
-  explainer: { src: "", poster: "", captions: "" },
+// Optional page explainer. Retired: replaced by the YouTube embed in the opening section.
 };
 
 // These are the two agreed regional entry prices, not an exchange-rate conversion.
@@ -606,12 +605,18 @@ export default function RoofingReferredPage() {
             </div>
             <p className="rp-choice-note">Or keep reading for the general roofing examples.</p>
             <span className="rp-sr-only" role="status">{business ? `Examples updated for ${profile.label.toLowerCase()}.` : "General roofing examples shown."}</span>
-            {CONFIG.explainer.src && <details className="rp-explainer">
-              <summary>Prefer to watch? See the 90-second overview <span aria-hidden="true">▶</span></summary>
-              <video src={CONFIG.explainer.src} poster={CONFIG.explainer.poster || undefined} controls playsInline preload="none">
-                {CONFIG.explainer.captions && <track kind="captions" src={CONFIG.explainer.captions} srcLang="en" label="English" default />}
-              </video>
-            </details>}
+            <figure className="rp-explainer-video">
+              <figcaption className="rp-explainer-caption">Prefer to watch? The short video explains the problem and our solution.</figcaption>
+              <div className="rp-explainer-frame">
+                <iframe
+                  src="https://www.youtube-nocookie.com/embed/FIqNbi3bG7A?rel=0"
+                  title="The problem and our solution — short explainer"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </div>
+            </figure>
             <div className="rp-opportunity" id="problem">
               <p className="rp-eyebrow">For {profile.label.toLowerCase()}</p>
               <h2>{profile.question}</h2>
@@ -899,10 +904,10 @@ const STYLES = String.raw`
 .rp-rep-reply p{margin-top:12px}
 .rp-rep-reply label{display:block;margin-top:18px}
 .rp-rep-reply textarea{display:block;resize:vertical;width:100%;margin:8px 0 16px;min-height:170px;padding:14px;border:1px solid var(--rp-border);border-radius:10px;color:var(--rp-text);background:var(--rp-bg);font:inherit;line-height:1.6}
-.rp-explainer{max-width:880px;margin-top:24px}
-.rp-explainer summary{display:flex;justify-content:space-between;gap:16px;cursor:pointer;font-weight:600;list-style:none;padding:12px 0}
-.rp-explainer summary::-webkit-details-marker{display:none}
-.rp-explainer video{margin-top:16px;display:block;width:100%;aspect-ratio:16/9;border-radius:14px;background:#000}
+.rp-explainer-video{max-width:880px;margin-top:24px}
+.rp-explainer-caption{font-weight:600;font-size:.95rem}
+.rp-explainer-frame{margin-top:12px;position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid var(--rp-border);background:#000}
+.rp-explainer-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .rp-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 @media(hover:hover){
   .rp-business button:hover,.rp-tabs button:hover,.rp-outline:hover,.rp-carousel-arrow:hover,.rp-dot:hover{border-color:var(--rp-accent-ink)}
