@@ -1174,7 +1174,7 @@ function BookingStep({ onBack }: { onBack: () => void }) {
 
       <div className="t3-intake-booking-embed">
         <iframe
-          src="https://calendly.com/cece-t3labs/20min?hide_gdpr_banner=1"
+          src="https://calendly.com/insights-t3labs/20-minute-meeting?hide_gdpr_banner=1"
           title="Book a call with T3 Labs"
           frameBorder="0"
           loading="lazy"

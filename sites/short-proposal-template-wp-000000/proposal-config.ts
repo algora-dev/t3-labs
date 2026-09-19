@@ -73,7 +73,7 @@ export const shortProposalTemplate = {
   },
   faq: [],
   actions: {
-    calendlyUrl: "https://calendly.com/cece-t3labs/20min",
+    calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
     launchEmailUrl:
       "mailto:cece@t3labs.co.uk?subject=Website%20launch%20request%20-%20%5BCOMPANY%20NAME%5D&body=Hi%20Cece%2C%0A%0AI%27d%20like%20to%20discuss%20launching%20the%20website%20concept%20for%20%5BCOMPANY%20NAME%5D.%0A",
   },

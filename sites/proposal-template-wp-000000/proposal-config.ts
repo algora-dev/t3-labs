@@ -127,7 +127,7 @@ export const proposalTemplate = {
     },
   ],
   actions: {
-    calendlyUrl: "https://calendly.com/cece-t3labs/20min",
+    calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
   },
   status: "draft",
 } satisfies ProposalConfig;

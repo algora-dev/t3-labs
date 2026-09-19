@@ -172,7 +172,7 @@ export const falconContractingProposal = {
     },
   ],
   actions: {
-    calendlyUrl: "https://calendly.com/cece-t3labs/20min",
+    calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
   },
   pageCopy: {
     conceptHeading: "Take a look at the website we built for Falcon",

@@ -105,7 +105,7 @@ export default function Page() {
         <p className="mt-6 text-sm text-white/50">
           Prefer to talk?{" "}
           <a
-            href="https://calendly.com/cece-t3labs/20min"
+            href="https://calendly.com/insights-t3labs/20-minute-meeting"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]"

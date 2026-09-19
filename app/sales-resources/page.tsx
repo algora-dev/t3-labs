@@ -43,7 +43,7 @@ const light: Tokens = {
   accentSoft: "rgba(215,255,0,.18)",
 };
 
-const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
+const BOOKING_URL = "https://calendly.com/insights-t3labs/20-minute-meeting";
 const CUSTOMER_PAGE = "/our-solution/referred";
 
 // Ron: swap this to the confirmed /public logo asset if the filename differs.

@@ -10,7 +10,7 @@ import { parseFinalBrief, parseIntakeMessages } from "@/lib/intake/validation";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const NOTIFY_EMAIL = process.env.CONTACT_EMAIL || "insights@t3labs.co.uk";
-const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
+const BOOKING_URL = "https://calendly.com/insights-t3labs/20-minute-meeting";
 
 async function sendEmail(payload: Record<string, unknown>, label: string): Promise<void> {
   if (!RESEND_API_KEY) {

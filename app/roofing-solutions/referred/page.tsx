@@ -39,7 +39,7 @@ const CONFIG = {
   // Keep the supplied referral page safe. Set to "direct" only on a direct T3 page.
   contactMode: "representative" as ContactMode,
   // Existing T3 booking URL from the supplied direct page. Confirm it reaches Shaun.
-  shaunBookingUrl: "https://calendly.com/cece-t3labs/20min",
+  shaunBookingUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
   // Optional, approved representative contact URL. Never read this from user query input.
   representativeContactUrl: "",
   // Must be the MAIN Apex demo website. The supplied deep tool link was not reused.

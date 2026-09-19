@@ -22,7 +22,7 @@ const light: Tokens = {
   accentInk:"#809000", accentSoft:"rgba(215,255,0,.18)"
 };
 
-const BOOKING_URL = "https://calendly.com/cece-t3labs/20min";
+const BOOKING_URL = "https://calendly.com/insights-t3labs/20-minute-meeting";
 
 // Add the 90-second page explainer when it is ready.
 // The video block stays hidden until a URL is provided.

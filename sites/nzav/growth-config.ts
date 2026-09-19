@@ -122,7 +122,7 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     },
   ],
   actions: {
-    calendlyUrl: "https://calendly.com/cece-t3labs/20min",
+    calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
     emailUrl:
       "mailto:cece@t3labs.co.uk?subject=Phase%201%20proposal%20-%20NZAV&body=Hi%20Cece%2C%0A%0AI%27d%20like%20to%20discuss%20the%20Phase%201%20proposal%20for%20NZAV.%0A",
     ctaLabel: "Book a 20-minute call",

@@ -195,7 +195,7 @@ export const threeARoofingProposal = {
     },
   ],
   actions: {
-    calendlyUrl: "https://calendly.com/cece-t3labs/20min",
+    calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
   },
   pageCopy: {
     conceptHeading: "The website concept we built for 3A Roofing",

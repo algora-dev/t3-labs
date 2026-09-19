@@ -95,7 +95,7 @@ export const everestTrayGrowthProposal: GrowthProposalConfig = {
     },
   ],
   actions: {
-    calendlyUrl: "https://calendly.com/cece-t3labs/20min",
+    calendlyUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
     emailUrl:
       "mailto:cece@t3labs.co.uk?subject=Growth%20proposal%20-%20Everest%20Tray&body=Hi%20Cece%2C%0A%0AI%27d%20like%20to%20discuss%20the%20digital%20growth%20proposal%20for%20Everest%20Tray.%0A",
     ctaLabel: "Book a 20-minute call",
