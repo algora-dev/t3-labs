@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import AnimatedHero from "@/components/t3-home/animated-hero";
+import MissionStatement from "@/components/t3-home/mission-statement";
 import AIServicesSection from "@/components/t3-home/ai-services-section";
 import T3OutcomeAnimation from "@/components/t3-outcomes/T3OutcomeAnimation";
 import IntakeModalMount from "@/components/intake/intake-modal-mount";
@@ -188,6 +189,7 @@ export default function Home() {
 
       <main id="top">
         <AnimatedHero onCtaClick={openIntake} />
+        <MissionStatement />
         <div className="mb-[104px]">
           <T3OutcomeAnimation />
         </div>

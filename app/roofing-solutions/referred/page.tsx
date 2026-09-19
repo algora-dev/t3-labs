@@ -707,6 +707,13 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
           </section>
 
           <PricingClose businessLabel={business ? BUSINESS_CHOICES.find(item => item.id === business)!.label : ""} variant={variant} />
+          {variant === "direct" && <div className="rp-mission">
+            <Disclosure title="Why we build this way — the T3 Labs mission">
+              <p>T3 Labs helps you stand out by getting more of the right people to your business, helping them get answers and take action without waiting for your team, and reducing the work required behind the scenes.</p>
+              <p>As search evolves into AI-driven conversations, we help make your business part of those answers — using tools, data and digital experiences built around your business and difficult for competitors to replicate.</p>
+              <p><strong>More customers. Better enquiries. Less work.</strong></p>
+            </Disclosure>
+          </div>}
         </div>
       </div>
       <footer style={{borderColor:t.border}} className="border-t">
@@ -867,6 +874,7 @@ const STYLES = String.raw`
 .rp-journey-after .rp-journey-summary{color:var(--rp-text)}
 .rp-journey-note{margin-top:20px!important;max-width:800px}
 .rp-glow-word{text-shadow:0 0 16px rgba(215,255,0,.55),0 0 5px rgba(215,255,0,.3)}
+.rp-mission{padding:0 0 52px;max-width:900px}
 .rp-roi h2{white-space:nowrap;font-size:clamp(1.35rem,2.8vw,2rem)}
 @media (max-width:640px){.rp-roi h2{white-space:normal}}
 .rp-discover{margin-top:36px;padding-top:30px;border-top:1px solid var(--rp-border);max-width:900px}
