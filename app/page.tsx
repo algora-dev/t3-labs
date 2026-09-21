@@ -248,7 +248,17 @@ function WorkSection() {
             key={card.num}
             className="group flex flex-col min-h-[330px] p-7 pb-6 border border-[var(--line)] rounded-lg bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.055),transparent_11rem),rgba(255,255,255,0.92)] shadow-[0_10px_32px_rgba(24,31,51,0.05)] hover:border-[#e3e8bc] hover:bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.11),transparent_11rem),#fbfff0] hover:shadow-[0_14px_34px_rgba(24,31,51,0.07)] transition-all duration-200"
           >
-            {card.img && (
+            {card.img && card.link && (
+              <a href={card.link.href} target="_blank" rel="noreferrer" aria-label={`${card.title} - ${card.link.label}`} className="mb-5 block overflow-hidden rounded-lg border border-[var(--line)] bg-[#f6f8f0] transition-all duration-200 group-hover:border-[#e3e8bc] group-hover:shadow-[0_10px_28px_rgba(215,255,0,0.35)]">
+                <img
+                  src={card.img}
+                  alt={`${card.title} preview`}
+                  loading="lazy"
+                  className="block aspect-[16/10] w-full cursor-pointer object-cover object-top transition-transform duration-200 group-hover:scale-[1.04]"
+                />
+              </a>
+            )}
+            {card.img && !card.link && (
               <div className="mb-5 overflow-hidden rounded-lg border border-[var(--line)] bg-[#f6f8f0] transition-all duration-200 group-hover:border-[#e3e8bc] group-hover:shadow-[0_10px_28px_rgba(215,255,0,0.35)]">
                 <img
                   src={card.img}

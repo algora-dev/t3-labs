@@ -40,6 +40,20 @@ function uid() {
   return Math.random().toString(36).slice(2, 10);
 }
 
+/** Split an assistant reply into display text and quick-reply options. */
+function parseQuickReplies(text: string): { body: string; options: string[] } {
+  const idx = text.indexOf('QUICK_REPLIES:');
+  if (idx === -1) return { body: text, options: [] };
+  const body = text.slice(0, idx).trim();
+  const raw = text.slice(idx + 'QUICK_REPLIES:'.length);
+  const options = raw
+    .split('|')
+    .map((s) => s.replace(/[\n\r]/g, ' ').trim())
+    .filter(Boolean)
+    .slice(0, 5);
+  return { body, options };
+}
+
 /** Render a tiny subset of markdown: [label](url) links and **bold**, plus line breaks. */
 function renderInline(text: string) {
   const parts: React.ReactNode[] = [];
@@ -283,27 +297,47 @@ export function T3AssistantLauncher() {
               </div>
             ) : null}
 
-            {messages.map((m) => (
+            {messages.map((m, mi) => {
+              const parsed = m.role === 'assistant' ? parseQuickReplies(m.text) : { body: m.text, options: [] };
+              const isLastAssistant = m.role === 'assistant' && mi === messages.length - 1;
+              return (
               <div key={m.id} className={m.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
+                <div className="max-w-full">
                 <div
                   className={
                     m.role === 'user'
-                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-[#d7ff00] px-3.5 py-2.5 text-[13px] font-medium leading-relaxed text-black shadow-[0_0_18px_rgba(215,255,0,0.25)]'
+                      ? 'max-w-[85%] ml-auto rounded-2xl rounded-br-md bg-[#d7ff00] px-3.5 py-2.5 text-[13px] font-medium leading-relaxed text-black shadow-[0_0_18px_rgba(215,255,0,0.25)]'
                       : 'max-w-[90%] rounded-2xl rounded-bl-md border border-slate-700/80 bg-slate-900/70 px-3.5 py-2.5 text-[13px] leading-relaxed text-slate-200'
                   }
                 >
-                  {m.streaming && !m.text ? (
+                  {m.streaming && !parsed.body ? (
                     <span className="inline-flex gap-1 py-1" aria-label="Thinking">
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#d7ff00]" />
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#d7ff00] [animation-delay:150ms]" />
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#d7ff00] [animation-delay:300ms]" />
                     </span>
                   ) : (
-                    renderInline(m.text)
+                    renderInline(parsed.body)
                   )}
                 </div>
+                {isLastAssistant && !m.streaming && !busy && parsed.options.length > 0 ? (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {parsed.options.map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => send(opt)}
+                        className="rounded-full border border-[#d7ff00]/40 bg-[#d7ff00]/5 px-3.5 py-2 text-xs font-semibold text-[#d7ff00] transition hover:bg-[#d7ff00] hover:text-black hover:shadow-[0_0_16px_rgba(215,255,0,0.4)]"
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+                </div>
               </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Input */}
