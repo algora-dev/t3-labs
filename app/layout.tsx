@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { T3AssistantLauncher } from "@/components/assistant-t3/T3AssistantLauncher";
 import "./globals.css";
 
 /* eslint-disable @next/next/no-page-custom-font -- This is the existing T3 Labs Inter source. */
@@ -169,7 +170,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
         />
       </head>
-      <body>{children}<Analytics /></body>
+      <body>{children}<Analytics /><T3AssistantLauncher /></body>
     </html>
   );
 }

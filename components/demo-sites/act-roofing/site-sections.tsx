@@ -160,6 +160,13 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
               {label}
             </a>
           ))}
+          <a
+            className="inline-block text-[0.85rem] font-semibold uppercase tracking-wide text-[#98A2B3] transition duration-200 ease-out hover:text-[#1769E0]"
+            href="/supplier-pricing-tool/apex-roofing/admin"
+            title="Staff - open the admin dashboard"
+          >
+            Admin
+          </a>
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
           <a
@@ -201,6 +208,13 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
                 {label}
               </a>
             ))}
+            <a
+              className="rounded-[10px] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#98A2B3] transition hover:bg-[#F7F8FA] hover:text-[#1769E0]"
+              href="/supplier-pricing-tool/apex-roofing/admin"
+              onClick={() => setOpen(false)}
+            >
+              Admin login
+            </a>
             <div className="mt-3 px-1">
               <ButtonLink href={site.estimateTool.ctaHref} className="w-full" onClick={() => setOpen(false)}>
                 {site.callsToAction.estimate}
@@ -1051,6 +1065,9 @@ export function Footer({ site }: { site: ActRoofingSiteConfig }) {
               {social.label}
             </a>
           ))}
+          <a className="text-sm font-semibold uppercase tracking-wide text-white/40 transition hover:text-[#8AB4F8]" href="/supplier-pricing-tool/apex-roofing/admin">
+            Admin login
+          </a>
         </div>
       </div>
       <div className="site-shell mt-12 border-t border-white/10 pt-6">
