@@ -506,6 +506,8 @@ function PricingClose({ businessLabel, variant }: { businessLabel: string; varia
             <a className="rp-primary" href={CONFIG.shaunBookingUrl} target="_blank" rel="noopener noreferrer">Book a free call with Shaun <span aria-hidden="true">→</span></a>
             <p>Discuss what would help, what it could cost and how soon it could be ready. No obligation.</p>
           </>}
+          <a className="rp-demo-btn" href="/roofing-business-tools">See exactly how our tools work <span aria-hidden="true">→</span></a>
+          <p>See who the tools benefit and the different ways they could apply with your business.</p>
         </div>
         {variant === "direct" && <Disclosure title="Who's Shaun?">
           <p>Shaun is an ex-roofer with 20 years of experience across roofing and technology. He now builds solutions around how roofing businesses work.</p>
@@ -603,6 +605,7 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
               <article id="assistant"><h3>Smart Assistant</h3><p>Customers ask a question. It uses your approved information to answer, clarify or pass the enquiry to your team.</p></article>
             </div>
             <div className="rp-reflection rp-shared-outcome"><p>Either route is designed to give the customer a faster answer, or push them to your team with a better-prepared enquiry.</p></div>
+            <a className="rp-demo-btn" href="/roofing-business-tools">See our tools <span aria-hidden="true">→</span></a>
             <div className="rp-setup">
               <h3>You explain how you work. We handle the setup.</h3>
               <p>We use your existing product information and focused conversations to agree the answers, pricing and handoffs. We handle the build and setup.</p>
