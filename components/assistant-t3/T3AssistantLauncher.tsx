@@ -99,6 +99,53 @@ export function T3AssistantLauncher() {
   const historyRef = useRef<{ role: 'user' | 'assistant'; content: string }[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const stoppedManuallyRef = useRef(false);
+
+  const toggleListening = useCallback(() => {
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) return;
+    if (listening) {
+      stoppedManuallyRef.current = true;
+      recognitionRef.current?.stop();
+      setListening(false);
+      return;
+    }
+    stoppedManuallyRef.current = false;
+    let finalText = '';
+    const buildRec = (): any => {
+      const rec = new SR();
+      rec.lang = 'en-GB';
+      rec.interimResults = true;
+      rec.continuous = true;
+      rec.onresult = (event: any) => {
+        finalText = '';
+        for (let i = 0; i < event.results.length; i++) finalText += event.results[i][0].transcript;
+        setInput(finalText.slice(0, 1200));
+      };
+      rec.onerror = (event: any) => {
+        if (event?.error && event.error !== 'no-speech' && event.error !== 'aborted') setListening(false);
+      };
+      rec.onend = () => {
+        if (stoppedManuallyRef.current) {
+          setListening(false);
+          return;
+        }
+        try {
+          recognitionRef.current = buildRec();
+          recognitionRef.current.start();
+        } catch {
+          setListening(false);
+        }
+      };
+      return rec;
+    };
+    const rec = buildRec();
+    recognitionRef.current = rec;
+    setListening(true);
+    rec.start();
+  }, [listening]);
 
   useEffect(() => {
     try {
@@ -365,6 +412,22 @@ export function T3AssistantLauncher() {
                 aria-label="Message the T3 Labs assistant"
                 className="max-h-28 flex-1 resize-none rounded-xl border border-slate-700 bg-slate-900/70 px-3.5 py-2.5 text-[13px] text-slate-100 placeholder:text-slate-500 focus:border-[#d7ff00]/60 focus:outline-none focus:shadow-[0_0_14px_rgba(215,255,0,0.15)]"
               />
+              <button
+                type="button"
+                onClick={toggleListening}
+                aria-label={listening ? 'Stop voice input' : 'Start voice input'}
+                title={listening ? 'Stop voice input' : 'Voice input'}
+                className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl border transition ${
+                  listening
+                    ? 'animate-pulse border-[#d7ff00]/70 bg-[#d7ff00] text-black shadow-[0_0_20px_rgba(215,255,0,0.5)]'
+                    : 'border-slate-700 bg-slate-900/70 text-slate-300 hover:border-[#d7ff00]/50 hover:text-[#d7ff00]'
+                }`}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <rect x="9" y="2" width="6" height="12" rx="3" />
+                  <path d="M5 10a7 7 0 0014 0M12 19v3" />
+                </svg>
+              </button>
               <button
                 type="submit"
                 disabled={busy || !input.trim()}
