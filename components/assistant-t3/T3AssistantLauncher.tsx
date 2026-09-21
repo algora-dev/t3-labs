@@ -57,7 +57,7 @@ function renderInline(text: string) {
           href={url}
           target={url.startsWith('/') ? undefined : '_blank'}
           rel={url.startsWith('/') ? undefined : 'noreferrer'}
-          className="font-semibold text-lime-300 underline decoration-lime-400/50 underline-offset-2 transition hover:text-lime-200 hover:decoration-lime-300"
+          className="font-semibold text-[#d7ff00] underline decoration-[#d7ff00]/50 underline-offset-2 transition hover:text-[#e9ff66] hover:decoration-[#d7ff00]"
         >
           {m[1]}
         </a>
@@ -190,7 +190,7 @@ export function T3AssistantLauncher() {
             // ignore
           }
         }}
-        className="group fixed right-0 top-1/2 z-[60] -translate-y-1/2 rounded-l-xl border border-lime-400/30 border-r-0 bg-black/85 py-3 pl-2.5 pr-1.5 text-[10px] font-bold uppercase tracking-widest text-lime-300 shadow-[0_0_18px_rgba(163,230,53,0.25)] backdrop-blur transition-all duration-300 hover:pl-4 hover:shadow-[0_0_26px_rgba(163,230,53,0.5)]"
+        className="group fixed right-0 top-1/2 z-[60] -translate-y-1/2 rounded-l-xl border border-[#d7ff00]/30 border-r-0 bg-black/85 py-3 pl-2.5 pr-1.5 text-[10px] font-bold uppercase tracking-widest text-[#d7ff00] shadow-[0_0_18px_rgba(215,255,0,0.25)] backdrop-blur transition-all duration-300 hover:pl-4 hover:shadow-[0_0_26px_rgba(215,255,0,0.5)]"
       >
         <span className="[writing-mode:vertical-rl]">T3 · Ask</span>
       </button>
@@ -207,8 +207,8 @@ export function T3AssistantLauncher() {
           onClick={() => setOpen(true)}
           className="fixed bottom-5 right-5 z-[60] group"
         >
-          <span className="absolute inset-0 animate-ping rounded-full bg-lime-400/20" aria-hidden />
-          <span className="relative grid h-14 w-14 place-items-center rounded-full border border-lime-400/40 bg-gradient-to-br from-slate-950 to-black shadow-[0_0_28px_rgba(163,230,53,0.35)] transition duration-300 group-hover:shadow-[0_0_40px_rgba(163,230,53,0.6)] group-hover:scale-105">
+          <span className="absolute inset-0 animate-ping rounded-full bg-[#d7ff00]/20" aria-hidden />
+          <span className="relative grid h-14 w-14 place-items-center rounded-full border border-[#d7ff00]/40 bg-gradient-to-br from-slate-950 to-black shadow-[0_0_28px_rgba(215,255,0,0.35)] transition duration-300 group-hover:shadow-[0_0_40px_rgba(215,255,0,0.6)] group-hover:scale-105">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A3E635" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
             </svg>
@@ -221,19 +221,19 @@ export function T3AssistantLauncher() {
         <div
           role="dialog"
           aria-label="T3 Labs Smart Assistant"
-          className="fixed bottom-4 right-4 z-[70] flex h-[min(600px,calc(100dvh-2rem))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-slate-700/80 bg-gradient-to-b from-slate-950 via-black to-slate-950 text-slate-100 shadow-[0_0_60px_rgba(0,0,0,0.7),0_0_30px_rgba(163,230,53,0.12)]"
+          className="fixed bottom-4 right-4 z-[70] flex h-[min(600px,calc(100dvh-2rem))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-slate-700/80 bg-gradient-to-b from-slate-950 via-black to-slate-950 text-slate-100 shadow-[0_0_60px_rgba(0,0,0,0.7),0_0_30px_rgba(215,255,0,0.12)]"
         >
           {/* Header */}
           <div className="relative flex items-center gap-3 border-b border-slate-800 bg-black/60 px-4 py-3">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime-400/70 to-transparent" aria-hidden />
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-lime-400/40 bg-slate-950 shadow-[0_0_14px_rgba(163,230,53,0.3)]">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d7ff00]/70 to-transparent" aria-hidden />
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#d7ff00]/40 bg-slate-950 shadow-[0_0_14px_rgba(215,255,0,0.3)]">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A3E635" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
               </svg>
             </span>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-bold tracking-tight text-white">
-                T3 Assistant <span className="text-lime-400">·</span> <span className="text-slate-400 font-medium">online</span>
+                T3 Assistant <span className="text-[#d7ff00]">·</span> <span className="text-slate-400 font-medium">online</span>
               </p>
               <p className="truncate text-[11px] text-slate-500">Built by T3 Labs — ask it anything, it IS the product</p>
             </div>
@@ -265,7 +265,7 @@ export function T3AssistantLauncher() {
             {showIntro && messages.length === 0 ? (
               <div className="pt-2">
                 <p className="text-sm leading-relaxed text-slate-300">
-                  <span className="font-bold text-lime-300">Hey.</span> I&apos;m the T3 Labs Smart Assistant — an example of what we build for businesses. Ask me
+                  <span className="font-bold text-[#d7ff00]">Hey.</span> I&apos;m the T3 Labs Smart Assistant — an example of what we build for businesses. Ask me
                   what we do, what we&apos;ve built, or how we&apos;d solve a problem in your business.
                 </p>
                 <div className="mt-4 grid gap-2">
@@ -274,7 +274,7 @@ export function T3AssistantLauncher() {
                       key={p}
                       type="button"
                       onClick={() => send(p)}
-                      className="rounded-xl border border-slate-700 bg-slate-900/60 px-3.5 py-2.5 text-left text-xs font-medium text-slate-300 transition hover:border-lime-400/50 hover:bg-slate-800/80 hover:text-white hover:shadow-[0_0_14px_rgba(163,230,53,0.12)]"
+                      className="rounded-xl border border-slate-700 bg-slate-900/60 px-3.5 py-2.5 text-left text-xs font-medium text-slate-300 transition hover:border-[#d7ff00]/50 hover:bg-slate-800/80 hover:text-white hover:shadow-[0_0_14px_rgba(215,255,0,0.12)]"
                     >
                       {p}
                     </button>
@@ -288,15 +288,15 @@ export function T3AssistantLauncher() {
                 <div
                   className={
                     m.role === 'user'
-                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-lime-400 px-3.5 py-2.5 text-[13px] font-medium leading-relaxed text-black shadow-[0_0_18px_rgba(163,230,53,0.25)]'
+                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-[#d7ff00] px-3.5 py-2.5 text-[13px] font-medium leading-relaxed text-black shadow-[0_0_18px_rgba(215,255,0,0.25)]'
                       : 'max-w-[90%] rounded-2xl rounded-bl-md border border-slate-700/80 bg-slate-900/70 px-3.5 py-2.5 text-[13px] leading-relaxed text-slate-200'
                   }
                 >
                   {m.streaming && !m.text ? (
                     <span className="inline-flex gap-1 py-1" aria-label="Thinking">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-400" />
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-400 [animation-delay:150ms]" />
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-lime-400 [animation-delay:300ms]" />
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#d7ff00]" />
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#d7ff00] [animation-delay:150ms]" />
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#d7ff00] [animation-delay:300ms]" />
                     </span>
                   ) : (
                     renderInline(m.text)
@@ -329,13 +329,13 @@ export function T3AssistantLauncher() {
                 maxLength={1200}
                 placeholder="Ask about our services, tools, pricing…"
                 aria-label="Message the T3 Labs assistant"
-                className="max-h-28 flex-1 resize-none rounded-xl border border-slate-700 bg-slate-900/70 px-3.5 py-2.5 text-[13px] text-slate-100 placeholder:text-slate-500 focus:border-lime-400/60 focus:outline-none focus:shadow-[0_0_14px_rgba(163,230,53,0.15)]"
+                className="max-h-28 flex-1 resize-none rounded-xl border border-slate-700 bg-slate-900/70 px-3.5 py-2.5 text-[13px] text-slate-100 placeholder:text-slate-500 focus:border-[#d7ff00]/60 focus:outline-none focus:shadow-[0_0_14px_rgba(215,255,0,0.15)]"
               />
               <button
                 type="submit"
                 disabled={busy || !input.trim()}
                 aria-label="Send message"
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-lime-400/40 bg-lime-400/10 text-lime-300 transition hover:bg-lime-400 hover:text-black hover:shadow-[0_0_20px_rgba(163,230,53,0.45)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-lime-400/10 disabled:hover:text-lime-300"
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#d7ff00]/40 bg-[#d7ff00]/10 text-[#d7ff00] transition hover:bg-[#d7ff00] hover:text-black hover:shadow-[0_0_20px_rgba(215,255,0,0.45)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-[#d7ff00]/10 disabled:hover:text-[#d7ff00]"
               >
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                   <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
@@ -343,7 +343,7 @@ export function T3AssistantLauncher() {
               </button>
             </form>
             <p className="mt-2 text-center text-[10px] text-slate-600">
-              Smart Assistant by <a href="/" className="text-slate-500 underline underline-offset-2 hover:text-lime-400">T3 Labs</a> — this could be on your website
+              Smart Assistant by <a href="/" className="text-slate-500 underline underline-offset-2 hover:text-[#d7ff00]">T3 Labs</a> — this could be on your website
             </p>
           </div>
         </div>
