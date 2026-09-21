@@ -26,7 +26,11 @@ interface CustomerStats {
 function summariseCustomers(events: TrackingEvent[]): Map<string, CustomerStats> {
   const byEmail = new Map<string, CustomerStats>();
   const touch = (email: string, at: string) => {
-    const s = byEmail.get(email) ?? { email, quotes: 0, totalValue: 0, orders: 0, converted: 0, enquiries: 0, lastActiveAt: at };
+    let s = byEmail.get(email);
+    if (!s) {
+      s = { email, quotes: 0, totalValue: 0, orders: 0, converted: 0, enquiries: 0, lastActiveAt: at };
+      byEmail.set(email, s);
+    }
     if (at > s.lastActiveAt) s.lastActiveAt = at;
     return s;
   };
@@ -67,13 +71,22 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
   const anonymousQuotes = quotes.filter(q => !q.email);
 
   const orderedQuotes = quotes.length ? quotes.filter(q => q.email && customers.get(q.email)?.orders) .length : 0;
-  // Value "left on the table": quotes from known/trade contacts with no orders.
-  const onTheTable = [...customers.values()].filter(s => s.orders === 0).reduce((sum, s) => sum + s.totalValue, 0);
-  const avgQuote = quotes.length ? quotes.reduce((s, q) => s + q.total, 0) / quotes.length : 0;
+  // "Left on the table": total quoted value minus the value from customers who ordered.
+  const totalQuoteValue = quotes.reduce((s, q) => s + q.total, 0);
+  const orderedValue = [...customers.values()].filter(s => s.orders > 0).reduce((sum, s) => sum + s.totalValue, 0);
+  const onTheTable = Math.max(0, totalQuoteValue - orderedValue);
+  const avgQuote = quotes.length ? totalQuoteValue / quotes.length : 0;
 
   const opportunities = known
     .filter(s => s.orders === 0 && s.quotes >= 3)
     .sort((a, b) => b.totalValue - a.totalValue);
+
+  // Per-section headline metrics.
+  const tradeQuotes = trade.reduce((s, c) => s + c.quotes, 0);
+  const tradeOrders = trade.reduce((s, c) => s + c.orders, 0);
+  const knownQuotes = known.reduce((s, c) => s + c.quotes, 0);
+  const knownOrders = known.reduce((s, c) => s + c.orders, 0);
+  const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 100) : 0);
 
   // product leaderboard: productId -> quoted count + name lookup
   const byId = useMemo(() => new Map(cfg.products.map(p => [p.id, p.name])), [cfg.products]);
@@ -114,7 +127,7 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
       </SectionCard>
 
       {/* Opportunities - the reach-out hook */}
-      <SectionCard title={`Opportunities (${opportunities.length})`} desc="Known contacts quoting repeatedly with no orders - the biggest reach-out wins.">
+      <SectionCard title={`Opportunities (${opportunities.length})`} desc={`${opportunities.length} known contacts with 3+ quotes and no orders - ${cfg.currency}${opportunities.reduce((s, o) => s + o.totalValue, 0).toLocaleString(undefined, { maximumFractionDigits: 0 })} of reachable quoted value waiting for a call.`}>
         {opportunities.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-3">No open opportunities right now.</p>
         ) : (
@@ -148,7 +161,7 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
       </SectionCard>
 
       {/* Trade customers */}
-      <SectionCard title={`Trade customers (${trade.length})`} desc="Logged-in accounts with tier pricing. Full visibility: quotes, conversions, orders.">
+      <SectionCard title={`Trade customers (${trade.length})`} desc={`Trade accounts created ${tradeQuotes} quotes - ${tradeOrders} became orders (${pct(tradeOrders, tradeQuotes)}%). Full visibility: quotes, conversions, orders.`}>
         {trade.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-3">No trade customer activity yet.</p>
         ) : (
@@ -185,7 +198,7 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
       </SectionCard>
 
       {/* Known customers */}
-      <SectionCard title={`Known customers (${known.length})`} desc="Captured emails without a trade login. You can see whether their quotes converted.">
+      <SectionCard title={`Known customers (${known.length})`} desc={`Known contacts created ${knownQuotes} quotes - ${knownOrders} became orders (${pct(knownOrders, knownQuotes)}%). Average quote ${cfg.currency}${avgQuote.toFixed(0)}.`}>
         {known.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-3">No known-customer activity yet.</p>
         ) : (
@@ -223,7 +236,7 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
       </SectionCard>
 
       {/* Anonymous usage */}
-      <SectionCard title={`Anonymous usage (${anonymousQuotes.length} quotes)`} desc="Visitors who used the tool without signing up - value quoted, outcome untrackable. A signup prompt converts these into known customers.">
+      <SectionCard title={`Anonymous usage (${anonymousQuotes.length} quotes)`} desc={`They made ${anonymousQuotes.length} quotes worth ${cfg.currency}${Math.round(anonymousQuotes.reduce((s, q) => s + q.total, 0)).toLocaleString()} - and that is as much info as you get without an email. A signup prompt converts these into known customers.`}>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
             <div className="text-xs text-slate-500">Quotes</div>
