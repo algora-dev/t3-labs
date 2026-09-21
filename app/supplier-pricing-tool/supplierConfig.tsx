@@ -109,7 +109,15 @@ export function readStoredConfig(slug: string = DEFAULT_SUPPLIER_SLUG): Supplier
   try {
     const raw = window.localStorage.getItem(configStorageKey(slug));
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as Partial<SupplierConfig>;
+    const parsedWrapper = JSON.parse(raw) as { savedAt?: number; cfg?: Partial<SupplierConfig> } & Partial<SupplierConfig>;
+    // Support both the new wrapper ({savedAt, cfg}) and legacy plain configs.
+    const savedAt = typeof parsedWrapper.savedAt === 'number' ? parsedWrapper.savedAt : null;
+    if (savedAt != null && Date.now() - savedAt > STORED_CONFIG_TTL_MS) {
+      // Auto-expired: revert this browser to defaults.
+      window.localStorage.removeItem(configStorageKey(slug));
+      return null;
+    }
+    const parsed = (parsedWrapper.cfg ?? parsedWrapper) as Partial<SupplierConfig>;
     const base = defaultConfig(slug);
     return {
       ...base,
@@ -129,11 +137,16 @@ export function readStoredConfig(slug: string = DEFAULT_SUPPLIER_SLUG): Supplier
 export function writeStoredConfig(cfg: SupplierConfig) {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(configStorageKey(cfg.slug), JSON.stringify(cfg));
+    // Meta wrapper adds a written-at timestamp so demo overrides can auto-expire
+    window.localStorage.setItem(configStorageKey(cfg.slug), JSON.stringify({ savedAt: Date.now(), cfg }));
     // same-tab live update for every mounted consumer
     window.dispatchEvent(new CustomEvent('qc-spt-config-changed'));
   } catch { /* ignore quota errors */ }
 }
+
+/** Demo safety: stored admin overrides expire after 24 hours so a browser
+ *  that was used to demo admin changes automatically reverts to defaults. */
+const STORED_CONFIG_TTL_MS = 24 * 60 * 60 * 1000;
 
 export function resetStoredConfig(slug: string = DEFAULT_SUPPLIER_SLUG) {
   if (typeof window === 'undefined') return;
