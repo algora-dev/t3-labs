@@ -6,18 +6,18 @@
 
 import { useEffect, useState } from 'react';
 import type { SupplierConfig } from '../supplierConfig';
-import { readEvents, customerSummaries, type TrackingEvent } from '../adminData';
+import { readEvents, customerSummaries, withDemoEvents, type TrackingEvent } from '../adminData';
 import { SectionCard } from './AdminPanel';
 
 export function AdminTracking({ cfg, slug }: { cfg: SupplierConfig; slug: string }) {
   const [events, setEvents] = useState<TrackingEvent[]>([]);
 
   useEffect(() => {
-    const load = () => setEvents(readEvents(slug));
+    const load = () => setEvents(withDemoEvents(readEvents(slug), cfg));
     load();
     window.addEventListener('qc-spt-events-changed', load);
     return () => window.removeEventListener('qc-spt-events-changed', load);
-  }, [slug]);
+  }, [slug, cfg]);
 
   const quotes = events.filter((e): e is Extract<TrackingEvent, { type: 'quote' }> => e.type === 'quote');
   const signups = events.filter((e): e is Extract<TrackingEvent, { type: 'signup' }> => e.type === 'signup');

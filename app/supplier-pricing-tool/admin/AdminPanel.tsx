@@ -13,7 +13,7 @@ import {
   defaultConfig, readStoredConfig, writeStoredConfig, resetStoredConfig, SupplierConfigProvider,
 } from '../supplierConfig';
 import { getSupplierDef } from '../supplierDefs';
-import { adminAuthKey, readAdminData, writeAdminData, resetAdminData, readEvents, type AdminData, type TrackingEvent } from '../adminData';
+import { adminAuthKey, readAdminData, writeAdminData, resetAdminData, readEvents, withDemoEvents, type AdminData, type TrackingEvent } from '../adminData';
 import { AdminProducts } from './AdminProducts';
 import { AdminTrade } from './AdminTrade';
 import { AdminTeam } from './AdminTeam';
@@ -176,23 +176,34 @@ function AdminHome({ slug, onLogout }: { slug: string; onLogout: () => void }) {
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 py-6 flex flex-col md:flex-row gap-6 pb-16">
-        <nav className="md:w-48 flex-shrink-0">
-          <div className="flex md:flex-col gap-1 overflow-x-auto md:overflow-visible">
+      <div className="flex min-h-[calc(100vh-57px)]">
+        <nav className="w-56 flex-shrink-0 border-r border-slate-200 bg-white px-3 py-4 hidden md:block">
+          <div className="flex flex-col gap-1 sticky top-16">
             {sections.map(s => (
               <button
                 key={s.key}
                 onClick={() => setSection(s.key)}
-                className={`whitespace-nowrap rounded-full md:rounded-xl px-4 py-2 text-left text-sm font-medium transition ${section === s.key ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-white hover:border hover:border-slate-200'}`}
+                className={`w-full whitespace-nowrap rounded-xl px-4 py-2.5 text-left text-sm font-medium transition ${section === s.key ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50 hover:border hover:border-slate-200'}`}
               >
                 {s.label}
               </button>
             ))}
           </div>
         </nav>
-        <div className="flex-1 min-w-0 space-y-4">
+        <nav className="md:hidden border-b border-slate-200 bg-white px-4 py-2 flex gap-1 overflow-x-auto w-full">
+          {sections.map(s => (
+            <button
+              key={s.key}
+              onClick={() => setSection(s.key)}
+              className={`whitespace-nowrap rounded-full px-4 py-2 text-left text-sm font-medium transition ${section === s.key ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </nav>
+        <div className="flex-1 min-w-0 px-4 md:px-8 py-6 space-y-4 pb-16">
           {section === 'dashboard' && <Dashboard cfg={cfg} admin={admin} slug={slug} />}
-          {section === 'products' && <AdminProducts cfg={cfg} setCfg={setCfg} />}
+          {section === 'products' && <AdminProducts cfg={cfg} setCfg={setCfg} admin={admin} setAdmin={setAdmin} />}
           {section === 'trade' && <AdminTrade admin={admin} setAdmin={setAdmin} cfg={cfg} />}
           {section === 'team' && <AdminTeam admin={admin} setAdmin={setAdmin} />}
           {section === 'tracking' && <AdminTracking cfg={cfg} slug={slug} />}
@@ -222,11 +233,11 @@ function Dashboard({ cfg, admin, slug }: { cfg: SupplierConfig; admin: AdminData
   const [events, setEvents] = useState<TrackingEvent[]>([]);
 
   useEffect(() => {
-    const load = () => setEvents(readEvents(slug));
+    const load = () => setEvents(withDemoEvents(readEvents(slug), cfg));
     load();
     window.addEventListener('qc-spt-events-changed', load);
     return () => window.removeEventListener('qc-spt-events-changed', load);
-  }, [slug]);
+  }, [slug, cfg]);
 
   const quotes = events.filter((e): e is Extract<TrackingEvent, { type: 'quote' }> => e.type === 'quote');
   const signups = events.filter((e): e is Extract<TrackingEvent, { type: 'signup' }> => e.type === 'signup');
