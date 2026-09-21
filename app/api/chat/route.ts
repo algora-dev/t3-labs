@@ -9,6 +9,11 @@ import { getActiveItems, getCatalog } from '@/lib/pricing/catalog';
 import { getEstimateRules, getV4Rules } from '@/lib/pricing/rules';
 import type { ChatStreamEvent, AssistantTurn } from '@/lib/assistant/types';
 
+/** Hard guarantee: no em dashes ever reach the visitor, prompt rules aside. */
+function stripEmDashes(text: string): string {
+  return text.replace(/ ?— ?/g, ', ');
+}
+
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
@@ -163,7 +168,8 @@ export async function POST(req: Request) {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
       };
       try {
-        const turn = await runAssistantTurn(session, message, (t) => send({ type: 'token', text: t }));
+        const turn = await runAssistantTurn(session, message, (t) => send({ type: 'token', text: stripEmDashes(t) }));
+        turn.message = stripEmDashes(turn.message);
 
         // Persist this turn in session state (per-session isolation)
         session.messages.push({ role: 'user', content: message });

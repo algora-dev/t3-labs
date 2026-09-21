@@ -296,7 +296,7 @@ export function T3AssistantLauncher() {
               <p className="truncate text-sm font-bold tracking-tight text-white">
                 T3 Assistant <span className="text-[#d7ff00]">·</span> <span className="text-slate-400 font-medium">online</span>
               </p>
-              <p className="truncate text-[11px] text-slate-500">Built by T3 Labs — ask it anything, it IS the product</p>
+              <p className="truncate text-[11px] text-slate-500">Built by T3 Labs, ask it anything, it IS the product</p>
             </div>
             <button
               type="button"
@@ -326,7 +326,7 @@ export function T3AssistantLauncher() {
             {showIntro && messages.length === 0 ? (
               <div className="pt-2">
                 <p className="text-sm leading-relaxed text-slate-300">
-                  <span className="font-bold text-[#d7ff00]">Hey.</span> I&apos;m the T3 Labs Smart Assistant — an example of what we build for businesses. Ask me
+                  <span className="font-bold text-[#d7ff00]">Hey.</span> I&apos;m the T3 Labs Smart Assistant, an example of what we build for businesses. Ask me
                   what we do, what we&apos;ve built, or how we&apos;d solve a problem in your business.
                 </p>
                 <div className="mt-4 grid gap-2">
@@ -440,7 +440,7 @@ export function T3AssistantLauncher() {
               </button>
             </form>
             <p className="mt-2 text-center text-[10px] text-slate-600">
-              Smart Assistant by <a href="/" className="text-slate-500 underline underline-offset-2 hover:text-[#d7ff00]">T3 Labs</a> — this could be on your website
+              Smart Assistant by <a href="/" className="text-slate-500 underline underline-offset-2 hover:text-[#d7ff00]">T3 Labs</a>, this could be on your website
             </p>
           </div>
         </div>

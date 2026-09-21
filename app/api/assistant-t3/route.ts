@@ -46,6 +46,11 @@ export async function GET() {
   });
 }
 
+/** Hard guarantee: no em dashes ever reach the visitor, prompt rules aside. */
+function stripEmDashes(text: string): string {
+  return text.replace(/ ?— ?/g, ', ');
+}
+
 /** POST: streaming chat turn (SSE with token events, then a final done event). */
 export async function POST(req: Request) {
   let body: { message?: unknown; history?: unknown; currentPagePath?: unknown };
@@ -136,7 +141,7 @@ export async function POST(req: Request) {
             try {
               const json = JSON.parse(payload);
               const delta = json.choices?.[0]?.delta?.content;
-              if (typeof delta === 'string' && delta) send({ type: 'token', text: delta });
+              if (typeof delta === 'string' && delta) send({ type: 'token', text: stripEmDashes(delta) });
             } catch {
               // ignore malformed keep-alive chunks
             }
