@@ -86,6 +86,17 @@ function AdminLogin({ slug, brand, logo, name, onLogin }: { slug: string; brand:
           <button type="submit" className="w-full rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90" style={{ backgroundColor: brand }}>
             Sign in
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              // Demo shortcut: one click straight into the demo admin (any credentials work).
+              window.sessionStorage.setItem(adminAuthKey(slug), '1');
+              onLogin();
+            }}
+            className="w-full rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+          >
+            View the demo admin
+          </button>
         </form>
         <p className="mt-4 text-center text-[11px] text-slate-400">Demo build - any email and password signs in.</p>
         <div className="mt-3 border-t border-slate-100 pt-3 text-center">

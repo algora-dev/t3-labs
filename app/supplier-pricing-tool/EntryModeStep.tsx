@@ -186,7 +186,7 @@ function ChoiceCard({ title, desc, selected, onClick }: { title: string; desc: s
 /** Step-0 customer sign-in: large full-width card above the entry-mode
  *  choice. Signed-in users see a confirmation chip instead of the button. */
 function SignInCard() {
-  const { user, signInWithGoogle, signInWithEmail, openAuthModal } = useFreeToolsAuth();
+  const { user, signInWithGoogle, signInWithEmail, signInWithDemo, openAuthModal } = useFreeToolsAuth();
   const { config } = useSupplierConfig();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -298,6 +298,12 @@ function SignInCard() {
           {busy ? 'Signing in...' : 'Sign in'}
         </button>
       </div>
+      <button
+        onClick={() => signInWithDemo()}
+        className="mt-3 w-full rounded-full border border-white/25 px-6 py-2.5 text-sm font-semibold text-white/90 transition hover:border-white/50 hover:bg-white/10"
+      >
+        Try the demo trade login
+      </button>
       {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
       <p className="mt-2 text-[11px] text-slate-500">
         No account? Just enter your email with no password - we&apos;ll email you a secure login link.

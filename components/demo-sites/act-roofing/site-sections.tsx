@@ -692,9 +692,53 @@ export function Contact({ site }: { site: ActRoofingSiteConfig }) {
     };
   }, [quoteOpen, choiceOpen]);
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  const [sending, setSending] = useState(false);
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus(site.contactSection.formStatus);
+    if (sending) return;
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const isQuoteForm = formData.has("project");
+    const pretty: Record<string, string> = isQuoteForm
+      ? {
+          Name: String(formData.get("name") ?? ""),
+          Phone: String(formData.get("phone") ?? ""),
+          Email: String(formData.get("email") ?? ""),
+          Postcode: String(formData.get("postcode") ?? ""),
+          "Service required": String(formData.get("project") ?? ""),
+          "Preferred timeframe": String(formData.get("timeframe") ?? ""),
+          "Preferred contact method": String(formData.get("preferred-contact") ?? ""),
+          "Before a quote": String(formData.getAll("contact-before-quote").join(", ")),
+          "Project description": String(formData.get("message") ?? ""),
+        }
+      : {
+          Name: String(formData.get("contact-name") ?? ""),
+          Phone: String(formData.get("contact-phone") ?? ""),
+          Email: String(formData.get("contact-email") ?? ""),
+          Message: String(formData.get("contact-message") ?? ""),
+        };
+    const attachmentNames = formData
+      .getAll("attachments")
+      .flatMap((f) => (f instanceof File && f.name ? [f.name] : [])) as string[];
+
+    setSending(true);
+    setStatus("");
+    try {
+      const res = await fetch("/api/site-enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formType: isQuoteForm ? "quote" : "contact", fields: pretty, attachmentNames }),
+      });
+      if (!res.ok) throw new Error("send failed");
+      setStatus(site.contactSection.formStatus);
+      form.reset();
+      setAttachmentLabel(site.quoteRequest?.fileEmptyText ?? "No file chosen");
+    } catch {
+      setStatus("Sorry - something went wrong sending your message. Please try again or call us directly.");
+    } finally {
+      setSending(false);
+    }
   }
 
   function closeQuoteModal() {
@@ -932,7 +976,7 @@ export function Contact({ site }: { site: ActRoofingSiteConfig }) {
               </div>
               <label className="flex items-start gap-3 rounded-[14px] border border-[#E5E7EB] bg-[#F7F8FA] p-4 text-sm leading-6 text-[#344054]">
                 <input className="mt-1 h-4 w-4 shrink-0 accent-[#1769E0]" name="consent" type="checkbox" required />
-                I agree that the details entered may be used to respond to this enquiry. This demonstration does not send or store information.
+                I agree that the details entered may be used to respond to this enquiry.
               </label>
               <button className="button-base bg-[#1769E0] text-white hover:bg-[#1257BC]" type="submit">
                 Send
