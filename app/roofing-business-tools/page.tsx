@@ -1,257 +1,358 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const bookingUrl = "https://calendly.com/insights-t3labs/20-minute-meeting";
 const apexDemoUrl = "https://www.t3labs.tech/apex-roofing";
 
-const SCREENSHOTS = {
-  measurement: "/assets/roofing-solutions/known-1-roof-area-entry.jpg",
-  takeoff: "/assets/roofing-solutions/plan-1-takeoff-canvas.jpg",
-  assistant: "/assets/roofing-solutions/assistant-3-product-question.jpg",
-  dashboard: "/assets/roofing-solutions/apex-demo-home.jpg",
-  output: "/assets/roofing-solutions/result-quote-output.jpg",
+const ASSET = "/assets/roofing-business-tools";
+
+const IMAGES = {
+  measurement: [
+    {
+      src: `${ASSET}/measure-2.jpg`,
+      title: "Enter measurements and apply products",
+      note: "Start with measurements already known, then attach the products, waste and pricing rules that belong to that roof component.",
+    },
+    {
+      src: `${ASSET}/measure-3.jpg`,
+      title: "Create a useful pricing output",
+      note: "Turn the measured job into a clear material and pricing result, with the next action configured around the business.",
+    },
+  ],
+  takeoff: [
+    {
+      src: `${ASSET}/takeoff-1.jpg`,
+      title: "Upload and calibrate the plan",
+      note: "The user starts from a plan or suitable image and calibrates it using a known distance.",
+    },
+    {
+      src: `${ASSET}/takeoff-2.jpg`,
+      title: "Measure the roof digitally",
+      note: "Areas and lineal components such as hips, valleys, barges and spouting can be measured directly on the plan.",
+    },
+    {
+      src: `${ASSET}/takeoff-3.jpg`,
+      title: "Continue straight into pricing",
+      note: "The measured output can move directly into the pricing workflow instead of being re-entered somewhere else.",
+    },
+  ],
+  assistant: [
+    {
+      src: `${ASSET}/assistant-1.jpg`,
+      title: "Answer a real product question",
+      note: "Start with the kind of question a customer would normally ask the team by phone or email.",
+    },
+    {
+      src: `${ASSET}/assistant-2.jpg`,
+      title: "Recognise buying intent",
+      note: "The assistant can move from product guidance into a pricing conversation and offer the right path forward.",
+    },
+    {
+      src: `${ASSET}/assistant-3.jpg`,
+      title: "Ask the questions needed to price properly",
+      note: "A guided flow can collect roof size, measurement type, project details and other inputs needed for a useful estimate.",
+    },
+    {
+      src: `${ASSET}/assistant-4.jpg`,
+      title: "Return a useful estimate",
+      note: "The Smart Assistant can use the same approved pricing logic to create a clear indicative result inside the conversation.",
+    },
+    {
+      src: `${ASSET}/assistant-5.jpg`,
+      title: "Let the customer review the job",
+      note: "Before handoff, the user can review what the system understood and correct details if needed.",
+    },
+    {
+      src: `${ASSET}/assistant-6.jpg`,
+      title: "Turn the conversation into a qualified enquiry",
+      note: "Project details and estimate context can be carried into the enquiry so the team starts with useful information.",
+    },
+  ],
+  homeowner: [
+    {
+      src: `${ASSET}/assistant-4.jpg`,
+      title: "Example customer-facing result",
+      note: "A homeowner can get useful price direction and a clear next step without waiting for somebody to manually answer the first question.",
+    },
+  ],
+  trade: [
+    {
+      src: `${ASSET}/trade-1.jpg`,
+      title: "Trade user starts with the job",
+      note: "Approved trade users can work through the same system with their own pricing access and job choices.",
+    },
+    {
+      src: `${ASSET}/trade-2.jpg`,
+      title: "Trade pricing appears in the output",
+      note: "The same measured job can return trade-specific pricing, savings and next actions for the logged-in contractor.",
+    },
+  ],
+  team: [
+    {
+      src: `${ASSET}/team.png`,
+      title: "Example custom team workspace",
+      note: "A fully custom internal workspace could combine takeoff, job details, quoting, orders, invoices, actions and staff workflows in one place.",
+    },
+  ],
+  admin: [
+    {
+      src: `${ASSET}/admin-1.jpg`,
+      title: "Products and pricing",
+      note: "Manage the products, categories, measurement types and prices that power the customer-facing tools.",
+    },
+    {
+      src: `${ASSET}/admin-2.jpg`,
+      title: "Trade users and pricing tiers",
+      note: "Create trade tiers, invite customers and control the pricing level attached to each account.",
+    },
+    {
+      src: `${ASSET}/admin-3.jpg`,
+      title: "Tracking and follow-up opportunities",
+      note: "See quote activity, conversion signals, trade usage and valuable jobs that may be worth following up.",
+    },
+  ],
 } as const;
 
 type ModuleKey = "measurement" | "takeoff" | "assistant";
-
 type AudienceKey = "homeowner" | "trade" | "team";
+type Slide = { src: string; title: string; note: string };
+type LightboxImage = { src: string; title: string } | null;
 
-const modules = {
+const MODULE_ORDER: ModuleKey[] = ["measurement", "takeoff", "assistant"];
+
+const modules: Record<
+  ModuleKey,
+  {
+    number: string;
+    eyebrow: string;
+    title: string;
+    short: string;
+    description: string;
+    bullets: string[];
+    steps: string[];
+    slides: readonly Slide[];
+    flagship?: boolean;
+  }
+> = {
   measurement: {
-    key: "measurement" as const,
     number: "01",
-    title: "Measurement-to-price tool",
-    eyebrow: "Core tool",
-    short: "Start with known measurements and turn them into a useful roofing output.",
+    eyebrow: "Core pricing tool",
+    title: "Measurement-to-price",
+    short: "Turn roof measurements into products, quantities and pricing.",
     description:
-      "A homeowner, contractor or staff member enters the roof measurements they already have, applies your products and gets a useful pricing, material or quote-ready result.",
+      "If the measurements are already known, this is the quickest route to a useful result. The workflow is configured around the business's own products, calculations, pricing and required output.",
     bullets: [
-      "Works for simple estimates or complex multi-product roofs",
-      "Uses your products, pricing rules and approved options",
-      "Can output an estimate, enquiry summary or quote-ready result",
+      "Use known roof areas, lengths and other required measurements",
+      "Apply products, accessories, waste and pricing rules automatically",
+      "Return an estimate, material list, quote-ready output or next action",
     ],
-    steps: [
-      "Enter roof areas, lengths or basic dimensions already known",
-      "Apply the right roofing products, accessories and pricing rules",
-      "Return a useful result the customer can act on or the team can review",
-    ],
-    image: SCREENSHOTS.measurement,
-    replaceNote: "Replace with a real screenshot of the measurement-to-price tool in use.",
+    steps: ["Enter measurements", "Apply products + rules", "Create the result"],
+    slides: IMAGES.measurement,
   },
   takeoff: {
-    key: "takeoff" as const,
     number: "02",
-    title: "Digital takeoff add-on",
-    eyebrow: "Measurement layer",
-    short: "Let people measure first, then flow straight into the pricing tool.",
+    eyebrow: "Measurement add-on",
+    title: "Digital takeoff",
+    short: "Measure the plan first, then continue straight into pricing.",
     description:
-      "If the user does not already know the measurements, they upload a plan or image, measure the roof digitally, and send those results straight into the same pricing workflow.",
+      "When the user does not have measurements yet, they can upload a plan or image, measure the roof digitally and carry those measurements into the same pricing workflow without starting again.",
     bullets: [
-      "Useful when the user has a plan but not a quantity takeoff",
-      "Reduces re-keying because the measured output goes straight into the next tool",
-      "Great for contractors, estimators or more serious customer enquiries",
+      "Upload a plan or suitable image and calibrate it",
+      "Measure roof areas and the lineal components the business cares about",
+      "Pass the finished takeoff directly into the pricing workflow",
     ],
-    steps: [
-      "Upload a plan or roof image and set the scale",
-      "Measure the roof, ridges, valleys, hips or other required components",
-      "Pass those measurements directly into the pricing tool for the next stage",
-    ],
-    image: SCREENSHOTS.takeoff,
-    replaceNote: "Replace with a screenshot of the digital takeoff tool, ideally with a roof measured on screen.",
+    steps: ["Upload + calibrate", "Measure", "Continue into pricing"],
+    slides: IMAGES.takeoff,
   },
   assistant: {
-    key: "assistant" as const,
     number: "03",
+    eyebrow: "Flagship capability",
     title: "Smart Assistant",
-    eyebrow: "Conversational layer",
-    short: "Answer questions, guide the user and create a better enquiry or estimate path.",
+    short: "Let customers ask naturally, then guide them toward an answer, estimate or enquiry.",
     description:
-      "A Smart Assistant gives people a fast way to ask product questions, pricing questions or workflow questions. It can answer using approved business knowledge, or guide the user into the right structured tool.",
+      "The Smart Assistant is not just a website chat box. It can use approved business knowledge, products and pricing rules, ask for missing information, create pricing outputs and hand a better-qualified opportunity to the team.",
     bullets: [
-      "Can answer useful questions without adding another phone call to the team",
-      "Can guide a person into the right next tool or collect a better enquiry",
-      "Can be tightly controlled so it only answers what you want it to answer",
+      "Answer approved product, compatibility, pricing and business questions",
+      "Ask the follow-up questions needed to create a meaningful result",
+      "Move the user from question to estimate, structured tool or human handoff",
     ],
-    steps: [
-      "The customer asks a product, compatibility or pricing question",
-      "The assistant answers from your approved information and pricing rules",
-      "If needed, it hands off to your team with the right context already collected",
-    ],
-    image: SCREENSHOTS.assistant,
-    replaceNote: "Replace with a screenshot of the Smart Assistant answering a roofing question or building an estimate.",
+    steps: ["Ask", "Clarify + calculate", "Answer + convert"],
+    slides: IMAGES.assistant,
+    flagship: true,
   },
 };
 
-const audienceContent = {
+const audiences: Record<
+  AudienceKey,
+  {
+    tab: string;
+    title: string;
+    question: string;
+    bullets: string[];
+    slides: readonly Slide[];
+  }
+> = {
   homeowner: {
+    tab: "Homeowners",
     title: "Homeowners and new website visitors",
-    question: "Can I get a rough roof price, product direction or useful answer without waiting for a call back?",
+    question: "Can I get a useful answer or price direction without waiting for somebody to call me back?",
     bullets: [
-      "Get a faster answer while interest is high",
-      "See a ballpark estimate or useful next step before contacting the team",
-      "Turn a basic visitor into a more prepared enquiry",
+      "Get an answer while interest is still high",
+      "See useful price direction or a next step before contacting the team",
+      "Send a much better-prepared enquiry if they choose to continue",
     ],
+    slides: IMAGES.homeowner,
   },
   trade: {
+    tab: "Trade users",
     title: "Roofers, repeat trade buyers and quoting contractors",
-    question: "Can I measure, price and save roofing jobs using this supplier's system instead of starting from scratch every time?",
+    question: "Can I measure and price my own jobs using this supplier's products and my approved trade pricing?",
     bullets: [
-      "Use trade pricing, approved products and saved jobs",
-      "Build quotes faster and create a reason to keep buying from you",
-      "Give good contractors a genuinely useful tool worth returning to",
+      "Give approved users their own trade pricing and workflow",
+      "Let contractors quote jobs using the products they already buy",
+      "Create a practical reason for good customers to keep returning",
     ],
+    slides: IMAGES.trade,
   },
   team: {
-    title: "Your internal estimating and sales team",
-    question: "Can our own staff use the same system with more power, more control and less re-keying?",
+    tab: "Your team",
+    title: "Your own estimating, sales and operations team",
+    question: "Could the same underlying technology become a custom internal system for the way our business actually works?",
     bullets: [
-      "Give staff their own version with internal pricing, controls and outputs",
-      "Preserve job context instead of starting again from a weak enquiry",
-      "Reduce repetitive work and speed up quote preparation",
+      "Combine takeoff, pricing, quoting, orders, invoices and job information",
+      "Give staff more controls than the public or trade-facing version",
+      "Build a focused internal workspace instead of forcing staff through disconnected systems",
     ],
+    slides: IMAGES.team,
   },
 };
 
-const adminCards = [
-  {
-    title: "Products and rules",
-    text: "Organise products, accessories and approved options. Control what can be selected and how the outputs are built.",
-  },
-  {
-    title: "Pricing layers",
-    text: "Manage public, trade and customer-specific price levels without showing the wrong prices to the wrong people.",
-  },
-  {
-    title: "Trade access",
-    text: "Approve contractor users, assign pricing tiers and give repeat buyers a practical reason to keep using your system.",
-  },
-  {
-    title: "Quote intelligence",
-    text: "Track quote activity, indicative value, quoted products and follow-up opportunities your team can act on.",
-  },
-  {
-    title: "Offers and actions",
-    text: "Prompt the right next step at the right time, such as formal quote requests, first-order offers or trade sign-up prompts.",
-  },
-  {
-    title: "Workflow controls",
-    text: "Decide what the public can do, what trade users can do, and when the team needs to review or take over.",
-  },
+const customisation = [
+  ["Brand", "Colours, typography, styling and interface details."],
+  ["Products", "Ten products, hundreds, or a much larger catalogue."],
+  ["Pricing", "Public, trade, customer-specific, labour, waste and calculation logic."],
+  ["Flow", "Questions, steps, screens, measurements and actions."],
+  ["Access", "Public users, trade accounts, staff roles and permissions."],
+  ["Outputs", "Estimates, material lists, enquiries, quotes and next actions."],
 ] as const;
 
-const deploymentLayers = [
-  {
-    title: "Public website layer",
-    text: "Help customers get a useful answer, basic price direction or better enquiry without making a phone call the only route.",
-  },
-  {
-    title: "Trade layer",
-    text: "Give approved roofers trade pricing, saved work and a tool worth returning to when quoting jobs.",
-  },
-  {
-    title: "Team layer",
-    text: "Let your own team use a more powerful version for internal quoting, estimating and reviewing structured job details.",
-  },
-  {
-    title: "Admin layer",
-    text: "Control products, prices, users, offers, tracking and permissions from one place.",
-  },
+const adminCapabilities = [
+  ["Products + rules", "Control the information and products that power the tools."],
+  ["Pricing layers", "Keep public, trade and customer-specific pricing separated."],
+  ["Trade access", "Approve accounts, tiers and who gets access to each level."],
+  ["Quote intelligence", "See quote activity, value, product demand and follow-up signals."],
+  ["Actions", "Prompt formal quotes, trade discussions, enquiries or other next steps."],
+  ["Workflow control", "Decide what stays self-service and when the team takes over."],
 ] as const;
 
-function PlaceholderShot({ src, alt, caption, note }: { src: string; alt: string; caption: string; note: string }) {
+function Carousel({
+  slides,
+  onOpen,
+  dark = false,
+  prominent = false,
+}: {
+  slides: readonly Slide[];
+  onOpen: (image: Exclude<LightboxImage, null>) => void;
+  dark?: boolean;
+  prominent?: boolean;
+}) {
+  const [index, setIndex] = useState(0);
+  const count = slides.length;
+  const current = slides[index];
+  const previous = () => setIndex((value) => (value - 1 + count) % count);
+  const next = () => setIndex((value) => (value + 1) % count);
+
+  useEffect(() => {
+    setIndex(0);
+  }, [slides]);
+
   return (
-    <figure className="rb-shot-card">
-      <img src={src} alt={alt} />
+    <figure className={`rb-carousel ${dark ? "rb-carousel--dark" : ""} ${prominent ? "rb-carousel--prominent" : ""}`}>
+      <button className="rb-carousel-image" type="button" onClick={() => onOpen({ src: current.src, title: current.title })}>
+        <img src={current.src} alt={current.title} />
+        <span className="rb-zoom">View larger</span>
+      </button>
       <figcaption>
-        <strong>{caption}</strong>
-        <span>{note}</span>
+        <div className="rb-carousel-copy">
+          <strong>{current.title}</strong>
+          <span>{current.note}</span>
+        </div>
+        {count > 1 ? (
+          <div className="rb-carousel-controls" aria-label="Screenshot carousel controls">
+            <button type="button" onClick={previous} aria-label="Previous screenshot">←</button>
+            <span>{index + 1} / {count}</span>
+            <button type="button" onClick={next} aria-label="Next screenshot">→</button>
+          </div>
+        ) : null}
       </figcaption>
+      {count > 1 ? (
+        <div className="rb-dots" aria-hidden="true">
+          {slides.map((slide, dotIndex) => (
+            <button key={slide.src} type="button" className={dotIndex === index ? "is-active" : ""} onClick={() => setIndex(dotIndex)} tabIndex={-1} />
+          ))}
+        </div>
+      ) : null}
     </figure>
   );
 }
 
 export default function RoofingBusinessToolsPage() {
-  const [selectedModules, setSelectedModules] = useState<ModuleKey[]>(["measurement", "takeoff", "assistant"]);
+  const [selectedModules, setSelectedModules] = useState<ModuleKey[]>(MODULE_ORDER);
   const [activeAudience, setActiveAudience] = useState<AudienceKey>("trade");
+  const [lightbox, setLightbox] = useState<LightboxImage>(null);
 
-  const orderedModules = useMemo(() => {
-    const keys: ModuleKey[] = ["measurement", "takeoff", "assistant"];
-    return keys.filter((key) => selectedModules.includes(key));
-  }, [selectedModules]);
+  const orderedModules = useMemo(() => MODULE_ORDER.filter((key) => selectedModules.includes(key)), [selectedModules]);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const close = (event: KeyboardEvent) => event.key === "Escape" && setLightbox(null);
+    window.addEventListener("keydown", close);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", close);
+      document.body.style.overflow = "";
+    };
+  }, [lightbox]);
 
   const toggleModule = (key: ModuleKey) => {
     setSelectedModules((current) => {
-      const exists = current.includes(key);
-      if (exists) {
+      if (current.includes(key)) {
         if (current.length === 1) return current;
         return current.filter((item) => item !== key);
       }
-      return [...current, key];
+      return MODULE_ORDER.filter((item) => [...current, key].includes(item));
     });
   };
 
-  const flowSummary = useMemo(() => {
-    const hasMeasurement = selectedModules.includes("measurement");
-    const hasTakeoff = selectedModules.includes("takeoff");
-    const hasAssistant = selectedModules.includes("assistant");
-
-    const entries: { title: string; text: string }[] = [];
-
-    if (hasTakeoff) {
-      entries.push({
-        title: "Start with a plan",
-        text: "A user uploads a plan or image and measures the roof digitally.",
-      });
-    }
-
-    if (hasMeasurement) {
-      entries.push({
-        title: hasTakeoff ? "Move into pricing" : "Start with known measurements",
-        text: hasTakeoff
-          ? "Those measurements flow straight into the pricing workflow."
-          : "The user enters the measurements they already know and applies your products.",
-      });
-    }
-
-    if (hasAssistant) {
-      entries.push({
-        title: hasMeasurement || hasTakeoff ? "Answer questions on the way" : "Start with a conversation",
-        text: hasMeasurement || hasTakeoff
-          ? "The Smart Assistant answers questions, qualifies users and can guide them into the right tool or next step."
-          : "The Smart Assistant answers questions, guides the user and can create a structured enquiry or estimate path.",
-      });
-    }
-
-    entries.push({
-      title: "Create the right outcome",
-      text: "That outcome might be an estimate, a stronger enquiry, a trade opportunity, a staff-ready job or a quote workflow.",
-    });
-
-    return entries;
+  const flow = useMemo(() => {
+    const items: { title: string; text: string }[] = [];
+    if (selectedModules.includes("takeoff")) items.push({ title: "Measure the plan", text: "Upload a plan or image and create the takeoff." });
+    if (selectedModules.includes("measurement")) items.push({ title: selectedModules.includes("takeoff") ? "Apply products + pricing" : "Start with known measurements", text: "Use the business's products, calculations and pricing rules." });
+    if (selectedModules.includes("assistant")) items.push({ title: selectedModules.length > 1 ? "Help throughout the journey" : "Start with a conversation", text: "Answer questions, gather missing details and guide the next step." });
+    items.push({ title: "Create the right outcome", text: "Estimate, quote-ready result, enquiry, trade action or internal workflow." });
+    return items;
   }, [selectedModules]);
 
   return (
     <main className="rb-page">
       <style>{styles}</style>
 
-      <header className="rbt-header sticky top-0 z-50 border-b backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
-          <a href="/roofing-solutions" className="flex items-center gap-2 font-semibold" aria-label="T3 Labs roofing solutions">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg" style={{background:"#0a0b10"}}><img src="/assets/t3-logo-white.png" alt="T3 Labs" className="h-7 w-7" /></span>
-            <span className="hidden text-sm sm:inline" style={{color:"#9aa1b5"}}>Labs</span>
+      <header className="rb-header">
+        <div className="rb-shell rb-header-inner">
+          <a href="/roofing-solutions" className="rb-brand" aria-label="T3 Labs roofing solutions">
+            <span><img src="/assets/t3-logo-white.png" alt="T3 Labs" /></span>
+            <b>T3 Labs</b>
           </a>
-          <nav className="hidden items-center gap-5 text-sm lg:flex" style={{color:"#9aa1b5"}}>
-            <a href="#the-system" className="rbt-nav-link">The System</a>
-            <a href="#build-your-system" className="rbt-nav-link">Build Your System</a>
+          <nav>
+            <a href="#tools">Tools</a>
+            <a href="#customise">Customise</a>
+            <a href="#users">Users</a>
+            <a href="#admin">Admin</a>
           </nav>
-          <div className="flex items-center gap-2">
-            <a href={apexDemoUrl} target="_blank" rel="noopener noreferrer" style={{borderColor:"#262a3a",color:"#9aa1b5"}} className="btn-outline rbt-nav-link rounded-full border px-3 py-1.5 text-xs font-medium">
-              Apex demo ↗
-            </a>
-            <a href={bookingUrl} target="_blank" rel="noopener noreferrer" style={{background:"#d7ff00",color:"#0a0b10"}} className="btn-solid hidden rounded-full px-4 py-1.5 text-xs font-semibold sm:inline-flex">
-              Book a call
-            </a>
+          <div className="rb-header-actions">
+            <a className="rb-header-demo" href={apexDemoUrl} target="_blank" rel="noopener noreferrer">Try live demo ↗</a>
+            <a className="rb-header-call" href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a call</a>
           </div>
         </div>
       </header>
@@ -259,182 +360,104 @@ export default function RoofingBusinessToolsPage() {
       <section className="rb-hero">
         <div className="rb-grid-glow" aria-hidden="true" />
         <div className="rb-shell rb-hero-grid">
-          <div>
+          <div className="rb-hero-copy">
             <p className="rb-eyebrow">Roofing business tools</p>
-            <h1>
-              Build a <em>roofing system</em> that helps customers, supports trade users and gives your team better control.
-            </h1>
+            <h1>Build the tools your <em>customers, trade users and team</em> actually need.</h1>
             <p className="rb-lead">
-              Start with one useful tool or combine measurement, digital takeoff, Smart Assistance and business controls into a system that makes your website more useful and your quoting process more efficient.
+              Start with one useful tool or combine measurement, digital takeoff, Smart Assistance, trade access and business controls into a system configured around the way your roofing business works.
             </p>
-            <div className="rb-hero-actions">
-              <a className="rb-primary" href="#the-system">
-                See the system <span aria-hidden="true">→</span>
-              </a>
-              <a className="rb-secondary" href="#build-your-system">Map your ideal setup</a>
+            <div className="rb-actions">
+              <a className="rb-primary" href={apexDemoUrl} target="_blank" rel="noopener noreferrer">Try the live Apex demo <span>→</span></a>
+              <a className="rb-secondary" href="#tools">Explore the tools</a>
             </div>
-            <p className="rb-fineprint">
-              Basic customer tools, trade pricing layers, staff workflows and admin controls can all be configured around how your roofing business already works.
-            </p>
+            <p className="rb-fineprint">The Apex setup is a working example, not a fixed template. The products, pricing, flow, styling, permissions and outputs can all change.</p>
           </div>
 
-          <div className="rb-dashboard" aria-label="Example admin dashboard illustration">
-            <div className="rb-dash-top">
-              <span className="rb-live">
-                <i /> Example dashboard
-              </span>
-              <span>Illustrative view</span>
-            </div>
-            <div className="rb-stat-grid">
-              <div>
-                <strong>125</strong>
-                <span>quotes created this month</span>
-              </div>
-              <div>
-                <strong>£284k</strong>
-                <span>indicative quote value</span>
-              </div>
-              <div>
-                <strong>31</strong>
-                <span>follow-up opportunities</span>
-              </div>
-            </div>
-            <div className="rb-chart">
-              <span>What the system can reveal</span>
-              <div className="rb-bars">
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </div>
-            </div>
-            <div className="rb-product-row">
-              <span className="rb-dot" /> Most quoted: Heritage clay tile <b>Open insights →</b>
-            </div>
-            <div className="rb-dash-offer">
-              <span>Opportunity example</span>
-              <p>See quoted jobs that did not convert, then offer a better next step.</p>
-              <button type="button">Review follow-up list</button>
+          <div className="rb-hero-visual">
+            <button type="button" onClick={() => setLightbox({ src: IMAGES.admin[2].src, title: IMAGES.admin[2].title })}>
+              <img src={IMAGES.admin[2].src} alt="Example roofing admin tracking dashboard" />
+              <span className="rb-hero-badge">Example admin + tracking view</span>
+            </button>
+            <div className="rb-hero-stat-row">
+              <span><b>Products</b> + pricing</span>
+              <span><b>Quotes</b> + activity</span>
+              <span><b>Trade</b> + follow-up</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="rb-proof">
-        <div className="rb-shell rb-proof-grid">
-          <p>More than a roofing calculator.</p>
-          <p>
-            This page goes deeper than Roofing Solutions. It shows how the system can be configured, how the tools connect, who they help, and what extra value appears when you add trade, team and admin layers.
-          </p>
+      <section className="rb-quick-strip">
+        <div className="rb-shell">
+          <strong>These are examples of what the technology can become.</strong>
+          <span>The real value comes from combining the tools with your business knowledge, products, pricing and workflow.</span>
         </div>
       </section>
 
-      <section className="rb-section rb-shell" id="the-system">
-        <div className="rb-section-heading rb-section-heading--narrow">
-          <p className="rb-eyebrow">Build your system</p>
-          <h2>Choose one core tool or combine them into a much more capable roofing workflow.</h2>
-          <p>
-            These tools are already built. The job is to configure them around your products, pricing rules, team workflow and the kind of users you want to help.
-          </p>
+      <section className="rb-section rb-shell" id="tools">
+        <div className="rb-heading rb-heading--wide">
+          <p className="rb-eyebrow">Choose the building blocks</p>
+          <h2>Start simple. Combine the parts that solve the right problem.</h2>
+          <p>Select the parts you want to explore. You can launch one useful tool first or connect all three into a broader workflow.</p>
         </div>
 
-        <div className="rb-config-grid">
-          {["measurement", "takeoff", "assistant"].map((key) => {
-            const module = modules[key as ModuleKey];
-            const active = selectedModules.includes(key as ModuleKey);
+        <div className="rb-picker-grid">
+          {MODULE_ORDER.map((key) => {
+            const item = modules[key];
+            const active = selectedModules.includes(key);
             return (
-              <button
-                key={module.key}
-                type="button"
-                className={`rb-picker ${active ? "is-active" : ""}`}
-                onClick={() => toggleModule(module.key)}
-                aria-pressed={active}
-              >
-                <span className="rb-picker-top">
-                  <span className="rb-number">{module.number}</span>
-                  <span className="rb-card-eyebrow">{module.eyebrow}</span>
-                </span>
-                <strong>{module.title}</strong>
-                <span>{module.short}</span>
+              <button key={key} type="button" className={`rb-picker ${active ? "is-active" : ""}`} onClick={() => toggleModule(key)} aria-pressed={active}>
+                <span className="rb-picker-top"><b>{item.number}</b><i>{item.eyebrow}</i></span>
+                <strong>{item.title}</strong>
+                <span>{item.short}</span>
               </button>
             );
           })}
         </div>
 
-        <div className="rb-builder">
-          <div className="rb-builder-copy">
-            <p className="rb-card-eyebrow">Selected configuration</p>
-            <h3>
-              {orderedModules.length === 1
-                ? `You are looking at a ${modules[orderedModules[0]].title.toLowerCase()} setup.`
-                : "Here is how your selected tools can work together."}
-            </h3>
-            <p>
-              Start small or build a fuller system. The selected mix below shows one practical way these tools can connect and create a better customer, trade or staff experience.
-            </p>
+        <div className="rb-flow-panel">
+          <div>
+            <p className="rb-card-label">Selected configuration</p>
+            <h3>{orderedModules.length === 1 ? `${modules[orderedModules[0]].title} only` : "One connected workflow"}</h3>
+            <p>The exact sequence can change by business. This simply shows one sensible way the selected pieces can work together.</p>
           </div>
-          <div className="rb-builder-flow" aria-label="Selected roofing system flow">
-            {flowSummary.map((entry, index) => (
-              <div className="rb-builder-step" key={entry.title}>
-                <article>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <b>{entry.title}</b>
-                  <p>{entry.text}</p>
-                </article>
-                {index < flowSummary.length - 1 ? <i aria-hidden="true">→</i> : null}
-              </div>
+          <div className="rb-flow">
+            {flow.map((item, index) => (
+              <article key={item.title}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div><b>{item.title}</b><p>{item.text}</p></div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="rb-section rb-showcase">
+      <section className="rb-section rb-tools-showcase">
         <div className="rb-shell">
-          <div className="rb-section-heading rb-showcase-heading">
-            <p className="rb-eyebrow">See each tool more clearly</p>
-            <h2>Three building blocks. Different jobs. One connected system.</h2>
-            <p>
-              Use screenshots, demos and examples to show how each tool works in practice. The placeholders below are ready to swap for real product imagery.
-            </p>
+          <div className="rb-heading rb-heading--wide rb-dark-copy">
+            <p className="rb-eyebrow">See the tools in action</p>
+            <h2>Real examples from the working Apex Roofing demo.</h2>
+            <p>Each slide shows a different part of the journey. Click any screenshot to view it larger, or open the live demo and use the tools yourself.</p>
           </div>
 
-          <div className="rb-module-stack">
+          <div className="rb-tool-stack">
             {orderedModules.map((key) => {
-              const module = modules[key];
+              const item = modules[key];
               return (
-                <article className="rb-module-show" key={module.key}>
-                  <div className="rb-module-copy">
-                    <p className="rb-card-eyebrow">{module.eyebrow}</p>
-                    <h3>{module.title}</h3>
-                    <p className="rb-module-desc">{module.description}</p>
-                    <ul className="rb-check-list">
-                      {module.bullets.map((bullet) => (
-                        <li key={bullet}>
-                          <span>✓</span>
-                          {bullet}
-                        </li>
-                      ))}
+                <article className={`rb-tool-card ${item.flagship ? "rb-tool-card--flagship" : ""}`} key={key}>
+                  <div className="rb-tool-copy">
+                    <div className="rb-tool-meta"><span>{item.eyebrow}</span>{item.flagship ? <b>Flagship</b> : null}</div>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                    <ul>
+                      {item.bullets.map((bullet) => <li key={bullet}><span>✓</span>{bullet}</li>)}
                     </ul>
-                    <div className="rb-mini-flow">
-                      {module.steps.map((step, index) => (
-                        <div key={step}>
-                          <strong>{index + 1}</strong>
-                          <p>{step}</p>
-                        </div>
-                      ))}
+                    <div className="rb-step-row">
+                      {item.steps.map((step, index) => <span key={step}><b>{index + 1}</b>{step}</span>)}
                     </div>
+                    <a href={apexDemoUrl} target="_blank" rel="noopener noreferrer" className="rb-text-link">Try this in the live demo →</a>
                   </div>
-                  <div>
-                    <PlaceholderShot
-                      src={module.image}
-                      alt={module.title}
-                      caption={module.title}
-                      note={module.replaceNote}
-                    />
-                  </div>
+                  <Carousel slides={item.slides} onOpen={setLightbox} prominent={item.flagship} />
                 </article>
               );
             })}
@@ -442,216 +465,123 @@ export default function RoofingBusinessToolsPage() {
         </div>
       </section>
 
-      <section className="rb-section rb-shell">
-        <div className="rb-section-heading rb-section-heading--narrow">
-          <p className="rb-eyebrow">One system, three main user groups</p>
-          <h2>The same roofing knowledge can help customers, trade users and your team in different ways.</h2>
-          <p>
-            The system becomes more useful as you decide who it is for, what they are allowed to do, and how far they should get before your team needs to step in.
-          </p>
-        </div>
-
-        <div className="rb-audience-switch" role="tablist" aria-label="Audience examples">
-          {(Object.keys(audienceContent) as AudienceKey[]).map((key) => (
-            <button
-              key={key}
-              type="button"
-              className={`rb-audience-tab ${activeAudience === key ? "is-active" : ""}`}
-              onClick={() => setActiveAudience(key)}
-              role="tab"
-              aria-selected={activeAudience === key}
-            >
-              {key === "homeowner" ? "Homeowners" : key === "trade" ? "Trade users" : "Your team"}
-            </button>
-          ))}
-        </div>
-
-        <div className="rb-audience-panel">
-          <div>
-            <p className="rb-card-eyebrow">Example audience</p>
-            <h3>{audienceContent[activeAudience].title}</h3>
-            <p className="rb-audience-question">{audienceContent[activeAudience].question}</p>
-            <ul className="rb-check-list rb-check-list--tight">
-              {audienceContent[activeAudience].bullets.map((bullet) => (
-                <li key={bullet}>
-                  <span>✓</span>
-                  {bullet}
-                </li>
-              ))}
-            </ul>
+      <section className="rb-section rb-shell" id="customise">
+        <div className="rb-customise-intro">
+          <div className="rb-heading">
+            <p className="rb-eyebrow">Built around the business</p>
+            <h2>The demo is not the product. It is one example of what the framework can do.</h2>
           </div>
-          <div className="rb-audience-shots">
-            <PlaceholderShot
-              src={SCREENSHOTS.output}
-              alt="Example roofing output"
-              caption="Useful output example"
-              note="Swap for a screenshot that matches the selected audience journey, such as a homeowner estimate, trade quote or staff-ready output."
-            />
+          <div className="rb-customise-copy">
+            <p>These are not copy-and-paste systems. T3 Labs provides the underlying technology, but the business information is what makes each implementation useful.</p>
+            <strong>The technology is the framework. Your products, pricing, knowledge and rules become the brain behind it.</strong>
           </div>
+        </div>
+        <div className="rb-custom-grid">
+          {customisation.map(([title, text]) => <article key={title}><span>+</span><h3>{title}</h3><p>{text}</p></article>)}
         </div>
       </section>
 
-      <section className="rb-section rb-layered">
+      <section className="rb-section rb-user-section" id="users">
         <div className="rb-shell">
-          <div className="rb-section-heading rb-section-heading--narrow">
-            <p className="rb-eyebrow">How the system can expand</p>
-            <h2>Start public. Add trade. Add team. Add control.</h2>
-            <p>
-              You do not need to launch everything at once. Think of the system in layers. Each layer adds more value, more control or a more specific use case.
-            </p>
+          <div className="rb-heading rb-heading--wide">
+            <p className="rb-eyebrow">One system, different users</p>
+            <h2>The same business logic can power very different experiences.</h2>
+            <p>Decide who the system is for, what each user can see and how far they should get before your team needs to step in.</p>
           </div>
 
-          <div className="rb-layer-grid">
-            {deploymentLayers.map((layer, index) => (
-              <article key={layer.title} className="rb-layer-card">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <h3>{layer.title}</h3>
-                <p>{layer.text}</p>
-              </article>
+          <div className="rb-tabs" role="tablist" aria-label="User examples">
+            {(Object.keys(audiences) as AudienceKey[]).map((key) => (
+              <button key={key} type="button" role="tab" aria-selected={activeAudience === key} className={activeAudience === key ? "is-active" : ""} onClick={() => setActiveAudience(key)}>
+                {audiences[key].tab}
+              </button>
             ))}
           </div>
+
+          <div className="rb-user-panel">
+            <div className="rb-user-copy">
+              <p className="rb-card-label">Example user</p>
+              <h3>{audiences[activeAudience].title}</h3>
+              <p className="rb-user-question">{audiences[activeAudience].question}</p>
+              <ul>
+                {audiences[activeAudience].bullets.map((bullet) => <li key={bullet}><span>✓</span>{bullet}</li>)}
+              </ul>
+              <a href={apexDemoUrl} target="_blank" rel="noopener noreferrer" className="rb-text-link rb-text-link--light">Explore the live demo →</a>
+            </div>
+            <Carousel slides={audiences[activeAudience].slides} onOpen={setLightbox} dark />
+          </div>
         </div>
       </section>
 
-      <section className="rb-section rb-shell">
-        <div className="rb-section-heading rb-section-heading--narrow">
-          <p className="rb-eyebrow">Admin and insight layer</p>
-          <h2>If you want more control, add the admin portal and tracking layer.</h2>
-          <p>
-            The admin portal is where pricing, users, trade access, quote intelligence and follow-up opportunities come together. It helps turn a useful tool into a more useful business system.
-          </p>
-        </div>
-
+      <section className="rb-section rb-shell" id="admin">
         <div className="rb-admin-grid">
-          <div>
-            <PlaceholderShot
-              src={SCREENSHOTS.dashboard}
-              alt="Admin dashboard example"
-              caption="Example admin dashboard"
-              note="Replace with an actual admin screenshot or a refined mock-up showing tracking, products, trade tiers and quote activity."
-            />
+          <div className="rb-admin-copy">
+            <div className="rb-heading">
+              <p className="rb-eyebrow">Admin + business controls</p>
+              <h2>Control what powers the tools, then see what customers are doing with them.</h2>
+              <p>The admin layer can be as simple or as capable as the project needs. These screenshots show three examples from the Apex demo.</p>
+            </div>
+            <div className="rb-capabilities">
+              {adminCapabilities.map(([title, text]) => <article key={title}><span>+</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
+            </div>
           </div>
-          <div className="rb-controls">
-            {adminCards.map((card) => (
-              <article key={card.title}>
-                <span className="rb-control-icon" aria-hidden="true">+</span>
-                <h3>{card.title}</h3>
-                <p>{card.text}</p>
-              </article>
-            ))}
+          <Carousel slides={IMAGES.admin} onOpen={setLightbox} />
+        </div>
+      </section>
+
+      <section className="rb-section rb-outcomes">
+        <div className="rb-shell rb-outcome-grid">
+          <div>
+            <p className="rb-eyebrow">What this can become</p>
+            <h2>From one useful tool to a much broader roofing business system.</h2>
+          </div>
+          <div className="rb-outcome-list">
+            <article><b>Public website</b><span>Help people get answers, measurements, price direction or a stronger enquiry.</span></article>
+            <article><b>Trade portal</b><span>Give approved roofers pricing, saved workflows and a reason to keep quoting with you.</span></article>
+            <article><b>Internal workspace</b><span>Build custom staff tools around jobs, takeoffs, quotes, orders, invoices and approvals.</span></article>
+            <article><b>Business intelligence</b><span>See what people quote, what products are being used and where follow-up opportunities exist.</span></article>
           </div>
         </div>
       </section>
 
-      <section className="rb-section rb-opportunity">
-        <div className="rb-shell rb-opportunity-grid">
-          <div>
-            <p className="rb-eyebrow">What could this mean for your business?</p>
-            <h2>Useful tools do more than answer questions. They can create a much better commercial position.</h2>
-            <div className="rb-question-list">
-              <article>
-                <h3>What if more homeowners could get a useful answer before calling your team?</h3>
-                <p>That could mean fewer dead-end visits, better enquiries and more people moving forward while they are still interested.</p>
-              </article>
-              <article>
-                <h3>What if roofers in your area preferred using your quoting workflow because it was the easiest one available?</h3>
-                <p>That could create more repeat quoting activity, more trade conversations and more materials purchased through your business.</p>
-              </article>
-              <article>
-                <h3>What if your own team could start with stronger information instead of chasing basics first?</h3>
-                <p>That could mean less repetitive work, faster turnaround and more time spent on higher-value jobs.</p>
-              </article>
-            </div>
-          </div>
-          <div className="rb-opportunity-card">
-            <p className="rb-card-eyebrow">Example conversion moment</p>
-            <h3>Turn useful activity into the next right action.</h3>
-            <p>
-              If someone keeps using the tool, asks for more detail or builds high-value quotes, your system can prompt the right next step, from formal quote requests to trade-access discussions.
-            </p>
-            <div>
-              <button type="button">Discuss trade pricing</button>
-              <button type="button">Request a formal quote</button>
-            </div>
-            <small>This is where a useful tool starts becoming a practical lead and conversion system.</small>
-          </div>
-        </div>
-      </section>
-
-      <section className="rb-close" id="build-your-system">
+      <section className="rb-close">
         <div className="rb-shell rb-close-inner">
-          <p className="rb-eyebrow">Build your roofing system</p>
-          <h2>Tell us who you want to help first, and we will map the smallest useful starting point.</h2>
-          <p>
-            You might start with a public estimate tool, a trade quoting layer, a Smart Assistant, or a fuller setup that combines them. The point is to begin with the part that would make the biggest difference.
-          </p>
-          <div className="rb-hero-actions">
-            <a className="rb-primary" href={bookingUrl} target="_blank" rel="noopener noreferrer">
-              Book a free roofing workflow call <span aria-hidden="true">→</span>
-            </a>
-            <a className="rb-secondary" href={apexDemoUrl} target="_blank" rel="noopener noreferrer">
-              Try the Apex Roofing demo
-            </a>
+          <p className="rb-eyebrow">See it working</p>
+          <h2>The easiest way to understand the possibilities is to use the demo.</h2>
+          <p>Try the measurement tool, digital takeoff, Smart Assistant and trade/admin layers. If it sparks an idea for your own business, we can map the smallest useful version first and expand from there.</p>
+          <div className="rb-actions rb-actions--center">
+            <a className="rb-primary" href={apexDemoUrl} target="_blank" rel="noopener noreferrer">Try the Apex Roofing demo <span>→</span></a>
+            <a className="rb-secondary" href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a 20-minute call</a>
           </div>
-          <p className="rb-close-note">
-            Use this page to understand what is possible. Use the Roofing Solutions page to understand why businesses like yours are starting with these tools.
-          </p>
         </div>
       </section>
 
-      <footer className="rb-footer">
-        <div className="rb-shell">
-          <span>© T3 Labs</span>
-          <span>Roofing tools · Trade growth · Smarter quoting</span>
+      <footer className="rb-footer"><div className="rb-shell"><span>© T3 Labs</span><span>Roofing tools · Trade growth · Smarter quoting</span></div></footer>
+
+      {lightbox ? (
+        <div className="rb-lightbox" role="dialog" aria-modal="true" aria-label={lightbox.title} onClick={() => setLightbox(null)}>
+          <button type="button" className="rb-lightbox-close" onClick={() => setLightbox(null)} aria-label="Close image">×</button>
+          <div className="rb-lightbox-inner" onClick={(event) => event.stopPropagation()}>
+            <img src={lightbox.src} alt={lightbox.title} />
+            <strong>{lightbox.title}</strong>
+          </div>
         </div>
-      </footer>
+      ) : null}
     </main>
   );
 }
 
 const styles = String.raw`
-.rb-page{--lime:#d7ff00;--ink:#090b12;--surface:#10141f;--raised:#151b29;--line:#2a3243;--muted:#a5adbd;background:var(--ink);color:#f5f7fc;font-family:Arial,Helvetica,sans-serif;line-height:1.5}
-.rb-page *{box-sizing:border-box}
-.rb-page :is(h1,h2,h3,p){margin:0}
-.rb-shell{max-width:1180px;margin:auto;padding-inline:24px}
-.rbt-header{background:rgba(10,11,16,.88);border-color:#262a3a}
-.rbt-header a{text-decoration:none}
-.rbt-nav-link{transition:color .16s ease}
-.rbt-nav-link:hover{color:#fff}
-.rb-secondary{color:#fff;text-decoration:none;font-weight:700;font-size:14px}
-.rb-page [id]{scroll-margin-top:96px}
-.btn-solid:hover{transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 7px 22px rgba(215,255,0,.18)}
-.btn-outline:hover{transform:translateY(-1px);border-color:#d7ff00!important;color:#fff!important}
-.rb-hero{position:relative;overflow:hidden;padding:74px 0 86px;background:radial-gradient(circle at 75% 35%,rgba(215,255,0,.15),transparent 28%),linear-gradient(135deg,#090b12,#111827)}
-.rb-grid-glow{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to right,#000 35%,transparent 85%)}
-.rb-hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
-.rb-eyebrow,.rb-card-eyebrow{color:var(--lime);font-size:12px;text-transform:uppercase;letter-spacing:.14em;font-weight:800}
-.rb-hero h1{font-size:clamp(42px,5vw,70px);line-height:.98;letter-spacing:-.055em;margin-top:18px;max-width:760px}
-.rb-hero h1 em{font-style:normal;color:var(--lime)}
-.rb-lead{font-size:18px;line-height:1.65;color:var(--muted);max-width:660px;margin-top:26px}
-.rb-hero-actions{display:flex;flex-wrap:wrap;gap:20px;align-items:center;margin-top:32px}
-.rb-primary{display:inline-flex;gap:9px;align-items:center;border-radius:999px;background:var(--lime);color:var(--ink);padding:15px 22px;text-decoration:none;font-size:14px;font-weight:800;transition:transform .2s,box-shadow .2s}
-.rb-primary:hover{transform:translateY(-2px);box-shadow:0 13px 30px rgba(215,255,0,.26)}
-.rb-secondary{border-bottom:1px solid rgba(255,255,255,.5);padding-bottom:3px}
-.rb-fineprint{font-size:13px;color:#8892a6;margin-top:22px;max-width:640px}
-.rb-dashboard{border:1px solid #3b475c;border-radius:18px;background:rgba(17,24,39,.9);box-shadow:0 28px 70px rgba(0,0,0,.38);padding:22px;transform:rotate(2deg)}
-.rb-dash-top,.rb-product-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9ba5b8}
-.rb-live{color:#fff}.rb-live i{display:inline-block;width:7px;height:7px;background:var(--lime);border-radius:50%;margin-right:6px}
-.rb-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}.rb-stat-grid div,.rb-chart,.rb-dash-offer{background:#202938;border:1px solid #334057;border-radius:11px;padding:14px}
-.rb-stat-grid strong{display:block;font-size:21px}.rb-stat-grid span{display:block;font-size:10px;color:#9ba5b8;margin-top:4px}.rb-chart{height:116px;color:#aab4c7;font-size:11px}.rb-bars{height:72px;display:flex;gap:8px;align-items:end;padding-top:10px}.rb-bars i{background:linear-gradient(#d7ff00,#7f9b08);width:10%;border-radius:3px 3px 0 0}.rb-bars i:nth-child(1){height:27%}.rb-bars i:nth-child(2){height:45%}.rb-bars i:nth-child(3){height:38%}.rb-bars i:nth-child(4){height:74%}.rb-bars i:nth-child(5){height:57%}.rb-bars i:nth-child(6){height:88%}.rb-bars i:nth-child(7){height:65%}
-.rb-product-row{padding:17px 2px}.rb-product-row b{color:var(--lime);font-weight:700}.rb-dot{width:8px;height:8px;background:#77aaff;border-radius:50%;margin-right:7px}.rb-dash-offer{border-color:rgba(215,255,0,.35);background:rgba(215,255,0,.08)}.rb-dash-offer span{font-size:10px;text-transform:uppercase;color:var(--lime);font-weight:700;letter-spacing:.08em}.rb-dash-offer p{font-size:13px;color:#fff;margin:6px 0 12px}.rb-dash-offer button,.rb-opportunity-card button{border:0;border-radius:999px;padding:8px 11px;background:var(--lime);color:var(--ink);font-size:11px;font-weight:800}
-.rb-proof{border-block:1px solid var(--line);background:#0d111a}.rb-proof-grid{display:grid;grid-template-columns:1fr 1.7fr;gap:24px;padding-block:22px}.rb-proof p:first-child{color:var(--lime);font-weight:800}.rb-proof p:last-child{color:var(--muted)}
-.rb-section{padding-block:96px}.rb-section-heading{max-width:880px}.rb-section-heading--narrow{max-width:780px}.rb-section-heading h2,.rb-showcase h2,.rb-opportunity h2,.rb-close h2{font-size:clamp(30px,4vw,52px);line-height:1.04;letter-spacing:-.045em;margin-top:15px}.rb-section-heading>p:last-child,.rb-close p,.rb-opportunity p{margin-top:18px;color:var(--muted);font-size:17px;line-height:1.7}
-.rb-config-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:42px}.rb-picker{appearance:none;border:1px solid var(--line);background:var(--surface);color:#fff;padding:24px;border-radius:16px;text-align:left;display:grid;gap:10px;cursor:pointer;transition:transform .2s,border-color .2s,background .2s}.rb-picker:hover{transform:translateY(-2px);border-color:#46526c}.rb-picker.is-active{border-color:rgba(215,255,0,.45);background:linear-gradient(180deg,rgba(215,255,0,.08),rgba(255,255,255,.01))}.rb-picker-top{display:flex;align-items:center;justify-content:space-between;gap:16px}.rb-picker strong{font-size:21px;letter-spacing:-.02em}.rb-picker span:last-child{color:var(--muted);font-size:14px;line-height:1.6}
-.rb-builder{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;margin-top:22px;padding:28px;border:1px solid var(--line);border-radius:18px;background:#111723}.rb-builder-copy h3{font-size:28px;line-height:1.1;letter-spacing:-.03em;margin-top:12px}.rb-builder-copy p:last-child{margin-top:16px;color:var(--muted);font-size:16px;line-height:1.7}.rb-builder-flow{display:grid;gap:16px}.rb-builder-step{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}.rb-builder-step article{padding:18px;border:1px solid #344057;border-radius:14px;background:#171f2c}.rb-builder-step span{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--lime);font-weight:800;margin-bottom:10px}.rb-builder-step b{display:block;font-size:18px;margin-bottom:8px}.rb-builder-step p{color:#c7cedc;font-size:14px;line-height:1.6}.rb-builder-step i{font-style:normal;color:var(--lime);font-size:22px}
-.rb-showcase{background:#f3f5f9;color:#10131c}.rb-showcase-heading .rb-eyebrow{color:#627700}.rb-showcase-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:72px;align-items:center}.rb-module-stack{display:grid;gap:22px;margin-top:42px}.rb-module-show{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:start;padding:28px;background:#fff;border:1px solid #d5dae5;border-radius:18px;box-shadow:0 20px 45px rgba(18,27,46,.08)}.rb-module-copy h3{font-size:30px;line-height:1.1;letter-spacing:-.03em;margin-top:12px}.rb-module-desc{margin-top:16px;color:#475063;font-size:16px;line-height:1.75}.rb-check-list{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:10px}.rb-check-list li{display:flex;gap:10px;color:#1b2330;font-size:15px;line-height:1.65}.rb-check-list li span{color:#627700;font-weight:900}.rb-check-list--tight{margin-top:18px}.rb-mini-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}.rb-mini-flow div{padding:16px;border-radius:12px;background:#f3f5f9;border:1px solid #dde3ef}.rb-mini-flow strong{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#10131c;color:#fff;font-size:13px;margin-bottom:10px}.rb-mini-flow p{font-size:13px;line-height:1.6;color:#536075}
-.rb-shot-card{display:grid;gap:0;background:#fff;padding:10px;border:1px solid #d5dae5;border-radius:14px;box-shadow:0 24px 55px rgba(18,27,46,.13)}.rb-shot-card img{display:block;width:100%;height:auto;border-radius:8px;background:#d9dde8;min-height:280px;object-fit:cover}.rb-shot-card figcaption{display:grid;gap:6px;padding:12px 6px 4px}.rb-shot-card strong{font-size:14px;color:#1a2230}.rb-shot-card span{font-size:12px;line-height:1.5;color:#606a7b}
-.rb-audience-switch{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}.rb-audience-tab{appearance:none;border:1px solid var(--line);background:var(--surface);color:#fff;padding:12px 16px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:700}.rb-audience-tab.is-active{background:var(--lime);color:var(--ink);border-color:var(--lime)}.rb-audience-panel{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start;margin-top:22px;padding:28px;border:1px solid var(--line);background:var(--surface);border-radius:18px}.rb-audience-panel h3{font-size:30px;line-height:1.1;letter-spacing:-.03em;margin-top:12px}.rb-audience-question{margin-top:16px;color:#dfe5f1;font-size:18px;line-height:1.55}.rb-audience-shots .rb-shot-card{background:#151b29;border-color:#2e3749;box-shadow:none}.rb-audience-shots .rb-shot-card strong{color:#fff}.rb-audience-shots .rb-shot-card span{color:#aab3c5}
-.rb-layered{background:#0d111a;border-block:1px solid var(--line)}.rb-layer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:42px}.rb-layer-card{padding:22px;border-radius:14px;background:var(--surface);border-top:3px solid var(--lime);border-inline:1px solid var(--line);border-bottom:1px solid var(--line)}.rb-layer-card span{display:inline-block;font-size:12px;color:var(--lime);font-weight:800;letter-spacing:.08em;margin-bottom:12px}.rb-layer-card h3{font-size:20px;line-height:1.2;letter-spacing:-.02em}.rb-layer-card p{margin-top:10px;color:var(--muted);font-size:14px;line-height:1.65}
-.rb-admin-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start;margin-top:40px}.rb-controls{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.rb-controls article{padding:22px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.rb-control-icon{display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:rgba(215,255,0,.12);color:var(--lime);font-weight:800}.rb-controls h3{font-size:18px;letter-spacing:-.02em;margin-top:14px}.rb-controls p{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.65}
-.rb-opportunity{background:linear-gradient(135deg,#1b2432,#10151f);border-block:1px solid var(--line)}.rb-opportunity-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:start}.rb-question-list{display:grid;gap:16px;margin-top:26px}.rb-question-list article{padding:18px;border-left:3px solid var(--lime);background:rgba(255,255,255,.03)}.rb-question-list h3{font-size:20px;line-height:1.3;letter-spacing:-.02em}.rb-question-list p{margin-top:8px;color:var(--muted);font-size:15px;line-height:1.7}.rb-opportunity-card{background:#fbfcff;color:#121722;border-radius:15px;padding:30px;box-shadow:0 24px 55px rgba(0,0,0,.25)}.rb-opportunity-card .rb-card-eyebrow{color:#647800}.rb-opportunity-card h3{font-size:28px;line-height:1.1;letter-spacing:-.03em;margin:11px 0}.rb-opportunity-card p{color:#596274;margin:0 0 22px;font-size:15px;line-height:1.7}.rb-opportunity-card div{display:flex;flex-wrap:wrap;gap:9px}.rb-opportunity-card button+button{background:#eef1f5;color:#273041}.rb-opportunity-card small{display:block;color:#7a8495;font-size:12px;line-height:1.55;margin-top:22px}
-.rb-close{padding-block:110px;background:radial-gradient(circle at 30% 0,rgba(215,255,0,.14),transparent 32%),#080a0f}.rb-close-inner{max-width:860px;text-align:center}.rb-close h2{margin-inline:auto}.rb-close p{max-width:720px;margin-inline:auto}.rb-close .rb-hero-actions{justify-content:center}.rb-close-note{font-size:13px;color:#8d96a9 !important;margin-top:22px}
-.rb-footer{border-top:1px solid var(--line);color:#8d96a9;font-size:12px}.rb-footer .rb-shell{display:flex;justify-content:space-between;padding-block:25px}
-@media(max-width:980px){.rb-config-grid,.rb-layer-grid{grid-template-columns:1fr 1fr}.rb-builder,.rb-module-show,.rb-audience-panel,.rb-admin-grid,.rb-opportunity-grid{grid-template-columns:1fr}.rb-controls{grid-template-columns:1fr}.rb-mini-flow{grid-template-columns:1fr}.rb-builder-step{grid-template-columns:1fr}.rb-builder-step i{display:none}}
-@media(max-width:800px){.rb-shell{padding-inline:20px}.rb-hero{padding-block:46px 58px}.rb-hero-grid,.rb-proof-grid,.rb-config-grid,.rb-module-grid,.rb-layer-grid,.rb-controls{grid-template-columns:1fr}.rb-dashboard{transform:none}.rb-proof-grid{padding-block:18px}.rb-section{padding-block:68px}.rb-footer .rb-shell{flex-direction:column;gap:8px}.rb-hero h1{font-size:42px}.rb-section-heading h2,.rb-showcase h2,.rb-opportunity h2,.rb-close h2{font-size:34px}.rb-stat-grid{grid-template-columns:1fr}.rb-layer-card,.rb-picker,.rb-builder,.rb-module-show,.rb-audience-panel,.rb-opportunity-card{padding:22px}.rb-audience-switch{gap:8px}}
+.rb-page{--lime:#d7ff00;--ink:#090b12;--surface:#111722;--surface2:#161e2b;--line:#293246;--muted:#a6afbf;--blue:#2373e8;background:var(--ink);color:#f6f8fd;font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+.rb-page *{box-sizing:border-box}.rb-page :is(h1,h2,h3,p){margin:0}.rb-page button,.rb-page a{font:inherit}.rb-shell{max-width:1180px;margin:auto;padding-inline:24px}.rb-page [id]{scroll-margin-top:86px}
+.rb-header{position:sticky;top:0;z-index:50;background:rgba(9,11,18,.9);backdrop-filter:blur(18px);border-bottom:1px solid #242b3a}.rb-header-inner{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:22px}.rb-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}.rb-brand span{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#0d111b}.rb-brand img{width:24px;height:24px;object-fit:contain}.rb-brand b{font-size:14px}.rb-header nav{display:flex;gap:22px}.rb-header nav a,.rb-header-demo{color:#a8b0bf;text-decoration:none;font-size:13px}.rb-header nav a:hover,.rb-header-demo:hover{color:#fff}.rb-header-actions{display:flex;align-items:center;gap:14px}.rb-header-call{background:var(--lime);color:#080a0f;text-decoration:none;font-size:12px;font-weight:800;padding:9px 14px;border-radius:999px}
+.rb-eyebrow,.rb-card-label{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:900;color:var(--lime)}.rb-hero{position:relative;overflow:hidden;padding:82px 0 84px;background:radial-gradient(circle at 82% 26%,rgba(215,255,0,.14),transparent 26%),linear-gradient(135deg,#090b12,#111827)}.rb-grid-glow{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to right,#000 25%,transparent 92%)}.rb-hero-grid{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:62px;align-items:center}.rb-hero h1{font-size:clamp(42px,5vw,68px);line-height:.99;letter-spacing:-.055em;margin-top:16px}.rb-hero h1 em{font-style:normal;color:var(--lime)}.rb-lead{font-size:18px;line-height:1.67;color:var(--muted);max-width:650px;margin-top:24px}.rb-actions{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:30px}.rb-primary{display:inline-flex;align-items:center;gap:8px;background:var(--lime);color:#090b12;text-decoration:none;padding:14px 20px;border-radius:999px;font-weight:900;font-size:14px;transition:.2s}.rb-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(215,255,0,.2)}.rb-secondary{color:#fff;text-decoration:none;font-size:14px;font-weight:800;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:3px}.rb-fineprint{font-size:13px;color:#858fa2;margin-top:19px;max-width:640px}.rb-hero-visual{position:relative}.rb-hero-visual>button{appearance:none;border:1px solid #3a465d;background:#0f1520;padding:9px;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.38);width:100%;cursor:zoom-in;position:relative;overflow:hidden;transform:rotate(1.2deg)}.rb-hero-visual img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;border-radius:11px;background:#fff}.rb-hero-badge{position:absolute;left:22px;bottom:22px;background:rgba(8,10,15,.9);color:#fff;border:1px solid #414a5d;border-radius:999px;padding:8px 11px;font-size:11px;font-weight:800}.rb-hero-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 18px 0}.rb-hero-stat-row span{font-size:11px;color:#929db0;text-align:center}.rb-hero-stat-row b{color:#fff}.rb-quick-strip{border-block:1px solid #273044;background:#0d1119}.rb-quick-strip .rb-shell{display:grid;grid-template-columns:.8fr 1.4fr;gap:34px;padding-block:22px}.rb-quick-strip strong{color:var(--lime);font-size:15px}.rb-quick-strip span{color:#a5adbd;font-size:14px}
+.rb-section{padding-block:92px}.rb-heading{max-width:760px}.rb-heading--wide{max-width:850px}.rb-heading h2,.rb-outcomes h2,.rb-close h2{font-size:clamp(31px,4vw,50px);line-height:1.04;letter-spacing:-.045em;margin-top:14px}.rb-heading>p:last-child{margin-top:17px;color:var(--muted);font-size:17px;line-height:1.68}.rb-picker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:38px}.rb-picker{appearance:none;text-align:left;border:1px solid var(--line);background:var(--surface);color:#fff;padding:22px;border-radius:15px;display:grid;gap:10px;cursor:pointer;transition:.2s}.rb-picker:hover{transform:translateY(-2px);border-color:#46536d}.rb-picker.is-active{border-color:rgba(215,255,0,.5);background:linear-gradient(180deg,rgba(215,255,0,.08),rgba(255,255,255,.015))}.rb-picker-top{display:flex;justify-content:space-between;align-items:center;gap:14px}.rb-picker-top b{color:var(--lime);font-size:12px}.rb-picker-top i{font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#8f99ab}.rb-picker>strong{font-size:20px}.rb-picker>span:last-child{color:var(--muted);font-size:14px;line-height:1.55}.rb-flow-panel{display:grid;grid-template-columns:.75fr 1.25fr;gap:28px;margin-top:18px;padding:28px;border-radius:17px;border:1px solid var(--line);background:#0f1520}.rb-flow-panel h3{font-size:27px;line-height:1.1;letter-spacing:-.03em;margin-top:11px}.rb-flow-panel>div:first-child>p:last-child{color:var(--muted);font-size:15px;line-height:1.65;margin-top:14px}.rb-flow{display:grid;gap:10px}.rb-flow article{display:grid;grid-template-columns:40px 1fr;gap:13px;padding:15px;border-radius:12px;border:1px solid #313c50;background:#151d2a}.rb-flow article>span{color:var(--lime);font-size:11px;font-weight:900}.rb-flow b{font-size:15px}.rb-flow p{color:#aeb8c9;font-size:13px;margin-top:4px}
+.rb-tools-showcase{background:#f3f5f8;color:#111621}.rb-dark-copy .rb-eyebrow{color:#667a00}.rb-dark-copy>p:last-child{color:#596477}.rb-tool-stack{display:grid;gap:22px;margin-top:40px}.rb-tool-card{display:grid;grid-template-columns:.9fr 1.1fr;gap:30px;padding:28px;border:1px solid #d6dce6;border-radius:18px;background:#fff;box-shadow:0 18px 44px rgba(23,34,55,.08)}.rb-tool-card--flagship{border:2px solid #b6d500;box-shadow:0 24px 58px rgba(45,65,20,.14)}.rb-tool-meta{display:flex;align-items:center;gap:9px}.rb-tool-meta span{font-size:10px;text-transform:uppercase;letter-spacing:.13em;font-weight:900;color:#617500}.rb-tool-meta b{font-size:10px;text-transform:uppercase;letter-spacing:.1em;background:#111827;color:#fff;padding:5px 8px;border-radius:999px}.rb-tool-copy h3{font-size:31px;letter-spacing:-.035em;margin-top:12px}.rb-tool-copy>p{color:#4e596a;font-size:15px;line-height:1.72;margin-top:14px}.rb-tool-copy ul,.rb-user-copy ul{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:9px}.rb-tool-copy li,.rb-user-copy li{display:flex;gap:9px;font-size:14px;line-height:1.55}.rb-tool-copy li span{color:#667a00;font-weight:900}.rb-step-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:22px}.rb-step-row span{display:flex;align-items:center;gap:8px;padding:10px;border-radius:10px;background:#f1f4f7;color:#536072;font-size:11px;font-weight:700}.rb-step-row b{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#151c28;color:#fff;font-size:10px}.rb-text-link{display:inline-block;margin-top:20px;color:#202a3a;text-decoration:none;font-weight:900;font-size:13px}.rb-text-link:hover{text-decoration:underline}
+.rb-carousel{min-width:0;border:1px solid #d7dde7;background:#fff;padding:9px;border-radius:15px;box-shadow:0 18px 38px rgba(20,32,53,.1)}.rb-carousel--prominent{box-shadow:0 22px 48px rgba(51,76,21,.16)}.rb-carousel-image{appearance:none;border:0;padding:0;background:#edf0f4;display:block;width:100%;border-radius:10px;overflow:hidden;position:relative;cursor:zoom-in}.rb-carousel-image img{display:block;width:100%;height:390px;object-fit:contain;object-position:center;background:#eef1f5}.rb-carousel--prominent .rb-carousel-image img{height:430px}.rb-zoom{position:absolute;right:10px;bottom:10px;background:rgba(8,10,15,.82);color:#fff;border-radius:999px;padding:7px 9px;font-size:10px;font-weight:800;opacity:0;transition:.18s}.rb-carousel-image:hover .rb-zoom{opacity:1}.rb-carousel figcaption{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:13px 7px 6px}.rb-carousel-copy{display:grid;gap:5px}.rb-carousel-copy strong{font-size:13px;color:#1a2230}.rb-carousel-copy span{font-size:11px;color:#657082;line-height:1.48;max-width:560px}.rb-carousel-controls{display:flex;align-items:center;gap:8px;flex:none}.rb-carousel-controls button{width:31px;height:31px;border-radius:50%;border:1px solid #d6dce4;background:#fff;color:#202a3a;cursor:pointer}.rb-carousel-controls span{font-size:11px;color:#6f7888;min-width:34px;text-align:center}.rb-dots{display:flex;justify-content:center;gap:6px;padding:4px 0 2px}.rb-dots button{appearance:none;width:6px;height:6px;border:0;border-radius:50%;background:#c4cad3;padding:0;cursor:pointer}.rb-dots button.is-active{background:#1a2230;transform:scale(1.3)}
+.rb-customise-intro{display:grid;grid-template-columns:1fr .9fr;gap:80px;align-items:end}.rb-customise-copy{padding:24px;border-left:3px solid var(--lime);background:#0e141e}.rb-customise-copy p{color:var(--muted);font-size:16px;line-height:1.7}.rb-customise-copy strong{display:block;color:#fff;font-size:18px;line-height:1.45;margin-top:13px}.rb-custom-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:38px}.rb-custom-grid article{padding:20px;border-radius:13px;background:var(--surface);border:1px solid var(--line)}.rb-custom-grid article>span{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(215,255,0,.1);color:var(--lime);font-weight:900}.rb-custom-grid h3{font-size:17px;margin-top:13px}.rb-custom-grid p{color:var(--muted);font-size:13px;line-height:1.6;margin-top:7px}
+.rb-user-section{background:#0d1119;border-block:1px solid var(--line)}.rb-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:32px}.rb-tabs button{appearance:none;border:1px solid var(--line);background:var(--surface);color:#fff;border-radius:999px;padding:10px 14px;cursor:pointer;font-size:13px;font-weight:800}.rb-tabs button.is-active{background:var(--lime);color:#080a0f;border-color:var(--lime)}.rb-user-panel{display:grid;grid-template-columns:.78fr 1.22fr;gap:26px;align-items:start;padding:26px;border:1px solid var(--line);border-radius:17px;background:var(--surface);margin-top:17px}.rb-user-copy h3{font-size:29px;line-height:1.08;letter-spacing:-.03em;margin-top:12px}.rb-user-question{font-size:17px;line-height:1.55;color:#e1e6ef;margin-top:15px}.rb-user-copy li{color:#c7cfdd}.rb-user-copy li span{color:var(--lime);font-weight:900}.rb-text-link--light{color:#fff}.rb-carousel--dark{background:#151d29;border-color:#303b4e;box-shadow:none}.rb-carousel--dark .rb-carousel-copy strong{color:#fff}.rb-carousel--dark .rb-carousel-copy span{color:#aeb7c7}.rb-carousel--dark .rb-carousel-controls button{background:#0f1520;border-color:#364154;color:#fff}.rb-carousel--dark .rb-dots button{background:#556074}.rb-carousel--dark .rb-dots button.is-active{background:var(--lime)}
+.rb-admin-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:34px;align-items:start}.rb-capabilities{display:grid;gap:9px;margin-top:26px}.rb-capabilities article{display:grid;grid-template-columns:29px 1fr;gap:10px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--surface)}.rb-capabilities article>span{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:rgba(215,255,0,.1);color:var(--lime);font-weight:900}.rb-capabilities h3{font-size:14px}.rb-capabilities p{color:var(--muted);font-size:12px;line-height:1.5;margin-top:3px}.rb-outcomes{background:linear-gradient(135deg,#171f2c,#0f141e);border-block:1px solid var(--line)}.rb-outcome-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:70px}.rb-outcomes h2{margin-top:14px}.rb-outcome-list{display:grid;grid-template-columns:1fr 1fr;gap:11px}.rb-outcome-list article{padding:18px;border:1px solid #334056;border-radius:12px;background:rgba(255,255,255,.025);display:grid;gap:7px}.rb-outcome-list b{font-size:16px}.rb-outcome-list span{font-size:13px;color:var(--muted);line-height:1.55}.rb-close{padding:104px 0;background:radial-gradient(circle at 50% 0,rgba(215,255,0,.13),transparent 34%),#080a0f}.rb-close-inner{max-width:850px;text-align:center}.rb-close h2{margin-inline:auto}.rb-close-inner>p:not(.rb-eyebrow){color:var(--muted);font-size:17px;line-height:1.7;max-width:720px;margin:18px auto 0}.rb-actions--center{justify-content:center}.rb-footer{border-top:1px solid var(--line);color:#858fa0;font-size:11px}.rb-footer .rb-shell{display:flex;justify-content:space-between;gap:20px;padding-block:24px}
+.rb-lightbox{position:fixed;inset:0;z-index:100;background:rgba(4,6,10,.91);display:grid;place-items:center;padding:32px}.rb-lightbox-inner{max-width:min(1500px,95vw);max-height:90vh;display:grid;gap:12px}.rb-lightbox-inner img{display:block;max-width:100%;max-height:84vh;object-fit:contain;border-radius:12px;background:#fff}.rb-lightbox-inner strong{color:#fff;text-align:center;font-size:13px}.rb-lightbox-close{position:fixed;right:28px;top:22px;width:42px;height:42px;border-radius:50%;border:1px solid #485168;background:#141a26;color:#fff;font-size:26px;cursor:pointer}
+@media(max-width:980px){.rb-header nav{display:none}.rb-hero-grid,.rb-flow-panel,.rb-tool-card,.rb-user-panel,.rb-admin-grid,.rb-outcome-grid,.rb-customise-intro{grid-template-columns:1fr}.rb-picker-grid,.rb-custom-grid{grid-template-columns:1fr 1fr}.rb-tool-card{gap:22px}.rb-carousel-image img,.rb-carousel--prominent .rb-carousel-image img{height:390px}.rb-outcome-list{grid-template-columns:1fr 1fr}.rb-customise-intro{gap:28px}}
+@media(max-width:720px){.rb-shell{padding-inline:18px}.rb-header-inner{min-height:60px}.rb-brand b,.rb-header-demo{display:none}.rb-header-call{font-size:11px}.rb-hero{padding:54px 0 58px}.rb-hero-grid{gap:35px}.rb-hero h1{font-size:40px}.rb-lead{font-size:16px}.rb-quick-strip .rb-shell,.rb-picker-grid,.rb-custom-grid,.rb-outcome-list{grid-template-columns:1fr}.rb-section{padding-block:66px}.rb-heading h2,.rb-outcomes h2,.rb-close h2{font-size:34px}.rb-heading>p:last-child{font-size:15px}.rb-flow-panel,.rb-tool-card,.rb-user-panel{padding:20px}.rb-step-row{grid-template-columns:1fr}.rb-carousel-image img,.rb-carousel--prominent .rb-carousel-image img{height:300px}.rb-carousel figcaption{display:grid}.rb-carousel-controls{justify-self:end}.rb-user-panel{gap:18px}.rb-footer .rb-shell{flex-direction:column}.rb-lightbox{padding:16px}.rb-lightbox-close{right:12px;top:12px}}
 `;
