@@ -1,15 +1,51 @@
 'use client';
 
-// Admin > Tracking: quotes created (date / items / value / email), signups
-// captured, and a product leaderboard (times quoted). Reads the tracking
-// events the tool logs (adminData.ts, localStorage demo-grade).
+// Admin > Tracking, restructured around customer types:
+// - Opportunities: known contacts quoting repeatedly without ordering
+// - Trade customers (login + tier pricing), known customers (email, no
+//   login), anonymous usage (no email - outcome untrackable)
+// - Quotes + signups + leaderboard in scrollable containers (~8-10 rows)
+// Reads tracking events the tool logs, merged with sample activity.
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { SupplierConfig } from '../supplierConfig';
-import { readEvents, customerSummaries, withDemoEvents, type TrackingEvent } from '../adminData';
+import type { AdminData, TrackingEvent } from '../adminData';
+import { readEvents, withDemoEvents } from '../adminData';
 import { SectionCard } from './AdminPanel';
 
-export function AdminTracking({ cfg, slug }: { cfg: SupplierConfig; slug: string }) {
+interface CustomerStats {
+  email: string;
+  quotes: number;
+  totalValue: number;
+  orders: number;
+  converted: number;
+  enquiries: number;
+  lastActiveAt: string;
+}
+
+function summariseCustomers(events: TrackingEvent[]): Map<string, CustomerStats> {
+  const byEmail = new Map<string, CustomerStats>();
+  const touch = (email: string, at: string) => {
+    const s = byEmail.get(email) ?? { email, quotes: 0, totalValue: 0, orders: 0, converted: 0, enquiries: 0, lastActiveAt: at };
+    if (at > s.lastActiveAt) s.lastActiveAt = at;
+    return s;
+  };
+  for (const e of events) {
+    if (e.type === 'quote' && e.email) {
+      const s = touch(e.email, e.createdAt);
+      s.quotes += 1;
+      s.totalValue += e.total;
+    } else if (e.type === 'action' && e.email) {
+      const s = touch(e.email, e.createdAt);
+      if (e.action === 'order') s.orders += 1;
+      else if (e.action === 'convert') s.converted += 1;
+      else s.enquiries += 1;
+    }
+  }
+  return byEmail;
+}
+
+export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug: string; admin: AdminData }) {
   const [events, setEvents] = useState<TrackingEvent[]>([]);
 
   useEffect(() => {
@@ -19,52 +55,90 @@ export function AdminTracking({ cfg, slug }: { cfg: SupplierConfig; slug: string
     return () => window.removeEventListener('qc-spt-events-changed', load);
   }, [slug, cfg]);
 
-  const quotes = events.filter((e): e is Extract<TrackingEvent, { type: 'quote' }> => e.type === 'quote');
-  const signups = events.filter((e): e is Extract<TrackingEvent, { type: 'signup' }> => e.type === 'signup');
-  const totalValue = quotes.reduce((s, q) => s + q.total, 0);
+  const quotes = useMemo(() => events.filter((e): e is Extract<TrackingEvent, { type: 'quote' }> => e.type === 'quote'), [events]);
+  const signups = useMemo(() => events.filter((e): e is Extract<TrackingEvent, { type: 'signup' }> => e.type === 'signup'), [events]);
+  const customers = useMemo(() => summariseCustomers(events), [events]);
+
+  const tradeEmails = useMemo(() => new Set(admin.customers.map(c => c.email.toLowerCase())), [admin.customers]);
+  const tierById = useMemo(() => new Map(admin.tiers.map(t => [t.id, t.name])), [admin.tiers]);
+
+  const trade = [...customers.values()].filter(s => tradeEmails.has(s.email.toLowerCase()));
+  const known = [...customers.values()].filter(s => !tradeEmails.has(s.email.toLowerCase()));
+  const anonymousQuotes = quotes.filter(q => !q.email);
+
+  const orderedQuotes = quotes.length ? quotes.filter(q => q.email && customers.get(q.email)?.orders) .length : 0;
+  // Value "left on the table": quotes from known/trade contacts with no orders.
+  const onTheTable = [...customers.values()].filter(s => s.orders === 0).reduce((sum, s) => sum + s.totalValue, 0);
+  const avgQuote = quotes.length ? quotes.reduce((s, q) => s + q.total, 0) / quotes.length : 0;
+
+  const opportunities = known
+    .filter(s => s.orders === 0 && s.quotes >= 3)
+    .sort((a, b) => b.totalValue - a.totalValue);
 
   // product leaderboard: productId -> quoted count + name lookup
-  const byId = new Map(cfg.products.map(p => [p.id, p.name]));
-  const counts = new Map<string, number>();
-  for (const q of quotes) {
-    for (const [pid, qty] of Object.entries(q.productCounts)) {
-      counts.set(pid, (counts.get(pid) ?? 0) + (qty > 0 ? 1 : 0));
+  const byId = useMemo(() => new Map(cfg.products.map(p => [p.id, p.name])), [cfg.products]);
+  const leaderboard = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const q of quotes) {
+      for (const [pid, qty] of Object.entries(q.productCounts)) {
+        counts.set(pid, (counts.get(pid) ?? 0) + (qty > 0 ? 1 : 0));
+      }
     }
-  }
-  const leaderboard = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
+  }, [quotes]);
   const max = leaderboard[0]?.[1] ?? 1;
+
+  const sortedQuotes = useMemo(() => [...quotes].sort((a, b) => b.createdAt.localeCompare(a.createdAt)), [quotes]);
+
+  const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('en-GB');
+  const fmtDateTime = (iso: string) => new Date(iso).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
 
   return (
     <div className="space-y-4">
-      <SectionCard title="By customer" desc="Outputs, combined value and order activity per email - spot the big accounts and who priced but never ordered.">
-        {customerSummaries(events).length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-3">No customer activity yet.</p>
+      {/* Headline numbers */}
+      <SectionCard title="Overview" desc="Last 30 days, including sample activity. Your own test quotes merge in on top.">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {[
+            { label: 'Quotes created', value: String(quotes.length) },
+            { label: 'Became orders', value: quotes.length ? `${Math.round((orderedQuotes / quotes.length) * 100)}%` : '-' },
+            { label: 'Average quote', value: `${cfg.currency}${avgQuote.toFixed(0)}` },
+            { label: "Left on the table", value: `${cfg.currency}${Math.round(onTheTable).toLocaleString()}` },
+            { label: 'Anonymous usage', value: `${anonymousQuotes.length} quotes` },
+          ].map(s => (
+            <div key={s.label} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <div className="text-xs text-slate-500">{s.label}</div>
+              <div className="mt-1 text-xl font-semibold text-slate-900">{s.value}</div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+
+      {/* Opportunities - the reach-out hook */}
+      <SectionCard title={`Opportunities (${opportunities.length})`} desc="Known contacts quoting repeatedly with no orders - the biggest reach-out wins.">
+        {opportunities.length === 0 ? (
+          <p className="text-sm text-slate-400 text-center py-3">No open opportunities right now.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="max-h-72 overflow-y-auto">
             <table className="w-full text-sm">
-              <thead>
+              <thead className="sticky top-0 bg-white">
                 <tr className="border-b border-slate-200 text-left text-xs text-slate-500">
-                  <th className="py-1.5 pr-2 font-medium">Email</th>
-                  <th className="py-1.5 pr-2 font-medium text-right">Outputs</th>
-                  <th className="py-1.5 pr-2 font-medium text-right">Total value</th>
-                  <th className="py-1.5 pr-2 font-medium text-right">Converted</th>
+                  <th className="py-1.5 pr-2 font-medium">Contact</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Quotes</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Quoted value</th>
                   <th className="py-1.5 pr-2 font-medium text-right">Orders</th>
                   <th className="py-1.5 font-medium">Last active</th>
                 </tr>
               </thead>
               <tbody>
-                {customerSummaries(events).map(s => (
+                {opportunities.map(s => (
                   <tr key={s.email} className="border-b border-slate-100">
                     <td className="py-1.5 pr-2 text-slate-900">{s.email}</td>
-                    <td className="py-1.5 pr-2 text-right text-slate-600">{s.outputs}</td>
-                    <td className="py-1.5 pr-2 text-right font-semibold text-slate-900">{cfg.currency}{s.totalValue.toFixed(2)}</td>
-                    <td className="py-1.5 pr-2 text-right text-slate-600">{s.converted}</td>
+                    <td className="py-1.5 pr-2 text-right text-slate-600">{s.quotes}</td>
+                    <td className="py-1.5 pr-2 text-right font-semibold text-slate-900">{cfg.currency}{s.totalValue.toFixed(0)}</td>
                     <td className="py-1.5 pr-2 text-right">
-                      <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${s.ordered > 0 ? 'bg-green-50 text-green-700 ring-1 ring-green-200' : 'bg-slate-100 text-slate-400'}`}>
-                        {s.ordered > 0 ? `${s.ordered} ordered` : 'no orders'}
-                      </span>
+                      <span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 ring-1 ring-amber-200">none - reach out</span>
                     </td>
-                    <td className="py-1.5 text-xs text-slate-400">{new Date(s.lastActiveAt).toLocaleDateString('en-GB')}</td>
+                    <td className="py-1.5 text-xs text-slate-400">{fmtDate(s.lastActiveAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -73,25 +147,125 @@ export function AdminTracking({ cfg, slug }: { cfg: SupplierConfig; slug: string
         )}
       </SectionCard>
 
-      <SectionCard title="Quotes" desc={`${quotes.length} quotes created - combined value ${cfg.currency}${totalValue.toFixed(2)}.`}>
+      {/* Trade customers */}
+      <SectionCard title={`Trade customers (${trade.length})`} desc="Logged-in accounts with tier pricing. Full visibility: quotes, conversions, orders.">
+        {trade.length === 0 ? (
+          <p className="text-sm text-slate-400 text-center py-3">No trade customer activity yet.</p>
+        ) : (
+          <div className="max-h-80 overflow-y-auto">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-white">
+                <tr className="border-b border-slate-200 text-left text-xs text-slate-500">
+                  <th className="py-1.5 pr-2 font-medium">Email</th>
+                  <th className="py-1.5 pr-2 font-medium">Tier</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Quotes</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Value</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Orders</th>
+                  <th className="py-1.5 font-medium">Last active</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trade.sort((a, b) => b.totalValue - a.totalValue).map(s => {
+                  const customer = admin.customers.find(c => c.email.toLowerCase() === s.email.toLowerCase());
+                  return (
+                    <tr key={s.email} className="border-b border-slate-100">
+                      <td className="py-1.5 pr-2 text-slate-900">{s.email}</td>
+                      <td className="py-1.5 pr-2"><span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-200">{customer ? tierById.get(customer.tierId ?? '') ?? 'Trade' : 'Trade'}</span></td>
+                      <td className="py-1.5 pr-2 text-right text-slate-600">{s.quotes}</td>
+                      <td className="py-1.5 pr-2 text-right font-semibold text-slate-900">{cfg.currency}{s.totalValue.toFixed(0)}</td>
+                      <td className="py-1.5 pr-2 text-right text-slate-600">{s.orders}</td>
+                      <td className="py-1.5 text-xs text-slate-400">{fmtDate(s.lastActiveAt)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </SectionCard>
+
+      {/* Known customers */}
+      <SectionCard title={`Known customers (${known.length})`} desc="Captured emails without a trade login. You can see whether their quotes converted.">
+        {known.length === 0 ? (
+          <p className="text-sm text-slate-400 text-center py-3">No known-customer activity yet.</p>
+        ) : (
+          <div className="max-h-80 overflow-y-auto">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-white">
+                <tr className="border-b border-slate-200 text-left text-xs text-slate-500">
+                  <th className="py-1.5 pr-2 font-medium">Email</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Quotes</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Value</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Converted</th>
+                  <th className="py-1.5 pr-2 font-medium text-right">Orders</th>
+                  <th className="py-1.5 font-medium">Last active</th>
+                </tr>
+              </thead>
+              <tbody>
+                {known.sort((a, b) => b.totalValue - a.totalValue).map(s => (
+                  <tr key={s.email} className="border-b border-slate-100">
+                    <td className="py-1.5 pr-2 text-slate-900">{s.email}</td>
+                    <td className="py-1.5 pr-2 text-right text-slate-600">{s.quotes}</td>
+                    <td className="py-1.5 pr-2 text-right font-semibold text-slate-900">{cfg.currency}{s.totalValue.toFixed(0)}</td>
+                    <td className="py-1.5 pr-2 text-right text-slate-600">{s.converted}</td>
+                    <td className="py-1.5 pr-2 text-right">
+                      <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${s.orders > 0 ? 'bg-green-50 text-green-700 ring-1 ring-green-200' : 'bg-slate-100 text-slate-400'}`}>
+                        {s.orders > 0 ? `${s.orders} ordered` : 'no orders'}
+                      </span>
+                    </td>
+                    <td className="py-1.5 text-xs text-slate-400">{fmtDate(s.lastActiveAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </SectionCard>
+
+      {/* Anonymous usage */}
+      <SectionCard title={`Anonymous usage (${anonymousQuotes.length} quotes)`} desc="Visitors who used the tool without signing up - value quoted, outcome untrackable. A signup prompt converts these into known customers.">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <div className="text-xs text-slate-500">Quotes</div>
+            <div className="mt-1 text-xl font-semibold text-slate-900">{anonymousQuotes.length}</div>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <div className="text-xs text-slate-500">Quoted value</div>
+            <div className="mt-1 text-xl font-semibold text-slate-900">{cfg.currency}{anonymousQuotes.reduce((s, q) => s + q.total, 0).toFixed(0)}</div>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <div className="text-xs text-slate-500">Share of all quotes</div>
+            <div className="mt-1 text-xl font-semibold text-slate-900">{quotes.length ? Math.round((anonymousQuotes.length / quotes.length) * 100) : 0}%</div>
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* All quotes - scrollable */}
+      <SectionCard title="Quotes" desc={`${quotes.length} quotes created - scroll to browse.`}>
         {quotes.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-3">No quotes yet - complete a pricing to the output in the tool.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="max-h-96 overflow-y-auto">
             <table className="w-full text-sm">
-              <thead>
+              <thead className="sticky top-0 bg-white">
                 <tr className="border-b border-slate-200 text-left text-xs text-slate-500">
                   <th className="py-1.5 pr-2 font-medium">Created</th>
                   <th className="py-1.5 pr-2 font-medium">Email</th>
+                  <th className="py-1.5 pr-2 font-medium">Type</th>
                   <th className="py-1.5 pr-2 font-medium text-right">Items</th>
                   <th className="py-1.5 font-medium text-right">Value</th>
                 </tr>
               </thead>
               <tbody>
-                {quotes.map((q, i) => (
+                {sortedQuotes.map((q, i) => (
                   <tr key={i} className="border-b border-slate-100">
-                    <td className="py-1.5 pr-2 text-xs text-slate-500">{new Date(q.createdAt).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}</td>
+                    <td className="py-1.5 pr-2 text-xs text-slate-500">{fmtDateTime(q.createdAt)}</td>
                     <td className="py-1.5 pr-2 text-slate-600">{q.email ?? <span className="text-slate-400">anonymous</span>}</td>
+                    <td className="py-1.5 pr-2">
+                      <span className={`rounded-full px-2 py-0.5 text-xs ${q.email ? (tradeEmails.has(q.email.toLowerCase()) ? 'bg-blue-50 text-blue-700' : 'bg-slate-100 text-slate-600') : 'bg-slate-100 text-slate-400'}`}>
+                        {q.email ? (tradeEmails.has(q.email.toLowerCase()) ? 'Trade' : 'Known') : 'Anonymous'}
+                      </span>
+                    </td>
                     <td className="py-1.5 pr-2 text-right text-slate-600">{q.itemCount}</td>
                     <td className="py-1.5 text-right font-semibold text-slate-900">{q.currency}{q.total.toFixed(2)}</td>
                   </tr>
@@ -106,7 +280,7 @@ export function AdminTracking({ cfg, slug }: { cfg: SupplierConfig; slug: string
         {leaderboard.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-3">No product data yet.</p>
         ) : (
-          <div className="space-y-1.5">
+          <div className="max-h-72 overflow-y-auto space-y-1.5">
             {leaderboard.map(([pid, count]) => (
               <div key={pid} className="flex items-center gap-3">
                 <span className="w-56 truncate text-sm text-slate-700">{byId.get(pid) ?? '(removed product)'}</span>
@@ -124,9 +298,9 @@ export function AdminTracking({ cfg, slug }: { cfg: SupplierConfig; slug: string
         {signups.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-3">No signups yet.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="max-h-64 overflow-y-auto">
             <table className="w-full text-sm">
-              <thead>
+              <thead className="sticky top-0 bg-white">
                 <tr className="border-b border-slate-200 text-left text-xs text-slate-500">
                   <th className="py-1.5 pr-2 font-medium">Name</th>
                   <th className="py-1.5 pr-2 font-medium">Email</th>
@@ -138,7 +312,7 @@ export function AdminTracking({ cfg, slug }: { cfg: SupplierConfig; slug: string
                   <tr key={i} className="border-b border-slate-100">
                     <td className="py-1.5 pr-2 text-slate-900">{s.name || '-'}</td>
                     <td className="py-1.5 pr-2 text-slate-600">{s.email}</td>
-                    <td className="py-1.5 text-xs text-slate-400">{new Date(s.createdAt).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}</td>
+                    <td className="py-1.5 text-xs text-slate-400">{fmtDateTime(s.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>

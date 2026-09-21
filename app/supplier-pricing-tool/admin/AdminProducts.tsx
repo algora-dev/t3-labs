@@ -214,19 +214,20 @@ export function AdminProducts({ cfg, setCfg, admin, setAdmin }: {
         </select>
       </div>
 
-      {/* Product list */}
-      <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden">
+      {/* Product list: each product is its own outlined card, zebra-striped
+          so expanded-all stays readable instead of a wall of noise. */}
+      <div className="space-y-2">
         {visible.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-8">
             {search ? `No products match "${search}".` : 'No products in this view yet.'}
           </p>
-        ) : visible.map(p => {
+        ) : visible.map((p, i) => {
           const isOpen = expanded.has(p.id);
           const libNames = libraries.filter(l => l.productIds.includes(p.id)).map(l => l.name);
           return (
-            <div key={p.id}>
+            <div key={p.id} className={`rounded-xl border border-slate-300 overflow-hidden ${i % 2 === 1 ? 'bg-slate-50' : 'bg-white'}`}>
               {/* Collapsed: name + code + quick facts */}
-              <div className={`flex items-center gap-3 px-4 py-2.5 ${isOpen ? 'bg-slate-50' : 'bg-white hover:bg-slate-50/60'} transition`}>
+              <div className={`flex items-center gap-3 px-4 py-2.5 ${isOpen ? 'bg-slate-100/70' : 'hover:bg-slate-100/50'} transition`}>
                 <button onClick={() => toggleExpanded(p.id)} className="text-slate-400 hover:text-slate-900 transition" aria-label={isOpen ? `Collapse ${p.name}` : `Expand ${p.name}`}>
                   <svg className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -262,7 +263,7 @@ export function AdminProducts({ cfg, setCfg, admin, setAdmin }: {
               </div>
               {/* Expanded: full edit grid */}
               {isOpen && (
-                <div className="bg-slate-50 px-4 pb-4 pt-1 md:pl-12">
+                <div className="px-4 pb-4 pt-1 md:pl-12">
                   <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     <label className="grid gap-1 text-xs font-medium text-slate-500">
                       Product code

@@ -206,7 +206,7 @@ function AdminHome({ slug, onLogout }: { slug: string; onLogout: () => void }) {
           {section === 'products' && <AdminProducts cfg={cfg} setCfg={setCfg} admin={admin} setAdmin={setAdmin} />}
           {section === 'trade' && <AdminTrade admin={admin} setAdmin={setAdmin} cfg={cfg} />}
           {section === 'team' && <AdminTeam admin={admin} setAdmin={setAdmin} />}
-          {section === 'tracking' && <AdminTracking cfg={cfg} slug={slug} />}
+          {section === 'tracking' && <AdminTracking cfg={cfg} slug={slug} admin={admin} />}
           {section === 'cta' && <AdminCta admin={admin} setAdmin={setAdmin} />}
           {section === 'settings' && <Settings slug={slug} cfg={cfg} setCfg={setCfg} admin={admin} setAdmin={setAdmin} onReset={flashSaved} />}
         </div>

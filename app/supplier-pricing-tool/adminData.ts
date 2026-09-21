@@ -165,13 +165,26 @@ function defaultLibraries(cfg: SupplierConfig): ProductLibrary[] {
   return [...seen.values()];
 }
 
+/** Sample trade customers so the tracking story shows known, logged-in
+ *  accounts. Fake addresses - collision risk with real users is nil. */
+function defaultTradeCustomers(): TradeCustomer[] {
+  const day = 86400000;
+  const now = Date.now();
+  return [
+    { email: 'mike@harwoodroofing.co.uk', tierId: 't1', status: 'active', addedAt: new Date(now - 42 * day).toISOString(), lastLoginAt: new Date(now - 1 * day).toISOString() },
+    { email: 'sarah.j@premierjones.co.uk', tierId: 't2', status: 'active', addedAt: new Date(now - 60 * day).toISOString(), lastLoginAt: new Date(now - 2 * day).toISOString() },
+    { email: 'dan@dtfdevelopments.co.uk', tierId: 't1', status: 'active', addedAt: new Date(now - 21 * day).toISOString(), lastLoginAt: new Date(now - 3 * day).toISOString() },
+    { email: 'amy@vaultconstructions.co.uk', tierId: 't2', status: 'active', addedAt: new Date(now - 35 * day).toISOString(), lastLoginAt: new Date(now - 5 * day).toISOString() },
+  ];
+}
+
 export function defaultAdminData(cfg: SupplierConfig): AdminData {
   return {
     tiers: [
       { id: 't1', name: 'Trade Tier 1', discountPct: 5 },
       { id: 't2', name: 'Trade Tier 2', discountPct: Math.max(cfg.discountPct, 10) },
     ],
-    customers: [],
+    customers: defaultTradeCustomers(),
     team: defaultTeam(cfg.name),
     cta: { ...DEFAULT_CTA },
     features: { products: true, tradePricing: true, team: true, tracking: true, cta: true },
@@ -207,7 +220,7 @@ export function readAdminData(slug: string, cfg: SupplierConfig): AdminData {
     }
     return {
       tiers: Array.isArray(parsed.tiers) && parsed.tiers.length > 0 ? parsed.tiers : base.tiers,
-      customers: Array.isArray(parsed.customers) ? parsed.customers : [],
+      customers: Array.isArray(parsed.customers) && parsed.customers.length > 0 ? parsed.customers : base.customers,
       team: Array.isArray(parsed.team) && parsed.team.length > 0 ? parsed.team : base.team,
       cta: { ...base.cta, ...(parsed.cta ?? {}) },
       features: { ...base.features, ...(parsed.features ?? {}) },
@@ -266,15 +279,11 @@ function seededPrng(seed: number): () => number {
   };
 }
 
-const SAMPLE_EMAILS = [
-  'mike@harwoodroofing.co.uk', 'sarah.j@premierjones.co.uk', 'dan@dtfdevelopments.co.uk',
-  'enquiries@barkerandson.co.uk', 'keith@nwrooflines.co.uk', 'amy@vaultconstructions.co.uk',
-  'paul.odonnell@podbuilders.co.uk', 'info@summitroofingltd.co.uk', 'tom@kestrelandco.co.uk',
-  'helen@qubebuild.co.uk', 'chris@apexhomeimprovements.co.uk', 'sam@riverstoneprop.co.uk',
-];
 
 /** Sample activity so the tracking dashboard shows what a live deployment
- *  looks like (87 quotes over ~30 days, signups, conversions, orders).
+ *  looks like. Three customer types: trade (login + tier pricing, higher
+ *  order rate), known (email captured, mixed conversion - a few big
+ *  zero-order opportunities), and anonymous (no email, quotes only).
  *  Deterministic: same numbers every render. Real events merge on top. */
 export function withDemoEvents(real: TrackingEvent[], cfg: SupplierConfig): TrackingEvent[] {
   const rand = seededPrng(42);
@@ -284,11 +293,25 @@ export function withDemoEvents(real: TrackingEvent[], cfg: SupplierConfig): Trac
   const weights = products.map((p, i) => (p.component === 'covering' ? 10 : 3) - Math.min(i, 5) * 0.4);
   const totalW = weights.reduce((s, w) => s + Math.max(w, 0.5), 0);
 
+  const TRADE_EMAILS = ['mike@harwoodroofing.co.uk', 'sarah.j@premierjones.co.uk', 'dan@dtfdevelopments.co.uk', 'amy@vaultconstructions.co.uk'];
+  const KNOWN_EMAILS = ['enquiries@barkerandson.co.uk', 'keith@nwrooflines.co.uk', 'paul.odonnell@podbuilders.co.uk', 'info@summitroofingltd.co.uk', 'tom@kestrelandco.co.uk', 'helen@qubebuild.co.uk', 'chris@apexhomeimprovements.co.uk', 'sam@riverstoneprop.co.uk'];
+  // Known customers who quote a lot but never order - the "opportunities".
+  const OPPORTUNITY_EMAILS = new Set(['enquiries@barkerandson.co.uk', 'keith@nwrooflines.co.uk', 'helen@qubebuild.co.uk']);
+  const orderRate: Record<string, number> = {};
+  for (const e of TRADE_EMAILS) orderRate[e] = 0.35;
+  for (const e of KNOWN_EMAILS) orderRate[e] = OPPORTUNITY_EMAILS.has(e) ? 0 : 0.18;
+  // Guaranteed minimum quote counts so the story always shows.
+  const minQuotes: Record<string, number> = {
+    'enquiries@barkerandson.co.uk': 8,
+    'keith@nwrooflines.co.uk': 6,
+    'helen@qubebuild.co.uk': 5,
+  };
+
   const events: TrackingEvent[] = [];
-  const QUOTES = 87;
   const now = Date.now();
-  for (let i = 0; i < QUOTES; i++) {
-    const email = SAMPLE_EMAILS[Math.floor(rand() * SAMPLE_EMAILS.length)];
+  const emailQuotes: Record<string, number> = {};
+
+  function makeQuote(email: string | null) {
     const daysAgo = Math.floor(rand() * 30);
     const createdAt = new Date(now - daysAgo * 86400000 - Math.floor(rand() * 86400000)).toISOString();
     // Most quotes are small repairs; a few are big re-roofs.
@@ -306,19 +329,33 @@ export function withDemoEvents(real: TrackingEvent[], cfg: SupplierConfig): Trac
       productCounts[pid] = (productCounts[pid] ?? 0) + 1;
     }
     events.push({ type: 'quote', createdAt, email, itemCount: Object.keys(productCounts).length, total: Math.round(total * 100) / 100, currency: cfg.currency, productCounts });
+    if (email == null) return; // anonymous: no follow-up actions trackable
+    emailQuotes[email] = (emailQuotes[email] ?? 0) + 1;
     if (rand() < 0.36) {
       events.push({ type: 'action', action: 'convert', createdAt: new Date(new Date(createdAt).getTime() + 3600000).toISOString(), email, total: Math.round(total) });
     }
-    if (rand() < 0.16) {
+    if (rand() < orderRate[email]) {
       events.push({ type: 'action', action: 'order', createdAt: new Date(new Date(createdAt).getTime() + 86400000).toISOString(), email, total: Math.round(total) });
-    }
-    if (rand() < 0.05) {
+    } else if (rand() < 0.08) {
       events.push({ type: 'action', action: 'enquiry', createdAt: new Date(new Date(createdAt).getTime() + 7200000).toISOString(), email, total: 0 });
     }
   }
+
+  // Trade + known customers: ~65 quotes with emails.
+  for (let i = 0; i < 65; i++) {
+    const all = [...TRADE_EMAILS, ...KNOWN_EMAILS];
+    makeQuote(all[Math.floor(rand() * all.length)]);
+  }
+  // Top up opportunity customers to their guaranteed minimums.
+  for (const [email, min] of Object.entries(minQuotes)) {
+    while ((emailQuotes[email] ?? 0) < min) makeQuote(email);
+  }
+  // Anonymous usage: quotes with no email, no trackable outcome.
+  for (let i = 0; i < 22; i++) makeQuote(null);
+
   const names = ['Mike Harwood', 'Sarah Jones', 'Dan Fletcher', 'Alex Barker', 'Keith Noble', 'Amy Chu', 'Paul O\u2019Donnell', 'Tom Kestrel'];
   for (let i = 0; i < 22; i++) {
-    const email = SAMPLE_EMAILS[Math.floor(rand() * SAMPLE_EMAILS.length)];
+    const email = KNOWN_EMAILS[Math.floor(rand() * KNOWN_EMAILS.length)];
     events.push({ type: 'signup', createdAt: new Date(now - Math.floor(rand() * 30) * 86400000).toISOString(), email, name: names[Math.floor(rand() * names.length)] });
   }
   // Real activity on top (most recent first)
