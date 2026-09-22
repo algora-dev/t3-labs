@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-const TITLE = "Construction Sales, Pricing & Customer Tools | T3 Labs";
+const TITLE = "Roofing Customer Tools & Smart Assistant | T3 Labs";
 const DESCRIPTION =
-  "See how T3 Labs builds custom pricing, estimating, customer and sales tools for construction businesses.";
+  "A representative-shared view of configurable roofing pricing, estimating, customer and Smart Assistant tools from T3 Labs.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },

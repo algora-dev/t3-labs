@@ -257,9 +257,9 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
 
         {/* Search / AI close */}
         <div className="mt-10 max-w-3xl">
-          <p className="text-sm leading-6" style={{ color: t.muted }}>The same tools can also create clearer, more useful product, pricing, quantity and technical information.</p>
-          <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>You cannot control whether AI chooses you. <strong style={{ color: t.text }}>But you can give it something worth finding.</strong></p>
-          <p className="mt-5 text-5xl font-bold leading-tight tracking-tight">The goal is to become <span style={{ color: t.accentInk }}>the answer AI gives</span>, not a link it lists.</p>
+          <p className="text-sm leading-6" style={{ color: t.muted }}>The same tools can also create clearer, more useful product, pricing, quantity and technical information that customers can use directly and AI search can understand more easily.</p>
+          <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>You cannot control every AI result. <strong style={{ color: t.text }}>But you can control how clear, useful and accessible your information is.</strong></p>
+          <p className="mt-5 text-5xl font-bold leading-tight tracking-tight">The goal is to become <span style={{ color: t.accentInk }}>the answer AI search gives</span>, not just another link it lists.</p>
           <a href={ctaAnchor} className="mt-6 inline-flex items-center gap-2 rounded-full border px-6 py-2.5 text-sm font-semibold transition-colors" style={{ borderColor: t.border, color: t.text }}>
             So where is your website making the customer do the work? <span aria-hidden>→</span>
           </a>

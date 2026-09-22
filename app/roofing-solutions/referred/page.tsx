@@ -14,14 +14,18 @@ type Business = "manufacturer" | "supplier" | "supply-install";
 type Audience = "visitor" | "trade" | "team";
 type Method = "known" | "plan" | "assistant";
 type Currency = "GBP" | "USD";
-type ContactMode = "representative" | "direct";
+type PageVariant = "direct" | "referred";
 type Tokens = {
   bg: string; surface: string; surfaceAlt: string; border: string;
   text: string; muted: string; accent: string; accentText: string;
   accentInk: string; accentSoft: string;
 };
-type MediaShot = { src: string; alt: string };
-type MediaSet = { shots: MediaShot[] };
+type MediaAsset = {
+  src: string;
+  fullSrc?: string;
+  alt: string;
+  videoSrc?: string;
+};
 
 const dark: Tokens = {
   bg: "#0a0b10", surface: "#101219", surfaceAlt: "#161927", border: "#262a3a",
@@ -36,42 +40,22 @@ const light: Tokens = {
 
 // IMPLEMENTATION: confirm these settings before publishing. No URLs are inferred.
 const CONFIG = {
-  // Keep the supplied referral page safe. Set to "direct" only on a direct T3 page.
-  contactMode: "representative" as ContactMode,
   // Existing T3 booking URL from the supplied direct page. Confirm it reaches Shaun.
   shaunBookingUrl: "https://calendly.com/insights-t3labs/20-minute-meeting",
   // Optional, approved representative contact URL. Never read this from user query input.
   representativeContactUrl: "",
   // Must be the MAIN Apex demo website. The supplied deep tool link was not reused.
-  apexDemoHomeUrl: "https://t3labs.tech/demo/roofing-site",
+  apexDemoHomeUrl: "/demo/roofing-site",
   currencyEndpoint: "/api/roofing-region",
   currencyPreferenceKey: "t3-roofing-price-currency",
-  // Real screenshots from the Apex Roofing demo, ordered as a short flick-through story per card.
+  // Real screenshots were not included. Blank entries show labelled illustrations.
   media: {
-    plan: {
-      shots: [
-        { src: "/assets/roofing-solutions/plan-1-takeoff-canvas.jpg", alt: "Digital takeoff canvas with a roof plan and ridges, hips, valleys and eaves measured as coloured lines" },
-        { src: "/assets/roofing-solutions/plan-2-measurement-choice.jpg", alt: "Choice between entering actual measurements or measuring from a plan with pitch-adjusted lengths" },
-        { src: "/assets/roofing-solutions/result-quote-output.jpg", alt: "Result screen with materials and labour totals and next actions, including continuing in QuoteCore+" },
-      ],
-    },
-    known: {
-      shots: [
-        { src: "/assets/roofing-solutions/known-1-roof-area-entry.jpg", alt: "Guided roof area entry with width by length, product selection and waste allowance" },
-        { src: "/assets/roofing-solutions/known-2-pricing-choice.jpg", alt: "Choice between material only and material and install pricing, with the job type selected" },
-        { src: "/assets/roofing-solutions/result-quote-output.jpg", alt: "Result screen with materials and labour totals and next actions, including continuing in QuoteCore+" },
-      ],
-    },
-    assistant: {
-      shots: [
-        { src: "/assets/roofing-solutions/assistant-1-start-options.jpg", alt: "Smart Assistant start screen offering an estimate, a roofing question, finding something or preparing an enquiry" },
-        { src: "/assets/roofing-solutions/assistant-2-enquiry-questions.jpg", alt: "Smart Assistant gathering job details conversationally, asking about roof pitch and roof shape" },
-        { src: "/assets/roofing-solutions/assistant-3-product-question.jpg", alt: "Smart Assistant answering a product question about underlay for a tiled roof" },
-        { src: "/assets/roofing-solutions/assistant-4-saving-code.jpg", alt: "Saving code offer shown to the customer before completing the enquiry" },
-      ],
-    },
-  } satisfies Record<Method, MediaSet>,
-// Optional page explainer. Retired: replaced by the YouTube embed in the opening section.
+    known: { src: "", fullSrc: "", videoSrc: "", alt: "Roofing tool showing a roof measurement, selected products and a preliminary result" },
+    plan: { src: "", fullSrc: "", videoSrc: "", alt: "Roofing plan measurement tool with measured areas ready to use in an estimate" },
+    assistant: { src: "", fullSrc: "", videoSrc: "", alt: "Smart Assistant answering a roofing product question and preparing the next step" },
+  } satisfies Record<Method, MediaAsset>,
+  // Optional page explainer. Hidden until supplied. Use a direct media URL, not a watch-page URL.
+  explainer: { src: "", poster: "", captions: "" },
 };
 
 // These are the two agreed regional entry prices, not an exchange-rate conversion.
@@ -107,22 +91,22 @@ const BASE_STORIES: Record<Audience, Story> = {
     label: "New visitors", benefit: "An answer before calling",
     question: "What do I need, and roughly what might it cost?",
     body: "A visitor can enter measurements, measure a plan or ask the Smart Assistant. They get product guidance or a preliminary estimate before deciding whether to enquire.",
-    result: "A useful answer, faster than elsewhere",
-    businessBenefit: "More likely to enquire or purchase.",
+    result: "A useful first answer",
+    businessBenefit: "A clearer starting point if they contact your team.",
   },
   trade: {
     label: "Roofing customers", benefit: "Prepare their own jobs",
-    question: "Let me measure and quote using the products I normally buy.",
-    body: "A roofing customer can work out quantities, products and pricing using tools on your website.",
-    result: "More roofers using your tools, more likely to purchase your products",
-    businessBenefit: "(Trade pricing available for different customers.)",
+    question: "Let me price this job using the products I normally buy.",
+    body: "A roofing customer can work out quantities, use approved products and account pricing, then prepare a material list or quote themselves.",
+    result: "A prepared job or material list",
+    businessBenefit: "Less work to place the next order with you.",
   },
   team: {
     label: "Your team", benefit: "Staff features and controls",
-    question: "Prepare estimates, pricing and quotes in one place.",
-    body: "Public-facing tools or back-end-only tools that let your team gain estimates, pricing and quotes using the same system, built around the way you already work.",
-    result: "Faster, better quoting with less back-end work",
-    businessBenefit: "(Everything connected to the same system.)",
+    question: "Use our pricing and rules to prepare this quote.",
+    body: "A staff version can add different rates, margins, permissions and quote features while using the same underlying product and job information.",
+    result: "A quote ready for staff review",
+    businessBenefit: "Less repeated entry and calculation.",
   },
 };
 
@@ -232,8 +216,8 @@ const PROFILES: Record<Business, Profile> = {
 
 const AUDIENCES: Audience[] = ["visitor", "trade", "team"];
 const METHODS: { id: Method; title: string; body: string }[] = [
-  { id: "plan", title: "Measure a plan", body: "Carry measured quantities into an estimate or enquiry." },
   { id: "known", title: "Enter measurements", body: "Turn known dimensions into quantities and preliminary pricing." },
+  { id: "plan", title: "Measure a plan", body: "Carry measured quantities into an estimate or enquiry." },
   { id: "assistant", title: "Ask the Smart Assistant", body: "Get product answers or preliminary pricing, with human handoff when needed." },
 ];
 
@@ -287,7 +271,7 @@ function AudienceExamples({ profile }: { profile: Profile }) {
               <p>{story.body}</p>
             </div>
             <div className="rp-result">
-              <p className="rp-result-label">Result</p><strong>{story.result}</strong>
+              <p className="rp-meta">Useful result</p><strong>{story.result}</strong>
               <p className="rp-result-benefit">{story.businessBenefit}</p>
             </div>
           </div>
@@ -331,63 +315,19 @@ function Illustration({ method }: { method: Method }) {
   );
 }
 
-function MethodCarousel({ method, expanded = false, title, onImageClick }: { method: Method; expanded?: boolean; title: string; onImageClick?: () => void }) {
-  const shots = CONFIG.media[method].shots;
-  const count = shots.length;
-  const [index, setIndex] = useState(0);
+function Screenshot({ method, expanded = false }: { method: Method; expanded?: boolean }) {
+  const asset: MediaAsset = CONFIG.media[method];
   const [failed, setFailed] = useState(false);
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
-  function go(next: number) { if (count) setIndex(((next % count) + count) % count); }
-  function onTouchStart(event: React.TouchEvent) {
-    touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY };
-  }
-  function onTouchEnd(event: React.TouchEvent) {
-    const start = touchStart.current;
-    touchStart.current = null;
-    if (!start) return;
-    const dx = event.changedTouches[0].clientX - start.x;
-    const dy = event.changedTouches[0].clientY - start.y;
-    if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) go(index + (dx < 0 ? 1 : -1));
-  }
-  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    if (event.key === "ArrowRight") { event.preventDefault(); go(index + 1); }
-    if (event.key === "ArrowLeft") { event.preventDefault(); go(index - 1); }
-  }
-  const shot = shots[index];
-  return (
-    <div className="rp-carousel" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onKeyDown={onKeyDown}
-      tabIndex={0} role="group" aria-roledescription="carousel" aria-label={`${title} example (${index + 1} of ${count})`}>
-      <div className="rp-carousel-track">
-        {!shot || failed ? <Illustration method={method} /> : onImageClick ? (
-          <button type="button" className="rp-media-open" onClick={onImageClick} aria-haspopup="dialog"
-            aria-label={`Enlarge ${title.toLowerCase()} example`}>
-            <img key={`${shot.src}-${index}`} src={shot.src} alt={shot.alt}
-              loading={expanded ? "eager" : "lazy"} decoding="async"
-              onError={() => setFailed(true)} className="rp-screenshot" />
-          </button>
-        ) : (
-          <img key={`${shot.src}-${index}`} src={shot.src} alt={shot.alt}
-            loading={expanded ? "eager" : "lazy"} decoding="async"
-            onError={() => setFailed(true)} className="rp-screenshot" />
-        )}
-      </div>
-      {count > 1 && <div className="rp-carousel-nav">
-        <button type="button" className="rp-carousel-arrow" onClick={() => go(index - 1)} aria-label="Previous example">←</button>
-        <div className="rp-carousel-dots" role="group" aria-label="Choose example">
-          {shots.map((s, i) => (
-            <button key={`${s.src}-${i}`} type="button" className={i === index ? "rp-dot rp-dot-active" : "rp-dot"}
-              aria-label={`Example ${i + 1} of ${count}`} aria-current={i === index} onClick={() => go(i)} />
-          ))}
-        </div>
-        <button type="button" className="rp-carousel-arrow" onClick={() => go(index + 1)} aria-label="Next example">→</button>
-        <span className="rp-sr-only" role="status" aria-live="polite">{index + 1} of {count}</span>
-      </div>}
-    </div>
-  );
+  const src = expanded ? asset.fullSrc || asset.src : asset.src;
+  if (!src || failed) return <Illustration method={method} />;
+  return <img src={src} alt={asset.alt} loading={expanded ? "eager" : "lazy"}
+    decoding="async" onError={() => setFailed(true)} className="rp-screenshot" />;
 }
 
 function MediaDialog({ method, onClose }: { method: Method; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const asset: MediaAsset = CONFIG.media[method];
   const title = METHODS.find(item => item.id === method)!.title;
   useEffect(() => {
     const element = dialog.current;
@@ -414,9 +354,11 @@ function MediaDialog({ method, onClose }: { method: Method; onClose: () => void 
         <button type="button" onClick={onClose} className="rp-outline" autoFocus aria-label="Close enlarged example">Close ×</button>
       </div>
       <div className="rp-dialog-media">
-        <MethodCarousel method={method} expanded title={title} />
+        {asset.videoSrc && !videoFailed ? <video src={asset.videoSrc} poster={asset.src || undefined} controls playsInline preload="metadata"
+          onError={() => setVideoFailed(true)} aria-label={`${title} demonstration`} /> : <Screenshot method={method} expanded />}
       </div>
-      <p className="rp-media-note">Example workflow from the Apex Roofing demo. Products, pricing and setup can be tailored to your business.</p>
+      <p className="rp-media-note">{!asset.src && !asset.videoSrc ? "Workflow illustration, not a live quote or product screenshot." : "Example workflow. Products, pricing and setup can be tailored to your business."}</p>
+      {videoFailed && <p className="rp-media-note" role="status">The video could not load. The still example is shown instead.</p>}
     </dialog>
   );
 }
@@ -427,14 +369,16 @@ function MediaExamples() {
     <>
       <div className="rp-media-grid">
         {METHODS.map(item => {
-          const shots = CONFIG.media[item.id].shots;
+          const asset: MediaAsset = CONFIG.media[item.id];
           return (
             <article key={item.id} className="rp-media-card">
-              <div className="rp-media-frame">
-                <MethodCarousel method={item.id} title={item.title} onImageClick={() => setOpen(item.id)} />
-              </div>
+              <button className="rp-media-trigger" type="button" onClick={() => setOpen(item.id)} aria-haspopup="dialog"
+                aria-label={`Enlarge ${item.title.toLowerCase()} example`}>
+                <div className="rp-media-frame"><Screenshot method={item.id} /></div>
+                <span className="rp-media-action">{asset.videoSrc ? "Play example" : "View larger"}<span aria-hidden="true">↗</span></span>
+              </button>
               <div className="rp-media-copy"><h3>{item.title}</h3><p>{item.body}</p>
-                {!shots.length && <span className="rp-meta">Workflow illustration</span>}
+                {!asset.src && !asset.videoSrc && <span className="rp-meta">Workflow illustration</span>}
               </div>
             </article>
           );
@@ -479,46 +423,74 @@ function useCurrency() {
   return { currency, choose };
 }
 
-function PricingClose({ businessLabel, variant }: { businessLabel: string; variant: "referred" | "direct" }) {
+function PricingClose({ businessLabel, variant }: { businessLabel: string; variant: PageVariant }) {
   const { currency, choose } = useCurrency();
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
+  const replyInput = useRef<HTMLTextAreaElement>(null);
+  const isReferral = variant === "referred";
+  const reply = `I'd like to explore this for our roofing business${businessLabel ? ` (${businessLabel.toLowerCase()})` : ""}. Could we arrange a free call with Shaun to discuss which tool would be useful, what it could cost and how soon a first version could be ready?`;
+  function showReply() {
+    setReplyOpen(true);
+    // Focus only after this intentionally opened area has been rendered.
+    window.requestAnimationFrame(() => document.getElementById("rp-rep-reply")?.focus({ preventScroll: true }));
+  }
+  async function copyReply() {
+    try {
+      await navigator.clipboard.writeText(reply);
+      setCopyStatus("Copied. Send it to the person who shared this page.");
+    } catch {
+      replyInput.current?.focus(); replyInput.current?.select();
+      setCopyStatus("Select and copy the message, then reply to your representative.");
+    }
+  }
   return (
     <section className="rp-section rp-close" id="pricing" aria-labelledby="rp-price-title">
       <div className="rp-close-inner" id="next-step">
+        <p className="rp-eyebrow">Start with one useful improvement</p>
         <h2 id="rp-price-title">Start with one useful improvement.</h2>
         <div className="rp-price-block">
           <p>Focused roofing solutions from</p>
           <div className="rp-price" aria-live="polite" aria-atomic="true">
             {currency ? PRICES[currency].amount : <span className="rp-price-loading">Loading price…</span>}
           </div>
-          {currency && <p className="rp-price-note">Excludes any tax or ongoing costs.</p>}
           <div className="rp-currency" role="group" aria-label="Choose pricing currency">
             <button type="button" aria-pressed={currency === "GBP"} onClick={() => choose("GBP")}>GBP £</button>
             <button type="button" aria-pressed={currency === "USD"} onClick={() => choose("USD")}>USD US$</button>
           </div>
         </div>
         <p className="rp-close-lead">A focused tool, configured around your products and rules.</p>
-        <p className="rp-turnaround">Basic setups can be live within days after receiving the relevant information from you.</p>
+        <p className="rp-turnaround">Some basic setups can be live within days once your information is ready. We confirm scope and timing before starting.</p>
         <p className="rp-payment"><strong>Flexible payment options available.</strong></p>
+        <p className="rp-smallprint">Starting price is for a focused setup. Tax and any ongoing costs are confirmed in your quote.</p>
         <div className="rp-close-action">
-          {variant === "referred" ? <>
-            <div className="rp-reflection rp-close-rep"><p>Arrange a meeting with T3 Labs via your current contact person.</p></div>
+          {isReferral ? <>
+            {CONFIG.representativeContactUrl ? <a className="rp-primary" href={CONFIG.representativeContactUrl}>Arrange a free call with Shaun <span aria-hidden="true">→</span></a>
+              : <button type="button" className="rp-primary" onClick={showReply} aria-expanded={replyOpen} aria-controls="rp-rep-reply">Arrange a free call with Shaun <span aria-hidden="true">→</span></button>}
+            <p>Your representative can arrange it and remain your point of contact.</p>
           </> : <>
             <a className="rp-primary" href={CONFIG.shaunBookingUrl} target="_blank" rel="noopener noreferrer">Book a free call with Shaun <span aria-hidden="true">→</span></a>
             <p>Discuss what would help, what it could cost and how soon it could be ready. No obligation.</p>
           </>}
-          <a className="rp-demo-btn" href="/roofing-business-tools">See exactly how our tools work <span aria-hidden="true">→</span></a>
-          <p>See who the tools benefit and the different ways they could apply with your business.</p>
         </div>
-        {variant === "direct" && <Disclosure title="Who's Shaun?">
+        {isReferral && replyOpen && <div id="rp-rep-reply" className="rp-rep-reply" tabIndex={-1}>
+          <h3>Reply to the person who shared this page.</h3>
+          <p>They can bring Shaun into the conversation. No need to start again with someone else.</p>
+          <label htmlFor="rp-reply-text" className="rp-meta">Suggested message</label>
+          <textarea id="rp-reply-text" ref={replyInput} readOnly value={reply} rows={4} />
+          <button type="button" className="rp-outline" onClick={copyReply}>Copy message</button>
+          <p role="status" className="rp-meta">{copyStatus}</p>
+        </div>}
+        <Disclosure title="Who's Shaun?">
           <p>Shaun is an ex-roofer with 20 years of experience across roofing and technology. He now builds solutions around how roofing businesses work.</p>
           <p>The conversation is about finding what would help, not selling you features you do not need.</p>
-        </Disclosure>}
+        </Disclosure>
       </div>
     </section>
   );
 }
 
-export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direct" }) {
+export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageVariant }) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [business, setBusiness] = useState<Business | null>(null);
   const t = theme === "dark" ? dark : light;
@@ -577,18 +549,12 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
             </div>
             <p className="rp-choice-note">Or keep reading for the general roofing examples.</p>
             <span className="rp-sr-only" role="status">{business ? `Examples updated for ${profile.label.toLowerCase()}.` : "General roofing examples shown."}</span>
-            <figure className="rp-explainer-video">
-              <figcaption className="rp-explainer-caption">Prefer to watch? The short video explains the problem and our solution.</figcaption>
-              <div className="rp-explainer-frame">
-                <iframe
-                  src="https://www.youtube-nocookie.com/embed/FIqNbi3bG7A?rel=0"
-                  title="The problem and our solution - short explainer"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              </div>
-            </figure>
+            {CONFIG.explainer.src && <details className="rp-explainer">
+              <summary>Prefer to watch? See the 90-second overview <span aria-hidden="true">▶</span></summary>
+              <video src={CONFIG.explainer.src} poster={CONFIG.explainer.poster || undefined} controls playsInline preload="none">
+                {CONFIG.explainer.captions && <track kind="captions" src={CONFIG.explainer.captions} srcLang="en" label="English" default />}
+              </video>
+            </details>}
             <div className="rp-opportunity" id="problem">
               <p className="rp-eyebrow">For {profile.label.toLowerCase()}</p>
               <h2>{profile.question}</h2>
@@ -604,13 +570,11 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
               <article><h3>Interactive tools</h3><p>Customers measure a job, choose your products and get quantities or preliminary pricing.</p></article>
               <article id="assistant"><h3>Smart Assistant</h3><p>Customers ask a question. It uses your approved information to answer, clarify or pass the enquiry to your team.</p></article>
             </div>
-            <div className="rp-reflection rp-shared-outcome"><p>Either route is designed to give the customer a faster answer, or push them to your team with a better-prepared enquiry.</p></div>
-            <a className="rp-demo-btn" href="/roofing-business-tools">See our tools <span aria-hidden="true">→</span></a>
+            <p className="rp-shared-outcome">Either route can lead to a better-prepared enquiry. Use one, or both.</p>
             <div className="rp-setup">
               <h3>You explain how you work. We handle the setup.</h3>
               <p>We use your existing product information and focused conversations to agree the answers, pricing and handoffs. We handle the build and setup.</p>
               <p className="rp-setup-promise">A focused first version can work alongside your current website and enquiry process.</p>
-              {variant === "direct" && <a className="rp-demo-btn" href="/roofing-business-tools">See the roofing business tools <span aria-hidden="true">→</span></a>}
               <Disclosure title="What would you need from us?">
                 <p>For a basic setup, we aim to keep your input to a few focused conversations and a review. We agree what is needed before starting, rather than asking your team to manage a software project.</p>
                 <ul>
@@ -630,14 +594,10 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
           </section>
 
           <section className="rp-section" id="demos" aria-labelledby="rp-demos-title">
-            <div className="rp-section-heading"><p className="rp-eyebrow">See how it works</p><h2 id="rp-demos-title">Three ways to get a useful result.</h2><p>Open any example to see it larger. Each can use your products and rules.</p></div>
+            <div className="rp-section-heading"><p className="rp-eyebrow">See how it works</p><h2 id="rp-demos-title">Three ways to get a useful result.</h2><p>Open any example to see it larger. Each can use your products and rules. Roofing is the worked example, but the same framework can be adapted to other construction businesses.</p></div>
             <MediaExamples />
-            {CONFIG.apexDemoHomeUrl && <div className="rp-demo-card">
-              <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-shot" aria-label="Open the Apex Roofing demo website">
-                <img src="/assets/roofing-solutions/apex-demo-home.jpg" alt="Apex Roofing demo website homepage" loading="lazy" />
-              </a>
-              <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-btn">Explore the Apex Roofing demo website ↗</a>
-            </div>}
+            {CONFIG.apexDemoHomeUrl && <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-link">Explore the Apex Roofing demo website ↗</a>}
+            <a href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"} className="rp-demo-link">See the roofing tools in more detail →</a>
           </section>
 
           <section className="rp-section" id="roof-value" aria-labelledby="rp-value-title">
@@ -669,7 +629,7 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
                 <p className="rp-journey-summary">A useful answer and a better starting point.</p>
               </article>
             </div>
-            <div className="rp-reflection rp-journey-note"><p>Customers can still call or enquire, but can gain their answer without needing to - or enquire with far more useful information for your team.</p></div>
+            <p className="rp-journey-note">Customers can still call or enquire. The difference is what they can do before they need to.</p>
             <div className="rp-discover">
               <h3>Make more of your roofing knowledge easy to find.</h3>
               <p>Publish selected product information, pricing and guidance. Keep private trade rates private.</p>
@@ -687,18 +647,12 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
 
           <section className="rp-section rp-roi" id="assessment" aria-labelledby="rp-roi-title">
             <p className="rp-eyebrow">Before you look at the price</p>
-            <h2 id="rp-roi-title">What would make this a worthwhile <span className="rp-glow-word">investment?</span></h2>
+            <h2 id="rp-roi-title">What would make this a worthwhile investment?</h2>
             <p className="rp-roi-question">How many staff hours would it need to save, or how much extra profit would it need to help generate, for you to say: this was worth it?</p>
+            <p>Think about one part of the business, not a complete transformation.</p>
           </section>
 
           <PricingClose businessLabel={business ? BUSINESS_CHOICES.find(item => item.id === business)!.label : ""} variant={variant} />
-          {variant === "direct" && <div className="rp-mission">
-            <Disclosure title="Why we build this way - the T3 Labs mission">
-              <p>T3 Labs helps you stand out by getting more of the right people to your business, helping them get answers and take action without waiting for your team, and reducing the work required behind the scenes.</p>
-              <p>As search evolves into AI-driven conversations, we help make your business part of those answers - using tools, data and digital experiences built around your business and difficult for competitors to replicate.</p>
-              <p><strong>More customers. Better enquiries. Less work.</strong></p>
-            </Disclosure>
-          </div>}
         </div>
       </div>
       <footer style={{borderColor:t.border}} className="border-t">
@@ -711,6 +665,10 @@ export function RoofingSolutionsPage({ variant }: { variant: "referred" | "direc
 }
 
 // Header hover treatment retained from the supplied page; body styles do not target it.
+export default function RoofingSolutionsReferredPage() {
+  return <RoofingSolutionsPage variant="referred" />;
+}
+
 const HEADER_STYLES = `
 .btn-solid:hover{transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 7px 22px rgba(215,255,0,.18)}
 .btn-outline:hover{transform:translateY(-1px);border-color:var(--accent-ink)!important}
@@ -759,7 +717,7 @@ const STYLES = String.raw`
 .rp-examples{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;list-style:none;padding:0;margin-top:28px!important;max-width:1020px}
 .rp-examples li{display:flex;gap:14px;align-items:flex-start;line-height:1.55;padding:4px 0}
 .rp-examples li>span:first-child{flex-shrink:0;color:var(--rp-accent-ink);font-weight:700}
-.rp-reflection{padding:24px 28px;background:var(--rp-soft);border-left:3px solid var(--rp-accent-ink);border-radius:0 12px 12px 0;margin-top:32px}
+.rp-reflection{padding:24px 28px;background:var(--rp-soft);border-left:3px solid var(--rp-accent-ink);border-radius:0 12px 12px 0;margin-top:32px;max-width:960px}
 .rp-reflection p{font-size:var(--rp-card);font-weight:600;line-height:1.5;color:var(--rp-text)}
 .rp-bridge{margin-top:30px!important;font-size:var(--rp-card);max-width:790px;color:var(--rp-text)!important}
 .rp-solutions{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -791,23 +749,14 @@ const STYLES = String.raw`
 .rp-audience-panel blockquote{font-size:var(--rp-card);font-weight:600;line-height:1.5}
 .rp-audience-panel>div>p{margin-top:16px}
 .rp-result{border-left:2px solid var(--rp-border);padding:0 0 0 26px}
-.rp-result-label{margin:0!important;font-size:var(--rp-meta);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rp-accent-ink)!important}
+.rp-result>.rp-meta{margin-top:0!important}
 .rp-result strong{display:block;font-size:var(--rp-card);line-height:1.5;margin-top:10px}
 .rp-result-benefit{margin-top:12px!important}
 .rp-carousel-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--rp-border);padding-top:16px;color:var(--rp-muted)}
 .rp-text-button{border:0;background:transparent;padding:8px 0;min-height:44px;font-weight:600!important;color:var(--rp-text)!important}
 .rp-media-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:20px;align-items:stretch}
 .rp-media-card{display:flex;flex-direction:column;border:1px solid var(--rp-border);border-radius:16px;overflow:hidden;background:var(--rp-surface)}
-.rp-media-open{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer}
-.rp-media-open img{transition:transform .18s ease}
-.rp-carousel{width:100%;height:100%;display:flex;flex-direction:column;outline:none}
-.rp-carousel:focus-visible{outline:3px solid var(--rp-accent-ink);outline-offset:2px}
-.rp-carousel-track{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
-.rp-carousel-nav{display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 8px 0}
-.rp-carousel-arrow{min-width:34px;min-height:34px;padding:0 10px;border:1px solid var(--rp-border);border-radius:999px;background:var(--rp-surface);color:var(--rp-text);font-weight:700;line-height:1}
-.rp-carousel-dots{display:flex;gap:8px;align-items:center}
-.rp-dot{width:9px;height:9px;min-height:0;padding:0;border:0;border-radius:999px;background:var(--rp-border);display:inline-block}
-.rp-dot-active{background:var(--rp-accent-ink)}
+.rp-media-trigger{display:block;width:100%;padding:0;border:0;background:var(--rp-raised);text-align:left}
 .rp-media-frame{width:100%;aspect-ratio:4/3;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:14px;border-bottom:1px solid var(--rp-border)}
 .rp-screenshot{display:block;width:100%;height:100%;object-fit:contain}
 .rp-media-action{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 20px;min-height:44px;font-size:var(--rp-meta);font-weight:600;color:var(--rp-accent-ink)}
@@ -832,9 +781,6 @@ const STYLES = String.raw`
 .rp-dialog h2{font-size:var(--rp-card)}
 .rp-dialog-media{display:flex;align-items:center;justify-content:center;min-height:250px;padding:24px;background:var(--rp-bg)}
 .rp-dialog-media :is(img,video){max-height:65dvh;width:100%;height:auto;object-fit:contain;display:block}
-.rp-dialog-media .rp-carousel{width:100%}
-.rp-dialog-media .rp-carousel-track{align-items:flex-start}
-.rp-dialog-media .rp-carousel-arrow{min-width:40px;min-height:40px}
 .rp-dialog-media .rp-illustration{width:min(650px,100%);aspect-ratio:4/3;height:auto;padding:30px;gap:20px;font-size:var(--rp-body)}
 .rp-dialog-media .rp-illustration-plan svg{min-height:170px}
 .rp-media-note{padding:16px 24px}
@@ -857,13 +803,9 @@ const STYLES = String.raw`
 .rp-journey li span{display:block;color:var(--rp-muted);margin-top:6px;line-height:1.55}
 .rp-journey-summary{border-top:1px solid var(--rp-border);padding-top:18px;margin-top:20px!important;font-weight:600}
 .rp-journey-after .rp-journey-summary{color:var(--rp-text)}
-.rp-journey-note{margin-top:20px!important}
-.rp-glow-word{text-shadow:0 0 16px rgba(215,255,0,.55),0 0 5px rgba(215,255,0,.3)}
-.rp-mission{padding:0 0 52px;max-width:900px}
-.rp-roi h2{white-space:nowrap;font-size:clamp(1.35rem,2.8vw,2rem)}
-@media (max-width:640px){.rp-roi h2{white-space:normal}}
-.rp-discover{margin-top:36px;padding-top:30px;border-top:1px solid var(--rp-border)}
-.rp-discover>p{margin-top:12px}
+.rp-journey-note{margin-top:20px!important;max-width:800px}
+.rp-discover{margin-top:36px;padding-top:30px;border-top:1px solid var(--rp-border);max-width:900px}
+.rp-discover>p{margin-top:12px;max-width:800px}
 .rp-source-links{display:flex;flex-wrap:wrap;gap:14px 24px;margin-top:16px}
 .rp-source-links a{color:var(--rp-accent-ink);text-underline-offset:5px}
 .rp-roi{padding-top:64px;padding-bottom:64px}
@@ -875,7 +817,6 @@ const STYLES = String.raw`
 .rp-close h2{margin:auto;max-width:650px}
 .rp-price-block{margin-top:26px}
 .rp-price{font-size:var(--rp-display);font-weight:750;line-height:1.15;letter-spacing:-.045em;color:var(--rp-accent-ink);margin-top:10px;min-height:64px;display:flex;justify-content:center;align-items:center;font-variant-numeric:tabular-nums}
-.rp-price-note{font-size:var(--rp-meta);margin-top:2px;color:var(--rp-muted)}
 .rp-price-loading{font-size:var(--rp-card);letter-spacing:0;color:var(--rp-muted)}
 .rp-currency{display:inline-flex;gap:6px;padding:4px;border:1px solid var(--rp-border);border-radius:999px;margin-top:16px}
 .rp-currency button{min-height:40px;padding:6px 16px;border:1px solid transparent;border-radius:999px;font-size:var(--rp-meta);background:transparent;color:var(--rp-muted);font-weight:600}
@@ -894,20 +835,13 @@ const STYLES = String.raw`
 .rp-rep-reply p{margin-top:12px}
 .rp-rep-reply label{display:block;margin-top:18px}
 .rp-rep-reply textarea{display:block;resize:vertical;width:100%;margin:8px 0 16px;min-height:170px;padding:14px;border:1px solid var(--rp-border);border-radius:10px;color:var(--rp-text);background:var(--rp-bg);font:inherit;line-height:1.6}
-.rp-explainer-video{max-width:960px;margin-top:24px}
-.rp-explainer-caption{font-weight:600;font-size:.95rem}
-.rp-explainer-frame{margin-top:12px;position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid var(--rp-border);background:#000}
-.rp-explainer-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.rp-demo-card{margin-top:28px;max-width:720px;margin-inline:auto;text-align:center}
-.rp-demo-shot{display:block;overflow:hidden;border:1px solid var(--rp-border);border-radius:14px;transition:transform .15s ease,box-shadow .15s ease}
-.rp-demo-shot img{display:block;width:100%;height:auto}
-.rp-demo-shot:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(215,255,0,.15)}
-.rp-demo-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:12px 24px;border-radius:999px;background:var(--rp-accent);color:#0a0b10!important;font-weight:600;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
-.rp-demo-btn:hover{transform:translateY(-1px);box-shadow:0 7px 22px rgba(215,255,0,.35)}
+.rp-explainer{max-width:880px;margin-top:24px}
+.rp-explainer summary{display:flex;justify-content:space-between;gap:16px;cursor:pointer;font-weight:600;list-style:none;padding:12px 0}
+.rp-explainer summary::-webkit-details-marker{display:none}
+.rp-explainer video{margin-top:16px;display:block;width:100%;aspect-ratio:16/9;border-radius:14px;background:#000}
 .rp-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 @media(hover:hover){
-  .rp-business button:hover,.rp-tabs button:hover,.rp-outline:hover,.rp-carousel-arrow:hover,.rp-dot:hover{border-color:var(--rp-accent-ink)}
-  .rp-media-open:hover .rp-screenshot{transform:scale(1.035)}
+  .rp-business button:hover,.rp-tabs button:hover,.rp-outline:hover{border-color:var(--rp-accent-ink)}
   .rp-media-trigger:hover .rp-media-action{background:var(--rp-soft)}
   .rp-primary:hover{filter:brightness(1.05)}
   .rp-text-button:hover{color:var(--rp-accent-ink)!important}
@@ -930,7 +864,6 @@ const STYLES = String.raw`
   .rp-business button{padding:14px 12px;align-content:flex-start;min-height:94px}
   .rp-select-status{font-size:var(--rp-meta)}
   .rp-opportunity{margin-top:30px;padding-top:28px}
-@media (max-width:640px){.rp-roi h2{white-space:normal}}
   .rp-examples{grid-template-columns:1fr;gap:16px;margin-top:24px!important}
   .rp-reflection{padding:22px;margin-top:28px}
   .rp-bridge{margin-top:28px!important}
@@ -944,8 +877,9 @@ const STYLES = String.raw`
   .rp-audience-panel{grid-template-columns:1fr;gap:22px;padding:24px 0}
   .rp-result{padding:18px 0 0;border-left:0;border-top:1px solid var(--rp-border)}
   .rp-media-grid{grid-template-columns:1fr;gap:16px;max-width:560px;margin:0 auto}
-  .rp-media-card{display:flex;flex-direction:column}
-  .rp-media-frame{aspect-ratio:4/3;padding:10px}
+  .rp-media-card{display:grid;grid-template-columns:minmax(115px,.85fr) minmax(0,1.15fr);min-height:230px}
+  .rp-media-trigger{align-self:stretch;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--rp-border)}
+  .rp-media-frame{aspect-ratio:4/3;padding:10px;border-bottom:0}
   .rp-media-action{padding:10px;justify-content:center;gap:6px}
   .rp-media-frame .rp-illustration{padding:10px;gap:8px}
   .rp-media-frame .rp-illustration-top{display:none}
@@ -981,7 +915,3 @@ const STYLES = String.raw`
 }
 @media(prefers-reduced-motion:reduce){.rp-content *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 `;
-
-export default function ReferredPage() {
-  return <RoofingSolutionsPage variant="referred" />;
-}

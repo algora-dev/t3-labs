@@ -273,7 +273,7 @@ export default function ConstructionSolutionPage(){
 
       <div className="mx-auto max-w-6xl px-5">
         <section className="py-20 sm:py-28">
-          <p className="text-sm font-semibold uppercase tracking-[.2em]" style={{color:t.accentInk}}>Built for construction suppliers & trade businesses</p>
+          <p className="text-sm font-semibold uppercase tracking-[.2em]" style={{color:t.accentInk}}>Built for construction suppliers, manufacturers & trade businesses</p>
           <h1 className="mt-4 max-w-4xl text-3xl font-bold leading-[1.08] tracking-tight sm:text-5xl">
             Your customers want answers now. If they cannot get them from you, they keep looking.
           </h1>
@@ -381,9 +381,9 @@ export default function ConstructionSolutionPage(){
 
                 <div style={{background:t.surface,borderColor:t.border}} className="rounded-2xl border p-6">
                   <p className="text-xs font-semibold uppercase tracking-[.14em]" style={{color:t.accentInk}}>Conversational</p>
-                  <h4 className="mt-2 text-xl font-semibold">Ask the intelligent sales assistant</h4>
+                  <h4 className="mt-2 text-xl font-semibold">Ask the Smart Assistant</h4>
                   <p className="mt-3 text-sm leading-6" style={{color:t.muted}}>
-                    Customers can simply explain what they need. The assistant is configured around your products, pricing, compatibility and common questions, then guides them toward an answer, preliminary price, enquiry or purchase.
+                    Customers can simply explain what they need. The Smart Assistant is configured around your business knowledge, products, pricing, calculations, compatibility and common questions, then guides them toward an answer, pricing output, enquiry or purchase.
                   </p>
                 </div>
               </div>
@@ -407,9 +407,9 @@ export default function ConstructionSolutionPage(){
               </div>
 
               <div style={{background:t.surface,borderColor:t.border}} className="mt-5 rounded-xl border p-5">
-                <p className="text-sm font-semibold">The sales assistant can be tightly controlled.</p>
+                <p className="text-sm font-semibold">The Smart Assistant can be tightly controlled.</p>
                 <p className="mt-2 text-sm leading-6" style={{color:t.muted}}>
-                  Whether you have 20 products or 20,000, it can be configured around the catalogue, pricing rules and answers you approve. If it does not have enough information or the question needs a person, it does not need to guess. It can stop and hand the customer to your team with the conversation already captured.
+                  Whether you have 20 products or 20,000, it can be configured around the business knowledge, catalogue, pricing, calculation rules and answers you approve. If it does not have enough information or the question needs a person, it does not need to guess. It can ask for more detail or hand the customer to your team with the conversation already captured.
                 </p>
               </div>
             </div>
@@ -465,7 +465,7 @@ export default function ConstructionSolutionPage(){
             <p className="text-sm font-semibold uppercase tracking-[.16em]" style={{color:t.accentInk}}>Live examples</p>
             <div className="mt-2 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
               <h3 className="text-3xl font-bold">See the tools and sales assistant in action.</h3>
-              <p className="max-w-xl text-sm leading-6" style={{color:t.muted}}>Examples of capability, not fixed products. The design, products, pricing, rules and workflow can all be tailored to your business.</p>
+              <p className="max-w-xl text-sm leading-6" style={{color:t.muted}}>Examples of capability, not fixed products. Roofing is our most advanced working example, but the same framework can be adapted to other construction businesses. The design, products, pricing, rules and workflow can all be tailored to your business. <a href="/roofing-business-tools/referred" className="font-semibold hover:underline" style={{color:t.accentInk}}>See the deeper roofing tools breakdown</a></p>
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {DEMOS.map(d=>(
@@ -555,7 +555,7 @@ export default function ConstructionSolutionPage(){
 
       <footer style={{borderColor:t.border}} className="border-t">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm sm:flex-row sm:items-center sm:justify-between" style={{color:t.muted}}>
-          <p>© T3 Labs</p><p>Construction sales tools · Pricing · Estimating · Quoting · Online sales assistants</p>
+          <p>© T3 Labs</p><p>Construction sales tools · Pricing · Estimating · Quoting · Smart Assistants</p>
         </div>
       </footer>
     </main>

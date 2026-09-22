@@ -3,12 +3,13 @@ import type { ReactNode } from "react";
 
 const TITLE = "Roofing Customer Tools & Smart Assistant | T3 Labs";
 const DESCRIPTION =
-  "See how T3 Labs turns a roofing website into a place customers can measure, price and prepare enquiries — using your products and rules.";
+  "See how T3 Labs turns a roofing website into a place customers can measure, price, ask questions and prepare better enquiries using your products, pricing and rules.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   alternates: { canonical: "https://www.t3labs.tech/roofing-solutions" },
+  robots: { index: true, follow: true },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
