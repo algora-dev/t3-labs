@@ -139,7 +139,7 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
                   <p className="mt-2 text-sm leading-6" style={{ color: t.muted }}>Instead of opening ten websites and piecing together the answer themselves, they can ask one question.</p>
                   <ul className="mt-5 space-y-2">
                     {AI_QUESTIONS.map((q) => (
-                      <li key={q} className="rounded-xl border px-4 py-2.5 text-sm font-medium" style={{ borderColor: t.border, background: t.surfaceAlt }}>{q}</li>
+                      <li key={q} className="rounded-xl border px-4 py-2.5 text-sm font-medium" style={{ borderColor: t.border, background: t.surfaceAlt, color: t.accentInk }}>{q}</li>
                     ))}
                   </ul>
                   <p className="mt-5 text-sm leading-6" style={{ color: t.muted }}>AI is doing more of the searching, comparing and explaining before the website visit even happens.</p>
@@ -152,14 +152,14 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
                   <p className="text-sm leading-6" style={{ color: t.muted }}>Instead of another product catalogue and contact form, give the buyer a useful next step.</p>
                   <div className="mt-5 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-xl border p-4" style={{ borderColor: t.border, background: t.surfaceAlt }}>
-                      <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>I know roughly what I need</p>
+                      <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.accentInk }}>I know roughly what I need</p>
                       <p className="mt-2 text-xl font-bold">Use the tool</p>
                       <ul className="mt-3 space-y-1 text-sm leading-6" style={{ color: t.muted }}>
                         <li>Calculate a price</li><li>Work out quantities</li><li>Compare products</li><li>Build a quote</li>
                       </ul>
                     </div>
                     <div className="rounded-xl border p-4" style={{ borderColor: t.border, background: t.surfaceAlt }}>
-                      <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>I need help figuring it out</p>
+                      <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.accentInk }}>I need help figuring it out</p>
                       <p className="mt-2 text-xl font-bold">Ask the assistant</p>
                       <ul className="mt-3 space-y-1 text-sm leading-6" style={{ color: t.muted }}>
                         <li>Explain what they need</li><li>Ask questions naturally</li><li>Get product guidance</li><li>Work toward an enquiry or sale</li>
@@ -180,32 +180,16 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
             </div>
 
             {/* Visual column */}
-            <div aria-hidden="true" className="order-first lg:order-none">
+            <div className="order-first lg:order-none">
               {step === 0 && (
                 <div className="rounded-2xl border p-4" style={{ borderColor: t.border, background: t.surfaceAlt }}>
-                  <div className="flex items-center justify-between rounded-lg px-3 py-2" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
-                    <span className="text-sm font-bold">ACME ROOFING SUPPLIES</span>
-                    <span className="text-xs" style={{ color: t.muted }}>Home · Products · Downloads · Contact</span>
-                  </div>
-                  <div className="mt-3 grid grid-cols-3 gap-2">
-                    {["Product A", "Product B", "Product C", "Product D", "Product E", "Product F"].map((p) => (
-                      <div key={p} className="rounded-lg p-3" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
-                        <div className="h-2 w-3/4 rounded" style={{ background: t.border }} />
-                        <div className="mt-2 h-2 w-1/2 rounded" style={{ background: t.border }} />
-                        <p className="mt-2 text-xs" style={{ color: t.muted }}>{p}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {["Technical spec (PDF)", "Price list 2026", "Contact us"].map((c) => (
-                      <span key={c} className="rounded-full border px-3 py-1.5 text-xs" style={{ borderColor: t.border, color: t.muted }}>{c}</span>
-                    ))}
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {["Find the right product", "Open the PDF", "Compare options", "Calculate quantity"].map((l) => (
-                      <span key={l} className="rounded-full px-3 py-1 text-xs font-semibold" style={{ background: t.accent, color: t.accentText }}>{l}</span>
-                    ))}
-                  </div>
+                  <img
+                    src="/assets/our-solution/old-way-homepage.jpg"
+                    alt="A busy, brochure-style roofing supplier homepage with dense navigation, search bar and PDF downloads"
+                    className="w-full rounded-xl"
+                    style={{ border: `1px solid ${t.border}` }}
+                    loading="lazy"
+                  />
                 </div>
               )}
 
@@ -213,11 +197,11 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
                 <div className="rounded-2xl border p-4" style={{ borderColor: t.border, background: t.surfaceAlt }}>
                   <div className="rounded-xl p-3" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
                     <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>Buyer question</p>
-                    <p className="mt-2 text-sm font-medium">I need roofing for a 120m² extension. What should I use and roughly what will it cost?</p>
+                    <p className="mt-2 text-sm font-medium" style={{ color: t.accentInk }}>I need roofing for a 120m² extension. What should I use and roughly what will it cost?</p>
                   </div>
                   <div className="mt-3 rounded-xl p-3" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
                     <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>AI-style answer</p>
-                    <div className="mt-2 space-y-2 text-sm" style={{ color: t.muted }}>
+                    <div className="mt-2 space-y-2 text-sm" style={{ color: t.accentInk }}>
                       <p>Recommended system: standing-seam metal roof, 30° pitch</p>
                       <p>Approximate quantity: 132 m² including 10% waste</p>
                       <p>Next step: confirm profile and finish with a supplier</p>
@@ -233,18 +217,16 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
                     <div className="rounded-xl p-3" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
                       <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>Path 1</p>
                       <p className="mt-1 text-sm font-bold">Use the tool</p>
-                      <div className="mt-2 h-2 w-2/3 rounded" style={{ background: t.border }} />
-                      <div className="mt-2 h-2 w-1/2 rounded" style={{ background: t.border }} />
-                      <div className="mt-2 h-2 w-3/4 rounded" style={{ background: t.border }} />
+                      <a href="/demo/roofing-site" target="_blank" rel="noopener noreferrer" className="mt-2 block overflow-hidden rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg" style={{ border: `1px solid ${t.border}` }}>
+                        <img src="/assets/roofing-solutions/known-1-roof-area-entry.jpg" alt="Measurement and pricing tool: guided roof area entry" className="w-full" loading="lazy" />
+                      </a>
                     </div>
                     <div className="rounded-xl p-3" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
                       <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>Path 2</p>
                       <p className="mt-1 text-sm font-bold">Ask the assistant</p>
-                      <div className="mt-2 space-y-1.5">
-                        <div className="h-2 w-1/2 rounded" style={{ background: t.border }} />
-                        <div className="ml-auto h-2 w-2/5 rounded" style={{ background: t.border }} />
-                        <div className="h-2 w-3/5 rounded" style={{ background: t.border }} />
-                      </div>
+                      <a href="/demo/roofing-site" target="_blank" rel="noopener noreferrer" className="mt-2 block overflow-hidden rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg" style={{ border: `1px solid ${t.border}` }}>
+                        <img src="/assets/our-solution/smart-assistant-open.jpg" alt="Apex Roofing website with the Smart Assistant open" className="w-full" loading="lazy" />
+                      </a>
                     </div>
                   </div>
                   <p className="mt-4 text-center text-sm font-bold">Better-informed customer</p>

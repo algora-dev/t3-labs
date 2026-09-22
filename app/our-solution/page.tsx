@@ -382,7 +382,7 @@ export default function ConstructionSolutionPage(){
               </p>
             </div>
             <div style={{background:t.surface,borderColor:t.border}} className="rounded-2xl border p-6">
-              <p className="font-semibold">Does any of this sound familiar?</p>
+              <p className="font-semibold" style={{color:t.accentInk}}>Does any of this sound familiar?</p>
               <div className="mt-4 grid gap-2">
                 {[
                   "“Contact us for pricing”",
@@ -461,14 +461,14 @@ export default function ConstructionSolutionPage(){
                   ["Capture better data","See what customers ask for, price, select and quote, then use that information to improve the business."],
                 ].map(([title,body])=>(
                   <div key={title} style={{background:t.surface,borderColor:t.border}} className="rounded-xl border p-4">
-                    <p className="text-sm font-semibold">{title}</p>
+                    <p className="text-sm font-semibold" style={{color:t.accentInk}}>{title}</p>
                     <p className="mt-1 text-xs leading-5" style={{color:t.muted}}>{body}</p>
                   </div>
                 ))}
               </div>
 
               <div style={{background:t.surface,borderColor:t.border}} className="mt-5 rounded-xl border p-5">
-                <p className="text-sm font-semibold">The Smart Assistant can be tightly controlled.</p>
+                <p className="text-sm font-semibold" style={{color:t.accentInk}}>The Smart Assistant can be tightly controlled.</p>
                 <p className="mt-2 text-sm leading-6" style={{color:t.muted}}>
                   Whether you have 20 products or 20,000, it can be configured around the business knowledge, catalogue, pricing, calculation rules and answers you approve. If it does not have enough information or the question needs a person, it does not need to guess. It can ask for more detail or hand the customer to your team with the conversation already captured.
                 </p>
