@@ -190,18 +190,22 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
                     style={{ border: `1px solid ${t.border}` }}
                     loading="lazy"
                   />
+                  <p className="mt-3 text-center text-xs leading-5" style={{ color: t.muted }}>
+                    A typical busy, professional roofing website. Nothing wrong with it — the answer is in there somewhere.
+                    These tools help the customer find it in seconds instead of digging.
+                  </p>
                 </div>
               )}
 
               {step === 1 && (
                 <div className="rounded-2xl border p-4" style={{ borderColor: t.border, background: t.surfaceAlt }}>
                   <div className="rounded-xl p-3" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
-                    <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>Buyer question</p>
-                    <p className="mt-2 text-sm font-medium" style={{ color: t.accentInk }}>I need roofing for a 120m² extension. What should I use and roughly what will it cost?</p>
+                    <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.accentInk }}>Buyer question</p>
+                    <p className="mt-2 text-sm font-medium">I need roofing for a 120m² extension. What should I use and roughly what will it cost?</p>
                   </div>
                   <div className="mt-3 rounded-xl p-3" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
-                    <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.muted }}>AI-style answer</p>
-                    <div className="mt-2 space-y-2 text-sm" style={{ color: t.accentInk }}>
+                    <p className="text-xs font-semibold uppercase tracking-[.12em]" style={{ color: t.accentInk }}>AI-style answer</p>
+                    <div className="mt-2 space-y-2 text-sm" style={{ color: t.text }}>
                       <p>Recommended system: standing-seam metal roof, 30° pitch</p>
                       <p>Approximate quantity: 132 m² including 10% waste</p>
                       <p>Next step: confirm profile and finish with a supplier</p>
