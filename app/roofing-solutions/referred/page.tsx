@@ -472,6 +472,8 @@ function PricingClose({ businessLabel, variant }: { businessLabel: string; varia
             <a className="rp-primary" href={CONFIG.shaunBookingUrl} target="_blank" rel="noopener noreferrer">Book a free call with Shaun <span aria-hidden="true">→</span></a>
             <p>Discuss what would help, what it could cost and how soon it could be ready. No obligation.</p>
           </>}
+          <a className="rp-demo-btn" href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"}>See exactly how our tools work <span aria-hidden="true">→</span></a>
+          <p>See who the tools benefit and the different ways they could apply with your business.</p>
         </div>
         {isReferral && replyOpen && <div id="rp-rep-reply" className="rp-rep-reply" tabIndex={-1}>
           <h3>Reply to the person who shared this page.</h3>
@@ -571,10 +573,12 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
               <article id="assistant"><h3>Smart Assistant</h3><p>Customers ask a question. It uses your approved information to answer, clarify or pass the enquiry to your team.</p></article>
             </div>
             <p className="rp-shared-outcome">Either route can lead to a better-prepared enquiry. Use one, or both.</p>
+            <a className="rp-demo-btn" href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"}>See our tools <span aria-hidden="true">→</span></a>
             <div className="rp-setup">
               <h3>You explain how you work. We handle the setup.</h3>
               <p>We use your existing product information and focused conversations to agree the answers, pricing and handoffs. We handle the build and setup.</p>
               <p className="rp-setup-promise">A focused first version can work alongside your current website and enquiry process.</p>
+              {variant === "direct" && <a className="rp-demo-btn" href="/roofing-business-tools">See the roofing business tools <span aria-hidden="true">→</span></a>}
               <Disclosure title="What would you need from us?">
                 <p>For a basic setup, we aim to keep your input to a few focused conversations and a review. We agree what is needed before starting, rather than asking your team to manage a software project.</p>
                 <ul>
