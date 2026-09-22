@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
@@ -20,12 +20,8 @@ type Tokens = {
   text: string; muted: string; accent: string; accentText: string;
   accentInk: string; accentSoft: string;
 };
-type MediaAsset = {
-  src: string;
-  fullSrc?: string;
-  alt: string;
-  videoSrc?: string;
-};
+type MediaShot = { src: string; alt: string };
+type MediaSet = { shots: MediaShot[] };
 
 const dark: Tokens = {
   bg: "#0a0b10", surface: "#101219", surfaceAlt: "#161927", border: "#262a3a",
@@ -48,12 +44,31 @@ const CONFIG = {
   apexDemoHomeUrl: "/demo/roofing-site",
   currencyEndpoint: "/api/roofing-region",
   currencyPreferenceKey: "t3-roofing-price-currency",
-  // Real screenshots were not included. Blank entries show labelled illustrations.
+  // Real screenshots from the Apex Roofing demo, ordered as a short flick-through story per card.
   media: {
-    known: { src: "", fullSrc: "", videoSrc: "", alt: "Roofing tool showing a roof measurement, selected products and a preliminary result" },
-    plan: { src: "", fullSrc: "", videoSrc: "", alt: "Roofing plan measurement tool with measured areas ready to use in an estimate" },
-    assistant: { src: "", fullSrc: "", videoSrc: "", alt: "Smart Assistant answering a roofing product question and preparing the next step" },
-  } satisfies Record<Method, MediaAsset>,
+    plan: {
+      shots: [
+        { src: "/assets/roofing-solutions/plan-1-takeoff-canvas.jpg", alt: "Digital takeoff canvas with a roof plan and ridges, hips, valleys and eaves measured as coloured lines" },
+        { src: "/assets/roofing-solutions/plan-2-measurement-choice.jpg", alt: "Choice between entering actual measurements or measuring from a plan with pitch-adjusted lengths" },
+        { src: "/assets/roofing-solutions/result-quote-output.jpg", alt: "Result screen with materials and labour totals and next actions, including continuing in QuoteCore+" },
+      ],
+    },
+    known: {
+      shots: [
+        { src: "/assets/roofing-solutions/known-1-roof-area-entry.jpg", alt: "Guided roof area entry with width by length, product selection and waste allowance" },
+        { src: "/assets/roofing-solutions/known-2-pricing-choice.jpg", alt: "Choice between material only and material and install pricing, with the job type selected" },
+        { src: "/assets/roofing-solutions/result-quote-output.jpg", alt: "Result screen with materials and labour totals and next actions, including continuing in QuoteCore+" },
+      ],
+    },
+    assistant: {
+      shots: [
+        { src: "/assets/roofing-solutions/assistant-1-start-options.jpg", alt: "Smart Assistant start screen offering an estimate, a roofing question, finding something or preparing an enquiry" },
+        { src: "/assets/roofing-solutions/assistant-2-enquiry-questions.jpg", alt: "Smart Assistant gathering job details conversationally, asking about roof pitch and roof shape" },
+        { src: "/assets/roofing-solutions/assistant-3-product-question.jpg", alt: "Smart Assistant answering a product question about underlay for a tiled roof" },
+        { src: "/assets/roofing-solutions/assistant-4-saving-code.jpg", alt: "Saving code offer shown to the customer before completing the enquiry" },
+      ],
+    },
+  } satisfies Record<Method, MediaSet>,
   // Optional page explainer. Hidden until supplied. Use a direct media URL, not a watch-page URL.
   explainer: { src: "", poster: "", captions: "" },
 };
@@ -315,19 +330,63 @@ function Illustration({ method }: { method: Method }) {
   );
 }
 
-function Screenshot({ method, expanded = false }: { method: Method; expanded?: boolean }) {
-  const asset: MediaAsset = CONFIG.media[method];
+function MethodCarousel({ method, expanded = false, title, onImageClick }: { method: Method; expanded?: boolean; title: string; onImageClick?: () => void }) {
+  const shots = CONFIG.media[method].shots;
+  const count = shots.length;
+  const [index, setIndex] = useState(0);
   const [failed, setFailed] = useState(false);
-  const src = expanded ? asset.fullSrc || asset.src : asset.src;
-  if (!src || failed) return <Illustration method={method} />;
-  return <img src={src} alt={asset.alt} loading={expanded ? "eager" : "lazy"}
-    decoding="async" onError={() => setFailed(true)} className="rp-screenshot" />;
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  function go(next: number) { if (count) setIndex(((next % count) + count) % count); }
+  function onTouchStart(event: React.TouchEvent) {
+    touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+  }
+  function onTouchEnd(event: React.TouchEvent) {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const dx = event.changedTouches[0].clientX - start.x;
+    const dy = event.changedTouches[0].clientY - start.y;
+    if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) go(index + (dx < 0 ? 1 : -1));
+  }
+  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "ArrowRight") { event.preventDefault(); go(index + 1); }
+    if (event.key === "ArrowLeft") { event.preventDefault(); go(index - 1); }
+  }
+  const shot = shots[index];
+  return (
+    <div className="rp-carousel" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onKeyDown={onKeyDown}
+      tabIndex={0} role="group" aria-roledescription="carousel" aria-label={`${title} example (${index + 1} of ${count})`}>
+      <div className="rp-carousel-track">
+        {!shot || failed ? <Illustration method={method} /> : onImageClick ? (
+          <button type="button" className="rp-media-open" onClick={onImageClick} aria-haspopup="dialog"
+            aria-label={`Enlarge ${title.toLowerCase()} example`}>
+            <img key={`${shot.src}-${index}`} src={shot.src} alt={shot.alt}
+              loading={expanded ? "eager" : "lazy"} decoding="async"
+              onError={() => setFailed(true)} className="rp-screenshot" />
+          </button>
+        ) : (
+          <img key={`${shot.src}-${index}`} src={shot.src} alt={shot.alt}
+            loading={expanded ? "eager" : "lazy"} decoding="async"
+            onError={() => setFailed(true)} className="rp-screenshot" />
+        )}
+      </div>
+      {count > 1 && <div className="rp-carousel-nav">
+        <button type="button" className="rp-carousel-arrow" onClick={() => go(index - 1)} aria-label="Previous example">←</button>
+        <div className="rp-carousel-dots" role="group" aria-label="Choose example">
+          {shots.map((s, i) => (
+            <button key={`${s.src}-${i}`} type="button" className={i === index ? "rp-dot rp-dot-active" : "rp-dot"}
+              aria-label={`Example ${i + 1} of ${count}`} aria-current={i === index} onClick={() => go(i)} />
+          ))}
+        </div>
+        <button type="button" className="rp-carousel-arrow" onClick={() => go(index + 1)} aria-label="Next example">→</button>
+        <span className="rp-sr-only" role="status" aria-live="polite">{index + 1} of {count}</span>
+      </div>}
+    </div>
+  );
 }
 
 function MediaDialog({ method, onClose }: { method: Method; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
-  const [videoFailed, setVideoFailed] = useState(false);
-  const asset: MediaAsset = CONFIG.media[method];
   const title = METHODS.find(item => item.id === method)!.title;
   useEffect(() => {
     const element = dialog.current;
@@ -354,11 +413,9 @@ function MediaDialog({ method, onClose }: { method: Method; onClose: () => void 
         <button type="button" onClick={onClose} className="rp-outline" autoFocus aria-label="Close enlarged example">Close ×</button>
       </div>
       <div className="rp-dialog-media">
-        {asset.videoSrc && !videoFailed ? <video src={asset.videoSrc} poster={asset.src || undefined} controls playsInline preload="metadata"
-          onError={() => setVideoFailed(true)} aria-label={`${title} demonstration`} /> : <Screenshot method={method} expanded />}
+        <MethodCarousel method={method} expanded title={title} />
       </div>
-      <p className="rp-media-note">{!asset.src && !asset.videoSrc ? "Workflow illustration, not a live quote or product screenshot." : "Example workflow. Products, pricing and setup can be tailored to your business."}</p>
-      {videoFailed && <p className="rp-media-note" role="status">The video could not load. The still example is shown instead.</p>}
+      <p className="rp-media-note">Example workflow from the Apex Roofing demo. Products, pricing and setup can be tailored to your business.</p>
     </dialog>
   );
 }
@@ -369,16 +426,14 @@ function MediaExamples() {
     <>
       <div className="rp-media-grid">
         {METHODS.map(item => {
-          const asset: MediaAsset = CONFIG.media[item.id];
+          const shots = CONFIG.media[item.id].shots;
           return (
             <article key={item.id} className="rp-media-card">
-              <button className="rp-media-trigger" type="button" onClick={() => setOpen(item.id)} aria-haspopup="dialog"
-                aria-label={`Enlarge ${item.title.toLowerCase()} example`}>
-                <div className="rp-media-frame"><Screenshot method={item.id} /></div>
-                <span className="rp-media-action">{asset.videoSrc ? "Play example" : "View larger"}<span aria-hidden="true">↗</span></span>
-              </button>
+              <div className="rp-media-frame">
+                <MethodCarousel method={item.id} title={item.title} onImageClick={() => setOpen(item.id)} />
+              </div>
               <div className="rp-media-copy"><h3>{item.title}</h3><p>{item.body}</p>
-                {!asset.src && !asset.videoSrc && <span className="rp-meta">Workflow illustration</span>}
+                {!shots.length && <span className="rp-meta">Workflow illustration</span>}
               </div>
             </article>
           );
@@ -538,7 +593,7 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
         </div>
       </header>
       <div className="rp-content" data-theme={theme}>
-        <style>{STYLES}</style>
+        <style>{STYLES + RESTORED_MEDIA_STYLES}</style>
         {variant === "referred" && <div className="rp-referral-note">Shared by your T3 Labs representative. They remain your point of contact.</div>}
         <div className="rp-shell">
           <section className="rp-section rp-opening" aria-labelledby="rp-title">
@@ -600,8 +655,13 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
           <section className="rp-section" id="demos" aria-labelledby="rp-demos-title">
             <div className="rp-section-heading"><p className="rp-eyebrow">See how it works</p><h2 id="rp-demos-title">Three ways to get a useful result.</h2><p>Open any example to see it larger. Each can use your products and rules. Roofing is the worked example, but the same framework can be adapted to other construction businesses.</p></div>
             <MediaExamples />
-            {CONFIG.apexDemoHomeUrl && <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-link">Explore the Apex Roofing demo website ↗</a>}
-            <a href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"} className="rp-demo-link">See the roofing tools in more detail →</a>
+            {CONFIG.apexDemoHomeUrl && <div className="rp-demo-card">
+              <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-shot" aria-label="Open the Apex Roofing demo website">
+                <img src="/assets/roofing-solutions/apex-demo-home.jpg" alt="Apex Roofing demo website homepage" loading="lazy" />
+              </a>
+              <a href={CONFIG.apexDemoHomeUrl} target="_blank" rel="noopener noreferrer" className="rp-demo-btn">Explore the Apex Roofing demo website</a>
+            </div>}
+            <a href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"} className="rp-demo-btn">See the roofing tools in more detail</a>
           </section>
 
           <section className="rp-section" id="roof-value" aria-labelledby="rp-value-title">
@@ -676,6 +736,23 @@ export default function RoofingSolutionsReferredPage() {
 const HEADER_STYLES = `
 .btn-solid:hover{transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 7px 22px rgba(215,255,0,.18)}
 .btn-outline:hover{transform:translateY(-1px);border-color:var(--accent-ink)!important}
+`;
+
+const RESTORED_MEDIA_STYLES = String.raw`
+.rp-demo-btn{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:12px 24px;border-radius:999px;background:var(--rp-accent);color:#0a0b10!important;font-weight:600;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+.rp-demo-btn:hover{transform:translateY(-1px);box-shadow:0 7px 22px rgba(215,255,0,.35)}
+.rp-demo-card{margin-top:28px;max-width:720px;margin-inline:auto;text-align:center}
+.rp-demo-shot{display:block;overflow:hidden;border:1px solid var(--rp-border);border-radius:14px;transition:transform .15s ease,box-shadow .15s ease}
+.rp-demo-shot:hover{transform:scale(1.02);box-shadow:0 10px 30px rgba(215,255,0,.15)}
+.rp-media-open{display:block;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer}
+.rp-carousel{width:100%;height:100%;display:flex;flex-direction:column;outline:none}
+.rp-carousel-track{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.rp-carousel-nav{display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 8px 0}
+.rp-carousel-arrow{min-width:34px;min-height:34px;padding:0 10px;border:1px solid var(--rp-border);border-radius:999px;background:var(--rp-surface);color:var(--rp-text);font-weight:700;line-height:1}
+.rp-carousel-arrow:hover,.rp-dot:hover{border-color:var(--rp-accent-ink)}
+.rp-carousel-dots{display:flex;gap:8px;align-items:center}
+.rp-dot{width:9px;height:9px;min-height:0;padding:0;border:0;border-radius:999px;background:var(--rp-border);display:inline-block}
+.rp-dot-active{background:var(--rp-accent-ink)}
 `;
 
 const STYLES = String.raw`
