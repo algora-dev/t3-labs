@@ -243,7 +243,7 @@ function EnquiryForm({ t }:{ t:Tokens }) {
       <textarea value={form.message} onChange={e=>setForm({...form,message:e.target.value})}
         placeholder="What feels slow, manual or harder than it should be for customers or staff?"
         rows={4} style={inputStyle} className="mt-4 w-full rounded-xl border px-4 py-3 outline-none"/>
-      {error && <p className="mt-4 text-sm font-semibold" style={{ color:"#ff6b6b" }}>{error}</p>}
+      {error && <p className="mt-4 text-sm font-semibold" style={{ color:"var(--t3-danger)" }}>{error}</p>}
       <button type="button" onClick={submit} disabled={submitting}
               style={{ background:t.accent,color:t.accentText }}
               className="btn-solid mt-5 min-h-12 rounded-full px-7 text-sm font-semibold disabled:opacity-60">
@@ -291,6 +291,7 @@ export default function ConstructionSolutionPage(){
         ["--t3-border" as string]:t.border,
         ["--t3-surface" as string]:t.surface,
         ["--t3-surface-alt" as string]:t.surfaceAlt,
+        ["--t3-danger" as string]:"#ff6b6b",
       }}
       className="t3-page min-h-screen antialiased"
     >

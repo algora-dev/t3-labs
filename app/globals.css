@@ -1,8 +1,24 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-:root {
+ :root {
   color-scheme: light;
+  --t3-black: #0a0b10;
+  --t3-white: #ffffff;
+  --t3-paper: #f5f6f8;
+  --t3-light-raised: #f0f2f5;
+  --t3-light-border: #dde2e8;
+  --t3-light-muted: #5e6674;
+  --t3-slate-900: #101722;
+  --t3-slate-800: #172131;
+  --t3-slate-border: #303d51;
+  --t3-dark-muted: #aab4c6;
+  --t3-lime: #d7ff00;
+  --t3-lime-ink: #5f7000;
+  --t3-danger: #ff6b6b;
+  --t3-glow: 0 0 0 1px rgba(215,255,0,.28), 0 0 26px rgba(215,255,0,.14);
+
+  /* Legacy aliases retained so existing pages migrate safely. */
   --ink: #0a0b10;
   --muted: #606575;
   --line: #e7e9ef;
@@ -10,6 +26,7 @@
   --lime: #d7ff00;
   --blue: #111318;
 }
+
 
 * {
   box-sizing: border-box;
@@ -41,7 +58,7 @@ body {
 }
 
 body::selection {
-  background: #1d2529;
+  background: var(--t3-slate-800);
   color: #ffffff;
 }
 

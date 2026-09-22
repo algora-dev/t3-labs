@@ -194,7 +194,7 @@ function Header({
       <nav
         aria-label="Primary navigation"
         className={`flex items-center justify-center gap-2 text-sm font-semibold ${
-          navOpen ? "fixed top-[76px] left-5 right-5 grid gap-2 p-4 border border-[var(--line)] rounded-xl bg-white shadow-[0_26px_80px_rgba(24,31,51,0.12)]" : "hidden md:flex"
+          navOpen ? "fixed top-[76px] left-5 right-5 grid gap-2 p-4 border border-[var(--t3-light-border)] rounded-xl bg-white shadow-[0_26px_80px_rgba(24,31,51,0.12)]" : "hidden md:flex"
         }`}
       >
         {NAV_LINKS.map((link) => (
@@ -217,10 +217,10 @@ function Header({
         aria-label="Open navigation"
         aria-expanded={navOpen}
         onClick={onToggle}
-        className="md:hidden flex w-[42px] h-[42px] shrink-0 flex-col items-center justify-center gap-1 border border-[var(--line)] rounded-lg bg-white"
+        className="md:hidden flex w-[42px] h-[42px] shrink-0 flex-col items-center justify-center gap-1 border border-[var(--t3-light-border)] rounded-lg bg-white"
       >
-        <span className="w-[18px] h-0.5 bg-[var(--ink)]" />
-        <span className="w-[18px] h-0.5 bg-[var(--ink)]" />
+        <span className="w-[18px] h-0.5 bg-[var(--t3-black)]" />
+        <span className="w-[18px] h-0.5 bg-[var(--t3-black)]" />
       </button>
     </header>
   );
@@ -234,10 +234,10 @@ function WorkSection() {
   return (
     <section id="work" className="mb-[104px] w-[min(1180px,calc(100%-40px))] mx-auto">
       <div className="mb-8.5">
-        <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
+        <p className="block m-0 text-[#5e6674] text-xs font-semibold tracking-[0.18em] uppercase">
           What we&rsquo;ve built
         </p>
-        <h2 className="max-w-[920px] mb-0 text-[#050505] text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-[1.04]">
+        <h2 className="max-w-[920px] mb-0 text-[#0a0b10] text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-[1.04]">
           Useful products across different problems.
         </h2>
       </div>
@@ -246,10 +246,10 @@ function WorkSection() {
         {WORK_CARDS.map((card) => (
           <article
             key={card.num}
-            className="group flex flex-col min-h-[330px] p-7 pb-6 border border-[var(--line)] rounded-lg bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.055),transparent_11rem),rgba(255,255,255,0.92)] shadow-[0_10px_32px_rgba(24,31,51,0.05)] hover:border-[#e3e8bc] hover:bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.11),transparent_11rem),#fbfff0] hover:shadow-[0_14px_34px_rgba(24,31,51,0.07)] transition-all duration-200"
+            className="group flex flex-col min-h-[330px] p-7 pb-6 border border-[var(--t3-light-border)] rounded-lg bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.055),transparent_11rem),rgba(255,255,255,0.92)] shadow-[0_10px_32px_rgba(24,31,51,0.05)] hover:border-[rgba(215,255,0,.55)] hover:bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.11),transparent_11rem),#fbfff0] hover:shadow-[0_14px_34px_rgba(24,31,51,0.07)] transition-all duration-200"
           >
             {card.img && card.link && (
-              <a href={card.link.href} target="_blank" rel="noreferrer" aria-label={`${card.title} - ${card.link.label}`} className="mb-5 block overflow-hidden rounded-lg border border-[var(--line)] bg-[#f6f8f0] transition-all duration-200 group-hover:border-[#e3e8bc] group-hover:shadow-[0_10px_28px_rgba(215,255,0,0.35)]">
+              <a href={card.link.href} target="_blank" rel="noreferrer" aria-label={`${card.title} - ${card.link.label}`} className="mb-5 block overflow-hidden rounded-lg border border-[var(--t3-light-border)] bg-[#f0f2f5] transition-all duration-200 group-hover:border-[rgba(215,255,0,.55)] group-hover:shadow-[0_10px_28px_rgba(215,255,0,0.35)]">
                 <img
                   src={card.img}
                   alt={`${card.title} preview`}
@@ -259,7 +259,7 @@ function WorkSection() {
               </a>
             )}
             {card.img && !card.link && (
-              <div className="mb-5 overflow-hidden rounded-lg border border-[var(--line)] bg-[#f6f8f0] transition-all duration-200 group-hover:border-[#e3e8bc] group-hover:shadow-[0_10px_28px_rgba(215,255,0,0.35)]">
+              <div className="mb-5 overflow-hidden rounded-lg border border-[var(--t3-light-border)] bg-[#f0f2f5] transition-all duration-200 group-hover:border-[rgba(215,255,0,.55)] group-hover:shadow-[0_10px_28px_rgba(215,255,0,0.35)]">
                 <img
                   src={card.img}
                   alt={`${card.title} preview`}
@@ -271,22 +271,22 @@ function WorkSection() {
             <h3 className="max-w-[260px] mb-3.5 text-[1.45rem] font-semibold leading-[1.15]">
               {card.title}
             </h3>
-            <p className="mb-0 text-[var(--muted)] text-base leading-[1.65]">{card.desc}</p>
+            <p className="mb-0 text-[var(--t3-light-muted)] text-base leading-[1.65]">{card.desc}</p>
             {card.link && (
               <div className="mt-auto flex flex-wrap items-center gap-2.5 pt-6">
                 <a
                   href={card.link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 w-auto min-h-[32px] px-3.5 py-1.5 border border-[var(--line)] rounded-lg bg-white text-[var(--ink)] text-xs font-semibold shadow-[0_8px_18px_rgba(16,24,40,0.04)] hover:-translate-y-px hover:border-[#e3e8bc] hover:bg-[#fbfff0] hover:text-black hover:shadow-[0_12px_24px_rgba(16,24,40,0.07)] transition-all duration-200"
+                  className="inline-flex items-center justify-center gap-2 w-auto min-h-[32px] px-3.5 py-1.5 border border-[var(--t3-light-border)] rounded-lg bg-white text-[var(--t3-black)] text-xs font-semibold shadow-[0_8px_18px_rgba(16,24,40,0.04)] hover:-translate-y-px hover:border-[rgba(215,255,0,.55)] hover:bg-[#fbfff0] hover:text-black hover:shadow-[0_12px_24px_rgba(16,24,40,0.07)] transition-all duration-200"
                 >
                   {card.link.label}
-                  <span className="inline-grid w-[18px] h-[18px] place-items-center rounded-full bg-[#d7ff00] text-[var(--ink)] text-[10px]">
+                  <span className="inline-grid w-[18px] h-[18px] place-items-center rounded-full bg-[#d7ff00] text-[var(--t3-black)] text-[10px]">
                     &rarr;
                   </span>
                 </a>
                 {card.link.note && (
-                  <span className="text-[var(--muted)] text-xs font-medium">{card.link.note}</span>
+                  <span className="text-[var(--t3-light-muted)] text-xs font-medium">{card.link.note}</span>
                 )}
               </div>
             )}
@@ -325,13 +325,13 @@ function CustomSolutionsSection({
     >
       {/* Header */}
       <div className="mb-8.5">
-        <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
+        <p className="block m-0 text-[#5e6674] text-xs font-semibold tracking-[0.18em] uppercase">
           What else we build
         </p>
-        <h2 className="max-w-[920px] mb-4.5 text-[#050505] text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-[1.04]">
+        <h2 className="max-w-[920px] mb-4.5 text-[#0a0b10] text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-[1.04]">
           Custom software solutions for every business.
         </h2>
-        <p className="max-w-[760px] mb-0 text-[#373c4c] text-[1.08rem] leading-[1.65]">
+        <p className="max-w-[760px] mb-0 text-[#5e6674] text-[1.08rem] leading-[1.65]">
           Beyond our productised tools, T3 Labs builds tailored software that solves
           specific operational problems. From lead generation engines to workflow
           automation, internal tools, and advanced integrations - if a process can be
@@ -344,7 +344,7 @@ function CustomSolutionsSection({
         {CAPABILITY_TAGS.map((tag) => (
           <span
             key={tag}
-            className="px-3 py-1.5 border border-[var(--line)] rounded-full bg-white text-[#4f5567] text-xs font-medium"
+            className="px-3 py-1.5 border border-[var(--t3-light-border)] rounded-full bg-white text-[#5e6674] text-xs font-medium"
           >
             {tag}
           </span>
@@ -353,7 +353,7 @@ function CustomSolutionsSection({
 
       {/* Carousel */}
       <div
-        className="relative overflow-hidden border border-[var(--line)] rounded-2xl bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.05),transparent_20rem),rgba(255,255,255,0.92)] shadow-[0_26px_80px_rgba(24,31,51,0.12)]"
+        className="relative overflow-hidden border border-[var(--t3-light-border)] rounded-2xl bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.05),transparent_20rem),rgba(255,255,255,0.92)] shadow-[0_26px_80px_rgba(24,31,51,0.12)]"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -383,17 +383,17 @@ function CustomSolutionsSection({
                 {/* Text side */}
                 <div className="flex flex-col justify-center gap-4 p-8.5 bg-[radial-gradient(circle_at_80%_20%,rgba(215,255,0,0.06),transparent_16rem),white]">
                   <div className="flex items-center gap-2.5">
-                    <span className="inline-grid w-[32px] h-[32px] place-items-center border border-[#d7ff00] rounded-lg bg-[#d7ff00] text-[var(--ink)] text-[11px] font-bold">
+                    <span className="inline-grid w-[32px] h-[32px] place-items-center border border-[#d7ff00] rounded-lg bg-[#d7ff00] text-[var(--t3-black)] text-[11px] font-bold">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="text-[#515763] text-xs font-semibold tracking-[0.12em] uppercase">
+                    <span className="text-[#5e6674] text-xs font-semibold tracking-[0.12em] uppercase">
                       Custom Build
                     </span>
                   </div>
                   <h3 className="text-[1.6rem] font-semibold leading-[1.15]">
                     {solution.title}
                   </h3>
-                  <p className="text-[var(--muted)] text-base leading-[1.65]">
+                  <p className="text-[var(--t3-light-muted)] text-base leading-[1.65]">
                     {solution.desc}
                   </p>
                 </div>
@@ -424,7 +424,7 @@ function CustomSolutionsSection({
           type="button"
           aria-label="Previous slide"
           onClick={() => setActiveSlide((prev) => (prev - 1 + CUSTOM_SOLUTIONS.length) % CUSTOM_SOLUTIONS.length)}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex w-10 h-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[var(--line)] text-[var(--ink)] shadow-[0_5px_16px_rgba(20,25,40,0.08)] hover:bg-white hover:border-[#e3e8bc] transition-all duration-200"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex w-10 h-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[var(--t3-light-border)] text-[var(--t3-black)] shadow-[0_5px_16px_rgba(20,25,40,0.08)] hover:bg-white hover:border-[rgba(215,255,0,.55)] transition-all duration-200"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
         </button>
@@ -432,7 +432,7 @@ function CustomSolutionsSection({
           type="button"
           aria-label="Next slide"
           onClick={() => setActiveSlide((prev) => (prev + 1) % CUSTOM_SOLUTIONS.length)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex w-10 h-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[var(--line)] text-[var(--ink)] shadow-[0_5px_16px_rgba(20,25,40,0.08)] hover:bg-white hover:border-[#e3e8bc] transition-all duration-200"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex w-10 h-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm border border-[var(--t3-light-border)] text-[var(--t3-black)] shadow-[0_5px_16px_rgba(20,25,40,0.08)] hover:bg-white hover:border-[rgba(215,255,0,.55)] transition-all duration-200"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
         </button>
@@ -440,16 +440,16 @@ function CustomSolutionsSection({
 
       {/* Positioning statement + CTA */}
       <div
-        className="grid gap-7 items-center mt-6 p-8.5 border border-[var(--line)] rounded-xl bg-[radial-gradient(circle_at_12%_20%,rgba(17,19,24,0.04),transparent_20rem),radial-gradient(circle_at_82%_30%,rgba(215,255,0,0.06),transparent_16rem),white] md:[grid-template-columns:1fr_auto] max-md:grid-cols-1"
+        className="grid gap-7 items-center mt-6 p-8.5 border border-[var(--t3-light-border)] rounded-xl bg-[radial-gradient(circle_at_12%_20%,rgba(17,19,24,0.04),transparent_20rem),radial-gradient(circle_at_82%_30%,rgba(215,255,0,0.06),transparent_16rem),white] md:[grid-template-columns:1fr_auto] max-md:grid-cols-1"
       >
         <div>
-          <p className="block mb-3 text-[#373c4c] text-[1.05rem] leading-[1.65]">
+          <p className="block mb-3 text-[#5e6674] text-[1.05rem] leading-[1.65]">
             We keep the process simple. You explain the problem, we work out the
             right technology, and we involve your team only where their judgment
             is genuinely needed. The result is practical software, automation and
             AI systems designed around how your business actually works.
           </p>
-          <p className="block m-0 text-[var(--muted)] text-sm leading-[1.6]">
+          <p className="block m-0 text-[var(--t3-light-muted)] text-sm leading-[1.6]">
             Lead generation. Workflow automation. Internal tools. Advanced integrations.
             If it can be built, we build it.
           </p>
@@ -457,7 +457,7 @@ function CustomSolutionsSection({
         <a
           href="#contact"
           onClick={(e) => { e.preventDefault(); onCtaClick(); }}
-          className="inline-flex min-h-[48px] items-center justify-center gap-3 px-5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform whitespace-nowrap"
+          className="inline-flex min-h-[48px] items-center justify-center gap-3 px-5 py-3.5 rounded-lg bg-gradient-to-br from-[#0a0b10] to-[#172131] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform whitespace-nowrap"
         >
           Start a project <span>&rarr;</span>
         </a>
@@ -474,7 +474,7 @@ function Testimonials() {
   return (
     <section id="testimonials" className="mb-[104px] w-[min(1180px,calc(100%-40px))] mx-auto">
       <div className="mb-8.5">
-        <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
+        <p className="block m-0 text-[#5e6674] text-xs font-semibold tracking-[0.18em] uppercase">
           What people say
         </p>
         <h2 className="mb-0 text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-none">
@@ -486,21 +486,21 @@ function Testimonials() {
         {TESTIMONIALS.map((t) => (
           <article
             key={t.initials}
-            className="flex flex-col gap-4 p-7 border border-[var(--line)] rounded-lg bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.045),transparent_11rem),rgba(255,255,255,0.94)] shadow-[0_10px_32px_rgba(24,31,51,0.05)] hover:-translate-y-0.5 hover:border-[#e3e8bc] hover:shadow-[0_14px_34px_rgba(24,31,51,0.07)] transition-all duration-200"
+            className="flex flex-col gap-4 p-7 border border-[var(--t3-light-border)] rounded-lg bg-[radial-gradient(circle_at_84%_14%,rgba(215,255,0,0.045),transparent_11rem),rgba(255,255,255,0.94)] shadow-[0_10px_32px_rgba(24,31,51,0.05)] hover:-translate-y-0.5 hover:border-[rgba(215,255,0,.55)] hover:shadow-[0_14px_34px_rgba(24,31,51,0.07)] transition-all duration-200"
           >
             <div className="text-[#f5a623] text-base tracking-[2px]">
               {"\u2605".repeat(5)}
             </div>
-            <p className="flex-1 m-0 text-[#3e4352] text-base italic leading-[1.7]">
+            <p className="flex-1 m-0 text-[#5e6674] text-base italic leading-[1.7]">
               &ldquo;{t.quote}&rdquo;
             </p>
             <div className="flex items-center gap-3 mt-1">
-              <div className="flex w-10 h-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#050608] to-[#242832] text-white text-xs font-bold">
+              <div className="flex w-10 h-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#0a0b10] to-[#172131] text-white text-xs font-bold">
                 {t.initials}
               </div>
               <div>
-                <strong className="block text-[var(--ink)] text-sm">{t.name}</strong>
-                <span className="block text-[var(--muted)] text-xs">{t.role}</span>
+                <strong className="block text-[var(--t3-black)] text-sm">{t.name}</strong>
+                <span className="block text-[var(--t3-light-muted)] text-xs">{t.role}</span>
               </div>
             </div>
           </article>
@@ -566,12 +566,12 @@ function EmailUsModal({ open, onClose }: { open: boolean; onClose: () => void })
         {sent ? (
           <div className="py-6 text-center">
             <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-[#d7ff00] text-lg font-bold">&#10003;</div>
-            <strong className="block text-lg text-[#050505]">Message sent.</strong>
-            <p className="mt-1 text-sm text-[var(--muted)]">We&apos;ll reply within 24 hours.</p>
+            <strong className="block text-lg text-[#0a0b10]">Message sent.</strong>
+            <p className="mt-1 text-sm text-[var(--t3-light-muted)]">We&apos;ll reply within 24 hours.</p>
             <button
               type="button"
               onClick={onClose}
-              className="mt-5 min-h-[44px] rounded-lg border border-[rgba(17,19,24,0.2)] px-5 text-sm font-semibold text-[#050608] transition hover:border-[#050608]/50 cursor-pointer"
+              className="mt-5 min-h-[44px] rounded-lg border border-[rgba(17,19,24,0.2)] px-5 text-sm font-semibold text-[#0a0b10] transition hover:border-[#0a0b10]/50 cursor-pointer"
             >
               Close
             </button>
@@ -579,17 +579,17 @@ function EmailUsModal({ open, onClose }: { open: boolean; onClose: () => void })
         ) : (
           <form onSubmit={submit} noValidate className="flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
-              <strong className="text-lg text-[#050505]">Email us</strong>
+              <strong className="text-lg text-[#0a0b10]">Email us</strong>
               <button
                 type="button"
                 onClick={onClose}
                 aria-label="Close"
-                className="grid h-8 w-8 place-items-center rounded-full border border-[var(--line)] text-[var(--muted)] hover:border-[#e3e8bc] cursor-pointer"
+                className="grid h-8 w-8 place-items-center rounded-full border border-[var(--t3-light-border)] text-[var(--t3-light-muted)] hover:border-[rgba(215,255,0,.55)] cursor-pointer"
               >
                 &#10005;
               </button>
             </div>
-            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--ink)]">
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--t3-black)]">
               Your email address
               <input
                 type="email"
@@ -597,20 +597,20 @@ function EmailUsModal({ open, onClose }: { open: boolean; onClose: () => void })
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="you@company.com"
-                className="rounded-lg border border-[var(--line)] bg-[#fafbfd] px-3.5 py-3 text-base font-normal text-[var(--ink)] outline-none focus:border-[#e3e8bc] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
+                className="rounded-lg border border-[var(--t3-light-border)] bg-[#f5f6f8] px-3.5 py-3 text-base font-normal text-[var(--t3-black)] outline-none focus:border-[rgba(215,255,0,.55)] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
               />
             </label>
-            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--ink)]">
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--t3-black)]">
               Subject
               <input
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="What's this about?"
-                className="rounded-lg border border-[var(--line)] bg-[#fafbfd] px-3.5 py-3 text-base font-normal text-[var(--ink)] outline-none focus:border-[#e3e8bc] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
+                className="rounded-lg border border-[var(--t3-light-border)] bg-[#f5f6f8] px-3.5 py-3 text-base font-normal text-[var(--t3-black)] outline-none focus:border-[rgba(215,255,0,.55)] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
               />
             </label>
-            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--ink)]">
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-[var(--t3-black)]">
               Message
               <textarea
                 value={message}
@@ -618,14 +618,14 @@ function EmailUsModal({ open, onClose }: { open: boolean; onClose: () => void })
                 required
                 rows={5}
                 placeholder="Write your message here."
-                className="resize-y rounded-lg border border-[var(--line)] bg-[#fafbfd] px-3.5 py-3 text-base font-normal text-[var(--ink)] outline-none focus:border-[#e3e8bc] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
+                className="resize-y rounded-lg border border-[var(--t3-light-border)] bg-[#f5f6f8] px-3.5 py-3 text-base font-normal text-[var(--t3-black)] outline-none focus:border-[rgba(215,255,0,.55)] focus:bg-white focus:shadow-[0_0_0_3px_rgba(215,255,0,0.14)]"
               />
             </label>
-            {error && <p className="m-0 text-sm font-medium text-[#e03e3e]">{error}</p>}
+            {error && <p className="m-0 text-sm font-medium text-[#ff6b6b]">{error}</p>}
             <button
               type="submit"
               disabled={sending}
-              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(10,11,16,0.16)] transition hover:-translate-y-0.5 cursor-pointer disabled:opacity-60"
+              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#0a0b10] to-[#172131] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(10,11,16,0.16)] transition hover:-translate-y-0.5 cursor-pointer disabled:opacity-60"
             >
               {sending ? "Sending..." : "Send message"} {!sending && <span>&rarr;</span>}
             </button>
@@ -647,7 +647,7 @@ function CTASection({ onCtaClick, onEmailClick }: { onCtaClick: () => void; onEm
       className="grid gap-7 items-center mb-8.5 p-10.5 border border-[rgba(17,19,24,0.1)] rounded-2xl bg-[radial-gradient(circle_at_12%_20%,rgba(17,19,24,0.06),transparent_24rem),radial-gradient(circle_at_82%_30%,rgba(215,255,0,0.08),transparent_17rem),white] shadow-[0_26px_80px_rgba(24,31,51,0.12)] w-[min(1180px,calc(100%-40px))] mx-auto md:[grid-template-columns:1fr_auto] max-md:grid-cols-1 max-md:p-7"
     >
       <div>
-        <p className="block m-0 text-[#515763] text-xs font-semibold tracking-[0.18em] uppercase">
+        <p className="block m-0 text-[#5e6674] text-xs font-semibold tracking-[0.18em] uppercase">
           Build with T3 Labs
         </p>
         <h2 className="mb-4.5 text-[clamp(2rem,3vw,3.1rem)] font-semibold leading-none">
@@ -658,7 +658,7 @@ function CTASection({ onCtaClick, onEmailClick }: { onCtaClick: () => void; onEm
           software or something custom. Tell us what's happening and we'll work
           out the sensible next step.
         </p>
-        <p className="mb-0 text-sm leading-[1.6] text-[#515763]">
+        <p className="mb-0 text-sm leading-[1.6] text-[#5e6674]">
           Speak it or type it - no technical brief needed. A real person at T3
           Labs reviews every enquiry.
         </p>
@@ -667,7 +667,7 @@ function CTASection({ onCtaClick, onEmailClick }: { onCtaClick: () => void; onEm
         <button
           type="button"
           onClick={onCtaClick}
-          className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#050608] to-[#242832] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform cursor-pointer"
+          className="inline-flex min-h-[52px] items-center justify-center gap-3 px-5.5 py-3.5 rounded-lg bg-gradient-to-br from-[#0a0b10] to-[#172131] text-white text-sm font-semibold shadow-[0_14px_30px_rgba(10,11,16,0.16)] hover:-translate-y-0.5 transition-transform cursor-pointer"
         >
           Tell us your problem <span>&rarr;</span>
         </button>
@@ -675,14 +675,14 @@ function CTASection({ onCtaClick, onEmailClick }: { onCtaClick: () => void; onEm
           href="https://calendly.com/insights-t3labs/20-minute-meeting"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-[rgba(17,19,24,0.2)] px-5.5 py-2.5 text-sm font-semibold text-[#050608] transition hover:border-[#050608]/50"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-[rgba(17,19,24,0.2)] px-5.5 py-2.5 text-sm font-semibold text-[#0a0b10] transition hover:border-[#0a0b10]/50"
         >
           Book a free call
         </a>
         <button
           type="button"
           onClick={onEmailClick}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-[rgba(17,19,24,0.2)] px-5.5 py-2.5 text-sm font-semibold text-[#050608] transition hover:border-[#050608]/50 cursor-pointer"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-[rgba(17,19,24,0.2)] px-5.5 py-2.5 text-sm font-semibold text-[#0a0b10] transition hover:border-[#0a0b10]/50 cursor-pointer"
         >
           Email us
         </button>
@@ -700,19 +700,19 @@ function Footer() {
     <footer className="grid gap-2 w-[min(1180px,calc(100%-40px))] mx-auto pt-7 pb-10.5 text-[#6f7584] text-sm">
       <p className="m-0">
         &copy; 2026 T3 Labs &middot;{" "}
-        <a href="/privacy" className="text-[var(--ink)] font-semibold no-underline hover:underline">Privacy</a>
+        <a href="/privacy" className="text-[var(--t3-black)] font-semibold no-underline hover:underline">Privacy</a>
         {" "}&middot;{" "}
-        <a href="/cookies" className="text-[var(--ink)] font-semibold no-underline hover:underline">Cookies</a>
+        <a href="/cookies" className="text-[var(--t3-black)] font-semibold no-underline hover:underline">Cookies</a>
         {" "}&middot;{" "}
-        <a href="/terms" className="text-[var(--ink)] font-semibold no-underline hover:underline">Terms</a>
+        <a href="/terms" className="text-[var(--t3-black)] font-semibold no-underline hover:underline">Terms</a>
         {" "}&middot;{" "}
-        <a href="/ai-consultancy" className="text-[var(--ink)] font-semibold no-underline hover:underline">AI Consultancy</a>
+        <a href="/ai-consultancy" className="text-[var(--t3-black)] font-semibold no-underline hover:underline">AI Consultancy</a>
         {" "}&middot;{" "}
-        <a href="/ai-implementation" className="text-[var(--ink)] font-semibold no-underline hover:underline">AI Implementation</a>
+        <a href="/ai-implementation" className="text-[var(--t3-black)] font-semibold no-underline hover:underline">AI Implementation</a>
         {" "}&middot;{" "}
-        <a href="/ai-automation" className="text-[var(--ink)] font-semibold no-underline hover:underline">AI Automation</a>
+        <a href="/ai-automation" className="text-[var(--t3-black)] font-semibold no-underline hover:underline">AI Automation</a>
         {" "}&middot;{" "}
-        <a href="/ai-training" className="text-[var(--ink)] font-semibold no-underline hover:underline">AI Training</a>
+        <a href="/ai-training" className="text-[var(--t3-black)] font-semibold no-underline hover:underline">AI Training</a>
       </p>
       <p className="m-0">T3 Labs is a trading name of T3 Play Limited.</p>
     </footer>
