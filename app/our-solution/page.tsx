@@ -11,15 +11,17 @@ type Tokens = {
   accentInk: string; accentSoft: string;
 };
 
+// T3 Labs design-system pilot tokens.
+// Keep this page visually familiar while standardising the palette used across T3 Labs.
 const dark: Tokens = {
-  bg:"#0a0b10", surface:"#101219", surfaceAlt:"#161927", border:"#262a3a",
-  text:"#e8eaf2", muted:"#9aa1b5", accent:"#d7ff00", accentText:"#0a0b10",
+  bg:"#0a0b10", surface:"#101722", surfaceAlt:"#172131", border:"#303d51",
+  text:"#ffffff", muted:"#aab4c6", accent:"#d7ff00", accentText:"#0a0b10",
   accentInk:"#d7ff00", accentSoft:"rgba(215,255,0,.08)"
 };
 const light: Tokens = {
-  bg:"#fbfcff", surface:"#fff", surfaceAlt:"#f3f5fa", border:"#e7e9ef",
-  text:"#0a0b10", muted:"#5a6172", accent:"#d7ff00", accentText:"#0a0b10",
-  accentInk:"#809000", accentSoft:"rgba(215,255,0,.18)"
+  bg:"#f5f6f8", surface:"#ffffff", surfaceAlt:"#f0f2f5", border:"#dde2e8",
+  text:"#0a0b10", muted:"#5e6674", accent:"#d7ff00", accentText:"#0a0b10",
+  accentInk:"#5f7000", accentSoft:"rgba(215,255,0,.12)"
 };
 
 const BOOKING_URL = "https://calendly.com/insights-t3labs/20-minute-meeting";
@@ -89,7 +91,7 @@ function ExpandCard({
 }) {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ background:t.surface, borderColor:t.border }} className="rounded-2xl border">
+    <div style={{ background:t.surface, borderColor:t.border }} className="expand-card rounded-2xl border">
       <button
         type="button"
         aria-expanded={open}
@@ -280,18 +282,32 @@ export default function ConstructionSolutionPage(){
   const openForm=()=>{ setFormOpen(true); setTimeout(()=>scrollToId("enquiry"),80); };
 
   return (
-    <main style={{background:t.bg,color:t.text,["--accent" as string]:t.accent,["--accent-ink" as string]:t.accentInk}} className="min-h-screen antialiased">
+    <main
+      style={{
+        background:t.bg,
+        color:t.text,
+        ["--accent" as string]:t.accent,
+        ["--accent-ink" as string]:t.accentInk,
+        ["--t3-border" as string]:t.border,
+        ["--t3-surface" as string]:t.surface,
+        ["--t3-surface-alt" as string]:t.surfaceAlt,
+      }}
+      className="t3-page min-h-screen antialiased"
+    >
       <style>{`
-        main button,main a{cursor:pointer;transition:transform .15s ease,filter .15s ease,border-color .15s ease,box-shadow .15s ease}
-        .btn-solid:hover{transform:translateY(-1px);filter:brightness(1.08);box-shadow:0 7px 22px rgba(215,255,0,.18)}
-        .btn-outline:hover{transform:translateY(-1px);border-color:var(--accent-ink)!important}
-        .hover-card{transition:transform .15s ease,border-color .15s ease}.hover-card:hover{transform:translateY(-2px);border-color:var(--accent-ink)!important}
-        .card-toggle:hover{background:rgba(127,127,127,.05)}.proof-stat strong{color:var(--accent-ink)}
-        .loop-pill{transition:transform .15s ease,background .15s ease,color .15s ease,border-color .15s ease}
-        .loop-pill:hover,.loop-pill:focus-visible{transform:scale(1.04);background:var(--accent)!important;color:#0a0b10!important;border-color:var(--accent)!important}
+        /* T3 Labs design-system pilot: interaction only. Layout and component structure stay unchanged. */
+        .t3-page button,.t3-page a{cursor:pointer;transition:transform 180ms ease,filter 180ms ease,border-color 180ms ease,box-shadow 180ms ease,background-color 180ms ease}
+        .t3-page :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+        .btn-solid:hover{transform:translateY(-2px);filter:brightness(1.04);box-shadow:0 0 0 1px rgba(215,255,0,.28),0 0 26px rgba(215,255,0,.18)}
+        .btn-outline:hover{transform:translateY(-2px);border-color:var(--accent)!important;box-shadow:0 0 0 1px rgba(215,255,0,.18),0 0 22px rgba(215,255,0,.10);background:rgba(215,255,0,.035)}
+        .hover-card{transition:transform 180ms ease,border-color 180ms ease,box-shadow 180ms ease}.hover-card:hover{transform:translateY(-2px);border-color:var(--accent)!important;box-shadow:0 0 0 1px rgba(215,255,0,.18),0 0 24px rgba(215,255,0,.10)}
+        .expand-card{transition:border-color 180ms ease,box-shadow 180ms ease}.expand-card:hover{border-color:var(--accent)!important;box-shadow:0 0 0 1px rgba(215,255,0,.14),0 0 22px rgba(215,255,0,.08)}
+        .card-toggle:hover{background:rgba(215,255,0,.035)}.proof-stat strong{color:var(--accent-ink)}
+        .loop-pill{transition:transform 180ms ease,background 180ms ease,color 180ms ease,border-color 180ms ease,box-shadow 180ms ease}
+        .loop-pill:hover,.loop-pill:focus-visible{transform:translateY(-1px);background:var(--accent)!important;color:#0a0b10!important;border-color:var(--accent)!important;box-shadow:0 0 22px rgba(215,255,0,.14)}
       `}</style>
 
-      <header style={{background:theme==="dark"?"rgba(10,11,16,.88)":"rgba(251,252,255,.92)",borderColor:t.border}} className="sticky top-0 z-50 border-b backdrop-blur">
+      <header style={{background:theme==="dark"?"rgba(10,11,16,.90)":"rgba(245,246,248,.94)",borderColor:t.border}} className="sticky top-0 z-50 border-b backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
           <a href="https://www.t3labs.tech" className="flex items-center gap-2 font-semibold">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg" style={{background:"#0a0b10"}}><img src="/assets/t3-logo-white.png" alt="T3 Labs" className="h-7 w-7" /></span>
