@@ -28,3 +28,13 @@ See `docs/ADDING_A_PROSPECT_SITE.md` for a practical example. Never commit `.env
 ## Copy standard (repo-wide, locked 2026-09-23)
 
 NO EM DASHES in T3 Labs copy: pages, blog MDX, components, metadata, prompts, emails, docs. Use a short dash (-) or a comma instead. Swept repo-wide 2026-09-23 (387 replacements, 56 files). Any new content must follow this rule. Exception: functional code that must reference the em dash character uses the \u2014 escape, never the literal character (see stripEmDashes in app/api/chat/route.ts and app/api/assistant-t3/route.ts).
+
+## External agent rules (locked 2026-09-23, goes into every outgoing handoff ZIP)
+
+If you are an external agent editing this code:
+1. Save every file as UTF-8. Never pipe file content through a terminal or console (cmd type, PowerShell pipes, git show redirects) - the DOS OEM codepage re-encodes UTF-8 and corrupts every non-ASCII symbol (a 2026-09-22 overlay turned arrows into "O-a-AE" garbage on the live site).
+2. NO EM DASHES anywhere: code, copy, comments, docs, metadata. Use a short dash (-) or a comma.
+3. Preserve non-ASCII symbols exactly as received (arrows, GBP signs, curly quotes, m2 superscripts, degree signs). Do not normalize or clean them.
+4. Keep original relative paths and file names in the returned ZIP.
+
+Every returned ZIP is byte-scanned for mojibake and em dashes BEFORE anything is applied. Files that fail the scan are rejected, not patched.
