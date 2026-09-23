@@ -47,7 +47,7 @@ export default function CookieBanner() {
           left: 0;
           right: 0;
           background: #ffffff;
-          border-top: 1px solid #e7e9ef;
+          border-top: 1px solid #dde2e8;
           box-shadow: 0 -4px 24px rgba(10, 11, 16, 0.08);
           z-index: 1000;
           padding: 16px 20px;
@@ -64,7 +64,7 @@ export default function CookieBanner() {
           margin: 0;
           font-size: 13px;
           line-height: 1.6;
-          color: #3e4352;
+          color: #5e6674;
           flex: 1;
           min-width: 260px;
         }
@@ -80,7 +80,7 @@ export default function CookieBanner() {
         }
         .cookie-btn {
           height: 38px;
-          border-radius: 8px;
+          border-radius: 999px;
           font-size: 13px;
           padding: 0 14px;
           cursor: pointer;
@@ -91,24 +91,24 @@ export default function CookieBanner() {
           text-decoration: none;
         }
         .cookie-btn.primary {
-          background: linear-gradient(135deg, #050608, #242832);
-          color: #ffffff;
+          background: #d7ff00;
+          color: #0a0b10;
           border: none;
           box-shadow: 0 14px 30px rgba(10, 11, 16, 0.16);
         }
-        .cookie-btn.primary:hover { transform: translateY(-2px); }
+        .cookie-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(215,255,0,.28), 0 0 22px rgba(215,255,0,.12); }
         .cookie-btn.secondary {
           background: #ffffff;
           color: #0a0b10;
-          border: 1px solid #e7e9ef;
+          border: 1px solid #dde2e8;
         }
-        .cookie-btn.secondary:hover { background: #fbfff0; border-color: #e3e8bc; }
+        .cookie-btn.secondary:hover { background: rgba(215,255,0,.08); border-color: rgba(95,112,0,.28); }
         .cookie-btn.manage {
-          background: #fbfff0;
+          background: rgba(215,255,0,.08);
           color: #0a0b10;
-          border: 1px solid #e3e8bc;
+          border: 1px solid rgba(95,112,0,.28);
         }
-        .cookie-btn.manage:hover { background: #f5f8e8; }
+        .cookie-btn.manage:hover { background: rgba(215,255,0,.12); }
       `}</style>
     </div>
   );

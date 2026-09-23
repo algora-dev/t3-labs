@@ -39,8 +39,8 @@ export default function Footer() {
       </div>
       <style jsx>{`
         .site-footer {
-          background: #fbfcff;
-          border-top: 1px solid #e7e9ef;
+          background: #f5f6f8;
+          border-top: 1px solid #dde2e8;
           padding: 24px 20px;
           margin-top: 40px;
         }
@@ -57,17 +57,17 @@ export default function Footer() {
           margin-bottom: 12px;
         }
         .footer-links a {
-          color: #606575;
+          color: #5e6674;
           text-decoration: none;
         }
         .footer-links a:hover {
           color: #0a0b10;
           text-decoration: underline;
         }
-        .footer-sep { color: #c5c8d1; }
+        .footer-sep { color: #dde2e8; }
         .footer-copy {
           font-size: 12px;
-          color: #606575;
+          color: #5e6674;
           margin: 0;
           line-height: 1.6;
         }

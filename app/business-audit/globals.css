@@ -2,10 +2,14 @@
 
 :root {
   --ink: #0a0b10;
-  --paper: #fbfcff;
-  --muted: #606575;
-  --line: #e7e9ef;
+  --paper: #f5f6f8;
+  --muted: #5e6674;
+  --line: #dde2e8;
   --lime: #d7ff00;
-  --t3-green-soft: #fbfff0;
-  --t3-green-line: #e3e8bc;
+  --t3-slate-900: #101722;
+  --t3-slate-800: #172131;
+  --t3-slate-border: #303d51;
+  --t3-danger: #ff6b6b;
+  --t3-green-soft: rgba(215,255,0,.08);
+  --t3-green-line: rgba(95,112,0,.28);
 }

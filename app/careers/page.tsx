@@ -225,7 +225,7 @@ const assets = [
 
 function Check({ children }: { children: string }) {
   return (
-    <li className="flex items-start gap-2.5 text-sm leading-6 text-white/75">
+    <li className="flex items-start gap-2.5 text-sm leading-6 text-[#aab4c6]">
       <span className="mt-1 text-[#d7ff00]" aria-hidden="true">✓</span>
       {children}
     </li>
@@ -239,31 +239,31 @@ export default function CareersPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
       {/* Site header - logo links back to t3labs.tech */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0b10]/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-[#303d51] bg-[#0a0b10]/90 backdrop-blur">
         <div className="mx-auto flex h-16 w-[min(1080px,calc(100%-40px))] items-center justify-between">
           <a href="https://www.t3labs.tech" aria-label="T3 Labs home" className="inline-flex items-center">
             <img src="/assets/t3-labs-white.png" alt="T3 Labs" className="h-8 w-auto object-contain" />
           </a>
-          <a href="https://www.t3labs.tech" className="text-sm font-semibold text-white/70 transition hover:text-[#d7ff00]">
+          <a href="https://www.t3labs.tech" className="text-sm font-semibold text-[#aab4c6] transition hover:text-[#d7ff00]">
             t3labs.tech <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-20 sm:py-24">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-[#d7ff00]">
             Commission-Only Sales Opportunities
           </p>
-          <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-semibold leading-tight tracking-tight">
+          <h1 className="text-[var(--t3-type-display)] font-semibold leading-tight tracking-tight">
             Find valuable business problems. Earn commission when we solve them.
           </h1>
           <div className="mt-5 max-w-[720px]">
-            <p className="text-lg leading-9 text-white/75">
+            <p className="text-lg leading-9 text-[#aab4c6]">
               We&rsquo;re recruiting commission-based salespeople for two ways to earn from one team:
             </p>
-            <ul className="mt-4 space-y-2 text-lg leading-9 text-white/75">
+            <ul className="mt-4 space-y-2 text-lg leading-9 text-[#aab4c6]">
               <li className="flex items-start gap-3">
                 <span className="mt-4 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d7ff00]" aria-hidden="true"></span>
                 <span><span className="text-white">T3 Labs</span> - custom software and workflow solutions for
@@ -274,10 +274,10 @@ export default function CareersPage() {
                 <span><a href="https://quote-core.com/careers" className="text-white underline decoration-[#d7ff00]/60 underline-offset-2 transition hover:text-[#d7ff00]">QuoteCore+</a> - our multi-use quoting platform for contractors.</span>
               </li>
             </ul>
-            <p className="mt-4 text-lg leading-9 text-white/75">
+            <p className="mt-4 text-lg leading-9 text-[#aab4c6]">
               Uncapped commission. Your strategy, your proven formula - support and assets only if you want them.
             </p>
-            <p className="mt-4 text-lg leading-9 text-white/75">
+            <p className="mt-4 text-lg leading-9 text-[#aab4c6]">
               You can focus on one type of opportunity, one industry, or sell across everything we offer - as
               much or as little as suits you.
             </p>
@@ -285,7 +285,7 @@ export default function CareersPage() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
               href="mailto:cece@t3labs.co.uk"
-              className="inline-flex items-center gap-2 rounded-full bg-[#d7ff00] px-7 py-3.5 text-sm font-semibold text-[#0a0b10] transition hover:bg-[#b8dd00]"
+              className="t3-accent-action inline-flex items-center gap-2 rounded-full bg-[#d7ff00] px-7 py-3.5 text-sm font-semibold text-[#0a0b10]"
             >
               Apply now <span aria-hidden="true">&rarr;</span>
             </a>
@@ -293,34 +293,34 @@ export default function CareersPage() {
               href="https://calendly.com/cece-t3labs/interview"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]"
+              className="text-sm font-semibold text-[#d7ff00] underline underline-offset-2 hover:text-[#d7ff00] hover:opacity-85"
             >
               Book a call
             </a>
           </div>
-          <p className="mt-3 text-sm text-white/50">Commission-only · Remote · Uncapped · No exclusivity required</p>
+          <p className="mt-3 text-sm text-[#aab4c6]">Commission-only · Remote · Uncapped · No exclusivity required</p>
         </div>
       </section>
 
       {/* Two ways to earn */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Multiple ways to earn</h2>
-          <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+          <p className="mt-4 max-w-[720px] text-base leading-8 text-[#aab4c6]">
             Earn from high-ticket custom projects, recurring subscriptions, or both at once.
           </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
-            <div className="rounded-xl border border-white/10 bg-white/5 p-7">
+            <div className="rounded-xl border border-[#303d51] bg-[#101722] p-7">
               <h3 className="text-lg font-semibold">T3 Labs - custom solutions, high-ticket projects</h3>
-              <p className="mt-3 text-base leading-8 text-white/75">
+              <p className="mt-3 text-base leading-8 text-[#aab4c6]">
                 We find and fix expensive business problems with whatever digital solution makes sense - websites,
                 sales tools, workflows, portals or complete software platforms. You find the problem; we scope, pitch
                 and build the solution. Flexible payment structures: more upfront and less monthly, or the reverse.
               </p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-7">
+            <div className="rounded-xl border border-[#303d51] bg-[#101722] p-7">
               <h3 className="text-lg font-semibold"><a href="https://quote-core.com/careers" className="underline decoration-[#d7ff00]/60 underline-offset-2 transition hover:text-[#d7ff00]">QuoteCore+</a> - recurring revenue</h3>
-              <p className="mt-3 text-base leading-8 text-white/75">
+              <p className="mt-3 text-base leading-8 text-[#aab4c6]">
                 A live, multi-use product already built and growing: takeoffs, quoting, ordering and invoicing for
                 roofing and construction contractors. Subscriptions recur monthly - your commission does too,
                 compounding as your base grows.
@@ -331,18 +331,18 @@ export default function CareersPage() {
       </section>
 
       {/* Problems worth listening for */}
-      <section id="sales-triggers" className="border-b border-white/10">
+      <section id="sales-triggers" className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Problems worth listening for</h2>
-          <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+          <p className="mt-4 max-w-[720px] text-base leading-8 text-[#aab4c6]">
             Most prospects will not say, &ldquo;We need custom software.&rdquo; They will describe the problem
             instead. If you hear any of these, there may be an opportunity:
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {salesTriggers.map((t) => (
-              <div key={t.quote} className="rounded-xl border border-white/10 bg-white/5 p-6">
+              <div key={t.quote} className="rounded-xl border border-[#303d51] bg-[#101722] p-6">
                 <p className="font-semibold text-white">{t.quote}</p>
-                <p className="mt-2 text-sm leading-7 text-white/70">{t.signals}</p>
+                <p className="mt-2 text-sm leading-7 text-[#aab4c6]">{t.signals}</p>
               </div>
             ))}
           </div>
@@ -350,23 +350,23 @@ export default function CareersPage() {
       </section>
 
       {/* Ask better questions */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             You don&rsquo;t need to pitch software. Ask better questions.
           </h2>
-          <p className="mt-4 text-base leading-8 text-white/75">
+          <p className="mt-4 text-base leading-8 text-[#aab4c6]">
             A good T3 Labs lead often appears after only a few simple questions:
           </p>
           <ol className="mt-8 space-y-3">
             {uncoverQuestions.map((q, i) => (
-              <li key={q} className="flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 px-5 py-4">
+              <li key={q} className="flex items-start gap-4 rounded-xl border border-[#303d51] bg-[#101722] px-5 py-4">
                 <span className="text-sm font-bold text-[#d7ff00]">{String(i + 1).padStart(2, "0")}</span>
-                <span className="text-base leading-7 text-white/80">{q}</span>
+                <span className="text-base leading-7 text-[#aab4c6]">{q}</span>
               </li>
             ))}
           </ol>
-          <p className="mt-8 rounded-xl border border-[#d7ff00]/30 bg-[#d7ff00]/5 p-6 text-base leading-8 text-white/85">
+          <p className="mt-8 rounded-xl border border-[#d7ff00]/30 bg-[rgba(215,255,0,.06)] p-6 text-base leading-8 text-white">
             <strong className="text-white">You do not have to design the answer.</strong> If the problem is real and
             valuable enough to solve, bring us into the conversation.
           </p>
@@ -374,26 +374,26 @@ export default function CareersPage() {
       </section>
 
       {/* What can you actually sell */}
-      <section id="what-we-build" className="border-b border-white/10">
+      <section id="what-we-build" className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">What can you actually sell through T3 Labs?</h2>
-          <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+          <p className="mt-4 max-w-[720px] text-base leading-8 text-[#aab4c6]">
             There is no fixed catalogue. The examples on this page are there to help you recognise
             opportunities - not to define the limits of what T3 Labs can build.
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {sellCategories.map((c) => (
-              <div key={c.title} className="rounded-xl border border-white/10 bg-white/5 p-6">
+              <div key={c.title} className="rounded-xl border border-[#303d51] bg-[#101722] p-6">
                 <h3 className="font-semibold">{c.title}</h3>
-                <p className="mt-2 text-sm leading-7 text-white/70">{c.desc}</p>
+                <p className="mt-2 text-sm leading-7 text-[#aab4c6]">{c.desc}</p>
               </div>
             ))}
           </div>
 
           {/* Built examples */}
-          <div className="mt-16 border-t border-white/10 pt-12">
+          <div className="mt-16 border-t border-[#303d51] pt-12">
             <h3 className="text-2xl font-semibold tracking-tight">Examples of things we&rsquo;ve built already</h3>
-            <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+            <p className="mt-4 max-w-[720px] text-base leading-8 text-[#aab4c6]">
               A small snippet of what we&rsquo;re building and what we can build. The scope is far broader than any
               list of tools - the work is really about solving the problem in front of us. But we are very good at
               building tools like these:
@@ -403,7 +403,7 @@ export default function CareersPage() {
                 href="https://quote-core.com/free-tools"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group overflow-hidden rounded-xl border border-white/10 bg-white/5 transition hover:border-[#d7ff00]/40"
+                className="t3-interactive-card group overflow-hidden rounded-xl border border-[#303d51] bg-[#101722]"
               >
                 <img
                   src="/assets/careers/free-tools-hub.png"
@@ -411,13 +411,13 @@ export default function CareersPage() {
                   width={1554}
                   height={1367}
                   loading="lazy"
-                  className="aspect-[16/10] w-full border-b border-white/10 object-cover object-top"
+                  className="aspect-[16/10] w-full border-b border-[#303d51] object-cover object-top"
                 />
                 <div className="p-6">
                   <p className="font-semibold text-white group-hover:text-[#d7ff00]">
                     Free tools hub <span aria-hidden="true">&rarr;</span>
                   </p>
-                  <p className="mt-2 text-sm leading-7 text-white/70">
+                  <p className="mt-2 text-sm leading-7 text-[#aab4c6]">
                     Custom measuring and estimating tools that let users quantify materials on real drawings, then
                     turn those quantities into prices using specific products - alongside calculators, generators
                     and a full takeoff builder. Live, in use and pulling in leads for QuoteCore+.
@@ -428,7 +428,7 @@ export default function CareersPage() {
                 href="https://www.t3labs.tech/supplier-pricing-tool/burton-roofing"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group overflow-hidden rounded-xl border border-white/10 bg-white/5 transition hover:border-[#d7ff00]/40"
+                className="t3-interactive-card group overflow-hidden rounded-xl border border-[#303d51] bg-[#101722]"
               >
                 <img
                   src="/assets/careers/supplier-pricing-tool.png"
@@ -436,13 +436,13 @@ export default function CareersPage() {
                   width={1554}
                   height={1367}
                   loading="lazy"
-                  className="aspect-[16/10] w-full border-b border-white/10 object-cover object-top"
+                  className="aspect-[16/10] w-full border-b border-[#303d51] object-cover object-top"
                 />
                 <div className="p-6">
                   <p className="font-semibold text-white group-hover:text-[#d7ff00]">
                     Branded supplier pricing tool <span aria-hidden="true">&rarr;</span>
                   </p>
-                  <p className="mt-2 text-sm leading-7 text-white/70">
+                  <p className="mt-2 text-sm leading-7 text-[#aab4c6]">
                     A custom, supplier-branded pricing tool built on a real roofing catalogue - an example of the
                     interactive sales tools we build for businesses.
                   </p>
@@ -454,35 +454,35 @@ export default function CareersPage() {
       </section>
 
       {/* Good lead / not a good lead */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">What does a good T3 Labs lead look like?</h2>
           <div className="mt-8 grid gap-5 sm:grid-cols-3">
-            <div className="rounded-xl border border-white/10 bg-white/5 p-6">
+            <div className="rounded-xl border border-[#303d51] bg-[#101722] p-6">
               <h3 className="font-semibold">1. A real problem</h3>
-              <p className="mt-2 text-sm leading-7 text-white/70">
+              <p className="mt-2 text-sm leading-7 text-[#aab4c6]">
                 Something slow, manual, expensive, repetitive, outdated, disconnected, difficult for customers, or
                 limiting growth.
               </p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-6">
+            <div className="rounded-xl border border-[#303d51] bg-[#101722] p-6">
               <h3 className="font-semibold">2. It matters financially</h3>
-              <p className="mt-2 text-sm leading-7 text-white/70">
+              <p className="mt-2 text-sm leading-7 text-[#aab4c6]">
                 It consumes staff time, delays quotes or orders, loses enquiries, requires extra hiring, creates
                 mistakes, or restricts sales.
               </p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-6">
+            <div className="rounded-xl border border-[#303d51] bg-[#101722] p-6">
               <h3 className="font-semibold">3. Someone wants it fixed</h3>
-              <p className="mt-2 text-sm leading-7 text-white/70">
+              <p className="mt-2 text-sm leading-7 text-[#aab4c6]">
                 They don&rsquo;t need to know the technical answer - just that the current process costs them enough
                 to make solving it worthwhile.
               </p>
             </div>
           </div>
-          <div className="mt-8 rounded-xl border border-white/10 p-6">
+          <div className="mt-8 rounded-xl border border-[#303d51] p-6">
             <h3 className="font-semibold">Not every problem needs custom software</h3>
-            <p className="mt-2 text-sm leading-7 text-white/70">
+            <p className="mt-2 text-sm leading-7 text-[#aab4c6]">
               Poor-fit leads: someone with only an idea and no real business problem; a tiny inconvenience with
               little commercial value; no budget and no value case; a request to clone a huge platform for almost
               nothing; or no one who owns the problem or makes decisions. Qualify first - quality beats volume.
@@ -492,14 +492,14 @@ export default function CareersPage() {
       </section>
 
       {/* How one deal can pay twice - example */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">How one deal can pay twice</h2>
-          <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+          <p className="mt-4 max-w-[720px] text-base leading-8 text-[#aab4c6]">
             An example of the hybrid opportunity:
           </p>
-          <div className="mt-8 rounded-xl border border-[#d7ff00]/30 bg-[#d7ff00]/5 p-7">
-            <p className="text-base leading-8 text-white/85">
+          <div className="mt-8 rounded-xl border border-[#d7ff00]/30 bg-[rgba(215,255,0,.06)] p-7">
+            <p className="text-base leading-8 text-white">
               Picture a construction supplies business with multiple stores or branches. T3 Labs builds them tools
               that help their customers buy more of their products while cutting the time their staff spend on
               quotes and admin - a high-ticket project that earns your commission on its own. Their trade customers
@@ -511,13 +511,13 @@ export default function CareersPage() {
       </section>
 
       {/* Your job vs T3 Labs' job */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             Your job is to find the opportunity - not design the software
           </h2>
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
-            <div className="rounded-xl border border-white/10 bg-white/5 p-7">
+            <div className="rounded-xl border border-[#303d51] bg-[#101722] p-7">
               <h3 className="text-lg font-semibold">You</h3>
               <ul className="mt-4 space-y-2.5">
                 <Check>Identify the business</Check>
@@ -527,7 +527,7 @@ export default function CareersPage() {
                 <Check>Make the introduction and help move the opportunity forward</Check>
               </ul>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-7">
+            <div className="rounded-xl border border-[#303d51] bg-[#101722] p-7">
               <h3 className="text-lg font-semibold">T3 Labs</h3>
               <ul className="mt-4 space-y-2.5">
                 <Check>Investigates the workflow</Check>
@@ -538,7 +538,7 @@ export default function CareersPage() {
               </ul>
             </div>
           </div>
-          <p className="mt-6 text-base leading-8 text-white/85">
+          <p className="mt-6 text-base leading-8 text-white">
             <strong className="text-white">You do not need a technical background.</strong> You need commercial
             awareness and the ability to recognise expensive problems.
           </p>
@@ -546,19 +546,19 @@ export default function CareersPage() {
       </section>
 
       {/* Roles */}
-      <section id="roles" className="border-b border-white/10">
+      <section id="roles" className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">The roles</h2>
-          <p className="mt-4 text-base leading-8 text-white/75">
+          <p className="mt-4 text-base leading-8 text-[#aab4c6]">
             Three ways in - same products, different strategies. Pick the one that fits your network and how you like
             to sell.
           </p>
           <div className="mt-10 space-y-5">
             {roles.map((r) => (
-              <div key={r.key} className="rounded-xl border border-white/10 bg-white/5 p-7 transition hover:border-[#d7ff00]/40">
+              <div key={r.key} className="t3-interactive-card rounded-xl border border-[#303d51] bg-[#101722] p-7">
                 <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#d7ff00]">{r.tag}</p>
                 <h3 className="mt-2 text-xl font-semibold">{r.title}</h3>
-                <p className="mt-3 text-base leading-8 text-white/75">{r.summary}</p>
+                <p className="mt-3 text-base leading-8 text-[#aab4c6]">{r.summary}</p>
                 <ul className="mt-5 grid gap-2 sm:grid-cols-2">
                   {r.points.map((pt) => (
                     <Check key={pt}>{pt}</Check>
@@ -571,10 +571,10 @@ export default function CareersPage() {
       </section>
 
       {/* Support */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">You don&rsquo;t get paid unless we get paid</h2>
-          <p className="mt-4 max-w-[720px] text-base leading-8 text-white/75">
+          <p className="mt-4 max-w-[720px] text-base leading-8 text-[#aab4c6]">
             We only earn when you earn, so helping you sell effectively matters to us as much as it matters to
             you. But none of this boxes you in.
             If you have your own strategy and a proven formula, run it your way. Everything below is optional - take
@@ -589,7 +589,7 @@ export default function CareersPage() {
               "A growing asset, tool and content library",
               "Direct line to the founders - no layers of management",
             ].map((item) => (
-              <li key={item} className="flex items-start gap-2.5 rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-medium text-white/80">
+              <li key={item} className="flex items-start gap-2.5 rounded-xl border border-[#303d51] bg-[#101722] px-5 py-4 text-sm font-medium text-[#aab4c6]">
                 <span className="mt-0.5 text-[#d7ff00]" aria-hidden="true">✓</span>
                 {item}
               </li>
@@ -599,10 +599,10 @@ export default function CareersPage() {
       </section>
 
       {/* Assets */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">A lot is already built - and we build the rest</h2>
-          <p className="mt-4 text-base leading-8 text-white/75">
+          <p className="mt-4 text-base leading-8 text-[#aab4c6]">
             We have already built a range of tools, calculators and live products that showcase how we solve
             problems. Some will fit a prospect perfectly; when they don&apos;t, that is the custom solution we build
             for them. Client work we have delivered for other businesses often can&apos;t be shown publicly, so what
@@ -610,9 +610,9 @@ export default function CareersPage() {
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {assets.map((a) => (
-              <div key={a.title} className="rounded-xl border border-white/10 bg-white/5 p-6">
+              <div key={a.title} className="rounded-xl border border-[#303d51] bg-[#101722] p-6">
                 <h3 className="font-semibold">{a.title}</h3>
-                <p className="mt-2 text-sm leading-7 text-white/70">{a.desc}</p>
+                <p className="mt-2 text-sm leading-7 text-[#aab4c6]">{a.desc}</p>
               </div>
             ))}
           </div>
@@ -620,7 +620,7 @@ export default function CareersPage() {
       </section>
 
       {/* How it works */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">How it works</h2>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
@@ -629,10 +629,10 @@ export default function CareersPage() {
               { step: "02", title: "Agree your terms", desc: "Commission rates, attribution and support agreed in writing before you sell anything." },
               { step: "03", title: "Sell and earn", desc: "Use the assets, your strategy and our support. Commission paid on the agreed schedule. No caps." },
             ].map((s) => (
-              <div key={s.step} className="rounded-xl border border-white/10 bg-white/5 p-6">
+              <div key={s.step} className="rounded-xl border border-[#303d51] bg-[#101722] p-6">
                 <span className="text-sm font-bold text-[#d7ff00]">{s.step}</span>
                 <h3 className="mt-2 text-lg font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm leading-7 text-white/70">{s.desc}</p>
+                <p className="mt-2 text-sm leading-7 text-[#aab4c6]">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -640,17 +640,17 @@ export default function CareersPage() {
       </section>
 
       {/* FAQ */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Common questions</h2>
-          <div className="mt-8 divide-y divide-white/10 rounded-xl border border-white/10 bg-white/5">
+          <div className="mt-8 divide-y divide-[#303d51] rounded-xl border border-[#303d51] bg-[#101722]">
             {faqs.map((f) => (
               <details key={f.q} className="group p-6">
                 <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold [&::-webkit-details-marker]:hidden">
                   {f.q}
-                  <span className="text-white/40 transition group-open:rotate-45" aria-hidden="true">+</span>
+                  <span className="text-[#aab4c6] transition group-open:rotate-45" aria-hidden="true">+</span>
                 </summary>
-                <p className="mt-3 text-base leading-8 text-white/70">{f.a}</p>
+                <p className="mt-3 text-base leading-8 text-[#aab4c6]">{f.a}</p>
               </details>
             ))}
           </div>
@@ -658,17 +658,17 @@ export default function CareersPage() {
       </section>
 
       {/* Apply CTA */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(1080px,calc(100%-40px))] py-16 text-center">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Apply</h2>
-          <p className="mx-auto mt-4 max-w-[620px] text-base leading-8 text-white/75">
+          <p className="mx-auto mt-4 max-w-[620px] text-base leading-8 text-[#aab4c6]">
             Email us a short note about which role fits you, your network, and how you would approach selling. We
             respond to every genuine application.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
               href="mailto:cece@t3labs.co.uk"
-              className="inline-flex items-center gap-2 rounded-full bg-[#d7ff00] px-7 py-3.5 text-sm font-semibold text-[#0a0b10] transition hover:bg-[#b8dd00]"
+              className="t3-accent-action inline-flex items-center gap-2 rounded-full bg-[#d7ff00] px-7 py-3.5 text-sm font-semibold text-[#0a0b10]"
             >
               Apply now <span aria-hidden="true">&rarr;</span>
             </a>
@@ -676,14 +676,14 @@ export default function CareersPage() {
               href="https://calendly.com/cece-t3labs/interview"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]"
+              className="text-sm font-semibold text-[#d7ff00] underline underline-offset-2 hover:text-[#d7ff00] hover:opacity-85"
             >
               Book a call
             </a>
           </div>
-          <p className="mt-10 text-xs leading-5 text-white/40">
+          <p className="mt-10 text-xs leading-5 text-[#aab4c6]">
             Commission-only, self-employed opportunities - not employment. Terms agreed in writing before you start.{" "}
-            <Link href="/privacy" className="underline hover:text-white/60">Privacy Policy</Link>.
+            <Link href="/privacy" className="underline hover:text-[#aab4c6]">Privacy Policy</Link>.
           </p>
         </div>
       </section>

@@ -78,15 +78,15 @@ export default function Page() {
       <IntakeModalMount />
       <main className="min-h-screen bg-[#0a0b10] text-white">
         {/* Hero */}
-        <section className="border-b border-white/10">
+        <section className="border-b border-[#303d51]">
           <div className="mx-auto w-[min(880px,calc(100%-40px))] py-20 sm:py-24">
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-[#d7ff00]">
               Case Study · Custom Software
             </p>
-            <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-semibold leading-tight tracking-tight">
+            <h1 className="text-[var(--t3-type-display)] font-semibold leading-tight tracking-tight">
               How We Built QuoteCore+: Turning a Roofing Workflow Into a SaaS Platform
             </h1>
-            <p className="mt-5 max-w-[720px] text-lg leading-9 text-white/75">
+            <p className="mt-5 max-w-[720px] text-lg leading-9 text-[#aab4c6]">
               QuoteCore+ is T3 Labs' own product — a roofing estimating and
               commercial workflow platform, live and in production. This is the
               story of how a fragmented trade process became structured software.
@@ -100,7 +100,7 @@ export default function Page() {
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               The original workflow problem
             </h2>
-            <p className="mt-4 text-base leading-8 text-white/75">
+            <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               Roofing estimating pulls together measurements, pitch calculations,
               material quantities, reusable pricing, labour, waste, quoting,
               purchase ordering, invoicing and supplier pricing. In most
@@ -108,7 +108,7 @@ export default function Page() {
               spreadsheets, supplier catalogues, handwritten rules, previous
               quotes and individual experience.
             </p>
-            <p className="mt-4 text-base leading-8 text-white/75">
+            <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               The result is duplicated work, inconsistent pricing, knowledge that
               lives in one person's head, and a real risk of omissions — the same
               job measured twice by two people produces two different quotes.
@@ -120,14 +120,14 @@ export default function Page() {
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               The product challenge
             </h2>
-            <p className="mt-4 text-base leading-8 text-white/75">
+            <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               The task wasn't "build a roofing app". It was to create one system
               where different measurement paths — a drawn plan, an AI-scanned
               plan, or measurements typed in from a site visit — converge into a
               single reusable calculation and pricing engine, and then flow
               onward into the commercial documents a contractor actually sends.
             </p>
-            <p className="mt-4 text-base leading-8 text-white/75">
+            <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               Three entry paths, one set of rules, one chain of documents.
             </p>
           </section>
@@ -137,25 +137,25 @@ export default function Page() {
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               What was built
             </h2>
-            <p className="mt-4 text-base leading-8 text-white/75">
+            <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               Every capability below is live in the product today:
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {builtCapabilities.map((c) => (
                 <div
                   key={c.title}
-                  className="rounded-xl border border-white/10 bg-white/5 p-6"
+                  className="rounded-xl border border-[#303d51] bg-[#101722] p-6"
                 >
                   <h3 className="text-base font-semibold text-white">{c.title}</h3>
-                  <p className="mt-2 text-sm leading-7 text-white/70">{c.body}</p>
+                  <p className="mt-2 text-sm leading-7 text-[#aab4c6]">{c.body}</p>
                 </div>
               ))}
             </div>
-            <p className="mt-6 text-base leading-8 text-white/75">
+            <p className="mt-6 text-base leading-8 text-[#aab4c6]">
               See it working:{" "}
               <a
                 href="https://quote-core.com?utm_source=t3labs&utm_medium=referral&utm_campaign=custom-solutions"
-                className="text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]"
+                className="text-[#d7ff00] underline underline-offset-2 hover:text-[#d7ff00] hover:opacity-85"
               >
                 QuoteCore+
               </a>
@@ -167,7 +167,7 @@ export default function Page() {
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               The deeper lesson
             </h2>
-            <p className="mt-4 text-base leading-8 text-white/75">
+            <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               The important proof here is not "T3 can code". It's that T3 can
               take a complex real-world workflow — one full of trade-specific
               rules, exceptions and hard-won judgement — model those rules
@@ -175,7 +175,7 @@ export default function Page() {
               contractor will actually use it, and turn the whole process into
               reusable, structured logic.
             </p>
-            <p className="mt-4 text-base leading-8 text-white/75">
+            <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               The same principles that turn roof measurements into material,
               labour and quote calculations apply to fabrication pricing,
               supplier portals, manufacturing estimates, service quotes and other
@@ -187,12 +187,12 @@ export default function Page() {
           {/* CTA */}
           <section
             id="intake"
-            className="mb-16 rounded-2xl border border-[#d7ff00]/25 bg-white/5 p-8 text-center sm:p-12"
+            className="mb-16 rounded-2xl border border-[#d7ff00]/25 bg-[#101722] p-8 text-center sm:p-12"
           >
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               Have a workflow off-the-shelf software can't handle?
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-white/70">
+            <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-[#aab4c6]">
               Tell us the problem — your spreadsheet, screenshots, process notes
               or a short video all work. We'll come back with a plain-English
               view of whether it needs configuration, integration or a custom build.
@@ -214,13 +214,13 @@ export default function Page() {
             <div className="grid gap-4 sm:grid-cols-2">
               <Link
                 href="/custom-software"
-                className="rounded-xl border border-white/10 bg-white/5 p-5 text-base font-medium text-white/80 transition hover:border-[#d7ff00]/40 hover:text-white"
+                className="t3-interactive-card rounded-xl border border-[#303d51] bg-[#101722] p-5 text-base font-medium text-white"
               >
                 Custom Software Development <span aria-hidden="true">&rarr;</span>
               </Link>
               <Link
                 href="/blog/custom-roofing-software"
-                className="rounded-xl border border-white/10 bg-white/5 p-5 text-base font-medium text-white/80 transition hover:border-[#d7ff00]/40 hover:text-white"
+                className="t3-interactive-card rounded-xl border border-[#303d51] bg-[#101722] p-5 text-base font-medium text-white"
               >
                 Custom Roofing Software Guide <span aria-hidden="true">&rarr;</span>
               </Link>

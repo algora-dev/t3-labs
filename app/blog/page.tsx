@@ -47,12 +47,12 @@ export default function BlogIndex() {
 
       <main className="min-h-screen bg-[#0a0b10] text-white">
         {/* Header */}
-        <header className="border-b border-white/10">
+        <header className="border-b border-[#303d51]">
           <nav className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
             <Link href="/" className="text-lg font-bold tracking-tight">
               T3 Labs
             </Link>
-            <div className="flex items-center gap-6 text-sm text-white/70">
+            <div className="flex items-center gap-6 text-sm text-[#aab4c6]">
               <Link href="/" className="hover:text-white">
                 Home
               </Link>
@@ -68,7 +68,7 @@ export default function BlogIndex() {
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Blog
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/60">
+          <p className="mt-4 max-w-2xl text-lg text-[#aab4c6]">
             Product development, AI implementation, and lessons learned from building real software.
           </p>
         </section>
@@ -76,15 +76,15 @@ export default function BlogIndex() {
         {/* Posts */}
         <section className="mx-auto max-w-4xl px-6 pb-24">
           {posts.length === 0 ? (
-            <p className="text-white/50">No posts yet. Check back soon.</p>
+            <p className="text-[#aab4c6]">No posts yet. Check back soon.</p>
           ) : (
             <div className="space-y-8">
               {posts.map((post) => (
                 <article
                   key={post.slug}
-                  className="group rounded-2xl border border-white/10 bg-white/5 p-8 transition-colors hover:border-[#d7ff00]/30"
+                  className="t3-interactive-card group rounded-2xl border border-[#303d51] bg-[#101722] p-8"
                 >
-                  <div className="flex items-center gap-3 text-xs text-white/40">
+                  <div className="flex items-center gap-3 text-xs text-[#aab4c6]">
                     <time dateTime={post.date}>
                       {new Date(post.date).toLocaleDateString("en-GB", {
                         day: "numeric",
@@ -107,10 +107,10 @@ export default function BlogIndex() {
                       {post.title}
                     </Link>
                   </h2>
-                  <p className="mt-3 text-base leading-7 text-white/60">
+                  <p className="mt-3 text-base leading-7 text-[#aab4c6]">
                     {post.description}
                   </p>
-                  <div className="mt-4 flex items-center gap-2 text-sm text-white/40">
+                  <div className="mt-4 flex items-center gap-2 text-sm text-[#aab4c6]">
                     <span>{post.author.name}</span>
                     <span>-</span>
                     <span>{post.author.role}</span>
@@ -122,8 +122,8 @@ export default function BlogIndex() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-white/10">
-          <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-white/40">
+        <footer className="border-t border-[#303d51]">
+          <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-[#aab4c6]">
             <p>T3 Labs - Product Studio</p>
           </div>
         </footer>

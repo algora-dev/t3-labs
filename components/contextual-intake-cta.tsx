@@ -31,12 +31,12 @@ export default function ContextualIntakeCTA({
   return (
     <section
       id="intake"
-      className="my-12 rounded-2xl border border-[#d7ff00]/25 bg-white/5 p-8 text-center sm:p-10"
+      className="my-12 rounded-2xl border border-[#d7ff00]/25 bg-[#101722] p-8 text-center sm:p-10"
     >
       <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
         {headline}
       </h2>
-      <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-white/70">{body}</p>
+      <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-[#aab4c6]">{body}</p>
       <button
         type="button"
         onClick={() =>
@@ -47,7 +47,7 @@ export default function ContextualIntakeCTA({
             problem_category: problemCategory,
           })
         }
-        className="mt-7 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#d7ff00] px-6 py-3 text-sm font-semibold text-[#0a0b10] transition hover:bg-[#b8dd00]"
+        className="t3-accent-action mt-7 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[#d7ff00] px-6 py-3 text-sm font-semibold text-[#0a0b10]"
       >
         {buttonText} <span aria-hidden="true">&rarr;</span>
       </button>

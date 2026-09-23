@@ -50,17 +50,17 @@ const PATHS = [
 export default function Page() {
   return (
     <main className="min-h-screen bg-[#0a0b10] text-white">
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-20 sm:py-24">
-          <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-semibold leading-tight tracking-tight">
+          <h1 className="text-[var(--t3-type-display)] font-semibold leading-tight tracking-tight">
             AI told you what&apos;s possible. Need help actually doing it?
           </h1>
-          <p className="mt-5 max-w-[720px] text-lg leading-9 text-white/75">
+          <p className="mt-5 max-w-[720px] text-lg leading-8 text-[#aab4c6]">
             You may already know AI could solve the problem. The difficult part
             is turning that answer into something that actually works in your
             business.
           </p>
-          <p className="mt-3 max-w-[720px] text-lg leading-9 text-white/75">
+          <p className="mt-3 max-w-[720px] text-lg leading-8 text-[#aab4c6]">
             You don&apos;t need to work out the technical solution first. Tell
             us what you&apos;re trying to achieve and we&apos;ll work out the
             sensible next step.
@@ -75,10 +75,10 @@ export default function Page() {
               key={p.href}
               href={p.href}
               data-service-path={p.tag}
-              className="rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:border-[#d7ff00]/40 hover:bg-white/[0.07]"
+              className="t3-interactive-card rounded-2xl border border-[#303d51] bg-[#101722] p-6"
             >
               <h2 className="text-xl font-semibold tracking-tight">{p.title}</h2>
-              <p className="mt-2 text-base leading-7 text-white/70">{p.body}</p>
+              <p className="mt-2 text-base leading-7 text-[#aab4c6]">{p.body}</p>
               <p className="mt-4 text-sm font-semibold text-[#d7ff00]">
                 {p.href.replace("/", "").replace("-", " ")}{" "}
                 <span aria-hidden="true">&rarr;</span>
@@ -90,25 +90,25 @@ export default function Page() {
 
       <section
         id="intake"
-        className="mx-auto mb-20 w-[min(880px,calc(100%-40px))] rounded-2xl border border-[#d7ff00]/25 bg-white/5 p-8 text-center sm:p-12"
+        className="mx-auto mb-20 w-[min(880px,calc(100%-40px))] rounded-2xl border border-[#d7ff00]/25 bg-[#101722] p-8 text-center sm:p-12"
       >
         <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           Still not sure?
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-white/70">
+        <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-[#aab4c6]">
           Speak it or type it. No technical brief needed. A real person at T3
           Labs reviews every enquiry.
         </p>
         <div className="mt-7">
           <AiHelpIntakeCTA />
         </div>
-        <p className="mt-6 text-sm text-white/50">
+        <p className="mt-6 text-sm text-[#aab4c6]">
           Prefer to talk?{" "}
           <a
             href="https://calendly.com/insights-t3labs/20-minute-meeting"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]"
+            className="text-[#d7ff00] underline underline-offset-2 hover:text-[#d7ff00] hover:opacity-85"
           >
             Book a free call
           </a>

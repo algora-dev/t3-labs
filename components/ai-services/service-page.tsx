@@ -13,16 +13,16 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
   return (
     <main className="min-h-screen bg-[#0a0b10] text-white">
       {/* Hero */}
-      <section className="border-b border-white/10">
+      <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-20 sm:py-24">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-[#d7ff00]">
             {data.eyebrow}
           </p>
-          <h1 className="text-[clamp(2.2rem,5vw,3.4rem)] font-semibold leading-tight tracking-tight">
+          <h1 className="text-[var(--t3-type-display)] font-semibold leading-tight tracking-tight">
             {data.h1}
           </h1>
           {data.intro.map((p) => (
-            <p key={p} className="mt-5 max-w-[720px] text-lg leading-9 text-white/75">
+            <p key={p} className="mt-5 max-w-[720px] text-lg leading-8 text-[#aab4c6]">
               {p}
             </p>
           ))}
@@ -44,10 +44,10 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
               {s.heading}
             </h2>
             {s.body && (
-              <p className="mt-4 text-base leading-8 text-white/75">{s.body}</p>
+              <p className="mt-4 text-base leading-8 text-[#aab4c6]">{s.body}</p>
             )}
             {s.bullets && (
-              <ul className="mt-5 list-disc space-y-2 pl-6 text-base leading-8 text-white/75">
+              <ul className="mt-5 list-disc space-y-2 pl-6 text-base leading-8 text-[#aab4c6]">
                 {s.bullets.map((b) => (
                   <li key={b}>{b}</li>
                 ))}
@@ -67,12 +67,12 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
             {data.faqs.map((f) => (
               <details
                 key={f.q}
-                className="group rounded-xl border border-white/10 bg-white/5 px-6 py-4"
+                className="group t3-interactive-card rounded-xl border border-[#303d51] bg-[#101722] px-6 py-4"
               >
                 <summary className="cursor-pointer list-none text-base font-semibold text-white marker:hidden [&::-webkit-details-marker]:hidden">
                   {f.q}
                 </summary>
-                <p className="mt-3 text-base leading-8 text-white/70">{f.a}</p>
+                <p className="mt-3 text-base leading-8 text-[#aab4c6]">{f.a}</p>
               </details>
             ))}
           </div>
@@ -82,12 +82,12 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
       {/* CTA block */}
       <section
         id="intake"
-        className="mx-auto mb-20 w-[min(880px,calc(100%-40px))] rounded-2xl border border-[#d7ff00]/25 bg-white/5 p-8 text-center sm:p-12"
+        className="mx-auto mb-20 w-[min(880px,calc(100%-40px))] rounded-2xl border border-[#d7ff00]/25 bg-[#101722] p-8 text-center sm:p-12"
       >
         <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           {data.ctaHeadline}
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-white/70">
+        <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-[#aab4c6]">
           {data.ctaBody}
         </p>
         <div className="mt-7">
@@ -97,13 +97,13 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
             trigger="page-cta"
           />
         </div>
-        <p className="mt-6 text-sm text-white/50">
+        <p className="mt-6 text-sm text-[#aab4c6]">
           Prefer to talk?{" "}
           <a
             href="https://calendly.com/insights-t3labs/20-minute-meeting"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]"
+            className="text-[#d7ff00] underline underline-offset-2 hover:text-[#d7ff00] hover:opacity-85"
           >
             Book a discovery call
           </a>
@@ -121,7 +121,7 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
               <Link
                 key={r.href}
                 href={r.href}
-                className="rounded-xl border border-white/10 bg-white/5 p-5 text-base font-medium text-white/80 transition hover:border-[#d7ff00]/40 hover:text-white"
+                className="t3-interactive-card rounded-xl border border-[#303d51] bg-[#101722] p-5 text-base font-medium text-white transition"
               >
                 {r.label} <span aria-hidden="true">&rarr;</span>
               </Link>

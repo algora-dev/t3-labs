@@ -58,48 +58,48 @@ const mdxComponents = {
     <h3 className="mt-8 text-xl font-semibold tracking-tight" {...props} />
   ),
   p: (props: any) => (
-    <p className="mt-5 text-base leading-8 text-white/75" {...props} />
+    <p className="mt-5 text-base leading-8 text-[#aab4c6]" {...props} />
   ),
   ul: (props: any) => (
-    <ul className="mt-5 list-disc space-y-2 pl-6 text-base leading-8 text-white/75" {...props} />
+    <ul className="mt-5 list-disc space-y-2 pl-6 text-base leading-8 text-[#aab4c6]" {...props} />
   ),
   ol: (props: any) => (
-    <ol className="mt-5 list-decimal space-y-2 pl-6 text-base leading-8 text-white/75" {...props} />
+    <ol className="mt-5 list-decimal space-y-2 pl-6 text-base leading-8 text-[#aab4c6]" {...props} />
   ),
   li: (props: any) => <li className="leading-8" {...props} />,
   a: (props: any) => (
-    <a className="text-[#d7ff00] underline underline-offset-2 hover:text-[#b8dd00]" {...props} />
+    <a className="text-[#d7ff00] underline underline-offset-2 hover:text-[#d7ff00] hover:opacity-85" {...props} />
   ),
   blockquote: (props: any) => (
     <blockquote
-      className="mt-6 border-l-2 border-[#d7ff00]/40 pl-6 text-base italic leading-8 text-white/60"
+      className="mt-6 border-l-2 border-[#d7ff00]/40 pl-6 text-base italic leading-8 text-[#aab4c6]"
       {...props}
     />
   ),
   code: (props: any) => (
     <code
-      className="rounded bg-white/10 px-1.5 py-0.5 text-sm text-[#d7ff00]"
+      className="rounded bg-[#172131] px-1.5 py-0.5 text-sm text-[#d7ff00]"
       {...props}
     />
   ),
   pre: (props: any) => (
     <pre
-      className="mt-6 overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-6 text-sm leading-7"
+      className="mt-6 overflow-x-auto rounded-xl border border-[#303d51] bg-[#101722] p-6 text-sm leading-7"
       {...props}
     />
   ),
-  hr: () => <hr className="my-10 border-white/10" />,
+  hr: () => <hr className="my-10 border-[#303d51]" />,
   table: (props: any) => (
     <div className="mt-6 overflow-x-auto">
       <table className="w-full border-collapse text-sm" {...props} />
     </div>
   ),
-  thead: (props: any) => <thead className="border-b border-white/20" {...props} />,
+  thead: (props: any) => <thead className="border-b border-[#303d51]" {...props} />,
   th: (props: any) => (
     <th className="px-3 py-2 text-left font-semibold text-white" {...props} />
   ),
   td: (props: any) => (
-    <td className="border-b border-white/10 px-3 py-2 align-top text-white/75" {...props} />
+    <td className="border-b border-[#303d51] px-3 py-2 align-top text-[#aab4c6]" {...props} />
   ),
   strong: (props: any) => (
     <strong className="font-semibold text-white" {...props} />
@@ -162,12 +162,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Site-wide intake modal mount — lets article CTAs + #intake deep links open it */}
         <IntakeModalMount />
         {/* Header */}
-        <header className="border-b border-white/10">
+        <header className="border-b border-[#303d51]">
           <nav className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
             <Link href="/" className="text-lg font-bold tracking-tight">
               T3 Labs
             </Link>
-            <div className="flex items-center gap-6 text-sm text-white/70">
+            <div className="flex items-center gap-6 text-sm text-[#aab4c6]">
               <Link href="/" className="hover:text-white">
                 Home
               </Link>
@@ -181,16 +181,16 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Article */}
         <article className="mx-auto max-w-3xl px-6 py-16">
           {/* Breadcrumb */}
-          <nav className="mb-8 text-sm text-white/40">
+          <nav className="mb-8 text-sm text-[#aab4c6]">
             <Link href="/" className="hover:text-white">Home</Link>
             <span className="mx-2">/</span>
             <Link href="/blog" className="hover:text-white">Blog</Link>
             <span className="mx-2">/</span>
-            <span className="text-white/60">{post.title}</span>
+            <span className="text-[#aab4c6]">{post.title}</span>
           </nav>
 
           {/* Meta */}
-          <div className="mb-2 flex items-center gap-3 text-sm text-white/40">
+          <div className="mb-2 flex items-center gap-3 text-sm text-[#aab4c6]">
             <time dateTime={post.date}>
               {new Date(post.date).toLocaleDateString("en-GB", {
                 day: "numeric",
@@ -204,17 +204,17 @@ export default async function BlogPostPage({ params }: PageProps) {
             {post.title}
           </h1>
 
-          <p className="mt-4 text-lg leading-8 text-white/60">
+          <p className="mt-4 text-lg leading-8 text-[#aab4c6]">
             {post.description}
           </p>
 
-          <div className="mt-6 flex items-center gap-3 border-y border-white/10 py-4">
+          <div className="mt-6 flex items-center gap-3 border-y border-[#303d51] py-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d7ff00] text-sm font-bold text-black">
               {post.author.name.charAt(0)}
             </div>
             <div>
               <p className="text-sm font-semibold text-white">{post.author.name}</p>
-              <p className="text-xs text-white/40">{post.author.role}</p>
+              <p className="text-xs text-[#aab4c6]">{post.author.role}</p>
             </div>
           </div>
 
@@ -229,7 +229,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/50"
+                  className="rounded-full border border-[#303d51] bg-[#101722] px-3 py-1 text-xs text-[#aab4c6]"
                 >
                   {tag}
                 </span>
@@ -247,9 +247,9 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <Link
                   key={p.slug}
                   href={`/blog/${p.slug}`}
-                  className="block rounded-xl border border-white/10 bg-white/5 p-6 transition-colors hover:border-[#d7ff00]/30"
+                  className="t3-interactive-card block rounded-xl border border-[#303d51] bg-[#101722] p-6"
                 >
-                  <p className="text-sm text-white/40">
+                  <p className="text-sm text-[#aab4c6]">
                     {new Date(p.date).toLocaleDateString("en-GB", {
                       day: "numeric",
                       month: "long",
@@ -259,7 +259,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   <h3 className="mt-2 text-lg font-semibold hover:text-[#d7ff00]">
                     {p.title}
                   </h3>
-                  <p className="mt-2 text-sm text-white/60">{p.description}</p>
+                  <p className="mt-2 text-sm text-[#aab4c6]">{p.description}</p>
                 </Link>
               ))}
             </div>
@@ -267,8 +267,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         )}
 
         {/* Footer */}
-        <footer className="border-t border-white/10">
-          <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-white/40">
+        <footer className="border-t border-[#303d51]">
+          <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-[#aab4c6]">
             <p>T3 Labs - Product Studio</p>
           </div>
         </footer>

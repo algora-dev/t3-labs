@@ -19,11 +19,11 @@ type Tokens = {
 
 const dark: Tokens = {
   bg: "#0a0b10",
-  surface: "#101219",
-  surfaceAlt: "#161927",
-  border: "#262a3a",
-  text: "#e8eaf2",
-  muted: "#9aa1b5",
+  surface: "#101722",
+  surfaceAlt: "#172131",
+  border: "#303d51",
+  text: "#ffffff",
+  muted: "#aab4c6",
   accent: "#d7ff00",
   accentText: "#0a0b10",
   accentInk: "#d7ff00",
@@ -31,16 +31,16 @@ const dark: Tokens = {
 };
 
 const light: Tokens = {
-  bg: "#fbfcff",
+  bg: "#f5f6f8",
   surface: "#ffffff",
-  surfaceAlt: "#f3f5fa",
-  border: "#e7e9ef",
+  surfaceAlt: "#f0f2f5",
+  border: "#dde2e8",
   text: "#0a0b10",
-  muted: "#5a6172",
+  muted: "#5e6674",
   accent: "#d7ff00",
   accentText: "#0a0b10",
-  accentInk: "#809000",
-  accentSoft: "rgba(215,255,0,.18)",
+  accentInk: "#5f7000",
+  accentSoft: "rgba(215,255,0,.12)",
 };
 
 const BOOKING_URL = "https://calendly.com/insights-t3labs/20-minute-meeting";
@@ -1001,10 +1001,10 @@ export default function SalesResourcesPage() {
     >
       <style>{`
         main button, main a { cursor:pointer; transition:transform .15s ease, filter .15s ease, border-color .15s ease, box-shadow .15s ease; }
-        .solid:hover { transform:translateY(-1px); filter:brightness(1.08); box-shadow:0 7px 22px rgba(215,255,0,.16); }
-        .outline:hover, .finder-option:hover { border-color:var(--accent-ink)!important; }
-        .hover-card { transition:transform .15s ease, border-color .15s ease; }
-        .hover-card:hover { transform:translateY(-2px); border-color:var(--accent-ink)!important; }
+        .solid:hover { transform:translateY(-1px); filter:brightness(1.03); box-shadow:var(--t3-glow); }
+        .outline:hover, .finder-option:hover { border-color:var(--accent-ink)!important; box-shadow:0 0 0 1px rgba(215,255,0,.14), 0 0 18px rgba(215,255,0,.08); }
+        .hover-card { transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+        .hover-card:hover { transform:translateY(-2px); border-color:var(--accent-ink)!important; box-shadow:var(--t3-glow); }
         .nav-scroll { scrollbar-width:none; }
         .nav-scroll::-webkit-scrollbar { display:none; }
         .tool-toggle:hover { background:rgba(127,127,127,.05); }
@@ -1015,7 +1015,7 @@ export default function SalesResourcesPage() {
 
       <header
         style={{
-          background: theme === "dark" ? "rgba(10,11,16,.92)" : "rgba(251,252,255,.94)",
+          background: theme === "dark" ? "rgba(10,11,16,.92)" : "rgba(245,246,248,.94)",
           borderColor: t.border,
         }}
         className="sticky top-0 z-50 border-b backdrop-blur"
@@ -1898,7 +1898,7 @@ export default function SalesResourcesPage() {
                 <InnerDisclosure
                   title="QuoteCore+"
                   eyebrow="READY-MADE PRODUCT"
-                  accent="#FF6B35"
+                  accent="#d7ff00"
                   border={t.border}
                   surface={t.surface}
                   surfaceAlt={t.surfaceAlt}
@@ -1913,7 +1913,7 @@ export default function SalesResourcesPage() {
                   >
                     <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[.14em] text-[#FF6B35]">
+                        <p className="text-xs font-semibold uppercase tracking-[.14em] text-[#d7ff00]">
                           QuoteCore+
                         </p>
                         <h3 className="mt-2 text-xl font-semibold">A ready-made measuring, estimating and quoting system for contractors.</h3>
@@ -1937,7 +1937,7 @@ export default function SalesResourcesPage() {
                       </div>
 
                       <span
-                        style={{ background: "#FF6B35", color: "#0a0b10" }}
+                        style={{ background: "#d7ff00", color: "#0a0b10" }}
                         className="solid inline-flex min-h-12 items-center justify-center rounded-full px-6 text-sm font-semibold"
                       >
                         Open QuoteCore+ sales guide →

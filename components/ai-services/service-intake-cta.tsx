@@ -30,7 +30,7 @@ export default function ServiceIntakeCTA({
           problem_category: problemCategory,
         })
       }
-      className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#d7ff00] px-6 py-3 text-sm font-semibold text-[#0a0b10] transition hover:bg-[#b8dd00]"
+      className="t3-accent-action inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[#d7ff00] px-6 py-3 text-sm font-semibold text-[#0a0b10]"
     >
       {buttonText} <span aria-hidden="true">&rarr;</span>
     </button>
