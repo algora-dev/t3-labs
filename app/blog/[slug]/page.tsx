@@ -163,7 +163,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <IntakeModalMount />
         {/* Header */}
         <header className="border-b border-[#303d51]">
-          <nav className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
+          <nav className="mx-auto flex w-[min(var(--t3-shell),calc(100%-40px))] items-center justify-between py-5">
             <Link href="/" className="text-lg font-bold tracking-tight">
               T3 Labs
             </Link>
@@ -179,7 +179,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         </header>
 
         {/* Article */}
-        <article className="mx-auto max-w-3xl px-6 py-16">
+        <article className="mx-auto w-[min(896px,calc(100%-40px))] py-16">
           {/* Breadcrumb */}
           <nav className="mb-8 text-sm text-[#aab4c6]">
             <Link href="/" className="hover:text-white">Home</Link>
@@ -240,7 +240,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Related posts */}
         {otherPosts.length > 0 && (
-          <section className="mx-auto max-w-3xl px-6 pb-24">
+          <section className="mx-auto w-[min(896px,calc(100%-40px))] pb-24">
             <h2 className="text-xl font-semibold tracking-tight">Related reading</h2>
             <div className="mt-6 space-y-4">
               {otherPosts.map((p) => (
@@ -268,7 +268,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Footer */}
         <footer className="border-t border-[#303d51]">
-          <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-[#aab4c6]">
+          <div className="mx-auto w-[min(var(--t3-shell),calc(100%-40px))] py-8 text-sm text-[#aab4c6]">
             <p>T3 Labs - Product Studio</p>
           </div>
         </footer>

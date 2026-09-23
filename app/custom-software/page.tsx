@@ -29,6 +29,9 @@ const data: ServicePageData = {
       id: "roofing-proof",
       heading: "Need custom roofing software?",
       body: "T3 Labs built QuoteCore+, a platform covering digital plan takeoff, AI-assisted scanning, reusable pricing logic, quoting, ordering, invoicing and supplier workflows. It's live, in production, and used by roofing contractors — proof that we can take a complex real-world trade workflow and turn it into working software. Read the full story: How We Built QuoteCore+.",
+      links: [
+        { text: "How We Built QuoteCore+", href: "/blog/building-quotecore-roofing-trade-software" },
+      ],
     },
     {
       id: "what-we-build",
@@ -69,10 +72,16 @@ const data: ServicePageData = {
     {
       q: "How much does custom software cost?",
       a: "It depends on scope, integrations and team structure — which is why we don't publish invented price bands. We scope each project from your actual workflow, then quote. For context on UK market ranges and why quotes vary so much, read our guide to custom software development costs.",
+      links: [
+        { text: "guide to custom software development costs", href: "/blog/custom-software-development-cost-uk" },
+      ],
     },
     {
       q: "Do we need custom software, or will existing software do?",
       a: "That's the first question we answer — before any build. If a configurable platform solves most of your requirement, we'll tell you (for roofing estimating, that's often QuoteCore+). Custom development makes sense for unique integrations, portals, proprietary workflows, or software you need to own.",
+      links: [
+        { text: "QuoteCore+", href: "/case-studies/quotecore" },
+      ],
     },
     {
       q: "Can you integrate custom software with systems we already use?",

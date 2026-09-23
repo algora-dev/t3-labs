@@ -1260,7 +1260,10 @@ function Styles() {
         border: 1px solid #dde2e8; background: #ffffff; color: #0a0b10; opacity: 0.9;
         border-radius: 999px;
       }
-      .secondary-button:hover { border-color: rgba(95,112,0,.28); background: rgba(215,255,0,.08); }
+      .secondary-button:hover {
+        transform: translateY(-2px); border-color: rgba(95,112,0,.38); background: rgba(215,255,0,.08);
+        box-shadow: 0 0 0 1px rgba(215,255,0,.28), 0 0 26px rgba(215,255,0,.14);
+      }
 
       .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
       .meta-pill {
@@ -1341,8 +1344,8 @@ function Styles() {
         cursor: pointer; transition: 0.15s ease; color: #0a0b10;
       }
       .option-button:hover {
-        background: rgba(215,255,0,.08); border-color: rgba(95,112,0,.38);
-        box-shadow: 0 0 0 1px rgba(215,255,0,.14), 0 0 18px rgba(215,255,0,.08);
+        transform: translateY(-2px); background: rgba(215,255,0,.08); border-color: rgba(95,112,0,.38);
+        box-shadow: 0 0 0 1px rgba(215,255,0,.28), 0 0 26px rgba(215,255,0,.14);
       }
       .option-button:focus-visible { outline: 2px solid #d7ff00; outline-offset: 3px; }
 
@@ -1365,9 +1368,12 @@ function Styles() {
         cursor: pointer; transition: 0.15s ease; color: #0a0b10;
       }
       .multi-button.active { background: #101722; color: #ffffff; border-color: #d7ff00; }
+      .multi-button:hover:not(.active), .multi-button.active:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 0 1px rgba(215,255,0,.28), 0 0 26px rgba(215,255,0,.14);
+      }
       .multi-button:hover:not(.active) {
         background: rgba(215,255,0,.08); border-color: rgba(95,112,0,.38);
-        box-shadow: 0 0 0 1px rgba(215,255,0,.14), 0 0 18px rgba(215,255,0,.08);
       }
       .multi-button:focus-visible { outline: 2px solid #d7ff00; outline-offset: 3px; }
       .multi-check { font-size: 16px; font-weight: 600; }
@@ -1480,7 +1486,7 @@ function Styles() {
       }
 
       .inline-link { color: #0a0b10; text-decoration: underline; }
-      .inline-link:hover { color: #5e6674; }
+      .inline-link:hover { color: #5f7000; }
 
       .helper-notice {
         font-size: 12px; color: #5e6674; line-height: 1.5;

@@ -1,6 +1,33 @@
 import Link from "next/link";
-import type { ServicePageData } from "@/lib/ai-services";
+import type { ReactNode } from "react";
+import type { ServiceInlineLink, ServicePageData } from "@/lib/ai-services";
 import ServiceIntakeCTA from "@/components/ai-services/service-intake-cta";
+
+function LinkedText({ text, links }: { text: string; links?: ServiceInlineLink[] }) {
+  if (!links?.length) return <>{text}</>;
+
+  const parts: ReactNode[] = [];
+  let cursor = 0;
+
+  links.forEach((link, index) => {
+    const match = text.indexOf(link.text, cursor);
+    if (match === -1) return;
+    if (match > cursor) parts.push(text.slice(cursor, match));
+    parts.push(
+      <Link
+        key={`${link.href}-${index}`}
+        href={link.href}
+        className="font-semibold text-[#d7ff00] underline underline-offset-2 hover:opacity-85"
+      >
+        {link.text}
+      </Link>,
+    );
+    cursor = match + link.text.length;
+  });
+
+  if (cursor < text.length) parts.push(text.slice(cursor));
+  return <>{parts}</>;
+}
 
 /**
  * Shared renderer for the four AI service pages (/ai-consultancy,
@@ -44,7 +71,9 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
               {s.heading}
             </h2>
             {s.body && (
-              <p className="mt-4 text-base leading-8 text-[#aab4c6]">{s.body}</p>
+              <p className="mt-4 text-base leading-8 text-[#aab4c6]">
+                <LinkedText text={s.body} links={s.links} />
+              </p>
             )}
             {s.bullets && (
               <ul className="mt-5 list-disc space-y-2 pl-6 text-base leading-8 text-[#aab4c6]">
@@ -72,7 +101,9 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
                 <summary className="cursor-pointer list-none text-base font-semibold text-white marker:hidden [&::-webkit-details-marker]:hidden">
                   {f.q}
                 </summary>
-                <p className="mt-3 text-base leading-8 text-[#aab4c6]">{f.a}</p>
+                <p className="mt-3 text-base leading-8 text-[#aab4c6]">
+                  <LinkedText text={f.a} links={f.links} />
+                </p>
               </details>
             ))}
           </div>

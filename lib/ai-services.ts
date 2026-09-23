@@ -4,9 +4,15 @@
  * Keep each page's intent distinct (brief §7 cannibalisation rules).
  */
 
+export interface ServiceInlineLink {
+  text: string;
+  href: string;
+}
+
 export interface ServiceFaq {
   q: string;
   a: string;
+  links?: ServiceInlineLink[];
 }
 
 export interface ServiceSection {
@@ -14,6 +20,7 @@ export interface ServiceSection {
   heading: string;
   body?: string;
   bullets?: string[];
+  links?: ServiceInlineLink[];
 }
 
 export interface ServicePageData {
@@ -89,6 +96,12 @@ export const AI_SERVICES: ServicePageData[] = [
         id: "after-consultancy",
         heading: "What happens after consultancy",
         body: "Consultancy should end with something being built, automated, integrated or taught — not a report that sits in a drawer. We can take the assessment straight into implementation, automation, custom development, integration, training, or a recommendation of existing software. You don't need to pick which one; the assessment tells us.",
+        links: [
+          { text: "implementation", href: "/ai-implementation" },
+          { text: "automation", href: "/ai-automation" },
+          { text: "custom development", href: "/custom-software" },
+          { text: "training", href: "/ai-training" },
+        ],
       },
     ],
     ctaHeadline: "Not sure what you need yet?",
@@ -117,6 +130,12 @@ export const AI_SERVICES: ServicePageData[] = [
       {
         q: "Can you also implement what you recommend?",
         a: "Yes. Consultancy at T3 Labs leads naturally into implementation, automation, integration, custom development or training — whichever the assessment points to. You don't need to pick; the assessment tells us.",
+        links: [
+          { text: "implementation", href: "/ai-implementation" },
+          { text: "automation", href: "/ai-automation" },
+          { text: "custom development", href: "/custom-software" },
+          { text: "training", href: "/ai-training" },
+        ],
       },
     ],
   },
@@ -154,6 +173,9 @@ export const AI_SERVICES: ServicePageData[] = [
         id: "does-ai-reduce-cost",
         heading: "Wondering whether AI should reduce the cost of your build?",
         body: "We build with AI-assisted development ourselves, so it's a fair question. Read our guide to how AI changes software development economics — where it genuinely removes manual work, where experienced humans still matter, and what it should mean for a software quote. See: does AI make software development cheaper?",
+        links: [
+          { text: "does AI make software development cheaper?", href: "/blog/does-ai-make-software-development-cheaper" },
+        ],
       },
       {
         id: "from-ai-suggestion-to-working-system",
@@ -309,6 +331,9 @@ export const AI_SERVICES: ServicePageData[] = [
         id: "training-around-your-systems",
         heading: "Training around systems we implement",
         body: "The best time to train your team is when a new system lands. We provide handover training as part of implementation work, so the people who'll actually run the workflow learn it on the real thing — not a generic demo.",
+        links: [
+          { text: "implementation work", href: "/ai-implementation" },
+        ],
       },
       {
         id: "who-training-suits",

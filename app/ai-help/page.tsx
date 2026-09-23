@@ -52,6 +52,9 @@ export default function Page() {
     <main className="min-h-screen bg-[#0a0b10] text-white">
       <section className="border-b border-[#303d51]">
         <div className="mx-auto w-[min(880px,calc(100%-40px))] py-20 sm:py-24">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-[#d7ff00]">
+            AI Help
+          </p>
           <h1 className="text-[var(--t3-type-display)] font-semibold leading-tight tracking-tight">
             AI told you what&apos;s possible. Need help actually doing it?
           </h1>
