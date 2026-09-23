@@ -75,7 +75,7 @@ const CONFIG = {
 
 // These are the two agreed regional entry prices, not an exchange-rate conversion.
 const PRICES: Record<Currency, { amount: string; name: string }> = {
-  GBP: { amount: "┬ú749", name: "GBP" },
+  GBP: { amount: "£749", name: "GBP" },
   USD: { amount: "US$999", name: "USD" },
 };
 
@@ -282,7 +282,7 @@ function AudienceExamples({ profile }: { profile: Profile }) {
           <div key={id} id={`rp-panel-${id}`} role="tabpanel" aria-labelledby={`rp-tab-${id}`}
             hidden={id !== active} tabIndex={0} className="rp-audience-panel">
             <div>
-              <blockquote>ÔÇ£{story.question}ÔÇØ</blockquote>
+              <blockquote>“{story.question}”</blockquote>
               <p>{story.body}</p>
             </div>
             <div className="rp-result">
@@ -293,9 +293,9 @@ function AudienceExamples({ profile }: { profile: Profile }) {
         );
       })}
       <div className="rp-carousel-controls">
-        <button className="rp-text-button" type="button" onClick={() => activate(index - 1)} aria-label="Previous user example">ÔåÉ Previous</button>
+        <button className="rp-text-button" type="button" onClick={() => activate(index - 1)} aria-label="Previous user example">← Previous</button>
         <span role="status" aria-live="polite">{index + 1} of {AUDIENCES.length}</span>
-        <button className="rp-text-button" type="button" onClick={() => activate(index + 1)} aria-label="Next user example">Next ÔåÆ</button>
+        <button className="rp-text-button" type="button" onClick={() => activate(index + 1)} aria-label="Next user example">Next →</button>
       </div>
     </div>
   );
@@ -306,10 +306,10 @@ function Illustration({ method }: { method: Method }) {
   return (
     <div className={`rp-illustration rp-illustration-${method}`} aria-hidden="true">
       {method === "known" && <>
-        <div className="rp-illustration-top">Known roof area <strong>180 m┬▓</strong></div>
+        <div className="rp-illustration-top">Known roof area <strong>180 m²</strong></div>
         <div className="rp-illustration-row"><span>Your products</span><b>Selected</b></div>
         <div className="rp-illustration-row"><span>Quantities</span><b>Prepared</b></div>
-        <div className="rp-illustration-answer">Preliminary result ÔåÆ Enquiry</div>
+        <div className="rp-illustration-answer">Preliminary result → Enquiry</div>
       </>}
       {method === "plan" && <>
         <div className="rp-illustration-top">Plan measurement <strong>Known scale</strong></div>
@@ -318,13 +318,13 @@ function Illustration({ method }: { method: Method }) {
           <path d="M82 34 L139 126 M173 18 L261 120 M45 105 L291 62" />
           <circle cx="82" cy="34" r="5" /><circle cx="261" cy="120" r="5" />
         </svg>
-        <div className="rp-illustration-answer">Measured areas ÔåÆ Quantities</div>
+        <div className="rp-illustration-answer">Measured areas → Quantities</div>
       </>}
       {method === "assistant" && <>
         <div className="rp-illustration-top">Smart Assistant</div>
         <div className="rp-bubble rp-bubble-user">Which accessories go with this product?</div>
         <div className="rp-bubble">Which product and roofing system are you using?</div>
-        <div className="rp-illustration-answer">Approved guidance ÔåÆ Next step</div>
+        <div className="rp-illustration-answer">Approved guidance → Next step</div>
       </>}
     </div>
   );
@@ -371,14 +371,14 @@ function MethodCarousel({ method, expanded = false, title, onImageClick }: { met
         )}
       </div>
       {count > 1 && <div className="rp-carousel-nav">
-        <button type="button" className="rp-carousel-arrow" onClick={() => go(index - 1)} aria-label="Previous example">ÔåÉ</button>
+        <button type="button" className="rp-carousel-arrow" onClick={() => go(index - 1)} aria-label="Previous example">←</button>
         <div className="rp-carousel-dots" role="group" aria-label="Choose example">
           {shots.map((s, i) => (
             <button key={`${s.src}-${i}`} type="button" className={i === index ? "rp-dot rp-dot-active" : "rp-dot"}
               aria-label={`Example ${i + 1} of ${count}`} aria-current={i === index} onClick={() => go(i)} />
           ))}
         </div>
-        <button type="button" className="rp-carousel-arrow" onClick={() => go(index + 1)} aria-label="Next example">ÔåÆ</button>
+        <button type="button" className="rp-carousel-arrow" onClick={() => go(index + 1)} aria-label="Next example">→</button>
         <span className="rp-sr-only" role="status" aria-live="polite">{index + 1} of {count}</span>
       </div>}
     </div>
@@ -410,7 +410,7 @@ function MediaDialog({ method, onClose }: { method: Method; onClose: () => void 
         if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) onClose();
       }}>
       <div className="rp-dialog-top"><h2 id="rp-dialog-title">{title}</h2>
-        <button type="button" onClick={onClose} className="rp-outline" autoFocus aria-label="Close enlarged example">Close ├ù</button>
+        <button type="button" onClick={onClose} className="rp-outline" autoFocus aria-label="Close enlarged example">Close ×</button>
       </div>
       <div className="rp-dialog-media">
         <MethodCarousel method={method} expanded title={title} />
@@ -507,10 +507,10 @@ function PricingClose({ businessLabel, variant }: { businessLabel: string; varia
         <div className="rp-price-block">
           <p>Focused roofing solutions from</p>
           <div className="rp-price" aria-live="polite" aria-atomic="true">
-            {currency ? PRICES[currency].amount : <span className="rp-price-loading">Loading priceÔÇª</span>}
+            {currency ? PRICES[currency].amount : <span className="rp-price-loading">Loading price…</span>}
           </div>
           <div className="rp-currency" role="group" aria-label="Choose pricing currency">
-            <button type="button" aria-pressed={currency === "GBP"} onClick={() => choose("GBP")}>GBP ┬ú</button>
+            <button type="button" aria-pressed={currency === "GBP"} onClick={() => choose("GBP")}>GBP £</button>
             <button type="button" aria-pressed={currency === "USD"} onClick={() => choose("USD")}>USD US$</button>
           </div>
         </div>
@@ -520,14 +520,14 @@ function PricingClose({ businessLabel, variant }: { businessLabel: string; varia
         <p className="rp-smallprint">Starting price is for a focused setup. Tax and any ongoing costs are confirmed in your quote.</p>
         <div className="rp-close-action">
           {isReferral ? <>
-            {CONFIG.representativeContactUrl ? <a className="rp-primary" href={CONFIG.representativeContactUrl}>Arrange a free call with Shaun <span aria-hidden="true">ÔåÆ</span></a>
-              : <button type="button" className="rp-primary" onClick={showReply} aria-expanded={replyOpen} aria-controls="rp-rep-reply">Arrange a free call with Shaun <span aria-hidden="true">ÔåÆ</span></button>}
+            {CONFIG.representativeContactUrl ? <a className="rp-primary" href={CONFIG.representativeContactUrl}>Arrange a free call with Shaun <span aria-hidden="true">→</span></a>
+              : <button type="button" className="rp-primary" onClick={showReply} aria-expanded={replyOpen} aria-controls="rp-rep-reply">Arrange a free call with Shaun <span aria-hidden="true">→</span></button>}
             <p>Your representative can arrange it and remain your point of contact.</p>
           </> : <>
-            <a className="rp-primary" href={CONFIG.shaunBookingUrl} target="_blank" rel="noopener noreferrer">Book a free call with Shaun <span aria-hidden="true">ÔåÆ</span></a>
+            <a className="rp-primary" href={CONFIG.shaunBookingUrl} target="_blank" rel="noopener noreferrer">Book a free call with Shaun <span aria-hidden="true">→</span></a>
             <p>Discuss what would help, what it could cost and how soon it could be ready. No obligation.</p>
           </>}
-          <a className="rp-demo-btn" href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"}>See exactly how our tools work <span aria-hidden="true">ÔåÆ</span></a>
+          <a className="rp-demo-btn" href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"}>See exactly how our tools work <span aria-hidden="true">→</span></a>
           <p>See who the tools benefit and the different ways they could apply with your business.</p>
         </div>
         {isReferral && replyOpen && <div id="rp-rep-reply" className="rp-rep-reply" tabIndex={-1}>
@@ -579,7 +579,7 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
           </nav>
           <div className="flex items-center gap-2">
             <button type="button" onClick={()=>setTheme(theme==="dark"?"light":"dark")} style={{borderColor:t.border,color:t.muted}} className="btn-outline rounded-full border px-3 py-1.5 text-xs font-medium">
-              {theme==="dark"?"ÔÿÇ Light":"Ôÿ¥ Dark"}
+              {theme==="dark"?"☀ Light":"☾ Dark"}
             </button>
             <button
               type="button"
@@ -602,12 +602,12 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
             <p className="rp-opening-copy">Help customers get roofing answers, quantities and pricing before calling. Choose your business type to see relevant examples.</p>
             <div className="rp-business" role="group" aria-label="Choose your roofing business type">
               {BUSINESS_CHOICES.map(item => <button type="button" key={item.id} aria-pressed={business === item.id}
-                onClick={() => setBusiness(item.id)}><span>{item.label}</span><span className="rp-select-status">{business === item.id ? "Selected" : "Choose ÔåÆ"}</span></button>)}
+                onClick={() => setBusiness(item.id)}><span>{item.label}</span><span className="rp-select-status">{business === item.id ? "Selected" : "Choose →"}</span></button>)}
             </div>
             <p className="rp-choice-note">Or keep reading for the general roofing examples.</p>
             <span className="rp-sr-only" role="status">{business ? `Examples updated for ${profile.label.toLowerCase()}.` : "General roofing examples shown."}</span>
             {CONFIG.explainer.src && <details className="rp-explainer">
-              <summary>Prefer to watch? See the 90-second overview <span aria-hidden="true">ÔûÂ</span></summary>
+              <summary>Prefer to watch? See the 90-second overview <span aria-hidden="true">▶</span></summary>
               <video src={CONFIG.explainer.src} poster={CONFIG.explainer.poster || undefined} controls playsInline preload="none">
                 {CONFIG.explainer.captions && <track kind="captions" src={CONFIG.explainer.captions} srcLang="en" label="English" default />}
               </video>
@@ -615,7 +615,7 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
             <div className="rp-opportunity" id="problem">
               <p className="rp-eyebrow">For {profile.label.toLowerCase()}</p>
               <h2>{profile.question}</h2>
-              <ul className="rp-examples">{profile.examples.map(item => <li key={item}><span aria-hidden="true">Ô£ô</span><span>{item}</span></li>)}</ul>
+              <ul className="rp-examples">{profile.examples.map(item => <li key={item}><span aria-hidden="true">✓</span><span>{item}</span></li>)}</ul>
               <div className="rp-reflection"><p>{profile.reflection}</p></div>
             </div>
             <p className="rp-bridge">Even if just one of these would help, we can build a solution around it.</p>
@@ -628,12 +628,12 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
               <article id="assistant"><h3>Smart Assistant</h3><p>Customers ask a question. It uses your approved information to answer, clarify or pass the enquiry to your team.</p></article>
             </div>
             <p className="rp-shared-outcome">Either route can lead to a better-prepared enquiry. Use one, or both.</p>
-            <a className="rp-demo-btn" href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"}>See our tools <span aria-hidden="true">ÔåÆ</span></a>
+            <a className="rp-demo-btn" href={variant === "referred" ? "/roofing-business-tools/referred" : "/roofing-business-tools"}>See our tools <span aria-hidden="true">→</span></a>
             <div className="rp-setup">
               <h3>You explain how you work. We handle the setup.</h3>
               <p>We use your existing product information and focused conversations to agree the answers, pricing and handoffs. We handle the build and setup.</p>
               <p className="rp-setup-promise">A focused first version can work alongside your current website and enquiry process.</p>
-              {variant === "direct" && <a className="rp-demo-btn" href="/roofing-business-tools">See the roofing business tools <span aria-hidden="true">ÔåÆ</span></a>}
+              {variant === "direct" && <a className="rp-demo-btn" href="/roofing-business-tools">See the roofing business tools <span aria-hidden="true">→</span></a>}
               <Disclosure title="What would you need from us?">
                 <p>For a basic setup, we aim to keep your input to a few focused conversations and a review. We agree what is needed before starting, rather than asking your team to manage a software project.</p>
                 <ul>
@@ -673,7 +673,7 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
             </div>
             <div className="rp-journeys">
               <article className="rp-journey rp-journey-before">
-                <h3>When the website stops at ÔÇ£enquireÔÇØ</h3>
+                <h3>When the website stops at “enquire”</h3>
                 <ol>
                   <li><strong>A buyer needs an answer.</strong><span>They search your site but still have questions.</span></li>
                   <li><strong>Some leave. Others enquire.</strong><span>Those enquiries now become a task for your team.</span></li>
@@ -702,8 +702,8 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
                 <p>Tool use can also reveal what gets asked about, selected and quoted. With appropriate permissions and aggregation, those insights can inform better resources and product decisions. Quote activity is not the same as completed sales.</p>
                 <p>Google says established SEO practices remain relevant to its AI search features. OpenAI describes how public websites can be discovered and cited in ChatGPT search.</p>
                 <div className="rp-source-links">
-                  <a href="https://developers.google.com/search/docs/appearance/ai-features" target="_blank" rel="noopener noreferrer">Google guidance Ôåù</a>
-                  <a href="https://help.openai.com/en/articles/12627856" target="_blank" rel="noopener noreferrer">OpenAI guidance Ôåù</a>
+                  <a href="https://developers.google.com/search/docs/appearance/ai-features" target="_blank" rel="noopener noreferrer">Google guidance ↗</a>
+                  <a href="https://help.openai.com/en/articles/12627856" target="_blank" rel="noopener noreferrer">OpenAI guidance ↗</a>
                 </div>
               </Disclosure>
             </div>
@@ -721,7 +721,7 @@ export function RoofingSolutionsPage({ variant = "referred" }: { variant?: PageV
       </div>
       <footer style={{borderColor:t.border}} className="border-t">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 text-sm sm:flex-row sm:items-center sm:justify-between" style={{color:t.muted}}>
-          <p>┬® T3 Labs</p><p>Roofing tools ┬À Smart Assistant ┬À Better-prepared enquiries</p>
+          <p>© T3 Labs</p><p>Roofing tools · Smart Assistant · Better-prepared enquiries</p>
         </div>
       </footer>
     </main>
@@ -877,7 +877,7 @@ const STYLES = String.raw`
 .rp-journey>h3{min-height:2.8em}
 .rp-journey ol{list-style:none;padding:0;margin-top:24px;display:flex;flex-direction:column;gap:0}
 .rp-journey li{position:relative;min-height:114px;padding-bottom:38px}
-.rp-journey li:not(:last-child)::after{content:'Ôåô';position:absolute;bottom:8px;left:0;font-size:var(--rp-card);color:var(--rp-muted)}
+.rp-journey li:not(:last-child)::after{content:'↓';position:absolute;bottom:8px;left:0;font-size:var(--rp-card);color:var(--rp-muted)}
 .rp-journey-after li:not(:last-child)::after{color:var(--rp-accent-ink)}
 .rp-journey li:last-child{min-height:0;padding-bottom:0}
 .rp-journey strong{display:block;line-height:1.5}
