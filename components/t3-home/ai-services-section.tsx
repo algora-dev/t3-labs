@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * AIServicesSection — concise homepage AI-services block (brief §5).
+ * AIServicesSection - concise homepage AI-services block (brief §5).
  * Kept deliberately compact: heading, two short paragraphs, primary CTA
  * (intake) + secondary link to /ai-consultancy. Do not expand this into a
  * full landing section.
@@ -50,7 +50,7 @@ export default function AIServicesSection() {
           automate the repetitive work, or train your team to use it themselves.
         </p>
         <p className="mb-7 max-w-[760px] text-[1.05rem] leading-8 text-white/60">
-          We design around people as well as technology — AI does the heavy
+          We design around people as well as technology - AI does the heavy
           lifting, with human review kept simple wherever judgment or approval
           still matters.
         </p>

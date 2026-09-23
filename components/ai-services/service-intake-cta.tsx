@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * ServiceIntakeCTA — button that opens the AI intake modal with the
+ * ServiceIntakeCTA - button that opens the AI intake modal with the
  * current service page's context (brief §11–12: contextual CTAs, pass
  * source page + category + CTA text into the intake funnel).
  */

@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { put, list, get } from "@vercel/blob";
 
 /**
- * POST /api/intake/events — store a funnel event (intake_open, intake_start,
+ * POST /api/intake/events - store a funnel event (intake_open, intake_start,
  *   intake_step, intake_submit, calendly_view) as a small JSON blob.
- * GET /api/intake/events — list recent events (Bearer INTAKE_ANALYTICS_TOKEN).
+ * GET /api/intake/events - list recent events (Bearer INTAKE_ANALYTICS_TOKEN).
  *
  * Storage: Vercel Blob (platform-native, no third-party deps). Records contain
- * no PII — event name, timestamp, random session id, and whitelisted props.
+ * no PII - event name, timestamp, random session id, and whitelisted props.
  *
  * Note: requires BLOB_READ_WRITE_TOKEN (Vercel project → Storage → Blob).
  * Store is PRIVATE - blobs are written without public access and read back
@@ -27,7 +27,7 @@ const EVENT_NAMES = new Set([
 const MAX_EVENTS_PER_GET = 500;
 
 // Best-effort per-instance rate limit (serverless instances are separate,
-// so this caps bursts per instance rather than globally — acceptable here).
+// so this caps bursts per instance rather than globally - acceptable here).
 const rateHits = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ ok: true, stored: true });
   } catch (err) {
-    // Blob not configured or temporarily unavailable — never disrupt the visitor
+    // Blob not configured or temporarily unavailable - never disrupt the visitor
     console.error("Intake event storage failed:", err instanceof Error ? err.message : err);
     return NextResponse.json({ ok: true, stored: false }, { status: 202 });
   }

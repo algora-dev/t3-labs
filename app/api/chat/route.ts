@@ -11,7 +11,9 @@ import type { ChatStreamEvent, AssistantTurn } from '@/lib/assistant/types';
 
 /** Hard guarantee: no em dashes ever reach the visitor, prompt rules aside. */
 function stripEmDashes(text: string): string {
-  return text.replace(/ ?— ?/g, ', ');
+  // \u2014 escape = em dash. Literal character deliberately not used so repo-wide
+  // no-em-dash sweeps cannot corrupt this sanitizer.
+  return text.replace(/ ?\u2014 ?/g, ', ');
 }
 
 export const runtime = 'nodejs';

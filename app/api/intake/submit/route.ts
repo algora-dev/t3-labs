@@ -5,7 +5,7 @@ import { parseFinalBrief, parseIntakeMessages } from "@/lib/intake/validation";
  * POST /api/intake/submit
  * Submits the intake brief with contact details.
  * Sends email to T3 Labs team and a copy to the visitor.
- * Stateless — receives conversation messages + contact details from client.
+ * Stateless - receives conversation messages + contact details from client.
  */
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;

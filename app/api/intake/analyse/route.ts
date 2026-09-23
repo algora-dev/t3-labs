@@ -7,10 +7,10 @@ import { parseIntakeMessages } from "@/lib/intake/validation";
 /**
  * POST /api/intake/analyse
  * Analyses visitor input and returns structured interpretation.
- * Stateless — receives full conversation context from the client.
+ * Stateless - receives full conversation context from the client.
  */
 
-// Vercel function timeout — GPT-5.6 reasoning models can take 20-30s
+// Vercel function timeout - GPT-5.6 reasoning models can take 20-30s
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
@@ -66,11 +66,11 @@ export async function POST(req: NextRequest) {
     // skip it, guarantee one so the UI never dead-ends.
     if (turn === 1 && !analysis.follow_up_question) {
       analysis.follow_up_question =
-        "What would make this a success for you — what outcome do you want to see in the next few months?";
+        "What would make this a success for you - what outcome do you want to see in the next few months?";
     }
 
     // Determine next stage. The first turn ALWAYS asks a follow-up question
-    // (product requirement) — enforce server-side even if the model tries to
+    // (product requirement) - enforce server-side even if the model tries to
     // skip straight to the brief.
     let stage: string;
     if (turn === 1) {

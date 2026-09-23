@@ -1,4 +1,4 @@
-﻿# Codex Implementation Note — T3 Labs Legal Pages
+﻿# Codex Implementation Note - T3 Labs Legal Pages
 
 Create three reusable legal routes in the existing T3 Labs codebase:
 

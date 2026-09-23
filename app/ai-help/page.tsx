@@ -8,12 +8,12 @@ const BASE_URL = "https://www.t3labs.tech";
 export const metadata: Metadata = {
   title: "Need Help With AI? Consultancy, Automation & Implementation",
   description:
-    "AI told you what's possible. Need help actually doing it? Route yourself to the right T3 Labs service — consultancy, implementation, automation or training — or just tell us the problem.",
+    "AI told you what's possible. Need help actually doing it? Route yourself to the right T3 Labs service - consultancy, implementation, automation or training - or just tell us the problem.",
   alternates: { canonical: `${BASE_URL}/ai-help` },
   openGraph: {
     title: "Need Help With AI? Consultancy, Automation & Implementation | T3 Labs",
     description:
-      "AI told you what's possible. Need help actually doing it? Tell us the problem — no technical brief needed.",
+      "AI told you what's possible. Need help actually doing it? Tell us the problem - no technical brief needed.",
     url: `${BASE_URL}/ai-help`,
     siteName: "T3 Labs",
     type: "website",
@@ -24,13 +24,13 @@ const PATHS = [
   {
     href: "/ai-consultancy",
     title: "I don't know where AI fits",
-    body: "We look at how your business works and identify what's worth doing — and what isn't.",
+    body: "We look at how your business works and identify what's worth doing - and what isn't.",
     tag: "ai-consultancy",
   },
   {
     href: "/ai-implementation",
     title: "I know what I want built",
-    body: "You have the outcome in mind — even if an AI gave you the sketch. We make it work.",
+    body: "You have the outcome in mind - even if an AI gave you the sketch. We make it work.",
     tag: "ai-implementation",
   },
   {
@@ -42,7 +42,7 @@ const PATHS = [
   {
     href: "/ai-training",
     title: "I want my team to learn AI",
-    body: "Training around the work your people actually do — not theoretical AI education.",
+    body: "Training around the work your people actually do - not theoretical AI education.",
     tag: "ai-training",
   },
 ];

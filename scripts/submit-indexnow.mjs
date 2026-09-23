@@ -4,7 +4,7 @@
  * Usage: node scripts/submit-indexnow.mjs [sitemapUrl]
  * Default: https://www.t3labs.tech/sitemap.xml
  * Key file must be deployed at https://www.t3labs.tech/<KEY>.txt
- * (Full-sitemap mode, same pattern as the quotecore-plus script — no hardcoded URL list.)
+ * (Full-sitemap mode, same pattern as the quotecore-plus script - no hardcoded URL list.)
  */
 
 import fs from 'node:fs';

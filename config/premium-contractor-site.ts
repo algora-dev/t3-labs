@@ -149,7 +149,7 @@ export const premiumContractorSite = {
     preferredContactMethods: ["Telephone", "Email", "Either is fine"],
     propertyTypes: ["Residential", "Commercial", "Managed property / landlord", "Other"],
     consentLabel: "I understand this is a demonstration form and no enquiry will be sent.",
-    demonstrationNote: "Demonstration only — this form does not contact a business or external service.",
+    demonstrationNote: "Demonstration only - this form does not contact a business or external service.",
   },
   callout: {
     eyebrow: "Planning a project?",

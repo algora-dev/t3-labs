@@ -9,12 +9,12 @@ const BASE_URL = "https://www.t3labs.tech";
 export const metadata: Metadata = {
   title: "AI Automation for UK Businesses",
   description:
-    "AI automation for UK businesses. We automate repetitive workflows — enquiries, documents, data entry, reporting, follow-ups — with human review kept where it matters. Tell us what's taking too much time.",
+    "AI automation for UK businesses. We automate repetitive workflows - enquiries, documents, data entry, reporting, follow-ups - with human review kept where it matters. Tell us what's taking too much time.",
   alternates: { canonical: `${BASE_URL}/ai-automation` },
   openGraph: {
     title: "AI Automation for UK Businesses | T3 Labs",
     description:
-      "We automate repetitive workflows — enquiries, documents, data entry, reporting, follow-ups — with human review kept where it matters.",
+      "We automate repetitive workflows - enquiries, documents, data entry, reporting, follow-ups - with human review kept where it matters.",
     url: `${BASE_URL}/ai-automation`,
     siteName: "T3 Labs",
     type: "website",

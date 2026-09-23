@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * IntakeModalMount — single site-wide mount point for the AI intake modal.
+ * IntakeModalMount - single site-wide mount point for the AI intake modal.
  *
  * Listens for:
  *  - `t3:intake-open` CustomEvents (fired via openIntakeModal() from hero,
  *    mid-page CTAs, and ContextualIntakeCTA blocks)
- *  - `#intake` URL hash (deep links — reviewer §8 requirement)
+ *  - `#intake` URL hash (deep links - reviewer §8 requirement)
  *
  * Also captures landing-page + UTM attribution on first load per session.
  * Mount once per page that needs intake availability.

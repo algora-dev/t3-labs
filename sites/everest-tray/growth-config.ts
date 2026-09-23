@@ -34,16 +34,16 @@ export const everestTrayGrowthProposal: GrowthProposalConfig = {
       type: "text",
       heading: "The outcome",
       paragraphs: [
-        "A polished digital presence that showcases Everest Tray, the people who manufacture and install it, approved installers as the network grows, and the company's wider long-run roofing and cladding capability — all built to generate more enquiries, specifications and orders.",
+        "A polished digital presence that showcases Everest Tray, the people who manufacture and install it, approved installers as the network grows, and the company's wider long-run roofing and cladding capability - all built to generate more enquiries, specifications and orders.",
       ],
     },
     {
       type: "list",
-      heading: "Stage one — build the foundation",
+      heading: "Stage one - build the foundation",
       intro: "Create the professional platform needed to launch Everest Tray properly and improve the whole business online.",
       items: [
         "Assess the current website and decide whether Everest Tray is best presented on the Element Roofing & Cladding website or through a dedicated product site",
-        "Showcase Everest Tray clearly for architects, builders and homeowners — what it is, where it works, finishes, technical information, projects and how to enquire",
+        "Showcase Everest Tray clearly for architects, builders and homeowners - what it is, where it works, finishes, technical information, projects and how to enquire",
         "Present the business as both the manufacturer and a qualified installer, with room to promote approved installers as the product grows",
         "Strengthen the wider business too, including other long-run roofing and cladding products, installation services and project capability",
         "Build the websites around the searches customers already make in Christchurch, Canterbury and New Zealand, including tray roofing and standing seam searches",
@@ -54,7 +54,7 @@ export const everestTrayGrowthProposal: GrowthProposalConfig = {
     },
     {
       type: "list",
-      heading: "Stage two — compound and accelerate",
+      heading: "Stage two - compound and accelerate",
       intro: "Keep building visibility, proof and demand, then actively take Everest Tray to the market.",
       items: [
         "Keep adding projects, reviews, case studies, videos, articles and technical information so the online presence becomes stronger over time",
@@ -62,7 +62,7 @@ export const everestTrayGrowthProposal: GrowthProposalConfig = {
         "Build awareness with architects, builders, designers, developers, roofing contractors and other potential product partners",
         "Use targeted outreach to introduce Everest Tray and direct prospects back to a professional website that makes the product easy to evaluate and specify",
         "Grow an approved installer network where appropriate, increasing confidence and the number of people able to recommend and install the product",
-        "Turn every new project into more proof — photography, reviews, videos and case studies that make the next enquiry easier to win",
+        "Turn every new project into more proof - photography, reviews, videos and case studies that make the next enquiry easier to win",
         "Continue improving the quoting and enquiry process so increased interest is converted into real jobs and product orders",
         "Provide ongoing support, strategy and systems so growth does not simply create more admin and more pressure for the owners",
       ],
@@ -80,7 +80,7 @@ export const everestTrayGrowthProposal: GrowthProposalConfig = {
         {
           heading: "Stage two creates",
           items: [
-            "A compounding growth system — more visibility, more enquiries, more projects and more proof — with ongoing support to keep improving it",
+            "A compounding growth system - more visibility, more enquiries, more projects and more proof - with ongoing support to keep improving it",
           ],
         },
       ],
@@ -90,7 +90,7 @@ export const everestTrayGrowthProposal: GrowthProposalConfig = {
       heading: "The long-term goal: more profit, without more owner workload",
       paragraphs: [
         "The aim is not to create growth that leaves the owners busier, more stressed and with less time. Our role is to take care of the digital, marketing and growth work, build systems around the business, and help make each job and enquiry more valuable.",
-        "The goal is a stronger, more profitable business with less dependence on the owners doing everything themselves — creating more time for family and the things that matter outside work. No specific result can be guaranteed, but every strategy will be designed with that outcome in mind.",
+        "The goal is a stronger, more profitable business with less dependence on the owners doing everything themselves - creating more time for family and the things that matter outside work. No specific result can be guaranteed, but every strategy will be designed with that outcome in mind.",
       ],
     },
   ],

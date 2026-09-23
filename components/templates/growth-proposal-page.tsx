@@ -333,7 +333,7 @@ export function GrowthProposalPage({ proposal }: { proposal: GrowthProposalConfi
             <a href="https://www.t3labs.tech/" className={`font-semibold ${t.muted} hover:underline`}>
               T3 Labs
             </a>{" "}
-            — private proposal for {p.companyName}
+            - private proposal for {p.companyName}
             {p.location ? ` · ${p.location}` : ""}.
           </footer>
         </main>

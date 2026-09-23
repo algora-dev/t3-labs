@@ -159,7 +159,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
 
       <main className="min-h-screen bg-[#0a0b10] text-white">
-        {/* Site-wide intake modal mount — lets article CTAs + #intake deep links open it */}
+        {/* Site-wide intake modal mount - lets article CTAs + #intake deep links open it */}
         <IntakeModalMount />
         {/* Header */}
         <header className="border-b border-[#303d51]">

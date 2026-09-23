@@ -258,7 +258,7 @@ export default function Page() {
   // Currency detection
   const [currency, setCurrency] = useState<{ symbol: string; code: string; amount: string }>({ symbol: "£", code: "gbp", amount: "9" });
   useEffect(() => {
-    // Detect locale — if not UK, show USD
+    // Detect locale - if not UK, show USD
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
     const locale = navigator.language || "";
     const isUK = tz.startsWith("Europe/London") || locale.startsWith("en-GB");
@@ -952,7 +952,7 @@ export default function Page() {
                   </button>
                 </div>
 
-                {/* Email insight card — right column, below upsell */}
+                {/* Email insight card - right column, below upsell */}
                 {aiInsight && (
                   <div className="email-insight-card">
                     {insightEmailStatus === "sent" ? (

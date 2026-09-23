@@ -6,10 +6,10 @@ import { parseIntakeMessages } from "@/lib/intake/validation";
 /**
  * POST /api/intake/finalise
  * Generates the final project brief from the conversation.
- * Stateless — receives full conversation context from the client.
+ * Stateless - receives full conversation context from the client.
  */
 
-// Vercel function timeout — GPT-5.6 reasoning models can take 20-30s
+// Vercel function timeout - GPT-5.6 reasoning models can take 20-30s
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {

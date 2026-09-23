@@ -54,7 +54,7 @@ export default function AnimatedHero({ onCtaClick }: AnimatedHeroProps) {
 
   useEffect(() => {
 
-    // Play every page load — no sessionStorage check
+    // Play every page load - no sessionStorage check
 
     cancelRef.current = false;
     let timers: number[] = [];
@@ -131,7 +131,7 @@ export default function AnimatedHero({ onCtaClick }: AnimatedHeroProps) {
     timers.push(watchdog);
 
     runSequence().catch(() => {
-      // Unexpected failure — never leave the visitor on a blank hero
+      // Unexpected failure - never leave the visitor on a blank hero
       setPhase("final");
     });
 
@@ -141,7 +141,7 @@ export default function AnimatedHero({ onCtaClick }: AnimatedHeroProps) {
     };
   }, []);
 
-  // Render heading with emphasis word — inline display, spaces preserved
+  // Render heading with emphasis word - inline display, spaces preserved
   function renderHeading(scene: Scene) {
     if (!scene.emphasisWord || !typedText.includes(scene.emphasisWord)) {
       return typedText;

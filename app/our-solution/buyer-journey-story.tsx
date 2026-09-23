@@ -191,7 +191,7 @@ export default function BuyerJourneyStory({ t, ctaAnchor = "#problem" }: { t: St
                     loading="lazy"
                   />
                   <p className="mt-3 text-center text-xs leading-5" style={{ color: t.muted }}>
-                    A typical busy, professional roofing website. Nothing wrong with it — the answer is in there somewhere.
+                    A typical busy, professional roofing website. Nothing wrong with it - the answer is in there somewhere.
                     These tools help the customer find it in seconds instead of digging.
                   </p>
                 </div>

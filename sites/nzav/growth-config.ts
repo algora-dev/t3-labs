@@ -25,7 +25,7 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     overline: "A private Phase 1 proposal prepared for",
     headline: "Website repositioning & search growth.",
     supportingCopy:
-      "Reposition NZAV so the market sees the business first as a specialist in SPON / IP paging, school bell, public-address and communication systems — while retaining broader AV capability in a supporting role.",
+      "Reposition NZAV so the market sees the business first as a specialist in SPON / IP paging, school bell, public-address and communication systems - while retaining broader AV capability in a supporting role.",
     metaChips: ["SPON / IP paging specialist", "High-intent search", "NZ foundation"],
     privacyNote: "This proposal is private and is not publicly listed.",
   },
@@ -39,7 +39,7 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     },
     {
       type: "list",
-      heading: "01 — Positioning & website restructure",
+      heading: "01 - Positioning & website restructure",
       items: [
         "Rework the homepage and site hierarchy so SPON / IP paging and communication systems become the primary focus",
         "Reduce the prominence of lower-priority AV services without removing useful existing search authority",
@@ -48,7 +48,7 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     },
     {
       type: "list",
-      heading: "02 — Search engine optimisation",
+      heading: "02 - Search engine optimisation",
       items: [
         "Keyword and competitor research focused on school paging, bell systems, PA, intercom, emergency communication, healthcare and secure facilities",
         "Optimise page titles, headings, metadata, internal linking, technical SEO, structured data/schema and indexing",
@@ -57,19 +57,19 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     },
     {
       type: "list",
-      heading: "03 — Dedicated SPON sales & product pages",
+      heading: "03 - Dedicated SPON sales & product pages",
       intro:
         "Create one or two flagship pages that NZAV can send directly to prospective customers during quoting, follow-up and sales conversations.",
       items: [
         "Clear explanation of how the system works, key benefits and typical applications",
         "Purpose-built graphics, system diagrams, visual examples and video content/demonstrations",
         "FAQs, common buyer concerns, proof points and strong calls-to-action for consultation or quotation",
-        "Designed to act as both an educational resource and a sales funnel — helping move a prospect from interest to enquiry",
+        "Designed to act as both an educational resource and a sales funnel - helping move a prospect from interest to enquiry",
       ],
     },
     {
       type: "list",
-      heading: "04 — High-value landing pages",
+      heading: "04 - High-value landing pages",
       intro: "Build or substantially improve dedicated pages targeting the most commercially valuable search categories:",
       items: [
         "School Paging Systems",
@@ -84,7 +84,7 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     },
     {
       type: "list",
-      heading: "05 — Content, authority & case studies",
+      heading: "05 - Content, authority & case studies",
       items: [
         "Create useful educational content answering the questions buyers search before choosing a system or supplier",
         "Turn completed installations into detailed, searchable case studies covering the problem, design, technology, installation and outcome",
@@ -93,9 +93,9 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     },
     {
       type: "list",
-      heading: "06 — Targeted lead & decision-maker research (additional service)",
+      heading: "06 - Targeted lead & decision-maker research (additional service)",
       intro:
-        "Help NZAV identify high-intent opportunities and the people involved in specifying, pricing, approving or procuring these systems — so the sales team can get onto the radar earlier and earn more chances to quote.",
+        "Help NZAV identify high-intent opportunities and the people involved in specifying, pricing, approving or procuring these systems - so the sales team can get onto the radar earlier and earn more chances to quote.",
       items: [
         "Research relevant schools, healthcare facilities, government organisations, corrections, consultants, construction projects and other target organisations",
         "Where publicly and lawfully available, provide decision-maker names/roles, business contact details, organisation/project context and relevant opportunity information",
@@ -103,7 +103,7 @@ export const nzavGrowthProposal: GrowthProposalConfig = {
     },
     {
       type: "list",
-      heading: "07 — Benchmarking & measurement",
+      heading: "07 - Benchmarking & measurement",
       intro: "Before work begins, snapshot the current website so the same metrics can be measured again after implementation.",
       items: [
         "Search impressions, organic clicks, CTR and organic traffic",

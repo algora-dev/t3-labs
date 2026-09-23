@@ -184,7 +184,7 @@ textarea {
   word-break: keep-all;
 }
 
-/* Emphasis word — pulses green (inline, no transform to prevent line jumps) */
+/* Emphasis word - pulses green (inline, no transform to prevent line jumps) */
 .t3-hero__emphasis {
   display: inline;
   transition:
@@ -234,7 +234,7 @@ textarea {
   transform: translateY(0);
 }
 
-/* Service item pulse — soft fade in/out, not blinding */
+/* Service item pulse - soft fade in/out, not blinding */
 .t3-hero__service-item {
   display: inline;
   transition:
@@ -294,7 +294,7 @@ textarea {
   line-height: 1.6;
 }
 
-/* CTA button — breathing, glossy, alive */
+/* CTA button - breathing, glossy, alive */
 .t3-hero__actions {
   display: flex;
   flex-wrap: wrap;
@@ -325,7 +325,7 @@ textarea {
   animation: t3CtaBreathe 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Glossy shine sweep — sits on top, slides across on hover */
+/* Glossy shine sweep - sits on top, slides across on hover */
 .t3-hero__cta::before {
   content: "";
   position: absolute;
@@ -371,7 +371,7 @@ textarea {
   transform: translateX(5px);
 }
 
-/* Breathing — subtle scale up/down */
+/* Breathing - subtle scale up/down */
 @keyframes t3CtaBreathe {
   0%, 100% {
     transform: scale(1);
@@ -431,7 +431,7 @@ textarea {
   box-shadow: 0 6px 24px rgba(10, 11, 16, 0.04);
 }
 
-/* Nav buttons — black by default, green glint on hover */
+/* Nav buttons - black by default, green glint on hover */
 .t3-header__nav-link {
   position: relative;
   overflow: hidden;

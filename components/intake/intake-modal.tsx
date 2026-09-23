@@ -16,7 +16,7 @@ import {
 } from "@/lib/intake/analytics";
 
 /* ------------------------------------------------------------------ */
-/*  IntakeModal — main component                                      */
+/*  IntakeModal - main component                                      */
 /* ------------------------------------------------------------------ */
 
 interface IntakeModalProps {
@@ -93,13 +93,13 @@ export default function IntakeModal({ open, onClose, context }: IntakeModalProps
   const contextRef = useRef<IntakeOpenContext | undefined>(context);
   const startTrackedRef = useRef(false);
 
-  // Close handler — defined early so it can be used in effects
+  // Close handler - defined early so it can be used in effects
   const handleClose = useCallback(() => {
     // Never clear user input on close
     onClose();
   }, [onClose]);
 
-  // Focus trap + scroll lock. Escape deliberately does NOT close the modal —
+  // Focus trap + scroll lock. Escape deliberately does NOT close the modal -
   // visitors exit via the X button or by finishing (prevents accidental loss).
   useEffect(() => {
     if (!open) return;
@@ -673,7 +673,7 @@ export default function IntakeModal({ open, onClose, context }: IntakeModalProps
 }
 
 /* ------------------------------------------------------------------ */
-/*  Step 1 — Initial input                                            */
+/*  Step 1 - Initial input                                            */
 /* ------------------------------------------------------------------ */
 
 function IntakeIntro({
@@ -712,10 +712,10 @@ function IntakeIntro({
           </p>
         </InfoDot>
       </div>
-      <p className="t3-intake-subtext">Type it, or leave a voice message — whichever is easier.</p>
+      <p className="t3-intake-subtext">Type it, or leave a voice message - whichever is easier.</p>
 
       {isTranscript && (
-        <p className="t3-intake-transcript-label">Transcript — check it&apos;s right:</p>
+        <p className="t3-intake-transcript-label">Transcript - check it&apos;s right:</p>
       )}
 
       <textarea
@@ -837,7 +837,7 @@ function ProcessingState({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Step 2 — Understanding + follow-up                               */
+/*  Step 2 - Understanding + follow-up                               */
 /* ------------------------------------------------------------------ */
 
 function UnderstandingStep({
@@ -930,7 +930,7 @@ function UnderstandingStep({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Step 3 — Final question (optional)                                */
+/*  Step 3 - Final question (optional)                                */
 /* ------------------------------------------------------------------ */
 
 function FinalQuestionStep({

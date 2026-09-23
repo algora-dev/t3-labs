@@ -1,5 +1,5 @@
 /**
- * T3 LABS DEMO PORT — types-only stub of quotecore-plus `app/lib/supabase/server.ts`.
+ * T3 LABS DEMO PORT - types-only stub of quotecore-plus `app/lib/supabase/server.ts`.
  *
  * The ported supplier pricing tool only imports TYPES from this module
  * (`Database`, `Tables`, `TablesInsert` via `app/lib/types.ts`). No runtime

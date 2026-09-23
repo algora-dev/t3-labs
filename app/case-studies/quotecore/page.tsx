@@ -6,16 +6,16 @@ import IntakeModalMount from "@/components/intake/intake-modal-mount";
 const BASE_URL = "https://www.t3labs.tech";
 
 /**
- * Asset 3 — T3 Labs QuoteCore+ case study.
+ * Asset 3 - T3 Labs QuoteCore+ case study.
  * Two-brand custom software strategy (30 Aug 2026), brief §Asset 3.
  * Product-truth gate: every capability listed below is cross-checked against
- * the product repo's CURRENT_TRUTH.md (sanitised) — live/implemented only.
+ * the product repo's CURRENT_TRUTH.md (sanitised) - live/implemented only.
  * No invented metrics, timelines or outcomes.
  */
 export const metadata: Metadata = {
   title: "How We Built QuoteCore+: Roofing Workflow to SaaS Platform | T3 Labs",
   description:
-    "Case study: how T3 Labs turned a fragmented roofing estimating workflow into QuoteCore+ — digital takeoff, AI-assisted scanning, reusable pricing components, quoting, ordering, invoicing and supplier workflows.",
+    "Case study: how T3 Labs turned a fragmented roofing estimating workflow into QuoteCore+ - digital takeoff, AI-assisted scanning, reusable pricing components, quoting, ordering, invoicing and supplier workflows.",
   alternates: { canonical: `${BASE_URL}/case-studies/quotecore` },
   openGraph: {
     title: "How We Built QuoteCore+: Roofing Workflow to SaaS Platform | T3 Labs",
@@ -30,23 +30,23 @@ export const metadata: Metadata = {
 const builtCapabilities: { title: string; body: string }[] = [
   {
     title: "Digital plan takeoff",
-    body: "Upload plans or site drawings, calibrate the scale, and measure directly on the plan — multiple pages, named roof areas, area and lineal measurements, and roof elements like ridges, hips, valleys and barges.",
+    body: "Upload plans or site drawings, calibrate the scale, and measure directly on the plan - multiple pages, named roof areas, area and lineal measurements, and roof elements like ridges, hips, valleys and barges.",
   },
   {
     title: "AI Scan Assist",
-    body: "AI reads an uploaded roof plan and proposes the roof geometry — areas and lines — for the user to review, adjust and accept. The person measuring is always the final verifier; AI accelerates, it doesn't decide.",
+    body: "AI reads an uploaded roof plan and proposes the roof geometry - areas and lines - for the user to review, adjust and accept. The person measuring is always the final verifier; AI accelerates, it doesn't decide.",
   },
   {
     title: "Reusable Smart Components",
-    body: "The heart of the platform: a component packages a measurement together with its materials, labour, waste rules, coverage, pricing and presentation — so the trade knowledge is captured once and reused on every future job.",
+    body: "The heart of the platform: a component packages a measurement together with its materials, labour, waste rules, coverage, pricing and presentation - so the trade knowledge is captured once and reused on every future job.",
   },
   {
     title: "Consistent pricing logic",
-    body: "Pitch factors, percentage and fixed waste, pack sizes and coverage, cost versus selling price, margin behaviour — the calculation rules contractors use, applied the same way every time, with results that remain explainable after the fact.",
+    body: "Pitch factors, percentage and fixed waste, pack sizes and coverage, cost versus selling price, margin behaviour - the calculation rules contractors use, applied the same way every time, with results that remain explainable after the fact.",
   },
   {
     title: "Quoting through to invoicing",
-    body: "Accepted job information flows into customer quotes, material orders, labour sheets and invoices — one connected chain instead of the same data being re-entered in four different places.",
+    body: "Accepted job information flows into customer quotes, material orders, labour sheets and invoices - one connected chain instead of the same data being re-entered in four different places.",
   },
   {
     title: "Supplier workflows",
@@ -87,7 +87,7 @@ export default function Page() {
               How We Built QuoteCore+: Turning a Roofing Workflow Into a SaaS Platform
             </h1>
             <p className="mt-5 max-w-[720px] text-lg leading-9 text-[#aab4c6]">
-              QuoteCore+ is T3 Labs' own product — a roofing estimating and
+              QuoteCore+ is T3 Labs' own product - a roofing estimating and
               commercial workflow platform, live and in production. This is the
               story of how a fragmented trade process became structured software.
             </p>
@@ -110,7 +110,7 @@ export default function Page() {
             </p>
             <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               The result is duplicated work, inconsistent pricing, knowledge that
-              lives in one person's head, and a real risk of omissions — the same
+              lives in one person's head, and a real risk of omissions - the same
               job measured twice by two people produces two different quotes.
             </p>
           </section>
@@ -122,8 +122,8 @@ export default function Page() {
             </h2>
             <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               The task wasn't "build a roofing app". It was to create one system
-              where different measurement paths — a drawn plan, an AI-scanned
-              plan, or measurements typed in from a site visit — converge into a
+              where different measurement paths - a drawn plan, an AI-scanned
+              plan, or measurements typed in from a site visit - converge into a
               single reusable calculation and pricing engine, and then flow
               onward into the commercial documents a contractor actually sends.
             </p>
@@ -169,8 +169,8 @@ export default function Page() {
             </h2>
             <p className="mt-4 text-base leading-8 text-[#aab4c6]">
               The important proof here is not "T3 can code". It's that T3 can
-              take a complex real-world workflow — one full of trade-specific
-              rules, exceptions and hard-won judgement — model those rules
+              take a complex real-world workflow - one full of trade-specific
+              rules, exceptions and hard-won judgement - model those rules
               faithfully in software, simplify the experience enough that a busy
               contractor will actually use it, and turn the whole process into
               reusable, structured logic.
@@ -180,7 +180,7 @@ export default function Page() {
               labour and quote calculations apply to fabrication pricing,
               supplier portals, manufacturing estimates, service quotes and other
               rule-heavy workflows. If your business has that shape, this case
-              study is about you — roofing is just where it was proven.
+              study is about you - roofing is just where it was proven.
             </p>
           </section>
 
@@ -193,7 +193,7 @@ export default function Page() {
               Have a workflow off-the-shelf software can't handle?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-[#aab4c6]">
-              Tell us the problem — your spreadsheet, screenshots, process notes
+              Tell us the problem - your spreadsheet, screenshots, process notes
               or a short video all work. We'll come back with a plain-English
               view of whether it needs configuration, integration or a custom build.
             </p>

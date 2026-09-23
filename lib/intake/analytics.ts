@@ -1,5 +1,5 @@
 /**
- * T3 Labs — Intake funnel analytics (Phase 1.3)
+ * T3 Labs - Intake funnel analytics (Phase 1.3)
  *
  * Lightweight, dependency-free event tracking for the AI intake funnel.
  * Events are POSTed to /api/intake/events (fire-and-forget, never throws)
@@ -58,7 +58,7 @@ export function captureLandingAttribution(): void {
     };
     sessionStorage.setItem(LANDING_KEY, JSON.stringify(attribution));
   } catch {
-    // sessionStorage unavailable (private mode etc.) — attribution stays null
+    // sessionStorage unavailable (private mode etc.) - attribution stays null
   }
 }
 

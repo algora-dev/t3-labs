@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * AiHelpIntakeCTA — /ai-help intake button. Passes the /ai-help source and
+ * AiHelpIntakeCTA - /ai-help intake button. Passes the /ai-help source and
  * an "unrouted" problem category so funnel analytics can compare visitors
  * who self-selected a service path vs. went straight to intake (brief §18).
  */

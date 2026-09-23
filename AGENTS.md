@@ -24,3 +24,7 @@ This private repository is the source for `t3labs.tech`. It hosts the T3 Labs ho
 7. Run `npm ci`, `npm run typecheck`, `npm run lint`, and `npm run build`. Verify the new `/proposal/<slug>` URL, an existing proposal, an unknown-slug 404, and robots metadata.
 
 See `docs/ADDING_A_PROSPECT_SITE.md` for a practical example. Never commit `.env*`, credentials, API keys, build output or local-only files.
+
+## Copy standard (repo-wide, locked 2026-09-23)
+
+NO EM DASHES in T3 Labs copy: pages, blog MDX, components, metadata, prompts, emails, docs. Use a short dash (-) or a comma instead. Swept repo-wide 2026-09-23 (387 replacements, 56 files). Any new content must follow this rule. Exception: functional code that must reference the em dash character uses the \u2014 escape, never the literal character (see stripEmDashes in app/api/chat/route.ts and app/api/assistant-t3/route.ts).

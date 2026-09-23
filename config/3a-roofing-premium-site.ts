@@ -10,8 +10,8 @@ export const threeARoofingPremiumSite = {
     legalName: "3A Roofing Ltd",
     tagline: "Roofing Our Heritage",
     description: "Heritage roofing, traditional craft and complete reroofing from Copdock, near Ipswich.",
-    logo: { src: asset("3a-roofing-logo-white.png"), alt: "3A Roofing Ltd — Roofing Our Heritage" },
-    logoLight: { src: asset("3a-roofing-logo-white.png"), alt: "3A Roofing Ltd — Roofing Our Heritage" },
+    logo: { src: asset("3a-roofing-logo-white.png"), alt: "3A Roofing Ltd - Roofing Our Heritage" },
+    logoLight: { src: asset("3a-roofing-logo-white.png"), alt: "3A Roofing Ltd - Roofing Our Heritage" },
   },
   branding: {
     primaryColour: "#171A18",
@@ -33,7 +33,7 @@ export const threeARoofingPremiumSite = {
   hero: {
     eyebrow: "Heritage roofing specialists · Suffolk",
     heading: "Traditional roofing craft for buildings that matter.",
-    supportingText: "Historic conservation, slating, tiling and leadwork for heritage, listed and ecclesiastical buildings — alongside complete reroofing for Suffolk homes.",
+    supportingText: "Historic conservation, slating, tiling and leadwork for heritage, listed and ecclesiastical buildings - alongside complete reroofing for Suffolk homes.",
     image: { src: asset("hero-heritage-estate-roof.webp"), alt: "Aerial view of a historic estate with renewed slate roofs and ornate brick chimneys" },
     primaryCta: "Request a quotation",
     secondaryCta: "Explore our work",
@@ -172,7 +172,7 @@ export const threeARoofingPremiumSite = {
     preferredContactMethods: ["Telephone", "Email", "Either is fine"],
     propertyTypes: ["Private home", "Listed or heritage property", "Ecclesiastical building", "Professional or managed project", "Other"],
     consentLabel: "I understand this is a demonstration form and no enquiry will be sent.",
-    demonstrationNote: "Demonstration only — this form does not contact 3A Roofing or any external service.",
+    demonstrationNote: "Demonstration only - this form does not contact 3A Roofing or any external service.",
   },
   callout: {
     eyebrow: "Planning roofing work?",
@@ -191,7 +191,7 @@ export const threeARoofingPremiumSite = {
     capability: { eyebrow: "Project capability", heading: "From Suffolk homes to professionally managed heritage buildings." },
     servicesProcess: { eyebrow: "From enquiry to scope", heading: "Useful information first. A closer roof review where it adds value.", description: "Share what you know, including photographs, drawings or reports. The next conversation can then focus on the building and the roofing details that matter." },
     relatedProjects: { eyebrow: "Relevant work", heading: "Different buildings. The same respect for material and detail." },
-    footerNote: "Private website concept by T3 Labs — demonstration only",
+    footerNote: "Private website concept by T3 Labs - demonstration only",
     footerLegalItems: ["No live form submission", "No social profiles shown"],
   },
   visibility: { trustStrip: true, projects: true, reviews: true, serviceAreas: true, commercialResidentialSplit: true, whatsapp: false },

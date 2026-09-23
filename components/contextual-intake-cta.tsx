@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * ContextualIntakeCTA — per-article contextual CTA block (Tom's Phase 2
+ * ContextualIntakeCTA - per-article contextual CTA block (Tom's Phase 2
  * prerequisite, reviewer §8 CTA system).
  *
  * Takes headline/body/buttonText per article, opens the existing intake

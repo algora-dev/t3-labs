@@ -48,7 +48,9 @@ export async function GET() {
 
 /** Hard guarantee: no em dashes ever reach the visitor, prompt rules aside. */
 function stripEmDashes(text: string): string {
-  return text.replace(/ ?— ?/g, ', ');
+  // \u2014 escape = em dash. Literal character deliberately not used so repo-wide
+  // no-em-dash sweeps cannot corrupt this sanitizer.
+  return text.replace(/ ?\u2014 ?/g, ', ');
 }
 
 /** POST: streaming chat turn (SSE with token events, then a final done event). */

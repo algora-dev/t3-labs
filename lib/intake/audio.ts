@@ -1,5 +1,5 @@
 /**
- * T3 Labs AI Intake — Audio container sniffing
+ * T3 Labs AI Intake - Audio container sniffing
  * iOS Safari's MediaRecorder can report an empty or misleading MIME type,
  * and in-app browsers mangle headers. Instead of trusting what the client
  * declares, detect the real container from magic bytes and normalise the
@@ -61,7 +61,7 @@ export function sniffAudioContainer(bytes: Uint8Array): SniffedAudio | null {
     return { extension: "mp3", mimeType: "audio/mpeg" };
   }
 
-  // ISO-BMFF (MP4/M4A): "ftyp" box at offset 4 — covers progressive and
+  // ISO-BMFF (MP4/M4A): "ftyp" box at offset 4 - covers progressive and
   // fragmented MP4 (what iOS Safari's MediaRecorder emits).
   if (startsWith(4, "ftyp")) {
     return { extension: "mp4", mimeType: "audio/mp4" };

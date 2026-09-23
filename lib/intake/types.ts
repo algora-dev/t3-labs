@@ -1,5 +1,5 @@
 /**
- * T3 Labs AI Intake Modal — Shared Types
+ * T3 Labs AI Intake Modal - Shared Types
  * Based on the build spec: structured output schemas, state machine, and session model.
  */
 

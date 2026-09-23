@@ -23,11 +23,11 @@ export async function POST(req: NextRequest) {
 
     if (dbError) {
       console.error("Supabase insert error:", dbError);
-      // Don't block on DB error — still attempt email if possible
+      // Don't block on DB error - still attempt email if possible
     }
 
     // Send email via Resend
-    // insights@t3labs.co.uk — active once domain is verified in Resend
+    // insights@t3labs.co.uk - active once domain is verified in Resend
     const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
     if (RESEND_API_KEY) {
@@ -97,9 +97,9 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Email failed to send" }, { status: 500 });
       }
     } else {
-      // Resend not configured yet — log and return success so we don't block UX
+      // Resend not configured yet - log and return success so we don't block UX
       // Email will be sent manually when Resend key is added
-      console.warn("RESEND_API_KEY not set — lead saved to Supabase, email not sent");
+      console.warn("RESEND_API_KEY not set - lead saved to Supabase, email not sent");
     }
 
     return NextResponse.json({ success: true });
