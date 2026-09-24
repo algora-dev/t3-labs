@@ -99,7 +99,10 @@
              <img src="/assets/t3-labs-white.png" alt="T3 Labs" className="w-20 h-auto" />
              <span className="text-[#7a7f8e] text-xs font-medium tracking-wide uppercase">Analytics Dashboard</span>
            </div>
-           <div className="flex items-center gap-4">
+           <div className="flex items-center gap-3">
+             <a href="/dashboard/pricing" className="px-3 py-1.5 rounded-lg border border-white/10 text-[#7a7f8e] text-xs font-medium hover:border-[#d7ff00] hover:text-[#d7ff00] transition-colors">
+               Pricing
+             </a>
              <button
                onClick={() => fetchData(true)}
                disabled={refreshing}
@@ -107,9 +110,9 @@
              >
                {refreshing ? "Refreshing..." : "Refresh"}
              </button>
-             <a href="/" className="text-[#5a5f6e] text-xs hover:text-[#d7ff00] transition-colors">
-               View site →
-             </a>
+             <form action="/api/dashboard/logout" method="post">
+               <button type="submit" className="text-[#5a5f6e] text-xs hover:text-[#d7ff00] transition-colors">Log out</button>
+             </form>
            </div>
          </div>
        </header>

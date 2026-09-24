@@ -1,45 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const COOKIE_NAME = "t3-internal-auth";
+
 /**
- * Password-protects /dashboard.
- * Access via /dashboard?p=<password> sets a cookie for subsequent requests.
- * No env var needed - password is inline.
+ * Protects the internal /dashboard area, including the pricing configurator.
+ * Credentials and the opaque session token live in Vercel environment variables.
  */
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const sessionToken = process.env.T3_ADMIN_SESSION_TOKEN;
+  const cookie = request.cookies.get(COOKIE_NAME)?.value;
+  const authenticated = Boolean(sessionToken && cookie === sessionToken);
 
-const DASHBOARD_PASSWORD = "T3Labs2026!";
-const COOKIE_NAME = "t3-dashboard-auth";
-
-export function middleware(req: NextRequest) {
-  const { pathname, searchParams } = req.nextUrl;
-
-  if (pathname !== "/dashboard") {
+  if (pathname === "/dashboard/login") {
+    if (authenticated) return NextResponse.redirect(new URL("/dashboard", request.url));
     return NextResponse.next();
   }
 
-  // Check cookie
-  const cookieAuth = req.cookies.get(COOKIE_NAME)?.value;
-  if (cookieAuth === DASHBOARD_PASSWORD) {
-    return NextResponse.next();
-  }
+  if (authenticated) return NextResponse.next();
 
-  // Check URL param (?p=password)
-  const urlParam = searchParams.get("p");
-  if (urlParam === DASHBOARD_PASSWORD) {
-    const res = NextResponse.next();
-    res.cookies.set(COOKIE_NAME, DASHBOARD_PASSWORD, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-      path: "/",
-    });
-    return res;
-  }
-
-  // Not authenticated - show login page
-  return NextResponse.rewrite(new URL("/dashboard/login", req.url));
+  const loginUrl = request.nextUrl.clone();
+  loginUrl.pathname = "/dashboard/login";
+  loginUrl.search = "";
+  loginUrl.searchParams.set("next", pathname);
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {
-  matcher: ["/dashboard"],
+  matcher: ["/dashboard/:path*"],
 };
