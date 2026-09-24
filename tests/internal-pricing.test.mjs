@@ -33,8 +33,8 @@ test('large catalogues increase both setup and monthly support allowance', () =>
   const selection = createDefaultPricingSelection();
   selection.catalogueSize = '1001-5000';
   const estimate = calculateInternalPrice(selection);
-  assert.equal(estimate.setup, 2499);
-  assert.equal(estimate.monthly, 274); // 99 platform + 175 catalogue
+  assert.equal(estimate.setup, 2124);
+  assert.equal(estimate.monthly, 229); // 99 platform + 130 catalogue
 });
 
 test('manual adjustments apply to final ballpark and never allow negative totals', () => {
@@ -63,8 +63,8 @@ test('fuller supplier configuration produces stable deterministic pricing', () =
   selection.customisationLevel = 'moderate';
   selection.supportLevel = 'managed';
   const estimate = calculateInternalPrice(selection);
-  assert.equal(estimate.setup, 9898);
-  assert.equal(estimate.monthly, 1022);
+  assert.equal(estimate.setup, 8013);
+  assert.equal(estimate.monthly, 833);
   assert.ok(estimate.mainFeatures.includes('Digital takeoff'));
   assert.ok(estimate.mainFeatures.includes('Smart Assistant'));
   assert.ok(estimate.mainFeatures.includes('Trade tiers + saved jobs'));

@@ -9,6 +9,7 @@ import {
   type PriceOption,
   type PricingSelection,
 } from "../../../lib/internal-pricing";
+import { buildEstimatePdf } from "./summary-pdf";
 
 type SavedSummary = {
   id: string;
@@ -164,8 +165,42 @@ export default function PricingConfigurator() {
     });
   };
 
+  const downloadPdf = () => {
+    try {
+      const bytes = buildEstimatePdf({
+        name: selection.estimateName.trim() || "Untitled estimate",
+        generatedAt: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
+        features: estimate.mainFeatures,
+        lines: estimate.lines,
+        setup: estimate.setup,
+        monthly: estimate.monthly,
+        notes: estimate.notes,
+        version: INTERNAL_PRICING_VERSION,
+      });
+      const slug =
+        selection.estimateName
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+          .slice(0, 40) || "estimate";
+      const date = new Date().toISOString().slice(0, 10);
+      const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `T3-ballpark-${slug}-${date}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    } catch {
+      // PDF download is best-effort; the local browser entry still saves.
+    }
+  };
+
   const saveSummary = () => {
     if (!estimate.mainFeatures.length) return;
+    downloadPdf();
     const next: SavedSummary = {
       id: crypto.randomUUID(),
       name: selection.estimateName.trim() || "Untitled estimate",
@@ -370,7 +405,7 @@ export default function PricingConfigurator() {
               ) : null}
 
               <div className="mt-6 grid gap-2">
-                <button type="button" onClick={saveSummary} disabled={!estimate.mainFeatures.length} className="min-h-11 rounded-full bg-[var(--t3-lime)] px-5 text-sm font-semibold text-[var(--t3-black)] transition hover:-translate-y-0.5 hover:shadow-[var(--t3-glow)] disabled:cursor-not-allowed disabled:opacity-40">Save summary</button>
+                <button type="button" onClick={saveSummary} disabled={!estimate.mainFeatures.length} className="min-h-11 rounded-full bg-[var(--t3-lime)] px-5 text-sm font-semibold text-[var(--t3-black)] transition hover:-translate-y-0.5 hover:shadow-[var(--t3-glow)] disabled:cursor-not-allowed disabled:opacity-40">Save PDF</button>
                 <button type="button" onClick={copySummary} className="min-h-11 rounded-full border border-[var(--t3-slate-border)] px-5 text-sm font-semibold text-white transition hover:border-[var(--t3-lime)]">{copied ? "Copied" : "Copy summary"}</button>
                 <button type="button" onClick={reset} className="py-2 text-xs font-semibold text-[var(--t3-dark-muted)] transition hover:text-white">Reset estimate</button>
               </div>
