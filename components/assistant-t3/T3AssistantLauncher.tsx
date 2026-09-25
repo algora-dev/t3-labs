@@ -13,9 +13,7 @@ import { usePathname } from 'next/navigation';
 const EXCLUDED_PREFIXES = [
   '/demo',
   '/supplier-pricing-tool',
-  '/3a-roofing',
   '/apex-roofing',
-  '/falcon-contracting',
   '/contractor-template',
   '/roofing-solutions',
   '/dashboard',

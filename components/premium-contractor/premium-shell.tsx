@@ -14,7 +14,7 @@ export function PremiumHeader({ site }: { site: PremiumContractorConfig }) {
 
   const links = [
     { label: "Home", href: base, active: pathname === base },
-    ...(site.navigation.showServices ? [{ label: "Services", href: `${base}/services`, active: pathname === `${base}/services` }] : []),
+    ...(site.navigation.showServices ? [{ label: "Services", href: `${base}#services`, active: false }] : []),
     ...(site.navigation.showProjects ? [{ label: "Projects", href: `${base}#projects`, active: false }] : []),
     ...(site.navigation.showProcess ? [{ label: "Our process", href: `${base}#process`, active: false }] : []),
   ];

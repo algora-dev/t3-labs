@@ -27,6 +27,26 @@ const nextConfig: NextConfig = {
         destination: "/demo/roofing-site/:path*",
         permanent: true,
       },
+      // Retired proposal pages and demo micro-sites (2026-09-25)
+      ...[
+        "/proposal/3a-roofing-wp-000207",
+        "/proposal/act-roofing-ltd",
+        "/proposal/aspire-membranes-wp-000206",
+        "/proposal/atkinson-building-services-wp-000208",
+        "/proposal/blenheim-roofing-wp-000209",
+        "/proposal/falcon-contracting-wp-000205",
+        "/proposal/nzav",
+        "/proposal/proposal-template-wp-000000",
+        "/proposal/short-proposal-template-wp-000000",
+        "/3a-roofing",
+        "/3a-roofing/:path*",
+        "/falcon-contracting",
+      ].map((source) => ({ source, destination: "/", permanent: true })),
+      {
+        source: "/contractor-template-premium/services",
+        destination: "/contractor-template-premium",
+        permanent: true,
+      },
     ];
   },
 };
