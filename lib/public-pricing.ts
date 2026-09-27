@@ -27,6 +27,8 @@ export interface PublicTier {
   /** Websites only: same tier on an existing site, 25% off. */
   existingUsd?: PriceBand | null;
   existingGbp?: PriceBand | null;
+  /** Card note under the price: "previous" = includes everything in the tier before it, "custom" = bespoke wording. Omit on first tiers. */
+  includes?: "previous" | "custom";
 }
 
 export interface PublicService {
@@ -61,6 +63,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "standard",
         name: "+ Digital Takeoff",
         blurb: "Upload a plan or suitable image, measure on screen, then continue straight into pricing.",
+        includes: "previous",
         usd: { low: 1499, high: 2199 },
         gbp: { low: 1199, high: 1749 },
       },
@@ -68,6 +71,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "advanced",
         name: "Advanced",
         blurb: "Hundreds of products, waste and rounding rules, branded quote outputs.",
+        includes: "previous",
         usd: { low: 2199, high: 3399 },
         gbp: { low: 1749, high: 2699 },
       },
@@ -75,6 +79,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "custom",
         name: "Custom",
         blurb: "Customised flow and screens, very large catalogue, your own pricing logic.",
+        includes: "previous",
         usd: { low: 3399, high: 4999 },
         gbp: { low: 2699, high: 3999 },
       },
@@ -82,6 +87,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "bespoke",
         name: "Bespoke",
         blurb: "Something else entirely. Talk to us.",
+        includes: "custom",
         usd: null,
         gbp: null,
       },
@@ -106,6 +112,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "guidance",
         name: "Sales guidance",
         blurb: "Clarifying questions, recommendations, stronger buying guidance.",
+        includes: "previous",
         usd: { low: 1999, high: 2749 },
         gbp: { low: 1599, high: 2199 },
       },
@@ -113,6 +120,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "pricing",
         name: "Pricing + estimates",
         blurb: "Collects the inputs in conversation and returns the estimate itself.",
+        includes: "previous",
         usd: { low: 2499, high: 3499 },
         gbp: { low: 1999, high: 2799 },
       },
@@ -120,6 +128,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "advanced",
         name: "Advanced / cross-system",
         blurb: "Multi-step guided flows, connected tools, account states. Contact us beyond this range.",
+        includes: "previous",
         usd: { low: 3499, high: 5999 },
         gbp: { low: 2799, high: 4799 },
         openTop: true,
@@ -145,6 +154,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "advanced",
         name: "Advanced admin",
         blurb: "Products, pricing, users, trade tiers and settings.",
+        includes: "previous",
         usd: { low: 750, high: 1499 },
         gbp: { low: 599, high: 1199 },
       },
@@ -152,6 +162,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "operations",
         name: "Operations workspace",
         blurb: "Jobs, staff actions and operational controls in one workspace.",
+        includes: "previous",
         usd: { low: 1499, high: 2499 },
         gbp: { low: 1199, high: 1999 },
       },
@@ -178,6 +189,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "standard",
         name: "Standard",
         blurb: "10-15 pages, SEO-led structure, simple buying journey, basic pricing and product pages.",
+        includes: "previous",
         usd: { low: 999, high: 1999 },
         gbp: { low: 749, high: 1499 },
         existingUsd: { low: 749, high: 1499 },
@@ -187,6 +199,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "complex",
         name: "Complex",
         blurb: "15-30 pages, richer content and structure.",
+        includes: "previous",
         usd: { low: 1999, high: 3999 },
         gbp: { low: 1499, high: 2999 },
         existingUsd: { low: 1499, high: 2999 },
@@ -196,6 +209,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
         id: "bespoke",
         name: "Bespoke",
         blurb: "Fully custom. Priced on scope, expect more depending on what you want.",
+        includes: "custom",
         usd: { low: 1999, high: null },
         gbp: { low: 1499, high: null },
         existingUsd: { low: 1499, high: null },

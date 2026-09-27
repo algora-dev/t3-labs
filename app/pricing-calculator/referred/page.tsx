@@ -161,11 +161,6 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
             <span><img src={logoSrc} alt="T3 Labs" /></span>
             <b>T3 Labs</b>
           </a>
-          <nav>
-            <a href="#build">Build yours</a>
-            <a href="#ballpark">Your ballpark</a>
-            <a href={isReferral ? "/roofing-solutions/referred" : "/roofing-solutions"}>Examples</a>
-          </nav>
           <div className="pc-header-actions">
             {isReferral ? (
               <a className="pc-header-call" href="#next-step">Next step</a>
@@ -306,12 +301,13 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
                       ) : null}
                     </div>
                     <div className="pc-tier-grid">
-                      {activeService.tiers.map((tier) => {
+                      {activeService.tiers.map((tier, tierIndex) => {
                         const state = selection[activeService.key];
                         if (!state) return null;
                         const existingSite = activeService.key === "websites" && state.existingSite;
                         const band = tierBand(tier, currency, existingSite);
                         const active = state.tierId === tier.id;
+                        const previousTier = tierIndex > 0 ? activeService.tiers[tierIndex - 1] : null;
                         return (
                           <button
                             key={tier.id}
@@ -324,6 +320,11 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
                             <strong>{tier.name}</strong>
                             <span className="pc-tier-blurb">{tier.blurb}</span>
                             <span className="pc-tier-price">{formatBand(band, currency, tier.openTop)}</span>
+                            {tier.includes === "previous" && previousTier ? (
+                              <span className="pc-tier-includes">Includes everything in {previousTier.name}, plus the above.</span>
+                            ) : tier.includes === "custom" ? (
+                              <span className="pc-tier-includes pc-tier-includes--custom">Need more than these options? Something custom-built to your needs.</span>
+                            ) : null}
                           </button>
                         );
                       })}
@@ -446,7 +447,7 @@ export default function PricingCalculatorReferredPage() {
 const styles = String.raw`
 .pc-page{--lime:#d7ff00;--ink:#0a0b10;--surface:#101722;--surface2:#172131;--line:#303d51;--muted:#aab4c6;background:var(--ink);color:#fff;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
 .pc-page *{box-sizing:border-box}.pc-page :where(h1,h2,h3,p){margin:0}.pc-page button,.pc-page a{font:inherit}.pc-page :where(a,button):focus-visible{outline:2px solid var(--lime);outline-offset:3px}.pc-shell{max-width:1180px;margin:auto;padding-inline:24px}.pc-page [id]{scroll-margin-top:86px}
-.pc-header{position:sticky;top:0;z-index:50;background:rgba(9,11,18,.9);backdrop-filter:blur(18px);border-bottom:1px solid #242b3a}.pc-header-inner{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:22px}.pc-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}.pc-brand span{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#0d111b}.pc-brand img{width:24px;height:24px;object-fit:contain}.pc-brand b{font-size:14px}.pc-header nav{display:flex;gap:22px}.pc-header nav a{color:#a8b0bf;text-decoration:none;font-size:14px}.pc-header nav a:hover{color:#fff}.pc-header-actions{display:flex;align-items:center;gap:14px}.pc-header-call{background:var(--lime);color:#080a0f;text-decoration:none;font-size:12px;font-weight:600;padding:9px 14px;border-radius:999px}
+.pc-header{position:sticky;top:0;z-index:50;background:rgba(9,11,18,.9);backdrop-filter:blur(18px);border-bottom:1px solid #242b3a}.pc-header-inner{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:22px}.pc-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}.pc-brand span{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#0d111b}.pc-brand img{width:24px;height:24px;object-fit:contain}.pc-brand b{font-size:14px}.pc-header-actions{display:flex;align-items:center;gap:14px}.pc-header-call{background:var(--lime);color:#080a0f;text-decoration:none;font-size:12px;font-weight:600;padding:9px 14px;border-radius:999px}
 .pc-eyebrow,.pc-card-label{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:700;color:var(--lime)}.pc-eyebrow b{margin-right:4px}
 .pc-hero{position:relative;overflow:hidden;padding:82px 0 66px;background:radial-gradient(circle at 82% 26%,rgba(215,255,0,.14),transparent 26%),linear-gradient(135deg,#0a0b10,#101722)}.pc-grid-glow{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to right,#000 25%,transparent 92%)}.pc-hero-grid{position:relative;display:grid;grid-template-columns:.95fr 1.05fr;gap:54px;align-items:center}.pc-hero-copy{min-width:0}
 .pc-hero h1{font-size:clamp(42px,5vw,68px);line-height:.99;letter-spacing:-.055em;margin-top:16px}.pc-hero h1 em{font-style:normal;color:var(--lime)}
@@ -481,6 +482,7 @@ const styles = String.raw`
 .pc-tier{appearance:none;text-align:left;border:1px solid #303d51;background:var(--surface2);color:#fff;padding:18px;border-radius:13px;display:grid;gap:8px;cursor:pointer;transition:.2s;align-content:start}.pc-tier:hover{transform:translateY(-2px);border-color:rgba(215,255,0,.55);box-shadow:0 8px 24px rgba(215,255,0,.12)}.pc-tier.is-active{border-color:rgba(215,255,0,.5);background:linear-gradient(180deg,rgba(215,255,0,.08),rgba(255,255,255,.015))}
 .pc-tier-check{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;border:2px solid #46536e;color:transparent;transition:.2s}.pc-tier-check svg{width:12px;height:12px}.pc-tier:not(.is-active):hover .pc-tier-check{border-color:rgba(215,255,0,.75)}.pc-tier.is-active .pc-tier-check{background:var(--lime);border-color:var(--lime);color:#080a0f}
 .pc-tier>strong{font-size:17px}.pc-tier-blurb{color:var(--muted);font-size:13px;line-height:1.55}.pc-tier-price{font-size:15px;font-weight:700;color:var(--lime)}.pc-tier.is-active .pc-tier-price{color:var(--lime)}
+.pc-tier-includes{font-size:11.5px;line-height:1.5;color:#9aa6ba;border-top:1px dashed #303d51;padding-top:8px}.pc-tier-includes--custom{color:#d2d9e5}
 .pc-total{align-self:start}
 .pc-total-inner{position:sticky;top:86px;padding:24px;border:1px solid var(--line);border-radius:17px;background:var(--surface);display:grid;gap:14px}
 .pc-total-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -498,7 +500,7 @@ const styles = String.raw`
 .pc-support{padding-block:0 92px}.pc-reassurance{padding:28px;border:1px solid var(--line);border-radius:17px;background:var(--surface)}.pc-reassurance h2{font-size:clamp(25px,3vw,36px);line-height:1.08;letter-spacing:-.035em;margin-top:10px}.pc-reassurance>p:last-child{color:var(--muted);font-size:15px;line-height:1.65;max-width:820px;margin-top:12px}.pc-learn-links{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.pc-learn-links a{display:grid;gap:6px;padding:17px 18px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-decoration:none;transition:.2s}.pc-learn-links a:hover{transform:translateY(-2px);border-color:rgba(215,255,0,.6);box-shadow:0 0 0 1px rgba(215,255,0,.14),0 0 22px rgba(215,255,0,.09)}.pc-learn-links span{font-size:11.5px;color:#8f99ab}.pc-learn-links b{font-size:14px;color:#fff}.pc-close{padding:104px 0;background:radial-gradient(circle at 50% 0,rgba(215,255,0,.13),transparent 34%),#080a0f}.pc-close-inner{max-width:850px;text-align:center}.pc-close h2{font-size:clamp(31px,4vw,50px);line-height:1.04;letter-spacing:-.045em;margin-top:14px}.pc-close-inner>p:not(.pc-eyebrow){color:var(--muted);font-size:18px;line-height:1.7;max-width:720px;margin:18px auto 0}.pc-actions--center{justify-content:center}.pc-close-note{font-size:12px!important;color:#858fa2!important;margin-top:16px!important}
 .pc-footer{border-top:1px solid var(--line);color:#858fa0;font-size:11px}.pc-footer .pc-shell{display:flex;justify-content:space-between;gap:20px;padding-block:24px}
 @media(min-width:1080px){.pc-build-layout{grid-template-columns:minmax(0,1fr) 360px}}
-@media(max-width:980px){.pc-header nav{display:none}.pc-hero-grid{grid-template-columns:1fr;gap:34px}.pc-how-grid{grid-template-columns:1fr}.pc-picker-grid{grid-template-columns:1fr 1fr}.pc-learn-links{grid-template-columns:1fr}}
+@media(max-width:980px){.pc-hero-grid{grid-template-columns:1fr;gap:34px}.pc-how-grid{grid-template-columns:1fr}.pc-picker-grid{grid-template-columns:1fr 1fr}.pc-learn-links{grid-template-columns:1fr}}
 @media(max-width:720px){.pc-shell{padding-inline:18px}.pc-header-inner{min-height:60px}.pc-brand b{display:none}.pc-header-call{font-size:11px}.pc-hero{padding:54px 0 44px}.pc-hero h1{font-size:40px}.pc-lead{font-size:16px}.pc-section{padding-block:66px}.pc-support{padding-bottom:66px}.pc-heading h2,.pc-close h2{font-size:34px}.pc-heading>p:last-child{font-size:16px}.pc-picker-grid{grid-template-columns:1fr}.pc-service{padding:20px}.pc-total-inner{position:static}.pc-actions .pc-cur{width:100%;justify-content:center}.pc-reassurance{padding:22px}}
 @media(max-width:720px){.pc-tab{font-size:12px;padding:9px 6px}}
 @media(prefers-reduced-motion:reduce){.pc-flash{animation:none}.pc-primary,.pc-secondary-btn,.pc-picker,.pc-tier,.pc-copy,.pc-tab,.pc-video-play,.pc-learn-links a{transition:none}.pc-tab-thumb{transition:none}}
