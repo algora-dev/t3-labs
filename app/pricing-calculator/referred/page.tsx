@@ -529,6 +529,9 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
                     I would like a call
                   </label>
                 </div>
+                {form.preference === "call" ? (
+                  <a className="pc-send-book" href={bookingUrl} target="_blank" rel="noopener noreferrer">Want to pick a time yourself? Book a call now →</a>
+                ) : null}
                 <textarea aria-label="Message, optional" placeholder="Anything else you want to tell us? (optional)" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
                 <input type="text" name="website" tabIndex={-1} autoComplete="off" className="pc-hp" aria-hidden="true" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
                 <ul className="pc-send-config" aria-label="Ballpark being sent">
@@ -621,6 +624,8 @@ const styles = String.raw`
 .pc-send-pref label{position:relative;display:grid;place-items:center;border:1px solid #303d51;border-radius:999px;padding:9px 10px;font-size:12px;font-weight:700;color:#a8b0bf;cursor:pointer;transition:.2s;text-align:center}
 .pc-send-pref label:hover{color:#fff}.pc-send-pref label.is-active{background:var(--lime);border-color:var(--lime);color:#080a0f}
 .pc-send-pref input{position:absolute;opacity:0;pointer-events:none}
+.pc-send-book{display:flex;align-items:center;justify-content:center;gap:6px;border:1px dashed rgba(215,255,0,.4);border-radius:999px;padding:9px 14px;font-size:12.5px;font-weight:700;color:#e7ecf4;text-decoration:none;transition:.2s;animation:pc-fade .18s ease}
+.pc-send-book:hover{border-color:var(--lime);color:#fff;box-shadow:0 0 16px rgba(215,255,0,.18)}
 .pc-send-config{list-style:none;margin:0;padding:10px 12px;border:1px dashed #303d51;border-radius:10px;display:grid;gap:5px;background:var(--surface2)}
 .pc-send-config li{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;color:#e7ecf4;flex-wrap:wrap}
 .pc-send-config b{color:var(--lime);font-weight:600}.pc-send-config i{font-style:normal;color:#aab4c6}
