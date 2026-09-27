@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   PUBLIC_SERVICES,
   SERVICE_ORDER,
@@ -79,7 +79,13 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
   const [selection, setSelection] = useState<BallparkSelection>({ calculator: defaultSelection("calculator") });
   const [activeTab, setActiveTab] = useState<ServiceKey | null>("calculator");
   const [flash, setFlash] = useState(0);
-  const [copied, setCopied] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
+  const [formSent, setFormSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", preference: "email", message: "" });
+  const [honeypot, setHoneypot] = useState("");
+  const sendFormRef = useRef<HTMLDivElement>(null);
 
   // GBP default for UK visitors. Runs after mount so server and first client render match.
   useEffect(() => {
@@ -141,14 +147,47 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
   const activeService = activeTab && selection[activeTab] ? PUBLIC_SERVICES[activeTab] : null;
   const activeTabIndex = activeTab ? selectedKeys.indexOf(activeTab) : -1;
 
-  const copyConfig = async () => {
-    const text = buildSummaryText(selection, currency);
+  const openSendForm = (scroll = false) => {
+    setFormOpen(true);
+    setFormSent(false);
+    if (scroll) {
+      window.setTimeout(() => {
+        sendFormRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 80);
+    }
+  };
+
+  const submitSendForm = async (e: FormEvent) => {
+    e.preventDefault();
+    if (sending) return;
+    const name = form.name.trim();
+    const email = form.email.trim();
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFormError("Please add your name and a valid email address.");
+      return;
+    }
+    setSending(true);
+    setFormError("");
     try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2400);
+      const res = await fetch("/api/ballpark-enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          contactPreference: form.preference,
+          message: form.message.trim(),
+          currency,
+          ballparkSummary: buildSummaryText(selection, currency),
+          website: honeypot,
+        }),
+      });
+      if (!res.ok) throw new Error("send failed");
+      setFormSent(true);
     } catch {
-      // Clipboard unavailable, ignore.
+      setFormError("Could not send right now. Please try again, or book a call instead.");
+    } finally {
+      setSending(false);
     }
   };
 
@@ -375,20 +414,65 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
               ) : null}
               <div className="pc-total-ctas">
                 {isReferral ? (
-                  <p className="pc-total-refer">Like what you are seeing? Copy this ballpark and send it back to the person who shared this page.</p>
+                  <p className="pc-total-refer">Like what you are seeing? Speak to the person who shared this page. They can walk you through the options and firm up the numbers.</p>
                 ) : (
                   <>
                     <a className="pc-primary" href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a free 20-minute call</a>
-                    <a className="pc-secondary-btn" href="/our-solution#start">Send us what you need</a>
+                    <button type="button" className="pc-secondary-btn" onClick={() => openSendForm(true)} disabled={selectedKeys.length === 0}>Send my ballpark</button>
                   </>
                 )}
-                <button type="button" className="pc-copy" onClick={copyConfig} disabled={selectedKeys.length === 0}>
-                  {copied ? "Copied" : "Copy my configuration"}
-                </button>
-                <p className="pc-copy-help">{isReferral ? "Copy your selections and ballpark, then send them to the person who shared this page." : "Copy your selections and ballpark, then send them to us if you would rather not book a call yet."}</p>
               </div>
               <p className="pc-total-disclaimer">One-off setup ballpark only, not a quote. Monthly hosting, maintenance and support are not included (from {monthlyFrom} a month, depending on features, users and AI usage).</p>
             </div>
+
+            {!isReferral && selectedKeys.length > 0 && formSent ? (
+              <div className="pc-send pc-send-ok" ref={sendFormRef}>
+                <strong>Sent. Thanks, {form.name.trim().split(" ")[0] || "there"}.</strong>
+                <p>
+                  {form.preference === "call"
+                    ? "We have your ballpark and will email you to arrange a call. Want to pick a time now? "
+                    : "We have your ballpark and will reply by email."}{" "}
+                  {form.preference === "call" ? (
+                    <a href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a call</a>
+                  ) : null}
+                </p>
+              </div>
+            ) : null}
+            {!isReferral && formOpen && selectedKeys.length > 0 && !formSent ? (
+              <div className="pc-send" ref={sendFormRef}>
+                <form onSubmit={submitSendForm} noValidate>
+                  <p className="pc-card-label">Send us your ballpark</p>
+                  <p className="pc-send-note">Add your details and we will get back to you. Your ballpark below is attached automatically.</p>
+                  <input type="text" aria-label="Your name" placeholder="Your name" autoComplete="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                  <input type="email" aria-label="Email address" placeholder="Email address" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                  <div className="pc-send-pref" role="radiogroup" aria-label="How should we reply">
+                    <label className={form.preference === "email" ? "is-active" : ""}>
+                      <input type="radio" name="reply-pref" value="email" checked={form.preference === "email"} onChange={() => setForm({ ...form, preference: "email" })} />
+                      Reply by email
+                    </label>
+                    <label className={form.preference === "call" ? "is-active" : ""}>
+                      <input type="radio" name="reply-pref" value="call" checked={form.preference === "call"} onChange={() => setForm({ ...form, preference: "call" })} />
+                      I would like a call
+                    </label>
+                  </div>
+                  <textarea aria-label="Message, optional" placeholder="Anything else you want to tell us? (optional)" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+                  <input type="text" name="website" tabIndex={-1} autoComplete="off" className="pc-hp" aria-hidden="true" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+                  <ul className="pc-send-config" aria-label="Ballpark being sent">
+                    {ballpark.lines.map((line) => (
+                      <li key={line.serviceKey}>
+                        <span>{line.serviceName}</span>
+                        <b>{line.tierName}</b>
+                        <i>{formatBand(line.band, currency, line.openTop)}</i>
+                      </li>
+                    ))}
+                    <li className="pc-send-total"><span>Total</span><i>{formatTotal(ballpark, currency)}</i></li>
+                  </ul>
+                  {formError ? <p className="pc-send-error" role="alert">{formError}</p> : null}
+                  <button type="submit" className="pc-primary" disabled={sending}>{sending ? "Sending..." : "Send my ballpark"}</button>
+                  <p className="pc-send-fine">We reply by email. No spam, no obligation.</p>
+                </form>
+              </div>
+            ) : null}
           </aside>
         </div>
       </section>
@@ -409,25 +493,20 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
       <section className="pc-close" id="next-step">
         <div className="pc-shell pc-close-inner">
           <p className="pc-eyebrow">Next step</p>
-          <h2>{isReferral ? "Send this ballpark back to the person who shared it." : "Turn your ballpark into a real plan."}</h2>
+          <h2>{isReferral ? "Speak to your rep about this ballpark." : "Turn your ballpark into a real plan."}</h2>
           <p>
             {isReferral
               ? "They can confirm which options make sense, remove anything you do not need and tighten the ballpark into a real scope."
-              : "Book a short call or send us what you need. We will confirm what fits, simplify the scope where possible and quote the real build."}
+              : "Book a short call or send us your ballpark. We will confirm what fits, simplify the scope where possible and quote the real build."}
           </p>
-          <div className="pc-actions pc-actions--center">
-            {isReferral ? (
-              <button type="button" className="pc-primary pc-primary-button" onClick={copyConfig} disabled={selectedKeys.length === 0}>
-                {copied ? "Copied" : "Copy my ballpark"}
-              </button>
-            ) : (
-              <>
-                <a className="pc-primary" href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a free 20-minute call</a>
-                <a className="pc-secondary-btn" href="/our-solution#start">Send us what you need</a>
-              </>
-            )}
-          </div>
-          {isReferral ? <p className="pc-close-note">Copy the configuration above and paste it into your existing conversation with your representative.</p> : null}
+          {!isReferral ? (
+            <div className="pc-actions pc-actions--center">
+              <a className="pc-primary" href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a free 20-minute call</a>
+              <button type="button" className="pc-secondary-btn" onClick={() => openSendForm(true)} disabled={selectedKeys.length === 0}>Send my ballpark</button>
+            </div>
+          ) : (
+            <p className="pc-close-note">The person who shared this page already has everything needed to take it forward.</p>
+          )}
         </div>
       </section>
 
@@ -494,8 +573,25 @@ const styles = String.raw`
 .pc-total-lines li{display:grid;gap:2px;padding:10px 12px;border-radius:10px;border:1px solid #303d51;background:var(--surface2)}
 .pc-total-lines span{font-size:13px;font-weight:600;color:#e7ecf4}.pc-total-lines span em{font-style:normal;color:#8f99ab;font-weight:500}
 .pc-total-lines b{font-size:12px;color:var(--lime)}.pc-total-lines i{font-style:normal;font-size:14px;font-weight:700}
-.pc-value-prompt{display:grid;gap:5px;padding:12px;border-left:3px solid var(--lime);background:rgba(215,255,0,.055);border-radius:0 10px 10px 0}.pc-value-prompt strong{font-size:13px;color:#fff}.pc-value-prompt span{font-size:11.5px;line-height:1.5;color:#aab4c6}.pc-total-ctas{display:grid;gap:10px;justify-items:stretch}.pc-total-refer{font-size:13px;font-weight:600;line-height:1.55;color:#e7ecf4;border:1px dashed rgba(215,255,0,.4);border-radius:12px;padding:12px;text-align:center}.pc-copy-help{font-size:11.5px;line-height:1.5;color:#8f99ab;text-align:center}
-.pc-copy{appearance:none;border:1px solid rgba(215,255,0,.45);background:transparent;color:#fff;font-size:13px;font-weight:700;padding:11px 16px;border-radius:999px;cursor:pointer;transition:.2s}.pc-copy:hover:not(:disabled){border-color:var(--lime);box-shadow:0 0 18px rgba(215,255,0,.25)}.pc-copy:disabled{opacity:.35;cursor:default}
+.pc-value-prompt{display:grid;gap:5px;padding:12px;border-left:3px solid var(--lime);background:rgba(215,255,0,.055);border-radius:0 10px 10px 0}.pc-value-prompt strong{font-size:13px;color:#fff}.pc-value-prompt span{font-size:11.5px;line-height:1.5;color:#aab4c6}.pc-total-ctas{display:grid;gap:10px;justify-items:stretch}.pc-total-refer{font-size:13px;font-weight:600;line-height:1.55;color:#e7ecf4;border:1px dashed rgba(215,255,0,.4);border-radius:12px;padding:12px;text-align:center}.pc-send{margin-top:14px;padding:20px;border:1px solid rgba(215,255,0,.3);border-radius:17px;background:var(--surface);display:grid}
+.pc-send form{display:grid;gap:10px}
+.pc-send input[type=text],.pc-send input[type=email],.pc-send textarea{width:100%;background:var(--surface2);border:1px solid #303d51;border-radius:10px;color:#fff;padding:11px 12px;font:inherit;font-size:13px}
+.pc-send input:focus,.pc-send textarea:focus{outline:none;border-color:rgba(215,255,0,.6)}
+.pc-send textarea{min-height:72px;resize:vertical}
+.pc-send-note{font-size:12px;color:var(--muted);line-height:1.5}
+.pc-send-pref{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pc-send-pref label{position:relative;display:grid;place-items:center;border:1px solid #303d51;border-radius:999px;padding:9px 10px;font-size:12px;font-weight:700;color:#a8b0bf;cursor:pointer;transition:.2s;text-align:center}
+.pc-send-pref label:hover{color:#fff}.pc-send-pref label.is-active{background:var(--lime);border-color:var(--lime);color:#080a0f}
+.pc-send-pref input{position:absolute;opacity:0;pointer-events:none}
+.pc-send-config{list-style:none;margin:0;padding:10px 12px;border:1px dashed #303d51;border-radius:10px;display:grid;gap:5px;background:var(--surface2)}
+.pc-send-config li{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;color:#e7ecf4;flex-wrap:wrap}
+.pc-send-config b{color:var(--lime);font-weight:600}.pc-send-config i{font-style:normal;color:#aab4c6}
+.pc-send-config .pc-send-total span{font-weight:700}.pc-send-config .pc-send-total i{font-weight:800;color:#fff}
+.pc-send-error{font-size:12px;color:#ff8f8f;line-height:1.5}
+.pc-send-fine{font-size:11px;color:#8f99ab;text-align:center}
+.pc-send-ok{gap:8px}.pc-send-ok strong{font-size:16px}.pc-send-ok p{font-size:13px;line-height:1.6;color:var(--muted)}.pc-send-ok a{color:var(--lime)}
+.pc-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.pc-secondary-btn:disabled{opacity:.4;cursor:default}.pc-secondary-btn:hover:disabled{transform:none;border-color:var(--line);box-shadow:none}
 .pc-total-disclaimer{font-size:11.5px;color:#858fa2;line-height:1.5}
 .pc-flash{animation:pc-flash .75s ease}@keyframes pc-flash{0%{box-shadow:0 0 0 rgba(215,255,0,0);border-color:var(--line)}30%{box-shadow:0 0 36px rgba(215,255,0,.35);border-color:rgba(215,255,0,.7)}100%{box-shadow:0 0 0 rgba(215,255,0,0);border-color:var(--line)}}
 .pc-support{padding-block:0 92px}.pc-reassurance{padding:28px;border:1px solid var(--line);border-radius:17px;background:var(--surface)}.pc-reassurance h2{font-size:clamp(25px,3vw,36px);line-height:1.08;letter-spacing:-.035em;margin-top:10px}.pc-reassurance>p:last-child{color:var(--muted);font-size:15px;line-height:1.65;max-width:820px;margin-top:12px}.pc-learn-links{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.pc-learn-links a{display:grid;gap:6px;padding:17px 18px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-decoration:none;transition:.2s}.pc-learn-links a:hover{transform:translateY(-2px);border-color:rgba(215,255,0,.6);box-shadow:0 0 0 1px rgba(215,255,0,.14),0 0 22px rgba(215,255,0,.09)}.pc-learn-links span{font-size:11.5px;color:#8f99ab}.pc-learn-links b{font-size:14px;color:#fff}.pc-close{padding:104px 0;background:radial-gradient(circle at 50% 0,rgba(215,255,0,.13),transparent 34%),#080a0f}.pc-close-inner{max-width:850px;text-align:center}.pc-close h2{font-size:clamp(31px,4vw,50px);line-height:1.04;letter-spacing:-.045em;margin-top:14px}.pc-close-inner>p:not(.pc-eyebrow){color:var(--muted);font-size:18px;line-height:1.7;max-width:720px;margin:18px auto 0}.pc-actions--center{justify-content:center}.pc-close-note{font-size:12px!important;color:#858fa2!important;margin-top:16px!important}
