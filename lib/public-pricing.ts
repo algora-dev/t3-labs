@@ -161,7 +161,7 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
     key: "websites",
     number: "04",
     eyebrow: "New service",
-    name: "Websites",
+    name: "Website",
     short: "A professional new website or work on your existing one.",
     intro: "New build or work on your existing site (25% off the same tier). Pick the size of the job.",
     tiers: [

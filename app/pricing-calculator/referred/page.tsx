@@ -107,6 +107,7 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
   const selectedKeys = SERVICE_ORDER.filter((key) => selection[key]);
   const selectedCount = selectedKeys.length;
   const activeService = activeTab && selection[activeTab] ? PUBLIC_SERVICES[activeTab] : null;
+  const activeTabIndex = activeTab ? selectedKeys.indexOf(activeTab) : -1;
 
   const copyConfig = async () => {
     const text = buildSummaryText(selection, currency);
@@ -222,27 +223,34 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
               </div>
             ) : (
               <div>
-                <div className="pc-tabs" role="tablist" aria-label="Selected services">
-                  {selectedKeys.map((key) => {
-                    const service = PUBLIC_SERVICES[key];
-                    const state = selection[key];
-                    const tierName = state
-                      ? (service.tiers.find((tier) => tier.id === state.tierId) ?? service.tiers[0]).name
-                      : "";
-                    return (
-                      <button
-                        key={key}
-                        type="button"
-                        role="tab"
-                        aria-selected={activeTab === key}
-                        className={`pc-tab${activeTab === key ? " is-active" : ""}`}
-                        onClick={() => setActiveTab(key)}
-                      >
-                        <b>{service.name}</b>
-                        <i>{tierName}</i>
-                      </button>
-                    );
-                  })}
+                <div
+                  className="pc-tabs"
+                  role="tablist"
+                  aria-label="Selected services"
+                  style={{ gridTemplateColumns: `repeat(${selectedKeys.length}, minmax(0, 1fr))` }}
+                >
+                  {activeTabIndex >= 0 ? (
+                    <span
+                      className="pc-tab-thumb"
+                      aria-hidden="true"
+                      style={{
+                        width: `calc((100% - 8px) / ${selectedKeys.length})`,
+                        transform: `translateX(${activeTabIndex * 100}%)`,
+                      }}
+                    />
+                  ) : null}
+                  {selectedKeys.map((key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      role="tab"
+                      aria-selected={activeTab === key}
+                      className={`pc-tab${activeTab === key ? " is-active" : ""}`}
+                      onClick={() => setActiveTab(key)}
+                    >
+                      {PUBLIC_SERVICES[key].name}
+                    </button>
+                  ))}
                 </div>
                 {activeService ? (
                   <section className="pc-service" role="tabpanel" aria-label={activeService.name}>
@@ -400,8 +408,11 @@ const styles = String.raw`
 .pc-build-layout{display:grid;grid-template-columns:1fr;gap:28px;margin-top:34px}
 .pc-build-main{display:grid;gap:22px;min-width:0}
 .pc-build-empty{padding:28px;border:1px dashed #46536e;border-radius:17px;background:var(--surface)}.pc-build-empty h3{font-size:26px;line-height:1.1;letter-spacing:-.03em;margin-top:11px}.pc-build-empty p:last-child{color:var(--muted);font-size:16px;line-height:1.65;margin-top:14px}
-.pc-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.pc-tab{appearance:none;border:1px solid var(--line);background:var(--surface);color:#fff;border-radius:999px;padding:8px 16px;cursor:pointer;font-size:13px;font-weight:600;display:grid;gap:2px;justify-items:start;transition:.2s;text-align:left}.pc-tab:hover:not(.is-active){border-color:rgba(215,255,0,.5)}.pc-tab b{font-size:13px;font-weight:700}.pc-tab i{font-style:normal;font-size:11px;font-weight:500;color:#8f99ab}.pc-tab.is-active{background:var(--lime);border-color:var(--lime)}.pc-tab.is-active b{color:#080a0f}.pc-tab.is-active i{color:#3d4506}
+.pc-tabs{position:relative;display:grid;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--surface);margin-bottom:16px}
+.pc-tab-thumb{position:absolute;top:4px;bottom:4px;left:4px;border-radius:999px;background:var(--lime);z-index:0;transition:transform .25s cubic-bezier(.4,0,.2,1),width .25s cubic-bezier(.4,0,.2,1)}
+.pc-tab{appearance:none;border:0;background:transparent;color:#a8b0bf;font-size:13px;font-weight:700;padding:10px 6px;border-radius:999px;cursor:pointer;transition:color .2s;position:relative;z-index:1;text-align:center;line-height:1.25}
+.pc-tab:hover:not(.is-active){color:#fff}
+.pc-tab.is-active{color:#080a0f}
 .pc-service{padding:26px;border:1px solid var(--line);border-radius:17px;background:var(--surface)}
 .pc-service-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:18px}
 .pc-service-head h3{font-size:26px;letter-spacing:-.03em;margin-top:10px}.pc-service-intro{color:var(--muted);font-size:15px;line-height:1.6;margin-top:8px;max-width:620px}
@@ -429,5 +440,6 @@ const styles = String.raw`
 @media(min-width:1080px){.pc-build-layout{grid-template-columns:minmax(0,1fr) 360px}}
 @media(max-width:980px){.pc-header nav{display:none}.pc-quick-strip .pc-shell{grid-template-columns:1fr;gap:8px}.pc-picker-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.pc-shell{padding-inline:18px}.pc-header-inner{min-height:60px}.pc-brand b{display:none}.pc-header-call{font-size:11px}.pc-hero{padding:54px 0 44px}.pc-hero h1{font-size:40px}.pc-lead{font-size:16px}.pc-section{padding-block:66px}.pc-heading h2,.pc-close h2{font-size:34px}.pc-heading>p:last-child{font-size:16px}.pc-picker-grid{grid-template-columns:1fr}.pc-service{padding:20px}.pc-total-inner{position:static}.pc-actions .pc-cur{width:100%;justify-content:center}}
-@media(prefers-reduced-motion:reduce){.pc-flash{animation:none}.pc-primary,.pc-picker,.pc-tier,.pc-copy,.pc-tab{transition:none}}
+@media(max-width:720px){.pc-tab{font-size:12px;padding:9px 6px}}
+@media(prefers-reduced-motion:reduce){.pc-flash{animation:none}.pc-primary,.pc-picker,.pc-tier,.pc-copy,.pc-tab{transition:none}.pc-tab-thumb{transition:none}}
 `;
