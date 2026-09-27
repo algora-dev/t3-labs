@@ -147,15 +147,31 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
   const activeService = activeTab && selection[activeTab] ? PUBLIC_SERVICES[activeTab] : null;
   const activeTabIndex = activeTab ? selectedKeys.indexOf(activeTab) : -1;
 
-  const openSendForm = (scroll = false) => {
+  const openSendForm = () => {
     setFormOpen(true);
     setFormSent(false);
-    if (scroll) {
-      window.setTimeout(() => {
-        sendFormRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 80);
-    }
   };
+
+  const closeSendForm = () => {
+    setFormOpen(false);
+  };
+
+  // Modal open: Escape to close, lock page scroll, focus the dialog.
+  useEffect(() => {
+    if (!formOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFormOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    const focusTimer = window.setTimeout(() => sendFormRef.current?.focus(), 60);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.documentElement.style.overflow = prevOverflow;
+      window.clearTimeout(focusTimer);
+    };
+  }, [formOpen]);
 
   const submitSendForm = async (e: FormEvent) => {
     e.preventDefault();
@@ -418,61 +434,12 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
                 ) : (
                   <>
                     <a className="pc-primary" href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a free 20-minute call</a>
-                    <button type="button" className="pc-secondary-btn" onClick={() => openSendForm(true)} disabled={selectedKeys.length === 0}>Send my ballpark</button>
+                    <button type="button" className="pc-secondary-btn" onClick={openSendForm} disabled={selectedKeys.length === 0}>Send my ballpark</button>
                   </>
                 )}
               </div>
               <p className="pc-total-disclaimer">One-off setup ballpark only, not a quote. Monthly hosting, maintenance and support are not included (from {monthlyFrom} a month, depending on features, users and AI usage).</p>
             </div>
-
-            {!isReferral && selectedKeys.length > 0 && formSent ? (
-              <div className="pc-send pc-send-ok" ref={sendFormRef}>
-                <strong>Sent. Thanks, {form.name.trim().split(" ")[0] || "there"}.</strong>
-                <p>
-                  {form.preference === "call"
-                    ? "We have your ballpark and will email you to arrange a call. Want to pick a time now? "
-                    : "We have your ballpark and will reply by email."}{" "}
-                  {form.preference === "call" ? (
-                    <a href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a call</a>
-                  ) : null}
-                </p>
-              </div>
-            ) : null}
-            {!isReferral && formOpen && selectedKeys.length > 0 && !formSent ? (
-              <div className="pc-send" ref={sendFormRef}>
-                <form onSubmit={submitSendForm} noValidate>
-                  <p className="pc-card-label">Send us your ballpark</p>
-                  <p className="pc-send-note">Add your details and we will get back to you. Your ballpark below is attached automatically.</p>
-                  <input type="text" aria-label="Your name" placeholder="Your name" autoComplete="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-                  <input type="email" aria-label="Email address" placeholder="Email address" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                  <div className="pc-send-pref" role="radiogroup" aria-label="How should we reply">
-                    <label className={form.preference === "email" ? "is-active" : ""}>
-                      <input type="radio" name="reply-pref" value="email" checked={form.preference === "email"} onChange={() => setForm({ ...form, preference: "email" })} />
-                      Reply by email
-                    </label>
-                    <label className={form.preference === "call" ? "is-active" : ""}>
-                      <input type="radio" name="reply-pref" value="call" checked={form.preference === "call"} onChange={() => setForm({ ...form, preference: "call" })} />
-                      I would like a call
-                    </label>
-                  </div>
-                  <textarea aria-label="Message, optional" placeholder="Anything else you want to tell us? (optional)" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
-                  <input type="text" name="website" tabIndex={-1} autoComplete="off" className="pc-hp" aria-hidden="true" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
-                  <ul className="pc-send-config" aria-label="Ballpark being sent">
-                    {ballpark.lines.map((line) => (
-                      <li key={line.serviceKey}>
-                        <span>{line.serviceName}</span>
-                        <b>{line.tierName}</b>
-                        <i>{formatBand(line.band, currency, line.openTop)}</i>
-                      </li>
-                    ))}
-                    <li className="pc-send-total"><span>Total</span><i>{formatTotal(ballpark, currency)}</i></li>
-                  </ul>
-                  {formError ? <p className="pc-send-error" role="alert">{formError}</p> : null}
-                  <button type="submit" className="pc-primary" disabled={sending}>{sending ? "Sending..." : "Send my ballpark"}</button>
-                  <p className="pc-send-fine">We reply by email. No spam, no obligation.</p>
-                </form>
-              </div>
-            ) : null}
           </aside>
         </div>
       </section>
@@ -502,7 +469,7 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
           {!isReferral ? (
             <div className="pc-actions pc-actions--center">
               <a className="pc-primary" href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a free 20-minute call</a>
-              <button type="button" className="pc-secondary-btn" onClick={() => openSendForm(true)} disabled={selectedKeys.length === 0}>Send my ballpark</button>
+              <button type="button" className="pc-secondary-btn" onClick={openSendForm} disabled={selectedKeys.length === 0}>Send my ballpark</button>
             </div>
           ) : (
             <p className="pc-close-note">The person who shared this page already has everything needed to take it forward.</p>
@@ -516,6 +483,72 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
           <span>Ballpark prices are indicative, not quotes.</span>
         </div>
       </footer>
+
+      {!isReferral && formOpen && selectedKeys.length > 0 ? (
+        <div
+          className="pc-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Send my ballpark"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeSendForm();
+          }}
+        >
+          <div className="pc-modal-card" ref={sendFormRef} tabIndex={-1}>
+            <button type="button" className="pc-modal-close" onClick={closeSendForm} aria-label="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+            {formSent ? (
+              <div className="pc-send-ok">
+                <strong>Sent. Thanks, {form.name.trim().split(" ")[0] || "there"}.</strong>
+                <p>
+                  {form.preference === "call"
+                    ? "We have your ballpark and will email you to arrange a call. Want to pick a time now?"
+                    : "We have your ballpark and will reply by email."}{" "}
+                  {form.preference === "call" ? (
+                    <a href={bookingUrl} target="_blank" rel="noopener noreferrer">Book a call</a>
+                  ) : null}
+                </p>
+                <button type="button" className="pc-secondary-btn" onClick={closeSendForm}>Close</button>
+              </div>
+            ) : (
+              <form className="pc-send" onSubmit={submitSendForm} noValidate>
+                <p className="pc-card-label">Send us your ballpark</p>
+                <p className="pc-send-note">Add your details and we will get back to you. Your ballpark below is attached automatically.</p>
+                <input type="text" aria-label="Your name" placeholder="Your name" autoComplete="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                <input type="email" aria-label="Email address" placeholder="Email address" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                <div className="pc-send-pref" role="radiogroup" aria-label="How should we reply">
+                  <label className={form.preference === "email" ? "is-active" : ""}>
+                    <input type="radio" name="reply-pref" value="email" checked={form.preference === "email"} onChange={() => setForm({ ...form, preference: "email" })} />
+                    Reply by email
+                  </label>
+                  <label className={form.preference === "call" ? "is-active" : ""}>
+                    <input type="radio" name="reply-pref" value="call" checked={form.preference === "call"} onChange={() => setForm({ ...form, preference: "call" })} />
+                    I would like a call
+                  </label>
+                </div>
+                <textarea aria-label="Message, optional" placeholder="Anything else you want to tell us? (optional)" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" className="pc-hp" aria-hidden="true" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+                <ul className="pc-send-config" aria-label="Ballpark being sent">
+                  {ballpark.lines.map((line) => (
+                    <li key={line.serviceKey}>
+                      <span>{line.serviceName}</span>
+                      <b>{line.tierName}</b>
+                      <i>{formatBand(line.band, currency, line.openTop)}</i>
+                    </li>
+                  ))}
+                  <li className="pc-send-total"><span>Total</span><i>{formatTotal(ballpark, currency)}</i></li>
+                </ul>
+                {formError ? <p className="pc-send-error" role="alert">{formError}</p> : null}
+                <button type="submit" className="pc-primary" disabled={sending}>{sending ? "Sending..." : "Send my ballpark"}</button>
+                <p className="pc-send-fine">We reply by email. No spam, no obligation.</p>
+              </form>
+            )}
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
@@ -573,8 +606,13 @@ const styles = String.raw`
 .pc-total-lines li{display:grid;gap:2px;padding:10px 12px;border-radius:10px;border:1px solid #303d51;background:var(--surface2)}
 .pc-total-lines span{font-size:13px;font-weight:600;color:#e7ecf4}.pc-total-lines span em{font-style:normal;color:#8f99ab;font-weight:500}
 .pc-total-lines b{font-size:12px;color:var(--lime)}.pc-total-lines i{font-style:normal;font-size:14px;font-weight:700}
-.pc-value-prompt{display:grid;gap:5px;padding:12px;border-left:3px solid var(--lime);background:rgba(215,255,0,.055);border-radius:0 10px 10px 0}.pc-value-prompt strong{font-size:13px;color:#fff}.pc-value-prompt span{font-size:11.5px;line-height:1.5;color:#aab4c6}.pc-total-ctas{display:grid;gap:10px;justify-items:stretch}.pc-total-refer{font-size:13px;font-weight:600;line-height:1.55;color:#e7ecf4;border:1px dashed rgba(215,255,0,.4);border-radius:12px;padding:12px;text-align:center}.pc-send{margin-top:14px;padding:20px;border:1px solid rgba(215,255,0,.3);border-radius:17px;background:var(--surface);display:grid}
-.pc-send form{display:grid;gap:10px}
+.pc-value-prompt{display:grid;gap:5px;padding:12px;border-left:3px solid var(--lime);background:rgba(215,255,0,.055);border-radius:0 10px 10px 0}.pc-value-prompt strong{font-size:13px;color:#fff}.pc-value-prompt span{font-size:11.5px;line-height:1.5;color:#aab4c6}.pc-total-ctas{display:grid;gap:10px;justify-items:stretch}.pc-total-refer{font-size:13px;font-weight:600;line-height:1.55;color:#e7ecf4;border:1px dashed rgba(215,255,0,.4);border-radius:12px;padding:12px;text-align:center}.pc-modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(6,8,14,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:pc-fade .18s ease}
+.pc-modal-card{width:min(480px,100%);max-height:min(88vh,760px);overflow-y:auto;background:var(--surface);border:1px solid #303d51;border-radius:17px;padding:26px;position:relative;outline:none;animation:pc-pop .18s ease}
+.pc-modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;border:1px solid #303d51;background:transparent;color:#aab4c6;cursor:pointer;transition:.2s}.pc-modal-close:hover{color:#fff;border-color:rgba(215,255,0,.6)}
+.pc-modal-close svg{width:16px;height:16px}
+@keyframes pc-fade{from{opacity:0}to{opacity:1}}
+@keyframes pc-pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.pc-send{display:grid;gap:10px}
 .pc-send input[type=text],.pc-send input[type=email],.pc-send textarea{width:100%;background:var(--surface2);border:1px solid #303d51;border-radius:10px;color:#fff;padding:11px 12px;font:inherit;font-size:13px}
 .pc-send input:focus,.pc-send textarea:focus{outline:none;border-color:rgba(215,255,0,.6)}
 .pc-send textarea{min-height:72px;resize:vertical}
@@ -589,7 +627,7 @@ const styles = String.raw`
 .pc-send-config .pc-send-total span{font-weight:700}.pc-send-config .pc-send-total i{font-weight:800;color:#fff}
 .pc-send-error{font-size:12px;color:#ff8f8f;line-height:1.5}
 .pc-send-fine{font-size:11px;color:#8f99ab;text-align:center}
-.pc-send-ok{gap:8px}.pc-send-ok strong{font-size:16px}.pc-send-ok p{font-size:13px;line-height:1.6;color:var(--muted)}.pc-send-ok a{color:var(--lime)}
+.pc-send-ok{display:grid;gap:10px;justify-items:start;padding:6px 0}.pc-send-ok strong{font-size:19px;letter-spacing:-.02em}.pc-send-ok p{font-size:13.5px;line-height:1.6;color:var(--muted)}.pc-send-ok a{color:var(--lime)}
 .pc-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .pc-secondary-btn:disabled{opacity:.4;cursor:default}.pc-secondary-btn:hover:disabled{transform:none;border-color:var(--line);box-shadow:none}
 .pc-total-disclaimer{font-size:11.5px;color:#858fa2;line-height:1.5}
@@ -600,5 +638,6 @@ const styles = String.raw`
 @media(max-width:980px){.pc-hero-grid{grid-template-columns:1fr;gap:34px}.pc-how-grid{grid-template-columns:1fr}.pc-picker-grid{grid-template-columns:1fr 1fr}.pc-learn-links{grid-template-columns:1fr}}
 @media(max-width:720px){.pc-shell{padding-inline:18px}.pc-header-inner{min-height:60px}.pc-brand b{display:none}.pc-header-call{font-size:11px}.pc-hero{padding:54px 0 44px}.pc-hero h1{font-size:40px}.pc-lead{font-size:16px}.pc-section{padding-block:66px}.pc-support{padding-bottom:66px}.pc-heading h2,.pc-close h2{font-size:34px}.pc-heading>p:last-child{font-size:16px}.pc-picker-grid{grid-template-columns:1fr}.pc-service{padding:20px}.pc-total-inner{position:static}.pc-actions .pc-cur{width:100%;justify-content:center}.pc-reassurance{padding:22px}}
 @media(max-width:720px){.pc-tab{font-size:12px;padding:9px 6px}}
-@media(prefers-reduced-motion:reduce){.pc-flash{animation:none}.pc-primary,.pc-secondary-btn,.pc-picker,.pc-tier,.pc-copy,.pc-tab,.pc-video-play,.pc-learn-links a{transition:none}.pc-tab-thumb{transition:none}}
+@media(max-width:720px){.pc-modal{padding:14px}.pc-modal-card{padding:20px}}
+@media(prefers-reduced-motion:reduce){.pc-modal,.pc-modal-card{animation:none}.pc-flash{animation:none}.pc-primary,.pc-secondary-btn,.pc-picker,.pc-tier,.pc-copy,.pc-tab,.pc-video-play,.pc-learn-links a{transition:none}.pc-tab-thumb{transition:none}}
 `;
