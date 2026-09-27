@@ -141,19 +141,19 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
     eyebrow: "Control layer",
     name: "Admin Dashboard",
     short: "Manage products, prices, users and activity yourself.",
-    intro: "Choose how much control your team needs day to day.",
+    intro: "Each level includes the one before it. Choose how much control and visibility you need.",
     tiers: [
       {
         id: "basic",
         name: "Basic admin",
-        blurb: "Manage products and standard prices yourself.",
+        blurb: "Update products, standard prices and content yourself, no developer needed.",
         usd: { low: 375, high: 749 },
         gbp: { low: 299, high: 599 },
       },
       {
         id: "advanced",
         name: "Advanced admin",
-        blurb: "Products, pricing, users, trade tiers and settings.",
+        blurb: "Adds user accounts and trade pricing tiers: you control who sees which price level.",
         includes: "previous",
         usd: { low: 750, high: 1499 },
         gbp: { low: 599, high: 1199 },
@@ -161,10 +161,18 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
       {
         id: "operations",
         name: "Operations workspace",
-        blurb: "Jobs, staff actions and operational controls in one workspace.",
+        blurb: "Adds activity tracking and logs: who used each tool, what they did and every quote created.",
         includes: "previous",
         usd: { low: 1499, high: 2499 },
         gbp: { low: 1199, high: 1999 },
+      },
+      {
+        id: "bespoke",
+        name: "Bespoke",
+        blurb: "A control centre shaped around how your team actually works. Talk to us.",
+        usd: null,
+        gbp: null,
+        includes: "custom",
       },
     ],
   },
@@ -340,5 +348,5 @@ export function buildSummaryText(selection: BallparkSelection, currency: Currenc
     return "- " + line.serviceName + scope + ": " + line.tierName + " (" + price + ")";
   });
   const total = "Ballpark total: " + formatTotal(ballpark, currency);
-  return ["T3 Labs ballpark (" + currency + ")", ...rows, total, "Indicative ballpark only, not a quote."].join("\n");
+  return ["T3 Labs ballpark (" + currency + ")", ...rows, total, "Indicative one-off ballpark only, not a quote. Monthly hosting and support not included."].join("\n");
 }

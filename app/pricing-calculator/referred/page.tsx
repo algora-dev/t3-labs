@@ -75,6 +75,7 @@ function HeroVideo() {
 export function PricingCalculatorPage({ variant = "referred" }: { variant?: PageVariant }) {
   const isReferral = variant === "referred";
   const [currency, setCurrency] = useState<Currency>("USD");
+  const monthlyFrom = currency === "USD" ? "$19" : "\u00A315";
   const [selection, setSelection] = useState<BallparkSelection>({ calculator: defaultSelection("calculator") });
   const [activeTab, setActiveTab] = useState<ServiceKey | null>("calculator");
   const [flash, setFlash] = useState(0);
@@ -188,7 +189,7 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
               <a className="pc-primary" href="#build">Build my ballpark</a>
               <CurrencyToggle currency={currency} onChange={setCurrency} />
             </div>
-            <p className="pc-fineprint">Indicative one-off setup ranges, not quotes. Hosting, support and usage are confirmed separately where applicable.</p>
+            <p className="pc-fineprint">Indicative one-off setup ranges, not quotes. Monthly hosting, maintenance and support are not included (from {monthlyFrom} a month, depending on features, users and AI usage).</p>
           </div>
           <HeroVideo />
         </div>
@@ -386,7 +387,7 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
                 </button>
                 <p className="pc-copy-help">{isReferral ? "Copy your selections and ballpark, then send them to the person who shared this page." : "Copy your selections and ballpark, then send them to us if you would rather not book a call yet."}</p>
               </div>
-              <p className="pc-total-disclaimer">One-off setup ballpark only, not a quote. Ongoing costs are confirmed separately where applicable.</p>
+              <p className="pc-total-disclaimer">One-off setup ballpark only, not a quote. Monthly hosting, maintenance and support are not included (from {monthlyFrom} a month, depending on features, users and AI usage).</p>
             </div>
           </aside>
         </div>
