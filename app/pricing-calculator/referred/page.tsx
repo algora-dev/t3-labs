@@ -20,26 +20,8 @@ type PageVariant = "direct" | "referred";
 const bookingUrl = "https://calendly.com/insights-t3labs/20-minute-meeting";
 const logoSrc = "/assets/t3-logo-white.png";
 
-const HERO_PREVIEWS = [
-  {
-    src: "/assets/roofing-business-tools/measure-3.jpg",
-    label: "Measurement + pricing",
-    title: "Turn job measurements into a useful pricing result",
-    alt: "Example measurement-to-price output from the Apex Roofing demo",
-  },
-  {
-    src: "/assets/roofing-business-tools/assistant-4.jpg",
-    label: "Smart Assistant",
-    title: "Answer naturally and work toward an estimate",
-    alt: "Example Smart Assistant pricing conversation from the Apex Roofing demo",
-  },
-  {
-    src: "/assets/roofing-business-tools/admin-3.jpg",
-    label: "Admin + insights",
-    title: "Control the system and see what customers are doing",
-    alt: "Example admin and quote activity dashboard from the Apex Roofing demo",
-  },
-] as const;
+const EXPLAINER_VIDEO_ID = "FIqNbi3bG7A";
+const VIDEO_POSTER = "/assets/roofing-business-tools/admin-3.jpg";
 
 function CheckIcon() {
   return (
@@ -62,44 +44,30 @@ function CurrencyToggle({ currency, onChange }: { currency: Currency; onChange: 
   );
 }
 
-function HeroPreview() {
-  const [index, setIndex] = useState(0);
-  const current = HERO_PREVIEWS[index];
-  const previous = () => setIndex((value) => (value - 1 + HERO_PREVIEWS.length) % HERO_PREVIEWS.length);
-  const next = () => setIndex((value) => (value + 1) % HERO_PREVIEWS.length);
-
+function HeroVideo() {
+  const [active, setActive] = useState(false);
   return (
-    <figure className="pc-hero-preview">
-      <div className="pc-hero-preview-top">
-        <span>Working examples</span>
-        <span>{index + 1} / {HERO_PREVIEWS.length}</span>
-      </div>
-      <div className="pc-hero-preview-image">
-        <img src={current.src} alt={current.alt} />
-      </div>
-      <figcaption>
-        <div>
-          <span>{current.label}</span>
-          <strong>{current.title}</strong>
-        </div>
-        <div className="pc-hero-preview-controls">
-          <button type="button" onClick={previous} aria-label="Previous example">←</button>
-          <button type="button" onClick={next} aria-label="Next example">→</button>
-        </div>
-      </figcaption>
-      <div className="pc-hero-dots" role="group" aria-label="Choose example">
-        {HERO_PREVIEWS.map((slide, slideIndex) => (
-          <button
-            key={slide.src}
-            type="button"
-            className={slideIndex === index ? "is-active" : ""}
-            onClick={() => setIndex(slideIndex)}
-            aria-label={`Show example ${slideIndex + 1}: ${slide.label}`}
-            aria-pressed={slideIndex === index}
-          />
-        ))}
-      </div>
-      <p className="pc-hero-example-note">Roofing is the worked example. The same framework can be adapted to other construction businesses.</p>
+    <figure className="pc-hero-video">
+      {active ? (
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${EXPLAINER_VIDEO_ID}?autoplay=1&rel=0`}
+          title="T3 Labs 90-second overview"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      ) : (
+        <button
+          type="button"
+          className="pc-video-facade"
+          onClick={() => setActive(true)}
+          aria-label="Play the T3 Labs overview video"
+        >
+          <img src={VIDEO_POSTER} alt="T3 Labs business tools overview" />
+          <span className="pc-video-facade-overlay" aria-hidden="true" />
+          <span className="pc-video-play" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
+          <span className="pc-video-label">Watch the 90-second overview</span>
+        </button>
+      )}
     </figure>
   );
 }
@@ -220,14 +188,14 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
               Choose the tools you want, select roughly how capable each needs to be, and your ballpark updates instantly.
               No contact details required.
             </p>
-            <p className="pc-hero-sub">Most businesses do not need everything. Start with one useful tool or combine several.</p>
+            <p className="pc-hero-sub">Select one tool or combine several.</p>
             <div className="pc-actions">
               <a className="pc-primary" href="#build">Build my ballpark</a>
               <CurrencyToggle currency={currency} onChange={setCurrency} />
             </div>
             <p className="pc-fineprint">Indicative one-off setup ranges, not quotes. Hosting, support and usage are confirmed separately where applicable.</p>
           </div>
-          <HeroPreview />
+          <HeroVideo />
         </div>
       </section>
 
@@ -487,7 +455,7 @@ const styles = String.raw`
 .pc-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--lime);color:#0a0b10;text-decoration:none;padding:14px 20px;border:0;border-radius:999px;font-weight:700;font-size:14px;transition:.2s;cursor:pointer}.pc-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(215,255,0,.2)}.pc-primary:disabled{opacity:.4;cursor:default}.pc-primary-button{font-family:inherit}
 .pc-secondary{color:#fff;font-size:14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:3px}.pc-secondary-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;border:1px solid var(--line);background:transparent;color:#fff;text-decoration:none;padding:11px 18px;border-radius:999px;font-size:13px;font-weight:700;transition:.2s}.pc-secondary-btn:hover{transform:translateY(-2px);border-color:rgba(215,255,0,.7);box-shadow:0 0 0 1px rgba(215,255,0,.18),0 0 22px rgba(215,255,0,.10)}
 .pc-cur{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}.pc-cur button{appearance:none;border:0;background:transparent;color:#a8b0bf;font-size:12px;font-weight:700;padding:7px 12px;border-radius:999px;cursor:pointer;transition:.2s}.pc-cur button:hover:not(.is-active){color:#fff}.pc-cur button.is-active{background:var(--lime);color:#080a0f}
-.pc-fineprint{font-size:13px;color:#858fa2;margin-top:22px;max-width:640px}.pc-hero-preview{min-width:0;margin:0;padding:9px;border:1px solid #3a465d;border-radius:18px;background:#101722;box-shadow:0 30px 70px rgba(0,0,0,.38)}.pc-hero-preview-top{display:flex;justify-content:space-between;gap:16px;padding:7px 9px 10px;color:#8f99ab;font-size:11px;text-transform:uppercase;letter-spacing:.11em;font-weight:700}.pc-hero-preview-image{display:grid;place-items:center;min-height:360px;border-radius:11px;overflow:hidden;background:#0a0b10}.pc-hero-preview-image img{display:block;width:100%;height:360px;object-fit:contain;background:#0a0b10}.pc-hero-preview figcaption{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:14px 9px 7px}.pc-hero-preview figcaption>div:first-child{display:grid;gap:4px}.pc-hero-preview figcaption span{color:var(--lime);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em}.pc-hero-preview figcaption strong{font-size:14px;line-height:1.4;color:#fff}.pc-hero-preview-controls{display:flex;gap:7px;flex:none}.pc-hero-preview-controls button{appearance:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface2);color:#fff;cursor:pointer;transition:.2s}.pc-hero-preview-controls button:hover{border-color:var(--lime);box-shadow:0 0 18px rgba(215,255,0,.18)}.pc-hero-dots{display:flex;justify-content:center;gap:7px;padding:4px 0 6px}.pc-hero-dots button{appearance:none;width:7px;height:7px;border:0;border-radius:50%;padding:0;background:#4b566b;cursor:pointer;transition:.2s}.pc-hero-dots button.is-active{background:var(--lime);transform:scale(1.25)}.pc-hero-example-note{padding:5px 10px 8px;color:#8f99ab;font-size:11.5px;line-height:1.5;text-align:center}
+.pc-fineprint{font-size:13px;color:#858fa2;margin-top:22px;max-width:640px}.pc-hero-video{min-width:0;margin:0;padding:9px;border:1px solid #3a465d;border-radius:18px;background:#101722;box-shadow:0 30px 70px rgba(0,0,0,.38)}.pc-hero-video iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:11px;background:#000}.pc-video-facade{appearance:none;border:0;padding:0;width:100%;display:block;position:relative;cursor:pointer;border-radius:11px;overflow:hidden;background:#000}.pc-video-facade img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;opacity:.5}.pc-video-facade-overlay{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(9,11,18,.1),rgba(9,11,18,.88))}.pc-video-play{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);display:grid;place-items:center;width:78px;height:78px;border-radius:50%;background:var(--lime);color:#080a0f;box-shadow:0 0 40px rgba(215,255,0,.45);transition:.2s}.pc-video-facade:hover .pc-video-play{transform:translate(-50%,-50%) scale(1.08);box-shadow:0 0 60px rgba(215,255,0,.65)}.pc-video-label{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:#fff;font-size:15px;font-weight:600;letter-spacing:.02em}
 .pc-quick-strip{border-block:1px solid #303d51;background:#101722}.pc-how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-block:18px}.pc-how-grid article{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:12px 14px;border-radius:12px}.pc-how-grid article>b{color:var(--lime);font-size:12px;letter-spacing:.08em}.pc-how-grid article>div{display:grid;gap:3px}.pc-how-grid strong{color:#fff;font-size:14px}.pc-how-grid span{color:#aab4c6;font-size:12px;line-height:1.5}
 .pc-section{padding-block:92px}
 .pc-heading{max-width:850px}.pc-heading h2{font-size:clamp(31px,4vw,50px);line-height:1.04;letter-spacing:-.045em;margin-top:14px}.pc-heading>p:last-child{margin-top:17px;color:var(--muted);font-size:18px;line-height:1.68}
@@ -531,7 +499,7 @@ const styles = String.raw`
 .pc-footer{border-top:1px solid var(--line);color:#858fa0;font-size:11px}.pc-footer .pc-shell{display:flex;justify-content:space-between;gap:20px;padding-block:24px}
 @media(min-width:1080px){.pc-build-layout{grid-template-columns:minmax(0,1fr) 360px}}
 @media(max-width:980px){.pc-header nav{display:none}.pc-hero-grid{grid-template-columns:1fr;gap:34px}.pc-how-grid{grid-template-columns:1fr}.pc-picker-grid{grid-template-columns:1fr 1fr}.pc-learn-links{grid-template-columns:1fr}}
-@media(max-width:720px){.pc-shell{padding-inline:18px}.pc-header-inner{min-height:60px}.pc-brand b{display:none}.pc-header-call{font-size:11px}.pc-hero{padding:54px 0 44px}.pc-hero h1{font-size:40px}.pc-lead{font-size:16px}.pc-hero-preview-image,.pc-hero-preview-image img{height:280px;min-height:280px}.pc-section{padding-block:66px}.pc-support{padding-bottom:66px}.pc-heading h2,.pc-close h2{font-size:34px}.pc-heading>p:last-child{font-size:16px}.pc-picker-grid{grid-template-columns:1fr}.pc-service{padding:20px}.pc-total-inner{position:static}.pc-actions .pc-cur{width:100%;justify-content:center}.pc-reassurance{padding:22px}.pc-hero-preview figcaption{align-items:flex-start}}
+@media(max-width:720px){.pc-shell{padding-inline:18px}.pc-header-inner{min-height:60px}.pc-brand b{display:none}.pc-header-call{font-size:11px}.pc-hero{padding:54px 0 44px}.pc-hero h1{font-size:40px}.pc-lead{font-size:16px}.pc-section{padding-block:66px}.pc-support{padding-bottom:66px}.pc-heading h2,.pc-close h2{font-size:34px}.pc-heading>p:last-child{font-size:16px}.pc-picker-grid{grid-template-columns:1fr}.pc-service{padding:20px}.pc-total-inner{position:static}.pc-actions .pc-cur{width:100%;justify-content:center}.pc-reassurance{padding:22px}}
 @media(max-width:720px){.pc-tab{font-size:12px;padding:9px 6px}}
-@media(prefers-reduced-motion:reduce){.pc-flash{animation:none}.pc-primary,.pc-secondary-btn,.pc-picker,.pc-tier,.pc-copy,.pc-tab,.pc-hero-preview-controls button,.pc-hero-dots button,.pc-learn-links a{transition:none}.pc-tab-thumb{transition:none}}
+@media(prefers-reduced-motion:reduce){.pc-flash{animation:none}.pc-primary,.pc-secondary-btn,.pc-picker,.pc-tier,.pc-copy,.pc-tab,.pc-video-play,.pc-learn-links a{transition:none}.pc-tab-thumb{transition:none}}
 `;
