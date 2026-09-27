@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 export const metadata: Metadata = {
   title: { absolute: "Ballpark Pricing | T3 Labs" },
   description:
-    "A shared ballpark view of T3 Labs tool, assistant, admin and website pricing. Continue with the person who shared this page.",
+    "Choose the T3 Labs tools you want, see an indicative ballpark, then continue with the person who shared this page.",
   robots: {
     index: false,
     follow: false,

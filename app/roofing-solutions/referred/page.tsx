@@ -518,6 +518,9 @@ function PricingClose({ businessLabel, variant }: { businessLabel: string; varia
         <p className="rp-turnaround">Some basic setups can be live within days once your information is ready. We confirm scope and timing before starting.</p>
         <p className="rp-payment"><strong>Flexible payment options available.</strong></p>
         <p className="rp-smallprint">Starting price is for a focused setup. Tax and any ongoing costs are confirmed in your quote.</p>
+        <div style={{ marginTop: "18px" }}>
+          <a className="rp-outline" href={isReferral ? "/pricing-calculator/referred" : "/pricing-calculator"}>Build a ballpark from your options <span aria-hidden="true">→</span></a>
+        </div>
         <div className="rp-close-action">
           {isReferral ? <>
             {CONFIG.representativeContactUrl ? <a className="rp-primary" href={CONFIG.representativeContactUrl}>Arrange a free call with Shaun <span aria-hidden="true">→</span></a>

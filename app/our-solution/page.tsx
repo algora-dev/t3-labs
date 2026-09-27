@@ -497,6 +497,7 @@ export default function ConstructionSolutionPage(){
                   <p className="mt-4 text-sm font-semibold" style={{color:t.accentInk}}>
                     Scope and payment structure can be flexible around what you actually need.
                   </p>
+                  <a href="/pricing-calculator" style={{borderColor:t.border}} className="btn-outline mt-5 inline-flex min-h-11 items-center justify-center rounded-full border px-6 text-sm font-semibold">Build your own ballpark →</a>
                 </div>
               </div>
             </div>

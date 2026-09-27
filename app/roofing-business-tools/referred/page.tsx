@@ -626,6 +626,7 @@ export function RoofingBusinessToolsPage({ variant = "referred" }: { variant?: P
           <p className="rb-eyebrow">See it working</p>
           <h2>The easiest way to understand the possibilities is to use the demo.</h2>
           <p>Try the measurement tool, digital takeoff, Smart Assistant and trade/admin layers. If it sparks an idea for your own business, start with the smallest useful version and expand from there. If you want the roofing business case first, see <a href={isReferral ? "/roofing-solutions/referred" : "/roofing-solutions"} style={{ color: "inherit", textDecoration: "underline" }}>Roofing Solutions</a>. If roofing is not your industry, the <a href={isReferral ? "/our-solution/referred" : "/our-solution"} style={{ color: "inherit", textDecoration: "underline" }}>construction overview</a> explains the same approach more broadly.</p>
+          <a className="rb-text-link rb-text-link--light" href={isReferral ? "/pricing-calculator/referred" : "/pricing-calculator"}>Choose the tools you want and see a ballpark →</a>
           <div className="rb-actions rb-actions--center">
             <a className="rb-primary" href={apexDemoUrl} target="_blank" rel="noopener noreferrer">Try the Apex Roofing demo <span>→</span></a>
             {isReferral ? (

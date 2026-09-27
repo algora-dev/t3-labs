@@ -1,4 +1,4 @@
-export const PUBLIC_PRICING_VERSION = "2026-09-v1";
+export const PUBLIC_PRICING_VERSION = "2026-09-v2";
 
 /**
  * Public ballpark pricing model for the customer-facing pricing calculator.
@@ -46,21 +46,21 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
     key: "calculator",
     number: "01",
     eyebrow: "Core tool",
-    name: "Pricing Calculator",
-    short: "Turn measurements into products, quantities and prices.",
-    intro: "Choose how much product and pricing complexity the tool needs to handle.",
+    name: "Measurement-to-Price Tool",
+    short: "Turn measurements into products, quantities and pricing.",
+    intro: "Choose whether users start with known measurements or need Digital Takeoff first, then choose how much product and pricing complexity the tool needs to handle.",
     tiers: [
       {
         id: "basic",
-        name: "Basic",
+        name: "Known measurements",
         blurb: "Known measurements in, up to ~100 products, simple rules, on-screen estimate.",
         usd: { low: 999, high: 1499 },
         gbp: { low: 799, high: 1199 },
       },
       {
         id: "standard",
-        name: "Standard",
-        blurb: "Adds plan or image upload, measure on screen, straight into pricing.",
+        name: "+ Digital Takeoff",
+        blurb: "Upload a plan or suitable image, measure on screen, then continue straight into pricing.",
         usd: { low: 1499, high: 2199 },
         gbp: { low: 1199, high: 1749 },
       },
@@ -92,8 +92,8 @@ export const PUBLIC_SERVICES: Record<ServiceKey, PublicService> = {
     number: "02",
     eyebrow: "Flagship",
     name: "Smart Assistant",
-    short: "Guides customers, answers questions and creates estimates in conversation.",
-    intro: "The assistant is a bigger build than the calculator at every level. Choose how far it should go.",
+    short: "Answer questions, guide customers and create pricing or estimates in conversation.",
+    intro: "Choose how far it should go, from approved answers and guidance through to pricing, estimates and connected workflows.",
     tiers: [
       {
         id: "qa",
