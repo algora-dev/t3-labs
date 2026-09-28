@@ -67,6 +67,7 @@ const CHEATS: { scenario: string; answer: string }[] = [
   { scenario: "They need a construction example", answer: "Roofing Solutions" },
   { scenario: "Can I see the tools in more detail?", answer: "Roofing Business Tools" },
   { scenario: "What might something like this cost?", answer: "Pricing Calculator" },
+  { scenario: "Can I see something working?", answer: "Live demo" },
   { scenario: "How should I approach this lead?", answer: "Sales Resources" },
 ];
 
@@ -212,6 +213,63 @@ export default function SalesHubPage() {
         </div>
       </section>
 
+      <section className="sh-section sh-section--compact" aria-labelledby="sh-demo-title">
+        <div className="sh-shell">
+          <p className="sh-eyebrow">Live demo</p>
+          <h2 id="sh-demo-title">Use it yourself so you know how to sell it — then show a customer.</h2>
+          <div className="sh-demo">
+            <a
+              className="sh-demo-shot"
+              href="/demo/roofing-site"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open the live Apex Roofing demo site"
+            >
+              <img
+                src="/assets/sales-hub/demo-home.jpg"
+                alt="The Apex Roofing demo website: hero with an instant estimate call to action, a Smart Website assistant card and the Ask Apex chat widget"
+                width="1200"
+                height="1073"
+                loading="lazy"
+              />
+              <span className="sh-demo-overlay" aria-hidden="true">
+                <b>Open the demo</b>
+                <span>t3labs.tech/demo/roofing-site</span>
+              </span>
+            </a>
+            <div className="sh-demo-copy">
+              <p>
+                A working, live demo: a fictitious roofing business with our tools on its website —
+                instant estimating, digital takeoff, pricing and a Smart Assistant.
+              </p>
+              <ul className="sh-points">
+                <li>
+                  <b>Use every tool yourself first.</b>{" "}
+                  Work through the flows so you know how they work and why they help — nothing sells
+                  them better than a rep who clearly has.
+                </li>
+                <li>
+                  <b>Then show a customer.</b>{" "}
+                  Walk the prospect through it live, or send the link and tell them what to try — the
+                  demo lands hardest when you explain it.
+                </li>
+              </ul>
+              <p className="sh-usewhen">
+                <b>Best used when:</b> you are learning what we build, or a prospect asks to see
+                something actually working.
+              </p>
+              <div className="sh-card-actions sh-card-actions--start">
+                <a className="sh-open" href="/demo/roofing-site" target="_blank" rel="noopener noreferrer">
+                  Open the demo
+                </a>
+                <CopyLink path="/demo/roofing-site" name="Live demo" />
+              </div>
+              <p className="sh-demo-fine">Fictitious business, sample data. Safe to share with prospects.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="sh-cheat" aria-labelledby="sh-cheat-title">
         <div className="sh-shell">
           <p className="sh-eyebrow">Quick reference</p>
@@ -336,4 +394,20 @@ const styles = String.raw`
 @media(max-width:900px){.sh-start-grid,.sh-referred-note{grid-template-columns:1fr}.sh-sell-grid{grid-template-columns:1fr}.sh-grid{grid-template-columns:1fr}.sh-cheat ul{grid-template-columns:1fr}.sh-feedback{display:grid}}
 @media(max-width:720px){.sh-shell{padding-inline:18px}.sh-hero{padding:54px 0 34px}.sh-hero h1{font-size:38px}.sh-lead{font-size:16px}.sh-section{padding:42px 0}.sh-section--first{padding-top:22px}.sh-section--compact{padding-top:34px;padding-bottom:34px}.sh-start-card,.sh-learn-note,.sh-card{padding:20px}.sh-card-actions{flex-direction:column}.sh-open,.sh-copy{width:100%}.sh-cheat li{flex-direction:column;align-items:flex-start;gap:6px}.sh-feedback b{white-space:normal}}
 @media(prefers-reduced-motion:reduce){.sh-card,.sh-open,.sh-copy,.sh-header-link{transition:none}.sh-card:hover,.sh-open:hover{transform:none}}
+.sh-demo{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:26px;align-items:stretch}
+.sh-demo-shot{position:relative;display:block;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);text-decoration:none;transition:.2s}
+.sh-demo-shot img{display:block;width:100%;height:auto}
+.sh-demo-shot:hover{border-color:rgba(215,255,0,.5);box-shadow:0 0 0 1px rgba(215,255,0,.12),0 0 30px rgba(215,255,0,.09);transform:translateY(-2px)}
+.sh-demo-overlay{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;padding:44px 10px 16px;background:linear-gradient(180deg,rgba(10,11,16,0),rgba(10,11,16,.92));color:#fff;text-align:center;opacity:0;transition:.2s}
+.sh-demo-overlay b{font-size:14px}
+.sh-demo-overlay span{font-size:11px;color:var(--muted)}
+.sh-demo-shot:hover .sh-demo-overlay,.sh-demo-shot:focus-visible .sh-demo-overlay{opacity:1}
+.sh-demo-copy{display:flex;flex-direction:column;gap:12px;justify-content:center;padding:26px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.sh-demo-copy>p:first-child{color:var(--muted);font-size:14.5px;line-height:1.6}
+.sh-points li b{color:#fff;font-weight:600}
+.sh-demo-copy .sh-card-actions{padding-top:2px}
+.sh-card-actions--start{justify-content:flex-start}
+.sh-demo-fine{font-size:11.5px;color:#858fa0}
+@media(max-width:900px){.sh-demo{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.sh-demo-shot{transition:none}.sh-demo-shot:hover{transform:none}}
 `;
