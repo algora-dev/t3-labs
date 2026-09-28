@@ -216,7 +216,7 @@ export default function SalesHubPage() {
       <section className="sh-section sh-section--compact" aria-labelledby="sh-demo-title">
         <div className="sh-shell">
           <p className="sh-eyebrow">Live demo</p>
-          <h2 id="sh-demo-title">Use it yourself so you know how to sell it — then show a customer.</h2>
+          <h2 id="sh-demo-title">Use it yourself so you know how to sell it. Then show a customer.</h2>
           <div className="sh-demo">
             <a
               className="sh-demo-shot"
@@ -239,18 +239,18 @@ export default function SalesHubPage() {
             </a>
             <div className="sh-demo-copy">
               <p>
-                A working, live demo: a fictitious roofing business with our tools on its website —
+                A working, live demo of a fictitious roofing business with our tools on its website:
                 instant estimating, digital takeoff, pricing and a Smart Assistant.
               </p>
               <ul className="sh-points">
                 <li>
                   <b>Use every tool yourself first.</b>{" "}
-                  Work through the flows so you know how they work and why they help — nothing sells
+                  Work through the flows so you know how they work and why they help. Nothing sells
                   them better than a rep who clearly has.
                 </li>
                 <li>
                   <b>Then show a customer.</b>{" "}
-                  Walk the prospect through it live, or send the link and tell them what to try — the
+                  Walk the prospect through it live, or send the link and tell them what to try. The
                   demo lands hardest when you explain it.
                 </li>
               </ul>
@@ -312,7 +312,7 @@ export default function SalesHubPage() {
       <footer className="sh-footer">
         <div className="sh-shell">
           <span>&copy; T3 Labs</span>
-          <span>This hub is for reps — please do not post the link publicly.</span>
+          <span>This hub is for reps. Please do not post the link publicly.</span>
         </div>
       </footer>
     </main>

@@ -625,7 +625,7 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
               <p className="pc-card-label">The tool you just used</p>
               <h3 id="pc-pitch-title">This is what T3 Labs builds.</h3>
               <p className="pc-pitch-lead">
-                You picked a few options and got a live price range — instantly, with no forms and no waiting.
+                You picked a few options and got a live price range instantly, with no forms and no waiting.
                 That kind of experience is the product.
               </p>
               <ul className="pc-pitch-list">
@@ -643,8 +643,8 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
                 </li>
               </ul>
               <p className="pc-pitch-note">
-                Want a tool like this for your own business? The person who shared this page can walk you through it —
-                they already have everything needed to take it forward.
+                Want a tool like this for your own business? The person who shared this page can walk you through it.
+                They already have everything needed to take it forward.
               </p>
               <button type="button" className="pc-primary" onClick={() => setPitchOpen(false)}>Got it</button>
             </div>
