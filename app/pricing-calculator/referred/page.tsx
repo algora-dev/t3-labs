@@ -291,7 +291,7 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
               <a className="pc-primary" href="#build">Build my ballpark</a>
               <CurrencyToggle currency={currency} onChange={setCurrency} />
             </div>
-            <p className="pc-fineprint">Indicative one-off setup ranges, not quotes. Monthly hosting, maintenance and support are not included (from {monthlyFrom} a month, depending on features, users and AI usage).</p>
+            <p className="pc-fineprint">Indicative one-off setup ranges, not quotes. Price includes all initial build costs and strategy sessions with the customer. Monthly hosting, maintenance and support are not included (from {monthlyFrom} a month, depending on features, users and AI usage).</p>
           </div>
           <HeroVideo />
         </div>
@@ -485,6 +485,10 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
                   </>
                 )}
               </div>
+              <p className="pc-total-includes">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5" /></svg>
+                Price includes all initial build costs and strategy sessions with the customer.
+              </p>
               <p className="pc-total-disclaimer">One-off setup ballpark only, not a quote. Monthly hosting, maintenance and support are not included (from {monthlyFrom} a month, depending on features, users and AI usage).</p>
             </div>
           </aside>
@@ -591,6 +595,7 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
                   ))}
                   <li className="pc-send-total"><span>Total</span><i>{formatTotal(ballpark, currency)}</i></li>
                 </ul>
+                <p className="pc-send-includes">Price includes all initial build costs and strategy sessions with the customer.</p>
                 {formError ? <p className="pc-send-error" role="alert">{formError}</p> : null}
                 <button type="submit" className="pc-primary" disabled={sending}>{sending ? "Sending..." : "Send my ballpark"}</button>
                 <p className="pc-send-fine">We reply by email. No spam, no obligation.</p>
@@ -749,4 +754,6 @@ const styles = String.raw`
 .pc-pitch-list span{font-size:13.5px;color:var(--muted);line-height:1.55}
 .pc-pitch-note{font-size:13px;color:#8f99ab;line-height:1.6;border-left:3px solid var(--lime);padding-left:12px}
 .pc-pitch .pc-primary{justify-self:start}
+.pc-total-includes{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:13px;line-height:1.5;color:#fff}.pc-total-includes svg{flex:none;width:15px;height:15px;margin-top:2px;color:var(--lime)}
+.pc-send-includes{font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px}
 `;
