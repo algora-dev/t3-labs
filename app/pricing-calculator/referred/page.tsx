@@ -87,6 +87,12 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
   const [honeypot, setHoneypot] = useState("");
   const sendFormRef = useRef<HTMLDivElement>(null);
 
+  // Self-demo pitch modal (referred variant only): shows once per session after
+  // the visitor interacts with the tool, pointing out the tool itself is the product.
+  const [pitchOpen, setPitchOpen] = useState(false);
+  const pitchShownRef = useRef(false);
+  const pitchRef = useRef<HTMLDivElement>(null);
+
   // GBP default for UK visitors. Runs after mount so server and first client render match.
   useEffect(() => {
     try {
@@ -96,6 +102,47 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
       // Timezone unavailable, keep USD.
     }
   }, []);
+
+  // Fire the self-demo pitch modal once per session, after the first interaction.
+  useEffect(() => {
+    if (variant !== "referred" || formOpen) return;
+    if (pitchShownRef.current || flash === 0) return;
+    try {
+      if (window.sessionStorage.getItem("t3-pc-pitch") === "1") {
+        pitchShownRef.current = true;
+        return;
+      }
+    } catch {
+      // Session storage unavailable, carry on.
+    }
+    const id = window.setTimeout(() => {
+      pitchShownRef.current = true;
+      try {
+        window.sessionStorage.setItem("t3-pc-pitch", "1");
+      } catch {
+        // Ignore.
+      }
+      setPitchOpen(true);
+    }, 1200);
+    return () => window.clearTimeout(id);
+  }, [variant, flash, formOpen]);
+
+  // Pitch modal open: Escape to close, lock page scroll, focus the dialog.
+  useEffect(() => {
+    if (!pitchOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPitchOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    const focusTimer = window.setTimeout(() => pitchRef.current?.focus(), 60);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.documentElement.style.overflow = prevOverflow;
+      window.clearTimeout(focusTimer);
+    };
+  }, [pitchOpen]);
 
   const bump = () => setFlash((seq) => seq + 1);
 
@@ -552,6 +599,53 @@ export function PricingCalculatorPage({ variant = "referred" }: { variant?: Page
           </div>
         </div>
       ) : null}
+
+      {variant === "referred" && pitchOpen ? (
+        <div
+          className="pc-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label="About the tool you just used"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setPitchOpen(false);
+          }}
+        >
+          <div className="pc-modal-card pc-pitch-card" ref={pitchRef} tabIndex={-1}>
+            <button type="button" className="pc-modal-close" onClick={() => setPitchOpen(false)} aria-label="Close">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+            <div className="pc-pitch">
+              <p className="pc-card-label">The tool you just used</p>
+              <h3 id="pc-pitch-title">This is what T3 Labs builds.</h3>
+              <p className="pc-pitch-lead">
+                You picked a few options and got a live price range — instantly, with no forms and no waiting.
+                That kind of experience is the product.
+              </p>
+              <ul className="pc-pitch-list">
+                <li>
+                  <b>Instant answers.</b>
+                  <span>Visitors who get a result straight away stay, engage and are far more likely to enquire.</span>
+                </li>
+                <li>
+                  <b>Better enquiries.</b>
+                  <span>Your team already knows what they want and roughly what it is worth before the first call.</span>
+                </li>
+                <li>
+                  <b>The fastest useful quote wins.</b>
+                  <span>In most trades, the business that answers first takes the job.</span>
+                </li>
+              </ul>
+              <p className="pc-pitch-note">
+                Want a tool like this for your own business? The person who shared this page can walk you through it —
+                they already have everything needed to take it forward.
+              </p>
+              <button type="button" className="pc-primary" onClick={() => setPitchOpen(false)}>Got it</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
@@ -645,4 +739,14 @@ const styles = String.raw`
 @media(max-width:720px){.pc-tab{font-size:12px;padding:9px 6px}}
 @media(max-width:720px){.pc-modal{padding:14px}.pc-modal-card{padding:20px}}
 @media(prefers-reduced-motion:reduce){.pc-modal,.pc-modal-card{animation:none}.pc-flash{animation:none}.pc-primary,.pc-secondary-btn,.pc-picker,.pc-tier,.pc-copy,.pc-tab,.pc-video-play,.pc-learn-links a{transition:none}.pc-tab-thumb{transition:none}}
+.pc-pitch-card{width:min(560px,100%)}
+.pc-pitch{display:grid;gap:14px;padding-top:2px}
+.pc-pitch h3{font-size:clamp(24px,3vw,32px);line-height:1.1;letter-spacing:-.03em}
+.pc-pitch-lead{color:var(--muted);font-size:15px;line-height:1.6}
+.pc-pitch-list{list-style:none;display:grid;gap:10px;padding:0;margin:0}
+.pc-pitch-list li{display:grid;gap:3px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface2)}
+.pc-pitch-list b{font-size:13.5px;color:var(--lime)}
+.pc-pitch-list span{font-size:13.5px;color:var(--muted);line-height:1.55}
+.pc-pitch-note{font-size:13px;color:#8f99ab;line-height:1.6;border-left:3px solid var(--lime);padding-left:12px}
+.pc-pitch .pc-primary{justify-self:start}
 `;
