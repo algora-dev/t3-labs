@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Manrope } from "next/font/google";
-import { DemoSiteStrip } from "@/components/demo-sites/demo-strip";
+import { ApexDemoShell } from "@/components/demo-journey/ApexDemoShell";
 import { SmartAssistantLauncher } from "@/components/assistant/SmartAssistantLauncher";
 import "./act.css";
 
@@ -27,8 +27,7 @@ export const metadata: Metadata = {
 export default function ApexRoofingDemoLayout({ children }: { children: ReactNode }) {
   return (
     <div id="act-demo-root" className={manrope.variable}>
-      <DemoSiteStrip siteLabel="Apex Roofing" />
-      {children}
+      <ApexDemoShell>{children}</ApexDemoShell>
       <SmartAssistantLauncher />
     </div>
   );

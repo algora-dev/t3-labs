@@ -1,0 +1,175 @@
+{
+  "baseArchive": "t3labs-apex-demo-handoff.zip",
+  "baseArchiveSha256": "3eba0a845246e8c54caeb63e62b9e0ffe3839ee4dde03ee281e79e4f23562d5f",
+  "application": "Paths are relative to repo root. Check beforeHash before overwriting any existing modified file. No files are deleted. This manifest does not hash itself.",
+  "files": [
+    {
+      "path": "QUICK_ROOF_ESTIMATE_HANDOFF.md",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "927ca8588990be40e1e28cd69ce14e844e1f75324f0d25006f43c49407a57a00"
+    },
+    {
+      "path": "app/api/quick-roof-estimate/route.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "ad0591c9e103b17b09ffb92c5d15b64289eb91472e6424da1303bb1f025a663f"
+    },
+    {
+      "path": "app/demo/roofing-site/quick-estimate/page.tsx",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "bc064d790ed70a80501e1d5143a1cbedd54dcd0a3161681e93888bf24fecea36"
+    },
+    {
+      "path": "app/demo/roofing-site/quick-estimate/quick-estimate.css",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "1d524db65ce92de1fbc32d813bc61210d87f16c353cc9fe7d45a5be8d5941d97"
+    },
+    {
+      "path": "app/supplier-pricing-tool/PortalFlow.tsx",
+      "status": "modified",
+      "beforeSha256": "53be7c07d3b4a91eb90a894522bd468062d732ad89e1db5ff2efe901887c5e6a",
+      "afterSha256": "b13c7e4b4458840854dea17c0213f7f37e7f2ac54f28812fc0b4cb1b1fc21d2e"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/site-config.ts",
+      "status": "modified",
+      "beforeSha256": "d20e00eb0859779f5104d02ee873f4457fcb9e96ba6587c76492bd95a6d7ad3d",
+      "afterSha256": "c10cd32a0736ae25abde2448ccc21c343fb73b167bb09d5c7df2f50f6b9c5bf5"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/site-sections.tsx",
+      "status": "modified",
+      "beforeSha256": "9fed4d522cc8df3b7ca1bff423c94fac4987e17766d4fef48e8fedb9b06d4ad0",
+      "afterSha256": "9d55bd5ac22bc4906d06c7c5a5717d5f000d070d58ce49d7c935bda74f0db60d"
+    },
+    {
+      "path": "components/quick-estimate/QuickEstimateImport.tsx",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "05ba829b5ba4849385a168bf22b286928bf3debbf3b533d27ac8ef2ca4e12d1f"
+    },
+    {
+      "path": "components/quick-estimate/QuickRoofEstimate.tsx",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "c3b3eebfd1b6aec63db0faa948247cdeb1b6af664a88bdcaca681146f4d55051"
+    },
+    {
+      "path": "components/quick-estimate/RoofIllustration.tsx",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "9768acb7fad4c11b845ca71803217ae690aefc68b517cbeef55f0b6de3b1ceae"
+    },
+    {
+      "path": "data/apex-roofing/site-map.json",
+      "status": "modified",
+      "beforeSha256": "98751ff56dafddfd2788c5074034f4c3f7c9198399c403c0bf6f39312c8b251e",
+      "afterSha256": "fb5bdbf1f5403ee66a7edaf0eed6fcd937a3857012dc2cacbf3c57665cf4fbca"
+    },
+    {
+      "path": "docs/QUICK_ROOF_ESTIMATE_BUILD_PLAN.md",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "84e2688d51a61ee10241c7648a33726c44820349891fdb5472c576d5b7fb8b40"
+    },
+    {
+      "path": "docs/QUICK_ROOF_ESTIMATE_VERIFICATION.json",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "9fba4dea80532c6ad4de3c966a98d1d5d2500683c73a7294fc7fc402010f7a00"
+    },
+    {
+      "path": "docs/quick-roof-reference.json",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "0a362132cda33aa4a5a16312b0a88427604de6c6986db9d9b683595f5b0246c6"
+    },
+    {
+      "path": "lib/quick-estimate/apex-profile.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "bebc7485c9977c15fba102c27975d7dc182a18bec7a93fb0963b8e231d4459d0"
+    },
+    {
+      "path": "lib/quick-estimate/config.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "13122eb0366aedca4d56c0f0b950445f2c93349c87abd925a75aa34eb6036948"
+    },
+    {
+      "path": "lib/quick-estimate/draft.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "b15cd496609696d457cefe1b298c88bad7de3159958d896655bf2a71cbfad60c"
+    },
+    {
+      "path": "lib/quick-estimate/engine.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "c1ce5dd77991bee46df9268a132bd921fbf584d7bb62590e18f5261f7dfdaa32"
+    },
+    {
+      "path": "lib/quick-estimate/geometry.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "b34f6f10aabd7563bac951efcc6001c820ba80c73bc9e50049d666344f60f577"
+    },
+    {
+      "path": "lib/quick-estimate/handoff.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "b6dd1ae8ed9fa4f9c32b6ee09da7246fcb3537ecf719343d7480c1813ae5a55a"
+    },
+    {
+      "path": "lib/quick-estimate/pricing.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "8d3dbc9ccf5c6ef242b71ee1188e01c3af17de888ad887bd4a9fc85934499537"
+    },
+    {
+      "path": "lib/quick-estimate/server.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "41e56a1d335a60a422f4a667498284c7a491e302adc8a3891118a607a6e13031"
+    },
+    {
+      "path": "lib/quick-estimate/supplier-adapter.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "0a45bcf491e54d89b3c8785d27bbd38d9ebab32315f9d028f535e1345edb21c7"
+    },
+    {
+      "path": "lib/quick-estimate/templates.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "3da45da78865b7f6067171493215246d6c7c1edc3edd8945ba3f742a9b2170da"
+    },
+    {
+      "path": "lib/quick-estimate/types.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "2ac1ebf83b79ecccfabc67607e033712cb8e1e02bea1bf087d0e844e796afbc2"
+    },
+    {
+      "path": "lib/quick-estimate/validation.ts",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "25575973543c710eed251f9b32738701d533b3e2688dcb937fa63eaef48ba671"
+    },
+    {
+      "path": "scripts/quick-roof-reference.mjs",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "2464da00e2f2c5cd2fa7e16228190755e51de31b28d7e4dad4899ba118db9628"
+    },
+    {
+      "path": "tests/quick-roof.test.mjs",
+      "status": "added",
+      "beforeSha256": null,
+      "afterSha256": "0800787beeb69cb6c1cce49e2b9766a11f1d2d3e52e16956ff01ce6ca1ce8439"
+    }
+  ]
+}

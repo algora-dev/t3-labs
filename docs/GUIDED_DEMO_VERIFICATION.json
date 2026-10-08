@@ -1,0 +1,180 @@
+{
+  "date": "2026-10-08",
+  "base": "t3labs-apex-flat-complexity-refinement.zip",
+  "status": "Review build, not deployed. Full Next.js validation remains a release gate.",
+  "automatedTests": {
+    "command": "npm test",
+    "passed": 94,
+    "failed": 0,
+    "baselinePassed": 72,
+    "baselineTotal": 73,
+    "newJourneyTests": 21
+  },
+  "logicTypecheck": {
+    "passed": true,
+    "typescript": "5.8.3 (available global toolchain; repository specifies 5.9.3)",
+    "scope": [
+      "lib/demo-journey/config.ts",
+      "lib/demo-journey/state.ts",
+      "lib/demo-journey/store.ts",
+      "lib/demo-journey/samples.ts"
+    ],
+    "strict": true
+  },
+  "changedTypescriptSyntax": {
+    "files": 20,
+    "syntaxErrors": 0,
+    "errors": []
+  },
+  "browser": {
+    "results": [
+      {
+        "check": "Landing offers 4 experiences and optional trade",
+        "passed": true
+      },
+      {
+        "check": "No desktop landing overflow",
+        "passed": true
+      },
+      {
+        "check": "Assistant example fills, but does not send automatically",
+        "passed": true
+      },
+      {
+        "check": "Missing assistant backend shows error and no false completion",
+        "passed": true
+      },
+      {
+        "check": "Skipping records a skip, not success",
+        "passed": true
+      },
+      {
+        "check": "Quick task completes only on priced result",
+        "passed": true
+      },
+      {
+        "check": "No quick result desktop overflow",
+        "passed": true
+      },
+      {
+        "check": "Detailed task completes on itemised priced output",
+        "passed": true
+      },
+      {
+        "check": "No detailed result desktop overflow",
+        "passed": true
+      },
+      {
+        "check": "Plan handoff not completed merely by opening",
+        "passed": true
+      },
+      {
+        "check": "Out-of-order corner reports a helpful message",
+        "passed": true
+      },
+      {
+        "check": "Real coordinate trace yields 80m2 / 92.4m2 surface",
+        "passed": true
+      },
+      {
+        "check": "Explicit plan handoff completes the task",
+        "passed": true
+      },
+      {
+        "check": "Measured values are in existing product estimator",
+        "passed": true
+      },
+      {
+        "check": "Trade success from actual example prices",
+        "passed": true
+      },
+      {
+        "check": "Trade material subtotal lower for same job",
+        "passed": true
+      },
+      {
+        "check": "Summary reflects 3 completed core tasks, not 4",
+        "passed": true
+      },
+      {
+        "check": "No summary desktop overflow",
+        "passed": true
+      },
+      {
+        "check": "API failure is explicit, with no substituted result",
+        "passed": true
+      },
+      {
+        "check": "No uncaught desktop JS errors",
+        "passed": true
+      },
+      {
+        "check": "No mobile landing horizontal overflow",
+        "passed": true
+      },
+      {
+        "check": "Mobile guide collapses to give tool space",
+        "passed": true
+      },
+      {
+        "check": "No mobile quick tool horizontal overflow",
+        "passed": true
+      },
+      {
+        "check": "Mobile completion is accessible from collapsed guide",
+        "passed": true
+      },
+      {
+        "check": "No mobile quick result horizontal overflow",
+        "passed": true
+      },
+      {
+        "check": "Mobile assistant controls are not covered by the guide",
+        "passed": true
+      },
+      {
+        "check": "Declining sample replacement preserves existing measurements",
+        "passed": true
+      },
+      {
+        "check": "Declining sample does not arm a false completion",
+        "passed": true
+      },
+      {
+        "check": "Plan trace can be completed using keyboard alone",
+        "passed": true
+      },
+      {
+        "check": "Reloading sample starts a fresh trace",
+        "passed": true
+      },
+      {
+        "check": "Free exploration removes the guide without clearing the tool",
+        "passed": true
+      },
+      {
+        "check": "No uncaught browser JS errors",
+        "passed": true
+      }
+    ],
+    "pageErrors": [],
+    "environment": "Chromium, React 18.2 standalone component harness. Live API disabled. Browser origin blocks native storage; memory fallback exercised."
+  },
+  "fullApplication": {
+    "npmCi": "Failed: registry DNS/network access. Incomplete node_modules excluded from delivery.",
+    "typecheck": "Not passed: missing dependency type definitions after failed install.",
+    "lint": "Not run successfully: eslint unavailable.",
+    "build": "Not run successfully: next unavailable.",
+    "liveAssistant": "Not verified: requires running server, configured AI credentials and network access.",
+    "uploadedPlanWorkspace": "Not browser-regression-tested in this environment: preview exercises guided training plan only.",
+    "nativeStorageReloadAndHydration": "Not end-to-end verified: managed browser only allowed in-memory document testing. Serialization tests and blocked-storage fallbacks pass."
+  },
+  "preserved": [
+    "Product catalogue and prices",
+    "Quick Estimate geometry and flat-complexity multipliers",
+    "Pricing calculation functions",
+    "API routes",
+    "Assistant approved business/pricing data",
+    "Dependency manifests and lockfile"
+  ]
+}

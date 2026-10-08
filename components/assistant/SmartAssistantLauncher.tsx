@@ -1,7 +1,10 @@
 'use client';
 
 import { type PointerEvent as ReactPointerEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { ASSISTANT_QUESTION, DEMO_HOME } from '@/lib/demo-journey/config';
+import { DEMO_ACTION_EVENT, actionFromEvent, recordDemoSignal, recordDemoFailure } from '@/lib/demo-journey/store';
+import { useDemoJourney } from '@/components/demo-journey/useDemoJourney';
 import type { AssistantAction, AssistantCard, AssistantTurn } from '@/lib/assistant/types';
 import type { Estimate, EstimateDraft } from '@/lib/pricing/estimate-engine';
 import { EnquiryPanel } from './EnquiryPanel';
@@ -258,6 +261,8 @@ export function SmartAssistantLauncher() {
     }
   }, []);
   const router = useRouter();
+  const demoJourney = useDemoJourney();
+  const isDemoHub = usePathname()?.startsWith(DEMO_HOME);
   const [embeddedFrame, setEmbeddedFrame] = useState(false);
   const [open, setOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -283,6 +288,24 @@ export function SmartAssistantLauncher() {
   const panelRef = useRef<HTMLDivElement>(null);
   const dragOffset = useRef<{ dx: number; dy: number } | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    const onDemoAction = (event: Event) => {
+      const action = actionFromEvent(event);
+      if (action === 'assistant-close') { setOpen(false); return; }
+      if (action !== 'assistant-prompt') return;
+      restoreAssistant();
+      setOpen(true);
+      if (busy) { recordDemoFailure('assistant'); return; }
+      setEnquiryActive(false);
+      setEstimatorActive(false);
+      setInput(ASSISTANT_QUESTION);
+      inputRef.current?.focus();
+    };
+    window.addEventListener(DEMO_ACTION_EVENT, onDemoAction);
+    return () => window.removeEventListener(DEMO_ACTION_EVENT, onDemoAction);
+  }, [busy, restoreAssistant]);
+
 
   useEffect(() => {
     setEmbeddedFrame(window.self !== window.top);
@@ -427,6 +450,7 @@ export function SmartAssistantLauncher() {
           if (event.type === 'token' && event.text) {
             setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: message.text + event.text } : message));
           } else if (event.type === 'turn' && event.turn) {
+            if (event.turn.message.trim()) recordDemoSignal('assistant-answer');
             setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: event.turn!.message, turn: event.turn, streaming: false } : message));
           } else if (event.type === 'error') {
             throw new Error(event.error ?? 'Something went wrong. Please try again.');
@@ -437,6 +461,7 @@ export function SmartAssistantLauncher() {
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Something went wrong. Please try again.';
       setError(message);
+      recordDemoFailure('assistant');
       setMessages((current) => current.filter((item) => item.id !== assistantId || item.text.length > 0));
     } finally {
       setBusy(false);
@@ -703,7 +728,7 @@ export function SmartAssistantLauncher() {
 
   return (
     <>
-      {!dismissed && !open && <SmartAssistantTeaser config={{ assistantLabel: config.assistantLabel, accentColor: config.accentColor, teaserTitle: config.teaserTitle, teaserText: config.teaserText, teaserExample: config.teaserExample }} onOpenAssistant={() => setOpen(true)} />}
+      {!dismissed && !open && !demoJourney.active && !isDemoHub && <SmartAssistantTeaser config={{ assistantLabel: config.assistantLabel, accentColor: config.accentColor, teaserTitle: config.teaserTitle, teaserText: config.teaserText, teaserExample: config.teaserExample }} onOpenAssistant={() => setOpen(true)} />}
 
       {dismissed ? (
         <button

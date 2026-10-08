@@ -10,11 +10,12 @@ import { SupplierConfigProvider } from '../supplierConfig';
 import { getSupplierDef } from '../supplierDefs';
 import { ToolShell } from '../ToolShell';
 import { SmartAssistantLauncher } from '@/components/assistant/SmartAssistantLauncher';
+import { ApexDemoShell } from '@/components/demo-journey/ApexDemoShell';
 
 export default function SupplierDemoPage({ params }: { params: Promise<{ supplierSlug: string }> | { supplierSlug: string } }) {
   const { supplierSlug } = use(params as Promise<{ supplierSlug: string }>);
   const def = getSupplierDef(supplierSlug);
-  return (
+  const tool = (
     <FreeToolsAuthProvider authTheme={{ accent: def.theme.accent, accentHover: def.theme.accentHover }}>
       <SupplierConfigProvider slug={def.slug}>
         <ToolShell />
@@ -24,4 +25,5 @@ export default function SupplierDemoPage({ params }: { params: Promise<{ supplie
       {def.slug === 'apex-roofing' && <SmartAssistantLauncher />}
     </FreeToolsAuthProvider>
   );
+  return def.slug === 'apex-roofing' ? <ApexDemoShell>{tool}</ApexDemoShell> : tool;
 }

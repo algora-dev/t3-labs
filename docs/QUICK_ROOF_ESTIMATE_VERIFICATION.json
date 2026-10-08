@@ -1,0 +1,94 @@
+{
+  "status": "review-build; not deployed; full Next.js build not verified",
+  "unitTests": {
+    "baselinePassed": 28,
+    "currentPassed": 65,
+    "newTests": 37,
+    "failed": 0,
+    "pitchedShapeSizePitchCombinations": 135
+  },
+  "strictTypecheck": {
+    "status": "passed",
+    "scope": [
+      "lib/quick-estimate/*.ts",
+      "app/api/quick-roof-estimate/route.ts",
+      "resolved non-UI dependencies"
+    ],
+    "fullProject": false
+  },
+  "browser": {
+    "renderer": "Local React 18.2 standalone component harness, not the Next.js 16 / React 19.2.1 app",
+    "checks": [
+      {
+        "check": "Desktop shape selection: no overflow, incomplete next disabled",
+        "passed": true
+      },
+      {
+        "check": "Desktop gable flow: real catalogue subtotal, compatibility and missing access visible",
+        "passed": true
+      },
+      {
+        "check": "Back navigation retains all roof selections",
+        "passed": true
+      },
+      {
+        "check": "Reset clears previous selections, including in no-storage mode",
+        "passed": true
+      },
+      {
+        "check": "Optional business task loads the agreed sample without contact capture",
+        "passed": true
+      },
+      {
+        "check": "Mobile shape grid at 390 px",
+        "passed": true
+      },
+      {
+        "check": "Mobile flat-roof flow skips pitch and shows quantities without invented price",
+        "passed": true
+      },
+      {
+        "check": "Small-screen shape grid at 320 px",
+        "passed": true
+      },
+      {
+        "check": "Roof cards support native radio keyboard selection",
+        "passed": true
+      },
+      {
+        "check": "Incompatible low-pitch tiles show quantities and a clear warning, not a price",
+        "passed": true
+      },
+      {
+        "check": "No uncaught browser errors on tested paths",
+        "passed": true
+      }
+    ]
+  },
+  "dependencyBackedChecks": [
+    {
+      "command": "npm ci --no-audit --no-fund",
+      "status": "blocked",
+      "cause": "Registry DNS/network EAI_AGAIN; dependency installation did not complete"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "exitCode": 2,
+      "cause": "Dependency type definitions unavailable"
+    },
+    {
+      "command": "npm run lint",
+      "status": "failed",
+      "exitCode": 127,
+      "cause": "eslint not installed"
+    },
+    {
+      "command": "npm run build",
+      "status": "failed",
+      "exitCode": 127,
+      "cause": "next not installed"
+    }
+  ],
+  "expertCalibration": "Not performed against real roofs. Reference template proportions and provisional allowances require review."
+}

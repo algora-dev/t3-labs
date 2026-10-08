@@ -305,5 +305,20 @@
     ],
     "description": "Apex instant supply pricing tool - measure a roof and price materials live.",
     "external": true
+  },
+  {
+    "id": "quick-roof-estimate",
+    "title": "Quick Roof Estimate",
+    "path": "/demo/roofing-site/quick-estimate",
+    "keywords": [
+      "quick estimate",
+      "no measurements",
+      "homeowner",
+      "roof shape",
+      "ballpark",
+      "simple calculator",
+      "flat roof estimate"
+    ],
+    "description": "Homeowner-friendly roof geometry estimator. Choose shape, size and pitch; see indicative configured product costs and unpriced items. Flat-roof measurements supported; missing catalogue prices are not invented."
   }
 ]

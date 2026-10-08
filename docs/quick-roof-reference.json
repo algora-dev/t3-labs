@@ -1,0 +1,6586 @@
+{
+  "note": "Representative geometric scenarios, not surveyed roofs, market benchmarks or prices. Review template proportions with the roofing business.",
+  "combinations": 140,
+  "rows": [
+    {
+      "input": {
+        "shape": "mono",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.229190252600844,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 12.045838050520167,
+          "eavesM": 10,
+          "highEdgeM": 10,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.5276180410083,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 16.038429621813908,
+          "eavesM": 12.909944487358056,
+          "highEdgeM": 12.909944487358056,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460498,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 12.423314164920995,
+          "eavesM": 10,
+          "highEdgeM": 10,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792515,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 17.88854381999832,
+          "eavesM": 12.909944487358056,
+          "highEdgeM": 12.909944487358056,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.28203230275508,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 13.856406460551018,
+          "eavesM": 10,
+          "highEdgeM": 10,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.57238268604124,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 24.10116989091379,
+          "eavesM": 12.909944487358056,
+          "highEdgeM": 12.909944487358056,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.38198375433474,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 15.551110053592076,
+          "eavesM": 12.909944487358056,
+          "highEdgeM": 12.909944487358056,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 19.642984424491523,
+          "eavesM": 15.811388300841898,
+          "highEdgeM": 15.811388300841898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.5276180410083,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 16.038429621813908,
+          "eavesM": 12.909944487358056,
+          "highEdgeM": 12.909944487358056,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688775,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 21.908902300206645,
+          "eavesM": 15.811388300841898,
+          "highEdgeM": 15.811388300841898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792515,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 17.88854381999832,
+          "eavesM": 12.909944487358056,
+          "highEdgeM": 12.909944487358056,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906188,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 29.517784218434052,
+          "eavesM": 15.811388300841898,
+          "highEdgeM": 15.811388300841898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.57297563150215,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 19.046142282583077,
+          "eavesM": 15.811388300841898,
+          "highEdgeM": 15.811388300841898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791577,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 22.10744958140508,
+          "eavesM": 17.795130420052185,
+          "highEdgeM": 17.795130420052185,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 19.642984424491523,
+          "eavesM": 15.811388300841898,
+          "highEdgeM": 15.811388300841898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.3931022920578,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 24.657656011875904,
+          "eavesM": 17.795130420052185,
+          "highEdgeM": 17.795130420052185,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688775,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 21.908902300206645,
+          "eavesM": 15.811388300841898,
+          "highEdgeM": 15.811388300841898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.58752710347835,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 33.221170075876465,
+          "eavesM": 17.795130420052185,
+          "highEdgeM": 17.795130420052185,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.72576913323599,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 21.435725912783354,
+          "eavesM": 17.795130420052185,
+          "highEdgeM": 17.795130420052185,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 25.35898384862245,
+          "eavesM": 20.412414523193153,
+          "highEdgeM": 20.412414523193153,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791577,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 22.10744958140508,
+          "eavesM": 17.795130420052185,
+          "highEdgeM": 17.795130420052185,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 28.2842712474619,
+          "eavesM": 20.412414523193153,
+          "highEdgeM": 20.412414523193153,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.3931022920578,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 24.657656011875904,
+          "eavesM": 17.795130420052185,
+          "highEdgeM": 17.795130420052185,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.93095671510315,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 38.10729556497973,
+          "eavesM": 20.412414523193153,
+          "highEdgeM": 20.412414523193153,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.95495938583687,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 24.588463956647054,
+          "eavesM": 20.412414523193153,
+          "highEdgeM": 20.412414523193153,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.58285412302496,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 27.77937497859938,
+          "eavesM": 22.360679774997898,
+          "highEdgeM": 22.360679774997898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 25.35898384862245,
+          "eavesM": 20.412414523193153,
+          "highEdgeM": 20.412414523193153,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.4101615137755,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 30.983866769659336,
+          "eavesM": 22.360679774997898,
+          "highEdgeM": 22.360679774997898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "mono",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 28.2842712474619,
+          "eavesM": 20.412414523193153,
+          "highEdgeM": 20.412414523193153,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.71714805812377,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 41.74445077291195,
+          "eavesM": 22.360679774997898,
+          "highEdgeM": 22.360679774997898,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.229190252600844,
+          "ridgeM": 10,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 12.045838050520167,
+          "eavesM": 20,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.5276180410083,
+          "ridgeM": 12.909944487358056,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 16.038429621813908,
+          "eavesM": 25.81988897471611,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460498,
+          "ridgeM": 10,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 12.423314164920995,
+          "eavesM": 20,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792515,
+          "ridgeM": 12.909944487358056,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 17.88854381999832,
+          "eavesM": 25.81988897471611,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.28203230275508,
+          "ridgeM": 10,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 13.856406460551018,
+          "eavesM": 20,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.57238268604124,
+          "ridgeM": 12.909944487358056,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 24.10116989091379,
+          "eavesM": 25.81988897471611,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.38198375433474,
+          "ridgeM": 12.909944487358056,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 15.551110053592076,
+          "eavesM": 25.81988897471611,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 15.811388300841898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 19.642984424491523,
+          "eavesM": 31.622776601683796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.5276180410083,
+          "ridgeM": 12.909944487358056,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 16.038429621813908,
+          "eavesM": 25.81988897471611,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688775,
+          "ridgeM": 15.811388300841898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 21.908902300206645,
+          "eavesM": 31.622776601683796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792515,
+          "ridgeM": 12.909944487358056,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 17.88854381999832,
+          "eavesM": 25.81988897471611,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906188,
+          "ridgeM": 15.811388300841898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 29.517784218434052,
+          "eavesM": 31.622776601683796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.57297563150215,
+          "ridgeM": 15.811388300841898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 19.046142282583077,
+          "eavesM": 31.622776601683796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791577,
+          "ridgeM": 17.795130420052185,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 22.10744958140508,
+          "eavesM": 35.59026084010437,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 15.811388300841898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 19.642984424491523,
+          "eavesM": 31.622776601683796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.3931022920578,
+          "ridgeM": 17.795130420052185,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 24.657656011875904,
+          "eavesM": 35.59026084010437,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688775,
+          "ridgeM": 15.811388300841898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 21.908902300206645,
+          "eavesM": 31.622776601683796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.58752710347835,
+          "ridgeM": 17.795130420052185,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 33.221170075876465,
+          "eavesM": 35.59026084010437,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.72576913323599,
+          "ridgeM": 17.795130420052185,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 21.435725912783354,
+          "eavesM": 35.59026084010437,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 20.412414523193153,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 25.35898384862245,
+          "eavesM": 40.824829046386306,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791577,
+          "ridgeM": 17.795130420052185,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 22.10744958140508,
+          "eavesM": 35.59026084010437,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 20.412414523193153,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 28.2842712474619,
+          "eavesM": 40.824829046386306,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.3931022920578,
+          "ridgeM": 17.795130420052185,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 24.657656011875904,
+          "eavesM": 35.59026084010437,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.93095671510315,
+          "ridgeM": 20.412414523193153,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 38.10729556497973,
+          "eavesM": 40.824829046386306,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.95495938583687,
+          "ridgeM": 20.412414523193153,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 24.588463956647054,
+          "eavesM": 40.824829046386306,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.58285412302496,
+          "ridgeM": 22.360679774997898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 27.77937497859938,
+          "eavesM": 44.721359549995796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 20.412414523193153,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 25.35898384862245,
+          "eavesM": 40.824829046386306,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.4101615137755,
+          "ridgeM": 22.360679774997898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 30.983866769659336,
+          "eavesM": 44.721359549995796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "gable",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 20.412414523193153,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 28.2842712474619,
+          "eavesM": 40.824829046386306,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.71714805812377,
+          "ridgeM": 22.360679774997898,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 41.74445077291195,
+          "eavesM": 44.721359549995796,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.22919025260083,
+          "ridgeM": 4,
+          "hipM": 17.00300603832627,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 32,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100828,
+          "ridgeM": 5.163977794943222,
+          "hipM": 22.29868212997974,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 41.31182235954578,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460497,
+          "ridgeM": 4,
+          "hipM": 17.272484906356894,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 32,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792514,
+          "ridgeM": 5.163977794943222,
+          "hipM": 23.664319132398468,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 41.31182235954578,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.28203230275508,
+          "ridgeM": 4,
+          "hipM": 18.330302779823363,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 32,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.57238268604118,
+          "ridgeM": 5.163977794943222,
+          "hipM": 28.65076596027913,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 41.31182235954578,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.3819837543347,
+          "ridgeM": 5.163977794943222,
+          "hipM": 21.950786407300594,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 41.31182235954578,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 6.32455532033676,
+          "hipM": 27.31019657748396,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 50.59644256269408,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100828,
+          "ridgeM": 5.163977794943222,
+          "hipM": 22.29868212997974,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 41.31182235954578,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688775,
+          "ridgeM": 6.32455532033676,
+          "hipM": 28.98275349237888,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 50.59644256269408,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792514,
+          "ridgeM": 5.163977794943222,
+          "hipM": 23.664319132398468,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 41.31182235954578,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906186,
+          "ridgeM": 6.32455532033676,
+          "hipM": 35.08987867129259,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 50.59644256269408,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.5729756315021,
+          "ridgeM": 6.32455532033676,
+          "hipM": 26.884113075353607,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 50.59644256269408,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791577,
+          "ridgeM": 7.118052168020874,
+          "hipM": 30.736612158700375,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 56.94441734416699,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 6.32455532033676,
+          "hipM": 27.31019657748396,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 50.59644256269408,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205785,
+          "ridgeM": 7.118052168020874,
+          "hipM": 32.619012860600186,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 56.94441734416699,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688775,
+          "ridgeM": 6.32455532033676,
+          "hipM": 28.98275349237888,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 50.59644256269408,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.5875271034783,
+          "ridgeM": 7.118052168020874,
+          "hipM": 39.49235547812146,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 56.94441734416699,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.72576913323599,
+          "ridgeM": 7.118052168020874,
+          "hipM": 30.257070998495077,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 56.94441734416699,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 8.16496580927726,
+          "hipM": 35.25731217541539,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 65.31972647421809,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791577,
+          "ridgeM": 7.118052168020874,
+          "hipM": 30.736612158700375,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 56.94441734416699,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.67513459481285,
+          "ridgeM": 8.16496580927726,
+          "hipM": 37.416573867739416,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 65.31972647421809,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205785,
+          "ridgeM": 7.118052168020874,
+          "hipM": 32.619012860600186,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 56.94441734416699,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.93095671510315,
+          "ridgeM": 8.16496580927726,
+          "hipM": 45.30083857145167,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 65.31972647421809,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.95495938583687,
+          "ridgeM": 8.16496580927726,
+          "hipM": 34.707240739467196,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 65.31972647421809,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.58285412302496,
+          "ridgeM": 8.94427190999916,
+          "hipM": 38.622450390953105,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 71.55417527999327,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 8.16496580927726,
+          "hipM": 35.25731217541539,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 65.31972647421809,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.4101615137755,
+          "ridgeM": 8.94427190999916,
+          "hipM": 40.9878030638384,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 71.55417527999327,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "hip",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.67513459481285,
+          "ridgeM": 8.16496580927726,
+          "hipM": 37.416573867739416,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 65.31972647421809,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.71714805812377,
+          "ridgeM": 8.94427190999916,
+          "hipM": 49.62458231896838,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 71.55417527999327,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.451542547285166,
+          "widthM": 8.451542547285166
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.229190252600844,
+          "ridgeM": 11.832159566199234,
+          "hipM": 3.5925407241165264,
+          "valleyM": 3.592540724116526,
+          "vergeM": 10.180591280167782,
+          "eavesM": 23.664319132398468,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100828,
+          "ridgeM": 15.275252316519467,
+          "hipM": 4.711456519247779,
+          "valleyM": 4.711456519247778,
+          "vergeM": 13.554947034039893,
+          "eavesM": 30.550504633038933,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.451542547285166,
+          "widthM": 8.451542547285166
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460498,
+          "ridgeM": 11.832159566199234,
+          "hipM": 3.649478527085403,
+          "valleyM": 3.6494785270854027,
+          "vergeM": 10.499616824312028,
+          "eavesM": 23.664319132398468,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792512,
+          "ridgeM": 15.275252316519467,
+          "hipM": 5,
+          "valleyM": 4.999999999999999,
+          "vergeM": 15.118578920369089,
+          "eavesM": 30.550504633038933,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.451542547285166,
+          "widthM": 8.451542547285166
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.28203230275508,
+          "ridgeM": 11.832159566199234,
+          "hipM": 3.8729833462074175,
+          "valleyM": 3.8729833462074175,
+          "vergeM": 11.710800875382398,
+          "eavesM": 23.664319132398468,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.57238268604118,
+          "ridgeM": 15.275252316519467,
+          "hipM": 6.053579188140215,
+          "valleyM": 6.053579188140215,
+          "vergeM": 20.369206277240608,
+          "eavesM": 30.550504633038933,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.38198375433473,
+          "ridgeM": 15.275252316519467,
+          "hipM": 4.637950131691746,
+          "valleyM": 4.6379501316917455,
+          "vergeM": 13.143086827544751,
+          "eavesM": 30.550504633038933,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151245,
+          "ridgeM": 18.708286933869708,
+          "hipM": 5.770332208733184,
+          "valleyM": 5.770332208733185,
+          "vergeM": 16.601351861924993,
+          "eavesM": 37.416573867739416,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100828,
+          "ridgeM": 15.275252316519467,
+          "hipM": 4.711456519247779,
+          "valleyM": 4.711456519247778,
+          "vergeM": 13.554947034039893,
+          "eavesM": 30.550504633038933,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688772,
+          "ridgeM": 18.708286933869708,
+          "hipM": 6.123724356957944,
+          "valleyM": 6.123724356957946,
+          "vergeM": 18.516401995451027,
+          "eavesM": 37.416573867739416,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792512,
+          "ridgeM": 15.275252316519467,
+          "hipM": 5,
+          "valleyM": 4.999999999999999,
+          "vergeM": 15.118578920369089,
+          "eavesM": 30.550504633038933,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906186,
+          "ridgeM": 18.708286933869708,
+          "hipM": 7.414090064237588,
+          "valleyM": 7.414090064237588,
+          "vergeM": 24.947080922367796,
+          "eavesM": 37.416573867739416,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.5729756315021,
+          "ridgeM": 18.708286933869708,
+          "hipM": 5.68030563755941,
+          "valleyM": 5.680305637559411,
+          "vergeM": 16.096928186289787,
+          "eavesM": 37.416573867739416,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791583,
+          "ridgeM": 21.055482263138344,
+          "hipM": 6.494294635466468,
+          "valleyM": 6.49429463546647,
+          "vergeM": 18.68420507492067,
+          "eavesM": 42.11096452627669,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151245,
+          "ridgeM": 18.708286933869708,
+          "hipM": 5.770332208733184,
+          "valleyM": 5.770332208733185,
+          "vergeM": 16.601351861924993,
+          "eavesM": 37.416573867739416,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.3931022920578,
+          "ridgeM": 21.055482263138344,
+          "hipM": 6.892024376045111,
+          "valleyM": 6.892024376045112,
+          "vergeM": 20.839522890069105,
+          "eavesM": 42.11096452627669,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688772,
+          "ridgeM": 18.708286933869708,
+          "hipM": 6.123724356957944,
+          "valleyM": 6.123724356957946,
+          "vergeM": 18.516401995451027,
+          "eavesM": 37.416573867739416,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.5875271034784,
+          "ridgeM": 21.055482263138344,
+          "hipM": 8.344283065396347,
+          "valleyM": 8.344283065396349,
+          "vergeM": 28.077013236686675,
+          "eavesM": 42.11096452627669,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.72576913323599,
+          "ridgeM": 21.055482263138344,
+          "hipM": 6.3929730725002285,
+          "valleyM": 6.39297307250023,
+          "vergeM": 18.116494958383168,
+          "eavesM": 42.11096452627669,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 24.1522945769824,
+          "hipM": 7.4494668488359626,
+          "valleyM": 7.449466848835961,
+          "vergeM": 21.432253095254996,
+          "eavesM": 48.3045891539648,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791583,
+          "ridgeM": 21.055482263138344,
+          "hipM": 6.494294635466468,
+          "valleyM": 6.49429463546647,
+          "vergeM": 18.68420507492067,
+          "eavesM": 42.11096452627669,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948128,
+          "ridgeM": 24.1522945769824,
+          "hipM": 7.905694150420948,
+          "valleyM": 7.905694150420948,
+          "vergeM": 23.904572186687872,
+          "eavesM": 48.3045891539648,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.3931022920578,
+          "ridgeM": 21.055482263138344,
+          "hipM": 6.892024376045111,
+          "valleyM": 6.892024376045112,
+          "vergeM": 20.839522890069105,
+          "eavesM": 42.11096452627669,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.93095671510304,
+          "ridgeM": 24.1522945769824,
+          "hipM": 9.57154911535802,
+          "valleyM": 9.57154911535802,
+          "vergeM": 32.206542982939744,
+          "eavesM": 48.3045891539648,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.95495938583682,
+          "ridgeM": 24.1522945769824,
+          "hipM": 7.333243045211901,
+          "valleyM": 7.3332430452119,
+          "vergeM": 20.78104493019903,
+          "eavesM": 48.3045891539648,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 18.89822365046136,
+          "widthM": 18.89822365046136
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.5828541230249,
+          "ridgeM": 26.457513110645905,
+          "hipM": 8.160482068988768,
+          "valleyM": 8.160482068988768,
+          "vergeM": 23.47785695686216,
+          "eavesM": 52.91502622129181,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 24.1522945769824,
+          "hipM": 7.4494668488359626,
+          "valleyM": 7.449466848835961,
+          "vergeM": 21.432253095254996,
+          "eavesM": 48.3045891539648,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 18.89822365046136,
+          "widthM": 18.89822365046136
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.41016151377545,
+          "ridgeM": 26.457513110645905,
+          "hipM": 8.660254037844387,
+          "valleyM": 8.660254037844387,
+          "vergeM": 26.186146828319085,
+          "eavesM": 52.91502622129181,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_gable",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948128,
+          "ridgeM": 24.1522945769824,
+          "hipM": 7.905694150420948,
+          "valleyM": 7.905694150420948,
+          "vergeM": 23.904572186687872,
+          "eavesM": 48.3045891539648,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 18.89822365046136,
+          "widthM": 18.89822365046136
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.7171480581237,
+          "ridgeM": 26.457513110645905,
+          "hipM": 10.48510672150041,
+          "valleyM": 10.48510672150041,
+          "vergeM": 35.28050018203164,
+          "eavesM": 52.91502622129181,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 9.486832980505138,
+          "widthM": 7.905694150420949
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.22919025260083,
+          "ridgeM": 15.020818885799802,
+          "hipM": 0,
+          "valleyM": 6.721028268838403,
+          "vergeM": 14.284606711937307,
+          "eavesM": 20.55480479109447,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 10.206207261596576
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.5276180410083,
+          "ridgeM": 19.391793797033493,
+          "hipM": 0,
+          "valleyM": 8.814328043853848,
+          "vergeM": 19.019237886466836,
+          "eavesM": 26.536138880151096,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 9.486832980505138,
+          "widthM": 7.905694150420949
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460498,
+          "ridgeM": 15.020818885799802,
+          "hipM": 0,
+          "valleyM": 6.827549144370991,
+          "vergeM": 14.73223831836864,
+          "eavesM": 20.55480479109447,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 10.206207261596576
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792515,
+          "ridgeM": 19.391793797033493,
+          "hipM": 0,
+          "valleyM": 9.354143466934854,
+          "vergeM": 21.213203435596427,
+          "eavesM": 26.536138880151096,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 9.486832980505138,
+          "widthM": 7.905694150420949
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.28203230275508,
+          "ridgeM": 15.020818885799802,
+          "hipM": 0,
+          "valleyM": 7.24568837309472,
+          "vergeM": 16.431676725154983,
+          "eavesM": 20.55480479109447,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 10.206207261596576
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.57238268604124,
+          "ridgeM": 19.391793797033493,
+          "hipM": 0,
+          "valleyM": 11.325209642862918,
+          "vergeM": 28.580471673734795,
+          "eavesM": 26.536138880151096,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 10.206207261596576
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.38198375433478,
+          "ridgeM": 19.391793797033493,
+          "hipM": 0,
+          "valleyM": 8.676810184866799,
+          "vergeM": 18.44134796748529,
+          "eavesM": 26.536138880151096,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 12.5
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 23.75,
+          "hipM": 0,
+          "valleyM": 10.795303066473057,
+          "vergeM": 23.29371405922687,
+          "eavesM": 32.5,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 10.206207261596576
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.5276180410083,
+          "ridgeM": 19.391793797033493,
+          "hipM": 0,
+          "valleyM": 8.814328043853848,
+          "vergeM": 19.019237886466836,
+          "eavesM": 26.536138880151096,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 12.5
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688775,
+          "ridgeM": 23.75,
+          "hipM": 0,
+          "valleyM": 11.4564392373896,
+          "vergeM": 25.980762113533153,
+          "eavesM": 32.5,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 10.206207261596576
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792515,
+          "ridgeM": 19.391793797033493,
+          "hipM": 0,
+          "valleyM": 9.354143466934854,
+          "vergeM": 21.213203435596427,
+          "eavesM": 26.536138880151096,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 12.5
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906186,
+          "ridgeM": 23.75,
+          "hipM": 0,
+          "valleyM": 13.870492427530927,
+          "vergeM": 35.00378610435928,
+          "eavesM": 32.5,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 12.5
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.57297563150215,
+          "ridgeM": 23.75,
+          "hipM": 0,
+          "valleyM": 10.626878773953916,
+          "vergeM": 22.58594634472532,
+          "eavesM": 32.5,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 14.068285846778444
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.7024742779158,
+          "ridgeM": 26.729743108879042,
+          "hipM": 0,
+          "valleyM": 12.149712747339748,
+          "vergeM": 26.21621022546603,
+          "eavesM": 36.57754320162395,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 12.5
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 23.75,
+          "hipM": 0,
+          "valleyM": 10.795303066473057,
+          "vergeM": 23.29371405922687,
+          "eavesM": 32.5,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 14.068285846778444
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205776,
+          "ridgeM": 26.729743108879042,
+          "hipM": 0,
+          "valleyM": 12.893796958227625,
+          "vergeM": 29.240383034426888,
+          "eavesM": 36.57754320162395,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 12.5
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688775,
+          "ridgeM": 23.75,
+          "hipM": 0,
+          "valleyM": 11.4564392373896,
+          "vergeM": 25.980762113533153,
+          "eavesM": 32.5,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 14.068285846778444
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.58752710347835,
+          "ridgeM": 26.729743108879042,
+          "hipM": 0,
+          "valleyM": 15.610724184486475,
+          "vergeM": 39.39546149084941,
+          "eavesM": 36.57754320162395,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 14.068285846778444
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.725769133236,
+          "ridgeM": 26.729743108879042,
+          "hipM": 0,
+          "valleyM": 11.960157460083693,
+          "vergeM": 25.419643943807714,
+          "eavesM": 36.57754320162395,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 16.13743060919757
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 30.661118157475382,
+          "hipM": 0,
+          "valleyM": 13.936676331237337,
+          "vergeM": 30.072055540901076,
+          "eavesM": 41.95731958391368,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 14.068285846778444
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.7024742779158,
+          "ridgeM": 26.729743108879042,
+          "hipM": 0,
+          "valleyM": 12.149712747339748,
+          "vergeM": 26.21621022546603,
+          "eavesM": 36.57754320162395,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 16.13743060919757
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 30.661118157475382,
+          "hipM": 0,
+          "valleyM": 14.79019945774904,
+          "vergeM": 33.54101966249684,
+          "eavesM": 41.95731958391368,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 14.068285846778444
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205776,
+          "ridgeM": 26.729743108879042,
+          "hipM": 0,
+          "valleyM": 12.893796958227625,
+          "vergeM": 29.240383034426888,
+          "eavesM": 36.57754320162395,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 16.13743060919757
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.9309567151031,
+          "ridgeM": 30.661118157475382,
+          "hipM": 0,
+          "valleyM": 17.906728725174457,
+          "vergeM": 45.18969354546336,
+          "eavesM": 41.95731958391368,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 16.13743060919757
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.9549593858368,
+          "ridgeM": 30.661118157475382,
+          "hipM": 0,
+          "valleyM": 13.71924150456287,
+          "vergeM": 29.15833135048514,
+          "eavesM": 41.95731958391368,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 21.213203435596427,
+          "widthM": 17.67766952966369
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.58285412302496,
+          "ridgeM": 33.58757210636101,
+          "hipM": 0,
+          "valleyM": 15.26686400653406,
+          "vergeM": 32.94228634059947,
+          "eavesM": 45.96194077712559,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 16.13743060919757
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 30.661118157475382,
+          "hipM": 0,
+          "valleyM": 13.936676331237337,
+          "vergeM": 30.072055540901076,
+          "eavesM": 41.95731958391368,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 21.213203435596427,
+          "widthM": 17.67766952966369
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.4101615137755,
+          "ridgeM": 33.58757210636101,
+          "hipM": 0,
+          "valleyM": 16.20185174601965,
+          "vergeM": 36.74234614174767,
+          "eavesM": 45.96194077712559,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "t_gable",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 16.13743060919757
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 30.661118157475382,
+          "hipM": 0,
+          "valleyM": 14.79019945774904,
+          "vergeM": 33.54101966249684,
+          "eavesM": 41.95731958391368,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 21.213203435596427,
+          "widthM": 17.67766952966369
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.7171480581237,
+          "ridgeM": 33.58757210636101,
+          "hipM": 0,
+          "valleyM": 19.615838507807553,
+          "vergeM": 49.50282904319179,
+          "eavesM": 45.96194077712559,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.451542547285166,
+          "widthM": 8.451542547285166
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.22919025260084,
+          "ridgeM": 6.761234037828133,
+          "hipM": 17.96270362058263,
+          "valleyM": 3.592540724116526,
+          "vergeM": 0,
+          "eavesM": 33.806170189140666,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100834,
+          "ridgeM": 8.728715609439694,
+          "hipM": 23.557282596238895,
+          "valleyM": 4.711456519247778,
+          "vergeM": 0,
+          "eavesM": 43.643578047198474,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.451542547285166,
+          "widthM": 8.451542547285166
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460498,
+          "ridgeM": 6.761234037828133,
+          "hipM": 18.247392635427016,
+          "valleyM": 3.6494785270854027,
+          "vergeM": 0,
+          "eavesM": 33.806170189140666,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.4700538379251,
+          "ridgeM": 8.728715609439694,
+          "hipM": 25,
+          "valleyM": 4.999999999999999,
+          "vergeM": 0,
+          "eavesM": 43.643578047198474,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.451542547285166,
+          "widthM": 8.451542547285166
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.28203230275511,
+          "ridgeM": 6.761234037828133,
+          "hipM": 19.364916731037088,
+          "valleyM": 3.8729833462074175,
+          "vergeM": 0,
+          "eavesM": 33.806170189140666,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.57238268604118,
+          "ridgeM": 8.728715609439694,
+          "hipM": 30.267895940701077,
+          "valleyM": 6.053579188140215,
+          "vergeM": 0,
+          "eavesM": 43.643578047198474,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.38198375433466,
+          "ridgeM": 8.728715609439694,
+          "hipM": 23.18975065845873,
+          "valleyM": 4.6379501316917455,
+          "vergeM": 0,
+          "eavesM": 43.643578047198474,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151242,
+          "ridgeM": 10.690449676496977,
+          "hipM": 28.851661043665928,
+          "valleyM": 5.770332208733185,
+          "vergeM": 0,
+          "eavesM": 53.45224838248488,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100834,
+          "ridgeM": 8.728715609439694,
+          "hipM": 23.557282596238895,
+          "valleyM": 4.711456519247778,
+          "vergeM": 0,
+          "eavesM": 43.643578047198474,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688767,
+          "ridgeM": 10.690449676496977,
+          "hipM": 30.618621784789724,
+          "valleyM": 6.123724356957946,
+          "vergeM": 0,
+          "eavesM": 53.45224838248488,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10.910894511799619,
+          "widthM": 10.910894511799619
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.4700538379251,
+          "ridgeM": 8.728715609439694,
+          "hipM": 25,
+          "valleyM": 4.999999999999999,
+          "vergeM": 0,
+          "eavesM": 43.643578047198474,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906188,
+          "ridgeM": 10.690449676496977,
+          "hipM": 37.07045032118794,
+          "valleyM": 7.414090064237588,
+          "vergeM": 0,
+          "eavesM": 53.45224838248488,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.57297563150206,
+          "ridgeM": 10.690449676496977,
+          "hipM": 28.40152818779705,
+          "valleyM": 5.680305637559411,
+          "vergeM": 0,
+          "eavesM": 53.45224838248488,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791583,
+          "ridgeM": 12.031704150364769,
+          "hipM": 32.47147317733234,
+          "valleyM": 6.49429463546647,
+          "vergeM": 0,
+          "eavesM": 60.158520751823836,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151242,
+          "ridgeM": 10.690449676496977,
+          "hipM": 28.851661043665928,
+          "valleyM": 5.770332208733185,
+          "vergeM": 0,
+          "eavesM": 53.45224838248488,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205773,
+          "ridgeM": 12.031704150364769,
+          "hipM": 34.46012188022556,
+          "valleyM": 6.892024376045112,
+          "vergeM": 0,
+          "eavesM": 60.158520751823836,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.363062095621219,
+          "widthM": 13.363062095621219
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688767,
+          "ridgeM": 10.690449676496977,
+          "hipM": 30.618621784789724,
+          "valleyM": 6.123724356957946,
+          "vergeM": 0,
+          "eavesM": 53.45224838248488,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.58752710347835,
+          "ridgeM": 12.031704150364769,
+          "hipM": 41.721415326981734,
+          "valleyM": 8.344283065396349,
+          "vergeM": 0,
+          "eavesM": 60.158520751823836,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.72576913323604,
+          "ridgeM": 12.031704150364769,
+          "hipM": 31.964865362501147,
+          "valleyM": 6.39297307250023,
+          "vergeM": 0,
+          "eavesM": 60.158520751823836,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 13.801311186847084,
+          "hipM": 37.24733424417981,
+          "valleyM": 7.449466848835961,
+          "vergeM": 0,
+          "eavesM": 69.00655593423542,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791583,
+          "ridgeM": 12.031704150364769,
+          "hipM": 32.47147317733234,
+          "valleyM": 6.49429463546647,
+          "vergeM": 0,
+          "eavesM": 60.158520751823836,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.67513459481285,
+          "ridgeM": 13.801311186847084,
+          "hipM": 39.528470752104745,
+          "valleyM": 7.905694150420948,
+          "vergeM": 0,
+          "eavesM": 69.00655593423542,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.039630187955959,
+          "widthM": 15.039630187955959
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205773,
+          "ridgeM": 12.031704150364769,
+          "hipM": 34.46012188022556,
+          "valleyM": 6.892024376045112,
+          "vergeM": 0,
+          "eavesM": 60.158520751823836,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.93095671510287,
+          "ridgeM": 13.801311186847084,
+          "hipM": 47.857745576790094,
+          "valleyM": 9.57154911535802,
+          "vergeM": 0,
+          "eavesM": 69.00655593423542,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.95495938583684,
+          "ridgeM": 13.801311186847084,
+          "hipM": 36.66621522605951,
+          "valleyM": 7.3332430452119,
+          "vergeM": 0,
+          "eavesM": 69.00655593423542,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 18.89822365046136,
+          "widthM": 18.89822365046136
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.58285412302484,
+          "ridgeM": 15.118578920369089,
+          "hipM": 40.802410344943844,
+          "valleyM": 8.160482068988768,
+          "vergeM": 0,
+          "eavesM": 75.59289460184544,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.81904510252076,
+          "ridgeM": 13.801311186847084,
+          "hipM": 37.24733424417981,
+          "valleyM": 7.449466848835961,
+          "vergeM": 0,
+          "eavesM": 69.00655593423542,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 18.89822365046136,
+          "widthM": 18.89822365046136
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.41016151377534,
+          "ridgeM": 15.118578920369089,
+          "hipM": 43.30127018922194,
+          "valleyM": 8.660254037844387,
+          "vergeM": 0,
+          "eavesM": 75.59289460184544,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "l_hip",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.251638983558856,
+          "widthM": 17.251638983558856
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.67513459481285,
+          "ridgeM": 13.801311186847084,
+          "hipM": 39.528470752104745,
+          "valleyM": 7.905694150420948,
+          "vergeM": 0,
+          "eavesM": 69.00655593423542,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 18.89822365046136,
+          "widthM": 18.89822365046136
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.71714805812377,
+          "ridgeM": 15.118578920369089,
+          "hipM": 52.42553360750205,
+          "valleyM": 10.48510672150041,
+          "vergeM": 0,
+          "eavesM": 75.59289460184544,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.682431421244592,
+          "widthM": 7.442084075352508
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.22919025260082,
+          "ridgeM": 16.124515496597102,
+          "hipM": 5.272408352956268,
+          "valleyM": 5.272408352956269,
+          "vergeM": 7.470511627504287,
+          "eavesM": 32.2490309931942,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 11.2089707663561,
+          "widthM": 9.607689228305228
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100831,
+          "ridgeM": 20.81665999466133,
+          "hipM": 6.914527799202905,
+          "valleyM": 6.914527799202906,
+          "vergeM": 9.946611806846933,
+          "eavesM": 41.63331998932266,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.682431421244592,
+          "widthM": 7.442084075352508
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460496,
+          "ridgeM": 16.124515496597102,
+          "hipM": 5.355970202640215,
+          "valleyM": 5.355970202640216,
+          "vergeM": 7.7046123758216485,
+          "eavesM": 32.2490309931942,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 11.2089707663561,
+          "widthM": 9.607689228305228
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.4700538379251,
+          "ridgeM": 20.81665999466133,
+          "hipM": 7.337993857053428,
+          "valleyM": 7.337993857053428,
+          "vergeM": 11.094003924504584,
+          "eavesM": 41.63331998932266,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.682431421244592,
+          "widthM": 7.442084075352508
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.28203230275508,
+          "ridgeM": 16.124515496597102,
+          "hipM": 5.683985600588052,
+          "valleyM": 5.683985600588052,
+          "vergeM": 8.593378488473194,
+          "eavesM": 32.2490309931942,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 11.2089707663561,
+          "widthM": 9.607689228305228
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.57238268604124,
+          "ridgeM": 20.81665999466133,
+          "hipM": 8.884225379151875,
+          "valleyM": 8.884225379151879,
+          "vergeM": 14.946911053544572,
+          "eavesM": 41.63331998932266,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 11.2089707663561,
+          "widthM": 9.607689228305228
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.38198375433475,
+          "ridgeM": 20.81665999466133,
+          "hipM": 6.806649915134834,
+          "valleyM": 6.806649915134836,
+          "vergeM": 9.644389040324322,
+          "eavesM": 41.63331998932266,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.728129459672884,
+          "widthM": 11.766968108291042
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.2914270615124,
+          "ridgeM": 25.495097567963928,
+          "hipM": 8.468532460168332,
+          "valleyM": 8.468532460168332,
+          "vergeM": 12.18206179815881,
+          "eavesM": 50.990195135927856,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 11.2089707663561,
+          "widthM": 9.607689228305228
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100831,
+          "ridgeM": 20.81665999466133,
+          "hipM": 6.914527799202905,
+          "valleyM": 6.914527799202906,
+          "vergeM": 9.946611806846933,
+          "eavesM": 41.63331998932266,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.728129459672884,
+          "widthM": 11.766968108291042
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.2050807568877,
+          "ridgeM": 25.495097567963928,
+          "hipM": 8.987170342729172,
+          "valleyM": 8.987170342729172,
+          "vergeM": 13.587324409735148,
+          "eavesM": 50.990195135927856,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 11.2089707663561,
+          "widthM": 9.607689228305228
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.4700538379251,
+          "ridgeM": 20.81665999466133,
+          "hipM": 7.337993857053428,
+          "valleyM": 7.337993857053428,
+          "vergeM": 11.094003924504584,
+          "eavesM": 41.63331998932266,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.728129459672884,
+          "widthM": 11.766968108291042
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906174,
+          "ridgeM": 25.495097567963928,
+          "hipM": 10.880909469403257,
+          "valleyM": 10.880909469403257,
+          "vergeM": 18.30615265597497,
+          "eavesM": 50.990195135927856,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.728129459672884,
+          "widthM": 11.766968108291042
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.57297563150215,
+          "ridgeM": 25.495097567963928,
+          "hipM": 8.336409574919383,
+          "valleyM": 8.336409574919383,
+          "vergeM": 11.811916014842463,
+          "eavesM": 50.990195135927856,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.450499950420657,
+          "widthM": 13.243285671789135
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.7024742779158,
+          "ridgeM": 28.693785622209788,
+          "hipM": 9.531018828189596,
+          "valleyM": 9.531018828189598,
+          "vergeM": 13.710458206369434,
+          "eavesM": 57.387571244419576,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.728129459672884,
+          "widthM": 11.766968108291042
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.2914270615124,
+          "ridgeM": 25.495097567963928,
+          "hipM": 8.468532460168332,
+          "valleyM": 8.468532460168332,
+          "vergeM": 12.18206179815881,
+          "eavesM": 50.990195135927856,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.450499950420657,
+          "widthM": 13.243285671789135
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205756,
+          "ridgeM": 28.693785622209788,
+          "hipM": 10.1147265068163,
+          "valleyM": 10.114726506816302,
+          "vergeM": 15.292029095125141,
+          "eavesM": 57.387571244419576,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.728129459672884,
+          "widthM": 11.766968108291042
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.2050807568877,
+          "ridgeM": 25.495097567963928,
+          "hipM": 8.987170342729172,
+          "valleyM": 8.987170342729172,
+          "vergeM": 13.587324409735148,
+          "eavesM": 50.990195135927856,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.450499950420657,
+          "widthM": 13.243285671789135
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.5875271034783,
+          "ridgeM": 28.693785622209788,
+          "hipM": 12.24605957507867,
+          "valleyM": 12.24605957507867,
+          "vergeM": 20.60289506552146,
+          "eavesM": 57.387571244419576,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.450499950420657,
+          "widthM": 13.243285671789135
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.72576913323607,
+          "ridgeM": 28.693785622209788,
+          "hipM": 9.382319426862933,
+          "valleyM": 9.382319426862933,
+          "vergeM": 13.293872871595509,
+          "eavesM": 57.387571244419576,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.722938923964165,
+          "widthM": 15.191090506254998
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.8190451025207,
+          "ridgeM": 32.914029430219166,
+          "hipM": 10.932828395016287,
+          "valleyM": 10.93282839501629,
+          "vergeM": 15.726974155579548,
+          "eavesM": 65.82805886043833,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.450499950420657,
+          "widthM": 13.243285671789135
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.7024742779158,
+          "ridgeM": 28.693785622209788,
+          "hipM": 9.531018828189596,
+          "valleyM": 9.531018828189598,
+          "vergeM": 13.710458206369434,
+          "eavesM": 57.387571244419576,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.722938923964165,
+          "widthM": 15.191090506254998
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 32.914029430219166,
+          "hipM": 11.602387022306427,
+          "valleyM": 11.602387022306427,
+          "vergeM": 17.541160386140582,
+          "eavesM": 65.82805886043833,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.450499950420657,
+          "widthM": 13.243285671789135
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205756,
+          "ridgeM": 28.693785622209788,
+          "hipM": 10.1147265068163,
+          "valleyM": 10.114726506816302,
+          "vergeM": 15.292029095125141,
+          "eavesM": 57.387571244419576,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.722938923964165,
+          "widthM": 15.191090506254998
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.93095671510304,
+          "ridgeM": 32.914029430219166,
+          "hipM": 14.047193722196461,
+          "valleyM": 14.047193722196461,
+          "vergeM": 23.633141456573902,
+          "eavesM": 65.82805886043833,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.722938923964165,
+          "widthM": 15.191090506254998
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.95495938583673,
+          "ridgeM": 32.914029430219166,
+          "hipM": 10.762258483608939,
+          "valleyM": 10.762258483608942,
+          "vergeM": 15.249118004095179,
+          "eavesM": 65.82805886043833,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.41450686788302,
+          "widthM": 16.641005886756872
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.5828541230248,
+          "ridgeM": 36.05551275463989,
+          "hipM": 11.976313458566846,
+          "valleyM": 11.976313458566844,
+          "vergeM": 17.22803701262336,
+          "eavesM": 72.11102550927978,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.722938923964165,
+          "widthM": 15.191090506254998
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.8190451025207,
+          "ridgeM": 32.914029430219166,
+          "hipM": 10.932828395016287,
+          "valleyM": 10.93282839501629,
+          "vergeM": 15.726974155579548,
+          "eavesM": 65.82805886043833,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.41450686788302,
+          "widthM": 16.641005886756872
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.41016151377534,
+          "ridgeM": 36.05551275463989,
+          "hipM": 12.70977818604485,
+          "valleyM": 12.70977818604485,
+          "vergeM": 19.215378456610456,
+          "eavesM": 72.11102550927978,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "u_gable",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.722938923964165,
+          "widthM": 15.191090506254998
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 32.914029430219166,
+          "hipM": 11.602387022306427,
+          "valleyM": 11.602387022306427,
+          "vergeM": 17.541160386140582,
+          "eavesM": 65.82805886043833,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.41450686788302,
+          "widthM": 16.641005886756872
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.7171480581235,
+          "ridgeM": 36.05551275463989,
+          "hipM": 15.387929742583921,
+          "valleyM": 15.387929742583921,
+          "vergeM": 25.888809360952052,
+          "eavesM": 72.11102550927978,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 9.486832980505138,
+          "widthM": 6.324555320336759
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.229190252600816,
+          "ridgeM": 12.649110640673516,
+          "hipM": 0,
+          "valleyM": 4.480685512558935,
+          "vergeM": 12.697428188388717,
+          "eavesM": 18.973665961010276,
+          "highEdgeM": 0,
+          "flashingM": 6.33663470726556,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 8.16496580927726
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100828,
+          "ridgeM": 16.329931618554518,
+          "hipM": 0,
+          "valleyM": 5.8762186959025655,
+          "vergeM": 16.905989232414967,
+          "eavesM": 24.49489742783178,
+          "highEdgeM": 0,
+          "flashingM": 8.308980212742373,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 9.486832980505138,
+          "widthM": 6.324555320336759
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460499,
+          "ridgeM": 12.649110640673516,
+          "hipM": 0,
+          "valleyM": 4.551699429580661,
+          "vergeM": 13.095322949661018,
+          "eavesM": 18.973665961010276,
+          "highEdgeM": 0,
+          "flashingM": 6.436108397583634,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 8.16496580927726
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792512,
+          "ridgeM": 16.329931618554518,
+          "hipM": 0,
+          "valleyM": 6.236095644623235,
+          "vergeM": 18.856180831641268,
+          "eavesM": 24.49489742783178,
+          "highEdgeM": 0,
+          "flashingM": 8.796528112548945,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 9.486832980505138,
+          "widthM": 6.324555320336759
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.28203230275513,
+          "ridgeM": 12.649110640673516,
+          "hipM": 0,
+          "valleyM": 4.8304589153964805,
+          "vergeM": 14.60593486680443,
+          "eavesM": 18.973665961010276,
+          "highEdgeM": 0,
+          "flashingM": 6.813761376869488,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 8.16496580927726
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.5723826860413,
+          "ridgeM": 16.329931618554518,
+          "hipM": 0,
+          "valleyM": 7.5501397619086115,
+          "vergeM": 25.404863709986486,
+          "eavesM": 24.49489742783178,
+          "highEdgeM": 0,
+          "flashingM": 10.43369883213525,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 8.16496580927726
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.38198375433478,
+          "ridgeM": 16.329931618554518,
+          "hipM": 0,
+          "valleyM": 5.784540123244533,
+          "vergeM": 16.39230930443137,
+          "eavesM": 24.49489742783178,
+          "highEdgeM": 0,
+          "flashingM": 8.180560230746472,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 10
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 20,
+          "hipM": 0,
+          "valleyM": 7.196868710982038,
+          "vergeM": 20.70552360820166,
+          "eavesM": 30,
+          "highEdgeM": 0,
+          "flashingM": 10.176380902050411,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 8.16496580927726
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100828,
+          "ridgeM": 16.329931618554518,
+          "hipM": 0,
+          "valleyM": 5.8762186959025655,
+          "vergeM": 16.905989232414967,
+          "eavesM": 24.49489742783178,
+          "highEdgeM": 0,
+          "flashingM": 8.308980212742373,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 10
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688764,
+          "ridgeM": 20,
+          "hipM": 0,
+          "valleyM": 7.6376261582597325,
+          "vergeM": 23.09401076758503,
+          "eavesM": 30,
+          "highEdgeM": 0,
+          "flashingM": 10.773502691896255,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.24744871391589,
+          "widthM": 8.16496580927726
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792512,
+          "ridgeM": 16.329931618554518,
+          "hipM": 0,
+          "valleyM": 6.236095644623235,
+          "vergeM": 18.856180831641268,
+          "eavesM": 24.49489742783178,
+          "highEdgeM": 0,
+          "flashingM": 8.796528112548945,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 10
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906186,
+          "ridgeM": 20,
+          "hipM": 0,
+          "valleyM": 9.246994951687284,
+          "vergeM": 31.114476537208247,
+          "eavesM": 30,
+          "highEdgeM": 0,
+          "flashingM": 12.778619134302058,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 10
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.57297563150217,
+          "ridgeM": 20,
+          "hipM": 0,
+          "valleyM": 7.084585849302611,
+          "vergeM": 20.076396750866948,
+          "eavesM": 30,
+          "highEdgeM": 0,
+          "flashingM": 10.019099187716733,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 11.254628677422755
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791574,
+          "ridgeM": 22.509257354845502,
+          "hipM": 0,
+          "valleyM": 8.099808498226496,
+          "vergeM": 23.303297978192028,
+          "eavesM": 33.76388603226826,
+          "highEdgeM": 0,
+          "flashingM": 11.453138833259382,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 10
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151248,
+          "ridgeM": 20,
+          "hipM": 0,
+          "valleyM": 7.196868710982038,
+          "vergeM": 20.70552360820166,
+          "eavesM": 30,
+          "highEdgeM": 0,
+          "flashingM": 10.176380902050411,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 11.254628677422755
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205765,
+          "ridgeM": 22.509257354845502,
+          "hipM": 0,
+          "valleyM": 8.595864638818414,
+          "vergeM": 25.991451586157236,
+          "eavesM": 33.76388603226826,
+          "highEdgeM": 0,
+          "flashingM": 12.125177235250684,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15,
+          "widthM": 10
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688764,
+          "ridgeM": 20,
+          "hipM": 0,
+          "valleyM": 7.6376261582597325,
+          "vergeM": 23.09401076758503,
+          "eavesM": 30,
+          "highEdgeM": 0,
+          "flashingM": 10.773502691896255,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 11.254628677422755
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.5875271034782,
+          "ridgeM": 22.509257354845502,
+          "hipM": 0,
+          "valleyM": 10.407149456324316,
+          "vergeM": 35.018187991866135,
+          "eavesM": 33.76388603226826,
+          "highEdgeM": 0,
+          "flashingM": 14.38186133667791,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 11.254628677422755
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.72576913323604,
+          "ridgeM": 22.509257354845502,
+          "hipM": 0,
+          "valleyM": 7.973438306722461,
+          "vergeM": 22.595239061162417,
+          "eavesM": 33.76388603226826,
+          "highEdgeM": 0,
+          "flashingM": 11.276124104001983,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 12.909944487358056
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.8190451025208,
+          "ridgeM": 25.819888974716108,
+          "hipM": 0,
+          "valleyM": 9.291117554158225,
+          "vergeM": 26.730716036356508,
+          "eavesM": 38.72983346207417,
+          "highEdgeM": 0,
+          "flashingM": 13.137651252768148,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 11.254628677422755
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.70247427791574,
+          "ridgeM": 22.509257354845502,
+          "hipM": 0,
+          "valleyM": 8.099808498226496,
+          "vergeM": 23.303297978192028,
+          "eavesM": 33.76388603226826,
+          "highEdgeM": 0,
+          "flashingM": 11.453138833259382,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 12.909944487358056
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.67513459481256,
+          "ridgeM": 25.819888974716108,
+          "hipM": 0,
+          "valleyM": 9.860132971832693,
+          "vergeM": 29.81423969999719,
+          "eavesM": 38.72983346207417,
+          "highEdgeM": 0,
+          "flashingM": 13.90853216867832,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 16.88194301613413,
+          "widthM": 11.254628677422755
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205765,
+          "ridgeM": 22.509257354845502,
+          "hipM": 0,
+          "valleyM": 8.595864638818414,
+          "vergeM": 25.991451586157236,
+          "eavesM": 33.76388603226826,
+          "highEdgeM": 0,
+          "flashingM": 12.125177235250684,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 12.909944487358056
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.930956715103,
+          "ridgeM": 25.819888974716108,
+          "hipM": 0,
+          "valleyM": 11.937819150116304,
+          "vergeM": 40.168616484856315,
+          "eavesM": 38.72983346207417,
+          "highEdgeM": 0,
+          "flashingM": 16.4971263648931,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 12.909944487358056
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.95495938583696,
+          "ridgeM": 25.819888974716108,
+          "hipM": 0,
+          "valleyM": 9.146161003041914,
+          "vergeM": 25.918516755986793,
+          "eavesM": 38.72983346207417,
+          "highEdgeM": 0,
+          "flashingM": 12.93460143267572,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 21.213203435596427,
+          "widthM": 14.142135623730951
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.58285412302496,
+          "ridgeM": 28.284271247461902,
+          "hipM": 0,
+          "valleyM": 10.177909337689373,
+          "vergeM": 29.28203230275509,
+          "eavesM": 42.42640687119285,
+          "highEdgeM": 0,
+          "flashingM": 14.391575887554243,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 12.909944487358056
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.8190451025208,
+          "ridgeM": 25.819888974716108,
+          "hipM": 0,
+          "valleyM": 9.291117554158225,
+          "vergeM": 26.730716036356508,
+          "eavesM": 38.72983346207417,
+          "highEdgeM": 0,
+          "flashingM": 13.137651252768148,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 21.213203435596427,
+          "widthM": 14.142135623730951
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.4101615137753,
+          "ridgeM": 28.284271247461902,
+          "hipM": 0,
+          "valleyM": 10.801234497346433,
+          "vergeM": 32.65986323710904,
+          "eavesM": 42.42640687119285,
+          "highEdgeM": 0,
+          "flashingM": 15.236033621142733,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "dormer",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 19.364916731037084,
+          "widthM": 12.909944487358056
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.67513459481256,
+          "ridgeM": 25.819888974716108,
+          "hipM": 0,
+          "valleyM": 9.860132971832693,
+          "vergeM": 29.81423969999719,
+          "eavesM": 38.72983346207417,
+          "highEdgeM": 0,
+          "flashingM": 13.90853216867832,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 21.213203435596427,
+          "widthM": 14.142135623730951
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.7171480581237,
+          "ridgeM": 28.284271247461902,
+          "hipM": 0,
+          "valleyM": 13.077225671871702,
+          "vergeM": 44.00251470505936,
+          "eavesM": 42.42640687119285,
+          "highEdgeM": 0,
+          "flashingM": 18.07169648813031,
+          "flatEdgeM": 0,
+          "dormerCount": 2
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "small",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.62730431518649,
+          "widthM": 10.476012382726452
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60.229190252600866,
+          "ridgeM": 10.476012382726456,
+          "hipM": 16.58995261872791,
+          "valleyM": 6.1120878068997575,
+          "vergeM": 2.4743597760307208,
+          "eavesM": 35.741689305772596,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 11.137801978460221,
+          "widthM": 13.52447383098741
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100825,
+          "ridgeM": 13.524473830987413,
+          "hipM": 21.756981039857,
+          "valleyM": 8.015729856789422,
+          "vergeM": 3.2944860258354742,
+          "eavesM": 46.14232248219235,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "small",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.62730431518649,
+          "widthM": 10.476012382726452
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 62.11657082460499,
+          "ridgeM": 10.476012382726456,
+          "hipM": 16.852885046223335,
+          "valleyM": 6.208957648608599,
+          "vergeM": 2.5518979024747703,
+          "eavesM": 35.741689305772596,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 11.137801978460221,
+          "widthM": 13.52447383098741
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792515,
+          "ridgeM": 13.524473830987413,
+          "hipM": 23.089442671255583,
+          "valleyM": 8.506636773620482,
+          "vergeM": 3.6745216973970027,
+          "eavesM": 46.14232248219235,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "small",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 8.62730431518649,
+          "widthM": 10.476012382726452
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 69.2820323027551,
+          "ridgeM": 10.476012382726456,
+          "hipM": 17.885005387796756,
+          "valleyM": 6.5892125112935425,
+          "vergeM": 2.84627226785928,
+          "eavesM": 35.741689305772596,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 11.137801978460221,
+          "widthM": 13.52447383098741
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 155.57238268604138,
+          "ridgeM": 13.524473830987413,
+          "hipM": 27.95475392409389,
+          "valleyM": 10.299119866771434,
+          "vergeM": 4.950669690498173,
+          "eavesM": 46.14232248219235,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "small_medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 11.137801978460221,
+          "widthM": 13.52447383098741
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100.38198375433474,
+          "ridgeM": 13.524473830987413,
+          "hipM": 21.417536735567772,
+          "valleyM": 7.890671428893391,
+          "vergeM": 3.194384735030831,
+          "eavesM": 46.14232248219235,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.640965851694249,
+          "widthM": 16.56402996277159
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151217,
+          "ridgeM": 16.564029962771592,
+          "hipM": 26.6467509455289,
+          "valleyM": 9.81722403256328,
+          "vergeM": 4.0349048640132565,
+          "eavesM": 56.512572814161885,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "small_medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 11.137801978460221,
+          "widthM": 13.52447383098741
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 103.52761804100825,
+          "ridgeM": 13.524473830987413,
+          "hipM": 21.756981039857,
+          "valleyM": 8.015729856789422,
+          "vergeM": 3.2944860258354742,
+          "eavesM": 46.14232248219235,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.640965851694249,
+          "widthM": 16.56402996277159
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688798,
+          "ridgeM": 16.564029962771592,
+          "hipM": 28.278676494910393,
+          "valleyM": 10.418459761282778,
+          "vergeM": 4.500351603704096,
+          "eavesM": 56.512572814161885,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "small_medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 11.137801978460221,
+          "widthM": 13.52447383098741
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 115.47005383792515,
+          "ridgeM": 13.524473830987413,
+          "hipM": 23.089442671255583,
+          "valleyM": 8.506636773620482,
+          "vergeM": 3.6745216973970027,
+          "eavesM": 46.14232248219235,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 13.640965851694249,
+          "widthM": 16.56402996277159
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 233.35857402906169,
+          "ridgeM": 16.564029962771592,
+          "hipM": 34.23744149954789,
+          "valleyM": 12.613794236675538,
+          "vergeM": 6.063307313391423,
+          "eavesM": 56.512572814161885,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "medium",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.640965851694249,
+          "widthM": 16.56402996277159
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.57297563150192,
+          "ridgeM": 16.564029962771592,
+          "hipM": 26.23101827472759,
+          "valleyM": 9.664059364373323,
+          "vergeM": 3.9123063214805915,
+          "eavesM": 56.512572814161885,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.35240054622226,
+          "widthM": 18.642200663269886
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.7024742779157,
+          "ridgeM": 18.64220066326989,
+          "hipM": 29.98992873516915,
+          "valleyM": 11.048921112957053,
+          "vergeM": 4.541135599319615,
+          "eavesM": 63.60280226292078,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "medium",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.640965851694249,
+          "widthM": 16.56402996277159
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 155.29142706151217,
+          "ridgeM": 16.564029962771592,
+          "hipM": 26.6467509455289,
+          "valleyM": 9.81722403256328,
+          "vergeM": 4.0349048640132565,
+          "eavesM": 56.512572814161885,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.35240054622226,
+          "widthM": 18.642200663269886
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205802,
+          "ridgeM": 18.64220066326989,
+          "hipM": 31.826600343917924,
+          "valleyM": 11.725589600390816,
+          "vergeM": 5.06497862175336,
+          "eavesM": 63.60280226292078,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "medium",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 13.640965851694249,
+          "widthM": 16.56402996277159
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 173.20508075688798,
+          "ridgeM": 16.564029962771592,
+          "hipM": 28.278676494910393,
+          "valleyM": 10.418459761282778,
+          "vergeM": 4.500351603704096,
+          "eavesM": 56.512572814161885,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.35240054622226,
+          "widthM": 18.642200663269886
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 295.5875271034787,
+          "ridgeM": 18.64220066326989,
+          "hipM": 38.532969094239554,
+          "valleyM": 14.196357034719838,
+          "vergeM": 6.824027236932222,
+          "eavesM": 63.60280226292078,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "medium_large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.35240054622226,
+          "widthM": 18.642200663269886
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190.72576913323584,
+          "ridgeM": 18.64220066326989,
+          "hipM": 29.522037051274943,
+          "valleyM": 10.876539966259191,
+          "vergeM": 4.4031554920597795,
+          "eavesM": 63.60280226292078,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.610411189931966,
+          "widthM": 21.384070730631674
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.819045102521,
+          "ridgeM": 21.38407073063168,
+          "hipM": 34.400807547523385,
+          "valleyM": 12.673981728034935,
+          "vergeM": 5.209039780618214,
+          "eavesM": 72.957417786861,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "medium_large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.35240054622226,
+          "widthM": 18.642200663269886
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 196.7024742779157,
+          "ridgeM": 18.64220066326989,
+          "hipM": 29.98992873516915,
+          "valleyM": 11.048921112957053,
+          "vergeM": 4.541135599319615,
+          "eavesM": 63.60280226292078,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.610411189931966,
+          "widthM": 21.384070730631674
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 21.38407073063168,
+          "hipM": 36.507614372525026,
+          "valleyM": 13.450173716193433,
+          "vergeM": 5.809928937741269,
+          "eavesM": 72.957417786861,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "medium_large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.35240054622226,
+          "widthM": 18.642200663269886
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 219.39310229205802,
+          "ridgeM": 18.64220066326989,
+          "hipM": 31.826600343917924,
+          "valleyM": 11.725589600390816,
+          "vergeM": 5.06497862175336,
+          "eavesM": 63.60280226292078,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.610411189931966,
+          "widthM": 21.384070730631674
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 388.93095671510235,
+          "ridgeM": 21.38407073063168,
+          "hipM": 44.20034691483322,
+          "valleyM": 16.28433833704382,
+          "vergeM": 7.82769608256754,
+          "eavesM": 72.957417786861,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "large",
+        "pitch": "low",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.610411189931966,
+          "widthM": 21.384070730631674
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.9549593858372,
+          "ridgeM": 21.38407073063168,
+          "hipM": 33.86409897736078,
+          "valleyM": 12.476246991659242,
+          "vergeM": 5.050765742785444,
+          "eavesM": 72.957417786861,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.291238911334265,
+          "widthM": 23.425075820905892
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 310.58285412302433,
+          "ridgeM": 23.425075820905896,
+          "hipM": 37.684196580345066,
+          "valleyM": 13.88365137170608,
+          "vergeM": 5.7062171815727165,
+          "eavesM": 79.92084691838481,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "large",
+        "pitch": "typical",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.610411189931966,
+          "widthM": 21.384070730631674
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 258.819045102521,
+          "ridgeM": 21.38407073063168,
+          "hipM": 34.400807547523385,
+          "valleyM": 12.673981728034935,
+          "vergeM": 5.209039780618214,
+          "eavesM": 72.957417786861,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.291238911334265,
+          "widthM": 23.425075820905892
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 346.4101615137755,
+          "ridgeM": 23.425075820905896,
+          "hipM": 39.992087825063535,
+          "valleyM": 14.73392709344446,
+          "vergeM": 6.364458273405841,
+          "eavesM": 79.92084691838481,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "complex",
+        "size": "large",
+        "pitch": "steep",
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.610411189931966,
+          "widthM": 21.384070730631674
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 288.6751345948129,
+          "ridgeM": 21.38407073063168,
+          "hipM": 36.507614372525026,
+          "valleyM": 13.450173716193433,
+          "vergeM": 5.809928937741269,
+          "eavesM": 72.957417786861,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 19.291238911334265,
+          "widthM": 23.425075820905892
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 466.71714805812337,
+          "ridgeM": 23.425075820905896,
+          "hipM": 48.419054109616056,
+          "valleyM": 17.83859888249013,
+          "vergeM": 8.574811435434125,
+          "eavesM": 79.92084691838481,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 0,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "flat",
+        "size": "small",
+        "pitch": null,
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 10,
+          "widthM": 6
+        },
+        "quantities": {
+          "footprintM2": 60,
+          "roofAreaM2": 60,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 32,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 41.31182235954578,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "flat",
+        "size": "small_medium",
+        "pitch": null,
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 12.909944487358056,
+          "widthM": 7.745966692414834
+        },
+        "quantities": {
+          "footprintM2": 100,
+          "roofAreaM2": 100,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 41.31182235954578,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.00000000000003,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 50.59644256269408,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "flat",
+        "size": "medium",
+        "pitch": null,
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 15.811388300841898,
+          "widthM": 9.486832980505138
+        },
+        "quantities": {
+          "footprintM2": 150,
+          "roofAreaM2": 150.00000000000003,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 50.59644256269408,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 56.94441734416699,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "flat",
+        "size": "medium_large",
+        "pitch": null,
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 17.795130420052185,
+          "widthM": 10.677078252031311
+        },
+        "quantities": {
+          "footprintM2": 190,
+          "roofAreaM2": 190,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 56.94441734416699,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.00000000000003,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 65.31972647421809,
+          "dormerCount": 0
+        }
+      }
+    },
+    {
+      "input": {
+        "shape": "flat",
+        "size": "large",
+        "pitch": null,
+        "storeys": 1,
+        "flatExtension": null
+      },
+      "lower": {
+        "dimensions": {
+          "lengthM": 20.412414523193153,
+          "widthM": 12.24744871391589
+        },
+        "quantities": {
+          "footprintM2": 250,
+          "roofAreaM2": 250.00000000000003,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 65.31972647421809,
+          "dormerCount": 0
+        }
+      },
+      "upper": {
+        "dimensions": {
+          "lengthM": 22.360679774997898,
+          "widthM": 13.416407864998739
+        },
+        "quantities": {
+          "footprintM2": 300,
+          "roofAreaM2": 300.00000000000006,
+          "ridgeM": 0,
+          "hipM": 0,
+          "valleyM": 0,
+          "vergeM": 0,
+          "eavesM": 0,
+          "highEdgeM": 0,
+          "flashingM": 0,
+          "flatEdgeM": 71.55417527999327,
+          "dormerCount": 0
+        }
+      }
+    }
+  ]
+}

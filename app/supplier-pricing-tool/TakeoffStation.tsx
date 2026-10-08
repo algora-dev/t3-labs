@@ -117,12 +117,13 @@ const PLACEHOLDER_COMPONENTS = [
   { id: 'ph-downpipe', name: 'Downpipes', measurement_type: 'point', is_system: true, collection_id: 'tool-builtin' },
 ] as never;
 
-export function TakeoffStation({ planUrl, onFinish }: {
+export function TakeoffStation({ planUrl, onFinish, contained = false }: {
   planUrl: string;
+  contained?: boolean;
   onFinish: (set: MeasurementSet, planImages?: DemoFinishPayload['planImages']) => void;
 }) {
   return (
-    <div className="w-[125%] -ml-[12.5%] space-y-3">
+    <div className={contained ? 'w-full space-y-3' : 'w-[125%] -ml-[12.5%] space-y-3'}>
       <Workstation
         workspaceSlug="supplier-demo"
         quote={{

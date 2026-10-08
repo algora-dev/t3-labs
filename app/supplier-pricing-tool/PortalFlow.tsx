@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import type { EntryMode, HaveSubMode, MeasurementSet, Mode } from './types';
 import { emptyMeasurementSet, GROUP_DEFS } from './types';
 import type { SupplierProduct } from './types';
@@ -22,6 +22,12 @@ import { TakeoffStation, stageSlug } from './TakeoffStation';
 import { tradeUnitPrice, useSupplierConfig } from './supplierConfig';
 import { readAdminData, effectiveTrade } from './adminData';
 import { useFreeToolsAuth } from '../_components/FreeToolsAuthProvider';
+import { QuickEstimateImport } from '../../components/quick-estimate/QuickEstimateImport';
+import { DemoPlanExercise } from '../../components/demo-journey/DemoPlanExercise';
+import { useDemoJourney } from '../../components/demo-journey/useDemoJourney';
+import { applyDemoRecipe, createDemoMeasurements } from '../../lib/demo-journey/samples';
+import { DEMO_ACTION_EVENT, actionFromEvent, recordDemoFailure, recordDemoSignal, updateJourney } from '../../lib/demo-journey/store';
+import { priceOutput } from './pricing';
 
 /** Session persistence: the whole in-progress flow survives Back navigation,
  *  refreshes and the output -> back loop. sessionStorage (not localStorage)
@@ -36,12 +42,13 @@ interface PersistedFlow {
   mode: Mode;
   flowSpeed: 'guide' | 'fast';
   step: number;
+  guidedSamplePlan?: boolean;
 }
 
-function readPersisted(): PersistedFlow | null {
+function readPersisted(key = FLOW_KEY): PersistedFlow | null {
   if (typeof window === 'undefined') return null;
   try {
-    const raw = window.sessionStorage.getItem(FLOW_KEY);
+    const raw = window.sessionStorage.getItem(key);
     if (!raw) return null;
     const p = JSON.parse(raw) as PersistedFlow;
     if (!p?.measureSet?.groups || typeof p.step !== 'number') return null;
@@ -51,8 +58,14 @@ function readPersisted(): PersistedFlow | null {
   }
 }
 
-export function PortalFlow() {
-  const restored = readPersisted();
+function PortalFlowReady() {
+  const { config, basePath } = useSupplierConfig();
+  // Keep Apex training jobs out of other suppliers' saved demo flows.
+  const storageKey = config.slug === 'apex-roofing' ? 'apex.supplier.flow.v1' : FLOW_KEY;
+  const restored = readPersisted(storageKey) ?? (config.slug === 'apex-roofing' ? readPersisted() : null);
+  const journey = useDemoJourney();
+  const [samplePlan, setSamplePlan] = useState(restored?.guidedSamplePlan ?? false);
+  const [sampleRevision, setSampleRevision] = useState(0);
   const [entryMode, setEntryMode] = useState<EntryMode | null>(restored?.entryMode ?? null);
   const [haveSubMode, setHaveSubMode] = useState<HaveSubMode | null>(restored?.haveSubMode ?? null);
   const [pricingMode, setPricingMode] = useState<PricingMode | null>(restored?.pricingMode ?? null);
@@ -66,7 +79,7 @@ export function PortalFlow() {
   const [step, setStep] = useState(() => {
     // A restored takeoff flow at the station step has no plan file to
     // re-render - drop to start (measurements survive for the manual edit).
-    if (restored && restored.entryMode === 'measure' && restored.step === 2) return 1;
+    if (restored && restored.entryMode === 'measure' && restored.step === 2 && !restored.guidedSamplePlan) return 1;
     return restored?.step ?? 1;
   });
   // Guide (one product group per page) vs Fast (all groups on one page).
@@ -78,10 +91,10 @@ export function PortalFlow() {
   // Persist after every change so Back/refresh/output-return never loses work
   useEffect(() => {
     try {
-      const p: PersistedFlow = { entryMode, haveSubMode, pricingMode, measureSet, mode, flowSpeed, step };
-      window.sessionStorage.setItem(FLOW_KEY, JSON.stringify(p));
+      const p: PersistedFlow = { entryMode, haveSubMode, pricingMode, measureSet, mode, flowSpeed, step, guidedSamplePlan: samplePlan };
+      window.sessionStorage.setItem(storageKey, JSON.stringify(p));
     } catch { /* ignore quota */ }
-  }, [entryMode, haveSubMode, pricingMode, measureSet, mode, flowSpeed, step]);
+  }, [entryMode, haveSubMode, pricingMode, measureSet, mode, flowSpeed, step, samplePlan, storageKey]);
 
   const populated = GROUP_DEFS.filter(g => measureSet.groups[g.key].entries.length > 0);
   const productDefs = populated;
@@ -90,8 +103,7 @@ export function PortalFlow() {
   // supplier config allows it; anonymous users always see baseline prices.
   // When the login feature is OFF nobody can log in, so trade-requires-login
   // can never be satisfied - treat trade pricing as public in that case.
-  const { config, basePath } = useSupplierConfig();
-  const { user } = useFreeToolsAuth();
+  const { user, signInWithDemo } = useFreeToolsAuth();
   // Supply-mode choice (materials only vs materials + install). Bypassed
   // (labour included) when the supplier config disables the feature.
   const showPricingMode = config.features.pricingMode;
@@ -131,11 +143,12 @@ export function PortalFlow() {
     if (typeof window === 'undefined') return;
     const slug = stageSlug(step, entryMode, activeGroupKey);
     if (window.location.hash !== slug) {
-      window.history.replaceState(null, '', `${basePath}${slug}`);
+      window.history.replaceState(null, '', `${basePath}${window.location.search}${slug}`);
     }
   }, [step, entryMode, activeGroupKey, basePath]);
 
   function reset() {
+    setSamplePlan(false);
     setEntryMode(null);
     setHaveSubMode(null);
     setPricingMode(null);
@@ -144,7 +157,7 @@ export function PortalFlow() {
     setPlanUrl(null);
     setMeasureSet(emptyMeasurementSet());
     setStep(1);
-    try { window.sessionStorage.removeItem(FLOW_KEY); } catch { /* ignore */ }
+    try { window.sessionStorage.removeItem(storageKey); } catch { /* ignore */ }
   }
 
   // Header brand click restarts the flow (choice modal keeps progress)
@@ -152,6 +165,44 @@ export function PortalFlow() {
     || Object.values(measureSet.groups).some(g => g.entries.length > 0)
     || measureSet.appliedProducts.length > 0
     || (measureSet.customComponents?.length ?? 0) > 0;
+  const exampleTotals = useMemo(() => priceOutput(measureSet, catalog, includeLabour), [measureSet, catalog, includeLabour]);
+  const publicTotals = useMemo(() => priceOutput(measureSet, config.products, includeLabour), [measureSet, config.products, includeLabour]);
+  useEffect(() => {
+    if (config.slug !== 'apex-roofing' || step !== outputStepNum || !exampleTotals.lines.length) return;
+    recordDemoSignal('detailed-output');
+    if (showTrade) recordDemoSignal('trade-preview');
+  }, [config.slug, step, outputStepNum, exampleTotals, showTrade, journey.attempted]);
+  useEffect(() => {
+    if (config.slug !== 'apex-roofing') return;
+    const onDemoAction = (event: Event) => {
+      const action = actionFromEvent(event);
+      if (!['detailed-example', 'plan-example', 'trade-example'].includes(action ?? '')) return;
+      const hasMeasurements = Object.values(measureSet.groups).some(group => group.entries.length > 0);
+      const replacesDraft = action !== 'trade-example' || !hasMeasurements;
+      if (replacesDraft && (hasProgress || planFile) && !window.confirm('Load this demo example? This replaces the current estimator draft and any in-progress drawing in this tab.')) {
+        updateJourney({ type: 'cancel' }); return;
+      }
+      try {
+        if (action === 'trade-example' && hasMeasurements) {
+          signInWithDemo(); setStep(outputStepNum); return;
+        }
+        const example = action === 'plan-example' ? emptyMeasurementSet() : createDemoMeasurements(config.products);
+        setMeasureSet(example); setPlanImages(null); setPlanFile(null);
+        if (planUrl) URL.revokeObjectURL(planUrl);
+        setPlanUrl(null); setSamplePlan(action === 'plan-example');
+        if (action === 'plan-example') setSampleRevision(value => value + 1);
+        setMode('standard'); setFlowSpeed('fast'); setPricingMode('supplyInstall');
+        setEntryMode(action === 'plan-example' ? 'measure' : 'have'); setHaveSubMode('actual');
+        if (action === 'trade-example') { signInWithDemo(); setStep(4); }
+        else setStep(2);
+      } catch {
+        recordDemoFailure(action === 'plan-example' ? 'plan' : action === 'trade-example' ? 'trade' : 'detailed');
+      }
+    };
+    window.addEventListener(DEMO_ACTION_EVENT, onDemoAction);
+    return () => window.removeEventListener(DEMO_ACTION_EVENT, onDemoAction);
+  }, [config.slug, config.products, measureSet, hasProgress, planFile, planUrl, outputStepNum, signInWithDemo]);
+
   useEffect(() => {
     const restart = () => { if (hasProgress) setRestartOpen(true); };
     window.addEventListener('qc-spt-restart', restart);
@@ -166,7 +217,9 @@ export function PortalFlow() {
   }, [hasProgress]);
 
   function handleTakeoffFinish(set: MeasurementSet, planImages?: { name: string; dataUrl: string; annotated: boolean }[]) {
+    setSamplePlan(false);
     setMeasureSet(set);
+    if (set.groups.roofAreas.entries.length) recordDemoSignal('plan-transfer');
     setPlanImages(planImages ?? null);
     // skip the manual entry step - measurements came from the station
     setStep(3);
@@ -174,10 +227,38 @@ export function PortalFlow() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <QuickEstimateImport supplierSlug={config.slug} onImport={(set) => {
+        setSamplePlan(false);
+        setMeasureSet(set);
+        setEntryMode('have');
+        setHaveSubMode('actual');
+        setPricingMode('supplyInstall');
+        setPlanFile(null);
+        if (planUrl) URL.revokeObjectURL(planUrl);
+        setPlanUrl(null);
+        setPlanImages(null);
+        setStep(2);
+      }} />
       {step < 3 && (
         <StepProgress steps={steps} current={currentStep} />
       )}
       <div className="mx-auto max-w-5xl px-4 py-6 pb-16">
+        {journey.active && config.slug === 'apex-roofing' && step >= 2 && !samplePlan && (
+          <section className="ag-demo-work-note" aria-label="Demo estimate scope">
+            <strong>{journey.current === 'trade' ? 'The same job, with example trade prices' : 'Your measurements and selected products, together'}</strong>
+            <p>This is a selected-product estimate, not a full roof quotation. Read the output scope: access, removal and other unselected work are not added here.</p>
+            {journey.current === 'trade' && showTrade && <div className="ag-trade-comparison">
+              <div><span>Public material subtotal</span><b>£{publicTotals.material.toLocaleString('en-GB', { maximumFractionDigits: 2 })}</b></div>
+              <div><span>Example trade material subtotal</span><b>£{exampleTotals.material.toLocaleString('en-GB', { maximumFractionDigits: 2 })}</b></div>
+              <p>Same measurements. Configured product rates change; installation rates do not. Prices exclude VAT. This is a local demo account, not a real login.</p>
+            </div>}
+          </section>
+        )}
+        {step === 2 && entryMode === 'measure' && samplePlan && <DemoPlanExercise key={sampleRevision}
+          onCancel={() => { setSamplePlan(false); setStep(1); }}
+          onFinish={(set) => handleTakeoffFinish(applyDemoRecipe(set, config.products))}
+        />}
+
         {/* Persistent Standard/Advanced + Guide/Fast toggles - entry step onward, but NOT on the takeoff step */}
         {step >= 2 && !(step === 2 && entryMode === 'measure') && (
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -249,8 +330,8 @@ export function PortalFlow() {
         )}
 
         {/* Step 2a: in-tool takeoff station (measure a plan) */}
-        {step === 2 && entryMode === 'measure' && planUrl && (
-          <TakeoffStation planUrl={planUrl} onFinish={handleTakeoffFinish} />
+        {step === 2 && entryMode === 'measure' && !samplePlan && planUrl && (
+          <TakeoffStation planUrl={planUrl} onFinish={handleTakeoffFinish} contained={config.slug === 'apex-roofing' && journey.active} />
         )}
 
         {/* Step 2b: manual measurement entry (have measurements).
@@ -373,4 +454,11 @@ export function PortalFlow() {
       )}
     </div>
   );
+}
+
+// Read browser drafts only after hydration, so a saved job cannot mismatch the server HTML.
+const subscribeHydration = () => () => {};
+export function PortalFlow() {
+  const hydrated = useSyncExternalStore(subscribeHydration, () => true, () => false);
+  return hydrated ? <PortalFlowReady /> : <div className="p-8 text-sm text-slate-500" role="status">Loading your estimator...</div>;
 }

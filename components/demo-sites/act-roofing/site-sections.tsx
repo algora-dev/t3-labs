@@ -422,6 +422,12 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
                 {tool.ctaLabel}
                 <ArrowIcon />
               </ButtonLink>
+              <p className="mt-4 text-sm text-[#667085]">
+                Already have measurements or plans?{' '}
+                <a className="font-semibold text-[#1769E0] hover:underline" href="/demo/roofing-site/estimate">
+                  Choose the right estimate tool
+                </a>
+              </p>
             </div>
           </div>
           {/* Tool preview */}
