@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": [
+      "dom",
+      "es2022"
+    ],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": []
+  },
+  "files": [
+    "../lib/demo-helper/embed.ts",
+    "../lib/demo-helper/config.ts",
+    "../lib/demo-helper/state.ts",
+    "../lib/demo-helper/store.ts",
+    "../lib/quick-estimate/plan-view.ts"
+  ]
+}

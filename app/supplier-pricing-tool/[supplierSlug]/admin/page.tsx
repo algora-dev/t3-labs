@@ -7,9 +7,10 @@
 import { use } from 'react';
 import { getSupplierDef } from '../../supplierDefs';
 import { AdminPanel } from '../../admin/AdminPanel';
+import { ApexDemoShell } from '@/components/demo-journey/ApexDemoShell';
 
 export default function SupplierAdminRoute({ params }: { params: Promise<{ supplierSlug: string }> | { supplierSlug: string } }) {
   const { supplierSlug } = use(params as Promise<{ supplierSlug: string }>);
   const def = getSupplierDef(supplierSlug);
-  return <AdminPanel slug={def.slug} />;
+  return def.slug === 'apex-roofing' ? <ApexDemoShell><AdminPanel slug={def.slug} /></ApexDemoShell> : <AdminPanel slug={def.slug} />;
 }

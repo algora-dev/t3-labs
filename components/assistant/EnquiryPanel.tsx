@@ -3,6 +3,9 @@
 import { useEffect, useState } from 'react';
 import type { Estimate, EstimateComponentSelection, EstimateScope } from '@/lib/pricing/estimate-engine';
 
+import { getHelper, recordHelperSignal } from '@/lib/demo-helper/store';
+import { validateDemoContact } from '@/lib/demo-helper/enquiry-preview';
+
 interface SessionPrefill {
   facts: {
     projectType: string | null;
@@ -18,6 +21,7 @@ interface SessionPrefill {
   };
   lead: { name: string | null; email: string | null; phone: string | null };
   latestEstimate: Estimate | null;
+  latestEstimates?: Estimate[];
   draftSummary: string[];
   recentUserMessages: string[];
 }
@@ -39,8 +43,8 @@ const labelCls = 'mb-1 block text-[11px] font-semibold text-slate-500';
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-4 border-b border-slate-100 py-2 last:border-0">
-      <span className="shrink-0 text-[11px] font-medium text-slate-500">{label}</span>
-      <span className="text-right text-xs font-medium text-slate-800">{value}</span>
+      <span className="shrink-0 text-xs font-medium text-slate-500">{label}</span>
+      <span className="text-right text-sm font-medium text-slate-800">{value}</span>
     </div>
   );
 }
@@ -75,6 +79,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
 
   useEffect(() => {
     let cancelled = false;
+    const context = { runId: getHelper().runId, task: getHelper().current };
     fetch('/api/session', { cache: 'no-store' })
       .then((r) => {
         if (!r.ok) throw new Error('Could not load session');
@@ -98,6 +103,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
         setPhone(data.lead.phone ?? '');
         setDraftSummary(Array.isArray(data.draftSummary) ? data.draftSummary : []);
         setPhase('review');
+        if (data.latestEstimate?.total && data.latestEstimate.lineItems.length) recordHelperSignal('assistant-enquiry-open', context);
       })
       .catch(() => {
         if (!cancelled) {
@@ -119,8 +125,8 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
         setError(`"${file.name}" is not a supported file type (images, PDF or text).`);
         continue;
       }
-      if (file.size > 2_500_000) {
-        setError(`"${file.name}" is too large - please keep files under 2.5 MB.`);
+      if (file.size <= 0 || file.size > 2_500_000) {
+        setError(`"${file.name}" must be a non-empty file under 2.5 MB.`);
         continue;
       }
       // Demo mode stores safe metadata only. A live client deployment should upload
@@ -130,41 +136,22 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
     setAttachments((current) => [...current, ...next].slice(0, 5));
   };
 
-  const submit = async () => {
-    setError(null);
-    setPhase('submitting');
-    try {
-      const res = await fetch('/api/inquiry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          phone,
-          question: notes,
-          project: {
-            projectType,
-            roofArea,
-            areaType,
-            roofShape,
-            pitchDegrees: pitch,
-            material,
-            location,
-            estimateScope,
-            components: prefill?.facts.components ?? [],
-            extras: extras.split(',').map((e) => e.trim()).filter(Boolean),
-          },
-          attachments,
-        }),
-      });
-      const data = (await res.json()) as { ok?: boolean; error?: string };
-      if (!res.ok || !data.ok) throw new Error(data.error ?? 'Something went wrong. Please try again.');
-      setPhase('success');
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.');
-      setPhase('contact');
-    }
+  const submit = () => {
+    const validation = validateDemoContact({ name, email, phone });
+    if (validation) { setError(validation); setPhase('contact'); return; }
+    // This demo intentionally does not POST contact details or file data.
+    // The complete estimate stays attached in component memory for the receipt below.
+    setError(null); setPhase('success');
+    if (prefill?.latestEstimate?.total) recordHelperSignal('assistant-enquiry-ready');
   };
+
+  const attachedEstimates = (prefill?.latestEstimates?.length
+    ? prefill.latestEstimates : prefill?.latestEstimate ? [prefill.latestEstimate] : [])
+    .filter(e => Number.isFinite(e.total)).slice().sort((a, b) => a.total - b.total);
+  const money = (n: number) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 }).format(n);
+  const estimateLabel = attachedEstimates.length > 1
+    ? `${money(attachedEstimates[0].total)} to ${money(attachedEstimates[attachedEstimates.length - 1].total)}`
+    : attachedEstimates.length ? money(attachedEstimates[0].total) : '';
 
   if (phase === 'loading') {
     return (
@@ -178,22 +165,25 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
   }
 
   if (phase === 'success') {
-    return (
-      <div className="flex h-full flex-col items-center justify-center px-7 text-center">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 6L9 17l-5-5" />
-          </svg>
-        </div>
-        <p className="text-base font-bold text-slate-900">Enquiry ready</p>
-        <p className="mt-2 max-w-sm text-xs leading-relaxed text-slate-500">
-          In a live deployment this would now go to the business with the project details and estimate context already attached. This is a demo, so no real business is contacted.
-        </p>
-        <button onClick={onClose} className="mt-5 rounded-full px-5 py-2.5 text-xs font-semibold text-white hover:opacity-90" style={{ backgroundColor: accentColor }}>
-          Back to assistant
-        </button>
+    return <div className="flex h-full flex-col overflow-y-auto px-5 py-6" role="status">
+      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-xl text-emerald-700" aria-hidden="true">✓</div>
+      <h2 className="text-xl font-bold text-slate-900">Here’s what Apex would receive.</h2>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">A customer enquiry with the roof details and estimate already attached. <strong>No email was sent.</strong></p>
+      <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4">
+        <Row label="Customer" value={name} />
+        <Row label="Contact" value={[email, phone].filter(Boolean).join(' · ')} />
+        <Row label="Project" value={projectType.replace(/_/g, ' ')} />
+        {roofArea && <Row label="Roof" value={`${roofArea} m² · ${roofShape} · ${pitch}°`} />}
+        {material && <Row label="Covering" value={material} />}
+        {location && <Row label="Location" value={location} />}
+        {estimateLabel && <Row label="Indicative estimate" value={`${estimateLabel} excl. VAT`} />}
+        {notes && <Row label="Your note" value={notes} />}
+        {attachments.length > 0 && <Row label="Selected files" value={attachments.map(f => f.name).join(', ')} />}
       </div>
-    );
+      <p className="mt-3 text-xs leading-relaxed text-slate-500">The full calculated scope and assumptions are attached behind this summary. Prices remain indicative and subject to a proper assessment. Selected files are represented by their names only.</p>
+      <p className="mt-2 text-xs leading-relaxed text-slate-500">These form details stay in memory on this page. They are not uploaded or saved. The assistant conversation uses its existing session.</p>
+      <button type="button" onClick={onClose} className="mt-5 min-h-11 rounded-xl px-5 py-3 text-sm font-semibold text-white" style={{ backgroundColor: accentColor }}>Back to assistant</button>
+    </div>;
   }
 
   const estimate = prefill?.latestEstimate;
@@ -231,31 +221,28 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
 
           {estimate && (
             <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <div className="flex items-center justify-between bg-slate-900 px-4 py-3 text-white">
+              <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-900 px-4 py-3 text-white">
                 <div>
                   <p className="text-xs font-semibold">Indicative estimate</p>
-                  <p className="mt-0.5 text-[10px] text-slate-300">Reference {estimate.id}</p>
+                  <p className="mt-0.5 text-[10px] text-slate-300">{attachedEstimates.length > 1 ? 'Both range scenarios included' : `Reference ${estimate.id}`}</p>
                 </div>
-                <p className="text-lg font-bold">{estimate.symbol}{estimate.total.toLocaleString()}</p>
+                <div><p className="text-lg font-bold">{estimateLabel}</p><p className="text-[11px] text-slate-300">GBP, excluding VAT</p></div>
               </div>
-              <div className="px-4 py-2">
-                {estimate.lineItems.map((line) => (
-                  <Row key={`${line.catalogItemId}-${line.quantity}`} label={line.label} value={`${line.quantity.toLocaleString()} ${line.unit} - ${estimate.symbol}${line.subtotal.toLocaleString()}`} />
-                ))}
-              </div>
-              {estimate.assumptions.length > 0 && (
-                <div className="border-t border-slate-100 px-4 py-2">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Pricing assumptions</p>
-                  <ul className="mt-1 space-y-1">
-                    {estimate.assumptions.slice(0, 5).map((a, i) => <li key={i} className="text-[10px] leading-relaxed text-slate-500">- {a}</li>)}
-                  </ul>
-                </div>
-              )}
+              <details className="px-4 py-3"><summary className="cursor-pointer text-xs font-semibold text-slate-600">View priced scope and assumptions</summary>
+                {attachedEstimates.map((item, index) => <div key={item.id} className="py-2">
+                  {attachedEstimates.length > 1 && <p className="mt-2 text-xs font-bold text-slate-700">{index === 0 ? 'Lower' : 'Upper'} scenario: {money(item.total)}</p>}
+                  {item.lineItems.map((line) => <Row key={`${line.catalogItemId}-${line.quantity}`} label={line.label} value={`${line.quantity.toLocaleString()} ${line.unit} - ${item.symbol}${line.subtotal.toLocaleString()}`} />)}
+                  {item.assumptions.length > 0 && <div className="border-t border-slate-100 py-2">
+                    <p className="text-xs font-bold text-slate-500">Pricing assumptions</p>
+                    <ul className="mt-1 space-y-1">{item.assumptions.slice(0, 5).map((a, i) => <li key={i} className="text-xs leading-relaxed text-slate-500">- {a}</li>)}</ul>
+                  </div>}
+                </div>)}
+              </details>
             </div>
           )}
 
           <p className="mt-3 text-[11px] leading-relaxed text-slate-400">
-            Want to change the estimate itself? Go back to the assistant and I can recalculate it before you send the enquiry.
+            Need to change the price? Return to chat to recalculate before previewing your enquiry.
           </p>
         </div>
 
@@ -350,6 +337,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-base font-bold text-slate-900">How should the team contact you?</p>
+            <button type="button" className="mt-2 min-h-9 text-xs font-semibold text-blue-700" onClick={() => { setName('Sam Taylor'); setEmail('homeowner@example.com'); setPhone(''); }}>Use example contact details</button>
             <p className="mt-1 text-xs text-slate-500">Your project details are already attached. I just need a way to reach you.</p>
           </div>
           <button onClick={() => setPhase('review')} className="text-xs font-semibold text-slate-500 hover:text-slate-800">Review</button>
@@ -357,17 +345,17 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
 
         <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm">
           <div>
-            <label className={labelCls}>Name *</label>
-            <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" autoComplete="name" />
+            <label className={labelCls} htmlFor="sa-enquiry-name">Name *</label>
+            <input className={inputCls} id="sa-enquiry-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" autoComplete="name" />
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2.5">
             <div>
-              <label className={labelCls}>Email</label>
-              <input className={inputCls} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" />
+              <label className={labelCls} htmlFor="sa-enquiry-email">Email</label>
+              <input className={inputCls} type="email" id="sa-enquiry-email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" />
             </div>
             <div>
-              <label className={labelCls}>Phone</label>
-              <input className={inputCls} type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Optional if email supplied" autoComplete="tel" />
+              <label className={labelCls} htmlFor="sa-enquiry-phone">Phone</label>
+              <input className={inputCls} type="tel" id="sa-enquiry-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Optional if email supplied" autoComplete="tel" />
             </div>
           </div>
           <div className="mt-3">
@@ -394,11 +382,11 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
 
         {estimate && (
           <div className="mt-3 rounded-xl bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
-            Estimate {estimate.id} - {estimate.symbol}{estimate.total.toLocaleString()} {estimate.currency} will be attached.
+            {attachedEstimates.length > 1 ? 'Both range scenarios' : 'Your estimate'} ({estimateLabel}, excluding VAT) will be attached.
           </div>
         )}
         {error && <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">{error}</div>}
-        <p className="mt-3 text-[10px] leading-relaxed text-slate-400">Demo only. No enquiry is sent outside this session.</p>
+        <p className="mt-3 text-[10px] leading-relaxed text-slate-400">Demo preview only. Use example details. No email is sent and your form details or files are not uploaded or saved.</p>
       </div>
 
       <div className="border-t border-slate-200 bg-white p-3">
@@ -408,7 +396,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
           className="w-full rounded-full px-4 py-3 text-xs font-semibold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
           style={{ backgroundColor: accentColor }}
         >
-          {phase === 'submitting' ? 'Preparing enquiry...' : 'Send enquiry'}
+          {phase === 'submitting' ? 'Preparing enquiry...' : 'Preview my enquiry'}
         </button>
       </div>
     </div>

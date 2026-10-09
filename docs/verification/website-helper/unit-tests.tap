@@ -1,0 +1,775 @@
+
+> t3-labs-site@1.0.0 test
+> node --experimental-strip-types --test tests/*.test.mjs
+
+TAP version 13
+# (node:5819) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5819) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5819) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-helper-build/apex-flat-refinement/lib/quick-estimate/server.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-helper-build/apex-flat-refinement/package.json.
+# Subtest: seven homeowner demo systems have material, labour and explicit exclusions
+ok 1 - seven homeowner demo systems have material, labour and explicit exclusions
+  ---
+  duration_ms: 1.459404
+  type: 'test'
+  ...
+# Subtest: five pitched systems calculate positive bounded subtotal on typical roofs
+ok 2 - five pitched systems calculate positive bounded subtotal on typical roofs
+  ---
+  duration_ms: 5.351599
+  type: 'test'
+  ...
+# Subtest: two flat systems have prices and flat perimeter details
+ok 3 - two flat systems have prices and flat perimeter details
+  ---
+  duration_ms: 0.717264
+  type: 'test'
+  ...
+# Subtest: mixed roof uses separately priced flat extension without duplicating gutter
+ok 4 - mixed roof uses separately priced flat extension without duplicating gutter
+  ---
+  duration_ms: 0.423107
+  type: 'test'
+  ...
+# Subtest: unsupported slate pitch is never priced as though compatible
+ok 5 - unsupported slate pitch is never priced as though compatible
+  ---
+  duration_ms: 0.294978
+  type: 'test'
+  ...
+# Subtest: new selections are accepted by the public parser
+ok 6 - new selections are accepted by the public parser
+  ---
+  duration_ms: 0.127709
+  type: 'test'
+  ...
+# Subtest: Apex demo has one Leeds / GBP identity across structured business data
+ok 7 - Apex demo has one Leeds / GBP identity across structured business data
+  ---
+  duration_ms: 1.061635
+  type: 'test'
+  ...
+# Subtest: every shared Apex content page has an assistant navigation destination
+ok 8 - every shared Apex content page has an assistant navigation destination
+  ---
+  duration_ms: 0.165045
+  type: 'test'
+  ...
+# Subtest: configured roof-system rates keep re-roof removal as separate allowances
+ok 9 - configured roof-system rates keep re-roof removal as separate allowances
+  ---
+  duration_ms: 0.300235
+  type: 'test'
+  ...
+# Subtest: complex estimate clarification budget supports the full guided conversation
+ok 10 - complex estimate clarification budget supports the full guided conversation
+  ---
+  duration_ms: 0.121019
+  type: 'test'
+  ...
+# (node:5821) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5821) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5821) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-helper-build/apex-flat-refinement/lib/demo-helper/config.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-helper-build/apex-flat-refinement/package.json.
+# Subtest: new helper has exactly three core tasks and optional admin, not mandatory advanced exercises
+ok 11 - new helper has exactly three core tasks and optional admin, not mandatory advanced exercises
+  ---
+  duration_ms: 1.347268
+  type: 'test'
+  ...
+# Subtest: welcome is visible without claiming any task or estimate was completed
+ok 12 - welcome is visible without claiming any task or estimate was completed
+  ---
+  duration_ms: 0.255589
+  type: 'test'
+  ...
+# Subtest: invalid or stale saved helper progress is rejected
+ok 13 - invalid or stale saved helper progress is rejected
+  ---
+  duration_ms: 0.715572
+  type: 'test'
+  ...
+# Subtest: persisted state retains UI progress only and strips contact or file data
+ok 14 - persisted state retains UI progress only and strips contact or file data
+  ---
+  duration_ms: 0.352393
+  type: 'test'
+  ...
+# Subtest: page visits, unopened tasks and unrelated events cannot complete a task
+ok 15 - page visits, unopened tasks and unrelated events cannot complete a task
+  ---
+  duration_ms: 0.120158
+  type: 'test'
+  ...
+# Subtest: knowledge flow requires both a structured answer and the visitor following its link
+ok 16 - knowledge flow requires both a structured answer and the visitor following its link
+  ---
+  duration_ms: 0.098817
+  type: 'test'
+  ...
+# Subtest: both pricing tasks require price, enquiry opening, and actual preview completion in order
+ok 17 - both pricing tasks require price, enquiry opening, and actual preview completion in order
+  ---
+  duration_ms: 0.496086
+  type: 'test'
+  ...
+# Subtest: stale asynchronous answers from a previous run or other task are ignored
+ok 18 - stale asynchronous answers from a previous run or other task are ignored
+  ---
+  duration_ms: 0.126618
+  type: 'test'
+  ...
+# Subtest: automatic completion preserves current page/task and collapsed state for reading the result
+ok 19 - automatic completion preserves current page/task and collapsed state for reading the result
+  ---
+  duration_ms: 0.234377
+  type: 'test'
+  ...
+# Subtest: manual continuation, skipping and observed completion remain distinguishable
+ok 20 - manual continuation, skipping and observed completion remain distinguishable
+  ---
+  duration_ms: 0.400935
+  type: 'test'
+  ...
+# Subtest: failure stays incomplete and a valid retry can succeed
+ok 21 - failure stays incomplete and a valid retry can succeed
+  ---
+  duration_ms: 0.125666
+  type: 'test'
+  ...
+# Subtest: admin is completed only by the matching panel event after explicitly starting it
+ok 22 - admin is completed only by the matching panel event after explicitly starting it
+  ---
+  duration_ms: 0.083524
+  type: 'test'
+  ...
+# Subtest: position storage is bounded and a resized desktop cannot strand the drag handle
+ok 23 - position storage is bounded and a resized desktop cannot strand the drag handle
+  ---
+  duration_ms: 0.22251
+  type: 'test'
+  ...
+# Subtest: price prose or an empty/incomplete card never becomes a measured assistant success
+ok 24 - price prose or an empty/incomplete card never becomes a measured assistant success
+  ---
+  duration_ms: 0.423338
+  type: 'test'
+  ...
+# Subtest: assistant knowledge completion requires a usable internal page action
+ok 25 - assistant knowledge completion requires a usable internal page action
+  ---
+  duration_ms: 0.275369
+  type: 'test'
+  ...
+# Subtest: prepared assistant scenario uses the existing catalogue and user-specified components exactly once
+ok 26 - prepared assistant scenario uses the existing catalogue and user-specified components exactly once
+  ---
+  duration_ms: 1.582057
+  type: 'test'
+  ...
+# Subtest: enquiry contacts allow phone or email but validate the provided contact
+ok 27 - enquiry contacts allow phone or email but validate the provided contact
+  ---
+  duration_ms: 0.223292
+  type: 'test'
+  ...
+# Subtest: attachments use metadata only, with explicit file type and size limits
+ok 28 - attachments use metadata only, with explicit file type and size limits
+  ---
+  duration_ms: 0.234337
+  type: 'test'
+  ...
+# Subtest: active site shell has a floating helper, not the legacy shrinking walkthrough wrapper
+ok 29 - active site shell has a floating helper, not the legacy shrinking walkthrough wrapper
+  ---
+  duration_ms: 0.388046
+  type: 'test'
+  ...
+# Subtest: guided enquiry UI has no send request; server also guards against demo email delivery
+ok 30 - guided enquiry UI has no send request; server also guards against demo email delivery
+  ---
+  duration_ms: 0.483467
+  type: 'test'
+  ...
+# Subtest: plan route uses the same integrated estimator without deleting an existing draft
+ok 31 - plan route uses the same integrated estimator without deleting an existing draft
+  ---
+  duration_ms: 0.260657
+  type: 'test'
+  ...
+# Subtest: admin has explicit local-only disclosure and trade milestone hook
+ok 32 - admin has explicit local-only disclosure and trade milestone hook
+  ---
+  duration_ms: 0.176822
+  type: 'test'
+  ...
+# Subtest: optional Apex advanced enquiry returns locally before uploading files or posting the output
+ok 33 - optional Apex advanced enquiry returns locally before uploading files or posting the output
+  ---
+  duration_ms: 0.162711
+  type: 'test'
+  ...
+# (node:5854) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5854) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5854) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-helper-build/apex-flat-refinement/lib/demo-journey/state.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-helper-build/apex-flat-refinement/package.json.
+# Subtest: journey has four core experiences and one genuinely optional trade task
+ok 34 - journey has four core experiences and one genuinely optional trade task
+  ---
+  duration_ms: 0.881358
+  type: 'test'
+  ...
+# Subtest: initial journey is inactive and never claims completed experiences
+ok 35 - initial journey is inactive and never claims completed experiences
+  ---
+  duration_ms: 0.117895
+  type: 'test'
+  ...
+# Subtest: malformed, stale, oversized or forged progress is rejected safely
+ok 36 - malformed, stale, oversized or forged progress is rejected safely
+  ---
+  duration_ms: 2.39332
+  type: 'test'
+  ...
+# Subtest: valid progress survives refresh without retaining arbitrary extra fields
+ok 37 - valid progress survives refresh without retaining arbitrary extra fields
+  ---
+  duration_ms: 0.241368
+  type: 'test'
+  ...
+# Subtest: visiting a task or receiving an unrelated result does not complete it
+ok 38 - visiting a task or receiving an unrelated result does not complete it
+  ---
+  duration_ms: 0.118225
+  type: 'test'
+  ...
+# Subtest: each task completes only through its matching result signal
+ok 39 - each task completes only through its matching result signal
+  ---
+  duration_ms: 0.188039
+  type: 'test'
+  ...
+# Subtest: failed assistant requests remain incomplete, and a successful retry can complete
+ok 40 - failed assistant requests remain incomplete, and a successful retry can complete
+  ---
+  duration_ms: 0.098055
+  type: 'test'
+  ...
+# Subtest: declining a sample import cancels the attempt, so an old output cannot count
+ok 41 - declining a sample import cancels the attempt, so an old output cannot count
+  ---
+  duration_ms: 0.084956
+  type: 'test'
+  ...
+# Subtest: pausing ignores result signals but preserves progress for resuming
+ok 42 - pausing ignores result signals but preserves progress for resuming
+  ---
+  duration_ms: 0.177623
+  type: 'test'
+  ...
+# Subtest: skipped tasks stay distinct from completed tasks, including the final optional step
+ok 43 - skipped tasks stay distinct from completed tasks, including the final optional step
+  ---
+  duration_ms: 0.379903
+  type: 'test'
+  ...
+# Subtest: next and direct selection do not silently complete other tasks
+ok 44 - next and direct selection do not silently complete other tasks
+  ---
+  duration_ms: 0.104485
+  type: 'test'
+  ...
+# Subtest: restarting clears only tour state and keeps it ready to begin
+ok 45 - restarting clears only tour state and keeps it ready to begin
+  ---
+  duration_ms: 0.196922
+  type: 'test'
+  ...
+# Subtest: quick demo inputs are valid and calculate a real ordered price range
+ok 46 - quick demo inputs are valid and calculate a real ordered price range
+  ---
+  duration_ms: 3.691405
+  type: 'test'
+  ...
+# Subtest: manual sample quantities are actual roof values, not footprint values converted twice
+ok 47 - manual sample quantities are actual roof values, not footprint values converted twice
+  ---
+  duration_ms: 0.534443
+  type: 'test'
+  ...
+# Subtest: sample plan requires four ordered corners and computes the calibrated footprint
+ok 48 - sample plan requires four ordered corners and computes the calibrated footprint
+  ---
+  duration_ms: 0.30346
+  type: 'test'
+  ...
+# Subtest: plan transfer retains plan-area provenance and existing pitch rules apply once
+ok 49 - plan transfer retains plan-area provenance and existing pitch rules apply once
+  ---
+  duration_ms: 0.246045
+  type: 'test'
+  ...
+# Subtest: demo recipes reuse current products and do not mutate the catalogue or source measurements
+ok 50 - demo recipes reuse current products and do not mutate the catalogue or source measurements
+  ---
+  duration_ms: 0.801369
+  type: 'test'
+  ...
+# Subtest: changing the sample covering changes product prices but not its measured quantities
+ok 51 - changing the sample covering changes product prices but not its measured quantities
+  ---
+  duration_ms: 0.304072
+  type: 'test'
+  ...
+# Subtest: trade comparison uses the same quantities and labour with discounted material rates
+ok 52 - trade comparison uses the same quantities and labour with discounted material rates
+  ---
+  duration_ms: 0.29678
+  type: 'test'
+  ...
+# Subtest: missing sample recipe products fail rather than returning misleading incomplete totals
+ok 53 - missing sample recipe products fail rather than returning misleading incomplete totals
+  ---
+  duration_ms: 0.294707
+  type: 'test'
+  ...
+# Subtest: guided routes exist and keep noindex metadata
+ok 54 - guided routes exist and keep noindex metadata
+  ---
+  duration_ms: 0.571428
+  type: 'test'
+  ...
+# (node:5866) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5866) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-helper-build/apex-flat-refinement/app/api/inquiry/route.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-helper-build/apex-flat-refinement/package.json.
+# (node:5866) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: demo endpoint never emails or persists contact facts, even with an email API key configured
+ok 55 - demo endpoint never emails or persists contact facts, even with an email API key configured
+  ---
+  duration_ms: 39.191675
+  type: 'test'
+  ...
+# Subtest: enquiry endpoint rejects malformed and invalid contact submissions without a session write
+ok 56 - enquiry endpoint rejects malformed and invalid contact submissions without a session write
+  ---
+  duration_ms: 2.422434
+  type: 'test'
+  ...
+# (node:5878) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5878) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-helper-build/apex-flat-refinement/lib/internal-pricing.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-helper-build/apex-flat-refinement/package.json.
+# Subtest: default measurement-to-price estimate starts at $999 setup and $99 monthly
+ok 57 - default measurement-to-price estimate starts at $999 setup and $99 monthly
+  ---
+  duration_ms: 0.888048
+  type: 'test'
+  ...
+# Subtest: digital takeoff adds $500 setup and $50 monthly and forces measurement tool
+ok 58 - digital takeoff adds $500 setup and $50 monthly and forces measurement tool
+  ---
+  duration_ms: 0.131766
+  type: 'test'
+  ...
+# Subtest: smart assistant base can be priced independently
+ok 59 - smart assistant base can be priced independently
+  ---
+  duration_ms: 0.214779
+  type: 'test'
+  ...
+# Subtest: large catalogues increase both setup and monthly support allowance
+ok 60 - large catalogues increase both setup and monthly support allowance
+  ---
+  duration_ms: 0.15542
+  type: 'test'
+  ...
+# Subtest: manual adjustments apply to final ballpark and never allow negative totals
+ok 61 - manual adjustments apply to final ballpark and never allow negative totals
+  ---
+  duration_ms: 0.12142
+  type: 'test'
+  ...
+# Subtest: fuller supplier configuration produces stable deterministic pricing
+ok 62 - fuller supplier configuration produces stable deterministic pricing
+  ---
+  duration_ms: 0.201098
+  type: 'test'
+  ...
+# (node:5885) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5885) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5885) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-helper-build/apex-flat-refinement/lib/pricing/estimate-engine.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-helper-build/apex-flat-refinement/package.json.
+# Subtest: catalogue version and currency are preserved
+ok 63 - catalogue version and currency are preserved
+  ---
+  duration_ms: 1.430572
+  type: 'test'
+  ...
+# Subtest: covering-only estimate never adds unrequested roof components
+ok 64 - covering-only estimate never adds unrequested roof components
+  ---
+  duration_ms: 0.185806
+  type: 'test'
+  ...
+# Subtest: simple gable geometry has no automatic valley allowance
+ok 65 - simple gable geometry has no automatic valley allowance
+  ---
+  duration_ms: 0.145876
+  type: 'test'
+  ...
+# Subtest: user-specified component quantities are priced exactly from approved rates
+ok 66 - user-specified component quantities are priced exactly from approved rates
+  ---
+  duration_ms: 0.237373
+  type: 'test'
+  ...
+# Subtest: plan-vs-actual slope conversion applies the 30 degree preset factor
+ok 67 - plan-vs-actual slope conversion applies the 30 degree preset factor
+  ---
+  duration_ms: 0.218754
+  type: 'test'
+  ...
+# Subtest: explicit estimated gutter selection changes the total without inventing downpipes
+ok 68 - explicit estimated gutter selection changes the total without inventing downpipes
+  ---
+  duration_ms: 0.328788
+  type: 'test'
+  ...
+# Subtest: commercial rounding remains stable
+ok 69 - commercial rounding remains stable
+  ---
+  duration_ms: 0.138005
+  type: 'test'
+  ...
+# Subtest: arithmetic is stable across repeated runs
+ok 70 - arithmetic is stable across repeated runs
+  ---
+  duration_ms: 0.790102
+  type: 'test'
+  ...
+# Subtest: unknown roofing materials never silently fall back to a priced product
+ok 71 - unknown roofing materials never silently fall back to a priced product
+  ---
+  duration_ms: 0.541493
+  type: 'test'
+  ...
+# Subtest: re-roof adds the configured strip and disposal allowances on top of the roof system
+ok 72 - re-roof adds the configured strip and disposal allowances on top of the roof system
+  ---
+  duration_ms: 0.399252
+  type: 'test'
+  ...
+# Subtest: new roofs never include strip or disposal allowance lines
+ok 73 - new roofs never include strip or disposal allowance lines
+  ---
+  duration_ms: 0.128671
+  type: 'test'
+  ...
+# Subtest: size bands produce a price RANGE at the configured band min and max
+ok 74 - size bands produce a price RANGE at the configured band min and max
+  ---
+  duration_ms: 0.308678
+  type: 'test'
+  ...
+# Subtest: exact area gives a single figure, and pitch bands use the configured representative degrees
+ok 75 - exact area gives a single figure, and pitch bands use the configured representative degrees
+  ---
+  duration_ms: 0.138505
+  type: 'test'
+  ...
+# Subtest: configured pitch compatibility blocks unsuitable roof coverings
+ok 76 - configured pitch compatibility blocks unsuitable roof coverings
+  ---
+  duration_ms: 0.112046
+  type: 'test'
+  ...
+# Subtest: guided plan area uses pitch to convert footprint to sloped roof area
+ok 77 - guided plan area uses pitch to convert footprint to sloped roof area
+  ---
+  duration_ms: 0.164344
+  type: 'test'
+  ...
+# Subtest: component quantity sources: user quantities are user-sourced, authorised heuristics are labelled
+ok 78 - component quantity sources: user quantities are user-sourced, authorised heuristics are labelled
+  ---
+  duration_ms: 0.182861
+  type: 'test'
+  ...
+# Subtest: draft validation refuses unauthorised heuristic component quantities
+ok 79 - draft validation refuses unauthorised heuristic component quantities
+  ---
+  duration_ms: 0.322298
+  type: 'test'
+  ...
+# Subtest: guided draft validation requires a pitch range or exact pitch
+ok 80 - guided draft validation requires a pitch range or exact pitch
+  ---
+  duration_ms: 0.172465
+  type: 'test'
+  ...
+# (node:5901) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5901) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:5901) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-helper-build/apex-flat-refinement/lib/quick-estimate/engine.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-helper-build/apex-flat-refinement/package.json.
+# Subtest: agreed five footprint bands and three pitch bands are preserved
+ok 81 - agreed five footprint bands and three pitch bands are preserved
+  ---
+  duration_ms: 1.419145
+  type: 'test'
+  ...
+# Subtest: simple gable has one ridge, four barge runs, two eaves and no hips or valleys
+ok 82 - simple gable has one ridge, four barge runs, two eaves and no hips or valleys
+  ---
+  duration_ms: 1.425885
+  type: 'test'
+  ...
+# Subtest: mono-pitch has one slope, no ridge and an explicit high edge
+ok 83 - mono-pitch has one slope, no ridge and an explicit high edge
+  ---
+  duration_ms: 0.380003
+  type: 'test'
+  ...
+# Subtest: hip lengths use diagonal plan runs and vertical rise, not a naive slope factor
+ok 84 - hip lengths use diagonal plan runs and vertical rise, not a naive slope factor
+  ---
+  duration_ms: 0.992962
+  type: 'test'
+  ...
+# Subtest: intersecting footprints are unions, never sums of overlapping rectangles
+ok 85 - intersecting footprints are unions, never sums of overlapping rectangles
+  ---
+  duration_ms: 22.634499
+  type: 'test'
+  ...
+# Subtest: all 135 pitched shape-size-pitch combinations have coherent finite ordered endpoints
+ok 86 - all 135 pitched shape-size-pitch combinations have coherent finite ordered endpoints
+  ---
+  duration_ms: 7.846229
+  type: 'test'
+  ...
+# Subtest: component lengths scale by square root of area, not area itself
+ok 87 - component lengths scale by square root of area, not area itself
+  ---
+  duration_ms: 0.136443
+  type: 'test'
+  ...
+# Subtest: storeys alter access only and preserve both complete quantity scenarios
+ok 88 - storeys alter access only and preserve both complete quantity scenarios
+  ---
+  duration_ms: 0.159737
+  type: 'test'
+  ...
+# Subtest: flat roofs do not acquire pitch, ridges, hips, valleys or invented membrane upstands
+ok 89 - flat roofs do not acquire pitch, ridges, hips, valleys or invented membrane upstands
+  ---
+  duration_ms: 0.341316
+  type: 'test'
+  ...
+# Subtest: an optional flat extension is added separately with no pitched-area conversion
+ok 90 - an optional flat extension is added separately with no pitched-area conversion
+  ---
+  duration_ms: 0.323109
+  type: 'test'
+  ...
+# Subtest: dormers have real junction geometry without counting their plan area twice
+ok 91 - dormers have real junction geometry without counting their plan area twice
+  ---
+  duration_ms: 0.13476
+  type: 'test'
+  ...
+# Subtest: roof illustrations and engine reference the same template meshes
+ok 92 - roof illustrations and engine reference the same template meshes
+  ---
+  duration_ms: 0.122222
+  type: 'test'
+  ...
+# Subtest: invalid dimensions, roof choices and contradictory flat inputs are rejected
+ok 93 - invalid dimensions, roof choices and contradictory flat inputs are rejected
+  ---
+  duration_ms: 0.374365
+  type: 'test'
+  ...
+# Subtest: public input accepts selections only and rejects client-supplied prices and quantities
+ok 94 - public input accepts selections only and rejects client-supplied prices and quantities
+  ---
+  duration_ms: 0.307015
+  type: 'test'
+  ...
+# Subtest: material category and project conditional fields are validated
+ok 95 - material category and project conditional fields are validated
+  ---
+  duration_ms: 0.418851
+  type: 'test'
+  ...
+# Subtest: typical-band tile pricing uses its compatible subrange without changing the measurement band
+ok 96 - typical-band tile pricing uses its compatible subrange without changing the measurement band
+  ---
+  duration_ms: 1.61797
+  type: 'test'
+  ...
+# Subtest: low-pitch tile prices only the compatible end of the band
+ok 97 - low-pitch tile prices only the compatible end of the band
+  ---
+  duration_ms: 0.461104
+  type: 'test'
+  ...
+# Subtest: flat and legacy metal demo rates produce subtotal with explicit exclusions
+ok 98 - flat and legacy metal demo rates produce subtotal with explicit exclusions
+  ---
+  duration_ms: 0.908187
+  type: 'test'
+  ...
+# Subtest: price adapter actually reuses the existing supplier engine and public rates
+ok 99 - price adapter actually reuses the existing supplier engine and public rates
+  ---
+  duration_ms: 0.405611
+  type: 'test'
+  ...
+# Subtest: changes to supplier product prices flow through without changing geometry
+ok 100 - changes to supplier product prices flow through without changing geometry
+  ---
+  duration_ms: 0.511028
+  type: 'test'
+  ...
+# Subtest: complex roof components increase configured cost without a blanket material surcharge
+ok 101 - complex roof components increase configured cost without a blanket material surcharge
+  ---
+  duration_ms: 0.521894
+  type: 'test'
+  ...
+# Subtest: new roofs omit removal while re-roofs use raw surface area without waste
+ok 102 - new roofs omit removal while re-roofs use raw surface area without waste
+  ---
+  duration_ms: 0.605809
+  type: 'test'
+  ...
+# Subtest: material-specific removal configuration can override the generic business rate
+ok 103 - material-specific removal configuration can override the generic business rate
+  ---
+  duration_ms: 0.433553
+  type: 'test'
+  ...
+# Subtest: configured two-storey access changes price, never physical quantities
+ok 104 - configured two-storey access changes price, never physical quantities
+  ---
+  duration_ms: 0.364731
+  type: 'test'
+  ...
+# Subtest: configured scaffold and demo VAT exclusion are visible
+ok 105 - configured scaffold and demo VAT exclusion are visible
+  ---
+  duration_ms: 0.267227
+  type: 'test'
+  ...
+# Subtest: area mode supports business rates and complexity without duplicated component charges
+ok 106 - area mode supports business rates and complexity without duplicated component charges
+  ---
+  duration_ms: 0.421555
+  type: 'test'
+  ...
+# Subtest: configured labour complexity affects labour only in component mode
+ok 107 - configured labour complexity affects labour only in component mode
+  ---
+  duration_ms: 1.05152
+  type: 'test'
+  ...
+# Subtest: area-mode flat extension uses its own system and only one disposal charge
+ok 108 - area-mode flat extension uses its own system and only one disposal charge
+  ---
+  duration_ms: 0.33749
+  type: 'test'
+  ...
+# Subtest: nonfinite and negative business rates fail configuration validation
+ok 109 - nonfinite and negative business rates fail configuration validation
+  ---
+  duration_ms: 0.285023
+  type: 'test'
+  ...
+# Subtest: measurement adapter retains section ownership and never re-applies roof pitch
+ok 110 - measurement adapter retains section ownership and never re-applies roof pitch
+  ---
+  duration_ms: 0.163202
+  type: 'test'
+  ...
+# Subtest: handoff preserves estimated provenance, selects an explicit endpoint and expires
+ok 111 - handoff preserves estimated provenance, selects an explicit endpoint and expires
+  ---
+  duration_ms: 0.300366
+  type: 'test'
+  ...
+# Subtest: API recalculates a valid request and returns a non-cacheable, noindex response
+ok 112 - API recalculates a valid request and returns a non-cacheable, noindex response
+  ---
+  duration_ms: 19.902502
+  type: 'test'
+  ...
+# Subtest: API rejects malformed JSON, forged prices, wrong media types and oversized bodies
+ok 113 - API rejects malformed JSON, forged prices, wrong media types and oversized bodies
+  ---
+  duration_ms: 2.04292
+  type: 'test'
+  ...
+# Subtest: corrupt, old or unsupported saved selections reset safely
+ok 114 - corrupt, old or unsupported saved selections reset safely
+  ---
+  duration_ms: 15.969529
+  type: 'test'
+  ...
+# Subtest: mixed roof removal uses membrane rates for the flat section, not tile removal rates
+ok 115 - mixed roof removal uses membrane rates for the flat section, not tile removal rates
+  ---
+  duration_ms: 0.591818
+  type: 'test'
+  ...
+# Subtest: material enums do not accept arrays or coerced objects
+ok 116 - material enums do not accept arrays or coerced objects
+  ---
+  duration_ms: 0.166387
+  type: 'test'
+  ...
+# Subtest: invalid catalogue prices and labour cannot produce a plausible-looking subtotal
+ok 117 - invalid catalogue prices and labour cannot produce a plausible-looking subtotal
+  ---
+  duration_ms: 0.488915
+  type: 'test'
+  ...
+# Subtest: flat complexity changes price allowance but never roof measurements
+ok 118 - flat complexity changes price allowance but never roof measurements
+  ---
+  duration_ms: 0.522224
+  type: 'test'
+  ...
+# Subtest: flat extension complexity does not change a pitched-only estimate
+ok 119 - flat extension complexity does not change a pitched-only estimate
+  ---
+  duration_ms: 0.734489
+  type: 'test'
+  ...
+1..119
+# tests 119
+# suites 0
+# pass 119
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1114.182958

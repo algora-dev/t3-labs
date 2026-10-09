@@ -29,15 +29,18 @@ export function EntryModeStep({
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const pdfPicker = usePdfPagePicker();
+  const [fileError, setFileError] = useState('');
 
   async function onFileChosen(raw: File | null) {
+    setFileError('');
     if (!raw) { setPlanFile(null); return; }
+    if (!['application/pdf', 'image/jpeg', 'image/png', 'image/webp'].includes(raw.type)) { setFileError('Choose a PDF, JPG, PNG or WebP image.'); return; }
     const isPdf = raw.type === 'application/pdf' || /\.pdf$/i.test(raw.name);
     if (isPdf) {
       // PDFs: convert the chosen page to a PNG client-side. 50 MB cap because
       // only one page is ultimately used.
       if (raw.size > 50 * 1024 * 1024) {
-        setPlanFile(null);
+        setFileError('Please choose a PDF smaller than 50 MB.'); setPlanFile(null);
         return;
       }
       const converted = await pdfPicker.convertIfNeeded(raw);
@@ -64,9 +67,7 @@ export function EntryModeStep({
       {/* Step 0: customer sign-in - trade pricing / supplier-assigned pricing.
           Large, unmissable, above everything else. Hidden when already signed
           in or when the login feature is off. */}
-      {config.features.login && (
-        <SignInCard />
-      )}
+      {config.features.login && (config.slug === 'apex-roofing' ? <details className="rounded-xl border border-slate-200 bg-white px-5 py-3"><summary className="cursor-pointer text-sm font-semibold text-slate-600">Have a trade account? <span className="font-normal">Optional sign-in for your rates</span></summary><div className="mt-3"><SignInCard /></div></details> : <SignInCard />)}
 
       <div className="rounded-xl border border-slate-200 bg-white hover:border-blue-200 hover:shadow-[0_0_8px_rgba(37,99,235,0.08)] transition p-4 md:p-6">
         <h2 className="text-lg font-semibold text-slate-900">How do you want to price this job?</h2>
@@ -74,8 +75,8 @@ export function EntryModeStep({
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           <ChoiceCard
             selected={entryMode === 'measure'}
-            title="I need to measure a plan"
-            desc="Upload your plan and measure roof areas and lines right here."
+            title="I have a plan or image"
+            desc="Upload a plan or satellite image. Set a scale and trace the roof here."
             onClick={() => pick('measure')}
           />
           <ChoiceCard
@@ -91,7 +92,7 @@ export function EntryModeStep({
       {entryMode === 'measure' && (
         <div className="rounded-xl border border-slate-200 bg-white hover:border-blue-200 hover:shadow-[0_0_8px_rgba(37,99,235,0.08)] transition p-4 md:p-6">
           <h3 className="text-base font-semibold text-slate-900">Upload your plan</h3>
-          <p className="mt-1 text-sm text-slate-500">PDF or image. You&apos;ll measure roof areas and lines on it in the next step.</p>
+          <p className="mt-1 text-sm text-slate-500">Use a PDF, plan or satellite image with a known dimension or scale. You’ll calibrate it, then trace roof areas and edges.</p>
 
           <button
             onClick={() => fileRef.current?.click()}
@@ -122,6 +123,7 @@ export function EntryModeStep({
         </div>
       )}
 
+      {fileError && <p role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">{fileError}</p>}
       {/* Plan vs actual sub-choice - appears directly below when 'have' is chosen */}
       {entryMode === 'have' && (
         <div className="rounded-xl border border-slate-200 bg-white hover:border-blue-200 hover:shadow-[0_0_8px_rgba(37,99,235,0.08)] transition p-4 md:p-6">

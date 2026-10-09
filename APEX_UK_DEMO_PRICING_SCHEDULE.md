@@ -1,8 +1,8 @@
-# Apex Roofing — proposed UK demonstration price schedule (review draft)
+# Apex Roofing - proposed UK demonstration price schedule (review draft)
 
 **Date:** 8 October 2026. **Status:** researched benchmarks + fictional demo allowances, **not yet integrated into the application**. All proposed prices below are **GBP excluding VAT**. These are deliberately rounded *Apex demo rates*, not merchant quotations or guaranteed UK costs. The references support selected material benchmarks, **not every row**. Rates labelled **Assumption** require validation.
 
-## Covering systems — one per category
+## Covering systems - one per category
 
 | ID | System / covering | Material £/m² | Install labour £/m² | Waste | Pricing basis | Evidence |
 |---|---|---:|---:|---:|---|---|
@@ -54,8 +54,8 @@ Material and labour rates are per **linear metre**. Ridge/hip rates include the 
 | F03 | Perimeter termination / edge trim | 10 / 9 | 12 / 10 | £/linear m exposed perimeter | 5% | Assumption |
 | F04 | Upstand / abutment flashing | 15 / 14 | 17 / 15 | £/linear m upstand | 5% | Requires separate upstand measurement |
 | F05 | Outlet / drainage detail | 35 / 35 | 40 / 40 | £/outlet | 0% | Assumption; cannot infer exact count solely from roof area |
-| F06 | Insulation / warm roof upgrade | Unpriced | Unpriced | £/m², optional | — | Not included; project-dependent |
-| F07 | Firrings / falls correction | Unpriced | Unpriced | £/m², optional | — | Not included; project-dependent |
+| F06 | Insulation / warm roof upgrade | Unpriced | Unpriced | £/m², optional | - | Not included; project-dependent |
+| F07 | Firrings / falls correction | Unpriced | Unpriced | £/m², optional | - | Not included; project-dependent |
 
 **Do not equate** roof perimeter with abutment length, or invent outlet counts. For a flat extension joined to a pitched roof, the junction should be measured and priced once, not as both exposed perimeter and an abutment.
 
@@ -67,9 +67,9 @@ Material and labour rates are per **linear metre**. Ridge/hip rates include the 
 | A02 | Strip old slate roof and dispose | 9 | 17 | £/m² existing roof area | Assumption |
 | A03 | Strip old metal/shingle roof and dispose | 7 | 12 | £/m² existing roof area | Assumption |
 | A04 | Strip old flat membrane and dispose | 8 | 13 | £/m² existing flat area | Assumption |
-| A05 | Access/scaffold — one storey | 550 | 0 | £/project allowance | Assumption, not a real scaffold quote |
-| A06 | Access/scaffold — two storeys | 1,100 | 0 | £/project allowance | Assumption, not a real scaffold quote |
-| A07 | Access/scaffold — three+ storeys | Unpriced | Unpriced | Needs site-specific quote | Not configured |
+| A05 | Access/scaffold - one storey | 550 | 0 | £/project allowance | Assumption, not a real scaffold quote |
+| A06 | Access/scaffold - two storeys | 1,100 | 0 | £/project allowance | Assumption, not a real scaffold quote |
+| A07 | Access/scaffold - three+ storeys | Unpriced | Unpriced | Needs site-specific quote | Not configured |
 | A08 | Additional difficult access | Unpriced | Unpriced | Survey-specific | Not configured |
 | A09 | Gutter and downpipes | Optional | Optional | Eaves linear m / downpipe count | Not in base roof quote |
 

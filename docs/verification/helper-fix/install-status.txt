@@ -1,0 +1,4 @@
+npm ci --ignore-scripts --no-audit --no-fund
+Stopped after 110 seconds with status 124. Dependency registry/network access was unavailable in this environment.
+No completed dependency installation, Next build, full typecheck or lint success is claimed.
+Partial node_modules and build output are excluded from the delivered ZIP.

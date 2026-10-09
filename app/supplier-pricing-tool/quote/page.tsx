@@ -8,6 +8,9 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { ApexBreadcrumbs } from '@/components/demo-helper/ApexBreadcrumbs';
+import { ApexDemoShell } from '@/components/demo-journey/ApexDemoShell';
 
 interface QuoteLine {
   description: string;
@@ -27,6 +30,8 @@ const DEFAULT_ACCENT = '#2563EB';
 const CURRENCY = '\u00A3'; // GBP default (matches the supplier tool demos)
 
 function QuoteBuilder() {
+  const params = useSearchParams();
+  const apex = params.get('supplier') === 'apex-roofing';
   const [ready, setReady] = useState(false);
   const [fromName, setFromName] = useState('');
   const [fromPhone, setFromPhone] = useState('');
@@ -63,7 +68,6 @@ function QuoteBuilder() {
 
   // Read the carried lines from the tool output handoff
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
     const raw = params.get('lines');
     if (raw) {
       try {
@@ -74,7 +78,7 @@ function QuoteBuilder() {
     const c = params.get('client');
     if (c) setClientName(c);
     setReady(true);
-  }, []);
+  }, [params]);
 
   const inputCls = 'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none';
 
@@ -164,12 +168,13 @@ function QuoteBuilder() {
             <button onClick={() => setShowSettings(s => !s)} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">
               {showSettings ? 'Hide settings' : 'Show settings'}
             </button>
-            <Link href="/supplier-pricing-tool" className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">
+            <Link href={apex ? "/supplier-pricing-tool/apex-roofing" : "/supplier-pricing-tool"} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">
               Back to tool
             </Link>
           </div>
         </div>
       </header>
+      {apex && <ApexBreadcrumbs className="apex-content-crumbs" items={[{ label: 'Roof tools', href: '/demo/roofing-site/estimate' }, { label: 'Detailed estimator', href: '/supplier-pricing-tool/apex-roofing' }, { label: 'Customer quote' }]} />}
 
       <div className="mx-auto max-w-4xl px-4 py-6 pb-16 space-y-4">
         {showSettings && (
@@ -476,10 +481,14 @@ function QuoteBuilder() {
   );
 }
 
+function QuotePageContent() {
+  const params = useSearchParams();
+  return params.get('supplier') === 'apex-roofing' ? <ApexDemoShell><QuoteBuilder /></ApexDemoShell> : <QuoteBuilder />;
+}
 export default function SupplierQuotePage() {
   return (
     <Suspense fallback={<main className="min-h-screen flex items-center justify-center text-sm text-slate-400">Loading...</main>}>
-      <QuoteBuilder />
+      <QuotePageContent />
     </Suspense>
   );
 }

@@ -60,8 +60,8 @@ export function AdminTrade({ admin, setAdmin, cfg }: { admin: AdminData; setAdmi
       <SectionCard title="Trade tiers" desc={`Blanket %-off price lists. Customers on a tier get that discount instead of the default ${cfg.discountPct}% blanket discount. Custom per-business pricing available on request.`}>
         <div className="grid gap-2 md:grid-cols-2">
           {admin.tiers.map(t => (
-            <div key={t.id} className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2.5">
-              <input type="text" value={t.name} onChange={e => patchTier(t.id, { name: e.target.value })} className={`${inputCls} flex-1`} aria-label={`Tier name ${t.id}`} />
+            <div key={t.id} className="flex items-center gap-2 rounded-xl min-w-0 border border-slate-200 px-3 py-2.5">
+              <input type="text" value={t.name} onChange={e => patchTier(t.id, { name: e.target.value })} className={`${inputCls} min-w-0 flex-1`} aria-label={`Tier name ${t.id}`} />
               <input type="number" min="0" max="80" step="0.5" value={t.discountPct} onChange={e => patchTier(t.id, { discountPct: parseFloat(e.target.value) || 0 })} className={`${inputCls} w-20 text-right`} aria-label={`Tier discount ${t.id}`} />
               <span className="text-sm text-slate-500">% off</span>
               <button onClick={() => removeTier(t.id)} className="text-slate-300 hover:text-red-500 transition" aria-label={`Remove tier ${t.name}`}>
@@ -73,7 +73,7 @@ export function AdminTrade({ admin, setAdmin, cfg }: { admin: AdminData; setAdmi
         <button onClick={addTier} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">+ Add tier</button>
       </SectionCard>
 
-      <SectionCard title={`Trade customers (${admin.customers.length})`} desc="Emails with trade-pricing access. First login: the customer sets their own password. Reset only sends them an email - owners never set customer passwords.">
+      <SectionCard title={`Trade customers (${admin.customers.length})`} desc="Try assigning a customer to a pricing tier. These demo accounts and invitations are browser-local; no email is sent. In a connected deployment, customers would receive a secure invitation.">
         <div className="flex flex-wrap items-end gap-3">
           <div>
             <label className="block text-xs font-medium text-slate-600">Customer email</label>
@@ -86,7 +86,7 @@ export function AdminTrade({ admin, setAdmin, cfg }: { admin: AdminData; setAdmi
             </select>
           </div>
           <div className="pb-0.5">
-            <button onClick={addCustomer} className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition">Add & send invite</button>
+            <button onClick={addCustomer} className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition">Add demo customer</button>
           </div>
         </div>
         {notice && <p className="text-xs text-green-700 rounded-lg bg-green-50 border border-green-200 px-3 py-2">{notice}</p>}
@@ -117,7 +117,7 @@ export function AdminTrade({ admin, setAdmin, cfg }: { admin: AdminData; setAdmi
                     </td>
                     <td className="py-1.5 pr-2 text-xs text-slate-400">{new Date(c.addedAt).toLocaleDateString('en-GB')}</td>
                     <td className="py-1.5 text-right whitespace-nowrap">
-                      <button onClick={() => resetPassword(c.email)} className="text-xs font-medium text-slate-500 hover:text-slate-800 transition">Reset password</button>
+                      <button onClick={() => resetPassword(c.email)} className="text-xs font-medium text-slate-500 hover:text-slate-800 transition">Preview password reset</button>
                       <button onClick={() => removeCustomer(c.email)} className="ml-3 text-slate-300 hover:text-red-500 transition" aria-label={`Remove ${c.email}`}>
                         <svg className="w-4 h-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                       </button>

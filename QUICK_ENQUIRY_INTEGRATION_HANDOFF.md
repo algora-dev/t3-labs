@@ -1,4 +1,4 @@
-# Apex Roofing — homeowner estimate and enquiry integration
+# Apex Roofing - homeowner estimate and enquiry integration
 
 ## Changes
 - Preserved existing Apex Roofing homepage and its branding, navigation, sections and Smart Assistant.

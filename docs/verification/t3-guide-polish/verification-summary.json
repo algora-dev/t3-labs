@@ -1,0 +1,23 @@
+{
+  "node_tests": {
+    "passed": 152,
+    "failed": 0,
+    "baseline_passed": 133
+  },
+  "browser_assertions": {
+    "passed": 335,
+    "failed_scenarios": 0,
+    "page_errors": 0
+  },
+  "strict_scoped_typecheck": "passed",
+  "syntax": {
+    "files": 307,
+    "errors": []
+  },
+  "preview": "self-contained React 18.2 component harness, not a Next production build",
+  "scope": "T3 guide polish and size-step illustrations only",
+  "full_app_checks": "blocked: registry DNS unavailable / incomplete local cache (ENOTCACHED); no local Next or ESLint",
+  "live_assistant_verified": false,
+  "deployed": false,
+  "preview_sha256": "7ac3965490caa698281425cee1f16e2a227b6ac56f4b428e88e127dc49127459"
+}

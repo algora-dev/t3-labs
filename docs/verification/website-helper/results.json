@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-09",
+  "status": "review-build-not-deployed",
+  "input_archive": "t3labs-apex-homeowner-enquiry-integrated.zip",
+  "input_sha256": "066d17497823ff909f8b57b6ee3e21d5e73da181421dbf2a49db52fe8548bb06",
+  "unit_tests": {
+    "baseline_passed": 94,
+    "current_passed": 119,
+    "failed": 0,
+    "new_tests": 25,
+    "runtime": "v22.16.0"
+  },
+  "syntax": {
+    "typescript_and_tsx_files": 302,
+    "errors": 0,
+    "note": "Transpile/syntax scan, not a full project semantic typecheck."
+  },
+  "strict_typecheck": {
+    "passed": true,
+    "scope": "lib/demo-helper: config, state, store, assistant-events, enquiry-preview; framework-independent logic only"
+  },
+  "browser_checks": {
+    "passed": 58,
+    "failed": 0,
+    "sets": {
+      "desktop_core": [
+        "Real Apex homepage is the landing content",
+        "No sidebar wrapper or shrunken demonstration site",
+        "Actual website remains full width",
+        "Desktop helper can be dragged away from the page controls",
+        "Keyboard arrow repositioning works",
+        "Home restores default position",
+        "Guide minimises to a launcher without changing page",
+        "Task prepares the supported knowledge prompt",
+        "Preparing a prompt never sends it automatically",
+        "A typed answer alone does not complete the navigation task",
+        "Following the offered page completes task one",
+        "Page navigation closes the floating assistant to reveal destination",
+        "Price request contains actual roof area and defined scope",
+        "Real pricing milestone is separate from enquiry completion",
+        "Enquiry loads the priced session details before advancing",
+        "Assistant pricing task finishes only at the enquiry preview",
+        "Assistant enquiry preview transmits no contact or attachment data",
+        "Assistant confirmation explicitly says nothing was sent",
+        "Task three enters the actual three-route tool chooser",
+        "Helper minimises while the homeowner uses the quick tool",
+        "Quick engine output advances to the next enquiry instruction",
+        "Quick task finishes at its complete enquiry preview",
+        "Quick enquiry transmits no customer or file data",
+        "Advanced measurement route is explained, not required",
+        "Plan/image route mentions known scale and reuses measured quantities",
+        "Three core tasks lead to recap without forcing the admin task",
+        "No uncaught browser errors through the full three-task component flow"
+      ],
+      "mobile_admin_and_navigation": [
+        "Mobile Apex homepage has no horizontal overflow",
+        "Mobile helper docks above chat without hiding the composer",
+        "Helper rail and message composer do not overlap",
+        "Mobile assistant does not widen the page",
+        "Unavailable live assistant remains incomplete with a clear error, not a fake reply",
+        "Mobile skip is explicitly labelled as skipped",
+        "Mobile tool entry leaves the page clear",
+        "Mobile roof cards fit the viewport",
+        "Mobile result shows the price and a clear enquiry CTA",
+        "Mobile helper minimises on form input focus",
+        "Optional plan is represented by filename only",
+        "Mobile quick estimate reaches a qualified enquiry preview",
+        "Mobile enquiry summary stays within viewport",
+        "Explicit admin demo link enters the safe demo account in one click",
+        "Admin exposes clear local-only and sample-data disclosure",
+        "Optional task completes when the actual trade panel is visible",
+        "Mobile business controls remain inside the viewport",
+        "No uncaught browser errors through mobile enquiry and admin",
+        "Expanded helper remains inside viewport after a resize",
+        "Detailed tool retains the consistent Apex header",
+        "Advanced entry mounts without an uncaught component error",
+        "Tool chooser works at 320px width",
+        "Small viewport has no uncaught browser errors"
+      ],
+      "assistant_range_preview": [
+        "Assistant enquiry review retains both configured range endpoints",
+        "Contact step confirms both range scenarios carry forward",
+        "Enquiry receipt preserves the same range and VAT basis",
+        "Range enquiry stays within mobile viewport without component errors"
+      ],
+      "optional_advanced_enquiry": [
+        "Optional advanced tool produces a clearly labelled local enquiry receipt",
+        "Advanced enquiry performs no external upload or submission request",
+        "Advanced receipt includes the selected plan filename without uploading the file",
+        "Advanced enquiry preview fits mobile without component errors"
+      ]
+    },
+    "browser": "Chromium 144.0.7559.96 built on Debian GNU/Linux 13 (trixie)",
+    "react_runtime": "18.2 standalone component harness; production package pins 19.2.1",
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        700
+      ]
+    ],
+    "api_fixture_note": "Assistant success/SSE/session data are explicit test fixtures. The sample single price is produced by the real deterministic engine. A second endpoint is synthetic only for range-presentation testing. No success fixtures are bundled in the delivered HTML preview.",
+    "storage_note": "The browser automation harness supplies in-memory storage in opaque pages; production and delivered preview use browser storage with the existing fallbacks."
+  },
+  "not_verified": [
+    "npm ci (failed registry/network install)",
+    "full Next.js production build",
+    "project-wide semantic typecheck",
+    "full ESLint run",
+    "live language-model conversations",
+    "Next.js server navigation/SSR/hydration",
+    "full uploaded-plan canvas and server PDF regression",
+    "physical mobile devices"
+  ],
+  "historical_copy_cleanup": [
+    {
+      "path": "FLAT_ROOF_REFINEMENT.md",
+      "literal_em_dashes_replaced": 1
+    },
+    {
+      "path": "APEX_UK_DEMO_PRICING_SCHEDULE.md",
+      "literal_em_dashes_replaced": 7
+    },
+    {
+      "path": "QUICK_ENQUIRY_INTEGRATION_HANDOFF.md",
+      "literal_em_dashes_replaced": 1
+    }
+  ]
+}

@@ -9,10 +9,15 @@ import { tradeConfigFor } from './tradeConfig';
 import { FreeToolsAuthProvider, useFreeToolsAuth } from '../_components/FreeToolsAuthProvider';
 import { SupplierConfigProvider, useSupplierConfig } from './supplierConfig';
 import Link from 'next/link';
+import { ApexToolHeader } from '@/components/demo-helper/ApexToolHeader';
 function Header() {
   const { config, basePath } = useSupplierConfig();
   const { user, openAuthModal, signOut } = useFreeToolsAuth();
   const headerLogo = config.logoDarkUrl ?? config.logoUrl;
+  if (config.slug === 'apex-roofing') return <ApexToolHeader title="Detailed roof estimating & plan measurement">
+    {config.features.login && <button type="button" className="at-trade-button" onClick={() => user ? void signOut() : openAuthModal('signin')}>{user ? 'Log out of trade' : 'Trade pricing'}</button>}
+    <Link href={`${basePath}/admin`}>Admin</Link>
+  </ApexToolHeader>;
 
   return (
     <header className="border-b border-black/20" style={{ backgroundColor: config.headerColor ?? config.brandColor }}>

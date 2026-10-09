@@ -1,0 +1,103 @@
+{
+  "base_archive": "t3labs-apex-helper-fixed-final.zip",
+  "entry_route": "/demo/roofing-site",
+  "modified": [
+    {
+      "path": "app/demo/roofing-site/quick-estimate/quick-estimate.css",
+      "sha256": "fb939f8aab9931912a79839b90e75eff169cdf622bc610c3d624f9dc17e4bb18"
+    },
+    {
+      "path": "app/supplier-pricing-tool/SupplierEnquiryModal.tsx",
+      "sha256": "2a16549817054f38b1a202246252ec2711f9736df6a27515c112819d451dc588"
+    },
+    {
+      "path": "components/demo-helper/DemoHelper.tsx",
+      "sha256": "189b2a673c831279229630a223c25b037a8fba718bc8ef5d82c9200279e46b3f"
+    },
+    {
+      "path": "components/demo-helper/helper.css",
+      "sha256": "cbac194bd9db160440d8eaac01dd8a707d198ecbf65d4372722c0566ecc1dc73"
+    },
+    {
+      "path": "components/quick-estimate/QuickQuoteEnquiry.tsx",
+      "sha256": "a228b391dbd09ec2faccd930f8e8f6a6f377e4ac1b9317c4e9a14d277577fcfe"
+    },
+    {
+      "path": "components/quick-estimate/QuickRoofEstimate.tsx",
+      "sha256": "5863e9bc8f93117abf1c861cce81da6bea9af607e612bebef18d581e87cd3124"
+    },
+    {
+      "path": "scripts/rebuild-helper-preview.mjs",
+      "sha256": "8c5cdfdac8abe525790fdcb02cd74707642de1f22af64dc0cd3b3ddc559098e4"
+    },
+    {
+      "path": "scripts/tsconfig.helper-check.json",
+      "sha256": "19220f6f45f010c5871b496d4edc4e02f197eeeeb01ec0969d7fb3d5a925e003"
+    },
+    {
+      "path": "scripts/verify-helper-preview.py",
+      "sha256": "ca0d1db337d4c4c2cc0510eb052f668829262415151a6920cce1a5f8bcdc0da8"
+    }
+  ],
+  "added": [
+    {
+      "path": "T3_GUIDE_POLISH_HANDOFF.md",
+      "sha256": "71182f2a79b316fe8c8b394074de14764354bc0a103a7e4e0db14988fccc86e5"
+    },
+    {
+      "path": "components/quick-estimate/RoofPlanIllustration.tsx",
+      "sha256": "a512fc55221dfd4c60529d2858116f1652cabfe496c206292de9fb39b1c2517c"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/browser-results.json",
+      "sha256": "c3399702a0ac885c7da5f9f01cb0f55fd45ef375dad3ba7e8470923f689bf2b7"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/node-tests.log",
+      "sha256": "8083f021d59ef7df5f43011a40ca7381ad2c0347b6d6717578a6fabe7a99a962"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/roof-size-page-1440.png",
+      "sha256": "d5f373df56d0cadd94195faf8087bddb69e07627cebbcc1265cf8d1ad1a3acf2"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/roof-size-page-390.png",
+      "sha256": "ca5cd208800e2999dfb7a39b47b74d8f6f955ed72afe14a1c5545256553892cc"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/syntax-results.json",
+      "sha256": "392cec5c36e4d60fe04d9f434c2e7b6fc4dd92db284ef10e2590406010f6bff8"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/t3-guide-enquiry-mobile.png",
+      "sha256": "9b76c9b6dc5fb124c387330c59a3bc883e8d7b91bf31540f6da5819bad010c55"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/t3-welcome-desktop.png",
+      "sha256": "cb1119e69518bb7c2b4f26e9a4ac6a008604a52d6b3ea4736f8dd14ad1664c4b"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/t3-welcome-mobile.png",
+      "sha256": "c19b701e0c715e609575c6b0634cd153d288aded55bf309856e46358de9503ca"
+    },
+    {
+      "path": "docs/verification/t3-guide-polish/verification-summary.json",
+      "sha256": "391e38cd2faf088b519da3de9a8ff96e581d3c068352a52f59556de7c3a0f623"
+    },
+    {
+      "path": "lib/quick-estimate/plan-view.ts",
+      "sha256": "eeaff49d4be7acba062b3cf96eea79d718e744ef4ce1dc85c0b05e2834515301"
+    },
+    {
+      "path": "public/assets/t3-demo-guide/t3-logo-icon-glow-transparent.png",
+      "sha256": "1829caa5a09acd2cb1d352689d1d39766f439b0f35427823fd0d63888d6f3dc9"
+    },
+    {
+      "path": "tests/helper-polish.test.mjs",
+      "sha256": "6b68202ef00b0c77882980cf5a8a58ec87b8abd0af0ab847de597ddd6631a8a4"
+    }
+  ],
+  "removed": [],
+  "protected_source_files_identical": 58,
+  "brand_logo_sha256": "1829caa5a09acd2cb1d352689d1d39766f439b0f35427823fd0d63888d6f3dc9"
+}

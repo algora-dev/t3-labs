@@ -1,8 +1,12 @@
 import Link from 'next/link';
-export const metadata = { title: 'Choose your roof estimate | Apex Roofing' };
-const options = [
- { icon:'📏', title:'I have roof measurements', detail:'Enter your dimensions and choose materials for a more detailed estimate.', href:'/supplier-pricing-tool/apex-roofing', cta:'Use my measurements' },
- { icon:'📐', title:'I have plans or drawings', detail:'Measure your roof digitally from a plan, then use those measurements to estimate.', href:'/demo/roofing-site/takeoff', cta:'Measure from a plan' },
- { icon:'🏠', title:'I don’t have measurements', detail:'Just choose the roof that looks like yours and answer a few questions for a ballpark price.', href:'/demo/roofing-site/quick-estimate', cta:'Get a quick estimate' },
-];
-export default function EstimateChoicePage(){return <main className="min-h-[70vh] bg-[#f5f7fa] px-4 py-14 text-[#101828]"><div className="mx-auto max-w-5xl"><Link href="/demo/roofing-site" className="text-sm font-semibold text-[#1769e0]">← Back to Apex Roofing</Link><p className="mt-10 text-xs font-bold uppercase tracking-widest text-[#1769e0]">Apex Roofing · Roof estimate</p><h1 className="mt-3 text-3xl font-extrabold sm:text-4xl">Let’s find the easiest way to price your roof.</h1><p className="mt-4 max-w-2xl text-[#667085]">You don’t need to be a roofing expert. Choose what you have available and we’ll guide you from there.</p><div className="mt-9 grid gap-5 md:grid-cols-3">{options.map(o=><Link key={o.href} href={o.href} className="group flex flex-col rounded-2xl border border-[#dce5f0] bg-white p-7 shadow-sm transition hover:border-[#1769e0] hover:shadow-lg"><span className="text-4xl" aria-hidden="true">{o.icon}</span><h2 className="mt-6 text-xl font-extrabold">{o.title}</h2><p className="mt-3 flex-1 text-sm leading-7 text-[#667085]">{o.detail}</p><span className="mt-8 inline-flex min-h-11 items-center justify-center rounded-lg bg-[#1769e0] px-4 py-3 text-center text-sm font-bold text-white group-hover:bg-[#1258b4]">{o.cta} →</span></Link>)}</div><p className="mt-8 text-center text-xs text-[#667085]">Apex Roofing is a fictional demonstration business. All estimates are indicative.</p></div></main>}
+import { ApexToolHeader } from '../../../../components/demo-helper/ApexToolHeader';
+import { RoofToolChoices } from '../../../../components/demo-helper/RoofToolChoices';
+export const metadata = { title: 'Free roof estimate tools | Apex Roofing' };
+export default function EstimateChoicePage() {
+  return <><ApexToolHeader title="Free roof estimate tools" section="chooser"/><main className="at-choice-page"><div className="at-choice-inner">
+    <div className="at-choice-intro"><p>THREE WAYS TO GET STARTED</p><h1>Let’s find the easiest way<br />to price your roof.</h1><p>No measurements? Start with a quick estimate. Have more detail? Choose a tool that can use it. You can explore all three without following the demo guide.</p></div>
+    <RoofToolChoices />
+    <p className="at-choice-note"><b>The same idea, at the right level of detail.</b> The advanced tools are straightforward for people familiar with roofing. Contractors or your own team can prepare itemised estimates and customer quote outputs using configured product prices. Public ranges, baseline rates and private trade prices can be tailored to the business. Final measurements and scope need checking.</p>
+    <Link href="/demo/roofing-site" className="at-back-link">← Back to Apex Roofing</Link>
+  </div></main></>;
+}

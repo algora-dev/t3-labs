@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, type CSSProperties } from 'react';
+import { ApexBreadcrumbs } from '../../demo-helper/ApexBreadcrumbs';
 import type { ThemeConfig } from '@quote-core/roof-takeoff';
 import type { PriceListConfig, PriceListItem } from "./price-list.config";
 
@@ -58,6 +59,7 @@ export function PriceListPage({ theme, config }: PriceListPageProps) {
       </header>
 
       <div className="mx-auto max-w-3xl px-4 py-8 md:py-12">
+        <ApexBreadcrumbs items={[{ label: "Products & prices" }]} />
         {/* Title */}
         <h1
           className="text-2xl md:text-3xl font-bold text-slate-900"

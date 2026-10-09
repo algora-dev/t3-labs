@@ -88,6 +88,19 @@ function PortalFlowReady() {
   // Header brand click: offer go-back vs restart instead of wiping
   const [restartOpen, setRestartOpen] = useState(false);
 
+  useEffect(() => {
+    if (config.slug !== 'apex-roofing') return;
+    const requested = new URLSearchParams(window.location.search).get('entry');
+    const hasSavedWork = restored && (restored.step > 1 || Object.values(restored.measureSet.groups).some(g => g.entries.length > 0));
+    if (hasSavedWork) return; // Never discard measurements when following an exploration link.
+    // Location search is unreadable during SSR; the one-time URL intent is applied after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (requested === 'plan') { setEntryMode('measure'); setHaveSubMode(null); }
+    if (requested === 'measurements') { setEntryMode('have'); setHaveSubMode(null); }
+  // Initial route intent only. Later selections belong to the visitor.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Persist after every change so Back/refresh/output-return never loses work
   useEffect(() => {
     try {

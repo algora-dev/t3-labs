@@ -1,0 +1,188 @@
+{
+  "base_archive": "t3labs-apex-website-helper.zip",
+  "date": "2026-10-09",
+  "modified": [
+    {
+      "path": "app/demo/roofing-site/act.css",
+      "sha256": "b20e9bcd515edc6432a5703bdeec62721457949a2a9d0a328f3231de2b8581e0"
+    },
+    {
+      "path": "app/demo/roofing-site/estimate/page.tsx",
+      "sha256": "bf30e56881bf6051554240f83b6d68db195805945dbedd44bf78be01cf45e083"
+    },
+    {
+      "path": "app/demo/roofing-site/quick-estimate/quick-estimate.css",
+      "sha256": "e2f5c148ef40080843a1aa083591e9e46988efcecd55ffdc1a8e0fa578f73eb3"
+    },
+    {
+      "path": "app/supplier-pricing-tool/OutputActions.tsx",
+      "sha256": "1599792b0122ba48e9acfbf855fcccc0b7c382eafe2da0535b2358cc7a28cebb"
+    },
+    {
+      "path": "app/supplier-pricing-tool/TakeoffStation.tsx",
+      "sha256": "f335224e23fc23f5eb5ee2f8632ddb9b0799ca62d6caff9e000579a5be0fc4c6"
+    },
+    {
+      "path": "app/supplier-pricing-tool/TakeoffWorkstation.tsx",
+      "sha256": "10807e74d8c31477bb3d33caddd1c9b9fd5118605beefc60084c38f8ac419c7b"
+    },
+    {
+      "path": "app/supplier-pricing-tool/admin/AdminPanel.tsx",
+      "sha256": "051c46de031b23727f7f52f61c68850908a50387da1f57453eab9bc4d4cd645b"
+    },
+    {
+      "path": "app/supplier-pricing-tool/quote/page.tsx",
+      "sha256": "02b0a01a6e4e0d8e21c0ae6764e2b28e77663670baa9b3c5ed89a597a814cae1"
+    },
+    {
+      "path": "components/assistant/SmartAssistantLauncher.tsx",
+      "sha256": "074ac28aa9f3b2ea1fe14dde22b4bef7b07e07a666801e2d23895b8bb75c60cd"
+    },
+    {
+      "path": "components/demo-helper/ApexToolHeader.tsx",
+      "sha256": "4a939df59a14dc32730dad86f7d2400abc159dd71020621f56389e14e7c01e73"
+    },
+    {
+      "path": "components/demo-helper/DemoHelper.tsx",
+      "sha256": "02a487704fccf63c8be352c3a64b1742749e6df9d52062aca26b3f8368af0421"
+    },
+    {
+      "path": "components/demo-helper/RoofToolChoices.tsx",
+      "sha256": "81d66992e107d8e961a92b0742868b90e8ba2d5d850cf0bd443441ada8469e37"
+    },
+    {
+      "path": "components/demo-helper/helper.css",
+      "sha256": "d7dddf96c9ad201b86571171336c348819d43e9117b9ffe5bc954c5d4d16c367"
+    },
+    {
+      "path": "components/demo-helper/tools.css",
+      "sha256": "0cd222646c20912bebd06b2208806e216be09da3d7fd9d32febb83480b84ea86"
+    },
+    {
+      "path": "components/demo-journey/ApexDemoShell.tsx",
+      "sha256": "96dcc3a7caeab75d9cf25599c3833b7e4af4ebb179d75f2837763a386d60e283"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/PriceListPage.tsx",
+      "sha256": "899e5629d965099c340e14c18ee5d15adeef28ef244a1e01f220a417ff52f73e"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/site-sections.tsx",
+      "sha256": "f5d9c013095ad3bb4539cfcf62c0d70fb3fe8a7d6552a98aaa038f8d0eee2851"
+    },
+    {
+      "path": "components/demo-sites/apex-pages/ApexContentPage.tsx",
+      "sha256": "c3471a6fbb4bee3bcf3680f3efca4159c748e2e7cf1e6b9b4e597d2f1f668019"
+    },
+    {
+      "path": "components/quick-estimate/QuickQuoteEnquiry.tsx",
+      "sha256": "49f794596c0aeff2faf4913eb222793a62a03c739a2db0f7a34755a99bf4e16c"
+    },
+    {
+      "path": "components/quick-estimate/QuickRoofEstimate.tsx",
+      "sha256": "3e2bdf0d4a1fd0e0bfcfe43764658fe52a7688718a54e555f1e2c8f7d45c0b98"
+    },
+    {
+      "path": "lib/demo-helper/store.ts",
+      "sha256": "ce6a26b3d7d2fc539d6c4d6817699399e4b95b9f4f5c1e22e1a45b54757b1139"
+    }
+  ],
+  "added": [
+    {
+      "path": "APEX_HELPER_FIX_HANDOFF.md",
+      "sha256": "3949e67b60022905c45728223f1fbec7ec6ad7596bf2115cb3a7f824294b966d"
+    },
+    {
+      "path": "components/demo-helper/ApexBreadcrumbs.tsx",
+      "sha256": "456408b7dd1dd704e605f810e9d62da06a6c8ddd75da81de45414fe0f8b46cee"
+    },
+    {
+      "path": "components/demo-helper/ApexIcon.tsx",
+      "sha256": "d8a06ee9c330acdae208606881b2d23f8e13925ad2e5a233d8aae3496daca93d"
+    },
+    {
+      "path": "components/demo-helper/breadcrumbs.css",
+      "sha256": "042329b1f40b7d3ad6103366b06d6d31bee413a0dcead6f691a8f08827db47da"
+    },
+    {
+      "path": "docs/ICON_CREDITS.md",
+      "sha256": "88d149173e8bd8f9f9ee822d058ab1c0e6011dcb22ec296fa8499a1354e22f9d"
+    },
+    {
+      "path": "docs/verification/helper-fix/browser-checks.log",
+      "sha256": "1fe8652ccb1300d65756ca1bffecb918a5401d5363283d138f813e46a44d03f1"
+    },
+    {
+      "path": "docs/verification/helper-fix/browser-results.json",
+      "sha256": "ab8605dc02d1ebffac426a261de4be03c7077a8df4c61a47462c7fb9b0dbaf34"
+    },
+    {
+      "path": "docs/verification/helper-fix/full-build.log",
+      "sha256": "80476a47a559e04a3c4b4ca89077bdaa75b6eb6cb7ef1fbf635210101e9b9d84"
+    },
+    {
+      "path": "docs/verification/helper-fix/full-lint.log",
+      "sha256": "d2de79dc4bfd9b6683c4a8fb49bbf5d58167f268271a484e7f6642d25883ad26"
+    },
+    {
+      "path": "docs/verification/helper-fix/full-typecheck.log",
+      "sha256": "7a374f8c395137bc33ff9a95f0e34b5ef5c958671c4c7444a964fd0089a593a4"
+    },
+    {
+      "path": "docs/verification/helper-fix/install-status.txt",
+      "sha256": "ea99982f9f62826228cf1cb33393c903e60b7acda60879a2367c600a3cb6d503"
+    },
+    {
+      "path": "docs/verification/helper-fix/strict-typecheck.txt",
+      "sha256": "c62ea019a0e3fb9df032ec3ef11c0a6fbb543b750e2c8f0151f8f80c98d69ee0"
+    },
+    {
+      "path": "docs/verification/helper-fix/syntax.json",
+      "sha256": "ba0e5f824a1ff95b66b807c5eba9aeb279a402d79713da318b50f6ea3456e780"
+    },
+    {
+      "path": "docs/verification/helper-fix/unit-tests.tap",
+      "sha256": "9b2e45f2988d2bb8230df305bb3fdb2d620fe41314e274c7ecc745986113746b"
+    },
+    {
+      "path": "lib/demo-helper/embed.ts",
+      "sha256": "cad5b6d2156dbca0abef3e887ab3a4e4efea441343d6e640315087011e0e760a"
+    },
+    {
+      "path": "scripts/check-review-syntax.mjs",
+      "sha256": "5c3143a0be4c8b332bae3b3ebf9a71bc87b808239da22832feb22f63869374c4"
+    },
+    {
+      "path": "scripts/preview/entry.jsx",
+      "sha256": "8656df39fe7c5dfaf1cac7791953a517d07c3ba0c9af6519903b00abfcb447b7"
+    },
+    {
+      "path": "scripts/rebuild-helper-preview.mjs",
+      "sha256": "b7a98b3856719970f1a83ded1417cc6910bcb55d0d957ec3dd1a1f78c556cf21"
+    },
+    {
+      "path": "scripts/tsconfig.helper-check.json",
+      "sha256": "8de53cb052a402a9846d69d81073bd39a744576029012c76cbdc81f3a1f4118d"
+    },
+    {
+      "path": "scripts/verify-helper-preview.py",
+      "sha256": "66e7928e93952c97a52e3ae21ef1f4945479f14edb0ea1f76f6097fa10204ab1"
+    },
+    {
+      "path": "tests/helper-visibility.test.mjs",
+      "sha256": "5e361de4458219c8018261b1d91549e07f3ea7c57e5ef6da25399c8fb97279a0"
+    }
+  ],
+  "deleted": [],
+  "unchanged_protected_files": 86,
+  "protected_scope": "Quick measurement/pricing sources, assistant/pricing logic, data, vendor, API routes, supplier catalogues and package files",
+  "verification": {
+    "unit_tests_passed": 133,
+    "browser_assertions_passed": 111,
+    "browser_failed_scenarios": 0,
+    "browser_page_errors": 0,
+    "syntax_files": 305,
+    "full_app_build": "unverified: dependency installation unavailable"
+  },
+  "preview_sha256": "412a141a1f78780e65647a808d375c19c3b7f3b6809f47fea4df7911ca93430f"
+}

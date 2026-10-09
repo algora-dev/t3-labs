@@ -6,8 +6,10 @@
 // Everything is demo-grade (sessionStorage auth, localStorage data) and
 // per-supplier branded from the def - same template for every deployment.
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { ApexToolHeader } from '@/components/demo-helper/ApexToolHeader';
 import type { SupplierConfig } from '../supplierConfig';
 import {
   defaultConfig, readStoredConfig, writeStoredConfig, resetStoredConfig, SupplierConfigProvider,
@@ -19,25 +21,35 @@ import { AdminTrade } from './AdminTrade';
 import { AdminTeam } from './AdminTeam';
 import { AdminTracking } from './AdminTracking';
 import { AdminCta } from './AdminCta';
+import { HELPER_COMMAND_EVENT, recordHelperSignal, takeHelperCommand } from '@/lib/demo-helper/store';
 
 type SectionKey = 'dashboard' | 'products' | 'trade' | 'team' | 'tracking' | 'cta' | 'settings';
 
 export function AdminPanel({ slug }: { slug: string }) {
+  return <Suspense fallback={<p>Loading business controls...</p>}><AdminPanelContent slug={slug} /></Suspense>;
+}
+function AdminPanelContent({ slug }: { slug: string }) {
+  const searchParams = useSearchParams();
+  const demoEntry = slug === 'apex-roofing' && searchParams.get('demo') === 'helper';
   const def = getSupplierDef(slug);
   const brand = def.brandColor;
   const [authed, setAuthed] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setAuthed(window.sessionStorage.getItem(adminAuthKey(slug)) === '1');
-  }, [slug]);
+    try {
+      if (demoEntry) window.sessionStorage.setItem(adminAuthKey(slug), '1');
+      setAuthed(demoEntry || window.sessionStorage.getItem(adminAuthKey(slug)) === '1');
+    } catch { setAuthed(demoEntry); }
+  }, [slug, demoEntry]);
 
+  const wrap = (content: React.ReactNode) => slug === 'apex-roofing' ? <><ApexToolHeader title="Business controls" section="admin" />{content}</> : content;
   if (authed === null) {
-    return <main className="min-h-screen flex items-center justify-center text-sm text-slate-400">Loading admin...</main>;
+    return wrap(<main className="min-h-screen flex items-center justify-center text-sm text-slate-400">Loading admin...</main>);
   }
   if (!authed) {
-    return <AdminLogin slug={slug} brand={brand} logo={def.logoDarkUrl ?? def.logoUrl} name={def.name} onLogin={() => setAuthed(true)} />;
+    return wrap(<AdminLogin slug={slug} brand={brand} logo={def.logoDarkUrl ?? def.logoUrl} name={def.name} onLogin={() => setAuthed(true)} />);
   }
-  return <AdminHome slug={slug} onLogout={() => { window.sessionStorage.removeItem(adminAuthKey(slug)); setAuthed(false); }} />;
+  return wrap(<AdminHome slug={slug} onLogout={() => { try { window.sessionStorage.removeItem(adminAuthKey(slug)); } catch { /* Optional demo storage. */ } setAuthed(false); }} />);
 }
 
 // ---- login ----
@@ -54,7 +66,7 @@ function AdminLogin({ slug, brand, logo, name, onLogin }: { slug: string; brand:
       setError('Enter your email and password.');
       return;
     }
-    window.sessionStorage.setItem(adminAuthKey(slug), '1');
+    try { window.sessionStorage.setItem(adminAuthKey(slug), '1'); } catch { /* This tab still works. */ }
     onLogin();
   }
 
@@ -90,7 +102,7 @@ function AdminLogin({ slug, brand, logo, name, onLogin }: { slug: string; brand:
             type="button"
             onClick={() => {
               // Demo shortcut: one click straight into the demo admin (any credentials work).
-              window.sessionStorage.setItem(adminAuthKey(slug), '1');
+              try { window.sessionStorage.setItem(adminAuthKey(slug), '1'); } catch { /* This tab still works. */ }
               onLogin();
             }}
             className="w-full rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
@@ -123,6 +135,17 @@ function AdminHome({ slug, onLogout }: { slug: string; onLogout: () => void }) {
     setAdmin(readAdminData(slug, base));
   }, [slug]);
 
+  useEffect(() => {
+    if (slug !== 'apex-roofing') return;
+    const handle = () => { if (takeHelperCommand(['admin-trade'])) setSection('trade'); };
+    window.addEventListener(HELPER_COMMAND_EVENT, handle); handle();
+    return () => window.removeEventListener(HELPER_COMMAND_EVENT, handle);
+  }, [slug]);
+
+  useEffect(() => {
+    if (slug === 'apex-roofing' && section === 'trade' && admin.features.tradePricing) recordHelperSignal('admin-trade-view');
+  }, [section, slug, admin.features.tradePricing]);
+
   function flashSaved() {
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -154,7 +177,7 @@ function AdminHome({ slug, onLogout }: { slug: string; onLogout: () => void }) {
   return (
     <main className="min-h-screen bg-slate-50">
       <header className="border-b border-black/20" style={{ backgroundColor: cfg.headerColor ?? cfg.brandColor }}>
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-2">
+        <div className="mx-auto max-w-6xl px-4 py-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             {cfg.logoDarkUrl || cfg.logoUrl ? (
               <span className={"flex items-center justify-center " + (cfg.logoWhiteBox ? "rounded-lg bg-white px-2 py-1" : "")}>
@@ -166,7 +189,7 @@ function AdminHome({ slug, onLogout }: { slug: string; onLogout: () => void }) {
             )}
             <span className="text-sm font-semibold text-white">Admin</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {saved && <span className="text-xs text-green-300">Saved</span>}
             <button onClick={saveAll} className="rounded-full bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-white/25 transition">Save changes</button>
             <button onClick={resetDemo} title="Reset all demo changes made in this browser" className="rounded-full border border-white/50 px-3.5 py-1.5 text-xs font-medium text-white hover:border-white transition">Reset demo</button>
@@ -176,13 +199,18 @@ function AdminHome({ slug, onLogout }: { slug: string; onLogout: () => void }) {
         </div>
       </header>
 
-      <div className="flex min-h-[calc(100vh-57px)]">
-        <nav className="w-56 flex-shrink-0 border-r border-slate-200 bg-white px-3 py-4 hidden md:block">
+      {slug === 'apex-roofing' && <div className="border-b border-blue-100 bg-blue-50 px-4 py-3 text-sm text-slate-700" role="note">
+        <strong>Demo business controls.</strong> Explore prices and trade accounts safely. Changes stay in this browser; no invitations are sent.
+        <details className="mt-1"><summary className="cursor-pointer font-medium text-blue-800">What changes in this demo?</summary><p className="mt-2 max-w-3xl">Saved product and trade settings apply to the detailed estimator in this browser. The Quick Estimate and Smart Assistant currently use their separately configured demo catalogues. Activity includes sample data, not real business performance. A client implementation can connect these experiences to its own pricing and account systems.</p></details>
+      </div>}
+      <div className="flex flex-col md:flex-row min-h-[calc(100vh-57px)]">
+        <nav aria-label="Business controls" className="w-56 flex-shrink-0 border-r border-slate-200 bg-white px-3 py-4 hidden md:block">
           <div className="flex flex-col gap-1 sticky top-16">
             {sections.map(s => (
               <button
                 key={s.key}
                 onClick={() => setSection(s.key)}
+                aria-current={section === s.key ? 'page' : undefined}
                 className={`w-full whitespace-nowrap rounded-xl px-4 py-2.5 text-left text-sm font-medium transition ${section === s.key ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50 hover:border hover:border-slate-200'}`}
               >
                 {s.label}
@@ -190,11 +218,12 @@ function AdminHome({ slug, onLogout }: { slug: string; onLogout: () => void }) {
             ))}
           </div>
         </nav>
-        <nav className="md:hidden border-b border-slate-200 bg-white px-4 py-2 flex gap-1 overflow-x-auto w-full">
+        <nav aria-label="Business controls" className="md:hidden border-b border-slate-200 bg-white px-4 py-2 flex gap-1 overflow-x-auto w-full">
           {sections.map(s => (
             <button
               key={s.key}
               onClick={() => setSection(s.key)}
+                aria-current={section === s.key ? 'page' : undefined}
               className={`whitespace-nowrap rounded-full px-4 py-2 text-left text-sm font-medium transition ${section === s.key ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'}`}
             >
               {s.label}
@@ -274,7 +303,7 @@ function Dashboard({ cfg, admin, slug }: { cfg: SupplierConfig; admin: AdminData
 
   return (
     <div className="space-y-4">
-      <SectionCard title="Overview" desc={`Live snapshot for ${cfg.name}. Changes you make here update the pricing tool instantly in this browser - and auto-reset after 24 hours.`}>
+      <SectionCard title="Overview" desc={`Demonstration snapshot for ${cfg.name}, including sample activity. Save changes to update this browser's detailed estimator. Demo settings expire after 24 hours.`}>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map(s => (
             <div key={s.label} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -285,7 +314,7 @@ function Dashboard({ cfg, admin, slug }: { cfg: SupplierConfig; admin: AdminData
         </div>
       </SectionCard>
       {admin.features.tracking && (
-        <SectionCard title="Recent activity" desc="What your customers have been doing in the tool. Open the pricing tool in another tab, complete a job, and watch it appear here.">
+        <SectionCard title="Recent activity" desc="Example activity alongside estimates and actions recorded by this browser. This is not a live business report.">
           {recent.length === 0 ? (
             <p className="text-sm text-slate-400 text-center py-3">No activity yet - complete a pricing in the tool to see it here.</p>
           ) : (

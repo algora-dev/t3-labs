@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { ApexIcon } from "../../demo-helper/ApexIcon";
+import { RoofToolChoices } from "../../demo-helper/RoofToolChoices";
 import { FormEvent, useEffect, useState } from "react";
 import type { ActRoofingSiteConfig } from "./types";
 
@@ -20,20 +22,11 @@ function ArrowIcon() {
 }
 
 function PhoneIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 20 20" fill="none">
-      <path d="M6.2 3.8 8.1 7l-1.3 1.3c.8 1.7 2.2 3.1 3.9 3.9l1.3-1.3 3.2 1.9-.7 2.8c-.1.5-.6.9-1.1.8-5.2-.5-9.3-4.6-9.8-9.8-.1-.5.3-1 .8-1.1l1.8-.7Z" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-  );
+  return <ApexIcon name="phone" className="h-4 w-4" />;
 }
 
 function EmailIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 20 20" fill="none">
-      <rect x="2.5" y="4" width="15" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
-      <path d="m3.5 5.5 6.5 5 6.5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  return <ApexIcon name="mail" className="h-4 w-4" />;
 }
 
 function StarIcon({ filled = true }: { filled?: boolean }) {
@@ -150,11 +143,11 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
             Apex<span className="text-[#1769E0]"> Roofing</span>
           </span>
         </a>
-        <nav className="hidden items-center gap-8 text-[0.95rem] font-medium text-[#475467] lg:flex" aria-label="Main navigation">
+        <nav className="apex-main-nav hidden items-center gap-8 text-[0.95rem] font-medium text-[#475467] lg:flex" aria-label="Main navigation">
           {site.navigation.map(({ label, href }) => (
             <a
               key={label}
-              className="inline-block transition duration-200 ease-out hover:scale-[1.08] hover:text-[#1769E0] hover:[text-shadow:0_0_14px_rgba(23,105,224,0.5)]"
+              className="inline-block transition-colors hover:text-[#1769E0]"
               href={href}
             >
               {label}
@@ -168,12 +161,12 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
             Admin
           </a>
         </nav>
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="apex-header-actions hidden items-center gap-3 lg:flex">
           <a
             href={site.contact.telephoneHref}
             aria-label={`Call ${site.companyName} on ${site.contact.telephone}`}
             title={site.contact.telephone}
-            className="grid h-10 w-10 place-items-center rounded-full border border-[#D0D5DD] bg-white text-[#475467] transition duration-200 ease-out hover:scale-110 hover:border-[#1769E0] hover:text-[#1769E0] hover:shadow-[0_0_14px_rgba(23,105,224,0.35)]"
+            className="apex-contact-icon"
           >
             <PhoneIcon />
           </a>
@@ -181,7 +174,7 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
             href={`mailto:${site.contact.email}`}
             aria-label={`Email ${site.companyName} at ${site.contact.email}`}
             title={site.contact.email}
-            className="grid h-10 w-10 place-items-center rounded-full border border-[#D0D5DD] bg-white text-[#475467] transition duration-200 ease-out hover:scale-110 hover:border-[#1769E0] hover:text-[#1769E0] hover:shadow-[0_0_14px_rgba(23,105,224,0.35)]"
+            className="apex-contact-icon"
           >
             <EmailIcon />
           </a>
@@ -395,81 +388,14 @@ export function Services({ site }: { site: ActRoofingSiteConfig }) {
 }
 
 export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
-  const tool = site.estimateTool;
-  return (
-    <section id="estimate" className="section-pad bg-white">
-      <div className="site-shell">
-        <div className="rounded-[24px] border border-[#D6E5F8] bg-[#F5F9FF] p-6 sm:p-10 lg:p-14">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-          <div>
-            <p className="section-eyebrow">{tool.eyebrow}</p>
-            <h2 className={`mt-4 text-3xl font-bold leading-tight tracking-[-0.02em] text-[#101828] sm:text-4xl lg:text-[2.75rem]`}>
-              {tool.title}
-            </h2>
-            <p className="mt-5 max-w-xl text-lg leading-8 text-[#475467]">
-              {tool.description}
-            </p>
-            <ul className="mt-7 grid max-w-md gap-3 sm:grid-cols-2">
-              {tool.benefits.map((benefit) => (
-                <li key={benefit} className="flex items-center gap-2.5 text-[0.95rem] font-medium text-[#344054]">
-                  <CheckIcon />
-                  {benefit}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8">
-              <ButtonLink href={tool.ctaHref}>
-                {tool.ctaLabel}
-                <ArrowIcon />
-              </ButtonLink>
-              <p className="mt-4 text-sm text-[#667085]">
-                Already have measurements or plans?{' '}
-                <a className="font-semibold text-[#1769E0] hover:underline" href="/demo/roofing-site/estimate">
-                  Choose the right estimate tool
-                </a>
-              </p>
-            </div>
-          </div>
-          {/* Tool preview */}
-          <div className="relative">
-            <div className="relative rounded-[20px] border border-[#E5E7EB] bg-white p-6 shadow-[0_16px_48px_-16px_rgba(16,24,40,0.18)] sm:p-8">
-            <ol className="relative grid gap-0" aria-label="Estimate tool steps">
-              {tool.previewSteps.map((step, index) => {
-                const isLast = index === tool.previewSteps.length - 1;
-                return (
-                  <li key={step.label} className="flex items-start gap-4">
-                    <div className="flex flex-col items-center">
-                      <span
-                        className={`grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-semibold ${
-                          isLast
-                            ? "bg-[#1769E0] text-white"
-                            : "border-2 border-[#1769E0] bg-white text-[#1769E0]"
-                        }`}
-                      >
-                        {isLast ? "→" : index + 1}
-                      </span>
-                      {!isLast ? <span className="h-9 w-px bg-[#D0D5DD]" aria-hidden="true" /> : null}
-                    </div>
-                    <div className={isLast ? "pb-0 pt-2" : "pb-6 pt-2"}>
-                      <p className={`font-semibold ${isLast ? "text-[#1769E0]" : "text-[#101828]"}`}>{step.label}</p>
-                      {step.hint ? (
-                        <p className="mt-0.5 max-w-xs text-sm leading-6 text-[#667085]">{step.hint}</p>
-                      ) : null}
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-                <div className="mt-6 rounded-[12px] bg-[#F7F8FA] p-4 text-sm leading-6 text-[#475467]">
-                  {tool.previewNote}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  return <section id="estimate" className="section-pad bg-white"><div className="site-shell"><div className="rounded-[24px] border border-[#D6E5F8] bg-[#F5F9FF] p-6 sm:p-10 lg:p-12">
+    <div className="grid items-center gap-9 lg:grid-cols-2">
+      <div><p className="section-eyebrow">FREE ROOF TOOLS</p><h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-[#101828] sm:text-4xl">A starting price.<br />A clearer next step.</h2><p className="mt-5 max-w-xl text-base leading-8 text-[#667085]">Choose the route that fits what you know. Get a ballpark without measurements, or use more detail to build an itemised estimate.</p>
+        <ul className="mt-6 grid gap-3 text-sm text-[#344054]"><li className="flex gap-2"><CheckIcon/>No account needed to try the tools</li><li className="flex gap-2"><CheckIcon/>Based on Apex’s configured products and rates</li><li className="flex gap-2"><CheckIcon/>Carry your estimate into a quote enquiry</li></ul>
+        <div className="mt-7"><ButtonLink href={site.estimateTool.ctaHref}>Choose an estimate tool<ArrowIcon/></ButtonLink></div>
+      </div><RoofToolChoices compact />
+    </div>
+  </div></div></section>;
 }
 
 export function Projects({ site }: { site: ActRoofingSiteConfig }) {

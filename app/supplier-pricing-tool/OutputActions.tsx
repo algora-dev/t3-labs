@@ -139,7 +139,7 @@ export function OutputActions({ measureSet, catalog, includeLabour = true, planI
     }
   }
 
-  const quoteUrl = buildConvertToQuoteUrl(measureSet, catalog, includeLabour);
+  const quoteUrl = buildConvertToQuoteUrl(measureSet, catalog, includeLabour) + (supplierCfg.slug === 'apex-roofing' ? '&supplier=apex-roofing' : '');
   const outputTotal = (() => { const o = priceOutput(measureSet, catalog, includeLabour); return o.material + o.labour; })();
 
   // Tracking: what the user did with the output (convert / order / enquiry)

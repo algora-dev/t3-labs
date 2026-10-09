@@ -178,3 +178,19 @@
 #act-demo-root .contractor-site input[type="radio"] {
   accent-color: var(--brand-accent);
 }
+
+/* Consistent contact icons; keep the estimate CTA as the primary header action. */
+#act-demo-root .apex-contact-icon{display:grid;place-items:center;width:44px;height:44px;flex-shrink:0;border:1px solid transparent;border-radius:10px;color:#475467;background:transparent;transition:background .15s,color .15s}
+#act-demo-root .apex-contact-icon:hover{background:#eff5ff;color:#1769e0}
+#act-demo-root .apex-contact-icon:focus-visible{outline:3px solid #1769e0;outline-offset:3px}
+#act-demo-root .apex-contact-icon svg{width:17px;height:17px}
+#act-demo-root .apex-header-actions{gap:4px}
+#act-demo-root .apex-header-actions .header-quote-button{margin-left:10px;white-space:nowrap}
+#act-demo-root .apex-main-nav{gap:clamp(12px,1.7vw,26px)}
+@media(min-width:1024px) and (max-width:1279px){#act-demo-root .apex-main-nav{font-size:12px;gap:12px}#act-demo-root .apex-header-actions .header-quote-button{font-size:12px;padding-inline:12px;margin-left:4px}}
+
+/* Let the contact columns shrink on small screens instead of overflowing at 320px. */
+#act-demo-root #contact > .site-shell > div{min-width:0}
+#act-demo-root #contact .form-field{width:100%;min-width:0}
+#act-demo-root #contact a[href^="mailto:"]{overflow-wrap:anywhere}
+@media(max-width:1023px){#act-demo-root #contact > .site-shell{grid-template-columns:minmax(0,1fr)}#act-demo-root #contact form,#act-demo-root #contact form > div,#act-demo-root #contact label{min-width:0}}

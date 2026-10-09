@@ -1,4 +1,4 @@
-# Flat-roof complexity refinement — review build
+# Flat-roof complexity refinement - review build
 
 Adds a **Simple / Typical / Complex** choice on the **Size** step for a flat main roof or optional flat extension. Typical is selected by default. The choice affects the *indicative installation labour and uncertainty allowance only*, not roof area, perimeter, pitched-roof geometry, material quantities, or scaffolding. This intentionally does not estimate outlets, penetrations or other site-specific details.
 

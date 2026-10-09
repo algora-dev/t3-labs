@@ -83,6 +83,9 @@ export function SupplierEnquiryModal({
   }, []);
   const { config: supplierCfg } = useSupplierConfig();
   const urls = toolUrls(supplierCfg);
+  // This fictional demo must not upload files or contact the external enquiry service.
+  // Do not make this depend on an editable admin setting.
+  const demoPreview = supplierSlug === 'apex-roofing';
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const emailValid = emailRegex.test(email);
@@ -141,6 +144,7 @@ export function SupplierEnquiryModal({
     if (!canSend) return;
     setSending(true);
     setError(null);
+    if (demoPreview) { setSent(true); setSending(false); return; }
     try {
       // Upload attachments first if any
       const attachmentIds: string[] = [];
@@ -186,16 +190,24 @@ export function SupplierEnquiryModal({
   if (sent) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40 p-2 md:p-4">
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 text-center">
+        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90dvh] overflow-y-auto p-6 text-center">
           <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">
             <svg className="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-slate-900">Enquiry sent!</h3>
+          <h3 className="text-lg font-semibold text-slate-900">{demoPreview ? 'Here is what Apex would receive.' : 'Enquiry sent!'}</h3>
           <p className="mt-2 text-sm text-slate-500">
-            Your message has been sent to {supplierName}. They&apos;ll reply directly to your email at {email}.
+            {demoPreview ? 'Demo preview only. No email was sent, and no files or contact details were uploaded or saved.' : <>Your message has been sent to {supplierName}. They&apos;ll reply directly to your email at {email}.</>}
           </p>
+          {demoPreview && <div className="mt-4 space-y-2 rounded-xl bg-slate-50 p-4 text-left text-sm text-slate-700">
+            <p><strong>{name}</strong><br />{email}{phone && ` · ${phone}`}</p>
+            <p>{intentOptions.find(item => item.value === intent)?.label}</p>
+            {includePricing && <p>Estimate attached: <strong>{cur}{fmt(output.material + output.labour)}</strong>, excluding VAT.</p>}
+            {includeQuantities && <p>Selected roof quantities and {output.lines.length} priced product lines included.</p>}
+            {message && <p className="whitespace-pre-wrap break-words">{message}</p>}
+            {files.length > 0 && <p className="break-words">Files represented by name only: {files.map(f => f.name).join(', ')}</p>}
+          </div>}
           <button
             onClick={onClose}
             className="mt-5 w-full rounded-full bg-black text-white px-5 py-3 text-sm font-semibold hover:bg-slate-800 transition"
@@ -213,8 +225,8 @@ export function SupplierEnquiryModal({
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-slate-100 px-5 py-4 flex items-center justify-between z-10">
           <div>
-            <h2 className="text-base font-semibold text-slate-900">Send to {supplierName}</h2>
-            <p className="text-xs text-slate-400">They&apos;ll reply directly to your email</p>
+            <h2 className="text-base font-semibold text-slate-900">{demoPreview ? 'Preview a quote enquiry' : `Send to ${supplierName}`}</h2>
+            <p className="text-xs text-slate-500">{demoPreview ? 'Your estimate carries through. Nothing is sent.' : <>They&apos;ll reply directly to your email</>}</p>
           </div>
           <button
             onClick={onClose}
@@ -229,6 +241,7 @@ export function SupplierEnquiryModal({
 
         {/* Body */}
         <div className="px-5 py-4 space-y-4">
+          {demoPreview && <button type="button" onClick={() => { setName('Demo Homeowner'); setEmail('homeowner@example.com'); setPhone(''); }} className="text-sm font-semibold text-blue-600">Use example contact details</button>}
           {/* Name + Email */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
@@ -265,7 +278,7 @@ export function SupplierEnquiryModal({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-              placeholder="+64 21 123 456"
+              placeholder={demoPreview ? '07700 900123' : '+64 21 123 456'}
             />
           </div>
 
@@ -303,7 +316,7 @@ export function SupplierEnquiryModal({
 
           {/* Include toggles */}
           <div className="space-y-2 rounded-lg bg-slate-50 p-3">
-            <p className="text-xs font-medium text-slate-600">Include in email:</p>
+            <p className="text-xs font-medium text-slate-600">{demoPreview ? 'Include in enquiry:' : 'Include in email:'}</p>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={includeQuantities} onChange={(e) => setIncludeQuantities(e.target.checked)} className="rounded border-slate-300 text-[#FF6B35] focus:ring-[#FF6B35]" />
               <span className="text-xs text-slate-600">Takeoff quantities (measurements per component)</span>
@@ -330,7 +343,7 @@ export function SupplierEnquiryModal({
               disabled={files.length >= 10}
               className="w-full rounded-lg border border-dashed border-slate-300 px-4 py-3 text-xs text-slate-500 hover:border-[#FF6B35] hover:bg-orange-50/30 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {files.length >= 5 ? 'Maximum 10 files reached' : '+ Add file (PDF, JPG, PNG, WebP)'}
+              {files.length >= 10 ? 'Maximum 10 files reached' : '+ Add file (PDF, JPG, PNG, WebP)'}
             </button>
             {files.length > 0 && (
               <div className="mt-2 space-y-1">
@@ -347,8 +360,8 @@ export function SupplierEnquiryModal({
             )}
           </div>
 
-          {/* Marketing consent */}
-          <label className="flex items-start gap-2 cursor-pointer">
+          {/* Marketing consent is irrelevant to a local preview. */}
+          {!demoPreview && <label className="flex items-start gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={marketingConsent}
@@ -358,7 +371,7 @@ export function SupplierEnquiryModal({
             <span className="text-xs text-slate-500">
               Send me product updates, deals, and news from {supplierName}. I can unsubscribe at any time.
             </span>
-          </label>
+          </label>}
 
           {/* Error */}
           {error && (
@@ -388,7 +401,7 @@ export function SupplierEnquiryModal({
               </>
             ) : (
               <>
-                Send to {supplierName}
+                {demoPreview ? 'Preview my enquiry' : `Send to ${supplierName}`}
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
               </>
             )}

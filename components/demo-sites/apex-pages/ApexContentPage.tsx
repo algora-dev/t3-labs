@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { ApexBreadcrumbs } from '../../demo-helper/ApexBreadcrumbs';
 import { actRoofingSite } from '../act-roofing/site-config';
 import type { ApexPage } from './apex-page-content';
 
@@ -26,6 +27,10 @@ export function ApexContentPage({ page }: { page: ApexPage }) {
           </nav>
         </div>
       </header>
+      <ApexBreadcrumbs className="apex-content-crumbs" items={[
+        ...(page.group === 'services' ? [{ label: 'Services', href: '/demo/roofing-site#services' }] : []),
+        { label: page.title },
+      ]} />
 
       <main>
         <section className="border-b border-[#E5E7EB] bg-white">

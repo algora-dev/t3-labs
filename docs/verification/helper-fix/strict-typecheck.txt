@@ -1,0 +1,3 @@
+PASS: tsc -p scripts/tsconfig.helper-check.json
+Scoped to embed.ts, config.ts, state.ts and store.ts in lib/demo-helper.
+Not a full application/React/Next typecheck.

@@ -7,6 +7,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useSupplierConfig } from './supplierConfig';
 import type { DemoFinishPayload } from './TakeoffWorkstation';
 import type { GroupKey, MeasurementSet } from './types';
 import { emptyMeasurementSet, GROUP_DEFS, makeId } from './types';
@@ -122,9 +123,12 @@ export function TakeoffStation({ planUrl, onFinish, contained = false }: {
   contained?: boolean;
   onFinish: (set: MeasurementSet, planImages?: DemoFinishPayload['planImages']) => void;
 }) {
+  const { config } = useSupplierConfig();
   return (
     <div className={contained ? 'w-full space-y-3' : 'w-[125%] -ml-[12.5%] space-y-3'}>
       <Workstation
+        backHref={config.slug === 'apex-roofing' ? '/demo/roofing-site/estimate' : undefined}
+        backLabel={config.slug === 'apex-roofing' ? 'Back to Apex roof tools' : undefined}
         workspaceSlug="supplier-demo"
         quote={{
           id: 'supplier-tool',

@@ -1,3 +1,4 @@
+import { getBusiness } from '@/lib/assistant/data';
 import { NextResponse } from 'next/server';
 import { getOrCreateSession, saveSession } from '@/lib/assistant/session';
 import { buildInquiryPayload, validateInquirySubmission, type InquirySubmission } from '@/lib/assistant/inquiry';
@@ -81,11 +82,8 @@ async function emailInquiry(payload: ReturnType<typeof buildInquiryPayload>): Pr
   }
 }
 
-/** POST /api/inquiry - submit the demo enquiry (spec 13.5).
- * Server assembles the payload from session facts + lead + latest canonical
- * estimate + submitted (possibly edited) form values, stores it in the
- * session, and emails it to the T3 Labs insights inbox via Resend.
- */
+/** Assemble from canonical session data. Fictional businesses are preview-only,
+ * even when email credentials exist. Live deployments retain their explicit send path. */
 export async function POST(req: Request) {
   let body: InquirySubmission;
   try {
@@ -94,13 +92,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
   }
 
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
   const guard = validateInquirySubmission(body);
   if (!guard.ok) {
     return NextResponse.json({ error: guard.error }, { status: 400 });
   }
 
   const session = await getOrCreateSession();
-  const payload = buildInquiryPayload(session, body);
+  // buildInquiryPayload also updates contact facts. Clone for a read-only demo preview.
+  const payload = buildInquiryPayload(getBusiness().business.demo ? structuredClone(session) : session, body);
+  if (getBusiness().business.demo) {
+    return NextResponse.json({ ok: true, mode: 'preview', emailed: false, payload, message: 'Demo preview only. No enquiry was sent or saved.' });
+  }
   const emailed = await emailInquiry(payload);
 
   const inquiry = {

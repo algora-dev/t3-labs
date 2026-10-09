@@ -1,14 +1,17 @@
 'use client';
 
-import { type PointerEvent as ReactPointerEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { ASSISTANT_QUESTION, DEMO_HOME } from '@/lib/demo-journey/config';
+import { type PointerEvent as ReactPointerEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useRouter } from 'next/navigation';
+import { ASSISTANT_FRAME_NAME, isAssistantWebsiteFrame, subscribeFrame } from '@/lib/demo-helper/embed';
+import { ASSISTANT_QUESTION } from '@/lib/demo-journey/config';
 import { DEMO_ACTION_EVENT, actionFromEvent, recordDemoSignal, recordDemoFailure } from '@/lib/demo-journey/store';
-import { useDemoJourney } from '@/components/demo-journey/useDemoJourney';
+import { HELPER_QUESTION, HELPER_PRICE_PROMPT } from '@/lib/demo-helper/config';
+import { getHelper, HELPER_COMMAND_EVENT, takeHelperCommand, recordHelperSignal, setHelperSurface, updateHelper } from '@/lib/demo-helper/store';
+import { signalsForAssistantTurn, isApexPage } from '@/lib/demo-helper/assistant-events';
+import { useDemoHelper } from '@/components/demo-helper/useDemoHelper';
 import type { AssistantAction, AssistantCard, AssistantTurn } from '@/lib/assistant/types';
 import type { Estimate, EstimateDraft } from '@/lib/pricing/estimate-engine';
 import { EnquiryPanel } from './EnquiryPanel';
-import { SmartAssistantTeaser } from './SmartAssistantTeaser';
 import { EstimateResultCard } from './EstimateResultCard';
 import { GuidedEstimator, type EstimatorConfig } from './GuidedEstimator';
 
@@ -236,6 +239,11 @@ function OpeningScreen({ config, busy, onAction }: { config: PublicConfig; busy:
 }
 
 export function SmartAssistantLauncher() {
+  const embedded = useSyncExternalStore(subscribeFrame, isAssistantWebsiteFrame, () => false);
+  return embedded ? null : <SmartAssistantCompanion />;
+}
+
+function SmartAssistantCompanion() {
   useEffect(() => {
     try {
       if (sessionStorage.getItem('apex_assistant_dismissed') === '1') setDismissed(true);
@@ -261,11 +269,9 @@ export function SmartAssistantLauncher() {
     }
   }, []);
   const router = useRouter();
-  const demoJourney = useDemoJourney();
-  const isDemoHub = usePathname()?.startsWith(DEMO_HOME);
-  const [embeddedFrame, setEmbeddedFrame] = useState(false);
+  const helper = useDemoHelper();
   const [open, setOpen] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [, setDismissed] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -308,15 +314,34 @@ export function SmartAssistantLauncher() {
 
 
   useEffect(() => {
-    setEmbeddedFrame(window.self !== window.top);
-  }, []);
+    const onCommand = () => {
+      const command = takeHelperCommand(['question', 'price-prompt', 'assistant-open', 'assistant-enquiry', 'assistant-close']);
+      if (!command) return;
+      if (command === 'assistant-close') { setOpen(false); return; }
+      restoreAssistant(); setOpen(true);
+      if (command === 'assistant-open') return;
+      if (command === 'assistant-enquiry') { setEstimatorActive(false); setEnquiryActive(true); return; }
+      if (busy) { updateHelper({ type: 'error', runId: getHelper().runId }); return; }
+      const prompt = command === 'question' ? HELPER_QUESTION : HELPER_PRICE_PROMPT;
+      if (input.trim() && input !== prompt && !window.confirm('Replace the unsent message with this demo example? Your conversation will be kept.')) return;
+      setEnquiryActive(false); setEstimatorActive(false); setInput(prompt);
+      requestAnimationFrame(() => inputRef.current?.focus());
+    };
+    window.addEventListener(HELPER_COMMAND_EVENT, onCommand);
+    onCommand();
+    return () => window.removeEventListener(HELPER_COMMAND_EVENT, onCommand);
+  }, [busy, input, restoreAssistant]);
+  useEffect(() => {
+    setHelperSurface(open ? enquiryActive ? 'assistant-enquiry' : 'assistant' : 'website');
+    return () => setHelperSurface('website');
+  }, [open, enquiryActive]);
 
   useEffect(() => {
     const openFromPage = (event: MouseEvent) => {
       const target = event.target instanceof Element ? event.target.closest('[data-open-smart-assistant]') : null;
       if (!target) return;
       event.preventDefault();
-      setOpen(true);
+      restoreAssistant(); setOpen(true);
     };
     document.addEventListener('click', openFromPage);
     return () => document.removeEventListener('click', openFromPage);
@@ -425,6 +450,7 @@ export function SmartAssistantLauncher() {
     setBusy(true);
     const userMsg: ChatMessage = { id: uid(), role: 'user', text: userDisplayText };
     const assistantId = uid();
+    const guideContext = { runId: getHelper().runId, task: getHelper().current };
     setMessages((current) => [...current, userMsg, { id: assistantId, role: 'assistant', text: '', streaming: true }]);
 
     try {
@@ -451,6 +477,7 @@ export function SmartAssistantLauncher() {
             setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: message.text + event.text } : message));
           } else if (event.type === 'turn' && event.turn) {
             if (event.turn.message.trim()) recordDemoSignal('assistant-answer');
+            signalsForAssistantTurn(event.turn).forEach(signal => recordHelperSignal(signal, guideContext));
             setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: event.turn!.message, turn: event.turn, streaming: false } : message));
           } else if (event.type === 'error') {
             throw new Error(event.error ?? 'Something went wrong. Please try again.');
@@ -462,6 +489,7 @@ export function SmartAssistantLauncher() {
       const message = e instanceof Error ? e.message : 'Something went wrong. Please try again.';
       setError(message);
       recordDemoFailure('assistant');
+      updateHelper({ type: 'error', runId: guideContext.runId });
       setMessages((current) => current.filter((item) => item.id !== assistantId || item.text.length > 0));
     } finally {
       setBusy(false);
@@ -535,11 +563,13 @@ export function SmartAssistantLauncher() {
   }, []);
 
   const navigateSite = useCallback((url: string) => {
+    if (isApexPage(url)) recordHelperSignal('knowledge-link');
     if (pinned) {
       const href = new URL(url, window.location.origin);
       setSiteHref(href.href);
       setIframePath(href.pathname);
     } else {
+      setOpen(false);
       router.push(url);
     }
   }, [pinned, router]);
@@ -636,7 +666,7 @@ export function SmartAssistantLauncher() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M4 4v6h6M20 20v-6h-6" /><path d="M20 9A8 8 0 006.3 6.3L4 8m0 7a8 8 0 0013.7 2.7L20 16" /></svg>
             </button>
           )}
-          <button onClick={dismissAssistant} aria-label="Minimize assistant to sidebar" title="Minimize assistant" className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20">
+          <button onClick={dismissAssistant} aria-label="Minimise assistant" title="Minimize assistant" className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6" /></svg>
           </button>
           <button onClick={() => setOpen(false)} aria-label="Close assistant" className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
@@ -647,6 +677,7 @@ export function SmartAssistantLauncher() {
 
   const body = (
     <>
+      <div className="sa-helper-mobile-space" aria-hidden="true" />
       {enquiryActive ? (
         <div className="min-h-0 flex-1"><EnquiryPanel onClose={() => setEnquiryActive(false)} accentColor={config.accentColor} /></div>
       ) : (
@@ -697,7 +728,7 @@ export function SmartAssistantLauncher() {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value.slice(0, config.maxUserMessageChars))}
-                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input); } }}
+                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); sendMessage(input); } }}
                 rows={1}
                 aria-label="Ask the Smart Assistant"
                 placeholder={`Ask anything about ${config.brandName}...`}
@@ -713,7 +744,7 @@ export function SmartAssistantLauncher() {
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 10a7 7 0 0014 0M12 17v4" /></svg>
               </button>
-              <button type="submit" disabled={busy || !input.trim()} aria-label="Send message" className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-xl text-white hover:opacity-90 disabled:opacity-35" style={{ backgroundColor: config.accentColor }}>
+              <button type="button" onClick={() => sendMessage(input)} disabled={busy || !input.trim()} aria-label="Send message" className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-xl text-white hover:opacity-90 disabled:opacity-35" style={{ backgroundColor: config.accentColor }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
               </button>
             </form>
@@ -724,49 +755,15 @@ export function SmartAssistantLauncher() {
     </>
   );
 
-  if (embeddedFrame) return null;
 
   return (
     <>
-      {!dismissed && !open && !demoJourney.active && !isDemoHub && <SmartAssistantTeaser config={{ assistantLabel: config.assistantLabel, accentColor: config.accentColor, teaserTitle: config.teaserTitle, teaserText: config.teaserText, teaserExample: config.teaserExample }} onOpenAssistant={() => setOpen(true)} />}
-
-      {dismissed ? (
-        <button
-          aria-label={`Restore ${config.assistantLabel}`}
-          onClick={() => {
-            restoreAssistant();
-            setOpen(true);
-          }}
-          className="group fixed right-0 top-1/2 z-50 -translate-y-1/2 rounded-l-xl border border-[#1769E0]/30 border-r-0 bg-slate-950/90 py-3 pl-2.5 pr-1.5 text-[10px] font-bold uppercase tracking-widest text-[#8AB4F8] shadow-[0_0_16px_rgba(23,105,224,0.25)] backdrop-blur transition-all duration-300 hover:pl-4 hover:shadow-[0_0_24px_rgba(23,105,224,0.5)]"
-        >
-          <span className="[writing-mode:vertical-rl]">Assistant</span>
+      {!open && (
+        <button type="button" aria-label={`Open ${config.assistantLabel}`} onClick={() => { restoreAssistant(); setOpen(true); }}
+          className="sa-apex-launcher" style={{ backgroundColor: config.accentColor }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2V11.5a9.5 9.5 0 0 1 19 0Z"/><path d="M7 10h9M7 14h6" /></svg>
+          <span><b>{config.assistantLabel}</b><small>Answers & roof prices</small></span>
         </button>
-      ) : null}
-
-      {!open && !dismissed && (
-        <span className="group fixed bottom-4 right-4 z-50 sm:bottom-5 sm:right-5">
-          <span className="pointer-events-none absolute inset-0 animate-pulse rounded-2xl" style={{ boxShadow: '0 0 24px rgba(23,105,224,0.55), 0 0 48px rgba(23,105,224,0.25)' }} aria-hidden />
-        <button
-          aria-label={`Open ${config.assistantLabel}`}
-          onClick={() => setOpen(true)}
-          className="relative flex items-center gap-3 rounded-2xl py-2.5 pl-3 pr-4 text-left text-white shadow-xl shadow-slate-900/25 transition hover:-translate-y-px hover:shadow-2xl active:translate-y-0 group-hover:shadow-[0_0_32px_rgba(23,105,224,0.65)]"
-          style={{ backgroundColor: config.accentColor }}
-        >
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.2 5 5.3 1.8-3.8 3.8.9 5.4-4.6-2.5L7.4 18l.9-5.4-3.8-3.8L9.8 7 12 2z" /></svg></span>
-          <span className="hidden sm:block"><span className="block text-sm font-black leading-tight">{config.assistantLabel}</span><span className="block text-[10px] leading-tight text-white/80">{config.launcherSubtitle}</span></span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              dismissAssistant();
-            }}
-            aria-label="Hide assistant to sidebar"
-            title="Hide assistant"
-            className="absolute -right-1.5 -top-1.5 hidden h-6 w-6 place-items-center rounded-full border border-white/30 bg-slate-900 text-white/80 shadow-md transition hover:bg-slate-800 hover:text-white group-hover:grid"
-          >
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
-          </button>
-        </button>
-        </span>
       )}
 
       {/* Pinned workspace (desktop only, V4 brief section 17): ~70/30 website + assistant */}
@@ -775,6 +772,7 @@ export function SmartAssistantLauncher() {
           <div className="h-full min-w-0 flex-1 bg-white">
             <iframe
               ref={iframeRef}
+              name={ASSISTANT_FRAME_NAME}
               src={siteHref ?? window.location.href}
               title="Website"
               className="h-full w-full border-0"
@@ -798,10 +796,11 @@ export function SmartAssistantLauncher() {
         <div
           ref={panelRef}
           role="dialog"
-          aria-modal="true"
           aria-label={config.assistantName}
           className="fixed inset-0 z-[60] flex flex-col overflow-hidden bg-slate-50 shadow-2xl sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(760px,calc(100dvh-2.5rem))] sm:w-[min(560px,calc(100vw-2.5rem))] sm:rounded-[22px] sm:border sm:border-slate-200"
           style={panelPositionStyle}
+          data-apex-assistant="true"
+          onKeyDown={e => { if (e.key === 'Escape') setOpen(false); }}
         >
           {header}
           {body}
