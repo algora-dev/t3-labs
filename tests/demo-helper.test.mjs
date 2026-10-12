@@ -116,7 +116,7 @@ test('guided enquiry UI has no send request; server also guards against demo ema
 test('plan route uses the same integrated estimator without deleting an existing draft',()=>{
  assert.match(src('app/demo/roofing-site/takeoff/page.tsx'),/entry=plan/);
  assert.match(src('app/supplier-pricing-tool/PortalFlow.tsx'),/entry.*plan/);
- assert.match(src('lib/demo-helper/config.ts'),/known scale/);
+ assert.match(src('lib/demo-helper/config.ts'),/Set the scale/);
 });
 test('admin has explicit local-only disclosure and trade milestone hook',()=>{
  const s=src('app/supplier-pricing-tool/admin/AdminPanel.tsx');assert.match(s,/admin-trade-view/);assert.match(s,/Changes stay in this browser/);

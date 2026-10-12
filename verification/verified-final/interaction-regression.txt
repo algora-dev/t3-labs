@@ -1,0 +1,37 @@
+PASS 1: freestyle send reports waiting without using example
+PASS 2: arbitrary question sent unchanged
+PASS 3: freestyle automatically starts relevant task
+PASS 4: free response offers honest manual continuation
+PASS 5: generic response not falsely verified
+PASS 6: actual structured answer updates guidance
+PASS 7: actual navigation action verifies answer task
+PASS 8: price prompt opens and prefills once
+PASS 9: network failure reported honestly
+PASS 10: retry clears stale error while sending
+PASS 11: structured estimate accepted for custom request
+PASS 12: estimate directs user to actual enquiry action
+PASS 13: missing assistant enquiry clearly labelled, not faked
+PASS 14: enquiry event contract tested with labelled fixture
+PASS 15: verified price-to-Quick transition also closes chat
+PASS 16: conversation preserved for freestyling after close
+PASS 17: cancel preserves unsent message
+PASS 18: cancel moves guidance to existing message, not fake prepared state
+PASS 19: sample covering changes actual result input
+PASS 20: manual contact details protected
+PASS 21: manual notes in same enquiry output
+PASS 22: actual nondefault covering attached to manual enquiry
+PASS 23: edit preview retains notes
+PASS 24: normal roof questionnaire available
+PASS 25: full and sample paths exclusive
+PASS 26: short size instructions
+PASS 27: normal homeowner flow not replaced
+PASS 28: sample replacement cancellation respected
+PASS 29: prior homeowner step preserved
+PASS 30: desktop drag remains available
+PASS 31: keyboard reset position retained
+PASS 32: outside click never hides helper
+PASS 33: manual hide persists through navigation
+PASS 34: short mobile viewport reserves guide space
+PASS 35: high contrast uses solid background
+PASS 36: no JavaScript page errors in exercised preview flows
+{"passed": 36, "pageErrors": []}

@@ -1,12 +1,14 @@
 'use client';
 
+import { lockBodyScroll } from '../../lib/demo-helper/scroll-lock';
 import { type PointerEvent as ReactPointerEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { ASSISTANT_FRAME_NAME, isAssistantWebsiteFrame, subscribeFrame } from '@/lib/demo-helper/embed';
 import { ASSISTANT_QUESTION } from '@/lib/demo-journey/config';
 import { DEMO_ACTION_EVENT, actionFromEvent, recordDemoSignal, recordDemoFailure } from '@/lib/demo-journey/store';
 import { HELPER_QUESTION, HELPER_PRICE_PROMPT } from '@/lib/demo-helper/config';
-import { getHelper, HELPER_COMMAND_EVENT, takeHelperCommand, recordHelperSignal, setHelperSurface, updateHelper } from '@/lib/demo-helper/store';
+import { getHelper, HELPER_COMMAND_EVENT, takeHelperCommand, recordHelperSignal, setHelperSurface, updateHelper, reportAssistantActivity } from '@/lib/demo-helper/store';
+import { isAssistantTask } from '@/lib/demo-helper/assistant-activity';
 import { signalsForAssistantTurn, isApexPage } from '@/lib/demo-helper/assistant-events';
 import { useDemoHelper } from '@/components/demo-helper/useDemoHelper';
 import type { AssistantAction, AssistantCard, AssistantTurn } from '@/lib/assistant/types';
@@ -196,7 +198,8 @@ function ThinkingDots() {
   return <span className="inline-flex items-center gap-1 py-1"><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400" /><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:120ms]" /><span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:240ms]" /></span>;
 }
 
-function OpeningScreen({ config, busy, onAction }: { config: PublicConfig; busy: boolean; onAction: (message: string) => void }) {
+function OpeningScreen({ config, busy, onAction, guided = false }: { config: PublicConfig; busy: boolean; onAction: (message: string) => void; guided?: boolean }) {
+  if (guided) return <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"><p className="text-sm font-bold text-slate-950">Ask about {config.brandName}.</p><p className="mt-2 text-sm leading-relaxed text-slate-600">Send the example below, edit it or write your own question.</p></div>;
   return (
     <div>
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -282,6 +285,7 @@ function SmartAssistantCompanion() {
   const [estimatorDraft, setEstimatorDraft] = useState<EstimateDraft | null>(null);
   const [pinned, setPinned] = useState(false);
   const [listening, setListening] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API recognition instance has no lib.dom types
   const recognitionRef = useRef<any>(null);
   const stoppedManuallyRef = useRef(false);
   const [siteHref, setSiteHref] = useState<string | null>(null);
@@ -294,6 +298,13 @@ function SmartAssistantCompanion() {
   const panelRef = useRef<HTMLDivElement>(null);
   const dragOffset = useRef<{ dx: number; dy: number } | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const resetDialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const resize = () => { if (window.innerWidth < 1024) setPinned(false); };
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, []);
+
 
   useEffect(() => {
     const onDemoAction = (event: Event) => {
@@ -317,23 +328,26 @@ function SmartAssistantCompanion() {
     const onCommand = () => {
       const command = takeHelperCommand(['question', 'price-prompt', 'assistant-open', 'assistant-enquiry', 'assistant-close']);
       if (!command) return;
-      if (command === 'assistant-close') { setOpen(false); return; }
+      if (command === 'assistant-close') { stoppedManuallyRef.current = true; recognitionRef.current?.stop?.(); setListening(false); setOpen(false); return; }
       restoreAssistant(); setOpen(true);
       if (command === 'assistant-open') return;
       if (command === 'assistant-enquiry') { setEstimatorActive(false); setEnquiryActive(true); return; }
       if (busy) { updateHelper({ type: 'error', runId: getHelper().runId }); return; }
       const prompt = command === 'question' ? HELPER_QUESTION : HELPER_PRICE_PROMPT;
-      if (input.trim() && input !== prompt && !window.confirm('Replace the unsent message with this demo example? Your conversation will be kept.')) return;
+      if (input.trim() && input !== prompt && !window.confirm('Replace the unsent message with this demo example? Your conversation will be kept.')) {
+        const h = getHelper(); reportAssistantActivity({ phase: 'editing', runId: h.runId, task: h.current }); return;
+      }
       setEnquiryActive(false); setEstimatorActive(false); setInput(prompt);
-      requestAnimationFrame(() => inputRef.current?.focus());
+      const h = getHelper(); reportAssistantActivity({ phase: 'prepared', runId: h.runId, task: h.current });
+      requestAnimationFrame(() => { if (window.innerWidth >= 980 && window.matchMedia('(pointer: fine)').matches) inputRef.current?.focus(); });
     };
     window.addEventListener(HELPER_COMMAND_EVENT, onCommand);
     onCommand();
     return () => window.removeEventListener(HELPER_COMMAND_EVENT, onCommand);
   }, [busy, input, restoreAssistant]);
   useEffect(() => {
-    setHelperSurface(open ? enquiryActive ? 'assistant-enquiry' : 'assistant' : 'website');
-    return () => setHelperSurface('website');
+    setHelperSurface(open ? enquiryActive ? 'assistant-enquiry' : 'assistant' : 'website', 'assistant');
+    return () => setHelperSurface('website', 'assistant');
   }, [open, enquiryActive]);
 
   useEffect(() => {
@@ -360,6 +374,7 @@ function SmartAssistantCompanion() {
       const raw = window.localStorage.getItem(POS_STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as { x: number; y: number };
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe restore of the persisted drag position, must run after mount
         if (Number.isFinite(parsed.x) && Number.isFinite(parsed.y)) setPos(parsed);
       }
     } catch { /* ignore */ }
@@ -369,15 +384,20 @@ function SmartAssistantCompanion() {
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !e.defaultPrevented && !document.querySelector('dialog[open]')) setOpen(false); };
     window.addEventListener('keydown', onKey);
-    const previous = document.body.style.overflow;
-    if (window.innerWidth < 640 && !pinned) document.body.style.overflow = 'hidden';
-    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = previous; };
+    let releaseScroll: (() => void) | null = null;
+    const syncScroll = () => {
+      const lock = window.innerWidth < 980 && !pinned;
+      if (lock && !releaseScroll) releaseScroll = lockBodyScroll();
+      else if (!lock && releaseScroll) { releaseScroll(); releaseScroll = null; }
+    };
+    syncScroll(); window.addEventListener('resize', syncScroll);
+    return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('resize', syncScroll); releaseScroll?.(); };
   }, [open, pinned]);
 
   useEffect(() => {
-    if (!open || enquiryActive) return;
+    if (!open || enquiryActive || window.innerWidth < 980 || !window.matchMedia('(pointer: fine)').matches) return;
     const timer = setTimeout(() => inputRef.current?.focus(), 100);
     return () => clearTimeout(timer);
   }, [open, enquiryActive]);
@@ -391,7 +411,7 @@ function SmartAssistantCompanion() {
       const h = panel?.height ?? 700;
       return {
         x: Math.min(Math.max(8, x), Math.max(8, window.innerWidth - w - 8)),
-        y: Math.min(Math.max(8, y), Math.max(8, window.innerHeight - Math.min(h, 120) - 8)),
+        y: Math.min(Math.max(8, y), Math.max(8, window.innerHeight - h - 8)),
       };
     };
     const onMove = (e: PointerEvent) => {
@@ -412,6 +432,7 @@ function SmartAssistantCompanion() {
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
     window.addEventListener('resize', onResize);
+    onResize();
     return () => {
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
@@ -421,7 +442,7 @@ function SmartAssistantCompanion() {
 
   const beginDrag = (e: ReactPointerEvent) => {
     if (e.target instanceof Element && e.target.closest('button, a, input')) return;
-    if (window.innerWidth < 640 || pinned) return;
+    if (window.innerWidth < 980 || pinned) return;
     const rect = panelRef.current?.getBoundingClientRect();
     if (!rect) return;
     dragOffset.current = { dx: e.clientX - rect.left, dy: e.clientY - rect.top };
@@ -450,7 +471,13 @@ function SmartAssistantCompanion() {
     setBusy(true);
     const userMsg: ChatMessage = { id: uid(), role: 'user', text: userDisplayText };
     const assistantId = uid();
+    // A visitor can bypass the suggested prompt and still take part in the task.
+    // Do not inspect their words or require an exact sample match.
+    const h = getHelper();
+    if (h.view === 'task' && isAssistantTask(h.current)) updateHelper({ type: 'prepare' });
     const guideContext = { runId: getHelper().runId, task: getHelper().current };
+    reportAssistantActivity({ phase: 'sending', ...guideContext, requestId: assistantId });
+    let receivedTurn = false;
     setMessages((current) => [...current, userMsg, { id: assistantId, role: 'assistant', text: '', streaming: true }]);
 
     try {
@@ -476,6 +503,7 @@ function SmartAssistantCompanion() {
           if (event.type === 'token' && event.text) {
             setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: message.text + event.text } : message));
           } else if (event.type === 'turn' && event.turn) {
+            receivedTurn = true;
             if (event.turn.message.trim()) recordDemoSignal('assistant-answer');
             signalsForAssistantTurn(event.turn).forEach(signal => recordHelperSignal(signal, guideContext));
             setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: event.turn!.message, turn: event.turn, streaming: false } : message));
@@ -484,12 +512,15 @@ function SmartAssistantCompanion() {
           }
         }
       }
+      if (!receivedTurn) throw new Error('The response was interrupted. Please try again.');
+      reportAssistantActivity({ phase: 'answered', ...guideContext, requestId: assistantId });
       setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, streaming: false } : message));
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Something went wrong. Please try again.';
       setError(message);
       recordDemoFailure('assistant');
       updateHelper({ type: 'error', runId: guideContext.runId });
+      reportAssistantActivity({ phase: 'error', ...guideContext, requestId: assistantId });
       setMessages((current) => current.filter((item) => item.id !== assistantId || item.text.length > 0));
     } finally {
       setBusy(false);
@@ -602,6 +633,7 @@ function SmartAssistantCompanion() {
   const panelPositionStyle = pos && !pinned ? { left: pos.x, top: pos.y, right: 'auto', bottom: 'auto' } : undefined;
 
   const toggleListening = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API is not in lib.dom types
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) { setError('Voice input is not supported in this browser. Try Chrome or Edge.'); return; }
     if (listening) {
@@ -613,16 +645,19 @@ function SmartAssistantCompanion() {
     }
     stoppedManuallyRef.current = false;
     let finalText = '';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- see Web Speech API note above
     const buildRec = (): any => {
       const rec = new SR();
       rec.lang = 'en-GB';
       rec.interimResults = true;
       rec.continuous = true;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognitionEvent shape
       rec.onresult = (event: any) => {
         finalText = '';
         for (let i = 0; i < event.results.length; i++) finalText += event.results[i][0].transcript;
         setInput(finalText.slice(0, config.maxUserMessageChars));
       };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognitionErrorEvent shape
       rec.onerror = (event: any) => {
         // "no-speech" is expected during pauses - onend handles the restart.
         if (event?.error && event.error !== 'no-speech' && event.error !== 'aborted') setListening(false);
@@ -641,6 +676,27 @@ function SmartAssistantCompanion() {
     setListening(true);
     rec.start();
   };
+
+  useEffect(() => {
+    if (!open) {
+      stoppedManuallyRef.current = true;
+      recognitionRef.current?.stop?.();
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- close/unmount cleanup resets local voice state synchronously
+      setListening(false);
+      setResetConfirm(false);
+    }
+    return () => { stoppedManuallyRef.current = true; recognitionRef.current?.stop?.(); };
+  }, [open]);
+
+  useEffect(() => {
+    const node = resetDialog.current;
+    if (!resetConfirm || !node) return;
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const release = lockBodyScroll();
+    node.showModal();
+    node.querySelector<HTMLButtonElement>('button')?.focus();
+    return () => { node.close(); release(); if (previous?.isConnected) previous.focus({ preventScroll: true }); };
+  }, [resetConfirm]);
 
   const header = (
     <header
@@ -683,7 +739,7 @@ function SmartAssistantCompanion() {
       ) : (
         <>
           <div ref={listRef} role="log" aria-live="polite" className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-5">
-            {!hasMessages && !estimatorActive && <OpeningScreen config={config} busy={busy} onAction={sendMessage} />}
+            {!hasMessages && !estimatorActive && <OpeningScreen config={config} busy={busy} onAction={sendMessage} guided={helper.view === 'task' && helper.started && isAssistantTask(helper.current) && !!input.trim()} />}
 
             <div className="space-y-4">
               {messages.map((message) => (
@@ -727,9 +783,13 @@ function SmartAssistantCompanion() {
               <textarea
                 ref={inputRef}
                 value={input}
-                onChange={(e) => setInput(e.target.value.slice(0, config.maxUserMessageChars))}
+                onChange={(e) => {
+                  setInput(e.target.value.slice(0, config.maxUserMessageChars));
+                  const h = getHelper();
+                  if (!busy && h.started) reportAssistantActivity({ phase: 'editing', runId: h.runId, task: h.current });
+                }}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); sendMessage(input); } }}
-                rows={1}
+                rows={input.trim() && helper.view === 'task' && helper.started && isAssistantTask(helper.current) ? (helper.current === 'assistant-price' ? 3 : 2) : 1}
                 aria-label="Ask the Smart Assistant"
                 placeholder={`Ask anything about ${config.brandName}...`}
                 className="max-h-28 min-h-[42px] flex-1 resize-none border-0 bg-transparent px-2.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
@@ -800,7 +860,7 @@ function SmartAssistantCompanion() {
           className="fixed inset-0 z-[60] flex flex-col overflow-hidden bg-slate-50 shadow-2xl sm:inset-auto sm:bottom-5 sm:right-5 sm:h-[min(760px,calc(100dvh-2.5rem))] sm:w-[min(560px,calc(100vw-2.5rem))] sm:rounded-[22px] sm:border sm:border-slate-200"
           style={panelPositionStyle}
           data-apex-assistant="true"
-          onKeyDown={e => { if (e.key === 'Escape') setOpen(false); }}
+          onKeyDown={e => { if (e.key === 'Escape' && !e.defaultPrevented && !document.querySelector('dialog[open]')) setOpen(false); }}
         >
           {header}
           {body}
@@ -808,7 +868,8 @@ function SmartAssistantCompanion() {
       )}
 
       {resetConfirm && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+        <dialog ref={resetDialog} className="sa-reset-dialog" aria-label="Start a new conversation?" aria-modal="true" onCancel={e => { e.preventDefault(); setResetConfirm(false); }}>
+
           <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-5 shadow-xl">
             <p className="text-sm font-bold text-slate-900">Start a new conversation?</p>
             <p className="mt-2 text-xs leading-relaxed text-slate-500">This will clear the assistant&apos;s memory of this chat, including your project details and estimate. The assistant will treat you as a new visitor.</p>
@@ -817,7 +878,7 @@ function SmartAssistantCompanion() {
               <button onClick={handleReset} className="rounded-full px-4 py-2.5 text-xs font-semibold text-white hover:opacity-90" style={{ backgroundColor: config.accentColor }}>Start Fresh</button>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </>
   );

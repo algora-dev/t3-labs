@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-11",
+  "base_archive": "t3labs-apex-conversion-999.zip",
+  "base_full_app_commit": "8e921255d92da45d880cd205dee1603d1ba7eec5",
+  "unit_tests": {
+    "command": "node --experimental-strip-types --test tests/conversion.test.mjs tests/flow-refinement.test.mjs",
+    "passed": 61,
+    "failed": 0
+  },
+  "scoped_strict_typecheck": {
+    "passed": true,
+    "scope": "changed framework-independent helper and conversion modules, not full Next app"
+  },
+  "preview_transpilation": {
+    "current_source_modules": 50,
+    "total_modules_including_existing_harness_fixtures": 56,
+    "syntax_diagnostics": 0
+  },
+  "browser": {
+    "engine": "Chromium via Playwright",
+    "harness": "standalone current-source React 18.2 preview",
+    "layout_assertions": 215,
+    "interaction_assertions": 36,
+    "total_assertions": 251,
+    "page_errors": [],
+    "batch_reports": [
+      "flow-layout-checks.json",
+      "flow-interaction-checks.json"
+    ],
+    "successful_assistant_responses": "explicit test-only stream fixtures",
+    "assistant_enquiry": "missing production component, explicit event fixtures for orchestration only"
+  },
+  "full_export_test_command": {
+    "passed_tests": 61,
+    "failed_import_suites": 7,
+    "status": "blocked by omitted full-app files, not a clean full suite"
+  },
+  "not_verified": [
+    "full Next production build",
+    "project-wide TypeScript and lint",
+    "live assistant/API and missing EnquiryPanel",
+    "real iOS/Android devices",
+    "site-enquiry backend demo safety",
+    "under-two-minute completion with first-time users"
+  ],
+  "no_deployment": true,
+  "no_booking_or_message_sent": true,
+  "preview_sha256": "c212437d49ed2560e1460320bf1fe8d8961694926a72d6d424bfa81dce7928d5"
+}

@@ -1,0 +1,26 @@
+PASS panel layout 320x568
+PASS panel layout 360x640
+PASS panel layout 390x844
+PASS panel layout 430x932
+PASS panel layout 768x1024
+PASS panel layout 844x390
+PASS panel layout 1024x768
+PASS panel layout 1440x900
+PASS panel layout 390x320
+PASS full local flow 320x568
+PASS full local flow 390x844
+PASS full local flow 768x1024
+PASS full local flow 1440x900
+PASS enquiry memory and long text
+PASS simulated phone keyboard
+PASS early admin and browser Back
+PASS native modal and scroll ownership
+PASS microphone close safety (mock)
+PASS overlapping enquiry surfaces
+PASS motion and contrast
+PASS full homeowner questionnaire pitched 320px
+PASS full homeowner questionnaire flat 390px
+PASS full homeowner questionnaire mixed 390px
+PASS full homeowner questionnaire pitched 1440px
+PASS desktop assistant drag bounds
+{"passedScenarios": 25, "failedScenarios": 0, "passedAssertions": 245, "pageErrors": []}

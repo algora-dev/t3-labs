@@ -1,4 +1,4 @@
-import { HELPER_TASKS, TASKS, isHelperTask, isHelperSignal, nextCoreTask } from './config';
+import { CORE_TASKS, HELPER_TASKS, TASKS, isHelperTask, isHelperSignal, nextCoreTask } from './config';
 import type { HelperSignal, HelperTaskId } from './config';
 export type HelperStatus = 'untried' | 'observed' | 'self-reported' | 'skipped';
 export type HelperView = 'welcome' | 'task' | 'benefit' | 'finish';
@@ -30,7 +30,7 @@ export type HelperAction =
   | { type: 'start' } | { type: 'select'; task: HelperTaskId } | { type: 'prepare' }
   | { type: 'collapse'; value: boolean } | { type: 'signal'; signal: HelperSignal; runId?: number; task?: HelperTaskId }
   | { type: 'error'; runId?: number } | { type: 'next' } | { type: 'skip' } | { type: 'manual' }
-  | { type: 'finish' } | { type: 'restart' };
+  | { type: 'finish' } | { type: 'restart' } | { type: 'return-from-admin' };
 export function reduceHelper(s: HelperState, a: HelperAction): HelperState {
   const select = (task: HelperTaskId): HelperState => ({ ...s, view: 'task', collapsed: false, current: task, started: false, milestones: [], error: false, runId: s.runId + 1 });
   const next = (state: HelperState): HelperState => {
@@ -38,6 +38,12 @@ export function reduceHelper(s: HelperState, a: HelperAction): HelperState {
     return task ? { ...select(task), status: state.status } : { ...state, view: 'finish', started: false, collapsed: false, error: false, runId: s.runId + 1 };
   };
   switch (a.type) {
+    case 'return-from-admin': {
+      if (s.current !== 'admin') return s;
+      const unfinished = CORE_TASKS.find(task => s.status[task] === 'untried');
+      return unfinished ? { ...select(unfinished), collapsed: s.collapsed }
+        : { ...s, view: 'finish', started: false, error: false, collapsed: s.collapsed, runId: s.runId + 1 };
+    }
     case 'start': return select('answers');
     case 'select': return select(a.task);
     case 'prepare': return { ...s, view: 'task', started: true, error: false };

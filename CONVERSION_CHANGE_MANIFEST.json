@@ -1,0 +1,463 @@
+{
+  "base_commit": "8e921255d92da45d880cd205dee1603d1ba7eec5",
+  "scope": "Lean demo export update; not a complete application",
+  "modified_files": [
+    {
+      "path": "README.md",
+      "before_sha256": "6f78f640ab4f6f2bbea7cbbc9678e8c43053512f486af3a5ee2a0ff543a75a1f",
+      "after_sha256": "8ede1934c8f887d90e4c13d1aa66b2840698ef954f773992f51d5467c75a3b77"
+    },
+    {
+      "path": "app/demo/roofing-site/quick-estimate/quick-estimate.css",
+      "before_sha256": "fb939f8aab9931912a79839b90e75eff169cdf622bc610c3d624f9dc17e4bb18",
+      "after_sha256": "55ba7bb8abb6d6cc76afb4b4b583b90b33b61ffc9123634619ff3b4350e9e9ed"
+    },
+    {
+      "path": "components/demo-helper/DemoHelper.tsx",
+      "before_sha256": "67b824144c59d0b30e01e140b3ee940147aa3b92fbe04e429c35a37c13271dc5",
+      "after_sha256": "71cb43f22134831b745cccd171db94339626e2d02b110df821d797de417c7bbf"
+    },
+    {
+      "path": "components/demo-journey/ApexDemoShell.tsx",
+      "before_sha256": "96dcc3a7caeab75d9cf25599c3833b7e4af4ebb179d75f2837763a386d60e283",
+      "after_sha256": "8be83c34bbdbe8ef4c503640b4050f8a6d2f4251c2bf362778b2f4ba2c2d3587"
+    },
+    {
+      "path": "components/quick-estimate/QuickRoofEstimate.tsx",
+      "before_sha256": "68ad52b2fb103ad0f18b1996e7e06300823ec4e50128cb25fa3491b8aa1cddb4",
+      "after_sha256": "c658c38cfb77b72c6171402d1eb4e6b1c48ec46b522345118e302f799f8859fb"
+    },
+    {
+      "path": "lib/demo-helper/config.ts",
+      "before_sha256": "2b686b450347bb4a902d6431d8ce3db0b47b9e5b5610e86c41824919fe445598",
+      "after_sha256": "02361e59776685cb47614dd37274524515e60a6b3ec01abe50e85148b126411b"
+    },
+    {
+      "path": "lib/demo-helper/store.ts",
+      "before_sha256": "ce6a26b3d7d2fc539d6c4d6817699399e4b95b9f4f5c1e22e1a45b54757b1139",
+      "after_sha256": "a15dec97de6928d6361f2cc325fcd365f083136d3792865df8870b4852199907"
+    }
+  ],
+  "added_files": [
+    {
+      "path": "CONVERSION_DEMO_HANDOFF.md",
+      "sha256": "200198ac797c0490bee511f14d0bb361da292e88b80e144106cc02e6b7920815"
+    },
+    {
+      "path": "components/demo-conversion/DemoConversion.tsx",
+      "sha256": "c7c0f6dc635585be2a77b89454bf77c64e8470dbeafe8ee1f0a902a7c0f58269"
+    },
+    {
+      "path": "components/demo-conversion/conversion.css",
+      "sha256": "393f5b19221c89fecd5a34984a516f8715a68aa3dd2c65235f4caff3c5904940"
+    },
+    {
+      "path": "components/demo-conversion/useConversion.ts",
+      "sha256": "5e2e90efbfe2f8ec90ffb8eab0c1a8875a2f02a0609e52dc3a4da7e584101ea1"
+    },
+    {
+      "path": "lib/demo-conversion/config.ts",
+      "sha256": "63a8673f728fb20b08d9b27164231d6bf4d17dd98d983071950de0322844e1d7"
+    },
+    {
+      "path": "lib/demo-conversion/metrics.ts",
+      "sha256": "d1093804bcdb3e13f3f0985542fe45264269dd34a7b1ef2a061da9d395b28dda"
+    },
+    {
+      "path": "lib/demo-conversion/state.ts",
+      "sha256": "f9c82e4e78cd0785316626ff124f52f127a981f4362beabab7ff336415c9a3ef"
+    },
+    {
+      "path": "lib/demo-conversion/store.ts",
+      "sha256": "544a96e1500fbf083970c37bac12e0d58849fe938b6e50a3ca4677c6c30b8c18"
+    },
+    {
+      "path": "tests/conversion-resolve.mjs",
+      "sha256": "71bd0a3c184f82db4ebfac989f44448a7fe504208bed223ce34c8997bfd35c63"
+    },
+    {
+      "path": "tests/conversion.test.mjs",
+      "sha256": "a8e4c14d350a076d8fcbe426711a375b5984f0db59a5a558e9d4c3d8f234a114"
+    },
+    {
+      "path": "verification/conversion-checks.json",
+      "sha256": "93e925d8527eb417f777e7fcf50844b8e00c78a9cad36af640455f84574d980f"
+    }
+  ],
+  "unchanged_files": [
+    {
+      "path": "app/api/ballpark-enquiry/route.ts",
+      "sha256": "d498f87f08c8e3a4ffc92ff65b37e525066a5de6c07fb9b4560682c195a92089"
+    },
+    {
+      "path": "app/api/quick-roof-estimate/route.ts",
+      "sha256": "ad0591c9e103b17b09ffb92c5d15b64289eb91472e6424da1303bb1f025a663f"
+    },
+    {
+      "path": "app/api/roofing-region/route.ts",
+      "sha256": "bc04d7ba36192689668038397e5c34f842080f6bd4c5541817155e9d83e9194f"
+    },
+    {
+      "path": "app/demo/roofing-site/[...slug]/page.tsx",
+      "sha256": "ddcd65efdeea9e5f36d72da2b02b3e23bed94dc2221803080b2e636b73797e6a"
+    },
+    {
+      "path": "app/demo/roofing-site/act.css",
+      "sha256": "b20e9bcd515edc6432a5703bdeec62721457949a2a9d0a328f3231de2b8581e0"
+    },
+    {
+      "path": "app/demo/roofing-site/estimate/page.tsx",
+      "sha256": "bf30e56881bf6051554240f83b6d68db195805945dbedd44bf78be01cf45e083"
+    },
+    {
+      "path": "app/demo/roofing-site/layout.tsx",
+      "sha256": "eeafb74eb7695bf5cfd621b514c3c9ac0566909d7e68976247d4bd97253586ec"
+    },
+    {
+      "path": "app/demo/roofing-site/page.tsx",
+      "sha256": "e195bf5db44107aba2b4d5f612ec87b34a9c75bf1f119f798331edb4971e71e8"
+    },
+    {
+      "path": "app/demo/roofing-site/price-list/page.tsx",
+      "sha256": "9c065b71738d071218597ac4ec37913d8fbe06d6078200ad28c298f5a66eb759"
+    },
+    {
+      "path": "app/demo/roofing-site/quick-estimate/page.tsx",
+      "sha256": "bc064d790ed70a80501e1d5143a1cbedd54dcd0a3161681e93888bf24fecea36"
+    },
+    {
+      "path": "app/demo/roofing-site/takeoff/page.tsx",
+      "sha256": "0b1dbabf94a4d6683afede6cc855c29585d4f414ac0917607a829d2355c4d66f"
+    },
+    {
+      "path": "app/demo/roofing-site/walkthrough/page.tsx",
+      "sha256": "0612fc0abd5147c1311f181ffa9a7d9eb0648ea7d74d1ee3b77651fa11e42717"
+    },
+    {
+      "path": "app/demo/roofing-site/walkthrough/summary/page.tsx",
+      "sha256": "4ae097e86d403f15f7347d818fbbc0dfc55c61bfe7a0ce862064b6204197bd4b"
+    },
+    {
+      "path": "app/supplier-pricing-tool/PricingModeChoice.tsx",
+      "sha256": "1aa5ea81b86aa4d360c9f3702fe170fc51a41cbdde2f7c7303224fd29554504a"
+    },
+    {
+      "path": "app/supplier-pricing-tool/pricing.ts",
+      "sha256": "8c73b309b9eb85007af703f93dcaa304ffc456904a37652108a481c391461a60"
+    },
+    {
+      "path": "app/supplier-pricing-tool/supplierDefs/apex-roofing.ts",
+      "sha256": "f8e6d0cdd910676f6e1f8c817d58c9e794c0ec40abfc377a8e788f87c4abae1f"
+    },
+    {
+      "path": "app/supplier-pricing-tool/types.ts",
+      "sha256": "bc5529196b6d4716e77da78266572a607c4fccfa1c02ca8a792b00e7ef74daa7"
+    },
+    {
+      "path": "components/assistant/SmartAssistantLauncher.tsx",
+      "sha256": "074ac28aa9f3b2ea1fe14dde22b4bef7b07e07a666801e2d23895b8bb75c60cd"
+    },
+    {
+      "path": "components/demo-helper/ApexBreadcrumbs.tsx",
+      "sha256": "456408b7dd1dd704e605f810e9d62da06a6c8ddd75da81de45414fe0f8b46cee"
+    },
+    {
+      "path": "components/demo-helper/ApexIcon.tsx",
+      "sha256": "d8a06ee9c330acdae208606881b2d23f8e13925ad2e5a233d8aae3496daca93d"
+    },
+    {
+      "path": "components/demo-helper/ApexToolHeader.tsx",
+      "sha256": "4a939df59a14dc32730dad86f7d2400abc159dd71020621f56389e14e7c01e73"
+    },
+    {
+      "path": "components/demo-helper/RoofToolChoices.tsx",
+      "sha256": "81d66992e107d8e961a92b0742868b90e8ba2d5d850cf0bd443441ada8469e37"
+    },
+    {
+      "path": "components/demo-helper/breadcrumbs.css",
+      "sha256": "042329b1f40b7d3ad6103366b06d6d31bee413a0dcead6f691a8f08827db47da"
+    },
+    {
+      "path": "components/demo-helper/helper.css",
+      "sha256": "611b9ded098230495ec9da4c01a938ce3d5b1ce8d7c3f4dabe9b9553f0a54d93"
+    },
+    {
+      "path": "components/demo-helper/tools.css",
+      "sha256": "0cd222646c20912bebd06b2208806e216be09da3d7fd9d32febb83480b84ea86"
+    },
+    {
+      "path": "components/demo-helper/useDemoHelper.ts",
+      "sha256": "a9bbe59d1411144430cbaa00edc5b644dc9e045d005b263c5ad1f2b3e4c764a3"
+    },
+    {
+      "path": "components/demo-journey/DemoGlyph.tsx",
+      "sha256": "9ea5b33eca58bf7d269ca592f7aa9bae6660698b2be536e1779f0265760e629e"
+    },
+    {
+      "path": "components/demo-journey/DemoLanding.tsx",
+      "sha256": "13a5b6b495658aaa06cceb32fe063927797c5065d924e591a8d7247b9caf3d1a"
+    },
+    {
+      "path": "components/demo-journey/DemoPlanExercise.tsx",
+      "sha256": "5ba96ece17cf2dd2084b8f48d711f5685f8b912526ca75514c6ef38a0c4568e9"
+    },
+    {
+      "path": "components/demo-journey/DemoSummary.tsx",
+      "sha256": "97468e40ae4f63085413102377f358caa3698079715c00e152efff97d8213e05"
+    },
+    {
+      "path": "components/demo-journey/GuidePanel.tsx",
+      "sha256": "67b90ed8dea0c742302c10bbb74cfa2281de8ea7f3c7324771e39c7f02efc78d"
+    },
+    {
+      "path": "components/demo-journey/journey.css",
+      "sha256": "66684d53c39847154941f681a8dc7fa243205ba9bbec7deec420c0573a48c57f"
+    },
+    {
+      "path": "components/demo-journey/useDemoJourney.ts",
+      "sha256": "3cddb562406b7f838f4348e03382f2a41f1fc94d9750f7309a2e3c8d65b463ba"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/PriceListPage.tsx",
+      "sha256": "899e5629d965099c340e14c18ee5d15adeef28ef244a1e01f220a417ff52f73e"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/act-roofing-site.tsx",
+      "sha256": "aee0834fbc4fae6fec4ee9b1f17d4e6eaf353938b829b63a4aa90b332fbb6cc4"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/components.config.ts",
+      "sha256": "0228906e52cf028cd676bdce91dfef3e6f205ced0a1c0f0b9d084fcc6d6157d4"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/price-list.config.ts",
+      "sha256": "91f73e5e6444724d966ce83bd71a27f8d8aa3a5b3e07adae7ce17d5ea469b8ff"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/site-config.ts",
+      "sha256": "b1eec5de9ba6c66dc026cd2a84f619294bf5c87a571e25fc6a135f1d03774b8b"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/site-sections.tsx",
+      "sha256": "f5d9c013095ad3bb4539cfcf62c0d70fb3fe8a7d6552a98aaa038f8d0eee2851"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/theme.config.ts",
+      "sha256": "5c15b0f9adbae62c34edf9f4409c7d36ddfa5ec67c4b2d1c742faee63c273316"
+    },
+    {
+      "path": "components/demo-sites/act-roofing/types.ts",
+      "sha256": "d4ad388f68d20c15bb4592975e2d0b56f70f556e323e408e28ea8b47bff0f8ed"
+    },
+    {
+      "path": "components/demo-sites/apex-pages/ApexContentPage.tsx",
+      "sha256": "c3471a6fbb4bee3bcf3680f3efca4159c748e2e7cf1e6b9b4e597d2f1f668019"
+    },
+    {
+      "path": "components/demo-sites/apex-pages/apex-page-content.ts",
+      "sha256": "73d3ad5d9c5ecdc0b0149297666dfd54b56f3ef637ffd7e22b8d6c4fd76ad5e2"
+    },
+    {
+      "path": "components/demo-sites/demo-strip.tsx",
+      "sha256": "d9324956b97ee973026db07c8b7384e7df3122e52ff2bb43bb1652714c21fb18"
+    },
+    {
+      "path": "components/demo-sites/old-apex/OldApexFooter.tsx",
+      "sha256": "e178df0bbe86f19c22ba62d978383fd8488e8a9859c0f6c4e11911ae59c66898"
+    },
+    {
+      "path": "components/demo-sites/old-apex/OldApexHeader.tsx",
+      "sha256": "7d89b61b1d9f501dfa1a8739efb65d03e3d802ba2e47d4b1451f84b3100295fe"
+    },
+    {
+      "path": "components/demo-sites/old-apex/RequestPriceForm.tsx",
+      "sha256": "628e68ea6f20e25fe7bcbd7009e47efe978b3df7e8e711d8c05bef492b66982b"
+    },
+    {
+      "path": "components/quick-estimate/QuickEstimateImport.tsx",
+      "sha256": "05ba829b5ba4849385a168bf22b286928bf3debbf3b533d27ac8ef2ca4e12d1f"
+    },
+    {
+      "path": "components/quick-estimate/QuickQuoteEnquiry.tsx",
+      "sha256": "a228b391dbd09ec2faccd930f8e8f6a6f377e4ac1b9317c4e9a14d277577fcfe"
+    },
+    {
+      "path": "components/quick-estimate/RoofIllustration.tsx",
+      "sha256": "9768acb7fad4c11b845ca71803217ae690aefc68b517cbeef55f0b6de3b1ceae"
+    },
+    {
+      "path": "components/quick-estimate/RoofPlanIllustration.tsx",
+      "sha256": "a512fc55221dfd4c60529d2858116f1652cabfe496c206292de9fb39b1c2517c"
+    },
+    {
+      "path": "data/apex-roofing/website-pages.json",
+      "sha256": "305dd076de63f255e84a47368c161b96d143416de85ae25ad535d3e64d7af018"
+    },
+    {
+      "path": "lib/assistant/types.ts",
+      "sha256": "7175c649f0d21d33b4f37e962bf8b68e0a85a72d2fe7fd915417d5d794b19563"
+    },
+    {
+      "path": "lib/demo-helper/assistant-events.ts",
+      "sha256": "eab9ea78ce854717091c363c68c2057f6bb85d93a8a06b4c560336cd25b896f6"
+    },
+    {
+      "path": "lib/demo-helper/embed.ts",
+      "sha256": "cad5b6d2156dbca0abef3e887ab3a4e4efea441343d6e640315087011e0e760a"
+    },
+    {
+      "path": "lib/demo-helper/enquiry-preview.ts",
+      "sha256": "dc7db2181da11101103ca248742ef8e5e34e1013a91c008d85ebaf680bd98c23"
+    },
+    {
+      "path": "lib/demo-helper/state.ts",
+      "sha256": "b0fb43548939b1e286b21bd8a452260ae1629889f63768a78235233386f27127"
+    },
+    {
+      "path": "lib/demo-journey/config.ts",
+      "sha256": "2dfbc2cd566992cf31f36f6167788560dc38d78227e80a073bfdaba3eb42407c"
+    },
+    {
+      "path": "lib/demo-journey/samples.ts",
+      "sha256": "d2d8c5724fdfaaaac42caf384e143e4c4e3023bf2d018849525bfef7dbdca4cd"
+    },
+    {
+      "path": "lib/demo-journey/state.ts",
+      "sha256": "2fec5c9cbef1c5f1d538baf40487c82c674f93f03e860ac22c261a2649ade8fc"
+    },
+    {
+      "path": "lib/demo-journey/store.ts",
+      "sha256": "aa4935f02f61cc80b7226890c1f234f0dd61468ed5433a88003e43d42ae3ec8f"
+    },
+    {
+      "path": "lib/pricing/rules.ts",
+      "sha256": "22548d3d5477fee437c6b9565ceabc2c003def4f0c15628cb0bebbf3bc686224"
+    },
+    {
+      "path": "lib/quick-estimate/apex-profile.ts",
+      "sha256": "a782617737025ca3374afc4d2a73bf405ca16d2f1287c04d830245a827cec5c7"
+    },
+    {
+      "path": "lib/quick-estimate/config.ts",
+      "sha256": "cabd7572d4c4825c623db09e2d48d3aa18297f3d21e5d019741053529500b069"
+    },
+    {
+      "path": "lib/quick-estimate/draft.ts",
+      "sha256": "d542c16fae38a6c6c62315a01c77b3305fa54d1c258608f02eb66747ac3bc3e2"
+    },
+    {
+      "path": "lib/quick-estimate/engine.ts",
+      "sha256": "c1ce5dd77991bee46df9268a132bd921fbf584d7bb62590e18f5261f7dfdaa32"
+    },
+    {
+      "path": "lib/quick-estimate/geometry.ts",
+      "sha256": "b34f6f10aabd7563bac951efcc6001c820ba80c73bc9e50049d666344f60f577"
+    },
+    {
+      "path": "lib/quick-estimate/handoff.ts",
+      "sha256": "b6dd1ae8ed9fa4f9c32b6ee09da7246fcb3537ecf719343d7480c1813ae5a55a"
+    },
+    {
+      "path": "lib/quick-estimate/plan-view.ts",
+      "sha256": "eeaff49d4be7acba062b3cf96eea79d718e744ef4ce1dc85c0b05e2834515301"
+    },
+    {
+      "path": "lib/quick-estimate/pricing.ts",
+      "sha256": "38423c16e0b20d2036738e9cfb14941d9b1c0691904eab15ff5867a20245c3fb"
+    },
+    {
+      "path": "lib/quick-estimate/server.ts",
+      "sha256": "41e56a1d335a60a422f4a667498284c7a491e302adc8a3891118a607a6e13031"
+    },
+    {
+      "path": "lib/quick-estimate/supplier-adapter.ts",
+      "sha256": "0a45bcf491e54d89b3c8785d27bbd38d9ebab32315f9d028f535e1345edb21c7"
+    },
+    {
+      "path": "lib/quick-estimate/templates.ts",
+      "sha256": "3da45da78865b7f6067171493215246d6c7c1edc3edd8945ba3f742a9b2170da"
+    },
+    {
+      "path": "lib/quick-estimate/types.ts",
+      "sha256": "d94f1d885fd64bd588f440e89837fab92be3087f1c2874a6e978e0dde2efcbd8"
+    },
+    {
+      "path": "lib/quick-estimate/validation.ts",
+      "sha256": "1f3248dfe975ec80ddcc97bcba9205af705ef0c88afdaeec3708825f204b3ab4"
+    },
+    {
+      "path": "package.json",
+      "sha256": "c494c1701163e127442a993aae9a56bf4603493fbcb5303166b6c83276f3d118"
+    },
+    {
+      "path": "public/assets/demo-act-roofing/ApexLogoBlack---ae397798-5fc2-4f9a-9c88-5c1e394f7e69.png",
+      "sha256": "500f38354670dccd39cc53e33f01345e8408009bf42d39fe49c6e6fb3b80ee84"
+    },
+    {
+      "path": "public/assets/demo-act-roofing/ApexLogoBlue---76ea5130-4506-420e-8fcf-50a67c9e0978.png",
+      "sha256": "41b488ce8002ca6d46645d3c0e623dbc5e4beb177914413f3eb077ffe8a95a9d"
+    },
+    {
+      "path": "public/assets/demo-act-roofing/ApexLogoWhite---f166f5cd-ea1d-4d9c-86d4-f2e3dc127812.png",
+      "sha256": "9f58d06219f6bf7fd3327b2925f8ad42a2d037f19c77f91b2129a5b30d7632c2"
+    },
+    {
+      "path": "public/assets/demo-act-roofing/apex-aerial.webp",
+      "sha256": "6ed4b46dec722b6ba88345a0ba771436a74bad151981c2d1b5520a7ef36c5f78"
+    },
+    {
+      "path": "public/assets/demo-act-roofing/apex-hero.webp",
+      "sha256": "8fd5e1f4ede67a82e2b03e169a9553ee2f0b0df67aa95b6816fdbf02fe6acd97"
+    },
+    {
+      "path": "public/assets/demo-act-roofing/apex-project-2.webp",
+      "sha256": "c3e7e6eb030bb80ac7ff3512dbbd4612333f418347ca23bca1a21ef37d3343a2"
+    },
+    {
+      "path": "public/assets/demo-act-roofing/apex-roofer.webp",
+      "sha256": "81203f0db14cfcf2de58839540c1ff93d5be58eace45f2565509f0da91804c47"
+    },
+    {
+      "path": "public/assets/demo-act-roofing/heritage-clay-pantile-new.png",
+      "sha256": "8a2b272afe69a7c51870fbc37aeaa7320eb87ab54018ef3053e4e578111974bb"
+    },
+    {
+      "path": "public/assets/t3-demo-guide/t3-logo-icon-glow-transparent.png",
+      "sha256": "1829caa5a09acd2cb1d352689d1d39766f439b0f35427823fd0d63888d6f3dc9"
+    },
+    {
+      "path": "public/assets/t3-labs-black.png",
+      "sha256": "ca36a8dffccfc30553ae46c853b0562ca16e3e217ca3cb4b36505d0f504c18af"
+    },
+    {
+      "path": "tests/apex-demo-catalogue.test.mjs",
+      "sha256": "dfd54a71a8b6f8b61da9fb1a2962185f156d38de4faeff31601839bdddedc879"
+    },
+    {
+      "path": "tests/demo-data.test.mjs",
+      "sha256": "6742cd826f65548278a75793cd4a664a310ca8217b805985a81e13f5b4738c1b"
+    },
+    {
+      "path": "tests/demo-helper.test.mjs",
+      "sha256": "6a1764dc6254235bbcf45667a549580d1d042bbf54d9133a78fa7bcb5752d7e4"
+    },
+    {
+      "path": "tests/demo-journey.test.mjs",
+      "sha256": "088c2a9dd7ebe38871bc3a2fb81393fba9e7fc206b86e525a2a4995599c99830"
+    },
+    {
+      "path": "tests/helper-polish.test.mjs",
+      "sha256": "626eab4c361154769826f28eb02fe9506af4c4ca3337f0930ea5dcc99bb9de8c"
+    },
+    {
+      "path": "tests/helper-visibility.test.mjs",
+      "sha256": "5e361de4458219c8018261b1d91549e07f3ea7c57e5ef6da25399c8fb97279a0"
+    },
+    {
+      "path": "tests/quick-roof.test.mjs",
+      "sha256": "e3f9352e239b64b152cf8eeee996f130826c86f87c532faae032b42fb572308f"
+    }
+  ],
+  "removed_files": [],
+  "note": "Manifest itself excluded from checksums. Production build and live assistant validation require the full repository."
+}

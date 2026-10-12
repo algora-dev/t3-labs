@@ -1,0 +1,216 @@
+PASS 1: 1440x1000 intro visible
+PASS 2: 1440x1000 no duplicate welcome
+PASS 3: 1440x1000 intro encourages own questions
+PASS 4: 1440x1000 one preparation action
+PASS 5: 1440x1000 input prefilled
+PASS 6: 1440x1000 prepared guidance
+PASS 7: 1440x1000 no repeat preparation button
+PASS 8: 1440x1000 preparing never hides guide
+PASS 9: 1440x1000 next task stays open
+PASS 10: 1440x1000 Quick transition closes assistant
+PASS 11: 1440x1000 focused sample visible
+PASS 12: 1440x1000 no competing full questionnaire
+PASS 13: 1440x1000 guide remains manually open on tool entry
+PASS 14: 1440x1000 unsent chat preserved through transition
+PASS 15: 1440x1000 explicit hide works
+PASS 16: 1440x1000 show restores same task
+PASS 17: 1440x1000 real sample calculation gives a range
+PASS 18: 1440x1000 single result title
+PASS 19: 1440x1000 fast enquiry available
+PASS 20: 1440x1000 no compulsory typing in fast path
+PASS 21: 1440x1000 actual enquiry preview
+PASS 22: 1440x1000 fictional contact explicitly shown
+PASS 23: 1440x1000 chosen covering attached
+PASS 24: 1440x1000 enquiry sequence marks observed
+PASS 25: 1440x1000 guide does not compete with enquiry preview
+PASS 26: 1440x1000 closer waits during enquiry
+PASS 27: 1440x1000 no timer hides final benefit
+PASS 28: 1440x1000 advanced tools visible before closing
+PASS 29: 1440x1000 business pricing explanation retained
+PASS 30: 1440x1000 acknowledged benefit opens closer
+PASS 31: 1440x1000 exact approved offer
+PASS 32: 1440x1000 booking link retained, not visited
+PASS 33: 1440x1000 compact finish, no duplicate pitch
+PASS 34: 1440x1000 closer never repeats after dismissal
+PASS 35: 1440x1000 no horizontal page overflow
+PASS 36: 1024x768 intro visible
+PASS 37: 1024x768 no duplicate welcome
+PASS 38: 1024x768 intro encourages own questions
+PASS 39: 1024x768 one preparation action
+PASS 40: 1024x768 input prefilled
+PASS 41: 1024x768 prepared guidance
+PASS 42: 1024x768 no repeat preparation button
+PASS 43: 1024x768 preparing never hides guide
+PASS 44: 1024x768 next task stays open
+PASS 45: 1024x768 Quick transition closes assistant
+PASS 46: 1024x768 focused sample visible
+PASS 47: 1024x768 no competing full questionnaire
+PASS 48: 1024x768 guide remains manually open on tool entry
+PASS 49: 1024x768 unsent chat preserved through transition
+PASS 50: 1024x768 explicit hide works
+PASS 51: 1024x768 show restores same task
+PASS 52: 1024x768 real sample calculation gives a range
+PASS 53: 1024x768 single result title
+PASS 54: 1024x768 fast enquiry available
+PASS 55: 1024x768 no compulsory typing in fast path
+PASS 56: 1024x768 actual enquiry preview
+PASS 57: 1024x768 fictional contact explicitly shown
+PASS 58: 1024x768 chosen covering attached
+PASS 59: 1024x768 enquiry sequence marks observed
+PASS 60: 1024x768 guide does not compete with enquiry preview
+PASS 61: 1024x768 closer waits during enquiry
+PASS 62: 1024x768 no timer hides final benefit
+PASS 63: 1024x768 advanced tools visible before closing
+PASS 64: 1024x768 business pricing explanation retained
+PASS 65: 1024x768 acknowledged benefit opens closer
+PASS 66: 1024x768 exact approved offer
+PASS 67: 1024x768 booking link retained, not visited
+PASS 68: 1024x768 compact finish, no duplicate pitch
+PASS 69: 1024x768 closer never repeats after dismissal
+PASS 70: 1024x768 no horizontal page overflow
+PASS 71: 768x1024 intro visible
+PASS 72: 768x1024 no duplicate welcome
+PASS 73: 768x1024 intro encourages own questions
+PASS 74: 768x1024 one preparation action
+PASS 75: 768x1024 input prefilled
+PASS 76: 768x1024 prepared guidance
+PASS 77: 768x1024 no repeat preparation button
+PASS 78: 768x1024 preparing never hides guide
+PASS 79: 768x1024 next task stays open
+PASS 80: 768x1024 Quick transition closes assistant
+PASS 81: 768x1024 focused sample visible
+PASS 82: 768x1024 no competing full questionnaire
+PASS 83: 768x1024 guide remains manually open on tool entry
+PASS 84: 768x1024 unsent chat preserved through transition
+PASS 85: 768x1024 explicit hide works
+PASS 86: 768x1024 show restores same task
+PASS 87: 768x1024 real sample calculation gives a range
+PASS 88: 768x1024 single result title
+PASS 89: 768x1024 fast enquiry available
+PASS 90: 768x1024 no compulsory typing in fast path
+PASS 91: 768x1024 actual enquiry preview
+PASS 92: 768x1024 fictional contact explicitly shown
+PASS 93: 768x1024 chosen covering attached
+PASS 94: 768x1024 enquiry sequence marks observed
+PASS 95: 768x1024 guide does not compete with enquiry preview
+PASS 96: 768x1024 closer waits during enquiry
+PASS 97: 768x1024 no timer hides final benefit
+PASS 98: 768x1024 advanced tools visible before closing
+PASS 99: 768x1024 business pricing explanation retained
+PASS 100: 768x1024 acknowledged benefit opens closer
+PASS 101: 768x1024 exact approved offer
+PASS 102: 768x1024 booking link retained, not visited
+PASS 103: 768x1024 compact finish, no duplicate pitch
+PASS 104: 768x1024 closer never repeats after dismissal
+PASS 105: 768x1024 no horizontal page overflow
+PASS 106: 390x844 intro visible
+PASS 107: 390x844 no duplicate welcome
+PASS 108: 390x844 intro encourages own questions
+PASS 109: 390x844 one preparation action
+PASS 110: 390x844 input prefilled
+PASS 111: 390x844 prepared guidance
+PASS 112: 390x844 no repeat preparation button
+PASS 113: 390x844 preparing never hides guide
+PASS 114: 390x844 reserved space prevents panel overlap
+PASS 115: 390x844 input unobstructed
+PASS 116: 390x844 next task stays open
+PASS 117: 390x844 Quick transition closes assistant
+PASS 118: 390x844 focused sample visible
+PASS 119: 390x844 no competing full questionnaire
+PASS 120: 390x844 guide remains manually open on tool entry
+PASS 121: 390x844 unsent chat preserved through transition
+PASS 122: 390x844 explicit hide works
+PASS 123: 390x844 show restores same task
+PASS 124: 390x844 real sample calculation gives a range
+PASS 125: 390x844 single result title
+PASS 126: 390x844 fast enquiry available
+PASS 127: 390x844 no compulsory typing in fast path
+PASS 128: 390x844 actual enquiry preview
+PASS 129: 390x844 fictional contact explicitly shown
+PASS 130: 390x844 chosen covering attached
+PASS 131: 390x844 enquiry sequence marks observed
+PASS 132: 390x844 guide does not compete with enquiry preview
+PASS 133: 390x844 closer waits during enquiry
+PASS 134: 390x844 no timer hides final benefit
+PASS 135: 390x844 advanced tools visible before closing
+PASS 136: 390x844 business pricing explanation retained
+PASS 137: 390x844 acknowledged benefit opens closer
+PASS 138: 390x844 exact approved offer
+PASS 139: 390x844 booking link retained, not visited
+PASS 140: 390x844 compact finish, no duplicate pitch
+PASS 141: 390x844 closer never repeats after dismissal
+PASS 142: 390x844 no horizontal page overflow
+PASS 143: 320x568 intro visible
+PASS 144: 320x568 no duplicate welcome
+PASS 145: 320x568 intro encourages own questions
+PASS 146: 320x568 one preparation action
+PASS 147: 320x568 input prefilled
+PASS 148: 320x568 prepared guidance
+PASS 149: 320x568 no repeat preparation button
+PASS 150: 320x568 preparing never hides guide
+PASS 151: 320x568 reserved space prevents panel overlap
+PASS 152: 320x568 input unobstructed
+PASS 153: 320x568 next task stays open
+PASS 154: 320x568 Quick transition closes assistant
+PASS 155: 320x568 focused sample visible
+PASS 156: 320x568 no competing full questionnaire
+PASS 157: 320x568 guide remains manually open on tool entry
+PASS 158: 320x568 unsent chat preserved through transition
+PASS 159: 320x568 explicit hide works
+PASS 160: 320x568 show restores same task
+PASS 161: 320x568 real sample calculation gives a range
+PASS 162: 320x568 single result title
+PASS 163: 320x568 fast enquiry available
+PASS 164: 320x568 no compulsory typing in fast path
+PASS 165: 320x568 actual enquiry preview
+PASS 166: 320x568 fictional contact explicitly shown
+PASS 167: 320x568 chosen covering attached
+PASS 168: 320x568 enquiry sequence marks observed
+PASS 169: 320x568 guide does not compete with enquiry preview
+PASS 170: 320x568 closer waits during enquiry
+PASS 171: 320x568 no timer hides final benefit
+PASS 172: 320x568 advanced tools visible before closing
+PASS 173: 320x568 business pricing explanation retained
+PASS 174: 320x568 acknowledged benefit opens closer
+PASS 175: 320x568 exact approved offer
+PASS 176: 320x568 booking link retained, not visited
+PASS 177: 320x568 compact finish, no duplicate pitch
+PASS 178: 320x568 closer never repeats after dismissal
+PASS 179: 320x568 no horizontal page overflow
+PASS 180: 844x390 intro visible
+PASS 181: 844x390 no duplicate welcome
+PASS 182: 844x390 intro encourages own questions
+PASS 183: 844x390 one preparation action
+PASS 184: 844x390 input prefilled
+PASS 185: 844x390 prepared guidance
+PASS 186: 844x390 no repeat preparation button
+PASS 187: 844x390 preparing never hides guide
+PASS 188: 844x390 next task stays open
+PASS 189: 844x390 Quick transition closes assistant
+PASS 190: 844x390 focused sample visible
+PASS 191: 844x390 no competing full questionnaire
+PASS 192: 844x390 guide remains manually open on tool entry
+PASS 193: 844x390 unsent chat preserved through transition
+PASS 194: 844x390 explicit hide works
+PASS 195: 844x390 show restores same task
+PASS 196: 844x390 real sample calculation gives a range
+PASS 197: 844x390 single result title
+PASS 198: 844x390 fast enquiry available
+PASS 199: 844x390 no compulsory typing in fast path
+PASS 200: 844x390 actual enquiry preview
+PASS 201: 844x390 fictional contact explicitly shown
+PASS 202: 844x390 chosen covering attached
+PASS 203: 844x390 enquiry sequence marks observed
+PASS 204: 844x390 guide does not compete with enquiry preview
+PASS 205: 844x390 closer waits during enquiry
+PASS 206: 844x390 no timer hides final benefit
+PASS 207: 844x390 advanced tools visible before closing
+PASS 208: 844x390 business pricing explanation retained
+PASS 209: 844x390 acknowledged benefit opens closer
+PASS 210: 844x390 exact approved offer
+PASS 211: 844x390 booking link retained, not visited
+PASS 212: 844x390 compact finish, no duplicate pitch
+PASS 213: 844x390 closer never repeats after dismissal
+PASS 214: 844x390 no horizontal page overflow
+PASS 215: no JavaScript errors in layout and local-flow checks
+{"passed": 215, "pageErrors": []}

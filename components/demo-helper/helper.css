@@ -191,3 +191,147 @@
 
 @media(max-width:640px){[data-apex-assistant] input,[data-apex-assistant] textarea,[data-apex-assistant] select{font-size:16px}}
 
+
+/* Focused active steps: less explanation, never smaller body text or auto-hide. */
+.dh-content .dh-example-summary { font-size:13px;line-height:1.6;color:var(--dh-muted);margin:12px 0; }
+.dh-more-guidance { margin-top:10px;color:var(--dh-muted);font-size:12px; }
+.dh-more-guidance>summary { cursor:pointer;min-height:36px;display:flex;align-items:center;gap:8px; }
+.dh-more-guidance>summary::before { content:'+';color:var(--dh-lime);font-size:16px; }
+.dh-more-guidance[open]>summary::before { content:'−'; }
+.dh-more-guidance p { font-size:13px;line-height:1.6;margin:8px 0; }
+.dh-active .dh-content { padding:14px 18px 10px; }
+.dh-active .dh-instruction { margin:0; }
+.dh-active .dh-bottom { display:none; }
+.dh-active .dh-task-footer { margin-top:6px;padding-top:4px; }
+.dh-is-waiting .dh-action-number { color:var(--dh-lime); }
+@media(min-width:760px) and (max-width:1080px) {
+  .dh-panel.dh-assistant-mode:not(.dh-welcome) { width:330px; }
+}
+@media(max-width:759px) {
+  /* Assistant stays fully above the measured guide, including its input. */
+  [data-apex-assistant="true"] {
+    top:var(--t3-visible-top,0px)!important;left:0!important;right:0!important;bottom:auto!important;
+    width:100%!important;max-width:none!important;border-radius:0!important;
+    height:calc(var(--t3-visual-height,100dvh) - var(--t3-guide-dock-height,0px))!important;
+    max-height:calc(var(--t3-visual-height,100dvh) - var(--t3-guide-dock-height,0px))!important;
+    transform:none!important;
+  }
+  .sa-helper-mobile-space { display:none; }
+  .dh-panel.dh-assistant-mode:not(.dh-welcome) {
+    bottom:calc(var(--dh-bottom-inset,0px) + 8px + env(safe-area-inset-bottom,0px));
+    max-height:min(300px,calc(var(--dh-viewport-height,100dvh) * .40));
+  }
+  .dh-panel.dh-assistant-mode.dh-active { max-height:min(235px,calc(var(--dh-viewport-height,100dvh) * .34)); }
+  .dh-assistant-mode .dh-top { padding:2px 12px; }
+  .dh-assistant-mode .dh-logo { width:32px;height:32px; }
+  .dh-assistant-mode .dh-brand>span { flex-direction:row;align-items:center;gap:8px; }
+  .dh-assistant-mode .dh-brand>span>span { font-size:12px; }
+  .dh-assistant-mode .dh-progress-row { padding-top:2px;padding-bottom:2px; }
+  .dh-assistant-mode .dh-content { padding:10px 14px; }
+  .dh-assistant-mode .dh-instruction p { font-size:13px;line-height:1.5; }
+  .dh-assistant-mode .dh-task-footer .dh-text { font-size:12px; }
+  .dh-launcher.dh-over-assistant {
+    top:auto;bottom:calc(var(--dh-bottom-inset,0px) + 8px + env(safe-area-inset-bottom,0px));
+  }
+}
+@media(max-width:759px) {
+  .dh-panel.dh-active { max-height:min(235px,calc(var(--dh-viewport-height,100dvh) * .38)); }
+  .dh-active .dh-top { padding:2px 12px; }
+  .dh-active .dh-logo { width:32px;height:32px; }
+  .dh-active .dh-brand>span { flex-direction:row;align-items:center;gap:8px; }
+  .dh-active .dh-brand>span>span { font-size:12px; }
+  .dh-active .dh-progress-row { padding-top:2px;padding-bottom:2px; }
+  .dh-active .dh-content { padding:10px 14px; }
+  .dh-active .dh-instruction p { font-size:13px;line-height:1.5; }
+  html[data-t3-guide-tool="quick"] { scroll-padding-bottom:var(--t3-guide-page-space,0px); }
+  html[data-t3-guide-tool="quick"] .qr-app { padding-bottom:var(--t3-guide-page-space,0px); }
+  html[data-t3-guide-tool="quick"] .qr-app :is(button,input,textarea,select,summary) { scroll-margin-bottom:var(--t3-guide-page-space,0px); }
+  html[data-t3-guide-tool="quick"] .sa-apex-launcher { bottom:calc(12px + env(safe-area-inset-bottom,0px)); }
+}
+@media(min-width:760px) {
+  /* Keep a floating guide, not a sidebar: extra scroll room can bring lower
+     controls above it without resizing or covering the website's main layout. */
+  html[data-t3-guide-tool="quick"] { scroll-padding-bottom:var(--t3-guide-page-space,0px); }
+  html[data-t3-guide-tool="quick"] .qr-app { padding-bottom:var(--t3-guide-page-space,0px); }
+  .qr-enquiry-confirm .qr-example-actions { justify-content:flex-end; }
+}
+.dh-active .dh-instruction p { color:var(--dh-text); }
+.dh-active .dh-more-guidance,.dh-active .dh-task-footer .dh-text { color:#e2e6ed; }
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+  .dh-panel,.dh-launcher { background:#0a0b10; }
+}
+
+.dh-secondary-strong { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.12); color:#fff; }
+.dh-secondary-strong:hover { background:rgba(255,255,255,.12); border-color:rgba(214,255,0,.26); box-shadow:0 0 18px rgba(214,255,0,.10); }
+.dh-secondary-strong>span { color:rgba(255,255,255,.72); }
+
+/* Optional business dashboard: clear secondary action, not a low-contrast ghost button. */
+.dh-panel .dh-secondary-strong { background:#050607; color:#fff; border:1px solid rgba(215,255,0,.28); box-shadow:0 4px 16px rgba(0,0,0,.32); }
+.dh-panel .dh-secondary-strong:hover { background:#101511; border-color:#d7ff00; box-shadow:0 0 0 1px rgba(215,255,0,.28),0 0 20px rgba(215,255,0,.22); }
+.dh-panel .dh-secondary-strong > span { color:#d7ff00; }
+
+/* Review fix: tablet/landscape and keyboard-sized views use two distinct regions. */
+html[data-t3-guide-docked="true"] [data-apex-assistant="true"] {
+  top:var(--t3-visible-top,0px)!important; left:0!important; right:0!important; bottom:auto!important;
+  width:100%!important; max-width:none!important; border-radius:0!important;
+  height:calc(var(--t3-visual-height,100dvh) - var(--t3-guide-dock-height,0px))!important;
+  max-height:calc(var(--t3-visual-height,100dvh) - var(--t3-guide-dock-height,0px))!important;
+  transform:none!important;
+}
+.dh-panel.dh-docked {
+  left:12px; right:12px; top:auto; width:auto; max-width:none; transform:none;
+  bottom:calc(var(--dh-bottom-inset,0px) + 8px + env(safe-area-inset-bottom,0px));
+  max-height:min(300px,calc(var(--dh-viewport-height,100dvh) * .40));
+}
+.dh-panel.dh-docked.dh-active { max-height:min(235px,calc(var(--dh-viewport-height,100dvh) * .34)); }
+.dh-docked .dh-top { padding:2px 12px; }
+.dh-docked .dh-logo { width:32px;height:32px; }
+.dh-docked .dh-brand>span { flex-direction:row;align-items:center;gap:8px; }
+.dh-docked .dh-brand>span>span { font-size:12px; }
+.dh-docked .dh-progress-row { padding-top:2px;padding-bottom:2px; }
+.dh-docked .dh-content { padding:10px 14px; }
+.dh-docked .dh-instruction p { font-size:13px;line-height:1.5; }
+.dh-panel.dh-short:not(.dh-welcome) { max-height:calc(var(--dh-viewport-height,100dvh) * .55); }
+.dh-panel.dh-short.dh-active { max-height:min(140px,calc(var(--dh-viewport-height,100dvh) * .42)); }
+/* Keep the instruction and explicit Hide action, not decorative rows, in scarce space. */
+.dh-short .dh-top,.dh-short .dh-progress-row,.dh-short .dh-bottom { display:none; }
+.dh-short .dh-content { padding:8px 14px; }
+.dh-short .dh-hide-bar::before { content:'T3'; color:var(--dh-lime); font-size:10px; letter-spacing:.12em; }
+.dh-content>.dh-task-menu { padding:0 0 12px; max-height:none; overflow:visible; }
+html[data-t3-guide-docked="true"] .dh-launcher.dh-over-assistant {
+  top:auto; left:12px; right:12px; max-width:none; min-height:44px;
+  bottom:calc(var(--dh-bottom-inset,0px) + 8px + env(safe-area-inset-bottom,0px));
+}
+/* A collapsed guide and the assistant launcher must not occupy the same tap target. */
+@media(max-width:759px) {
+  html[data-t3-guide-tool="quick"] .sa-apex-launcher { bottom:calc(12px + env(safe-area-inset-bottom,0px)); }
+  .qr-app :is(button.qr-text-button,summary),.dh-finish-details summary { min-height:44px; display:inline-flex; align-items:center; }
+  .dh-more-guidance>summary,.dh-task-footer :is(button,a) { min-height:44px; }
+}
+html[data-t3-guide-short="true"] [data-apex-assistant] header { padding:6px 12px; }
+html[data-t3-guide-short="true"] [data-apex-assistant] header p+p { display:none; }
+html[data-t3-guide-short="true"] [data-apex-assistant] footer { padding:6px 10px; }
+html[data-t3-guide-short="true"] [data-apex-assistant] footer>p { display:none; }
+html[data-t3-guide-short="true"] [data-apex-assistant] textarea { height:44px!important; min-height:44px!important; max-height:44px!important; font-size:16px; }
+[data-apex-assistant] :is(textarea,input) { min-width:0; }
+[data-apex-assistant] [role="log"] { overflow-wrap:anywhere; }
+.dh-admin-return { display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px 18px; padding:8px 20px; background:#fff; border-bottom:1px solid #dbe3ec; color:#172b48; }
+.dh-admin-return a { display:inline-flex; align-items:center; min-height:44px; font-size:14px; font-weight:650; text-decoration:none; }
+.dh-admin-return a:hover { text-decoration:underline; }
+.dh-admin-return a:focus-visible { outline:3px solid #1769e0; outline-offset:3px; }
+.sa-reset-dialog { margin:auto; padding:0; width:min(384px,calc(100vw - 24px)); max-height:calc(100dvh - 24px); border:0; border-radius:16px; background:white; color:#172b48; overflow:auto; box-shadow:0 18px 60px #0004; }
+.sa-reset-dialog::backdrop { background:#0006; }
+.sa-reset-dialog button { min-height:44px; }
+.sa-reset-dialog button:focus-visible { outline:3px solid #1769e0; outline-offset:3px; }
+@media(prefers-reduced-motion:reduce) { .dh-launcher:hover,.dh-launcher:active { transform:none; } }
+@media print { .dh-admin-return,.sa-reset-dialog { display:none!important; } }
+/* Match the older three-class tablet rule without changing large-desktop sizing. */
+.dh-panel.dh-docked:not(.dh-welcome) { width:auto; }
+@media(max-width:979px) {
+  [data-apex-assistant] header button { min-width:44px; min-height:44px; }
+  [data-apex-assistant] header button[aria-label="Minimise assistant"],
+  [data-apex-assistant] header button[aria-label="Reset panel position"] { display:none; }
+  [data-apex-assistant] button[aria-label="Send message"],
+  [data-apex-assistant] button[aria-label="Start voice input"],
+  [data-apex-assistant] button[aria-label="Stop voice input"] { min-width:44px; min-height:44px; }
+}

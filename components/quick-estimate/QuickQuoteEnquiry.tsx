@@ -22,8 +22,9 @@ export function makeQuickEnquirySummary(r: QuickResult) {
     r.price.taxNote, 'Not a formal quote. The actual price could be higher or lower.',
   ].join('\n');
 }
-export function QuickQuoteEnquiry({ result, onClose }: { result: QuickResult; onClose: () => void }) {
+export function QuickQuoteEnquiry({ result, onClose, guided = false, open = true }: { result: QuickResult; onClose: () => void; guided?: boolean; open?: boolean }) {
   const [submitted, setSubmitted] = useState(false);
+  const [editDetails, setEditDetails] = useState(!guided);
   const [details, setDetails] = useState({ name: '', email: '', phone: '', postcode: '', address: '', notes: '', contactPreference: 'email' });
   const [files, setFiles] = useState<DemoFile[]>([]);
   const [error, setError] = useState('');
@@ -32,34 +33,45 @@ export function QuickQuoteEnquiry({ result, onClose }: { result: QuickResult; on
   const summary = makeQuickEnquirySummary(result);
   const amount = result.price.low && result.price.high ? `${pounds(Math.floor(result.price.low.total / 100) * 100)} to ${pounds(Math.ceil(result.price.high.total / 100) * 100)}` : 'Requires professional review';
   useEffect(() => {
-    setHelperSurface('quick-enquiry');
+    if (!open) return;
+    setHelperSurface('quick-enquiry', 'quick');
     if (result.price.low && result.price.high) recordHelperSignal('quick-enquiry-open');
     heading.current?.focus({ preventScroll: true }); heading.current?.scrollIntoView({ block: 'start' });
-    return () => setHelperSurface('website');
-  }, [result]);
+    return () => setHelperSurface('website', 'quick');
+  }, [result, open]);
   function update(key: keyof typeof details, value: string) { setDetails(s => ({ ...s, [key]: value })); }
-  function preparePreview() {
-    const validation = validateDemoContact(details);
+  function preparePreview(next = details) {
+    const validation = validateDemoContact(next);
     if (validation) { setError(validation); return; }
-    setError(''); setSubmitted(true);
+    setDetails(next); setError(''); setSubmitted(true);
     if (result.price.low && result.price.high) recordHelperSignal('quick-enquiry-ready');
     requestAnimationFrame(() => { heading.current?.focus(); heading.current?.scrollIntoView({ block: 'start' }); });
+  }
+  function exampleDetails() {
+    // Explicit demo shortcut, using the same validation and current estimate.
+    // Never read personal details from another form or from storage.
+    return { ...details, name: 'Sam Taylor', email: 'homeowner@example.com', phone: '', postcode: 'LS1 1AA', address: '', contactPreference: 'email' };
+  }
+  function fillExample() {
+    const hasContact = [details.name, details.email, details.phone, details.address, details.postcode].some(value => value.trim());
+    if (hasContact && !window.confirm('Replace these contact details with the fictional example? Your notes and selected files will be kept.')) return;
+    setDetails(exampleDetails()); setError('');
   }
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     preparePreview();
   }
   const fields = [ ['Roof', ROOF_TEMPLATES[i.shape].label], ['Size', SIZE_BANDS[i.size].label], ['Project', i.project === 'reroof' ? 'Replace existing roof' : 'New roof'], ['Covering', materials[i.covering]], ['Indicative range', amount] ];
-  return <section className="qr-enquiry" aria-labelledby="quick-enquiry-heading">
-    <div className="qr-enquiry-head"><div><p className="qr-eyebrow">YOUR NEXT STEP · DEMO PREVIEW</p><h2 id="quick-enquiry-heading" ref={heading} tabIndex={-1}>{submitted ? 'Here’s what Apex would receive.' : 'Request a more accurate quote.'}</h2></div><button type="button" className="qr-text-button" onClick={onClose} aria-label="Close quote enquiry">Close ×</button></div>
+  return <section className="qr-enquiry" hidden={!open} aria-labelledby="quick-enquiry-heading">
+    <div className="qr-enquiry-head"><div><p className="qr-eyebrow">YOUR NEXT STEP · DEMO PREVIEW</p><h2 id="quick-enquiry-heading" ref={heading} tabIndex={-1}>{submitted ? 'Here’s what Apex would receive.' : 'Request a quote.'}</h2></div><button type="button" className="qr-text-button" onClick={onClose} aria-label="Close quote enquiry">Close ×</button></div>
     {submitted ? <div className="qr-enquiry-confirm">
       <p role="status" className="qr-enquiry-attached"><strong>Enquiry preview ready. Nothing was sent.</strong><br />The business would receive your details and the complete estimate together.</p>
-      <dl>{[['Name', details.name], ['Email', details.email], ...(details.phone ? [['Phone', details.phone]] : []), ...(details.address || details.postcode ? [['Property', [details.address, details.postcode].filter(Boolean).join(', ')]] : []), ...fields].map(([k,v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+      <dl>{[['Name', details.name], ['Email', details.email], ['Preferred contact', details.contactPreference === 'call' ? 'Phone' : 'Email'], ...(details.phone ? [['Phone', details.phone]] : []), ...(details.address || details.postcode ? [['Property', [details.address, details.postcode].filter(Boolean).join(', ')]] : []), ...fields].map(([k,v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
       {details.notes && <p><strong>Your note</strong><br />{details.notes}</p>}
       {files.length > 0 && <p><strong>Selected files, not uploaded</strong><br />{files.map(f => f.name).join(', ')}</p>}
       <p className="qr-muted">The calculation and its assumptions stay attached behind this summary. This price is a starting point, not a formal quote. {result.price.taxNote}</p>
       <details className="qr-details"><summary>View the attached estimate summary</summary><pre>{summary}</pre></details>
-      <button type="button" className="qr-button" onClick={onClose}>Return to my estimate →</button>
+      <div className="qr-example-actions"><button type="button" className="qr-button" onClick={onClose}>Return to my estimate →</button><button type="button" className="qr-text-button" onClick={() => { setSubmitted(false); setEditDetails(true); }}>Edit details / add notes or files</button></div>
     </div> : <form onSubmit={submit} className="qr-enquiry-form" onKeyDown={e => {
       // Preview-only action: sandboxed HTML viewers may prohibit native form submits.
       // Keep Enter and native validity checks, without requesting any navigation.
@@ -69,7 +81,14 @@ export function QuickQuoteEnquiry({ result, onClose }: { result: QuickResult; on
       if (e.currentTarget.reportValidity()) preparePreview();
     }}>
       <div className="qr-enquiry-attached"><strong>✓ Your roof details and {amount.toLowerCase().startsWith('requires') ? 'selections' : amount} are attached.</strong><p>Tell us how to reach you. You won’t need to describe your roof again.</p></div>
-      <button type="button" className="qr-text-button" onClick={() => { setDetails({ ...details, name: 'Sam Taylor', email: 'homeowner@example.com', phone: '', postcode: 'LS1 1AA', address: '', contactPreference: 'email' }); setError(''); }}>Use example contact details</button>
+      {!editDetails ? <div className="qr-enquiry-shortcut">
+        <p><strong>Try it without typing.</strong><br />Preview with Sam Taylor, homeowner@example.com and postcode LS1 1AA. These are fictional contact details; the estimate above is your actual result.</p>
+        <button type="button" className="qr-button" onClick={() => preparePreview(exampleDetails())}>Preview with example details →</button>
+        <button type="button" className="qr-text-button" onClick={() => setEditDetails(true)}>Edit details / add notes or files</button>
+        <p className="qr-muted">Demo enquiry only. Nothing is sent or uploaded.</p>
+        {error && <p role="alert" className="qr-info">{error}</p>}
+      </div> : <>
+      <button type="button" className="qr-text-button" onClick={fillExample}>Use example contact details</button>
       <div className="qr-enquiry-grid"><label>Full name *<input required autoComplete="name" maxLength={100} value={details.name} onChange={e => update('name',e.target.value)} /></label><label>Email address *<input required type="email" autoComplete="email" maxLength={150} value={details.email} onChange={e => update('email',e.target.value)} /></label><label>Telephone (optional)<input type="tel" autoComplete="tel" maxLength={30} value={details.phone} onChange={e => update('phone',e.target.value)} /></label><label>Property postcode (optional)<input autoComplete="postal-code" maxLength={20} value={details.postcode} onChange={e => update('postcode',e.target.value)} /></label></div>
       <label>Property address (optional)<input autoComplete="street-address" maxLength={250} value={details.address} onChange={e => update('address',e.target.value)} /></label>
       <label>Anything else we should know? (optional)<textarea rows={3} maxLength={2000} placeholder="Roof condition, plans, preferred materials or when you hope to start." value={details.notes} onChange={e => update('notes',e.target.value)} /></label>
@@ -84,6 +103,7 @@ export function QuickQuoteEnquiry({ result, onClose }: { result: QuickResult; on
       <button className="qr-button" type="button" onClick={e => {
         if (e.currentTarget.form?.reportValidity()) preparePreview();
       }}>Preview my enquiry →</button>
+      </>}
     </form>}
   </section>;
 }

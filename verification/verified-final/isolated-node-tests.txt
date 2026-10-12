@@ -1,0 +1,523 @@
+TAP version 13
+# Subtest: photographic assets replace abstract swatches for three demo choices
+ok 1 - photographic assets replace abstract swatches for three demo choices
+  ---
+  duration_ms: 1.223437
+  type: 'test'
+  ...
+# Subtest: business dashboard button is dark and routes directly to admin
+ok 2 - business dashboard button is dark and routes directly to admin
+  ---
+  duration_ms: 1.636924
+  type: 'test'
+  ...
+# (node:8343) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8343) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8343) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-verified-sweep/site/lib/demo-conversion/state.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-verified-sweep/site/package.json.
+# Subtest: first arrival opens only the intro, then records that it was seen
+ok 3 - first arrival opens only the intro, then records that it was seen
+  ---
+  duration_ms: 6.374489
+  type: 'test'
+  ...
+# Subtest: duplicate initialisation is idempotent (React Strict Mode)
+ok 4 - duplicate initialisation is idempotent (React Strict Mode)
+  ---
+  duration_ms: 0.142418
+  type: 'test'
+  ...
+# Subtest: existing active visitors are not forced to restart the tour
+ok 5 - existing active visitors are not forced to restart the tour
+  ---
+  duration_ms: 0.116074
+  type: 'test'
+  ...
+# Subtest: intro dismissal does not spend the one closing invitation
+ok 6 - intro dismissal does not spend the one closing invitation
+  ---
+  duration_ms: 0.09723
+  type: 'test'
+  ...
+# Subtest: closing cannot stack on top of an intro
+ok 7 - closing cannot stack on top of an intro
+  ---
+  duration_ms: 0.120358
+  type: 'test'
+  ...
+# Subtest: closing once per visit: exit
+ok 8 - closing once per visit: exit
+  ---
+  duration_ms: 0.147825
+  type: 'test'
+  ...
+# Subtest: closing once per visit: complete
+ok 9 - closing once per visit: complete
+  ---
+  duration_ms: 0.127943
+  type: 'test'
+  ...
+# Subtest: closing once per visit: tour-ended
+ok 10 - closing once per visit: tour-ended
+  ---
+  duration_ms: 0.094915
+  type: 'test'
+  ...
+# Subtest: completion is queued, not forced over an open form or the intro
+ok 11 - completion is queued, not forced over an open form or the intro
+  ---
+  duration_ms: 0.492792
+  type: 'test'
+  ...
+# Subtest: booking clicks suppress later invitations without claiming a booking
+ok 12 - booking clicks suppress later invitations without claiming a booking
+  ---
+  duration_ms: 7.110421
+  type: 'test'
+  ...
+# Subtest: persistence stores only two UI flags, not open overlays or data
+ok 13 - persistence stores only two UI flags, not open overlays or data
+  ---
+  duration_ms: 0.96071
+  type: 'test'
+  ...
+# Subtest: reload after a shown closer never shows another closer
+ok 14 - reload after a shown closer never shows another closer
+  ---
+  duration_ms: 0.099904
+  type: 'test'
+  ...
+# Subtest: reload after introduction does not show another introduction
+ok 15 - reload after introduction does not show another introduction
+  ---
+  duration_ms: 0.064144
+  type: 'test'
+  ...
+# Subtest: bad or tampered session data is ignored
+ok 16 - bad or tampered session data is ignored
+  ---
+  duration_ms: 0.372065
+  type: 'test'
+  ...
+# Subtest: exit intent needs dwell plus genuine fine-pointer engagement
+ok 17 - exit intent needs dwell plus genuine fine-pointer engagement
+  ---
+  duration_ms: 4.304436
+  type: 'test'
+  ...
+# Subtest: exit prompt suppressed during editing
+ok 18 - exit prompt suppressed during editing
+  ---
+  duration_ms: 0.229768
+  type: 'test'
+  ...
+# Subtest: exit prompt suppressed during dragging
+ok 19 - exit prompt suppressed during dragging
+  ---
+  duration_ms: 0.059556
+  type: 'test'
+  ...
+# Subtest: exit prompt suppressed during busySurface
+ok 20 - exit prompt suppressed during busySurface
+  ---
+  duration_ms: 0.054489
+  type: 'test'
+  ...
+# Subtest: exit prompt suppressed during otherModal
+ok 21 - exit prompt suppressed during otherModal
+  ---
+  duration_ms: 0.047859
+  type: 'test'
+  ...
+# Subtest: exit prompt cannot race completion or another overlay
+ok 22 - exit prompt cannot race completion or another overlay
+  ---
+  duration_ms: 0.163352
+  type: 'test'
+  ...
+# Subtest: metric payloads explicitly discard personal details and arbitrary properties
+ok 23 - metric payloads explicitly discard personal details and arbitrary properties
+  ---
+  duration_ms: 0.193004
+  type: 'test'
+  ...
+# Subtest: an early exit never marks a helper task complete
+ok 24 - an early exit never marks a helper task complete
+  ---
+  duration_ms: 0.181327
+  type: 'test'
+  ...
+# Subtest: three core tasks still require real tool milestones, not page visits
+ok 25 - three core tasks still require real tool milestones, not page visits
+  ---
+  duration_ms: 0.540106
+  type: 'test'
+  ...
+# Subtest: manual and skipped paths remain honest and do not reset the closer
+ok 26 - manual and skipped paths remain honest and do not reset the closer
+  ---
+  duration_ms: 0.173653
+  type: 'test'
+  ...
+# Subtest: guide stays manually controlled on tasks, signals and next actions
+ok 27 - guide stays manually controlled on tasks, signals and next actions
+  ---
+  duration_ms: 0.343187
+  type: 'test'
+  ...
+# Subtest: intro copy is brief, explicitly fictional, and makes no guaranteed speed claim
+ok 28 - intro copy is brief, explicitly fictional, and makes no guaranteed speed claim
+  ---
+  duration_ms: 0.497581
+  type: 'test'
+  ...
+# Subtest: closing uses hypothetical value and the agreed open-ended price question
+ok 29 - closing uses hypothetical value and the agreed open-ended price question
+  ---
+  duration_ms: 0.116414
+  type: 'test'
+  ...
+# Subtest: one real 20-minute destination is shared by final helper and modal
+ok 30 - one real 20-minute destination is shared by final helper and modal
+  ---
+  duration_ms: 0.352487
+  type: 'test'
+  ...
+# Subtest: advanced tools and professional uses remain discoverable without forced exercises
+ok 31 - advanced tools and professional uses remain discoverable without forced exercises
+  ---
+  duration_ms: 0.113918
+  type: 'test'
+  ...
+# Subtest: prepared assistant scenario remains specific rather than fabricated or auto-sent
+ok 32 - prepared assistant scenario remains specific rather than fabricated or auto-sent
+  ---
+  duration_ms: 0.279887
+  type: 'test'
+  ...
+# Subtest: sample shortcut reviews the input, protects drafts and uses the existing calculator
+ok 33 - sample shortcut reviews the input, protects drafts and uses the existing calculator
+  ---
+  duration_ms: 0.334823
+  type: 'test'
+  ...
+# Subtest: both enquiries retain their required completion sequence
+ok 34 - both enquiries retain their required completion sequence
+  ---
+  duration_ms: 1.070503
+  type: 'test'
+  ...
+# Subtest: modals have native focus containment, Escape support and explicit dismissal
+ok 35 - modals have native focus containment, Escape support and explicit dismissal
+  ---
+  duration_ms: 0.358383
+  type: 'test'
+  ...
+# Subtest: no trapping of tab close, browser back, or idle mobile visitors
+ok 36 - no trapping of tab close, browser back, or idle mobile visitors
+  ---
+  duration_ms: 0.409821
+  type: 'test'
+  ...
+# Subtest: T3 modal uses approved glass plus reduced-motion and solid fallbacks
+ok 37 - T3 modal uses approved glass plus reduced-motion and solid fallbacks
+  ---
+  duration_ms: 0.209703
+  type: 'test'
+  ...
+# Subtest: new conversion layer contains no contact-form transmission or third-party tracker
+ok 38 - new conversion layer contains no contact-form transmission or third-party tracker
+  ---
+  duration_ms: 0.277765
+  type: 'test'
+  ...
+# Subtest: new code respects UTF-8 branding and the no-em-dash handoff rule
+ok 39 - new code respects UTF-8 branding and the no-em-dash handoff rule
+  ---
+  duration_ms: 0.306477
+  type: 'test'
+  ...
+# Subtest: all 135 existing geometry combinations retain agreed footprint and pitch behaviour
+ok 40 - all 135 existing geometry combinations retain agreed footprint and pitch behaviour
+  ---
+  duration_ms: 67.44792
+  type: 'test'
+  ...
+# (node:8344) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8344) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8344) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-verified-sweep/site/lib/demo-helper/config.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-verified-sweep/site/package.json.
+# Subtest: admin destination is recognised: /supplier-pricing-tool/apex-roofing/admin
+ok 41 - admin destination is recognised: /supplier-pricing-tool/apex-roofing/admin
+  ---
+  duration_ms: 0.952719
+  type: 'test'
+  ...
+# Subtest: admin destination is recognised: /supplier-pricing-tool/apex-roofing/admin/
+ok 42 - admin destination is recognised: /supplier-pricing-tool/apex-roofing/admin/
+  ---
+  duration_ms: 0.146271
+  type: 'test'
+  ...
+# Subtest: admin destination is recognised: /supplier-pricing-tool/apex-roofing/admin?demo=helper
+ok 43 - admin destination is recognised: /supplier-pricing-tool/apex-roofing/admin?demo=helper
+  ---
+  duration_ms: 0.070973
+  type: 'test'
+  ...
+# Subtest: admin destination is recognised: /supplier-pricing-tool/apex-roofing/admin/trade
+ok 44 - admin destination is recognised: /supplier-pricing-tool/apex-roofing/admin/trade
+  ---
+  duration_ms: 0.055375
+  type: 'test'
+  ...
+# Subtest: non-admin destination is excluded: null
+ok 45 - non-admin destination is excluded: null
+  ---
+  duration_ms: 0.100521
+  type: 'test'
+  ...
+# Subtest: non-admin destination is excluded: /demo/roofing-site
+ok 46 - non-admin destination is excluded: /demo/roofing-site
+  ---
+  duration_ms: 0.045126
+  type: 'test'
+  ...
+# Subtest: non-admin destination is excluded: /supplier-pricing-tool/apex-roofing/administrator
+ok 47 - non-admin destination is excluded: /supplier-pricing-tool/apex-roofing/administrator
+  ---
+  duration_ms: 0.105722
+  type: 'test'
+  ...
+# Subtest: non-admin destination is excluded: /supplier-pricing-tool/other/admin
+ok 48 - non-admin destination is excluded: /supplier-pricing-tool/other/admin
+  ---
+  duration_ms: 0.047448
+  type: 'test'
+  ...
+# Subtest: admin guidance has no second open action at destination
+ok 49 - admin guidance has no second open action at destination
+  ---
+  duration_ms: 0.504154
+  type: 'test'
+  ...
+# Subtest: returning from optional admin resumes the first unfinished core experience
+ok 50 - returning from optional admin resumes the first unfinished core experience
+  ---
+  duration_ms: 0.608698
+  type: 'test'
+  ...
+# Subtest: returning from admin after the tour shows finish without resetting progress
+ok 51 - returning from admin after the tour shows finish without resetting progress
+  ---
+  duration_ms: 0.160811
+  type: 'test'
+  ...
+# Subtest: admin return on a different task does not discard a conversation milestone
+ok 52 - admin return on a different task does not discard a conversation milestone
+  ---
+  duration_ms: 0.167872
+  type: 'test'
+  ...
+# Subtest: example marker persists with roof choices without touching price or enquiry data
+ok 53 - example marker persists with roof choices without touching price or enquiry data
+  ---
+  duration_ms: 0.249216
+  type: 'test'
+  ...
+# Subtest: overlapping scroll locks restore the original style only after the last release
+ok 54 - overlapping scroll locks restore the original style only after the last release
+  ---
+  duration_ms: 0.112675
+  type: 'test'
+  ...
+# Subtest: closing chat cannot clear an enquiry owned by the Quick Estimate
+ok 55 - closing chat cannot clear an enquiry owned by the Quick Estimate
+  ---
+  duration_ms: 0.195927
+  type: 'test'
+  ...
+# Subtest: both enquiry surfaces can release independently
+ok 56 - both enquiry surfaces can release independently
+  ---
+  duration_ms: 0.068882
+  type: 'test'
+  ...
+# Subtest: enquiry component survives closing and reopening the same result, without storage
+ok 57 - enquiry component survives closing and reopening the same result, without storage
+  ---
+  duration_ms: 0.508448
+  type: 'test'
+  ...
+# Subtest: small viewport rules preserve an instruction region rather than just the header
+ok 58 - small viewport rules preserve an instruction region rather than just the header
+  ---
+  duration_ms: 0.194646
+  type: 'test'
+  ...
+# Subtest: admin return navigation is outside the hideable helper in the shared shell
+ok 59 - admin return navigation is outside the hideable helper in the shared shell
+  ---
+  duration_ms: 0.207283
+  type: 'test'
+  ...
+# (node:8377) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8377) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:8377) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///mnt/data/apex-verified-sweep/site/lib/demo-helper/state.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /mnt/data/apex-verified-sweep/site/package.json.
+# Subtest: answers: one prepare action opens and fills, never sends
+ok 60 - answers: one prepare action opens and fills, never sends
+  ---
+  duration_ms: 1.234634
+  type: 'test'
+  ...
+# Subtest: answers: prepared prompt points to Send, without a second prepare action
+ok 61 - answers: prepared prompt points to Send, without a second prepare action
+  ---
+  duration_ms: 0.253509
+  type: 'test'
+  ...
+# Subtest: answers: own question remains valid, no exact-string checks
+ok 62 - answers: own question remains valid, no exact-string checks
+  ---
+  duration_ms: 0.113827
+  type: 'test'
+  ...
+# Subtest: answers: busy request has feedback, not another example button
+ok 63 - answers: busy request has feedback, not another example button
+  ---
+  duration_ms: 0.091488
+  type: 'test'
+  ...
+# Subtest: answers: non-milestone answer offers follow-up/manual progress, not fake success
+ok 64 - answers: non-milestone answer offers follow-up/manual progress, not fake success
+  ---
+  duration_ms: 0.078658
+  type: 'test'
+  ...
+# Subtest: assistant-price: one prepare action opens and fills, never sends
+ok 65 - assistant-price: one prepare action opens and fills, never sends
+  ---
+  duration_ms: 0.053318
+  type: 'test'
+  ...
+# Subtest: assistant-price: prepared prompt points to Send, without a second prepare action
+ok 66 - assistant-price: prepared prompt points to Send, without a second prepare action
+  ---
+  duration_ms: 0.109951
+  type: 'test'
+  ...
+# Subtest: assistant-price: own question remains valid, no exact-string checks
+ok 67 - assistant-price: own question remains valid, no exact-string checks
+  ---
+  duration_ms: 0.052137
+  type: 'test'
+  ...
+# Subtest: assistant-price: busy request has feedback, not another example button
+ok 68 - assistant-price: busy request has feedback, not another example button
+  ---
+  duration_ms: 0.155303
+  type: 'test'
+  ...
+# Subtest: assistant-price: non-milestone answer offers follow-up/manual progress, not fake success
+ok 69 - assistant-price: non-milestone answer offers follow-up/manual progress, not fake success
+  ---
+  duration_ms: 0.22589
+  type: 'test'
+  ...
+# Subtest: knowledge response requires an actual page action before the benefit
+ok 70 - knowledge response requires an actual page action before the benefit
+  ---
+  duration_ms: 0.167501
+  type: 'test'
+  ...
+# Subtest: price guidance handles estimate and enquiry phases explicitly
+ok 71 - price guidance handles estimate and enquiry phases explicitly
+  ---
+  duration_ms: 0.149246
+  type: 'test'
+  ...
+# Subtest: failed request keeps live failure honest and retries clear the error
+ok 72 - failed request keeps live failure honest and retries clear the error
+  ---
+  duration_ms: 0.106317
+  type: 'test'
+  ...
+# Subtest: activity rejects prior task and prior run feedback
+ok 73 - activity rejects prior task and prior run feedback
+  ---
+  duration_ms: 0.09552
+  type: 'test'
+  ...
+# Subtest: late response cannot replace feedback for a later network request
+ok 74 - late response cannot replace feedback for a later network request
+  ---
+  duration_ms: 0.059191
+  type: 'test'
+  ...
+# Subtest: activity whitelist discards request contents
+ok 75 - activity whitelist discards request contents
+  ---
+  duration_ms: 0.558263
+  type: 'test'
+  ...
+# Subtest: quick task has one entry, then directs attention to the page
+ok 76 - quick task has one entry, then directs attention to the page
+  ---
+  duration_ms: 0.116018
+  type: 'test'
+  ...
+# Subtest: closing waits for final benefit acknowledgement, not a reading timer
+ok 77 - closing waits for final benefit acknowledgement, not a reading timer
+  ---
+  duration_ms: 0.285996
+  type: 'test'
+  ...
+# Subtest: enquiry preview does not hide guide or compete with final benefit
+ok 78 - enquiry preview does not hide guide or compete with final benefit
+  ---
+  duration_ms: 0.266339
+  type: 'test'
+  ...
+# Subtest: example enquiry uses the same validation and current result, with no transport
+ok 79 - example enquiry uses the same validation and current result, with no transport
+  ---
+  duration_ms: 0.189293
+  type: 'test'
+  ...
+# Subtest: tool sample and full questionnaire are mutually exclusive
+ok 80 - tool sample and full questionnaire are mutually exclusive
+  ---
+  duration_ms: 0.77493
+  type: 'test'
+  ...
+# Subtest: mobile layout reserves space, retains brand, Hide and accessibility fallbacks
+ok 81 - mobile layout reserves space, retains brand, Hide and accessibility fallbacks
+  ---
+  duration_ms: 0.223774
+  type: 'test'
+  ...
+# Subtest: assistant accepts independent questions and does not require the prepared prompt
+ok 82 - assistant accepts independent questions and does not require the prepared prompt
+  ---
+  duration_ms: 0.340688
+  type: 'test'
+  ...
+1..82
+# tests 82
+# suites 0
+# pass 82
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 556.184348

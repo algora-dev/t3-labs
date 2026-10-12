@@ -1,0 +1,20 @@
+{
+  "compiledModules": 51,
+  "diagnostics": [],
+  "fixtures": [
+    "/__conversion-preview.tsx",
+    "/app/supplier-pricing-tool/pitch.ts",
+    "/components/assistant/EnquiryPanel.tsx",
+    "/components/assistant/EstimateResultCard.tsx",
+    "/components/assistant/GuidedEstimator.tsx"
+  ],
+  "sourceRoot": "current lean export",
+  "cssIds": [
+    "app/demo/roofing-site/act.css",
+    "app/demo/roofing-site/quick-estimate/quick-estimate.css",
+    "components/demo-helper/helper.css",
+    "components/demo-conversion/conversion.css",
+    "components/demo-helper/tools.css",
+    "components/demo-helper/breadcrumbs.css"
+  ]
+}

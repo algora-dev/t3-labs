@@ -76,10 +76,10 @@ test('admin demo entry reads the router query inside a Suspense boundary', () =>
 
 test('local enquiry preview keeps native validation without requiring sandbox allow-forms', () => {
   const s = source('components/quick-estimate/QuickQuoteEnquiry.tsx');
-  assert.match(s, /function preparePreview\(\)/);
+  assert.match(s, /function preparePreview\(next = details\)/);
   assert.match(s, /e\.currentTarget\.form\?\.reportValidity\(\)/);
   assert.match(s, /onKeyDown/);
-  assert.match(s, /validateDemoContact\(details\)/);
+  assert.match(s, /validateDemoContact\(next\)/);
   assert.doesNotMatch(s, /type="submit">Preview my enquiry/);
 });
 test('assistant send control works without native form submission and respects composition', () => {
