@@ -92,3 +92,10 @@ test('task copy, requirements and the closing offer are unchanged', () => {
   assert.match(ui, /CONVERSION_OFFER\.bookingLabel/);
   assert.match(ui, /Next: a price without chat/);
 });
+
+test('mobile homepage width rules cannot shrink the Apex demo header or footers', () => {
+  const css = source('app/globals.css');
+  assert.doesNotMatch(css, /header\[class\*=.sticky.\]/, 'broad sticky-header matcher must not return');
+  assert.doesNotMatch(css, /footer\[class\*=.w-.\]/, 'broad footer matcher must not return');
+  assert.match(css, /width: min\(100% - 28px, 1180px\) !important/, 'homepage mobile insets stay for their exact page classes');
+});

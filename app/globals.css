@@ -816,12 +816,13 @@ textarea {
 }
 
 @media (max-width: 640px) {
-  header[class*="sticky"] {
-    width: min(100% - 28px, 1180px) !important;
-  }
-
+  /* Homepage mobile insets, scoped to exact homepage classes. The previous
+     attribute-substring matchers (any sticky header, any footer with a width
+     utility class) also caught the Apex demo's full-bleed sticky header and
+     shrank it, leaving a right-hand gap on the demo below 640px (fixed
+     2026-10-11). */
   main section.w-\[min\(1180px\,calc\(100\%-40px\)\)\],
-  footer[class*="w-"] {
+  footer.w-\[min\(1180px\,calc\(100\%-40px\)\)\] {
     width: min(100% - 28px, 1180px) !important;
   }
 
