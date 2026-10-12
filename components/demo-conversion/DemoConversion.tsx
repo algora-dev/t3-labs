@@ -1,10 +1,12 @@
 'use client';
 import { createPortal } from 'react-dom';
-import { useEffect, useRef, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useDemoHelper, useHelperSurface } from '../demo-helper/useDemoHelper';
 import { useConversion } from './useConversion';
 import { CORE_TASKS } from '../../lib/demo-helper/config';
 import { getHelper, updateHelper, revealHelper } from '../../lib/demo-helper/store';
+import { holdMobileStart } from '../../lib/demo-helper/mobile-notice';
+import { MobileNotice } from '../demo-helper/MobileNotice';
 import { CONVERSION_OFFER, INTRO_COPY, CLOSING_COPY, EXIT_MIN_VISIT_MS, EXIT_AFTER_INTRO_MS } from '../../lib/demo-conversion/config';
 import { canOfferExit } from '../../lib/demo-conversion/state';
 import { getConversion, updateConversion } from '../../lib/demo-conversion/store';
@@ -23,6 +25,7 @@ export function DemoConversion() {
   const surface = useHelperSurface();
   const dialog = useRef<HTMLDialogElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
+  const [mobileHold, setMobileHold] = useState(false);
   const arrival = useRef(0);
   const introClosed = useRef(0);
   const entered = useRef(false);
@@ -112,6 +115,11 @@ export function DemoConversion() {
     introClosed.current = Date.now();
     trackDemo(start ? 'intro_started' : 'intro_dismissed');
     updateConversion({ type: 'dismiss-intro' });
+    // Mobile only: one guide-free browse choice before the guided tour opens.
+    if (start && holdMobileStart()) { setMobileHold(true); return; }
+    finishIntroStart(start);
+  }
+  function finishIntroStart(start: boolean) {
     // Prevent a second welcome inside the helper after closing the intro.
     if (getHelper().view === 'welcome') updateHelper({ type: 'start' });
     updateHelper({ type: 'collapse', value: !start });
@@ -124,9 +132,17 @@ export function DemoConversion() {
   function contact(kind: 'booking_clicked' | 'contact_clicked') {
     trackDemo(kind, { reason: c.reason ?? undefined }); updateConversion({ type: 'contact' });
   }
-  if (!c.ready || !c.modal) return null;
+  if (!c.ready) return null;
   const intro = c.modal === 'intro';
-  return createPortal(<dialog ref={dialog} className={`t3-cv-dialog ${intro ? 't3-cv-intro' : 't3-cv-closing'}`} aria-modal="true" aria-labelledby="t3-conversion-title" aria-describedby="t3-conversion-description" onKeyDown={containTab} onCancel={event => { event.preventDefault(); dismiss(); }}>
+  return <>
+    {mobileHold && <MobileNotice
+      onContinue={() => { setMobileHold(false); finishIntroStart(true); }}
+      onExplore={() => {
+        setMobileHold(false);
+        finishIntroStart(false);
+        requestAnimationFrame(() => (document.querySelector('.dh-launcher') as HTMLElement | null)?.focus({ preventScroll: true }));
+      }} />}
+    {c.modal && createPortal(<dialog ref={dialog} className={`t3-cv-dialog ${intro ? 't3-cv-intro' : 't3-cv-closing'}`} aria-modal="true" aria-labelledby="t3-conversion-title" aria-describedby="t3-conversion-description" onKeyDown={containTab} onCancel={event => { event.preventDefault(); dismiss(); }}>
     <div className="t3-cv-head">
       <div className="t3-cv-brand">
         {/* The supplied T3 brand asset is preserved, including its glow. */}
@@ -156,5 +172,6 @@ export function DemoConversion() {
 
       </>}
     </div>
-  </dialog>, document.body);
+  </dialog>, document.body)}
+  </>;
 }

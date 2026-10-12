@@ -130,6 +130,18 @@
 .dh-welcome .dh-content>.dh-small { font-size:12px; }
 .dh-welcome .dh-content>.dh-hint { font-size:11px; }
 .dh-welcome .dh-primary { font-size:14px!important; min-height:48px; }
+/* Mobile-only choice, asked once per tab before the guided tour starts on a
+   small screen. Same guide surface, compact, above the centred welcome panel. */
+.dh-notice-scrim { position:fixed; inset:0; z-index:96; background:rgba(6,7,10,.6); }
+.dh-panel.dh-notice { z-index:97; left:50%; right:auto; top:var(--dh-centre-y,50%); bottom:auto; transform:translate(-50%,-50%); width:min(400px,calc(100vw - 28px)); max-height:calc(var(--dh-viewport-height,100dvh) - 24px); }
+.dh-notice .dh-top { padding:6px 14px; }
+.dh-notice .dh-logo { width:38px; height:38px; }
+.dh-notice .dh-content { padding:14px 18px; }
+.dh-notice .dh-content h2 { font-size:21px; margin:2px 0 10px; }
+.dh-notice .dh-content>p { margin:0; }
+.dh-notice .dh-primary { margin-top:14px; }
+.dh-notice .dh-secondary { margin-top:8px; justify-content:center; }
+@media print { .dh-notice-scrim { display:none!important; } }
 @media(max-width:759px) {
   .dh-panel { left:12px; right:12px; bottom:calc(var(--dh-bottom-inset,0px) + 72px + env(safe-area-inset-bottom,0px)); width:auto; max-width:none; max-height:min(calc(var(--dh-viewport-height,100dvh) * .65),calc(var(--dh-viewport-height,100dvh) - 100px),590px); border-radius:12px; }
   .dh-top { padding:5px 16px; }

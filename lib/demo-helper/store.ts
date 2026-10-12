@@ -5,6 +5,7 @@ import type { HelperAction } from './state';
 import type { HelperCommand, HelperSignal } from './config';
 export const HELPER_KEY = 'apex.demo.helper.v2';
 export const HELPER_POSITION_KEY = 'apex.demo.helper.position.v2';
+export const HELPER_MOBILE_NOTICE_KEY = 'apex.demo.helper.mobile-notice.v1';
 export const HELPER_REVEAL_EVENT = 'apex-demo-helper-reveal';
 export const HELPER_COMMAND_EVENT = 'apex-demo-helper-command';
 const CHANGE = 'apex-demo-helper-change';

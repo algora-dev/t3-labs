@@ -8,6 +8,8 @@ import type { HelperTaskId } from '../../lib/demo-helper/config';
 import { taskGuidance } from '../../lib/demo-helper/guidance';
 import { isAssistantTask } from '../../lib/demo-helper/assistant-activity';
 import { updateHelper, sendHelperCommand, HELPER_POSITION_KEY, HELPER_REVEAL_EVENT } from '../../lib/demo-helper/store';
+import { holdMobileStart } from '../../lib/demo-helper/mobile-notice';
+import { MobileNotice } from './MobileNotice';
 import { clampPosition, readPosition, type HelperPosition } from '../../lib/demo-helper/state';
 import { useDemoHelper, useHelperSurface, useAssistantActivity } from './useDemoHelper';
 import { CONVERSION_OFFER } from '../../lib/demo-conversion/config';
@@ -44,6 +46,7 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
   const [copied, setCopied] = useState(false);
   const [taskMenu, setTaskMenu] = useState(false);
   const [manual, setManual] = useState(false);
+  const [mobileNotice, setMobileNotice] = useState(false);
   const quickTransition = useRef<number | null>(null);
   const panel = useRef<HTMLElement>(null);
   const content = useRef<HTMLDivElement>(null);
@@ -140,6 +143,21 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
   function hideGuide() {
     updateHelper({ type: 'collapse', value: true });
     requestAnimationFrame(() => launcher.current?.focus({ preventScroll: true }));
+  }
+  // Mobile only: the guide shares a small screen with the tools it explains, so
+  // offer one guide-free browse choice before starting. Asked once per tab.
+  function beginTour() {
+    if (holdMobileStart()) { setMobileNotice(true); return; }
+    updateHelper({ type: 'start' });
+  }
+  function continueMobileTour() {
+    setMobileNotice(false);
+    updateHelper({ type: 'start' });
+    requestAnimationFrame(() => panel.current?.focus({ preventScroll: true }));
+  }
+  function exploreWithoutGuide() {
+    setMobileNotice(false);
+    hideGuide();
   }
   function select(id: HelperTaskId) { if (id === 'admin') { openAdminDashboard(); return; } sendHelperCommand('assistant-close'); setTaskMenu(false); setManual(false); updateHelper({ type: 'select', task: id }); }
   function openAdminDashboard() {
@@ -254,7 +272,7 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
           <p>Welcome to Apex Roofing, an example business. Try three short experiences using the real tools on this website.</p>
           <div className="dh-welcome-preview"><span aria-hidden="true">3</span><p>Get an answer. Get a price.<br /><b>See how it becomes an enquiry.</b></p></div>
           <p className="dh-small">Your products. Your pricing. Your branding. Imagine this working for your customers.</p>
-          <button type="button" className="dh-primary" onClick={() => updateHelper({ type: 'start' })}>Show me around <Arrow /></button>
+          <button type="button" className="dh-primary" onClick={beginTour}>Show me around <Arrow /></button>
           <p className="dh-small dh-centre dh-hint">{mobile ? 'Hide the guide whenever you need more space.' : 'Move it out of your way, or hide it at any time.'}</p>
         </>}
         {s.view === 'task' && <>
@@ -304,5 +322,6 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
       </div>
       <div className="dh-bottom">One example. Built your way.</div>
     </aside>}
+    {mobileNotice && <MobileNotice onContinue={continueMobileTour} onExplore={exploreWithoutGuide} />}
   </>, document.body);
 }
