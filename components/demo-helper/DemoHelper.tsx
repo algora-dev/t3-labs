@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { createPortal } from 'react-dom';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type PointerEvent, type KeyboardEvent } from 'react';
-import { APEX_HOME, ADMIN_HOME, isAdminPath, QUICK_HOME, CORE_TASKS, TASKS, HELPER_TASKS, HELPER_QUESTION, HELPER_PRICE_PROMPT, ADVANCED_TOOLS, ADVANCED_PRICING_NOTE } from '../../lib/demo-helper/config';
+import { APEX_HOME, ADMIN_HOME, isAdminPath, QUICK_HOME, CORE_TASKS, TASKS, HELPER_TASKS, HELPER_QUESTION, HELPER_PRICE_PROMPT, ADVANCED_TOOLS, ADVANCED_PRICING_NOTE, nextCoreTask } from '../../lib/demo-helper/config';
 import type { HelperTaskId } from '../../lib/demo-helper/config';
 import { taskGuidance } from '../../lib/demo-helper/guidance';
 import { isAssistantTask } from '../../lib/demo-helper/assistant-activity';
@@ -190,6 +190,30 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
     } else if (isAdminPath(path)) sendHelperCommand('admin-trade');
     else router.push(ADMIN_HOME);
   }
+  // Any advance also moves the visitor to the next task's context: the right page
+  // with the right tool open. Nobody finishes a step and wonders what is next.
+  function advanceTask(action: Parameters<typeof updateHelper>[0]) {
+    const target = nextCoreTask(s.current);
+    setManual(false); setTaskMenu(false);
+    updateHelper(action);
+    if (target === 'quick-price') {
+      sendHelperCommand('assistant-close');
+      if (path !== QUICK_HOME) router.push(QUICK_HOME);
+    } else if (target) {
+      sendHelperCommand('assistant-close');
+      if ((!path?.startsWith(APEX_HOME) && !path?.startsWith('/supplier-pricing-tool/apex-roofing')) || isAdminPath(path)) router.push(APEX_HOME);
+      sendHelperCommand('assistant-open');
+    }
+  }
+  // Task 2 free exit: exploring counts as trying. Advance straight to the Quick
+  // Roof Estimate without waiting for milestones; close chat, keep its history.
+  function finishedExploring() {
+    setManual(false); setTaskMenu(false);
+    updateHelper({ type: 'manual' });
+    updateHelper({ type: 'next' });
+    sendHelperCommand('assistant-close');
+    if (path !== QUICK_HOME) router.push(QUICK_HOME);
+  }
   const prompt = s.current === 'answers' ? HELPER_QUESTION : HELPER_PRICE_PROMPT;
   async function copy() {
     try { await navigator.clipboard.writeText(prompt); setCopied(true); } catch { setCopied(false); }
@@ -238,6 +262,7 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
           <div className={`dh-instruction ${guidance.waiting ? 'dh-is-waiting' : ''}`} role="status"><span className="dh-action-number" aria-hidden="true">{guidance.waiting ? '…' : '→'}</span><p>{instruction}</p></div>
           {!s.started && isAssistantTask(s.current) && <p className="dh-example-summary">{s.current === 'answers' ? 'Example: “Do you handle insurance work?”' : 'Example: 120 m² gable roof · concrete tiles · 25° pitch.'}</p>}
           {guidance.button && !adminAtDestination && <button type="button" className="dh-primary" onClick={tryTask}>{guidance.button} <Arrow /></button>}
+          {s.current === 'assistant-price' && (s.started || assistantOpen) && <button type="button" className="dh-secondary dh-secondary-strong" onClick={finishedExploring}>I’m finished exploring. Next step <Arrow /></button>}
           {s.current === 'admin' && <Link href={APEX_HOME} className="dh-secondary" onClick={() => updateHelper({ type: 'return-from-admin' })}>← Return to Apex Roofing</Link>}
           {!s.started && isAssistantTask(s.current) && <p className="dh-small dh-centre">An example, not a script. You choose what to send.</p>}
           {guidance.freeResponse && <button type="button" className="dh-text" onClick={() => setManual(v => !v)} aria-expanded={manual}>Ready to move on?</button>}
@@ -254,14 +279,18 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
             <button type="button" className="dh-text" onClick={() => setManual(v => !v)} aria-expanded={manual}>Continue manually</button>
           </details>
           {manual && <div className="dh-manual"><p>Continue without automatic confirmation. Marked as tried, not verified.</p><button type="button" className="dh-secondary" onClick={() => { setManual(false); updateHelper({ type: 'manual' }); }}>I’ve tried it. Continue.</button></div>}
-          <div className="dh-task-footer"><button type="button" className="dh-text" onClick={() => { setManual(false); updateHelper({ type: 'skip' }); }}>Skip task</button><button type="button" className="dh-text" onClick={() => updateHelper({ type: 'finish' })}>Finish tour</button></div>
+          <div className="dh-task-footer"><button type="button" className="dh-text" onClick={() => advanceTask({ type: 'skip' })}>Skip task</button><button type="button" className="dh-text" onClick={() => updateHelper({ type: 'finish' })}>Finish tour</button></div>
         </>}
-        {readingEnquiry && <><div className="dh-instruction"><span className="dh-action-number" aria-hidden="true">✓</span><p>Your enquiry preview is ready. Read what the business receives, then return to your estimate.</p></div></>}
+        {readingEnquiry && <>
+          <div className="dh-instruction"><span className="dh-action-number" aria-hidden="true">✓</span><p>Your enquiry preview is ready. Read what the business receives, then return to your estimate.</p></div>
+          <button type="button" className="dh-primary" onClick={() => advanceTask({ type: 'next' })}>Next step <Arrow /></button>
+          <div className="dh-task-footer"><button type="button" className="dh-text" onClick={() => advanceTask({ type: 'skip' })}>Skip task</button><button type="button" className="dh-text" onClick={() => updateHelper({ type: 'finish' })}>Finish tour</button></div>
+        </>}
         {s.view === 'benefit' && !readingEnquiry && <>
           <div className="dh-success-icon"><Check /></div><p className="dh-eyebrow">{s.status[s.current] === 'observed' ? 'EXPERIENCE COMPLETE' : 'MARKED AS TRIED'}</p>
           <h2>{s.status[s.current] === 'observed' ? task.outcome : 'What this could mean for you.'}</h2><p>{task.benefit}</p>
           {s.current === 'quick-price' && <div className="dh-advanced"><p className="dh-eyebrow">NEED MORE DETAIL?</p>{ADVANCED_TOOLS.map(tool => <Link key={tool.href} href={tool.href}><b>{tool.title} <Arrow /></b><span>{tool.text}</span></Link>)}<p>{ADVANCED_PRICING_NOTE}</p></div>}
-          <button type="button" className="dh-primary" onClick={() => { sendHelperCommand('assistant-close'); updateHelper({ type: 'next' }); }}>{s.current === 'answers' ? 'Next: a price through chat' : s.current === 'assistant-price' ? 'Next: a price without chat' : 'What could this do for my business?'} <Arrow /></button>
+          <button type="button" className="dh-primary" onClick={() => advanceTask({ type: 'next' })}>{s.current === 'answers' ? 'Next: a price through chat' : s.current === 'assistant-price' ? 'Next: a price without chat' : 'What could this do for my business?'} <Arrow /></button>
           
         </>}
         {s.view === 'finish' && <>
