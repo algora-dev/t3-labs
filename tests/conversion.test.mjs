@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { register } from 'node:module';
 import fs from 'node:fs';
 register(new URL('./conversion-resolve.mjs', import.meta.url));
-const { initialConversion, readConversion, reduceConversion: reduce, savedConversion, canOfferExit } = await import('../lib/demo-conversion/state.ts');
-const { INTRO_COPY, CLOSING_COPY, CONVERSION_OFFER } = await import('../lib/demo-conversion/config.ts');
+const { initialConversion, readConversion, reduceConversion: reduce, savedConversion } = await import('../lib/demo-conversion/state.ts');
+const { INTRO_COPY, CLOSING_COPY, CONVERSION_OFFER, EXPLORE_DELAY_MS } = await import('../lib/demo-conversion/config.ts');
 const { metricPayload } = await import('../lib/demo-conversion/metrics.ts');
 const { initialHelper, reduceHelper, readHelper } = await import('../lib/demo-helper/state.ts');
 const { TASKS, CORE_TASKS, HELPER_PRICE_PROMPT, ADVANCED_TOOLS, ADVANCED_PRICING_NOTE } = await import('../lib/demo-helper/config.ts');
@@ -14,7 +14,7 @@ const { PITCHED_SHAPES } = await import('../lib/quick-estimate/templates.ts');
 const src = path => fs.readFileSync(new URL('../'+path,import.meta.url),'utf8');
 const fresh = () => reduce(initialConversion(), {type:'initialise',resume:false});
 const openVisit = () => reduce(fresh(),{type:'dismiss-intro'});
-const safeExit = { finePointer:true, enteredPage:true, elapsed:9000, sinceIntro:2000, visible:true,editing:false,dragging:false,busySurface:false,otherModal:false };
+const explore = at => reduce(openVisit(),{type:'explore',at});
 const closing = reason => reduce(openVisit(),{type:'show-closing',reason});
 
 test('first arrival opens only the intro, then records that it was seen',()=>{
@@ -27,27 +27,29 @@ test('existing active visitors are not forced to restart the tour',()=>{
  const s=reduce(initialConversion(),{type:'initialise',resume:true});assert.equal(s.modal,null);assert.equal(s.introSeen,true);
 });
 test('intro dismissal does not spend the one closing invitation',()=>{const s=openVisit();assert.equal(s.modal,null);assert.equal(s.closerSeen,false);});
-test('closing cannot stack on top of an intro',()=>{const s=fresh();assert.equal(reduce(s,{type:'show-closing',reason:'exit'}),s);});
-for(const reason of ['exit','complete','tour-ended']) test(`closing once per visit: ${reason}`,()=>{
+test('closing cannot stack on top of an intro',()=>{const s=fresh();assert.equal(reduce(s,{type:'show-closing',reason:'explored'}),s);});
+for(const reason of ['explored','complete','tour-ended']) test(`closing once per visit: ${reason}`,()=>{
  const s=closing(reason);assert.equal(s.modal,'closing');assert.equal(s.reason,reason);assert.equal(s.closerSeen,true);
  const hidden=reduce(s,{type:'dismiss-closing'});assert.equal(hidden.modal,null);
- for(const later of ['exit','complete','tour-ended']) assert.equal(reduce(hidden,{type:'show-closing',reason:later}),hidden);
+ for(const later of ['explored','complete','tour-ended']) assert.equal(reduce(hidden,{type:'show-closing',reason:later}),hidden);
 });
 test('completion is queued, not forced over an open form or the intro',()=>{
  const s=reduce(fresh(),{type:'queue',reason:'complete'});assert.equal(s.modal,'intro');assert.equal(s.pending,'complete');
- const next=reduce(reduce(s,{type:'dismiss-intro'}),{type:'show-closing',reason:'exit'});assert.equal(next.reason,'complete');assert.equal(next.pending,null);
+ const next=reduce(reduce(s,{type:'dismiss-intro'}),{type:'show-closing',reason:'explored'});assert.equal(next.reason,'complete');assert.equal(next.pending,null);
 });
 test('booking clicks suppress later invitations without claiming a booking',()=>{
  const s=reduce(openVisit(),{type:'contact'});assert.equal(s.closerSeen,true);assert.equal(s.modal,null);assert.equal(s.pending,null);
- assert.equal(reduce(s,{type:'show-closing',reason:'exit'}),s);assert.equal(metricPayload('booking_clicked').name,'booking_clicked');
+ assert.equal(reduce(s,{type:'show-closing',reason:'explored'}),s);assert.equal(metricPayload('booking_clicked').name,'booking_clicked');
 });
-test('persistence stores only two UI flags, not open overlays or data',()=>{
- const saved=savedConversion({...closing('exit'),email:'private@example.com',price:6000});
+test('persistence stores only UI flags plus the dwell origin, not open overlays or data',()=>{
+ const saved=savedConversion({...closing('explored'),email:'private@example.com',price:6000});
  assert.deepEqual(JSON.parse(saved),{version:1,introSeen:true,closerSeen:true});
- const restored=readConversion(saved);assert.equal(restored.ready,false);assert.equal(restored.modal,null);assert.equal(restored.pending,null);
+ const at=Date.now()-1000;const dwell=savedConversion(explore(at));
+ assert.deepEqual(JSON.parse(dwell),{version:1,introSeen:true,closerSeen:false,exploredAt:at});
+ const restored=readConversion(dwell);assert.equal(restored.exploredAt,at);assert.equal(restored.ready,false);assert.equal(restored.modal,null);assert.equal(restored.pending,null);
 });
 test('reload after a shown closer never shows another closer',()=>{
- const s=reduce(readConversion(savedConversion(closing('exit'))),{type:'initialise',resume:true});
+ const s=reduce(readConversion(savedConversion(closing('explored'))),{type:'initialise',resume:true});
  assert.equal(reduce(s,{type:'show-closing',reason:'complete'}),s);
 });
 test('reload after introduction does not show another introduction',()=>{
@@ -57,20 +59,41 @@ test('bad or tampered session data is ignored',()=>{
  for(const raw of [null,'null','bad','[]',' '.repeat(401),'{"version":2}',JSON.stringify({version:1,introSeen:'yes',closerSeen:true})]) assert.deepEqual(readConversion(raw),initialConversion());
  assert.equal(readConversion(JSON.stringify({version:1,introSeen:true,closerSeen:false,modal:'closing'})).modal,null);
 });
-test('exit intent needs dwell plus genuine fine-pointer engagement',()=>{
- assert.equal(canOfferExit(openVisit(),safeExit),true);
- for(const patch of [{finePointer:false},{enteredPage:false},{elapsed:7999},{sinceIntro:1799},{visible:false}]) assert.equal(canOfferExit(openVisit(),{...safeExit,...patch}),false);
+test('explore choice is stamped once and never after the closer',()=>{
+ const at=Date.now()-1000;const s=explore(at);
+ assert.equal(s.exploredAt,at);
+ assert.equal(reduce(s,{type:'explore',at:at+9999}).exploredAt,at);
+ assert.equal(reduce(closing('explored'),{type:'explore',at:at+9999}).exploredAt,null);
+ assert.equal(reduce(s,{type:'explore',at:0}).exploredAt,at);
 });
-for(const key of ['editing','dragging','busySurface','otherModal']) test(`exit prompt suppressed during ${key}`,()=>assert.equal(canOfferExit(openVisit(),{...safeExit,[key]:true}),false));
-test('exit prompt cannot race completion or another overlay',()=>{
- for(const s of [initialConversion(),fresh(),closing('exit'),reduce(openVisit(),{type:'queue',reason:'complete'})]) assert.equal(canOfferExit(s,safeExit),false);
+test('explore dwell queues exactly one invitation and never forces over an overlay',()=>{
+ const s=reduce(explore(Date.now()-EXPLORE_DELAY_MS-1),{type:'queue',reason:'explored'});
+ assert.equal(s.pending,'explored');assert.equal(s.modal,null);assert.equal(s.closerSeen,false);
+ assert.equal(reduce(s,{type:'queue',reason:'explored'}),s);
+ assert.equal(reduce(fresh(),{type:'queue',reason:'explored'}).modal,'intro');
+});
+test('the dwell origin survives a reload but tampered values do not',()=>{
+ const at=Date.now()-1000;
+ assert.equal(readConversion(savedConversion(explore(at))).exploredAt,at);
+ for(const raw of ['{"version":1,"introSeen":true,"closerSeen":false,"exploredAt":"x"}','{"version":1,"introSeen":true,"closerSeen":false,"exploredAt":-5}','{"version":1,"introSeen":true,"closerSeen":false,"exploredAt":null}']) assert.equal(readConversion(raw).exploredAt,null);
+});
+test('pointer-exit tracking is gone: invitations come from finish or dwell only',()=>{
+ const s=src('components/demo-conversion/DemoConversion.tsx');
+ assert.doesNotMatch(s,/mouseout|mousemove/);assert.doesNotMatch(s,/canOfferExit/);
+ assert.match(s,/EXPLORE_DELAY_MS/);assert.match(s,/\{ type: 'explore', at: Date\.now\(\) \}/);
+ assert.match(src('lib/demo-conversion/config.ts'),/EXPLORE_DELAY_MS = 4 \* 60 \* 1000/);
+ assert.equal(EXPLORE_DELAY_MS,240000);
+});
+test('the dwell invitation still waits for typing, drag, enquiry and other overlays',()=>{
+ const s=src('components/demo-conversion/DemoConversion.tsx');
+ assert.match(s,/editing\(\)/);assert.match(s,/otherModal\(\)/);assert.match(s,/\.dh-panel\.is-dragging/);assert.match(s,/surface\.includes\('enquiry'\)/);
 });
 test('metric payloads explicitly discard personal details and arbitrary properties',()=>{
  const e=metricPayload('task_completed',{task:'quick-price',verification:'observed',email:'private@example.com',notes:'private',price:10,url:'https://private.example'});
  assert.deepEqual(e,{name:'task_completed',task:'quick-price',verification:'observed'});
  assert.deepEqual(metricPayload('task_started',{task:'not-a-task',reason:'private-message',verification:'fake'}),{name:'task_started'});
 });
-test('an early exit never marks a helper task complete',()=>{const h=initialHelper();closing('exit');assert.ok(Object.values(h.status).every(x=>x==='untried'));});
+test('an early invitation never marks a helper task complete',()=>{const h=initialHelper();closing('explored');assert.ok(Object.values(h.status).every(x=>x==='untried'));});
 test('three core tasks still require real tool milestones, not page visits',()=>{
  assert.equal(CORE_TASKS.length,3);assert.equal(TASKS.admin.optional,true);
  for(const id of CORE_TASKS){let h=reduceHelper(initialHelper(),{type:'select',task:id});
@@ -82,7 +105,7 @@ test('three core tasks still require real tool milestones, not page visits',()=>
  }
 });
 test('manual and skipped paths remain honest and do not reset the closer',()=>{
- const c=reduce(closing('exit'),{type:'dismiss-closing'});
+ const c=reduce(closing('explored'),{type:'dismiss-closing'});
  let h=reduceHelper(initialHelper(),{type:'start'});h=reduceHelper(h,{type:'manual'});assert.equal(h.status.answers,'self-reported');
  h=reduceHelper(h,{type:'next'});h=reduceHelper(h,{type:'skip'});assert.equal(h.status['assistant-price'],'skipped');
  h=reduceHelper(h,{type:'restart'});assert.equal(h.view,'task');assert.equal(c.closerSeen,true);

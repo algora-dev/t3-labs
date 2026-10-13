@@ -75,10 +75,11 @@ test('quick task has one entry, then directs attention to the page',()=>{
  const started=reduceHelper(s,{type:'prepare'});assert.equal(taskGuidance(started,null,'website',QUICK_HOME).button,null);
  assert.match(taskGuidance(signal(started,'quick-result'),null,'website',QUICK_HOME).text,/Request a quote/);
 });
-test('closing waits for final benefit acknowledgement, not a reading timer',()=>{
+test('closing waits for final benefit acknowledgement or the explore dwell, never a reading timer',()=>{
  const s=source('components/demo-conversion/DemoConversion.tsx');
  assert.match(s,/if \(h.view === 'finish'\) updateConversion/);
- assert.doesNotMatch(s,/finalExperience|setTimeout|1200/);
+ assert.doesNotMatch(s,/finalExperience|1200/);
+ assert.match(s,/EXPLORE_DELAY_MS/);
  assert.match(s,/surface.includes\('enquiry'\)/);
 });
 test('enquiry preview does not hide guide or compete with final benefit',()=>{

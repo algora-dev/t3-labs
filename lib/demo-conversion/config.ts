@@ -24,6 +24,6 @@ export const CLOSING_COPY = {
   question: 'If this saved your team a few hours a week, or helped you win five more customers a year, what would that be worth?',
   callNote: 'Let’s look at what would help your business. No obligation.',
 } as const;
-// These are guardrails, not a timer that forces a sales interruption.
-export const EXIT_MIN_VISIT_MS = 8000;
-export const EXIT_AFTER_INTRO_MS = 1800;
+// The only non-completion trigger: visitors who chose to explore on their own
+// receive the single invitation after an unhurried four minutes, helper or not.
+export const EXPLORE_DELAY_MS = 4 * 60 * 1000;

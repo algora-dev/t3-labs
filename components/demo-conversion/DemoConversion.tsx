@@ -7,8 +7,7 @@ import { CORE_TASKS } from '../../lib/demo-helper/config';
 import { getHelper, updateHelper, revealHelper } from '../../lib/demo-helper/store';
 import { holdMobileStart } from '../../lib/demo-helper/mobile-notice';
 import { MobileNotice } from '../demo-helper/MobileNotice';
-import { CONVERSION_OFFER, INTRO_COPY, CLOSING_COPY, EXIT_MIN_VISIT_MS, EXIT_AFTER_INTRO_MS } from '../../lib/demo-conversion/config';
-import { canOfferExit } from '../../lib/demo-conversion/state';
+import { CONVERSION_OFFER, INTRO_COPY, CLOSING_COPY, EXPLORE_DELAY_MS } from '../../lib/demo-conversion/config';
 import { getConversion, updateConversion } from '../../lib/demo-conversion/store';
 import { trackDemo } from '../../lib/demo-conversion/metrics';
 import { lockBodyScroll } from '../../lib/demo-helper/scroll-lock';
@@ -26,12 +25,8 @@ export function DemoConversion() {
   const dialog = useRef<HTMLDialogElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const [mobileHold, setMobileHold] = useState(false);
-  const arrival = useRef(0);
-  const introClosed = useRef(0);
-  const entered = useRef(false);
 
   useEffect(() => {
-    arrival.current = Date.now(); introClosed.current = Date.now();
     const prior = getHelper();
     const resume = prior.view !== 'welcome' || Object.values(prior.status).some(status => status !== 'untried');
     updateConversion({ type: 'initialise', resume });
@@ -64,25 +59,17 @@ export function DemoConversion() {
     return () => { cancelAnimationFrame(frame); window.removeEventListener('focusout', attempt); document.removeEventListener('visibilitychange', attempt); window.removeEventListener('pointerup', attempt); };
   }, [c.pending, c.modal, c.closerSeen, surface]);
 
+  // The only non-completion invitation: visitors who chose Explore on my own
+  // are asked once after an unhurried four-minute dwell, helper or no helper.
+  // Deliberately no beforeunload, history trapping, pointer-exit popup, or mobile back interception.
   useEffect(() => {
-    if (!c.ready || c.modal || c.closerSeen) return;
-    const enter = (event: MouseEvent) => { if (event.clientY > 60) entered.current = true; };
-    const exit = (event: MouseEvent) => {
-      if (event.relatedTarget || event.clientY > 8 || event.buttons) return;
-      if (canOfferExit(getConversion(), {
-        finePointer: window.matchMedia('(hover: hover) and (pointer: fine)').matches,
-        enteredPage: entered.current, elapsed: Date.now() - arrival.current,
-        sinceIntro: Date.now() - introClosed.current,
-        visible: document.visibilityState === 'visible', editing: editing(),
-        dragging: !!document.querySelector('.dh-panel.is-dragging'),
-        busySurface: surface.includes('enquiry'), otherModal: otherModal(),
-      }, EXIT_MIN_VISIT_MS, EXIT_AFTER_INTRO_MS)) updateConversion({ type: 'show-closing', reason: 'exit' });
-    };
-    document.addEventListener('mousemove', enter);
-    document.addEventListener('mouseout', exit);
-    // Deliberately no beforeunload, history trapping, inactivity popup, or mobile back interception.
-    return () => { document.removeEventListener('mousemove', enter); document.removeEventListener('mouseout', exit); };
-  }, [c.ready, c.modal, c.closerSeen, surface]);
+    if (!c.ready || c.closerSeen || c.modal || c.exploredAt == null) return;
+    const invite = () => updateConversion({ type: 'queue', reason: 'explored' });
+    const remaining = c.exploredAt + EXPLORE_DELAY_MS - Date.now();
+    if (remaining <= 0) { invite(); return; }
+    const timer = window.setTimeout(invite, remaining);
+    return () => window.clearTimeout(timer);
+  }, [c.ready, c.closerSeen, c.modal, c.exploredAt]);
 
   useEffect(() => {
     const node = dialog.current;
@@ -112,7 +99,6 @@ export function DemoConversion() {
   }
 
   function leaveIntro(start: boolean) {
-    introClosed.current = Date.now();
     trackDemo(start ? 'intro_started' : 'intro_dismissed');
     updateConversion({ type: 'dismiss-intro' });
     // Mobile only: one guide-free browse choice before the guided tour opens.
@@ -120,6 +106,8 @@ export function DemoConversion() {
     finishIntroStart(start);
   }
   function finishIntroStart(start: boolean) {
+    // Exploring alone starts the one self-guided dwell invitation.
+    if (!start) updateConversion({ type: 'explore', at: Date.now() });
     // Prevent a second welcome inside the helper after closing the intro.
     if (getHelper().view === 'welcome') updateHelper({ type: 'start' });
     updateHelper({ type: 'collapse', value: !start });
