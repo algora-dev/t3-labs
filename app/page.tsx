@@ -26,7 +26,7 @@ const WORK_CARDS = [
     num: "01",
     title: "QuoteCore+",
     desc: "A fully functional, feature-packed construction quoting and job-management SaaS app. From large software products like this to small focused tools - a clear picture of what we can build.",
-    img: "/assets/quotecore-card.jpg",
+    img: "/assets/quotecore-card.webp",
     link: { href: "https://quote-core.com/", label: "View QuoteCore+" },
   },
   {
