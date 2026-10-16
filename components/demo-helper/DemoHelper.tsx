@@ -15,6 +15,7 @@ import { useDemoHelper, useHelperSurface, useAssistantActivity } from './useDemo
 import { CONVERSION_OFFER } from '../../lib/demo-conversion/config';
 import { trackDemo } from '../../lib/demo-conversion/metrics';
 import { updateConversion } from '../../lib/demo-conversion/store';
+import { useConversion } from '../demo-conversion/useConversion';
 import './helper.css';
 const noSubscribe = () => () => {};
 const clientSnapshot = () => true;
@@ -33,6 +34,7 @@ function T3Mark() {
 export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
   const mounted = useSyncExternalStore(noSubscribe, clientSnapshot, serverSnapshot);
   const s = useDemoHelper();
+  const conversion = useConversion();
   const welcome = s.view === 'welcome';
   const [welcomeMoved, setWelcomeMoved] = useState(false);
   const surface = useHelperSurface();
@@ -196,6 +198,19 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
     e.preventDefault(); if (welcome) setWelcomeMoved(true); const [x, y] = deltas[e.key];
     setPosition(clampPosition({ x: rect.x + x, y: rect.y + y }, { width, height }, rect));
   }
+  function startQuickPath(mode: 'full' | 'instant') {
+    setManual(false);
+    sendHelperCommand('assistant-close');
+    if (!s.started) updateHelper({ type: 'prepare' });
+    sendHelperCommand(mode === 'full' ? 'quick-full' : 'quick-instant');
+    if (path !== QUICK_HOME) router.push(QUICK_HOME);
+  }
+  function openBusinessValue() {
+    setManual(false); setTaskMenu(false);
+    if (s.view === 'benefit') updateHelper({ type: 'next' });
+    else if (s.view !== 'finish') updateHelper({ type: 'finish' });
+    updateConversion({ type: 'show-closing', reason: 'complete' });
+  }
   function tryTask() {
     setManual(false);
     if (!s.started) updateHelper({ type: 'prepare' });
@@ -204,7 +219,7 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
       sendHelperCommand(guidance.command ?? 'assistant-open');
     } else if (s.current === 'quick-price') {
       sendHelperCommand('assistant-close');
-      sendHelperCommand(guidance.command ?? 'quick-example');
+      sendHelperCommand(guidance.command ?? 'quick-full');
       if (path !== QUICK_HOME) router.push(QUICK_HOME);
     } else if (isAdminPath(path)) recordHelperSignal('admin-open');
     else router.push(ADMIN_HOME);
@@ -273,6 +288,11 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
           <div className={`dh-instruction ${guidance.waiting ? 'dh-is-waiting' : ''}`} role="status"><span className="dh-action-number" aria-hidden="true">{guidance.waiting ? '…' : '→'}</span><p>{instruction}</p></div>
           {!s.started && isAssistantTask(s.current) && <p className="dh-example-summary">{s.current === 'answers' ? 'Example: “Do you handle insurance work?”' : 'Example: 120 m² gable roof · concrete tiles · 25° pitch.'}</p>}
           {!s.started && task.note && <p className="dh-pricing-note">{task.note}</p>}
+          {s.current === 'quick-price' && !s.started && <div className="dh-quick-paths" aria-label="Choose Quick Roof Estimate demo route">
+            <button type="button" className="dh-path-choice" onClick={() => startQuickPath('full')}><span><b>Full flow</b><small>Follow the real customer steps</small></span><em>20 sec →</em></button>
+            <button type="button" className="dh-path-choice" onClick={() => startQuickPath('instant')}><span><b>Quick flow</b><small>Pre-filled demo roof, straight to the result</small></span><em>Instant →</em></button>
+            <p className="dh-small dh-quick-demo-note">Quick flow is only a demo shortcut to save time. Both routes use the same estimator and both count.</p>
+          </div>}
           {guidance.button && !adminAtDestination && <button type="button" className="dh-primary" onClick={tryTask}>{guidance.button} <Arrow /></button>}
           {s.current === 'admin' && <Link href={APEX_HOME} className="dh-secondary" onClick={() => updateHelper({ type: 'return-from-admin' })}>← Return to Apex Roofing</Link>}
           {!s.started && isAssistantTask(s.current) && <p className="dh-small dh-centre">An example, not a script. You choose what to send.</p>}
@@ -300,12 +320,15 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
           <div className="dh-success-icon"><Check /></div><p className="dh-eyebrow">WHAT THIS COULD MEAN</p>
           <h2>{task.outcome}</h2><p>{task.benefit}</p><p className="dh-question dh-reflection">{task.reflection}</p>
           {s.current === 'quick-price' && <div className="dh-advanced"><p className="dh-eyebrow">NEED MORE DETAIL?</p>{ADVANCED_TOOLS.map(tool => <Link key={tool.href} href={tool.href}><b>{tool.title} <Arrow /></b><span>{tool.text}</span></Link>)}<p>{ADVANCED_PRICING_NOTE}</p></div>}
-          <button type="button" className="dh-primary" onClick={() => advanceTask({ type: 'next' })}>{s.current === 'answers' ? 'Next: a price through chat' : s.current === 'assistant-price' ? 'Next: a price without chat' : 'What could this do for my business?'} <Arrow /></button>
-          
+          {s.current === 'quick-price' || s.current === 'admin' ? <>
+            <button type="button" className="dh-primary" onClick={openBusinessValue}>What could this mean for my business? <Arrow /></button>
+            {s.current === 'quick-price' && <button type="button" className="dh-secondary dh-secondary-strong" onClick={openAdminDashboard}>Explore the business dashboard <span>optional ↗</span></button>}
+          </> : <button type="button" className="dh-primary" onClick={() => advanceTask({ type: 'next' })}>{s.current === 'answers' ? 'Next: a price through chat' : 'Next: a price without chat'} <Arrow /></button>}
         </>}
         {s.view === 'finish' && <>
           <p className="dh-eyebrow">KEEP EXPLORING</p><h2>Try it your way.</h2>
           <p>Ask your own questions, run another estimate, or explore the business dashboard.</p>
+          {!conversion.closerSeen && <button type="button" className="dh-primary" onClick={openBusinessValue}>What could this mean for my business? <Arrow /></button>}
           <button type="button" className="dh-secondary dh-secondary-strong" onClick={openAdminDashboard}>Explore the business dashboard <span>optional ↗</span></button>
           <details className="dh-finish-details"><summary>More estimating options</summary>{ADVANCED_TOOLS.map(tool => <p key={tool.href}><Link href={tool.href}>{tool.title} →</Link><br />{tool.text}</p>)}<p>{ADVANCED_PRICING_NOTE}</p></details>
           <div className="dh-task-footer"><Link href={APEX_HOME} className="dh-text">Explore Apex</Link><a href={CONVERSION_OFFER.contactUrl} target="_blank" rel="noopener noreferrer" className="dh-text" onClick={() => { trackDemo('contact_clicked'); updateConversion({ type: 'contact' }); }}>Talk to T3 Labs ↗</a><button type="button" className="dh-text" onClick={() => { if (window.confirm('Restart the helper? Your estimates and enquiries will not be changed.')) updateHelper({ type: 'restart' }); }}>Restart guide</button></div>

@@ -1,14 +1,15 @@
 'use client';
 
 import { createPortal } from 'react-dom';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useDemoHelper, useHelperSurface } from '../demo-helper/useDemoHelper';
 import { useConversion } from './useConversion';
-import { CORE_TASKS } from '../../lib/demo-helper/config';
+import { CORE_TASKS, isAdminPath } from '../../lib/demo-helper/config';
 import { getHelper, updateHelper, revealHelper } from '../../lib/demo-helper/store';
 import { holdMobileStart } from '../../lib/demo-helper/mobile-notice';
 import { MobileNotice } from '../demo-helper/MobileNotice';
-import { CONVERSION_OFFER, INTRO_COPY, TOUR_REMINDER_COPY, CLOSING_COPY, EXPLORE_DELAY_MS, EARNED_INTERACTIONS_REQUIRED } from '../../lib/demo-conversion/config';
+import { CONVERSION_OFFER, INTRO_COPY, TOUR_REMINDER_COPY, DASHBOARD_INTRO_COPY, CLOSING_COPY, EXPLORE_DELAY_MS, EARNED_INTERACTIONS_REQUIRED } from '../../lib/demo-conversion/config';
 import { getConversion, updateConversion } from '../../lib/demo-conversion/store';
 import type { MeaningfulInteraction } from '../../lib/demo-conversion/state';
 import { trackDemo } from '../../lib/demo-conversion/metrics';
@@ -25,6 +26,7 @@ export function DemoConversion() {
   const c = useConversion();
   const h = useDemoHelper();
   const surface = useHelperSurface();
+  const path = usePathname();
   const dialog = useRef<HTMLDialogElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const [mobileHold, setMobileHold] = useState<'intro' | 'reminder' | null>(null);
@@ -51,13 +53,15 @@ export function DemoConversion() {
   const earnedClose = earnedCount >= EARNED_INTERACTIONS_REQUIRED;
   const coreVerified = CORE_TASKS.every(task => h.status[task] === 'observed');
 
-  // Completing all three verified core examples earns the value invitation immediately.
-  // Finishing or skipping the tour after only two examples is still enough to qualify,
-  // but the four-minute rule below keeps that partial journey from turning into a hard sell.
+  // The completed guided tour does not auto-open the sales invitation. The visitor
+  // explicitly asks for the business meaning from the helper. Partial/self-guided
+  // journeys can still earn the timed invitation below after enough real interaction.
+
   useEffect(() => {
-    if (!c.ready || c.closerSeen || !earnedClose || !coreVerified) return;
-    if (h.view === 'finish') updateConversion({ type: 'queue', reason: 'complete' });
-  }, [c.ready, c.closerSeen, earnedClose, h.view, coreVerified]);
+    if (!c.ready || c.modal || c.dashboardIntroSeen || !isAdminPath(path)) return;
+    if (new URLSearchParams(window.location.search).get('demo') !== 'helper') return;
+    updateConversion({ type: 'show-dashboard-intro' });
+  }, [c.ready, c.modal, c.dashboardIntroSeen, path]);
 
   // Visitors who chose self-guided exploration get one helpful tour reminder at
   // four minutes. Time alone never unlocks the sales invitation.
@@ -88,7 +92,7 @@ export function DemoConversion() {
   // Self-guided visitors must see the tour reminder first and then keep engaging,
   // which prevents a reminder and a sales modal appearing back-to-back.
   useEffect(() => {
-    if (!c.ready || c.closerSeen || c.modal || c.pending || !earnedClose || c.startedAt == null) return;
+    if (!c.ready || c.closerSeen || c.modal || c.pending || !earnedClose || coreVerified || c.startedAt == null) return;
     const elapsed = Date.now() >= c.startedAt + EXPLORE_DELAY_MS;
     if (!elapsed) {
       const timer = window.setTimeout(() => setDwellTick(value => value + 1), Math.max(0, c.startedAt + EXPLORE_DELAY_MS - Date.now()));
@@ -187,6 +191,8 @@ export function DemoConversion() {
     else if (c.modal === 'tour-reminder') {
       trackDemo('tour_reminder_dismissed');
       updateConversion({ type: 'dismiss-tour-reminder' });
+    } else if (c.modal === 'dashboard-intro') {
+      updateConversion({ type: 'dismiss-dashboard-intro' });
     } else {
       trackDemo('closing_dismissed', { reason: c.reason ?? undefined });
       updateConversion({ type: 'dismiss-closing' });
@@ -201,7 +207,8 @@ export function DemoConversion() {
   if (!c.ready) return null;
   const intro = c.modal === 'intro';
   const reminder = c.modal === 'tour-reminder';
-  const closeLabel = intro ? 'Close introduction' : reminder ? 'Close tour reminder' : 'Close invitation';
+  const dashboardIntro = c.modal === 'dashboard-intro';
+  const closeLabel = intro ? 'Close introduction' : reminder ? 'Close tour reminder' : dashboardIntro ? 'Close dashboard introduction' : 'Close invitation';
 
   return <>
     {mobileHold && <MobileNotice
@@ -218,7 +225,7 @@ export function DemoConversion() {
         else updateHelper({ type: 'collapse', value: true });
         requestAnimationFrame(() => (document.querySelector('.dh-launcher') as HTMLElement | null)?.focus({ preventScroll: true }));
       }} />}
-    {c.modal && createPortal(<dialog ref={dialog} className={`t3-cv-dialog ${intro ? 't3-cv-intro' : reminder ? 't3-cv-reminder' : 't3-cv-closing'}`} aria-modal="true" aria-labelledby="t3-conversion-title" aria-describedby="t3-conversion-description" onKeyDown={containTab} onCancel={event => { event.preventDefault(); dismiss(); }}>
+    {c.modal && createPortal(<dialog ref={dialog} className={`t3-cv-dialog ${intro ? 't3-cv-intro' : reminder ? 't3-cv-reminder' : dashboardIntro ? 't3-cv-dashboard' : 't3-cv-closing'}`} aria-modal="true" aria-labelledby="t3-conversion-title" aria-describedby="t3-conversion-description" onKeyDown={containTab} onCancel={event => { event.preventDefault(); dismiss(); }}>
       <div className="t3-cv-head">
         <div className="t3-cv-brand">
           {/* The supplied T3 brand asset is preserved, including its glow. */}
@@ -229,8 +236,8 @@ export function DemoConversion() {
         <button type="button" className="t3-cv-close" aria-label={closeLabel} onClick={dismiss}><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg></button>
       </div>
       <div className="t3-cv-body">
-        <p className="t3-cv-eyebrow">{intro ? INTRO_COPY.eyebrow : reminder ? TOUR_REMINDER_COPY.eyebrow : CLOSING_COPY.eyebrow}</p>
-        <h2 id="t3-conversion-title" ref={title} tabIndex={-1}>{intro ? INTRO_COPY.title : reminder ? TOUR_REMINDER_COPY.title : CLOSING_COPY.title}</h2>
+        <p className="t3-cv-eyebrow">{intro ? INTRO_COPY.eyebrow : reminder ? TOUR_REMINDER_COPY.eyebrow : dashboardIntro ? DASHBOARD_INTRO_COPY.eyebrow : CLOSING_COPY.eyebrow}</p>
+        <h2 id="t3-conversion-title" ref={title} tabIndex={-1}>{intro ? INTRO_COPY.title : reminder ? TOUR_REMINDER_COPY.title : dashboardIntro ? DASHBOARD_INTRO_COPY.title : CLOSING_COPY.title}</h2>
         {intro ? <>
           <p id="t3-conversion-description" className="t3-cv-description">{INTRO_COPY.body}</p>
           <p className="t3-cv-freedom">{INTRO_COPY.freedom}</p>
@@ -242,6 +249,10 @@ export function DemoConversion() {
           <p id="t3-conversion-description" className="t3-cv-description">{TOUR_REMINDER_COPY.body}</p>
           <button type="button" className="t3-cv-primary" onClick={startReminderTour}>{TOUR_REMINDER_COPY.action}<span aria-hidden="true">→</span></button>
           <button type="button" className="t3-cv-text t3-cv-explore" onClick={dismiss}>{TOUR_REMINDER_COPY.secondary}</button>
+        </> : dashboardIntro ? <>
+          <p id="t3-conversion-description" className="t3-cv-description">{DASHBOARD_INTRO_COPY.body}</p>
+          <ul className="t3-cv-benefits">{DASHBOARD_INTRO_COPY.bullets.map(item => <li key={item}>{item}</li>)}</ul>
+          <button type="button" className="t3-cv-primary" onClick={dismiss}>{DASHBOARD_INTRO_COPY.action}<span aria-hidden="true">→</span></button>
         </> : <>
           <p id="t3-conversion-description" className="t3-cv-description">{CLOSING_COPY.question}</p>
           <div className="t3-cv-offer"><p className="t3-cv-offer-question">{CONVERSION_OFFER.priceLabel} <strong>{CONVERSION_OFFER.startingPrice}</strong>?</p></div>

@@ -43,7 +43,7 @@ test('booking clicks suppress later invitations without claiming a booking',()=>
 });
 test('persistence stores only non-sensitive presentation state, never open overlays or arbitrary data',()=>{
  const saved=savedConversion({...closing('explored'),email:'private@example.com',price:6000});
- const parsed=JSON.parse(saved);assert.equal(parsed.version,2);assert.equal(parsed.introSeen,true);assert.equal(parsed.closerSeen,true);assert.deepEqual(parsed.interactions,[]);assert.equal(parsed.email,undefined);assert.equal(parsed.price,undefined);
+ const parsed=JSON.parse(saved);assert.equal(parsed.version,3);assert.equal(parsed.dashboardIntroSeen,false);assert.equal(parsed.introSeen,true);assert.equal(parsed.closerSeen,true);assert.deepEqual(parsed.interactions,[]);assert.equal(parsed.email,undefined);assert.equal(parsed.price,undefined);
  const at=Date.now()-1000;const dwell=savedConversion(explore(at));
  const restored=readConversion(dwell);assert.equal(restored.exploredAt,at);assert.equal(restored.ready,false);assert.equal(restored.modal,null);assert.equal(restored.pending,null);
 });
@@ -76,6 +76,11 @@ test('self-guided dwell shows one tour reminder before any sales close',()=>{
  s=reduce(s,{type:'show-tour-reminder',at:Date.now()});assert.equal(s.modal,'tour-reminder');assert.equal(s.tourReminderSeen,true);assert.equal(s.closerSeen,false);
  const hidden=reduce(s,{type:'dismiss-tour-reminder'});assert.equal(hidden.modal,null);
  assert.equal(reduce(hidden,{type:'show-tour-reminder',at:Date.now()+1000}),hidden);
+});
+test('dashboard introduction is session-scoped and does not spend the sales invitation',()=>{
+ let s=openVisit();s=reduce(s,{type:'show-dashboard-intro'});assert.equal(s.modal,'dashboard-intro');assert.equal(s.dashboardIntroSeen,true);assert.equal(s.closerSeen,false);
+ s=reduce(s,{type:'dismiss-dashboard-intro'});assert.equal(s.modal,null);assert.equal(reduce(s,{type:'show-dashboard-intro'}),s);
+ const restored=readConversion(savedConversion(s));assert.equal(restored.dashboardIntroSeen,true);assert.equal(restored.modal,null);
 });
 test('the dwell origin survives a reload but tampered values do not',()=>{
  const at=Date.now()-1000;

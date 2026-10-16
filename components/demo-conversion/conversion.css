@@ -69,3 +69,7 @@
 .t3-cv-offer .t3-cv-offer-question strong { display:inline; font-size:inherit; line-height:inherit; letter-spacing:normal; margin:0; font-weight:750; color:var(--cv-lime); }
 
 .t3-cv-body .t3-cv-freedom{font-size:14px;line-height:1.6;color:#d4d9e2;margin:0 0 20px;}
+
+/* Optional business-dashboard orientation: concise proof before exploration. */
+.t3-cv-benefits{display:grid;gap:9px;list-style:none;margin:0 0 24px;padding:0}.t3-cv-benefits li{position:relative;padding:10px 12px 10px 34px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:rgba(255,255,255,.035);color:var(--cv-muted);font-size:13px;line-height:1.55}.t3-cv-benefits li::before{content:'✓';position:absolute;left:12px;top:10px;color:var(--cv-lime);font-weight:800}
+@media(max-width:480px){.t3-cv-benefits{gap:7px;margin-bottom:18px}.t3-cv-benefits li{padding:9px 10px 9px 31px;font-size:12px}.t3-cv-benefits li::before{left:10px;top:9px}}

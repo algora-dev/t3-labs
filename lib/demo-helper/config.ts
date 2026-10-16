@@ -17,7 +17,7 @@ export const HELPER_TASKS = [...CORE_TASKS, 'admin'] as const;
 export type HelperTaskId = typeof HELPER_TASKS[number];
 export const HELPER_SIGNALS = ['knowledge-answer', 'knowledge-link', 'assistant-estimate', 'assistant-enquiry-open', 'assistant-enquiry-ready', 'quick-result', 'quick-enquiry-open', 'quick-enquiry-ready', 'admin-open', 'admin-trade-view'] as const;
 export type HelperSignal = typeof HELPER_SIGNALS[number];
-export type HelperCommand = 'question' | 'price-prompt' | 'assistant-open' | 'assistant-enquiry' | 'quick-enquiry' | 'admin-trade' | 'assistant-close' | 'quick-example';
+export type HelperCommand = 'question' | 'price-prompt' | 'assistant-open' | 'assistant-enquiry' | 'quick-enquiry' | 'admin-trade' | 'assistant-close' | 'quick-example' | 'quick-full' | 'quick-instant';
 export interface HelperTask {
   id: HelperTaskId; number: string; label: string; title: string; question: string;
   instruction: string; actionLabel: string; outcome: string; benefit: string; reflection: string;
@@ -48,8 +48,8 @@ export const TASKS: Record<HelperTaskId, HelperTask> = {
   'quick-price': {
     id: 'quick-price', number: '3', label: 'A price without chatting', title: 'No measurements? No problem.',
     question: 'What about customers who don’t want to chat or know their measurements?',
-    instruction: 'We’ll open a pre-filled example so you can jump to the result. Change the covering, calculate the range, or try the full tool.',
-    actionLabel: 'Open the Quick Roof Estimate',
+    instruction: 'Choose the full customer flow, or use an instant pre-filled example to see the result.',
+    actionLabel: 'Choose how to try it',
     note: 'Your products. Your rules. Use exact prices, starting prices or ranges. Even a range gives customers, search and AI useful pricing context.',
     outcome: 'A starting price, without a phone call.',
     benefit: 'A few simple choices give the customer a useful range and give your team better context if they enquire.',

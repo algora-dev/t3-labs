@@ -310,9 +310,6 @@ function Dashboard({ cfg, admin, slug }: { cfg: SupplierConfig; admin: AdminData
 
   return (
     <div className="space-y-4">
-      {slug === 'apex-roofing' && <SectionCard title="What if local contractors used your website to price their own jobs?" desc="Trade pricing, quoting tools and usage can live in one place. The same tools can also support your own team with different pricing and rules.">
-        <p className="text-sm text-slate-600">Give useful tools to repeat customers, then see the products, quotes and activity they create.</p>
-      </SectionCard>}
       <SectionCard title="Overview" desc={`Demonstration snapshot for ${cfg.name}, including sample activity. Save changes to update this browser's detailed estimator. Demo settings expire after 24 hours.`}>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map(s => (

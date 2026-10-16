@@ -39,3 +39,16 @@ export const CLOSING_COPY = {
 // visitors see a tour reminder first, never the sales close just because time passed.
 export const EXPLORE_DELAY_MS = 4 * 60 * 1000;
 export const EARNED_INTERACTIONS_REQUIRED = 2;
+
+export const DASHBOARD_INTRO_COPY = {
+  eyebrow: 'OPTIONAL · BUSINESS DASHBOARD',
+  title: 'What if local contractors used your website to price their own jobs?',
+  body: 'This is the business side behind the customer-facing tools.',
+  bullets: [
+    'Give local contractors quoting tools they can return to, with their own trade pricing and rules.',
+    'Let your own team use the same tools with internal pricing.',
+    'Manage products, customers and pricing from one place.',
+    'Track quotes, activity and usage to see what people actually do.',
+  ],
+  action: 'Explore the dashboard',
+} as const;

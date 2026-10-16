@@ -350,3 +350,9 @@ html[data-t3-guide-short="true"] [data-apex-assistant] textarea { height:44px!im
 /* Conversion-audit microcopy: one visible pricing objection-handler and one reflective question per completed example. */
 .dh-content .dh-pricing-note { margin:10px 0 2px; padding:10px 12px; border:1px solid rgba(215,255,0,.20); border-radius:8px; background:rgba(215,255,0,.055); color:#eef6ce; font-size:12px; line-height:1.55; }
 .dh-content .dh-reflection { margin:16px 0 4px; color:#f4f6fa; }
+
+/* Task 3 route choice: both are first-class paths through the same estimator. */
+.dh-quick-paths{display:grid;gap:8px;margin:14px 0 2px}
+.dh-panel .dh-path-choice{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px;padding:10px 12px;border:1px solid var(--dh-line);border-radius:8px;background:var(--dh-surface);color:var(--dh-text);text-align:left;transition:border-color 160ms ease,background 160ms ease,box-shadow 160ms ease}
+.dh-panel .dh-path-choice:hover{border-color:rgba(215,255,0,.42);background:rgba(215,255,0,.07);box-shadow:0 0 18px rgba(215,255,0,.08)}
+.dh-path-choice>span{display:flex;min-width:0;flex-direction:column;gap:2px}.dh-path-choice b{font-size:13px;line-height:1.35}.dh-path-choice small{font-size:11px;line-height:1.4;color:var(--dh-muted);font-weight:500}.dh-path-choice em{flex-shrink:0;font-size:11px;line-height:1.3;color:var(--dh-lime);font-style:normal;font-weight:700;white-space:nowrap}.dh-content .dh-quick-demo-note{margin:3px 1px 0;font-size:11px;line-height:1.5}

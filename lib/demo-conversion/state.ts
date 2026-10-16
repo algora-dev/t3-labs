@@ -1,7 +1,7 @@
 /** Session-only presentation state, deliberately separate from tool data/progress. */
 export type ClosingReason = 'complete' | 'tour-ended' | 'explored';
 export type MeaningfulInteraction = 'assistant-answer' | 'assistant-price' | 'quick-price' | 'dashboard' | 'detailed' | 'plan';
-export type ConversionModal = 'intro' | 'tour-reminder' | 'closing' | null;
+export type ConversionModal = 'intro' | 'tour-reminder' | 'dashboard-intro' | 'closing' | null;
 
 const INTERACTIONS: readonly MeaningfulInteraction[] = ['assistant-answer', 'assistant-price', 'quick-price', 'dashboard', 'detailed', 'plan'];
 export function isMeaningfulInteraction(value: unknown): value is MeaningfulInteraction {
@@ -9,12 +9,13 @@ export function isMeaningfulInteraction(value: unknown): value is MeaningfulInte
 }
 
 export interface ConversionState {
-  version: 2;
+  version: 3;
   ready: boolean;
   introSeen: boolean;
   closerSeen: boolean;
   tourReminderSeen: boolean;
   tourEngaged: boolean;
+  dashboardIntroSeen: boolean;
   modal: ConversionModal;
   pending: ClosingReason | null;
   reason: ClosingReason | null;
@@ -26,12 +27,13 @@ export interface ConversionState {
 }
 
 export const initialConversion = (): ConversionState => ({
-  version: 2,
+  version: 3,
   ready: false,
   introSeen: false,
   closerSeen: false,
   tourReminderSeen: false,
   tourEngaged: false,
+  dashboardIntroSeen: false,
   modal: null,
   pending: null,
   reason: null,
@@ -54,8 +56,9 @@ export function readConversion(raw: string | null): ConversionState {
     if (v?.version === 1 && typeof v.introSeen === 'boolean' && typeof v.closerSeen === 'boolean') {
       return { ...initial, introSeen: v.introSeen, closerSeen: v.closerSeen, exploredAt: validTime(v.exploredAt) };
     }
-    if (!v || v.version !== 2 || typeof v.introSeen !== 'boolean' || typeof v.closerSeen !== 'boolean'
+    if (!v || ![2, 3].includes(v.version) || typeof v.introSeen !== 'boolean' || typeof v.closerSeen !== 'boolean'
       || typeof v.tourReminderSeen !== 'boolean' || typeof v.tourEngaged !== 'boolean'
+      || (v.version === 3 && typeof v.dashboardIntroSeen !== 'boolean')
       || !Array.isArray(v.interactions) || v.interactions.length > INTERACTIONS.length || !v.interactions.every(isMeaningfulInteraction)) return initial;
     return {
       ...initial,
@@ -63,6 +66,7 @@ export function readConversion(raw: string | null): ConversionState {
       closerSeen: v.closerSeen,
       tourReminderSeen: v.tourReminderSeen,
       tourEngaged: v.tourEngaged,
+      dashboardIntroSeen: v.version === 3 ? v.dashboardIntroSeen : false,
       startedAt: validTime(v.startedAt),
       exploredAt: validTime(v.exploredAt),
       reminderShownAt: validTime(v.reminderShownAt),
@@ -74,11 +78,12 @@ export function readConversion(raw: string | null): ConversionState {
 
 export function savedConversion(s: ConversionState): string {
   return JSON.stringify({
-    version: 2,
+    version: 3,
     introSeen: s.introSeen,
     closerSeen: s.closerSeen,
     tourReminderSeen: s.tourReminderSeen,
     tourEngaged: s.tourEngaged,
+    dashboardIntroSeen: s.dashboardIntroSeen,
     interactions: s.interactions,
     ...(s.startedAt != null ? { startedAt: s.startedAt } : {}),
     ...(s.exploredAt != null ? { exploredAt: s.exploredAt } : {}),
@@ -94,6 +99,8 @@ export type ConversionAction =
   | { type: 'tour-engaged' }
   | { type: 'show-tour-reminder'; at: number }
   | { type: 'dismiss-tour-reminder' }
+  | { type: 'show-dashboard-intro' }
+  | { type: 'dismiss-dashboard-intro' }
   | { type: 'interact'; key: MeaningfulInteraction; at?: number }
   | { type: 'queue'; reason: ClosingReason }
   | { type: 'show-closing'; reason: ClosingReason }
@@ -120,6 +127,8 @@ export function reduceConversion(s: ConversionState, a: ConversionAction): Conve
       return { ...s, modal: 'tour-reminder', tourReminderSeen: true, reminderShownAt: at };
     }
     case 'dismiss-tour-reminder': return s.modal === 'tour-reminder' ? { ...s, modal: null } : s;
+    case 'show-dashboard-intro': return !s.ready || s.modal || s.dashboardIntroSeen ? s : { ...s, modal: 'dashboard-intro', dashboardIntroSeen: true };
+    case 'dismiss-dashboard-intro': return s.modal === 'dashboard-intro' ? { ...s, modal: null } : s;
     case 'interact': {
       if (!isMeaningfulInteraction(a.key)) return s;
       const at = validTime(a.at);

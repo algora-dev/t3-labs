@@ -52,7 +52,7 @@ export function takeHelperCommand(accepted: readonly HelperCommand[]): HelperCom
 }
 export function readHelperCommand(event: Event): HelperCommand | null {
   const command: unknown = (event as CustomEvent).detail;
-  return ['question', 'price-prompt', 'assistant-open', 'assistant-enquiry', 'quick-enquiry', 'admin-trade', 'assistant-close', 'quick-example'].includes(String(command)) ? command as HelperCommand : null;
+  return ['question', 'price-prompt', 'assistant-open', 'assistant-enquiry', 'quick-enquiry', 'admin-trade', 'assistant-close', 'quick-example', 'quick-full', 'quick-instant'].includes(String(command)) ? command as HelperCommand : null;
 }
 export function setHelperSurface(value: BaseSurface, owner = 'legacy') {
   if (value === 'website') delete surfaces[owner]; else surfaces[owner] = value;

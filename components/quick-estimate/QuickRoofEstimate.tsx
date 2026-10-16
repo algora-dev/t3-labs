@@ -101,8 +101,18 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
   }, [result]);
   useEffect(() => {
     const command = () => {
-      const action = takeHelperCommand(['quick-enquiry', 'quick-example']);
+      const action = takeHelperCommand(['quick-enquiry', 'quick-example', 'quick-full', 'quick-instant']);
       if (action === 'quick-enquiry' && result) setEnquiryOpen(true);
+      if (action === 'quick-full') {
+        setShowExample(false); setEnquiryOpen(false); setNotice('');
+        writeDraft(initial);
+        requestAnimationFrame(() => { heading.current?.focus({ preventScroll: true }); heading.current?.scrollIntoView({ block: 'start', behavior: 'auto' }); });
+      }
+      if (action === 'quick-instant') {
+        trackDemo('sample_selected', { task: 'quick-price' });
+        setShowExample(false); setEnquiryOpen(false); setNotice('');
+        writeDraft({ step: 5, answers: { ...sample, covering: 'tile' }, demo: false, example: true });
+      }
       if (action === 'quick-example') {
         if (result?.price.low && result.price.high) recordHelperSignal('quick-result');
         else { setShowExample(true); requestAnimationFrame(() => { exampleHeading.current?.focus({ preventScroll: true }); exampleHeading.current?.scrollIntoView({ block: 'center' }); }); }

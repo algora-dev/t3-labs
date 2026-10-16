@@ -68,14 +68,16 @@ test('activity whitelist discards request contents',()=>{
  assert.equal(nextAssistantActivity(null,activity(prepare('quick-price'),'prepared'),prepare('quick-price')),null);
 });
 test('quick task offers the fast example or full tool and either result completes it',()=>{
- const s=select('quick-price');assert.equal(taskGuidance(s,null,'website',null).command,'quick-example');
+ const s=select('quick-price');const choice=taskGuidance(s,null,'website',null);assert.equal(choice.command,undefined);assert.equal(choice.button,null);
+ const helper=source('components/demo-helper/DemoHelper.tsx');assert.match(helper,/Full flow/);assert.match(helper,/20 sec/);assert.match(helper,/Quick flow/);assert.match(helper,/Instant/);assert.match(helper,/quick-full/);assert.match(helper,/quick-instant/);
  const started=reduceHelper(s,{type:'prepare'});const guidance=taskGuidance(started,null,'website',QUICK_HOME);
- assert.equal(guidance.button,null);assert.match(guidance.text,/fast example or complete the full step-by-step tool/);
+ assert.equal(guidance.button,null);assert.match(guidance.text,/Continue on the current page/);
  const done=signal(started,'quick-result');assert.equal(done.view,'benefit');assert.equal(done.status['quick-price'],'observed');
 });
 test('closing is earned by interaction while self-guided dwell triggers only the tour reminder',()=>{
  const s=source('components/demo-conversion/DemoConversion.tsx');
- assert.match(s,/if \(h.view === 'finish'\) updateConversion/);
+ assert.doesNotMatch(s,/if \(h.view === 'finish'\) updateConversion/);
+ assert.match(source('components/demo-helper/DemoHelper.tsx'),/show-closing.*reason: 'complete'/s);
  assert.doesNotMatch(s,/finalExperience|1200/);
  assert.match(s,/EXPLORE_DELAY_MS/);
  assert.match(s,/surface.includes\('enquiry'\)/);

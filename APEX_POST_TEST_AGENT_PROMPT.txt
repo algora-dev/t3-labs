@@ -1,0 +1,34 @@
+Integrate the attached Apex post-test UX refinement package into the latest live Apex demo branch and deploy it to the test environment after verification.
+
+Treat the supplied full codebase as the reference implementation, but MERGE the intent into the latest live branch. Do not blindly overwrite newer live changes.
+
+Read APEX_POST_TEST_UX_HANDOFF.md first.
+
+The requested scope is intentionally narrow:
+1. Task 3 must show two obvious T3 helper choices on the Quick Roof Estimate page: "Full flow" with "20 sec", and "Quick flow" with "Instant". Full flow resets to and uses the real step-by-step estimator. Quick flow is explicitly a demo shortcut and goes directly to the real pre-filled result. Both valid results complete Task 3. No enquiry is required.
+2. Completing all three guided tasks must NOT automatically fire the final value/$999 modal. The helper button "What could this mean for my business?" must explicitly open that modal. Keep the existing four-minute earned-close behaviour for partial/self-guided journeys with the existing meaningful-interaction safeguards.
+3. Entering the Apex Business Dashboard through `?demo=helper` must show a one-time T3-themed intro modal explaining trade-contractor use, internal team use, product/customer/pricing control, and quote/activity/usage tracking. It must be dismissible, session-scoped, and independent from the final sales modal.
+
+Do not redesign the experience or add features. Preserve the three core tasks, pricing engines, Smart Assistant behaviour, pricing/range messaging, intro, closing copy, $999 wording and booking URL.
+
+Before deployment run:
+- npm ci
+- npm test
+- npm run typecheck
+- npm run lint
+- npm run build
+
+Then browser-test every scenario in APEX_POST_TEST_UX_HANDOFF.md on desktop and mobile. Fix real integration defects rather than bypassing signals or forcing completion.
+
+Important expected behaviour:
+- Full flow and Quick flow are both first-class Task 3 choices.
+- Quick flow is visibly described as a demo shortcut.
+- Full flow leaves the guide compact and instructs the visitor to continue on the current page.
+- A valid Quick Roof Estimate result is the only core completion requirement for Task 3.
+- The fully completed tour waits for the user's "What could this mean for my business?" click before opening the sales modal.
+- The optional dashboard remains available before or after the value modal.
+- The dashboard intro appears once per tab/session only on the guided Apex admin entry.
+- Returning from admin preserves helper progress.
+- No deployment should change estimator maths or fabricate prices.
+
+Report back with: files merged, conflicts/resolutions, test/typecheck/lint/build results, desktop/mobile smoke-test results, deployment URL, and any remaining issue. Do not claim a flow works unless you actually exercised it in the deployed/browser environment.

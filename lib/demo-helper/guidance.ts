@@ -24,8 +24,8 @@ export function taskGuidance(s: HelperState, activity: AssistantActivity | null,
     return { text: 'Ask about Apex’s services, products or prices. Press Send when you’re ready.', button: open ? null : 'Open assistant', command: 'assistant-open' };
   }
   if (s.current === 'quick-price') {
-    if (!s.started) return { text: task.instruction, button: task.actionLabel, command: 'quick-example' };
-    return { text: 'Use the fast example or complete the full step-by-step tool. Either estimate result completes this example.', button: path === QUICK_HOME ? null : task.actionLabel, command: 'quick-example' };
+    if (!s.started) return { text: task.instruction, button: null };
+    return { text: 'Continue on the current page. Follow the steps to get your result. Either route completes this example.', button: path === QUICK_HOME ? null : 'Return to the Quick Roof Estimate', command: 'quick-full' };
   }
   if (isAdminPath(path)) return { text: 'Explore any section. Products, trade pricing, customers, activity and quoting controls are all part of the same business dashboard.', button: null };
   return { text: task.instruction, button: task.actionLabel, command: 'admin-trade' };
