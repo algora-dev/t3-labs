@@ -1,0 +1,49 @@
+Implement the Apex Smart Assistant fresh-tab session isolation fix from this package into the latest live T3 Labs branch.
+
+Primary objective:
+Prevent a new Apex demo visit from inheriting Smart Assistant messages, estimates, facts, outputs or enquiry context from a previous demo visit, while preserving conversation state during normal navigation/reloads inside the same tab.
+
+Use `APEX_ASSISTANT_SESSION_ISOLATION_HANDOFF.md` as the acceptance spec.
+
+Important implementation intent already present in this package:
+- Per-tab assistant identity is stored in sessionStorage under `apex.smart-assistant.tab-session.v1`.
+- Stateful requests send `x-apex-assistant-session`.
+- Server session lookups use the validated per-tab scope before the old browser-wide cookie.
+- The old cookie behavior remains as a compatibility fallback.
+- Start New Conversation replaces all scoped server state with an empty session.
+- Guided Task 2 prompt preparation only fills the composer and must never auto-submit.
+
+Merge rules:
+1. Merge these files into the newest live branch. Do not blindly overwrite newer unrelated changes.
+2. Preserve all current conversion-audit and post-test UX work, including Full flow vs Quick flow, dashboard intro, helper completion rules and final-modal behavior.
+3. Do not redesign the assistant or estimator.
+4. Do not change pricing calculations or catalogue data.
+5. Preserve UTF-8 and the repository-wide no-em-dash rule.
+
+Required verification before deployment:
+- npm ci
+- npm test
+- npm run typecheck
+- npm run lint
+- npm run build
+
+Then deploy to staging/test and run the exact A-E browser regression scenarios in `APEX_ASSISTANT_SESSION_ISOLATION_HANDOFF.md`.
+
+Pay special attention to:
+- New tab after an old estimate: insurance answer must not resurrect the old estimate.
+- Pricing example is pre-filled only. It does nothing until Send is explicitly clicked.
+- Same-tab navigation/reloads preserve the current assistant session.
+- Start New Conversation clears hidden server context.
+- PDF/output lookup remains session-owned.
+- Enquiry prefill reads only the current tab's session.
+- Two simultaneously open demo tabs do not share project facts or estimates.
+
+If current live code conflicts with this package, preserve newer compatible behavior and merge the session-isolation intent. Fix integration defects rather than weakening isolation or making guided prompts auto-submit.
+
+Report back with:
+- files merged/changed
+- conflicts and how they were resolved
+- test/typecheck/lint/build results
+- staging URL
+- results of regression scenarios A-E
+- any remaining issue that prevents calling the fresh-tab leak fixed
