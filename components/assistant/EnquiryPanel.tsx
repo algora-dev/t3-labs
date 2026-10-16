@@ -24,6 +24,12 @@ interface SessionPrefill {
   latestEstimates?: Estimate[];
   draftSummary: string[];
   recentUserMessages: string[];
+  handoff?: {
+    summary: string;
+    category: 'general' | 'product_advice' | 'quotes_surveys' | 'accounts_billing' | 'emergency';
+    createdAt: string;
+    sourceUserMessages: string[];
+  } | null;
 }
 
 interface PendingAttachment {
@@ -76,6 +82,8 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
   const [phone, setPhone] = useState('');
   const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
   const [draftSummary, setDraftSummary] = useState<string[]>([]);
+  const [contextSummary, setContextSummary] = useState('');
+  const [contextMessages, setContextMessages] = useState<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -97,7 +105,13 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
         setLocation(data.facts.location ?? '');
         setEstimateScope(data.facts.estimateScope ?? '');
         setExtras(data.facts.extras.join(', '));
-        setNotes('');
+        const recent = Array.isArray(data.recentUserMessages) ? data.recentUserMessages.filter(Boolean).slice(-4) : [];
+        const handoffMessages = data.handoff?.sourceUserMessages?.filter(Boolean) ?? [];
+        const carriedMessages = [...new Set([...handoffMessages, ...recent])].slice(-4);
+        const carriedSummary = data.handoff?.summary?.trim() || (!data.latestEstimate ? carriedMessages.at(-1) ?? '' : '');
+        setContextSummary(carriedSummary);
+        setContextMessages(carriedMessages);
+        setNotes(carriedSummary);
         setName(data.lead.name ?? '');
         setEmail(data.lead.email ?? '');
         setPhone(data.lead.phone ?? '');
@@ -153,6 +167,24 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
     ? `${money(attachedEstimates[0].total)} to ${money(attachedEstimates[attachedEstimates.length - 1].total)}`
     : attachedEstimates.length ? money(attachedEstimates[0].total) : '';
 
+  const hasProjectDetails = !!prefill && !!(
+    prefill.latestEstimate
+    || prefill.facts.projectType
+    || prefill.facts.roofArea
+    || prefill.facts.roofShape
+    || prefill.facts.pitchDegrees != null
+    || prefill.facts.material
+    || prefill.facts.location
+    || prefill.facts.estimateScope
+    || prefill.facts.components.length
+    || prefill.facts.extras.length
+  );
+  const roofSummary = [
+    roofArea ? `${roofArea} m²` : '',
+    roofShape ? roofShape.replace(/_/g, ' ') : '',
+    pitch ? `${pitch}°` : '',
+  ].filter(Boolean).join(' · ');
+
   if (phase === 'loading') {
     return (
       <div className="flex h-full items-center justify-center px-6">
@@ -168,20 +200,23 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
     return <div className="flex h-full flex-col overflow-y-auto px-5 py-6" role="status">
       <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-xl text-emerald-700" aria-hidden="true">✓</div>
       <h2 className="text-xl font-bold text-slate-900">Here’s what Apex would receive.</h2>
-      <p className="mt-2 text-sm leading-relaxed text-slate-600">A customer enquiry with the roof details and estimate already attached. <strong>No email was sent.</strong></p>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        The request and useful conversation details are already attached{estimateLabel ? ', including the indicative estimate' : ''}. <strong>This is a demo, so no email was sent.</strong> On a live site this would go straight to the business team.
+      </p>
       <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4">
         <Row label="Customer" value={name} />
         <Row label="Contact" value={[email, phone].filter(Boolean).join(' · ')} />
-        <Row label="Project" value={projectType.replace(/_/g, ' ')} />
-        {roofArea && <Row label="Roof" value={`${roofArea} m² · ${roofShape} · ${pitch}°`} />}
+        {contextSummary && <Row label="Enquiry" value={notes || contextSummary} />}
+        {hasProjectDetails && <Row label="Project" value={(projectType || 'Roofing enquiry').replace(/_/g, ' ')} />}
+        {roofSummary && <Row label="Roof" value={roofSummary} />}
         {material && <Row label="Covering" value={material} />}
         {location && <Row label="Location" value={location} />}
         {estimateLabel && <Row label="Indicative estimate" value={`${estimateLabel} excl. VAT`} />}
-        {notes && <Row label="Your note" value={notes} />}
+        {!contextSummary && notes && <Row label="Enquiry note" value={notes} />}
         {attachments.length > 0 && <Row label="Selected files" value={attachments.map(f => f.name).join(', ')} />}
       </div>
-      <p className="mt-3 text-xs leading-relaxed text-slate-500">The full calculated scope and assumptions are attached behind this summary. Prices remain indicative and subject to a proper assessment. Selected files are represented by their names only.</p>
-      <p className="mt-2 text-xs leading-relaxed text-slate-500">These form details stay in memory on this page. They are not uploaded or saved. The assistant conversation uses its existing session.</p>
+      {estimateLabel && <p className="mt-3 text-xs leading-relaxed text-slate-500">The full calculated scope and assumptions sit behind this summary. Prices remain indicative and subject to a proper assessment.</p>}
+      <p className="mt-2 text-xs leading-relaxed text-slate-500">Selected files are represented by their names only. These form details stay in memory on this page and are not uploaded or saved.</p>
       <button type="button" onClick={onClose} className="mt-5 min-h-11 rounded-xl px-5 py-3 text-sm font-semibold text-white" style={{ backgroundColor: accentColor }}>Back to assistant</button>
     </div>;
   }
@@ -195,20 +230,37 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-base font-bold text-slate-900">Here is what I know so far</p>
-              <p className="mt-1 text-xs text-slate-500">I have carried these details across from our conversation.</p>
+              <p className="mt-1 text-xs text-slate-500">I have carried across what you already told me, so you do not need to type it again.</p>
             </div>
             <button onClick={onClose} className="text-xs font-semibold text-slate-500 hover:text-slate-800">Back to chat</button>
           </div>
 
-          <div className="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
-            <Row label="Project" value={projectType || 'Roofing enquiry'} />
-            <Row label="Area" value={roofArea ? `Approx. ${roofArea} m²` : 'Not specified'} />
-            <Row label="Roof type" value={roofShape ? roofShape.replace(/_/g, ' ') : 'Not specified'} />
-            <Row label="Pitch" value={pitch ? `Approx. ${pitch}°` : 'Not specified'} />
-            <Row label="Material" value={material || 'Not specified'} />
-            <Row label="Estimate scope" value={scopeLabel(estimateScope || null)} />
-            {location && <Row label="Location" value={location} />}
-          </div>
+          {contextSummary && (
+            <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50/60 px-4 py-3 shadow-sm">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-blue-700">Enquiry carried from chat</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-700">{contextSummary}</p>
+              {contextMessages.length > 1 && (
+                <details className="mt-2">
+                  <summary className="cursor-pointer text-[11px] font-semibold text-slate-500">View conversation details being carried across</summary>
+                  <ul className="mt-2 space-y-1">
+                    {contextMessages.map((message, index) => <li key={`${message}-${index}`} className="text-[11px] leading-relaxed text-slate-500">- {message}</li>)}
+                  </ul>
+                </details>
+              )}
+            </div>
+          )}
+
+          {hasProjectDetails && (
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
+              <Row label="Project" value={projectType || 'Roofing enquiry'} />
+              <Row label="Area" value={roofArea ? `Approx. ${roofArea} m²` : 'Not specified'} />
+              <Row label="Roof type" value={roofShape ? roofShape.replace(/_/g, ' ') : 'Not specified'} />
+              <Row label="Pitch" value={pitch ? `Approx. ${pitch}°` : 'Not specified'} />
+              <Row label="Material" value={material || 'Not specified'} />
+              <Row label="Estimate scope" value={scopeLabel(estimateScope || null)} />
+              {location && <Row label="Location" value={location} />}
+            </div>
+          )}
 
           {draftSummary.length > 0 && (
             <div className="mt-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
@@ -338,7 +390,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
           <div>
             <p className="text-base font-bold text-slate-900">How should the team contact you?</p>
             <button type="button" className="mt-2 min-h-9 text-xs font-semibold text-blue-700" onClick={() => { setName('Sam Taylor'); setEmail('homeowner@example.com'); setPhone(''); }}>Use example contact details</button>
-            <p className="mt-1 text-xs text-slate-500">Your project details are already attached. I just need a way to reach you.</p>
+            <p className="mt-1 text-xs text-slate-500">Your request and known details are already attached. I just need a way to reach you.</p>
           </div>
           <button onClick={() => setPhase('review')} className="text-xs font-semibold text-slate-500 hover:text-slate-800">Review</button>
         </div>
@@ -359,8 +411,8 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
             </div>
           </div>
           <div className="mt-3">
-            <label className={labelCls}>Anything else? (optional)</label>
-            <textarea className={`${inputCls} min-h-[72px] resize-none`} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add any note for the team" />
+            <label className={labelCls}>Enquiry summary</label>
+            <textarea className={`${inputCls} min-h-[88px] resize-none`} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="The assistant will carry across the request it already understands." />
           </div>
         </div>
 
@@ -386,7 +438,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
           </div>
         )}
         {error && <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">{error}</div>}
-        <p className="mt-3 text-[10px] leading-relaxed text-slate-400">Demo preview only. Use example details. No email is sent and your form details or files are not uploaded or saved.</p>
+        <p className="mt-3 text-[10px] leading-relaxed text-slate-400">Demo preview only. No email is sent. On a live site this enquiry would be delivered to the business or its CRM workflow.</p>
       </div>
 
       <div className="border-t border-slate-200 bg-white p-3">
@@ -396,7 +448,7 @@ export function EnquiryPanel({ onClose, accentColor }: { onClose: () => void; ac
           className="w-full rounded-full px-4 py-3 text-xs font-semibold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
           style={{ backgroundColor: accentColor }}
         >
-          {phase === 'submitting' ? 'Preparing enquiry...' : 'Preview my enquiry'}
+          {phase === 'submitting' ? 'Preparing enquiry...' : 'Preview what Apex receives'}
         </button>
       </div>
     </div>

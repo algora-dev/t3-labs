@@ -28,6 +28,7 @@ export async function GET() {
       draftSummary: [],
       currentPagePath: null,
       recentUserMessages: [],
+      handoff: null,
       inquiryCount: 0,
     });
   }
@@ -35,7 +36,7 @@ export async function GET() {
   const estimateId = session.estimateFlow.latestEstimateId;
   const estimate = estimateId ? session.estimates[estimateId] ?? null : null;
   const recentUserMessages = session.messages
-    .filter((m) => m.role === 'user')
+    .filter((m) => m.role === 'user' && !m.content.startsWith('['))
     .slice(-5)
     .map((m) => m.content);
 
@@ -48,6 +49,7 @@ export async function GET() {
     draftSummary: session.draft ? draftSummaryLines(session.draft) : [],
     currentPagePath: session.currentPagePath,
     recentUserMessages,
+    handoff: session.handoff,
     inquiryCount: session.inquiries.length,
   });
 }

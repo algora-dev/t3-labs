@@ -69,7 +69,7 @@ html=html.slice(0,assetStart+13)+JSON.stringify(assets)+html.slice(assetEnd);
 html=html.replace("const routeSubs=new Set();let loc={path:'/demo/roofing-site',search:''};", "const routeSubs=new Set();const readRoute=()=>{const hash=window.location.hash.slice(1);const v=hash.startsWith('/')?hash:'/demo/roofing-site';const [pathname,search='']=v.split('?');return {path:pathname.split('#')[0],search};};let loc=readRoute();window.addEventListener('popstate',()=>{loc=readRoute();routeSubs.forEach(f=>f());window.scrollTo(0,0);});");
 html=html.replace("loc={path:pathname.split('#')[0],search:query};routeSubs", "loc={path:pathname.split('#')[0],search:query};try{window.history.pushState({},'', '#'+href)}catch{}routeSubs");
 html=html.replace("back:()=>navigate('/demo/roofing-site')", "back:()=>window.history.back()");
-html=html.replace(/<title>[^<]*<\/title>/,'<title>Apex Roofing — verified review preview</title>');
+html=html.replace(/<title>[^<]*<\/title>/,'<title>Apex Roofing - verified review preview</title>');
 fs.writeFileSync(out,html);
 fs.writeFileSync(out+'.build.json',JSON.stringify({compiledModules:compiled,diagnostics,fixtures,sourceRoot:root,cssIds},null,2));
 console.log(JSON.stringify({compiled,fixtures,bytes:html.length,cssIds}));

@@ -36,6 +36,15 @@ export interface EstimateFlow {
   latestEstimateIds?: string[];
 }
 
+export type HandoffCategory = 'general' | 'product_advice' | 'quotes_surveys' | 'accounts_billing' | 'emergency';
+
+export interface HandoffDraft {
+  summary: string;
+  category: HandoffCategory;
+  createdAt: string;
+  sourceUserMessages: string[];
+}
+
 export interface SessionLead {
   name: string | null;
   email: string | null;
@@ -73,6 +82,12 @@ export interface AssistantSession {
   inquiries: InquiryRecord[];
   draft: EstimateDraft | null;
   currentPagePath: string | null;
+  /**
+   * Non-estimate ambiguity guard. When true, the previous assistant turn already
+   * asked the one allowed general clarification for the current request.
+   */
+  generalClarificationPending: boolean;
+  handoff: HandoffDraft | null;
   turnCount: number;
   messageTimestamps: number[];
 }
@@ -131,6 +146,8 @@ function newSession(sessionId: string): AssistantSession {
     inquiries: [],
     draft: null,
     currentPagePath: null,
+    generalClarificationPending: false,
+    handoff: null,
     turnCount: 0,
     messageTimestamps: [],
   };
@@ -146,6 +163,8 @@ function normaliseSession(session: AssistantSession): AssistantSession {
   session.inquiries ??= [];
   session.draft ??= null;
   session.currentPagePath ??= null;
+  session.generalClarificationPending ??= false;
+  session.handoff ??= null;
   session.messageTimestamps ??= [];
   return session;
 }

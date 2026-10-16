@@ -347,3 +347,6 @@ html[data-t3-guide-short="true"] [data-apex-assistant] textarea { height:44px!im
   [data-apex-assistant] button[aria-label="Start voice input"],
   [data-apex-assistant] button[aria-label="Stop voice input"] { min-width:44px; min-height:44px; }
 }
+/* Conversion-audit microcopy: one visible pricing objection-handler and one reflective question per completed example. */
+.dh-content .dh-pricing-note { margin:10px 0 2px; padding:10px 12px; border:1px solid rgba(215,255,0,.20); border-radius:8px; background:rgba(215,255,0,.055); color:#eef6ce; font-size:12px; line-height:1.55; }
+.dh-content .dh-reflection { margin:16px 0 4px; color:#f4f6fa; }

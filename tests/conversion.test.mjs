@@ -4,7 +4,7 @@ import { register } from 'node:module';
 import fs from 'node:fs';
 register(new URL('./conversion-resolve.mjs', import.meta.url));
 const { initialConversion, readConversion, reduceConversion: reduce, savedConversion } = await import('../lib/demo-conversion/state.ts');
-const { INTRO_COPY, CLOSING_COPY, CONVERSION_OFFER, EXPLORE_DELAY_MS } = await import('../lib/demo-conversion/config.ts');
+const { INTRO_COPY, TOUR_REMINDER_COPY, CLOSING_COPY, CONVERSION_OFFER, EXPLORE_DELAY_MS, EARNED_INTERACTIONS_REQUIRED } = await import('../lib/demo-conversion/config.ts');
 const { metricPayload } = await import('../lib/demo-conversion/metrics.ts');
 const { initialHelper, reduceHelper, readHelper } = await import('../lib/demo-helper/state.ts');
 const { TASKS, CORE_TASKS, HELPER_PRICE_PROMPT, ADVANCED_TOOLS, ADVANCED_PRICING_NOTE } = await import('../lib/demo-helper/config.ts');
@@ -12,7 +12,7 @@ const { measureRoof } = await import('../lib/quick-estimate/engine.ts');
 const { SIZE_BANDS, PITCH_BANDS } = await import('../lib/quick-estimate/config.ts');
 const { PITCHED_SHAPES } = await import('../lib/quick-estimate/templates.ts');
 const src = path => fs.readFileSync(new URL('../'+path,import.meta.url),'utf8');
-const fresh = () => reduce(initialConversion(), {type:'initialise',resume:false});
+const fresh = () => reduce(initialConversion(), {type:'initialise',resume:false,at:1700000000000});
 const openVisit = () => reduce(fresh(),{type:'dismiss-intro'});
 const explore = at => reduce(openVisit(),{type:'explore',at});
 const closing = reason => reduce(openVisit(),{type:'show-closing',reason});
@@ -41,11 +41,10 @@ test('booking clicks suppress later invitations without claiming a booking',()=>
  const s=reduce(openVisit(),{type:'contact'});assert.equal(s.closerSeen,true);assert.equal(s.modal,null);assert.equal(s.pending,null);
  assert.equal(reduce(s,{type:'show-closing',reason:'explored'}),s);assert.equal(metricPayload('booking_clicked').name,'booking_clicked');
 });
-test('persistence stores only UI flags plus the dwell origin, not open overlays or data',()=>{
+test('persistence stores only non-sensitive presentation state, never open overlays or arbitrary data',()=>{
  const saved=savedConversion({...closing('explored'),email:'private@example.com',price:6000});
- assert.deepEqual(JSON.parse(saved),{version:1,introSeen:true,closerSeen:true});
+ const parsed=JSON.parse(saved);assert.equal(parsed.version,2);assert.equal(parsed.introSeen,true);assert.equal(parsed.closerSeen,true);assert.deepEqual(parsed.interactions,[]);assert.equal(parsed.email,undefined);assert.equal(parsed.price,undefined);
  const at=Date.now()-1000;const dwell=savedConversion(explore(at));
- assert.deepEqual(JSON.parse(dwell),{version:1,introSeen:true,closerSeen:false,exploredAt:at});
  const restored=readConversion(dwell);assert.equal(restored.exploredAt,at);assert.equal(restored.ready,false);assert.equal(restored.modal,null);assert.equal(restored.pending,null);
 });
 test('reload after a shown closer never shows another closer',()=>{
@@ -55,8 +54,14 @@ test('reload after a shown closer never shows another closer',()=>{
 test('reload after introduction does not show another introduction',()=>{
  const s=reduce(readConversion(savedConversion(fresh())),{type:'initialise',resume:false});assert.equal(s.modal,null);
 });
+test('intro has an independent once-per-session sentinel so helper navigation cannot resurrect it',()=>{
+ const store=src('lib/demo-conversion/store.ts');
+ assert.match(store,/INTRO_SEEN_KEY = 'apex\.demo\.intro\.seen\.v1'/);
+ assert.match(store,/sessionStorage\.getItem\(INTRO_SEEN_KEY\) === '1'/);
+ assert.match(store,/sessionStorage\.setItem\(INTRO_SEEN_KEY, '1'\)/);
+});
 test('bad or tampered session data is ignored',()=>{
- for(const raw of [null,'null','bad','[]',' '.repeat(401),'{"version":2}',JSON.stringify({version:1,introSeen:'yes',closerSeen:true})]) assert.deepEqual(readConversion(raw),initialConversion());
+ for(const raw of [null,'null','bad','[]',' '.repeat(1501),'{"version":2}',JSON.stringify({version:1,introSeen:'yes',closerSeen:true})]) assert.deepEqual(readConversion(raw),initialConversion());
  assert.equal(readConversion(JSON.stringify({version:1,introSeen:true,closerSeen:false,modal:'closing'})).modal,null);
 });
 test('explore choice is stamped once and never after the closer',()=>{
@@ -66,18 +71,18 @@ test('explore choice is stamped once and never after the closer',()=>{
  assert.equal(reduce(closing('explored'),{type:'explore',at:at+9999}).exploredAt,null);
  assert.equal(reduce(s,{type:'explore',at:0}).exploredAt,at);
 });
-test('explore dwell queues exactly one invitation and never forces over an overlay',()=>{
- const s=reduce(explore(Date.now()-EXPLORE_DELAY_MS-1),{type:'queue',reason:'explored'});
- assert.equal(s.pending,'explored');assert.equal(s.modal,null);assert.equal(s.closerSeen,false);
- assert.equal(reduce(s,{type:'queue',reason:'explored'}),s);
- assert.equal(reduce(fresh(),{type:'queue',reason:'explored'}).modal,'intro');
+test('self-guided dwell shows one tour reminder before any sales close',()=>{
+ let s=explore(Date.now()-EXPLORE_DELAY_MS-1);
+ s=reduce(s,{type:'show-tour-reminder',at:Date.now()});assert.equal(s.modal,'tour-reminder');assert.equal(s.tourReminderSeen,true);assert.equal(s.closerSeen,false);
+ const hidden=reduce(s,{type:'dismiss-tour-reminder'});assert.equal(hidden.modal,null);
+ assert.equal(reduce(hidden,{type:'show-tour-reminder',at:Date.now()+1000}),hidden);
 });
 test('the dwell origin survives a reload but tampered values do not',()=>{
  const at=Date.now()-1000;
  assert.equal(readConversion(savedConversion(explore(at))).exploredAt,at);
  for(const raw of ['{"version":1,"introSeen":true,"closerSeen":false,"exploredAt":"x"}','{"version":1,"introSeen":true,"closerSeen":false,"exploredAt":-5}','{"version":1,"introSeen":true,"closerSeen":false,"exploredAt":null}']) assert.equal(readConversion(raw).exploredAt,null);
 });
-test('pointer-exit tracking is gone: invitations come from finish or dwell only',()=>{
+test('pointer-exit tracking is gone: the four-minute self-guided event is a tour reminder, not an exit popup',()=>{
  const s=src('components/demo-conversion/DemoConversion.tsx');
  assert.doesNotMatch(s,/mouseout|mousemove/);assert.doesNotMatch(s,/canOfferExit/);
  assert.match(s,/EXPLORE_DELAY_MS/);assert.match(s,/\{ type: 'explore', at: Date\.now\(\) \}/);
@@ -117,17 +122,20 @@ test('guide stays manually controlled on tasks, signals and next actions',()=>{
  h=reduceHelper(h,{type:'collapse',value:true});assert.equal(h.collapsed,true);assert.equal(readHelper(JSON.stringify(h)).collapsed,true);
 });
 test('intro copy is brief, explicitly fictional, and makes no guaranteed speed claim',()=>{
- const text=Object.values(INTRO_COPY).join(' ');assert.ok(text.split(/\s+/).length<110);assert.match(text,/fictional/);assert.match(text,/calling the team/);assert.match(text,/ask your own questions/);assert.doesNotMatch(text,/guaranteed|under two|less than two|60 seconds/i);
+ const text=Object.values(INTRO_COPY).join(' ');assert.ok(text.split(/\s+/).length<110);assert.match(text,/fictional/);assert.match(text,/9pm/);assert.match(text,/without waiting for your team/);assert.match(text,/ask your own questions/);assert.doesNotMatch(text,/guaranteed|under two|less than two|60 seconds/i);
 });
 test('closing uses hypothetical value and the agreed open-ended price question',()=>{
- assert.match(CLOSING_COPY.question,/If this/);assert.match(CLOSING_COPY.question,/customers a year/);
+ assert.match(CLOSING_COPY.question,/If this/);assert.match(CLOSING_COPY.question,/5 routine enquiries a week/);assert.match(CLOSING_COPY.question,/over a year/);
  assert.equal(CONVERSION_OFFER.startingPrice,'$999');assert.equal(`${CONVERSION_OFFER.priceLabel} ${CONVERSION_OFFER.startingPrice}?`,'What if you could have solutions like this for $999?');assert.equal(CONVERSION_OFFER.priceNote,'');
 });
-test('one real 20-minute destination is shared by final helper and modal',()=>{
- assert.equal(CONVERSION_OFFER.bookingUrl,'https://calendly.com/insights-t3labs/20-minute-meeting');assert.match(src('components/demo-helper/DemoHelper.tsx'),/CONVERSION_OFFER.bookingUrl/);assert.match(src('components/demo-conversion/DemoConversion.tsx'),/CONVERSION_OFFER.bookingUrl/);
+test('the real 20-minute booking destination is reserved for the earned closing modal',()=>{
+ assert.equal(CONVERSION_OFFER.bookingUrl,'https://calendly.com/insights-t3labs/20-minute-meeting');
+ assert.match(src('components/demo-conversion/DemoConversion.tsx'),/CONVERSION_OFFER.bookingUrl/);
+ assert.doesNotMatch(src('components/demo-helper/DemoHelper.tsx'),/CONVERSION_OFFER.bookingUrl/);
+ assert.match(src('components/demo-helper/DemoHelper.tsx'),/Talk to T3 Labs/);
 });
 test('advanced tools and professional uses remain discoverable without forced exercises',()=>{
- assert.equal(ADVANCED_TOOLS.length,2);assert.match(ADVANCED_TOOLS.map(t=>t.title+' '+t.text).join(' '),/satellite image/);assert.match(ADVANCED_PRICING_NOTE,/public or trade pricing/);assert.match(ADVANCED_PRICING_NOTE,/customer quotes/);
+ assert.equal(ADVANCED_TOOLS.length,2);assert.match(ADVANCED_TOOLS.map(t=>t.title+' '+t.text).join(' '),/satellite image/);assert.match(ADVANCED_PRICING_NOTE,/exact prices, starting prices or ranges/);assert.match(ADVANCED_PRICING_NOTE,/search and AI/);assert.match(ADVANCED_PRICING_NOTE,/private trade pricing/);
 });
 test('prepared assistant scenario remains specific rather than fabricated or auto-sent',()=>{
  assert.match(HELPER_PRICE_PROMPT,/120 m² of actual sloping roof area/);assert.match(HELPER_PRICE_PROMPT,/12 metres/);
@@ -136,10 +144,11 @@ test('prepared assistant scenario remains specific rather than fabricated or aut
 test('sample shortcut reviews the input, protects drafts and uses the existing calculator',()=>{
  const s=src('components/quick-estimate/QuickRoofEstimate.tsx');assert.match(s,/FAST DEMO SHORTCUT/);assert.match(s,/Calculate this example/);assert.match(s,/window.confirm\('Use the sample roof/);assert.match(s,/writeDraft\(\{ step: 5, answers: \{ \.\.\.sample, covering: sampleCovering \}/);assert.match(s,/createQuickResult\(parseQuickInput\(a\), catalog, profile\)/);
 });
-test('both enquiries retain their required completion sequence',()=>{
- assert.deepEqual(TASKS['assistant-price'].requirements,['assistant-estimate','assistant-enquiry-open','assistant-enquiry-ready']);
- assert.deepEqual(TASKS['quick-price'].requirements,['quick-result','quick-enquiry-open','quick-enquiry-ready']);
+test('core pricing tasks complete on the useful price while enquiry previews remain optional',()=>{
+ assert.deepEqual(TASKS['assistant-price'].requirements,['assistant-estimate']);
+ assert.deepEqual(TASKS['quick-price'].requirements,['quick-result']);
  assert.match(src('components/quick-estimate/QuickQuoteEnquiry.tsx'),/Use example contact details/);
+ assert.match(src('components/assistant/SmartAssistantLauncher.tsx'),/OPEN_INQUIRY/);
 });
 test('modals have native focus containment, Escape support and explicit dismissal',()=>{
  const s=src('components/demo-conversion/DemoConversion.tsx');assert.match(s,/node.showModal\(\)/);assert.match(s,/onCancel=/);assert.match(s,/aria-labelledby="t3-conversion-title"/);assert.match(s,/previous\?\.isConnected/);assert.match(s,/lockBodyScroll/);assert.match(s,/releaseScroll\(\)/);
@@ -155,6 +164,16 @@ test('new conversion layer contains no contact-form transmission or third-party 
 });
 test('new code respects UTF-8 branding and the no-em-dash handoff rule',()=>{
  for(const file of ['lib/demo-conversion/config.ts','lib/demo-conversion/state.ts','lib/demo-conversion/store.ts','lib/demo-conversion/metrics.ts','components/demo-conversion/DemoConversion.tsx','components/demo-conversion/conversion.css']) assert.doesNotMatch(src(file),/\u2014|\uFFFD/);
+});
+test('the tour reminder is concise and the earned close requires two distinct meaningful examples',()=>{
+ const text=Object.values(TOUR_REMINDER_COPY).join(' ');assert.match(text,/3 minutes/);assert.match(text,/guided tour/i);assert.equal(EARNED_INTERACTIONS_REQUIRED,2);
+ let s=openVisit();s=reduce(s,{type:'interact',key:'assistant-answer',at:100});assert.deepEqual(s.interactions,['assistant-answer']);
+ s=reduce(s,{type:'interact',key:'assistant-answer',at:200});assert.deepEqual(s.interactions,['assistant-answer']);assert.equal(s.lastInteractionAt,200);
+ s=reduce(s,{type:'interact',key:'quick-price',at:300});assert.equal(s.interactions.length,2);
+});
+test('starting the guide suppresses the one-time self-guided reminder',()=>{
+ let s=explore(100);s=reduce(s,{type:'tour-engaged'});assert.equal(s.tourEngaged,true);assert.equal(s.tourReminderSeen,true);
+ assert.equal(reduce(s,{type:'show-tour-reminder',at:1000}),s);
 });
 test('all 135 existing geometry combinations retain agreed footprint and pitch behaviour',()=>{
  let count=0;for(const shape of PITCHED_SHAPES)for(const size of Object.keys(SIZE_BANDS))for(const pitch of Object.keys(PITCH_BANDS)){

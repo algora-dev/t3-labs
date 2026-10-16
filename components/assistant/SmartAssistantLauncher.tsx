@@ -9,6 +9,7 @@ import { DEMO_ACTION_EVENT, actionFromEvent, recordDemoSignal, recordDemoFailure
 import { HELPER_QUESTION, HELPER_PRICE_PROMPT } from '@/lib/demo-helper/config';
 import { getHelper, HELPER_COMMAND_EVENT, takeHelperCommand, recordHelperSignal, setHelperSurface, updateHelper, reportAssistantActivity } from '@/lib/demo-helper/store';
 import { isAssistantTask } from '@/lib/demo-helper/assistant-activity';
+import { updateConversion } from '@/lib/demo-conversion/store';
 import { signalsForAssistantTurn, isApexPage } from '@/lib/demo-helper/assistant-events';
 import { useDemoHelper } from '@/components/demo-helper/useDemoHelper';
 import type { AssistantAction, AssistantCard, AssistantTurn } from '@/lib/assistant/types';
@@ -179,6 +180,27 @@ function ActionButton({ action, handlers: h }: { action: AssistantAction; handle
   }
   if (action.type === 'OPEN_INQUIRY') {
     return <button disabled={h.busy} onClick={h.onInquiry} className={`${base} text-white hover:opacity-90`} style={{ backgroundColor: h.accentColor, borderColor: h.accentColor }}>{action.label}</button>;
+  }
+  if (action.type === 'SHOW_CONTACT_OPTIONS') {
+    return (
+      <details className="w-full rounded-xl border border-slate-200 bg-white">
+        <summary className="cursor-pointer list-none px-3.5 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50">
+          {action.label}
+        </summary>
+        <div className="border-t border-slate-100 px-3 py-2.5">
+          <p className="mb-2 text-[10px] leading-relaxed text-slate-400">Fictional demo contact lines. On a live site these would route to the right person.</p>
+          <div className="grid gap-2">
+            {action.contacts.map((contact) => (
+              <a key={contact.id} href={contact.phoneHref} className="rounded-lg border border-slate-200 px-3 py-2.5 transition hover:border-slate-300 hover:bg-slate-50">
+                <span className="block text-xs font-bold text-slate-900">{contact.label}</span>
+                <span className="mt-0.5 block text-xs font-semibold" style={{ color: h.accentColor }}>{contact.phone}</span>
+                <span className="mt-1 block text-[10px] leading-snug text-slate-500">{contact.description}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </details>
+    );
   }
   if (action.type === 'ADD_ESTIMATE_OPTION') {
     return <button disabled={h.busy} onClick={() => h.onFollowUp(action.followUpMessage)} className={`${base} border-slate-300 bg-white text-slate-700 hover:bg-slate-50`}>{action.label}</button>;
@@ -504,8 +526,12 @@ function SmartAssistantCompanion() {
             setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: message.text + event.text } : message));
           } else if (event.type === 'turn' && event.turn) {
             receivedTurn = true;
-            if (event.turn.message.trim()) recordDemoSignal('assistant-answer');
-            signalsForAssistantTurn(event.turn).forEach(signal => recordHelperSignal(signal, guideContext));
+            const helperSignals = signalsForAssistantTurn(event.turn);
+            if (event.turn.message.trim()) {
+              recordDemoSignal('assistant-answer');
+              updateConversion({ type: 'interact', key: helperSignals.includes('assistant-estimate') ? 'assistant-price' : 'assistant-answer', at: Date.now() });
+            }
+            helperSignals.forEach(signal => recordHelperSignal(signal, guideContext));
             setMessages((current) => current.map((message) => message.id === assistantId ? { ...message, text: event.turn!.message, turn: event.turn, streaming: false } : message));
           } else if (event.type === 'error') {
             throw new Error(event.error ?? 'Something went wrong. Please try again.');

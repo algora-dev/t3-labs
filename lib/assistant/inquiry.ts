@@ -156,17 +156,20 @@ export function buildInquiryPayload(session: AssistantSession, sub: InquirySubmi
       }
     : null;
 
+  const handoffSummary = session.handoff?.summary?.trim() || null;
+
   return {
     business: getBusiness().business.name,
     channel: 'smart-assistant-demo',
     contact: { name, email: email ?? null, phone: phone ?? null },
-    summary: buildProjectSummary(project, estimateTotal),
+    summary: handoffSummary ?? buildProjectSummary(project, estimateTotal),
     project,
     draft: draftPayload,
     estimate: estimatePayload,
     attachments,
+    handoff: session.handoff,
     pricingAssumptions: estimate ? estimate.assumptions.slice(0, 8) : [],
-    customerNote: str(sub.question),
+    customerNote: str(sub.question) ?? handoffSummary,
     conversationContext: session.messages.slice(-12),
     submittedAt: new Date().toISOString(),
   };

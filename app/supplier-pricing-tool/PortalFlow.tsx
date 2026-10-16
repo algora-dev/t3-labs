@@ -27,6 +27,7 @@ import { DemoPlanExercise } from '../../components/demo-journey/DemoPlanExercise
 import { useDemoJourney } from '../../components/demo-journey/useDemoJourney';
 import { applyDemoRecipe, createDemoMeasurements } from '../../lib/demo-journey/samples';
 import { DEMO_ACTION_EVENT, actionFromEvent, recordDemoFailure, recordDemoSignal, updateJourney } from '../../lib/demo-journey/store';
+import { updateConversion } from '../../lib/demo-conversion/store';
 import { priceOutput } from './pricing';
 
 /** Session persistence: the whole in-progress flow survives Back navigation,
@@ -183,6 +184,7 @@ function PortalFlowReady() {
   useEffect(() => {
     if (config.slug !== 'apex-roofing' || step !== outputStepNum || !exampleTotals.lines.length) return;
     recordDemoSignal('detailed-output');
+    updateConversion({ type: 'interact', key: 'detailed', at: Date.now() });
     if (showTrade) recordDemoSignal('trade-preview');
   }, [config.slug, step, outputStepNum, exampleTotals, showTrade, journey.attempted]);
   useEffect(() => {
@@ -232,7 +234,10 @@ function PortalFlowReady() {
   function handleTakeoffFinish(set: MeasurementSet, planImages?: { name: string; dataUrl: string; annotated: boolean }[]) {
     setSamplePlan(false);
     setMeasureSet(set);
-    if (set.groups.roofAreas.entries.length) recordDemoSignal('plan-transfer');
+    if (set.groups.roofAreas.entries.length) {
+      recordDemoSignal('plan-transfer');
+      updateConversion({ type: 'interact', key: 'plan', at: Date.now() });
+    }
     setPlanImages(planImages ?? null);
     // skip the manual entry step - measurements came from the station
     setStep(3);

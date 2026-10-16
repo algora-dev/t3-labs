@@ -976,7 +976,7 @@ export function Footer({ site }: { site: ActRoofingSiteConfig }) {
         <nav className="grid content-start gap-3 text-[0.95rem]" aria-label="Footer services">
           <p className="text-sm font-semibold uppercase tracking-[0.1em] text-white/40">Services</p>
           {site.services.map((service) => (
-            <a key={service.title} className="text-white/70 transition hover:text-white" href="#services">
+            <a key={service.title} className="text-white/70 transition hover:text-white" href={service.linkHref ?? "#services"}>
               {service.title}
             </a>
           ))}

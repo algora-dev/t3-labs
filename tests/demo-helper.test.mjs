@@ -32,16 +32,14 @@ test('page visits, unopened tasks and unrelated events cannot complete a task',(
  assert.equal(reduceHelper(s,{type:'signal',signal:'quick-result'}),s);
  const a=attempt('quick-price');assert.equal(reduceHelper(a,{type:'signal',signal:'assistant-estimate'}),a);
 });
-test('knowledge flow requires both a structured answer and the visitor following its link',()=>{
+test('knowledge flow completes on a useful assistant answer; following a page link stays optional',()=>{
  let s=attempt('answers');assert.equal(reduceHelper(s,{type:'signal',signal:'knowledge-link'}),s);
- s=reduceHelper(s,{type:'signal',signal:'knowledge-answer'});assert.equal(s.view,'task');
- s=reduceHelper(s,{type:'signal',signal:'knowledge-link'});assert.equal(s.view,'benefit');assert.equal(s.status.answers,'observed');
+ s=reduceHelper(s,{type:'signal',signal:'knowledge-answer'});assert.equal(s.view,'benefit');assert.equal(s.status.answers,'observed');
 });
-test('both pricing tasks require price, enquiry opening, and actual preview completion in order',()=>{
+test('both pricing tasks complete on the useful price result; enquiry previews stay optional',()=>{
  for(const id of ['assistant-price','quick-price']){
-   let s=attempt(id);const signals=TASKS[id].requirements;
-   assert.equal(reduceHelper(s,{type:'signal',signal:signals[2]}),s);
-   for(const [i,signal] of signals.entries()){s=reduceHelper(s,{type:'signal',signal});assert.equal(s.view,i===2?'benefit':'task');}
+   let s=attempt(id);const [signal]=TASKS[id].requirements;
+   s=reduceHelper(s,{type:'signal',signal});assert.equal(s.view,'benefit');
    assert.equal(s.status[id],'observed');
  }
 });
@@ -76,14 +74,20 @@ test('position storage is bounded and a resized desktop cannot strand the drag h
  assert.deepEqual(clampPosition({x:3000,y:-8},{width:800,height:600},{width:364,height:400}),{x:424,y:12});
  assert.deepEqual(clampPosition({x:NaN,y:Infinity},{width:320,height:400},{width:364,height:500}),{x:12,y:12});
 });
-test('price prose or an empty/incomplete card never becomes a measured assistant success',()=>{
- assert.deepEqual(signalsForAssistantTurn({message:'Your roof will cost £10,000.'}),[]);
- assert.deepEqual(signalsForAssistantTurn({message:'Estimate',cards:[{type:'estimate',estimate:{total:100,lineItems:[]}}]}),[]);
- assert.deepEqual(signalsForAssistantTurn({message:'Estimate',cards:[{type:'estimate_result',result:{mode:'single',estimate:{total:NaN}}}]}),[]);
+test('price prose or an empty/incomplete card never becomes a measured assistant estimate',()=>{
+ for (const turn of [
+   {message:'Your roof will cost £10,000.'},
+   {message:'Estimate',cards:[{type:'estimate',estimate:{total:100,lineItems:[]}}]},
+   {message:'Estimate',cards:[{type:'estimate_result',result:{mode:'single',estimate:{total:NaN}}}]},
+ ]) {
+   const signals=signalsForAssistantTurn(turn);
+   assert.ok(signals.includes('knowledge-answer'));
+   assert.ok(!signals.includes('assistant-estimate'));
+ }
 });
-test('assistant knowledge completion requires a usable internal page action',()=>{
+test('assistant knowledge completion is based on the useful answer; page actions are optional',()=>{
  assert.deepEqual(signalsForAssistantTurn({message:'Yes.',actions:[{type:'NAVIGATE_INTERNAL',url:'/demo/roofing-site/services/insurance-work'}]}),['knowledge-answer']);
- assert.deepEqual(signalsForAssistantTurn({message:'Yes.',actions:[{type:'NAVIGATE_INTERNAL',url:'https://external.example'}]}),[]);
+ assert.deepEqual(signalsForAssistantTurn({message:'Yes.',actions:[{type:'NAVIGATE_INTERNAL',url:'https://external.example'}]}),['knowledge-answer']);
  assert.equal(isApexPage('/demo/roofing-site-evil'),false);assert.equal(isApexPage('javascript:alert(1)'),false);
 });
 test('prepared assistant scenario uses the existing catalogue and user-specified components exactly once',()=>{
@@ -91,7 +95,7 @@ test('prepared assistant scenario uses the existing catalogue and user-specified
  const e=createEstimate({projectType:'reroof',roofArea:120,areaType:'actual_roof_area',roofShape:'gable',pitchDegrees:25,material:'reroof_concrete_tile',componentScope:'specified_components',components:[{catalogItemId:'ridge_hip_system',quantity:12}]});
  assert.ok(e.lineItems.some(l=>l.catalogItemId==='reroof_strip_allowance'));assert.ok(e.lineItems.some(l=>l.catalogItemId==='reroof_disposal_allowance'));assert.ok(e.total>0);assert.equal(e.lineItems.filter(l=>l.catalogItemId==='ridge_hip_system').length,1);
  assert.ok(e.lineItems.every(l=>!['valley_trough','batten','underlay'].includes(l.catalogItemId)));
- assert.deepEqual(signalsForAssistantTurn({message:'Estimate',cards:[{type:'estimate',estimate:e}]}),['assistant-estimate']);
+ assert.deepEqual(signalsForAssistantTurn({message:'Estimate',cards:[{type:'estimate',estimate:e}]}),['assistant-estimate','knowledge-answer']);
 });
 test('enquiry contacts allow phone or email but validate the provided contact',()=>{
  const c={name:'Demo Visitor',email:'demo@example.com',phone:''};assert.equal(validateDemoContact(c),null);

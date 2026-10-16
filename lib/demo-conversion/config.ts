@@ -8,22 +8,34 @@ export const CONVERSION_OFFER = {
   bookingUrl: 'https://calendly.com/insights-t3labs/20-minute-meeting',
   contactUrl: 'https://www.t3labs.tech/#contact',
 } as const;
+
 export const INTRO_COPY = {
   eyebrow: 'A WORKING DEMO FOR BUSINESS OWNERS',
   title: 'What if your website did more of the work?',
-  body: 'Apex Roofing is fictional. The solutions work. Try three examples: get answers, see prices and prepare an enquiry, without calling the team.',
-  freedom: 'Use our examples, or ask your own questions about Apex at any time.',
-  question: 'How would customers get these answers on your website?',
+  body: 'Apex Roofing is fictional. Imagine a customer landing on your website at 9pm. In three short examples, see how they can get answers, see a price and prepare a useful enquiry without waiting for your team.',
+  freedom: 'Use our examples, or ask your own questions about Apex.',
+  question: 'What can a customer actually get done on your website at 9pm?',
   action: 'Start the demo',
   secondary: 'Explore on my own',
   reassurance: 'No sign-up. Use example details.',
 } as const;
+
+export const TOUR_REMINDER_COPY = {
+  eyebrow: 'WANT THE HIGHLIGHTS?',
+  title: 'Finding your way around?',
+  body: 'Hopefully you’ve started to see what these tools could do for a business like yours. Want the highlights? The guided tour takes about 3 minutes.',
+  action: 'Take the guided tour',
+  secondary: 'Keep exploring',
+} as const;
+
 export const CLOSING_COPY = {
   eyebrow: 'IMAGINE THIS ON YOUR WEBSITE',
   title: 'What could this give back to your business?',
-  question: 'If this saved your team a few hours a week, or helped you win five more customers a year, what would that be worth?',
+  question: 'If this helped you win a few more customers, or simply handled 5 routine enquiries a week for you, what would that be worth over a year?',
   callNote: 'Let’s look at what would help your business. No obligation.',
 } as const;
-// The only non-completion trigger: visitors who chose to explore on their own
-// receive the single invitation after an unhurried four minutes, helper or not.
+
+// Four minutes is long enough to explore without being interrupted. Self-guided
+// visitors see a tour reminder first, never the sales close just because time passed.
 export const EXPLORE_DELAY_MS = 4 * 60 * 1000;
+export const EARNED_INTERACTIONS_REQUIRED = 2;

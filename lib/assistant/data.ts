@@ -51,6 +51,14 @@ export function getAssistantConfig(): AssistantConfig {
   return loadJson<AssistantConfig>('assistant-config.json');
 }
 
+export interface BusinessContact {
+  id: string;
+  label: string;
+  phone: string;
+  phoneHref: string;
+  description: string;
+}
+
 export interface BusinessData {
   business: {
     name: string;
@@ -70,6 +78,14 @@ export interface BusinessData {
     materials: string[];
     handoffMessage: string;
     trustSignals?: string[];
+    showroom?: {
+      available: boolean;
+      name: string;
+      address: string;
+      access: string;
+      whatYouCanSee: string[];
+    };
+    contacts?: BusinessContact[];
   };
   faqs: { q: string; a: string }[];
 }

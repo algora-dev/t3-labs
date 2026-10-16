@@ -1,6 +1,6 @@
-import { getAssistantConfig, resolveSiteTopic } from './data';
+import { getAssistantConfig, getBusiness, resolveSiteTopic } from './data';
 import { buildSystemPrompt } from './prompts';
-import type { AssistantSession } from './session';
+import type { AssistantSession, HandoffCategory } from './session';
 import { recentMessages } from './session';
 import type { AssistantAction, AssistantCard, AssistantTurn } from './types';
 import {
@@ -35,6 +35,7 @@ interface TurnState {
   factsUpdated: boolean;
   latestEstimateId: string | null;
   latestEstimateIds: string[];
+  currentUserMessage: string;
 }
 
 const AREA_TYPES: AreaType[] = ['actual_roof_area', 'plan_area', 'unknown'];
@@ -121,7 +122,7 @@ function toolDefinitions() {
       type: 'function',
       function: {
         name: 'ask_clarification',
-        description: 'Ask one short estimate clarification. Use a structured kind when available so the UI can show useful choices.',
+        description: 'Ask one short clarification. Use a structured estimate kind when relevant; use generic only for one genuinely ambiguous non-estimate question.',
         parameters: {
           type: 'object',
           properties: {
@@ -155,8 +156,23 @@ function toolDefinitions() {
       type: 'function',
       function: {
         name: 'open_inquiry',
-        description: 'Hand off to the human team with the conversation context.',
+        description: 'Open the enquiry workflow when the visitor directly wants to proceed. Existing project and conversation context is carried into the form.',
         parameters: { type: 'object', properties: {} },
+      },
+    },
+    {
+      type: 'function',
+      function: {
+        name: 'handoff_to_team',
+        description: 'Use when a question needs a person. Creates both enquiry and call options, and stores a concise handoff summary so the visitor does not need to repeat the request.',
+        parameters: {
+          type: 'object',
+          properties: {
+            summary: { type: 'string', description: 'One concise sentence describing what the visitor needs the team to confirm, including useful details already supplied.' },
+            category: { type: 'string', enum: ['general', 'product_advice', 'quotes_surveys', 'accounts_billing', 'emergency'] },
+          },
+          required: ['summary', 'category'],
+        },
       },
     },
     {
@@ -289,6 +305,48 @@ function addClarificationActions(kind: string | null, turn: TurnState) {
       { type: 'QUICK_REPLY', label: 'Not sure', message: "I'm not sure which area type it is. Treat it as actual roof area and state that assumption." },
     );
   }
+}
+
+
+const HANDOFF_CATEGORIES: HandoffCategory[] = ['general', 'product_advice', 'quotes_surveys', 'accounts_billing', 'emergency'];
+
+function handoffCategory(value: unknown): HandoffCategory {
+  const candidate = str(value);
+  return candidate && HANDOFF_CATEGORIES.includes(candidate as HandoffCategory)
+    ? candidate as HandoffCategory
+    : 'general';
+}
+
+function handoffContacts(category: HandoffCategory) {
+  const contacts = getBusiness().business.contacts ?? [];
+  const preferredId =
+    category === 'product_advice' ? 'general-product-advice'
+      : category === 'quotes_surveys' ? 'quotes-surveys'
+        : category === 'accounts_billing' ? 'accounts-billing'
+          : category === 'emergency' ? 'emergency-roofing'
+            : 'general-product-advice';
+  return [...contacts].sort((a, b) => Number(b.id === preferredId) - Number(a.id === preferredId));
+}
+
+function sourceUserMessages(session: AssistantSession, currentUserMessage?: string): string[] {
+  const messages = recentMessages(session, 10)
+    .filter((message) => message.role === 'user' && !message.content.startsWith('['))
+    .map((message) => message.content);
+  const current = currentUserMessage?.trim();
+  if (current && !current.startsWith('[')) messages.push(current);
+  return [...new Set(messages)].slice(-4);
+}
+
+function isSimpleEnquiryIntent(message: string): boolean {
+  return /^(?:yes(?: please)?|please do|sure|ok(?:ay)?|prepare|open|create|start|send)(?: (?:an?|the|my))? (?:enquiry|inquiry|contact request|quote request)(?: please)?[.!?]*$/i.test(message.trim())
+    || /^(?:yes(?: please)?|please do|sure|ok(?:ay)?)[.!?]*$/i.test(message.trim());
+}
+
+function directInquirySummary(messages: string[], currentUserMessage: string): string | null {
+  const current = currentUserMessage.trim();
+  if (current && !isSimpleEnquiryIntent(current)) return current.slice(0, 500);
+  const previous = [...messages].reverse().find((message) => message.trim() && !isSimpleEnquiryIntent(message));
+  return previous?.slice(0, 500) ?? null;
 }
 
 const handlers: Record<string, ToolHandler> = {
@@ -583,6 +641,18 @@ const handlers: Record<string, ToolHandler> = {
     const question = str(args.question);
     const kind = str(args.kind);
     if (!question) return { error: 'Missing question.' };
+
+    if (kind === 'generic') {
+      if (session.generalClarificationPending) {
+        return {
+          status: 'limit_reached',
+          instruction: 'A general clarification was already asked for this request. Do not ask another. Answer from approved information if you now can, otherwise use handoff_to_team.',
+        };
+      }
+      session.generalClarificationPending = true;
+      return { status: 'ok', askedSoFar: 1, max: 1, question, kind };
+    }
+
     const flow = session.estimateFlow;
     if (!flow.active) {
       flow.active = true;
@@ -612,10 +682,40 @@ const handlers: Record<string, ToolHandler> = {
     return { ok: true, instruction: 'Tell the customer the guided estimator is open and takes about 60 seconds. Do not list the steps yourself - the UI handles them.' };
   },
 
-  open_inquiry(_args, _session, turn) {
+  open_inquiry(_args, session, turn) {
+    const messages = sourceUserMessages(session, turn.currentUserMessage);
+    const currentIsSimpleIntent = isSimpleEnquiryIntent(turn.currentUserMessage);
+    const summary = directInquirySummary(messages, turn.currentUserMessage);
+    if ((!session.handoff || !currentIsSimpleIntent) && summary) {
+      session.handoff = {
+        summary,
+        category: 'general',
+        createdAt: new Date().toISOString(),
+        sourceUserMessages: messages,
+      };
+    }
     turn.actions.push({ type: 'OPEN_INQUIRY', label: 'Prepare an enquiry' });
-    turn.cards.push({ type: 'handoff', summary: 'I can carry the project details from this conversation into the enquiry for you.' });
+    turn.cards.push({ type: 'handoff', summary: 'I can carry the useful details from this conversation into the enquiry for you.' });
     return { ok: true };
+  },
+
+  handoff_to_team(args, session, turn) {
+    const summary = str(args.summary)?.slice(0, 500);
+    if (!summary) return { error: 'Missing handoff summary.' };
+    const category = handoffCategory(args.category);
+    const contacts = handoffContacts(category);
+    session.handoff = {
+      summary,
+      category,
+      createdAt: new Date().toISOString(),
+      sourceUserMessages: sourceUserMessages(session, turn.currentUserMessage),
+    };
+    turn.actions.push(
+      { type: 'OPEN_INQUIRY', label: 'Prepare an enquiry' },
+      { type: 'SHOW_CONTACT_OPTIONS', label: 'Call the team', contacts }
+    );
+    turn.cards.push({ type: 'handoff', summary: 'I can carry what you have already told me into the enquiry, or you can call the right Apex team directly.' });
+    return { ok: true, category, contacts: contacts.map((contact) => ({ id: contact.id, label: contact.label, phone: contact.phone })) };
   },
 
   update_facts(args, session, turn) {
@@ -725,12 +825,13 @@ function isInitialPriceRequest(userMessage: string, session: AssistantSession): 
 export async function runAssistantTurn(session: AssistantSession, userMessage: string, onToken: (t: string) => void): Promise<AssistantTurn> {
   const apiKey = process.env.OPENAI_API_KEY;
   const config = getAssistantConfig();
+  const resolvingGeneralClarification = session.generalClarificationPending;
   const messages: ChatMessage[] = [
     { role: 'system', content: buildSystemPrompt(session) },
     ...recentMessages(session).map((m) => ({ role: m.role, content: m.content }) as ChatMessage),
     { role: 'user', content: userMessage },
   ];
-  const turnState: TurnState = { cards: [], actions: [], factsUpdated: false, latestEstimateId: null, latestEstimateIds: [] };
+  const turnState: TurnState = { cards: [], actions: [], factsUpdated: false, latestEstimateId: null, latestEstimateIds: [], currentUserMessage: userMessage };
   let finalContent = '';
   const started = Date.now();
 
@@ -797,6 +898,11 @@ export async function runAssistantTurn(session: AssistantSession, userMessage: s
   if (turnState.cards.length) turn.cards = turnState.cards;
   if (turnState.actions.length) turn.actions = dedupeActions(turnState.actions);
   if (turnState.factsUpdated) turn.sessionFactsUpdated = true;
+
+  // A generic clarification is allowed once for a non-estimate request. After
+  // the visitor answers it, the next successful turn must resolve or hand off,
+  // then a future unrelated request may use its own single clarification.
+  if (resolvingGeneralClarification) session.generalClarificationPending = false;
   return turn;
 }
 

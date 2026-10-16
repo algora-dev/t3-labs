@@ -13,7 +13,7 @@ export function signalsForAssistantTurn(turn: AssistantTurn): HelperSignal[] {
     return false;
   });
   if (hasEstimate) out.push('assistant-estimate');
-  if (turn.message?.trim() && turn.actions?.some(action => action.type === 'NAVIGATE_INTERNAL' && !action.external && isApexPage(action.url))) out.push('knowledge-answer');
+  if (turn.message?.trim()) out.push('knowledge-answer');
   return out;
 }
 export function isApexPage(url: string): boolean {

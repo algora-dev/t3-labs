@@ -1,7 +1,7 @@
 /** Integration hook, not an analytics client: no requests, cookies, or personal data.
  * Attach a listener after the site's existing analytics consent gate, if desired. */
 export const CONVERSION_METRIC_EVENT = 't3-demo-metric';
-export type MetricName = 'intro_viewed' | 'intro_started' | 'intro_dismissed' | 'task_started' | 'task_completed' | 'task_skipped' | 'sample_selected' | 'closing_viewed' | 'closing_dismissed' | 'booking_clicked' | 'contact_clicked';
+export type MetricName = 'intro_viewed' | 'intro_started' | 'intro_dismissed' | 'tour_reminder_viewed' | 'tour_reminder_started' | 'tour_reminder_dismissed' | 'task_started' | 'task_completed' | 'task_skipped' | 'sample_selected' | 'closing_viewed' | 'closing_dismissed' | 'booking_clicked' | 'contact_clicked';
 export interface MetricFields { task?: 'answers' | 'assistant-price' | 'quick-price' | 'admin'; reason?: 'complete' | 'tour-ended' | 'explored'; verification?: 'observed' | 'self-reported' }
 export function metricPayload(name: MetricName, fields: MetricFields = {}) {
   const event: { name: MetricName; task?: MetricFields['task']; reason?: MetricFields['reason']; verification?: MetricFields['verification'] } = { name };

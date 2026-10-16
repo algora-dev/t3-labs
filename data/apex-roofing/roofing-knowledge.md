@@ -38,11 +38,15 @@ The ridge is the top horizontal line where two roof planes meet; hips are the di
 ## Fascia, soffit, gutters
 The fascia is the board along the lower roof edge that gutters fix to; the soffit is the board underneath the roof overhang (usually vented to feed the roof space with air). Gutters and downpipes collect and drain roof water. These are commonly replaced together with a re-roof.
 
-## Common roofing materials (as installed by Apex)
+## Common roofing materials (as installed or assessed by Apex)
 - Concrete tiles: durable, cost-effective, heavy; 30-50 year life.
 - Clay tiles: warmer look, long life, moderately higher cost.
 - Natural slate (CUPA Spanish): premium, 75-100+ year life, requires skilled installation and copper fixings.
+- Asphalt shingles: lightweight pitched-roof covering for suitable decks and pitches. Final deck and underlayment specification is site and product dependent.
+- Pressed metal tiles: lightweight metal covering with a tile-like appearance. Support spacing, fixing pattern and exposure rating depend on the selected manufacturer system.
+- Long-run profiled metal: sheet roofing suitable for some lower-pitch and contemporary roofs. Minimum pitch, laps, support layout and fixing design depend on the selected profile and exposure.
 - GRP fibreglass and EPDM membrane systems: used for suitable flat and low-slope roofs.
+- High-performance felt: can be assessed for suitable flat roofs, but the exact build-up and price may require a site-specific specification rather than an instant online rate.
 
 ## Why pitch/material compatibility matters
 Each covering has a minimum pitch: below it, water can be driven back up the laps and leak. Slate and interlocking tiles typically need 20-30 degrees minimum. Using the wrong material below its minimum pitch voids manufacturer warranties.
@@ -55,3 +59,18 @@ Roof covering systems (supply and installed): concrete tile (Marley Edgemere) fr
 
 ## Re-roof cost structure (from the Re-Roof Cost Guide page)
 Every re-roof price = covering system + strip allowance (10 pounds per m2, indicative, confirmed after inspection) + removal/disposal allowance (1,000 pounds per job). Timber repairs are quoted separately after inspection, never hidden in the rate. Price drivers: actual sloped area, pitch, material, roof shape (hips/valleys add components and labour), and access. Worked example: a 120 m2 concrete tile re-roof at medium pitch is roughly 7,400 pounds covering + 1,200 pounds strip + 1,000 pounds disposal = around 9,600 pounds before optional components. Most homes are completed in 2 to 4 working days with a 10-year workmanship warranty issued in writing.
+
+## Product support layers and fixings
+A complete roof includes more than the visible covering. Pitched-roof systems can include breathable underlay, timber battens or other support layers, suitable nails/clips/screws, dry-fix ridge and hip systems, verge details, valleys and flashings. Flat-roof systems rely on a sound deck, compatible membrane or resin system, correctly formed falls and careful perimeter, outlet and upstand details. Manufacturer-specific fixing patterns, structural support and hidden deck condition cannot be confirmed confidently from chat alone.
+
+## Apex sample centre and contact routing
+The fictional Apex demo includes an appointment-only product sample centre at Unit 14, Calder Trade Park, Leeds LS12. It is a consultation and sample space, not a walk-in retail counter. Visitors can compare tile, slate, metal, flat-roof and roof-component samples.
+
+Specialist fictional demo contact lines:
+- General & product advice: 01632 960 410.
+- Quotes & surveys: 01632 960 411.
+- Accounts & billing: 01632 960 412.
+- Emergency roofing: 01632 960 413.
+
+When a visitor has a question that depends on a site inspection, manufacturer-specific information, account records, billing details, structural judgement or another fact not in the approved sources, the assistant should not guess. It should either ask one short clarification if that could genuinely make the question answerable, or route the visitor to the team with a prepared enquiry and call options.
+

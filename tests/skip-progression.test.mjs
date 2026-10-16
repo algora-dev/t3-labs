@@ -24,7 +24,7 @@ test('skip never demotes an already observed task', () => {
   assert.equal(s1.status['quick-price'], 'observed');
 });
 
-test('finished-exploring path self-reports and advances straight to Task 3', () => {
+test('manual continuation self-reports an example and advances without creating a dead end', () => {
   const s1 = reduceHelper(tasking({ current: 'assistant-price' }), { type: 'manual' });
   assert.equal(s1.view, 'benefit');
   assert.equal(s1.status['assistant-price'], 'self-reported');
@@ -33,28 +33,19 @@ test('finished-exploring path self-reports and advances straight to Task 3', () 
   assert.equal(s2.current, 'quick-price');
 });
 
-test('Task 2 offers a persistent finished-exploring exit once exploring', () => {
+test('every active task keeps a visible manual continue and skip route', () => {
   const ui = source('components/demo-helper/DemoHelper.tsx');
-  assert.match(ui, /s\.current === 'assistant-price' && \(s\.started \|\| assistantOpen\)/);
-  assert.match(ui, /I\u2019m finished exploring\. Next step/);
-});
-
-test('finished exploring closes the assistant and navigates to the Quick Estimate page', () => {
-  const ui = source('components/demo-helper/DemoHelper.tsx');
-  const at = ui.indexOf('function finishedExploring');
-  assert.ok(at > 0, 'finishedExploring handler exists');
-  const body = ui.slice(at, ui.indexOf('const prompt', at));
-  assert.match(body, /type: 'manual'/);
-  assert.match(body, /type: 'next'/);
-  assert.match(body, /sendHelperCommand\('assistant-close'\)/);
-  assert.match(body, /router\.push\(QUICK_HOME\)/);
+  assert.match(ui, /Ready to move on\?/);
+  assert.match(ui, /Continue to the next example/);
+  assert.match(ui, /Continue when ready/);
+  assert.match(ui, /Skip task/);
 });
 
 test('every advancing control also navigates the site to the next task context', () => {
   const ui = source('components/demo-helper/DemoHelper.tsx');
   const at = ui.indexOf('function advanceTask');
   assert.ok(at > 0, 'advanceTask helper exists');
-  const body = ui.slice(at, ui.indexOf('function finishedExploring', at));
+  const body = ui.slice(at, ui.indexOf('const prompt', at));
   assert.match(body, /QUICK_HOME/);
   assert.match(body, /APEX_HOME/);
   assert.match(body, /router\.push/);
@@ -86,10 +77,12 @@ test('the enquiry-reading stage keeps visible advance and skip controls', () => 
   assert.match(body, /Skip task/);
 });
 
-test('task copy, requirements and the closing offer are unchanged', () => {
-  assert.deepEqual([...TASKS['assistant-price'].requirements], ['assistant-estimate', 'assistant-enquiry-open', 'assistant-enquiry-ready']);
+test('core price completion is lightweight and the earned close is not repeated in the helper finish', () => {
+  assert.deepEqual([...TASKS['assistant-price'].requirements], ['assistant-estimate']);
+  assert.deepEqual([...TASKS['quick-price'].requirements], ['quick-result']);
   const ui = source('components/demo-helper/DemoHelper.tsx');
-  assert.match(ui, /CONVERSION_OFFER\.bookingLabel/);
+  assert.doesNotMatch(ui, /CONVERSION_OFFER\.bookingLabel/);
+  assert.match(ui, /Talk to T3 Labs/);
   assert.match(ui, /Next: a price without chat/);
 });
 

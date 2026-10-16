@@ -37,16 +37,13 @@ for(const id of ['answers','assistant-price']) {
   assert.equal(g.freeResponse,true);assert.equal(s.view,'task');assert.equal(s.status[id],'untried');
  });
 }
-test('knowledge response requires an actual page action before the benefit',()=>{
+test('knowledge response completes the core example without forcing a page click',()=>{
  let s=prepare('answers');s=signal(s,'knowledge-answer');
- assert.equal(taskGuidance(s,activity(s,'answered'),'assistant',null).text,'Open the page the assistant recommends.');
- assert.equal(s.view,'task');s=signal(s,'knowledge-link');assert.equal(s.view,'benefit');
+ assert.equal(s.view,'benefit');assert.equal(s.status.answers,'observed');
 });
-test('price guidance handles estimate and enquiry phases explicitly',()=>{
+test('price result completes the core example while refinement and enquiry stay optional',()=>{
  let s=prepare('assistant-price');s=signal(s,'assistant-estimate');
- assert.match(taskGuidance(s,activity(s,'answered'),'assistant',null).text,/Review the price/);
- s=signal(s,'assistant-enquiry-open');assert.equal(taskGuidance(s,null,'assistant-enquiry',null).button,null);
- s=signal(s,'assistant-enquiry-ready');assert.equal(s.view,'benefit');
+ assert.equal(s.view,'benefit');assert.equal(s.status['assistant-price'],'observed');
 });
 test('failed request keeps live failure honest and retries clear the error',()=>{
  let s=prepare('answers');s=reduceHelper(s,{type:'error',runId:s.runId});
@@ -70,12 +67,13 @@ test('activity whitelist discards request contents',()=>{
  assert.deepEqual(next,{...activity(s,'prepared'),requestId:'abc'});
  assert.equal(nextAssistantActivity(null,activity(prepare('quick-price'),'prepared'),prepare('quick-price')),null);
 });
-test('quick task has one entry, then directs attention to the page',()=>{
+test('quick task offers the fast example or full tool and either result completes it',()=>{
  const s=select('quick-price');assert.equal(taskGuidance(s,null,'website',null).command,'quick-example');
- const started=reduceHelper(s,{type:'prepare'});assert.equal(taskGuidance(started,null,'website',QUICK_HOME).button,null);
- assert.match(taskGuidance(signal(started,'quick-result'),null,'website',QUICK_HOME).text,/Request a quote/);
+ const started=reduceHelper(s,{type:'prepare'});const guidance=taskGuidance(started,null,'website',QUICK_HOME);
+ assert.equal(guidance.button,null);assert.match(guidance.text,/fast example or complete the full step-by-step tool/);
+ const done=signal(started,'quick-result');assert.equal(done.view,'benefit');assert.equal(done.status['quick-price'],'observed');
 });
-test('closing waits for final benefit acknowledgement or the explore dwell, never a reading timer',()=>{
+test('closing is earned by interaction while self-guided dwell triggers only the tour reminder',()=>{
  const s=source('components/demo-conversion/DemoConversion.tsx');
  assert.match(s,/if \(h.view === 'finish'\) updateConversion/);
  assert.doesNotMatch(s,/finalExperience|1200/);

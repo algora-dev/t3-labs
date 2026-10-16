@@ -1,5 +1,13 @@
 import type { Estimate, PricedDraft } from '../pricing/estimate-engine';
 
+export interface AssistantContactOption {
+  id: string;
+  label: string;
+  phone: string;
+  phoneHref: string;
+  description: string;
+}
+
 export type AssistantCard =
   | { type: 'estimate'; estimate: Estimate }
   | { type: 'estimate_result'; result: PricedDraft }
@@ -8,6 +16,7 @@ export type AssistantCard =
 export type AssistantAction =
   | { type: 'NAVIGATE_INTERNAL'; label: string; url: string; external: boolean }
   | { type: 'OPEN_INQUIRY'; label: string }
+  | { type: 'SHOW_CONTACT_OPTIONS'; label: string; contacts: AssistantContactOption[] }
   | { type: 'ADD_ESTIMATE_OPTION'; label: string; followUpMessage: string }
   | { type: 'QUICK_REPLY'; label: string; message: string; description?: string; emphasis?: 'primary' | 'secondary' }
   | { type: 'DOWNLOAD_OUTPUT'; label: string; estimateId: string; estimateIds?: string[] }

@@ -25,7 +25,7 @@
       "saturday": "8:00 AM - 2:00 PM",
       "sunday": "Emergency calls only"
     },
-    "emergencyProcess": "For storm damage or active leaks, call our emergency line on 0808 157 0426. We aim to arrange urgent temporary protection as quickly as practical, followed by an assessment for permanent repairs.",
+    "emergencyProcess": "For storm damage or active leaks, call the emergency roofing line on 01632 960 413. The main office number remains 0808 157 0426 for general enquiries. We aim to arrange urgent temporary protection as quickly as practical, followed by an assessment for permanent repairs.",
     "insuranceWork": "Yes, we handle insurance roofing work. We work with all major insurers, provide detailed damage assessments with photos, and can meet your adjuster on site. We guide you through the claim process from initial inspection to final sign-off.",
     "guarantees": [
       "10-year workmanship warranty on all full roof replacements",
@@ -44,7 +44,7 @@
       {
         "id": "roof_replacement",
         "name": "Roof Replacement",
-        "summary": "Complete roof replacement and new roof installation in concrete tile, clay tile, or natural slate."
+        "summary": "Complete roof replacement and new roof installation across suitable tile, slate, shingle and metal pitched-roof systems."
       },
       {
         "id": "roof_repair",
@@ -82,7 +82,10 @@
       "Clay tile",
       "Natural slate",
       "Flat and low-slope membrane systems",
-      "Roof repairs across common pitched-roof coverings"
+      "Roof repairs across common pitched-roof coverings",
+      "Asphalt shingle",
+      "Pressed metal tile",
+      "Long-run profiled metal"
     ],
     "materials": [
       "Marley concrete tiles",
@@ -92,14 +95,61 @@
       "Dry-fix ridge, hip and verge systems",
       "GRP valley troughs",
       "PVC guttering systems",
-      "GRP and EPDM flat-roof systems"
+      "GRP and EPDM flat-roof systems",
+      "Asphalt shingles for suitable pitched roofs",
+      "Pressed metal tile systems",
+      "Long-run profiled metal roofing",
+      "High-performance felt systems for flat roofs where survey-approved"
     ],
-    "handoffMessage": "I want to make sure you get an accurate answer from the Apex team. I can pass along everything you've told me so far - would you like me to prepare an enquiry?",
+    "handoffMessage": "I want to make sure you get an accurate answer from the Apex team. I can carry what you've already told me into an enquiry, or show you the right team number to call.",
     "trustSignals": [
       "20+ years roofing experience",
       "500+ roofs completed",
       "Fully insured",
       "10-year workmanship guarantee on full roof replacements"
+    ],
+    "showroom": {
+      "available": true,
+      "name": "Apex Roofing Sample Centre",
+      "address": "Unit 14, Calder Trade Park, Leeds LS12 - fictional demo location",
+      "access": "By appointment only. This is a product sample and consultation space, not a walk-in retail counter.",
+      "whatYouCanSee": [
+        "Concrete and clay tile samples",
+        "Natural slate samples",
+        "Pressed metal and long-run metal samples",
+        "Flat-roof membrane and GRP samples",
+        "Gutter, fascia, soffit and dry-fix component samples"
+      ]
+    },
+    "contacts": [
+      {
+        "id": "general-product-advice",
+        "label": "General & product advice",
+        "phone": "01632 960 410",
+        "phoneHref": "tel:+441632960410",
+        "description": "Materials, product suitability, samples, showroom appointments and general questions."
+      },
+      {
+        "id": "quotes-surveys",
+        "label": "Quotes & surveys",
+        "phone": "01632 960 411",
+        "phoneHref": "tel:+441632960411",
+        "description": "Site visits, formal quotes, measurements and project-specific pricing."
+      },
+      {
+        "id": "accounts-billing",
+        "label": "Accounts & billing",
+        "phone": "01632 960 412",
+        "phoneHref": "tel:+441632960412",
+        "description": "Invoices, payments, account questions and billing queries."
+      },
+      {
+        "id": "emergency-roofing",
+        "label": "Emergency roofing",
+        "phone": "01632 960 413",
+        "phoneHref": "tel:+441632960413",
+        "description": "Active leaks, storm damage and urgent temporary protection."
+      }
     ]
   },
   "faqs": [
@@ -133,11 +183,11 @@
     },
     {
       "q": "Do you do emergency callouts?",
-      "a": "Yes. Call 0808 157 0426 for urgent storm damage or active leaks. We will arrange temporary protection and assessment as quickly as practical."
+      "a": "Yes. Call the fictional demo emergency roofing line on 01632 960 413 for urgent storm damage or active leaks. We will arrange temporary protection and assessment as quickly as practical."
     },
     {
       "q": "What materials do you install?",
-      "a": "Concrete tile (including Marley systems), clay tile, natural Spanish slate (CUPA), plus GRP and EPDM systems for suitable flat and low-slope roofs."
+      "a": "Apex can discuss concrete and clay tile, natural slate, asphalt shingles, pressed metal tile, long-run profiled metal, plus GRP, EPDM and survey-approved felt systems for suitable flat roofs. Final pitch, deck, exposure and manufacturer requirements are confirmed where needed."
     },
     {
       "q": "How do I know if I need a repair or a full replacement?",
@@ -150,6 +200,14 @@
     {
       "q": "Is Apex Roofing a real company?",
       "a": "Apex Roofing is a fictional business - this website is an interactive demo built by T3 Labs to showcase a Smart Assistant trained on a business's own knowledge, products, and pricing."
+    },
+    {
+      "q": "Can I visit you to look at roofing products?",
+      "a": "Yes. The fictional Apex Roofing demo includes a Leeds product sample centre by appointment. It is a consultation and sample space rather than a walk-in retail counter."
+    },
+    {
+      "q": "Who should I call for product advice or a quote?",
+      "a": "Use the product advice line for materials and suitability questions, or the quotes and surveys line for site visits and formal project pricing. The Smart Assistant can also prepare an enquiry with your conversation details already attached."
     }
   ]
 }

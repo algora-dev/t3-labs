@@ -110,22 +110,29 @@
     "slug": "services/guttering",
     "group": "services",
     "title": "Guttering & Downpipes",
-    "metaDescription": "Gutter, downpipe, fascia and soffit replacement by Apex Roofing, standalone or with a re-roof.",
+    "metaDescription": "Guttering, downpipes, fascia and soffit replacement by Apex Roofing, including drainage upgrades alongside re-roofing work.",
     "intro": "Gutters protect more than the roof. We replace guttering, downpipes, fascias and soffits either as a standalone job or as part of your re-roof, when access is already in place.",
     "sections": [
       {
         "heading": "What we install",
         "bullets": [
-          "Seamless half-round gutters in black or brown",
-          "76mm downpipes with offsets and brackets",
+          "Half-round PVC gutter systems in common colours",
+          "Downpipes with offsets, shoes and brackets",
           "UPVC fascia and vented soffit boards",
-          "Gutter guards and leaf protection"
+          "Replacement outlets, unions and brackets",
+          "Leaf protection where it suits the property"
         ]
       },
       {
-        "heading": "Good value with a re-roof",
+        "heading": "Standalone work or part of a re-roof",
         "body": [
-          "Adding gutters during a re-roof saves scaffolding and labour. If you are pricing a re-roof, ask the Smart Assistant to add an estimated gutter allowance to your indicative estimate."
+          "Gutters, downpipes, fascia and soffit can be handled as a standalone job or added while a roof is already being replaced. Combining the work can reduce duplicated access and labour."
+        ]
+      },
+      {
+        "heading": "Sizing and drainage",
+        "body": [
+          "The right gutter and downpipe arrangement depends on roof area, rainfall, outlet positions and the existing drainage route. If a drainage question needs site-specific calculations, the Apex team will confirm it rather than the Smart Assistant guessing."
         ]
       }
     ]
@@ -186,37 +193,43 @@
     "slug": "information/roofing-materials",
     "group": "information",
     "title": "Roofing Materials",
-    "metaDescription": "Guide to the roofing materials Apex installs: concrete tile, clay tile, natural slate and flat roof systems.",
-    "intro": "The material you choose drives cost, appearance and lifespan. These are the systems Apex installs and stands behind.",
+    "metaDescription": "Guide to Apex Roofing materials: concrete and clay tile, natural slate, shingles, metal roofing, flat-roof systems and supporting roof components.",
+    "intro": "The material you choose affects cost, appearance, pitch suitability and lifespan. Apex works with pitched-roof coverings, flat-roof systems and the supporting components that make the complete roof work.",
     "sections": [
       {
-        "heading": "Concrete tile",
+        "heading": "Concrete and clay tiles",
         "body": [
-          "The workhorse of modern roofing. Durable, good value and available in a wide range of profiles and colours. Typical installed life of 40 years or more."
-        ]
-      },
-      {
-        "heading": "Clay tile",
-        "body": [
-          "Classic character that weathers beautifully. Slightly higher cost than concrete, with a lifespan commonly quoted at 50 years or more."
+          "Concrete tiles are durable, widely available and generally the best-value traditional pitched-roof option. Clay tiles cost more but offer a distinctive finish and long service life."
         ]
       },
       {
         "heading": "Natural slate",
         "body": [
-          "The premium choice. CUPA Spanish slate is dense, fire-resistant and can outlast the building it sits on when correctly fixed with copper nails."
+          "Natural slate is a premium pitched-roof covering with a long service life. Apex uses natural Spanish slate in the configured demo systems and fixes slate with suitable corrosion-resistant fixings."
         ]
       },
       {
-        "heading": "Flat roof systems",
+        "heading": "Shingles and metal roofing",
         "body": [
-          "GRP fibreglass and EPDM membranes for low-slope roofs, garages and extensions. Seamless, flexible and detailed to avoid ponding."
+          "For suitable pitched roofs, Apex can discuss asphalt shingles, pressed metal tiles and long-run profiled metal. Pitch, exposure, detailing and the chosen manufacturer system need to be checked before a formal specification is confirmed."
         ]
       },
       {
-        "heading": "Not sure?",
+        "heading": "Flat-roof systems",
         "body": [
-          "Ask the Smart Assistant to compare options for your budget, roof pitch and desired look, or start a guided estimate."
+          "Apex installs EPDM rubber and GRP fibreglass systems for suitable flat and low-slope roofs. High-performance felt can also be assessed, but some felt projects need a site-specific specification rather than an instant online price."
+        ]
+      },
+      {
+        "heading": "What sits underneath and around the covering",
+        "body": [
+          "A complete roof also relies on underlay or membrane, battens or deck support, suitable fixings, ridge and hip systems, valleys, flashings, gutters, downpipes, fascia and soffit. Those items can be discussed separately or as part of a roof project."
+        ]
+      },
+      {
+        "heading": "Not sure what suits your roof?",
+        "body": [
+          "Ask the Smart Assistant to compare options for your roof type and pitch. If the answer depends on site conditions or a manufacturer-specific detail, it will hand the question to the Apex team rather than guess."
         ]
       }
     ]
@@ -519,6 +532,196 @@
     ]
   },
   {
+    "slug": "information/pitched-roof-coverings",
+    "group": "information",
+    "title": "Pitched Roof Coverings",
+    "metaDescription": "Concrete tile, clay tile, natural slate, asphalt shingles, pressed metal tile and long-run metal roofing options from Apex Roofing.",
+    "intro": "Different pitched-roof coverings suit different roof angles, budgets and architectural styles. This guide shows the main options Apex can discuss and where a site-specific check is still needed.",
+    "sections": [
+      {
+        "heading": "Concrete tile",
+        "body": [
+          "A durable, cost-effective choice for many UK pitched roofs. The configured Apex demo system includes breathable underlay, battens, fixings, dry verge and installation."
+        ]
+      },
+      {
+        "heading": "Clay tile",
+        "body": [
+          "A traditional covering with strong character and long service life. The exact profile and minimum pitch must suit the roof and the selected manufacturer system."
+        ]
+      },
+      {
+        "heading": "Natural slate",
+        "body": [
+          "A premium covering with a long service life. Correct headlap, batten gauge, fixing pattern and skilled installation are important."
+        ]
+      },
+      {
+        "heading": "Asphalt shingles",
+        "body": [
+          "A lightweight pitched-roof option used on suitable roofs and structures. Deck condition, underlayment and pitch need to be checked before specification."
+        ]
+      },
+      {
+        "heading": "Pressed metal tile",
+        "body": [
+          "Pressed metal tiles provide a tiled appearance with a lighter roof covering. Support spacing, fixings and exposure requirements depend on the selected system."
+        ]
+      },
+      {
+        "heading": "Long-run profiled metal",
+        "body": [
+          "Long-run metal can suit lower-pitch and contemporary roofs when the chosen profile, laps, fixings and exposure rating are appropriate. Final specification is manufacturer and site dependent."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "information/flat-roof-systems",
+    "group": "information",
+    "title": "Flat Roof Systems",
+    "metaDescription": "EPDM, GRP fibreglass and high-performance felt flat-roof options, detailing and survey considerations from Apex Roofing.",
+    "intro": "Flat roofs rely on continuous waterproof systems, correct falls and careful detailing at edges, outlets and upstands. Apex can install or repair several common systems.",
+    "sections": [
+      {
+        "heading": "EPDM rubber membrane",
+        "body": [
+          "EPDM is a flexible sheet membrane commonly used on extensions, garages and other suitable flat roofs. Deck condition, falls, edges and outlets are checked as part of the job."
+        ]
+      },
+      {
+        "heading": "GRP fibreglass",
+        "body": [
+          "GRP forms a rigid, seamless fibreglass surface when installed onto a suitable deck. It is often chosen where a crisp finished appearance and robust surface are wanted."
+        ]
+      },
+      {
+        "heading": "High-performance felt",
+        "body": [
+          "Modern felt systems can be appropriate on some flat roofs. Because build-up, deck, insulation, outlets and detailing vary, Apex may need a survey before confirming the exact system or price."
+        ]
+      },
+      {
+        "heading": "What cannot be confirmed remotely",
+        "body": [
+          "Hidden deck condition, insulation build-up, structural falls, outlet capacity and awkward perimeter details can change the specification. The Smart Assistant can explain the options, but the team confirms site-specific details."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "information/underlays-battens-decking",
+    "group": "information",
+    "title": "Underlay, Battens & Roof Decking",
+    "metaDescription": "Apex Roofing guide to breathable underlay, battens, support layers and flat-roof decking.",
+    "intro": "The visible roof covering is only one part of the system. Underlay, battens and deck support help manage water, ventilation and the loads transferred into the roof structure.",
+    "sections": [
+      {
+        "heading": "Breathable underlay and membranes",
+        "body": [
+          "Apex uses breathable membrane in the configured full pitched-roof systems. It forms a secondary water-shedding layer beneath tiles or slate while allowing the roof build-up to manage moisture correctly."
+        ]
+      },
+      {
+        "heading": "Battens",
+        "body": [
+          "Timber battens support tile and slate coverings. Their spacing depends on the chosen product, headlap and roof pitch, so final gauge is set to the actual roof and manufacturer instructions."
+        ]
+      },
+      {
+        "heading": "Metal-roof support layers",
+        "body": [
+          "Pressed and long-run metal systems can require specific support spacing, membranes and fixing arrangements. The exact build-up is confirmed for the selected profile and exposure."
+        ]
+      },
+      {
+        "heading": "Flat-roof decking",
+        "body": [
+          "EPDM, GRP and felt systems rely on a sound, suitable deck. Existing deck condition cannot be guaranteed from a photo or chat conversation and may need inspection before a formal quote."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "information/fixings-roof-components",
+    "group": "information",
+    "title": "Roof Fixings & Components",
+    "metaDescription": "Dry-fix ridge and hip systems, valleys, flashings, roof fixings and associated components used by Apex Roofing.",
+    "intro": "A roof covering only performs properly when its fixings, edges, junctions and drainage details are right. Apex treats these components as part of the roofing system, not afterthoughts.",
+    "sections": [
+      {
+        "heading": "Tile, slate and metal fixings",
+        "body": [
+          "Fixings vary by covering. The configured demo systems include suitable tile fixings, copper slate nails and metal-system fixings where relevant. Final fixing patterns depend on product and exposure requirements."
+        ]
+      },
+      {
+        "heading": "Dry-fix ridge, hip and verge",
+        "body": [
+          "Mechanically fixed ridge, hip and verge systems avoid reliance on exposed mortar and can provide controlled ventilation where the system is designed for it."
+        ]
+      },
+      {
+        "heading": "Valleys and flashings",
+        "body": [
+          "Apex works with GRP valley troughs and lead or aluminium flashings at roof junctions, chimneys, walls and abutments. These details are common leak points when damaged or badly installed."
+        ]
+      },
+      {
+        "heading": "Fascia, soffit, gutters and downpipes",
+        "body": [
+          "Roof-edge components and drainage can be replaced separately or alongside a re-roof. Exact drainage sizing and unusual details are confirmed by the team when a site-specific answer is needed."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "information/showroom-contact-options",
+    "group": "information",
+    "title": "Showroom & Contact Options",
+    "metaDescription": "How to visit the fictional Apex Roofing sample centre or contact product advice, quotes, accounts and emergency roofing teams.",
+    "intro": "Apex Roofing is a fictional demo business, but the contact experience is designed to show how a real roofing company could route customers to the right person without making them start again.",
+    "sections": [
+      {
+        "heading": "Product sample centre",
+        "body": [
+          "The demo business includes an appointment-only sample centre at Unit 14, Calder Trade Park, Leeds LS12 - a fictional demo location.",
+          "Visitors can compare tile, slate, metal, flat-roof and roof-component samples. It is a consultation and sample space rather than a walk-in retail counter."
+        ]
+      },
+      {
+        "heading": "General & product advice",
+        "body": [
+          "01632 960 410 - materials, product suitability, samples and showroom appointments."
+        ]
+      },
+      {
+        "heading": "Quotes & surveys",
+        "body": [
+          "01632 960 411 - site visits, formal quotes, measurements and project-specific pricing."
+        ]
+      },
+      {
+        "heading": "Accounts & billing",
+        "body": [
+          "01632 960 412 - invoices, payments and account queries."
+        ]
+      },
+      {
+        "heading": "Emergency roofing",
+        "body": [
+          "01632 960 413 - active leaks, storm damage and urgent temporary protection."
+        ]
+      },
+      {
+        "heading": "Prefer not to call?",
+        "body": [
+          "The Smart Assistant can prepare an enquiry from the conversation so the visitor only needs to review the request and add contact details. In this demo, no enquiry is actually sent."
+        ]
+      }
+    ]
+  },
+  {
     "slug": "request-a-quote",
     "group": "commercial",
     "title": "Request a Quote",
@@ -546,13 +749,22 @@
     "slug": "contact",
     "group": "commercial",
     "title": "Contact Apex",
-    "metaDescription": "Contact Apex Roofing: phone, email, hours and service areas.",
-    "intro": "Reach the team directly, or ask the Smart Assistant anything first - it answers instantly, around the clock.",
+    "metaDescription": "Contact the fictional Apex Roofing demo team for general advice, product questions, quotes, accounts or emergency roofing.",
+    "intro": "Choose the route that best fits your question, or ask the Smart Assistant first and let it carry the conversation into an enquiry.",
     "sections": [
       {
-        "heading": "Phone",
+        "heading": "Main office",
         "body": [
-          "0808 157 0426. 24/7 emergency line."
+          "0808 157 0426 - general enquiries and the main Apex Roofing demo office line."
+        ]
+      },
+      {
+        "heading": "Specialist demo contact lines",
+        "bullets": [
+          "General & product advice - 01632 960 410",
+          "Quotes & surveys - 01632 960 411",
+          "Accounts & billing - 01632 960 412",
+          "Emergency roofing - 01632 960 413"
         ]
       },
       {
@@ -562,17 +774,18 @@
         ]
       },
       {
+        "heading": "Sample centre",
+        "body": [
+          "Unit 14, Calder Trade Park, Leeds LS12 - fictional demo location.",
+          "Visits are by appointment. It is a product sample and consultation space, not a walk-in retail counter."
+        ]
+      },
+      {
         "heading": "Hours",
         "bullets": [
           "Mon to Fri: 7:00 AM to 6:00 PM",
           "Sat: 8:00 AM to 2:00 PM",
           "Sun: emergency only"
-        ]
-      },
-      {
-        "heading": "Address",
-        "body": [
-          "Apex Roofing (fictional demo business). Serving Leeds, Harrogate, Wakefield, Bradford, Horsforth, Wetherby, Otley and Pudsey."
         ]
       }
     ]

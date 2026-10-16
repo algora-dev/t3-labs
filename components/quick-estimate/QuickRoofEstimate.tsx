@@ -7,6 +7,7 @@ import { HELPER_COMMAND_EVENT, takeHelperCommand, recordHelperSignal, getHelper,
 import { useDemoHelper } from '../demo-helper/useDemoHelper';
 import { QuickQuoteEnquiry } from './QuickQuoteEnquiry';
 import { trackDemo } from '../../lib/demo-conversion/metrics';
+import { updateConversion } from '../../lib/demo-conversion/store';
 import type { ReactNode } from 'react';
 import type { SupplierProduct } from '../../app/supplier-pricing-tool/types';
 import { EXTENSION_BANDS, PITCH_BANDS, SIZE_BANDS } from '../../lib/quick-estimate/config';
@@ -29,14 +30,20 @@ function writeDraft(draft: Draft) { memorySnapshot = JSON.stringify(draft); try 
 const serverSnapshot = () => null;
 const sample: QuickEstimateInput = QUICK_DEMO_INPUT;
 const coveringLabels: Record<CoveringId, string> = { tile: 'Concrete tiles', slate: 'Natural slate', metal: 'Long-run metal (legacy)', shingle: 'Asphalt shingles', pressed_metal: 'Pressed metal tiles', longrun: 'Long-run metal', epdm: 'Rubber membrane (EPDM)', grp: 'Fibreglass (GRP)', felt: 'Roofing felt' };
-const MATERIAL_PHOTOS: Partial<Record<CoveringId, string>> = {
-  tile: '/assets/apex-roof-materials/concrete-tile.webp',
-  slate: '/assets/apex-roof-materials/natural-slate.webp',
-  longrun: '/assets/apex-roof-materials/long-run-metal.webp',
+const MATERIAL_PHOTOS: Partial<Record<CoveringId, { src: string; position?: string }>> = {
+  tile: { src: '/assets/apex-roof-materials/concrete-tile.webp' },
+  slate: { src: '/assets/apex-roof-materials/natural-slate.webp' },
+  shingle: { src: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Asphalt_Shingles_Texture_DTXR-ST-AP-1.jpg/960px-Asphalt_Shingles_Texture_DTXR-ST-AP-1.jpg' },
+  pressed_metal: { src: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Red_metal_tile_on_a_home.jpg/960px-Red_metal_tile_on_a_home.jpg', position: 'center 58%' },
+  longrun: { src: '/assets/apex-roof-materials/long-run-metal.webp' },
 };
 function MaterialThumbnail({ id }: { id: CoveringId }) {
-  const src = MATERIAL_PHOTOS[id];
-  if (src) return <img className="qr-material-swatch qr-material-photo" src={src} alt="" width={560} height={250} loading="lazy" draggable={false} onError={e => { e.currentTarget.style.display = 'none'; }} />;
+  const photo = MATERIAL_PHOTOS[id];
+  if (photo) {
+    // Two demo-only remote photos are credited in docs/ROOF_MATERIAL_IMAGE_CREDITS.md.
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img className="qr-material-swatch qr-material-photo" src={photo.src} alt="" width={560} height={250} loading="lazy" draggable={false} style={photo.position ? { objectPosition: photo.position } : undefined} />;
+  }
   return <span className={`qr-material-swatch qr-swatch-${id}`} aria-hidden="true" />;
 }
 const existingLabels: Record<ExistingMaterial, string> = { tile: 'Tiles', slate: 'Slate', metal: 'Metal', membrane: 'Felt or membrane', unknown: 'Not sure' };
@@ -89,7 +96,7 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
     if (result?.price.low && result.price.high) {
       const h = getHelper();
       if (h.current === 'quick-price' && h.view === 'task' && !h.started) updateHelper({ type: 'prepare' });
-      recordDemoSignal('quick-result'); recordHelperSignal('quick-result');
+      recordDemoSignal('quick-result'); recordHelperSignal('quick-result'); updateConversion({ type: 'interact', key: 'quick-price', at: Date.now() });
     }
   }, [result]);
   useEffect(() => {
@@ -157,7 +164,7 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
         <p className="qr-eyebrow">FAST DEMO SHORTCUT</p>
         <div className="qr-demo-example-body"><RoofPlanIllustration shape="gable" size="small" /><div><h1 id="quick-demo-example" ref={exampleHeading} tabIndex={-1}>Try a roof. See a real calculation.</h1><p>Small gable · 60–100 m² footprint · one storey · 15–30° pitch. Replacing concrete tiles; no flat extension.</p><p className="qr-muted">We&apos;ve pre-filled the roof shape, size, pitch and project details so you can see the result faster. You can still switch to the full step-by-step tool at any time.</p></div></div>
         <Field label="Which covering would you choose?"><div className="qr-three-grid">{(['tile', 'slate', 'longrun'] as const).map(id => <Choice key={id} name="sample-covering" value={id} selected={sampleCovering === id} onSelect={() => setSampleCovering(id)}><MaterialThumbnail id={id} /><b>{coveringLabels[id]}</b></Choice>)}</div></Field>
-        <p className="qr-muted qr-demo-example-note">Calculated using Apex’s demo products and rates.</p>
+        <p className="qr-muted qr-demo-example-note">Apex uses demo rates. A live version can use your exact prices, starting prices or ranges.</p>
         <div className="qr-example-actions"><button type="button" className="qr-button" onClick={calculateExample}>Calculate this example →</button><button type="button" className="qr-text-button" onClick={() => { setShowExample(false); requestAnimationFrame(() => heading.current?.focus({ preventScroll: true })); }}>Try the full tool instead</button></div>
       </section> : <>
       <ol className="qr-progress" aria-label="Estimate progress">{steps.map((label, i) => <li key={label} className={i === step ? 'is-current' : i < step ? 'is-done' : ''} aria-current={i === step ? 'step' : undefined}><button type="button" disabled={i > step} onClick={() => go(i)}><span>{i < step ? '✓' : String(i + 1).padStart(2, '0')}</span><b>{label}</b></button></li>)}</ol>
@@ -189,7 +196,7 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
           {current === 'Covering' && <>
             <Field label={flat ? 'Your flat-roof covering' : 'Your new roof covering'}><div className="qr-three-grid">{(flat ? ['epdm', 'grp'] as const : ['tile', 'slate', 'shingle', 'pressed_metal', 'longrun'] as const).map(id => <Choice key={id} name="covering" value={id} selected={a.covering === id} onSelect={() => update({ covering: id })} className="qr-material-card"><MaterialThumbnail id={id} /><b>{coveringLabels[id]}</b>{!profile.systems[id] && <small>Measurements available; rates not loaded</small>}</Choice>)}</div></Field>
             {a.flatExtension && <Field label="Covering for the flat extension"><div className="qr-three-grid">{(['epdm', 'grp'] as const).map(id => <Choice key={id} name="flat-covering" value={id} selected={a.flatCovering === id} onSelect={() => update({ flatCovering: id })}><b>{coveringLabels[id]}</b></Choice>)}</div></Field>}
-            <div className="qr-help-line"><span aria-hidden="true">ⓘ</span><p>Prices use Apex’s demo products and rates. No contact details needed.</p></div>
+            <div className="qr-help-line"><span aria-hidden="true">ⓘ</span><p>Apex uses demo products and rates. A live version can use your products with exact prices, starting prices or ranges. No contact details needed.</p></div>
           </>}
           {current === 'Result' && !enquiryOpen && (result ? <Results result={result} example={draft.example === true} onRefine={refine} onDownload={download} onEdit={() => go(0)} onEnquire={() => setEnquiryOpen(true)} /> : <div role="alert" className="qr-info">Some selections are missing or invalid. <button type="button" onClick={() => go(0)}>Review your roof</button></div>)}
           {notice && <p role="alert" className="qr-info">{notice}</p>}

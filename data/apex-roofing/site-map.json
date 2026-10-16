@@ -93,7 +93,9 @@
       "downpipe",
       "spouting",
       "fascia",
-      "soffit"
+      "soffit",
+      "downpipes",
+      "roof drainage"
     ],
     "description": "Gutter, downpipe, fascia and soffit replacement."
   },
@@ -136,9 +138,17 @@
       "slate",
       "membrane",
       "options",
-      "products"
+      "products",
+      "shingles",
+      "pressed metal",
+      "long-run metal",
+      "epdm",
+      "grp",
+      "felt",
+      "underlay",
+      "roofing products"
     ],
-    "description": "Guide to the roofing materials Apex installs."
+    "description": "Guide to pitched and flat roofing materials plus the supporting roof components Apex uses."
   },
   {
     "id": "material-comparison",
@@ -259,6 +269,100 @@
       "worked example"
     ],
     "description": "What a re-roof costs and what is involved: allowances, rates and a worked example."
+  },
+  {
+    "id": "pitched-roof-coverings",
+    "title": "Pitched Roof Coverings",
+    "path": "/demo/roofing-site/information/pitched-roof-coverings",
+    "keywords": [
+      "concrete tile",
+      "clay tile",
+      "natural slate",
+      "slate",
+      "asphalt shingles",
+      "shingles",
+      "pressed metal",
+      "metal tile",
+      "long run",
+      "long-run metal",
+      "profiled metal",
+      "pitched roof material"
+    ],
+    "description": "Concrete, clay, slate, shingle, pressed-metal and long-run metal covering options."
+  },
+  {
+    "id": "flat-roof-systems",
+    "title": "Flat Roof Systems",
+    "path": "/demo/roofing-site/information/flat-roof-systems",
+    "keywords": [
+      "flat roof",
+      "epdm",
+      "rubber membrane",
+      "grp",
+      "fibreglass",
+      "felt",
+      "flat membrane",
+      "low slope"
+    ],
+    "description": "EPDM, GRP fibreglass and felt flat-roof systems, including survey-dependent details."
+  },
+  {
+    "id": "underlay-battens-decking",
+    "title": "Underlay, Battens & Roof Decking",
+    "path": "/demo/roofing-site/information/underlays-battens-decking",
+    "keywords": [
+      "underlay",
+      "membrane",
+      "breathable membrane",
+      "battens",
+      "batten",
+      "deck",
+      "decking",
+      "ply",
+      "support layer"
+    ],
+    "description": "Breathable membranes, battens, metal-roof support layers and flat-roof decking."
+  },
+  {
+    "id": "roof-fixings-components",
+    "title": "Roof Fixings & Components",
+    "path": "/demo/roofing-site/information/fixings-roof-components",
+    "keywords": [
+      "fixings",
+      "nails",
+      "clips",
+      "dry ridge",
+      "ridge",
+      "hip",
+      "valley",
+      "flashing",
+      "verge",
+      "roof components",
+      "fascia",
+      "soffit"
+    ],
+    "description": "Fixings, dry-fix ridge and hip systems, valleys, flashings and roof-edge components."
+  },
+  {
+    "id": "showroom-contact-options",
+    "title": "Showroom & Contact Options",
+    "path": "/demo/roofing-site/information/showroom-contact-options",
+    "keywords": [
+      "store",
+      "shop",
+      "showroom",
+      "visit",
+      "in person",
+      "sample",
+      "product samples",
+      "phone numbers",
+      "contact team",
+      "product expert",
+      "billing",
+      "accounts",
+      "quote line"
+    ],
+    "description": "Appointment-only sample centre plus product, quotes, accounts and emergency contact options."
   },
   {
     "id": "request-a-quote",

@@ -1,4 +1,4 @@
-# Apex Roofing / T3 Labs — independently re-run final sweep
+# Apex Roofing / T3 Labs - independently re-run final sweep
 
 Date: 11 October 2026. Nothing deployed.
 

@@ -23,7 +23,8 @@ export function ApexContentPage({ page }: { page: ApexPage }) {
           <nav className="hidden items-center gap-5 text-sm font-semibold text-[#475467] sm:flex">
             <Link href="/demo/roofing-site/services/roof-replacement" className="hover:text-[#1769E0]">Roof Replacement</Link>
             <Link href="/demo/roofing-site/information/roofing-materials" className="hover:text-[#1769E0]">Materials</Link>
-            <Link href="/demo/roofing-site/information/roof-pitch-guide" className="hover:text-[#1769E0]">Pitch Guide</Link>
+            <Link href="/demo/roofing-site/information/products-and-prices" className="hover:text-[#1769E0]">Products & Prices</Link>
+            <Link href="/demo/roofing-site/contact" className="hover:text-[#1769E0]">Contact</Link>
           </nav>
         </div>
       </header>

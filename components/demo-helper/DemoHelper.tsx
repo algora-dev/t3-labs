@@ -7,7 +7,7 @@ import { APEX_HOME, ADMIN_HOME, isAdminPath, QUICK_HOME, CORE_TASKS, TASKS, HELP
 import type { HelperTaskId } from '../../lib/demo-helper/config';
 import { taskGuidance } from '../../lib/demo-helper/guidance';
 import { isAssistantTask } from '../../lib/demo-helper/assistant-activity';
-import { updateHelper, sendHelperCommand, HELPER_POSITION_KEY, HELPER_REVEAL_EVENT } from '../../lib/demo-helper/store';
+import { updateHelper, sendHelperCommand, recordHelperSignal, HELPER_POSITION_KEY, HELPER_REVEAL_EVENT } from '../../lib/demo-helper/store';
 import { holdMobileStart } from '../../lib/demo-helper/mobile-notice';
 import { MobileNotice } from './MobileNotice';
 import { clampPosition, readPosition, type HelperPosition } from '../../lib/demo-helper/state';
@@ -147,6 +147,7 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
   // Mobile only: the guide shares a small screen with the tools it explains, so
   // offer one guide-free browse choice before starting. Asked once per tab.
   function beginTour() {
+    updateConversion({ type: 'tour-engaged' });
     if (holdMobileStart()) { setMobileNotice(true); return; }
     updateHelper({ type: 'start' });
   }
@@ -166,7 +167,7 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
     setManual(false);
     updateHelper({ type: 'select', task: 'admin' });
     updateHelper({ type: 'prepare' });
-    if (isAdminPath(path)) sendHelperCommand('admin-trade');
+    if (isAdminPath(path)) recordHelperSignal('admin-open');
     else router.push(ADMIN_HOME);
   }
   function startDrag(e: PointerEvent<HTMLButtonElement>) {
@@ -205,7 +206,7 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
       sendHelperCommand('assistant-close');
       sendHelperCommand(guidance.command ?? 'quick-example');
       if (path !== QUICK_HOME) router.push(QUICK_HOME);
-    } else if (isAdminPath(path)) sendHelperCommand('admin-trade');
+    } else if (isAdminPath(path)) recordHelperSignal('admin-open');
     else router.push(ADMIN_HOME);
   }
   // Any advance also moves the visitor to the next task's context: the right page
@@ -223,15 +224,6 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
       sendHelperCommand('assistant-open');
     }
   }
-  // Task 2 free exit: exploring counts as trying. Advance straight to the Quick
-  // Roof Estimate without waiting for milestones; close chat, keep its history.
-  function finishedExploring() {
-    setManual(false); setTaskMenu(false);
-    updateHelper({ type: 'manual' });
-    updateHelper({ type: 'next' });
-    sendHelperCommand('assistant-close');
-    if (path !== QUICK_HOME) router.push(QUICK_HOME);
-  }
   const prompt = s.current === 'answers' ? HELPER_QUESTION : HELPER_PRICE_PROMPT;
   async function copy() {
     try { await navigator.clipboard.writeText(prompt); setCopied(true); } catch { setCopied(false); }
@@ -241,7 +233,8 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
   const instruction = guidance.text;
   const readingEnquiry = s.view === 'benefit' && surface.includes('enquiry');
   const activeTask = (s.view === 'task' && s.started) || readingEnquiry;
-  const collapsedText = s.view === 'welcome' ? 'Show me around' : s.view === 'finish' ? 'Keep exploring' : s.view === 'benefit' ? 'See what this means' : task.label;
+  const untouchedTour = s.view === 'task' && s.current === 'answers' && !s.started && CORE_TASKS.every(id => s.status[id] === 'untried');
+  const collapsedText = s.view === 'welcome' ? 'Show me around' : s.view === 'finish' ? 'Keep exploring' : s.view === 'benefit' ? 'See what this means' : untouchedTour ? 'Start the 3-step tour' : task.label;
   const centred = welcome && (mobile || !welcomeMoved);
   const style: CSSProperties | undefined = !mobile && !dockAssistant && position && !collapsed && !centred ? { left: position.x, top: position.y, right: 'auto', bottom: 'auto', transform: 'none' } : undefined;
 
@@ -251,7 +244,7 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
   if (!mounted || suspended) return null;
   return createPortal(<>
     <p className="dh-sr" aria-live="polite" aria-atomic="true">{s.view === 'benefit' ? (collapsed ? 'Experience finished. Show the demo guide to see the benefit.' : 'Experience finished. Your demo guide now shows the benefit.') : s.started ? `Task ${task.number}. ${instruction}` : ''}</p>
-    {collapsed ? <button ref={launcher} type="button" style={viewportStyle} className={`dh-launcher ${assistantOpen ? 'dh-over-assistant' : ''}`} aria-label={`Show demo guide: ${collapsedText}`} aria-controls="t3-demo-guide" aria-expanded="false" onClick={() => { updateHelper({ type: 'collapse', value: false }); requestAnimationFrame(() => panel.current?.focus({ preventScroll: true })); }}>
+    {collapsed ? <button ref={launcher} type="button" style={viewportStyle} className={`dh-launcher ${assistantOpen ? 'dh-over-assistant' : ''}`} aria-label={`Show demo guide: ${collapsedText}`} aria-controls="t3-demo-guide" aria-expanded="false" onClick={() => { updateConversion({ type: 'tour-engaged' }); updateHelper({ type: 'collapse', value: false }); requestAnimationFrame(() => panel.current?.focus({ preventScroll: true })); }}>
       <T3Mark /><span><b>Show demo guide</b><small>{collapsedText}</small></span><span className="dh-launcher-step">{s.view === 'task' || s.view === 'benefit' ? task.optional ? '+' : `${task.number}/3` : '↑'}</span>
     </button> : <aside id="t3-demo-guide" ref={panel} role="dialog" tabIndex={-1} style={{ ...viewportStyle, ...style }} className={`dh-panel ${welcome ? 'dh-welcome' : ''} ${activeTask ? 'dh-active' : ''} ${assistantOpen ? 'dh-assistant-mode' : ''} ${dockAssistant ? 'dh-docked' : ''} ${shortViewport ? 'dh-short' : ''} ${dragging ? 'is-dragging' : ''}`} aria-label="T3 Labs demo guide">
       <button type="button" className="dh-hide-bar" onClick={hideGuide} aria-label="Hide guide" aria-expanded="true" aria-controls="t3-demo-guide">
@@ -270,8 +263,8 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
         {s.view === 'welcome' && <>
           <p className="dh-eyebrow">A WEBSITE THAT DOES MORE</p><h2>See what your website<br />could do for you.</h2>
           <p>Welcome to Apex Roofing, an example business. Try three short experiences using the real tools on this website.</p>
-          <div className="dh-welcome-preview"><span aria-hidden="true">3</span><p>Get an answer. Get a price.<br /><b>See how it becomes an enquiry.</b></p></div>
-          <p className="dh-small">Your products. Your pricing. Your branding. Imagine this working for your customers.</p>
+          <div className="dh-welcome-preview"><span aria-hidden="true">3</span><p>Get an answer. Get a price.<br /><b>See what customers can do without calling.</b></p></div>
+          <p className="dh-small">Your products. Your pricing or ranges. Your branding. Imagine this working for your customers.</p>
           <button type="button" className="dh-primary" onClick={beginTour}>Show me around <Arrow /></button>
           <p className="dh-small dh-centre dh-hint">{mobile ? 'Hide the guide whenever you need more space.' : 'Move it out of your way, or hide it at any time.'}</p>
         </>}
@@ -279,24 +272,23 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
           {!s.started && <><p className="dh-eyebrow">{task.optional ? 'OPTIONAL · ' : ''}{task.label}</p><h2>{task.title}</h2><p className="dh-question">{task.question}</p></>}
           <div className={`dh-instruction ${guidance.waiting ? 'dh-is-waiting' : ''}`} role="status"><span className="dh-action-number" aria-hidden="true">{guidance.waiting ? '…' : '→'}</span><p>{instruction}</p></div>
           {!s.started && isAssistantTask(s.current) && <p className="dh-example-summary">{s.current === 'answers' ? 'Example: “Do you handle insurance work?”' : 'Example: 120 m² gable roof · concrete tiles · 25° pitch.'}</p>}
+          {!s.started && task.note && <p className="dh-pricing-note">{task.note}</p>}
           {guidance.button && !adminAtDestination && <button type="button" className="dh-primary" onClick={tryTask}>{guidance.button} <Arrow /></button>}
-          {s.current === 'assistant-price' && (s.started || assistantOpen) && <button type="button" className="dh-secondary dh-secondary-strong" onClick={finishedExploring}>I’m finished exploring. Next step <Arrow /></button>}
           {s.current === 'admin' && <Link href={APEX_HOME} className="dh-secondary" onClick={() => updateHelper({ type: 'return-from-admin' })}>← Return to Apex Roofing</Link>}
           {!s.started && isAssistantTask(s.current) && <p className="dh-small dh-centre">An example, not a script. You choose what to send.</p>}
           {guidance.freeResponse && <button type="button" className="dh-text" onClick={() => setManual(v => !v)} aria-expanded={manual}>Ready to move on?</button>}
           <details className="dh-more-guidance" key={`${s.current}-${s.runId}`}>
             <summary>More guidance</summary>
             {isAssistantTask(s.current) && <>
-              <p>Ask your own questions about Apex’s services, products or prices at any time. The examples are suggestions, not fixed replies.</p>
-              <p>If it needs more information, follow its questions or enquiry option. A different request may need manual continuation in the guide.</p>
+              <p>Ask your own question at any time. The example only saves you typing.</p>
               <details className="dh-prompt"><summary>View suggested message</summary><textarea readOnly aria-label="Suggested assistant prompt" value={prompt} rows={s.current === 'answers' ? 2 : 5} onFocus={e => e.currentTarget.select()} /><button type="button" onClick={copy} className="dh-text">{copied ? 'Copied ✓' : 'Copy text'}</button></details>
             </>}
-            {s.current === 'assistant-price' && <p>Your business chooses the rates: public ranges, detailed prices or private trade rates. Demo enquiries aren’t sent.</p>}
-            {s.current === 'quick-price' && <p>Try the sample for speed, or choose your own roof. The same calculator uses Apex’s demo products and rates. Enquiries are previews, not sent.</p>}
-            {s.current === 'admin' && <p>Local demo changes only. Activity includes sample data. No invites or emails are sent.</p>}
-            <button type="button" className="dh-text" onClick={() => setManual(v => !v)} aria-expanded={manual}>Continue manually</button>
+            {s.current === 'assistant-price' && <p>Don’t want exact prices public? Use starting prices or ranges. That still gives customers, search and AI useful pricing context. Demo enquiries aren’t sent.</p>}
+            {s.current === 'quick-price' && <p>The shortcut is pre-filled for speed. The full tool asks for more detail, and either path counts. Prices can be exact, starting prices or ranges.</p>}
+            {s.current === 'admin' && <p>Demo changes are local. Activity is sample data. No invites or emails are sent.</p>}
+            <button type="button" className="dh-text" onClick={() => setManual(v => !v)} aria-expanded={manual}>Continue when ready</button>
           </details>
-          {manual && <div className="dh-manual"><p>Continue without automatic confirmation. Marked as tried, not verified.</p><button type="button" className="dh-secondary" onClick={() => { setManual(false); updateHelper({ type: 'manual' }); }}>I’ve tried it. Continue.</button></div>}
+          {manual && <div className="dh-manual"><p>Seen enough to understand the example? Continue whenever you’re ready.</p><button type="button" className="dh-secondary" onClick={() => { setManual(false); updateHelper({ type: 'manual' }); }}>Continue to the next example</button></div>}
           <div className="dh-task-footer"><button type="button" className="dh-text" onClick={() => advanceTask({ type: 'skip' })}>Skip task</button><button type="button" className="dh-text" onClick={() => updateHelper({ type: 'finish' })}>Finish tour</button></div>
         </>}
         {readingEnquiry && <>
@@ -305,19 +297,18 @@ export function DemoHelper({ suspended = false }: { suspended?: boolean }) {
           <div className="dh-task-footer"><button type="button" className="dh-text" onClick={() => advanceTask({ type: 'skip' })}>Skip task</button><button type="button" className="dh-text" onClick={() => updateHelper({ type: 'finish' })}>Finish tour</button></div>
         </>}
         {s.view === 'benefit' && !readingEnquiry && <>
-          <div className="dh-success-icon"><Check /></div><p className="dh-eyebrow">{s.status[s.current] === 'observed' ? 'EXPERIENCE COMPLETE' : 'MARKED AS TRIED'}</p>
-          <h2>{s.status[s.current] === 'observed' ? task.outcome : 'What this could mean for you.'}</h2><p>{task.benefit}</p>
+          <div className="dh-success-icon"><Check /></div><p className="dh-eyebrow">WHAT THIS COULD MEAN</p>
+          <h2>{task.outcome}</h2><p>{task.benefit}</p><p className="dh-question dh-reflection">{task.reflection}</p>
           {s.current === 'quick-price' && <div className="dh-advanced"><p className="dh-eyebrow">NEED MORE DETAIL?</p>{ADVANCED_TOOLS.map(tool => <Link key={tool.href} href={tool.href}><b>{tool.title} <Arrow /></b><span>{tool.text}</span></Link>)}<p>{ADVANCED_PRICING_NOTE}</p></div>}
           <button type="button" className="dh-primary" onClick={() => advanceTask({ type: 'next' })}>{s.current === 'answers' ? 'Next: a price through chat' : s.current === 'assistant-price' ? 'Next: a price without chat' : 'What could this do for my business?'} <Arrow /></button>
           
         </>}
         {s.view === 'finish' && <>
-          <p className="dh-eyebrow">YOUR NEXT STEP</p><h2>Keep exploring.</h2>
-          <p>The tools are still here. Try your own questions, explore an estimate, or talk to T3 Labs.</p>
-          <a href={CONVERSION_OFFER.bookingUrl} target="_blank" rel="noopener noreferrer" className="dh-primary" onClick={() => { trackDemo('booking_clicked'); updateConversion({ type: 'contact' }); }}>{CONVERSION_OFFER.bookingLabel} <Arrow /></a>
+          <p className="dh-eyebrow">KEEP EXPLORING</p><h2>Try it your way.</h2>
+          <p>Ask your own questions, run another estimate, or explore the business dashboard.</p>
           <button type="button" className="dh-secondary dh-secondary-strong" onClick={openAdminDashboard}>Explore the business dashboard <span>optional ↗</span></button>
           <details className="dh-finish-details"><summary>More estimating options</summary>{ADVANCED_TOOLS.map(tool => <p key={tool.href}><Link href={tool.href}>{tool.title} →</Link><br />{tool.text}</p>)}<p>{ADVANCED_PRICING_NOTE}</p></details>
-          <div className="dh-task-footer"><Link href={APEX_HOME} className="dh-text">Explore Apex</Link><button type="button" className="dh-text" onClick={() => { if (window.confirm('Restart the helper? Your estimates and enquiries will not be changed.')) updateHelper({ type: 'restart' }); }}>Restart guide</button></div>
+          <div className="dh-task-footer"><Link href={APEX_HOME} className="dh-text">Explore Apex</Link><a href={CONVERSION_OFFER.contactUrl} target="_blank" rel="noopener noreferrer" className="dh-text" onClick={() => { trackDemo('contact_clicked'); updateConversion({ type: 'contact' }); }}>Talk to T3 Labs ↗</a><button type="button" className="dh-text" onClick={() => { if (window.confirm('Restart the helper? Your estimates and enquiries will not be changed.')) updateHelper({ type: 'restart' }); }}>Restart guide</button></div>
         </>}
       </div>
       <div className="dh-bottom">One example. Built your way.</div>

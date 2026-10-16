@@ -19,10 +19,37 @@ test('Apex demo has one Leeds / GBP identity across structured business data', (
 });
 
 test('every shared Apex content page has an assistant navigation destination', () => {
-  assert.equal(pages.length, 18); // 16 original + products-and-prices + reroof-cost-guide
+  assert.ok(pages.length >= 23);
   const internalPaths = new Set(siteMap.filter((entry) => entry.path?.startsWith('/demo/roofing-site/')).map((entry) => entry.path));
   for (const page of pages) {
     assert.ok(internalPaths.has(`/demo/roofing-site/${page.slug}`), `Missing site-map path for ${page.slug}`);
+  }
+});
+
+
+test('explorable Apex knowledge includes materials, components, drainage, flat roofs and contact depth', () => {
+  const requiredSlugs = [
+    'information/roofing-materials',
+    'information/pitched-roof-coverings',
+    'information/flat-roof-systems',
+    'information/underlays-battens-decking',
+    'information/fixings-roof-components',
+    'services/flat-roofing',
+    'services/guttering',
+    'information/showroom-contact-options',
+    'contact',
+  ];
+  const slugs = new Set(pages.map((page) => page.slug));
+  for (const slug of requiredSlugs) assert.ok(slugs.has(slug), `Missing explorable page ${slug}`);
+
+  assert.equal(business.business.showroom?.available, true);
+  assert.ok((business.business.contacts ?? []).length >= 4);
+  assert.ok((business.business.contacts ?? []).some((contact) => contact.id === 'quotes-surveys'));
+  assert.ok((business.business.contacts ?? []).some((contact) => contact.id === 'accounts-billing'));
+
+  const corpus = JSON.stringify({ business, pages, siteMap }).toLowerCase();
+  for (const term of ['long-run', 'epdm', 'underlay', 'fixings', 'downpipes', 'showroom']) {
+    assert.match(corpus, new RegExp(term));
   }
 });
 
