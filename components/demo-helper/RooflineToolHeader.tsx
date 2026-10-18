@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { ApexBreadcrumbs } from './ApexBreadcrumbs';
+import { RooflineBreadcrumbs } from './RooflineBreadcrumbs';
 import type { ReactNode } from 'react';
-import './tools.css';
+import './roofline-tools.css';
 
 /** Roofline Canterbury tool header: branding + tool navigation + breadcrumbs. */
 
@@ -12,6 +12,6 @@ export function RooflineToolHeader({ title, children, section = 'tool' }: { titl
       <img src="/assets/demo-roofline/branding.png" alt="Roofline Canterbury" className="max-h-9 w-auto object-contain" />
     </Link>
       <nav aria-label="Roofline roof tools"><Link href="/demo/roofline-site">Roofline home</Link><Link href="/demo/roofline-site/estimate">All roof tools</Link>{children}</nav>
-    </div><ApexBreadcrumbs items={section === 'chooser' ? [{ label: 'Roof tools' }] : section === 'admin' ? [{ label: 'Business controls' }] : [{ label: 'Roof tools', href: '/demo/roofline-site/estimate' }, { label: title }]} />
+    </div><RooflineBreadcrumbs items={section === 'chooser' ? [{ label: 'Roof tools' }] : section === 'admin' ? [{ label: 'Business controls' }] : [{ label: 'Roof tools', href: '/demo/roofline-site/estimate' }, { label: title }]} />
   </header>;
 }

@@ -1,0 +1,13 @@
+/* Roofline Canterbury breadcrumbs (red accent variant of the Apex breadcrumbs). */
+.rl-breadcrumbs{font:500 12px/1.6 var(--font-manrope),"Segoe UI",Arial,sans-serif;color:#667085}
+.rl-breadcrumbs ol{display:flex;align-items:center;flex-wrap:wrap;gap:0 6px;list-style:none;padding:0;margin:0}
+.rl-breadcrumbs li{display:flex;align-items:center;gap:6px;min-width:0}
+.rl-breadcrumbs a{display:inline-flex;align-items:center;min-height:36px;color:#475467;text-decoration:none}
+.rl-breadcrumbs a:hover{color:#c8102e;text-decoration:underline;text-underline-offset:3px}
+.rl-breadcrumbs a:focus-visible{outline:2px solid #c8102e;outline-offset:3px;border-radius:2px}
+.rl-breadcrumbs svg{width:14px;height:14px;flex-shrink:0;color:#98a2b3}
+.rl-breadcrumbs [aria-current]{color:#344054;overflow-wrap:anywhere}
+.at-header .rl-breadcrumbs{width:min(1200px,calc(100% - 48px));margin:auto;padding:6px 0}
+.at-header nav.rl-breadcrumbs{display:block;font-size:12px;font-weight:500}
+@media(max-width:759px){.rl-breadcrumbs{font-size:11px}.rl-breadcrumbs a{min-height:40px}.at-header .rl-breadcrumbs{width:calc(100% - 32px)}}
+@media print{.rl-breadcrumbs{display:none!important}}

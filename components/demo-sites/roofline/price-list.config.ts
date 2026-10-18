@@ -1,3 +1,4 @@
+export type { PriceListConfig, PriceListItem } from '../act-roofing/price-list.config';
 import type { PriceListConfig } from "../act-roofing/price-list.config";
 
 /** Roofline Canterbury product price list. Supply-only indicative NZD rates, ex GST.

@@ -147,8 +147,8 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
         <div className="site-shell flex min-h-[34px] items-center justify-between gap-4">
           <p className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/95">Canterbury roofing specialists</p>
           <div className="flex items-center gap-4">
-            <Link href="/supplier-pricing-tool/roofline-roofing/admin" className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/80 transition hover:text-white" title="Staff - open the admin dashboard">
-              Staff
+            <Link href="/supplier-pricing-tool/roofline-roofing/admin" className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/80 transition hover:text-white" title="Admin - open the admin dashboard">
+              Admin
             </Link>
             <span aria-hidden="true" className="text-white/90">
               <SearchIcon />
@@ -176,9 +176,9 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
                 <span className="block text-[1.05rem] font-bold tracking-[-0.01em]">{site.contact.telephone}</span>
               </span>
             </a>
-            <button type="button" onClick={openQuoteRequest} className="button-base bg-[#C8102E] text-white shadow-[0_1px_2px_rgba(16,24,40,0.1)] hover:bg-[#A50D26]">
-              Free Quote
-            </button>
+            <a href="#estimate" className="button-base bg-[#C8102E] text-white shadow-[0_1px_2px_rgba(16,24,40,0.1)] hover:bg-[#A50D26]">
+              Instant Roof Estimate
+            </a>
             <button
               className="grid h-11 w-11 place-items-center rounded-[10px] border border-[#D0D5DD] bg-white text-[#101828] transition hover:border-[#101828] lg:hidden"
               type="button"
@@ -346,7 +346,7 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
   return <section id="estimate" className="section-pad bg-white"><div className="site-shell"><div className="rounded-[24px] border border-[#D6E5F8] bg-[#F5F9FF] p-6 sm:p-10 lg:p-12">
     <div className="grid items-center gap-9 lg:grid-cols-2">
       <div><p className="section-eyebrow">FREE ROOF TOOLS</p><h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-[#101828] sm:text-4xl">A starting price.<br />A clearer next step.</h2><p className="mt-5 max-w-xl text-base leading-8 text-[#667085]">Choose the route that fits what you know. Get a ballpark without measurements, or use more detail to build an itemised estimate.</p>
-        <ul className="mt-6 grid gap-3 text-sm text-[#344054]"><li className="flex gap-2"><CheckIcon/>No account needed to try the tools</li><li className="flex gap-2"><CheckIcon/>Based on ApexÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s configured products and rates</li><li className="flex gap-2"><CheckIcon/>Carry your estimate into a quote enquiry</li></ul>
+        <ul className="mt-6 grid gap-3 text-sm text-[#344054]"><li className="flex gap-2"><CheckIcon/>No account needed to try the tools</li><li className="flex gap-2"><CheckIcon/>Based on ApexÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢s configured products and rates</li><li className="flex gap-2"><CheckIcon/>Carry your estimate into a quote enquiry</li></ul>
         <div className="mt-7"><ButtonLink href={site.estimateTool.ctaHref}>Choose an estimate tool<ArrowIcon/></ButtonLink></div>
       </div><RoofToolChoices compact />
     </div>
@@ -423,7 +423,7 @@ export function Feedback({ site }: { site: ActRoofingSiteConfig }) {
                         <StarIcon key={i} filled={i < review.rating} />
                       ))}
                     </div>
-                    <span className="text-xs text-[#667085]">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â·</span>
+                    <span className="text-xs text-[#667085]">ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â·</span>
                     <GoogleGlyph />
                   </div>
                 </div>
@@ -546,7 +546,7 @@ export function Contact({ site }: { site: ActRoofingSiteConfig }) {
     projectTypes: ["New roof", "Roof repair", "Flat roofing", "Slate & tiling", "Leadwork & chimneys", "Inspection & maintenance"],
   };
   const beforeQuoteOptions = quoteRequest.beforeQuoteOptions ?? ["Request call before quote", "Request email before quote"];
-  const preferredTimeframes = quoteRequest.preferredTimeframes ?? ["As soon as practical", "Within 1ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ3 months", "Within 3ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ6 months", "More than 6 months away", "Just researching"];
+  const preferredTimeframes = quoteRequest.preferredTimeframes ?? ["As soon as practical", "Within 1ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“3 months", "Within 3ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“6 months", "More than 6 months away", "Just researching"];
   const preferredContactMethods = quoteRequest.preferredContactMethods ?? ["Phone", "Email"];
 
   useEffect(() => {
@@ -960,7 +960,7 @@ export function Footer({ site }: { site: ActRoofingSiteConfig }) {
       <div className="site-shell mt-12 border-t border-white/10 pt-6">
         <p className="text-sm leading-6 text-white/40">{site.demoDisclaimer}</p>
         <p className="mt-2 text-sm text-white/40">
-          ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© {new Date().getFullYear()} {site.companyName}. All rights reserved.
+          ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© {new Date().getFullYear()} {site.companyName}. All rights reserved.
         </p>
       </div>
     </footer>

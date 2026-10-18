@@ -227,7 +227,7 @@ function OpeningScreen({ config, busy, onAction, guided = false }: { config: Pub
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl text-white" style={{ backgroundColor: config.accentColor }}>
-            <img src="/assets/demo-act-roofing/ApexLogoWhite---f166f5cd-ea1d-4d9c-86d4-f2e3dc127812.png" alt="Apex Roofing" width="18" height="18" className="h-[18px] w-[18px] object-contain" />
+            <img src="/assets/demo-roofline/branding.png" alt="Roofline Canterbury" width="18" height="18" style={{ background: "white", borderRadius: 4, padding: 2 }} className="h-[18px] w-[18px] object-contain" />
           </span>
           <div>
             <p className="text-sm font-bold text-slate-950">Ask me instead of searching</p>
@@ -733,7 +733,7 @@ function SmartAssistantCompanion() {
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15"><img src="/assets/demo-act-roofing/ApexLogoWhite---f166f5cd-ea1d-4d9c-86d4-f2e3dc127812.png" alt="Apex Roofing" width="20" height="20" className="h-5 w-5 object-contain" /></span>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15"><img src="/assets/demo-roofline/branding.png" alt="Roofline Canterbury" style={{ background: "white", borderRadius: 5, padding: 3 }} width="20" height="20" className="h-5 w-5 object-contain" /></span>
           <div className="min-w-0"><p className="truncate text-sm font-black">{config.assistantLabel}</p><p className="truncate text-[10px] text-white/75">Ask me like you would ask the team</p></div>
         </div>
         <div className="flex items-center gap-1.5">
