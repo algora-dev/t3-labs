@@ -56,7 +56,7 @@ export const ROOFLINE_ROOFING = {
     // ---- Screws / fixings (area, no labour) ----
     { id: 'rf-screws-65', name: 'Screws (Fixings) - 65mm', code: 'FIX-RF-65', basis: 'area', groups: ['roofAreas'], component: 'fixing', roofTypes: ['all'], unitPrice: 2.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 0, priceEditable: true, suggested: true },
     { id: 'rf-screws-50', name: 'Screws (Fixings) - 50mm', code: 'FIX-RF-50', basis: 'area', groups: ['roofAreas'], component: 'fixing', roofTypes: ['all'], unitPrice: 1.7, packSize: null, defaultWastePct: 10, defaultLabourRate: 0, priceEditable: true },
-    { id: 'rf-ev-clips', name: 'Everest tray clips', code: 'FIX-RF-EV', basis: 'area', groups: ['roofAreas'], component: 'fixing', roofTypes: ['everest'], family: 'Everest', unitPrice: 11.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 0, priceEditable: true, suggested: true },
+    { id: 'rf-ev-clips', name: 'Everest Hidden Fix Clips', code: 'FIX-RF-EV', basis: 'area', groups: ['roofAreas'], component: 'fixing', roofTypes: ['everest'], family: 'Everest', unitPrice: 11.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 0, priceEditable: true, suggested: true },
 
     // ---- Ridge (lineal, +0.25m per entry) ----
     { id: 'rf-ridge-rd', name: 'Ridge Flashing - Roofdeck', code: 'RDG-RF-RD', basis: 'lineal', groups: ['ridges'], component: 'ridge', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 18.5, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 22.0, priceEditable: true, suggested: true },

@@ -29,7 +29,7 @@ function subscribe(fn: () => void) { window.addEventListener('quick-roof-draft',
 function writeDraft(draft: Draft) { memorySnapshot = JSON.stringify(draft); try { sessionStorage.setItem(DRAFT_KEY, memorySnapshot); } catch { /* In-memory mode still works when storage is disabled. */ } window.dispatchEvent(new Event('quick-roof-draft')); }
 const serverSnapshot = () => null;
 const sample: QuickEstimateInput = QUICK_DEMO_INPUT;
-const coveringLabels: Record<CoveringId, string> = { tile: 'Concrete tiles', slate: 'Natural slate', metal: 'Long-run metal (legacy)', shingle: 'Asphalt shingles', pressed_metal: 'Pressed metal tiles', longrun: 'Long-run metal', epdm: 'Rubber membrane (EPDM)', grp: 'Fibreglass (GRP)', felt: 'Roofing felt', everest_tray: 'Secret-fix tray' };
+const coveringLabels: Record<CoveringId, string> = { tile: 'Concrete tiles', slate: 'Natural slate', metal: 'Long-run metal (legacy)', shingle: 'Asphalt shingles', pressed_metal: 'Pressed metal tiles', longrun: 'Long-run metal', epdm: 'Rubber membrane (EPDM)', grp: 'Fibreglass (GRP)', felt: 'Roofing felt', everest_tray: 'Hidden-fix tray' };
 const MATERIAL_PHOTOS: Partial<Record<CoveringId, { src: string; position?: string }>> = {
   tile: { src: '/assets/apex-roof-materials/concrete-tile.webp' },
   slate: { src: '/assets/apex-roof-materials/natural-slate.webp' },

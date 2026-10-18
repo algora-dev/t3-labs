@@ -32,7 +32,7 @@ const sample: QuickEstimateInput = {
   exactRoofAreaM2: 160, exactPitchDegrees: 20, project: 'reroof', existingMaterial: 'metal',
   covering: 'pressed_metal', flatCovering: null,
 };
-const coveringLabels: Record<CoveringId, string> = { tile: 'Concrete tiles', slate: 'Natural slate', metal: 'Corrugate or Roofdeck 0.55g', shingle: 'Asphalt shingles', pressed_metal: 'Roofdeck 0.40g (ColorCote)', longrun: 'Corrugate 0.40g (ColorCote)', epdm: 'Rubber membrane (EPDM)', grp: 'Fibreglass (GRP)', felt: 'Roofing felt', everest_tray: 'Everest Tray 0.55g (secret fix)' };
+const coveringLabels: Record<CoveringId, string> = { tile: 'Concrete tiles', slate: 'Natural slate', metal: 'Corrugate or Roofdeck 0.55g', shingle: 'Asphalt shingles', pressed_metal: 'Roofdeck 0.40g (ColorCote)', longrun: 'Corrugate 0.40g (ColorCote)', epdm: 'Rubber membrane (EPDM)', grp: 'Fibreglass (GRP)', felt: 'Roofing felt', everest_tray: 'Everest Tray 0.55g (hidden fix)' };
 const MATERIAL_PHOTOS: Partial<Record<CoveringId, { src: string; position?: string }>> = {
   longrun: { src: '/assets/demo-roofline/roof-material-corrugate.webp' },
   pressed_metal: { src: '/assets/demo-roofline/roof-material-roofdeck.webp' },
@@ -71,6 +71,17 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [showExample, setShowExample] = useState(false);
   const [sampleCovering, setSampleCovering] = useState<CoveringId>('pressed_metal');
+  // Raw keystroke text for the optional exact-value fields. The draft only ever
+  // holds committed values; while the visitor is mid-keystroke the text lives
+  // here so React's controlled-input revert never fights the typist.
+  const [areaText, setAreaText] = useState<string | null>(null);
+  const [pitchText, setPitchText] = useState<string | null>(null);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- resync raw text when the committed value changes (including external draft writes)
+  useEffect(() => { setAreaText(null); }, [a.exactRoofAreaM2]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- same resync for pitch
+  useEffect(() => { setPitchText(null); }, [a.exactPitchDegrees]);
+  const areaValue = areaText !== null ? areaText : a.exactRoofAreaM2 != null ? String(a.exactRoofAreaM2) : '';
+  const pitchValue = pitchText !== null ? pitchText : a.exactPitchDegrees != null ? String(a.exactPitchDegrees) : '';
   const helper = useDemoHelper();
   const exampleHeading = useRef<HTMLHeadingElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -124,8 +135,8 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
     return () => window.removeEventListener(HELPER_COMMAND_EVENT, command);
   }, [result]);
   const canContinue = current === 'Roof' ? !!a.shape
-    : current === 'Size' ? !!a.size && !!a.storeys
-    : current === 'Pitch' ? !!a.pitch
+    : current === 'Size' ? (!!a.size || a.exactRoofAreaM2 !== undefined) && !!a.storeys
+    : current === 'Pitch' ? !!a.pitch || a.exactPitchDegrees !== undefined
     : current === 'Project' ? !!a.project && (a.project === 'new_roof' || !!a.existingMaterial)
     : current === 'Covering' ? !!a.covering && (!a.flatExtension || !!a.flatCovering) : false;
   const titles: Record<string, string> = { Roof: 'Which roof looks most like yours?', Size: 'How big is your roof?', Pitch: 'How steep is your roof?', Project: 'What are you planning?', Covering: 'What would you like on your roof?', Result: 'Your ballpark roof estimate' };
@@ -189,13 +200,13 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
           </>}
           {current === 'Size' && <>
             <Field label="Choose an approximate roof size"><div className="qr-size-grid">{Object.entries(SIZE_BANDS).map(([id, b]) => <Choice key={id} name="size" value={id} selected={a.size === id} onSelect={() => update({ size: id as SizeId })} className="qr-size-card"><RoofPlanIllustration shape={a.shape ?? 'gable'} size={id as SizeId} /><b>{b.label}</b><small>{b.min}-{b.max} m²</small></Choice>)}</div></Field>
-            <label className="qr-exact-field"><span><b>Know the actual roof area?</b><small>Optional. Enter the sloped roof surface area to tighten the price range.</small></span><span className="qr-exact-input"><input type="number" inputMode="decimal" min="20" max="1200" step="1" value={a.exactRoofAreaM2 ?? ''} placeholder="e.g. 160" onChange={e => { const v = e.target.value === '' ? undefined : Number(e.target.value); if (v === undefined || (Number.isFinite(v) && v >= 20 && v <= 1200)) update({ exactRoofAreaM2: v }); }} /><b>m²</b></span></label>
+            <label className="qr-exact-field"><span><b>Know the actual roof area?</b><small>Optional. Enter the sloped roof surface area to tighten the price range.</small></span><span className="qr-exact-input"><input type="number" inputMode="decimal" min="20" max="1200" step="1" value={areaValue} placeholder="e.g. 160" onChange={e => { setAreaText(e.target.value); const v = e.target.value === '' ? undefined : Number(e.target.value); if (v === undefined || (Number.isFinite(v) && v >= 20 && v <= 1200)) update({ exactRoofAreaM2: v }); }} /><b>m²</b></span></label>
             <p className="qr-info">If you only know the building footprint, use the size cards. If you know the roof surface area from plans or measurements, enter it above for a tighter estimate.</p>
             <Field label="How many storeys?"><div className="qr-two-grid">{([1, 2] as const).map(v => <Choice key={v} name="storeys" value={String(v)} selected={a.storeys === v} onSelect={() => update({ storeys: v })}><b>{v === 1 ? 'Single storey' : 'Two storeys'}</b><small>{v === 1 ? 'Ground floor only' : 'Ground floor and upstairs'}</small></Choice>)}</div></Field>
           </>}
           {current === 'Pitch' && <>
             <Field label="Choose the closest slope"><div className="qr-three-grid">{Object.entries(PITCH_BANDS).map(([id, b]) => <Choice key={id} name="pitch" value={id} selected={a.pitch === id} onSelect={() => update({ pitch: id as PitchId })} className="qr-pitch-card"><PitchIllustration degrees={(b.min + b.max) / 2} /><b>{b.label}</b><small>{b.description}</small><span className="qr-tag">{b.min}-{b.max}°</span></Choice>)}</div></Field>
-            <label className="qr-exact-field"><span><b>Know the actual pitch?</b><small>Optional. An exact pitch helps narrow the estimate and confirm profile suitability.</small></span><span className="qr-exact-input"><input type="number" inputMode="decimal" min="3" max="50" step="0.5" value={a.exactPitchDegrees ?? ''} placeholder="e.g. 20" onChange={e => { const v = e.target.value === '' ? undefined : Number(e.target.value); if (v === undefined || (Number.isFinite(v) && v >= 0 && v <= 50)) update({ exactPitchDegrees: v }); }} /><b>°</b></span></label>
+            <label className="qr-exact-field"><span><b>Know the actual pitch?</b><small>Optional. An exact pitch helps narrow the estimate and confirm profile suitability.</small></span><span className="qr-exact-input"><input type="number" inputMode="decimal" min="3" max="50" step="0.5" value={pitchValue} placeholder="e.g. 20" onChange={e => { setPitchText(e.target.value); const v = e.target.value === '' ? undefined : Number(e.target.value); if (v === undefined || (Number.isFinite(v) && v >= 0 && v <= 50)) update({ exactPitchDegrees: v }); }} /><b>°</b></span></label>
             <p className="qr-info">A steeper roof needs more covering over the same footprint. Exact pitch and exact roof area materially tighten the indicative range.</p>
             <p className="qr-muted">Some coverings need a minimum pitch. We will flag this before showing a price. Do not climb onto your roof to check.</p>
           </>}

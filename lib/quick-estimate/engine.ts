@@ -27,13 +27,14 @@ export function measureSection(shape: ShapeId, footprintM2: number, pitchDegrees
 }
 
 export function measureRoof(input: MeasurementInput): MeasurementRange {
-  if (!Object.hasOwn(ROOF_TEMPLATES, input.shape) || !Object.hasOwn(SIZE_BANDS, input.size)) throw new Error('Choose a valid roof shape and size');
+  if (!Object.hasOwn(ROOF_TEMPLATES, input.shape)) throw new Error('Choose a valid roof shape');
   if (input.storeys !== 1 && input.storeys !== 2) throw new Error('Choose one or two storeys');
-  if (input.shape !== 'flat' && (!input.pitch || !Object.hasOwn(PITCH_BANDS, input.pitch))) throw new Error('Choose a pitch band');
+  if (input.shape !== 'flat' && input.exactPitchDegrees === undefined && (!input.pitch || !Object.hasOwn(PITCH_BANDS, input.pitch))) throw new Error('Choose a pitch band, or enter the actual pitch');
   if (input.shape === 'flat' && (input.pitch !== null || input.flatExtension !== null)) throw new Error('A flat roof has no pitched band or separate flat extension');
   if (input.flatExtension !== null && !Object.hasOwn(EXTENSION_BANDS, input.flatExtension)) throw new Error('Choose a valid extension size');
-  const size = SIZE_BANDS[input.size];
   const exactRoofArea = input.exactRoofAreaM2;
+  const size = input.size != null && Object.hasOwn(SIZE_BANDS, input.size) ? SIZE_BANDS[input.size] : undefined;
+  if (!size && exactRoofArea === undefined) throw new Error('Choose a property size, or enter the actual roof area');
   if (exactRoofArea !== undefined && (!Number.isFinite(exactRoofArea) || exactRoofArea < 20 || exactRoofArea > 1200)) throw new Error('Exact roof area is outside this model');
   const exactPitch = input.exactPitchDegrees;
   if (exactPitch !== undefined && (!Number.isFinite(exactPitch) || exactPitch < 0 || exactPitch > 50)) throw new Error('Exact pitch is outside this model');
@@ -53,7 +54,7 @@ export function measureRoof(input: MeasurementInput): MeasurementRange {
       : 1;
     const footprint = exactRoofArea !== undefined
       ? exactRoofArea / roofAreaPerFootprint
-      : size[key];
+      : size![key];
     const sections = [measureSection(input.shape, footprint, pitchDegrees)];
     if (input.flatExtension) sections.push(measureSection('flat', EXTENSION_BANDS[input.flatExtension][key], 0, 'extension'));
     const totals = emptyQuantities();

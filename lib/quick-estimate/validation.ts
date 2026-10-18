@@ -9,7 +9,9 @@ export function parseQuickInput(value: unknown): QuickEstimateInput {
   const keys = ['shape', 'size', 'pitch', 'storeys', 'flatExtension', 'project', 'existingMaterial', 'covering', 'flatCovering', 'flatComplexity', 'exactRoofAreaM2', 'exactPitchDegrees'];
   if (Object.keys(v).some(k => !keys.includes(k))) throw new InputError('Only roof selections are accepted, not quantities or prices');
   const has = (o: object, x: unknown) => typeof x === 'string' && Object.hasOwn(o, x);
-  if (!has(ROOF_TEMPLATES, v.shape) || !has(SIZE_BANDS, v.size)) throw new InputError('Choose a valid roof shape and property size');
+  if (!has(ROOF_TEMPLATES, v.shape)) throw new InputError('Choose a valid roof shape');
+  if (v.size !== undefined && !has(SIZE_BANDS, v.size)) throw new InputError('Choose a valid property size');
+  if (v.size === undefined && v.exactRoofAreaM2 === undefined) throw new InputError('Choose a property size, or enter the actual roof area');
   if (v.storeys !== 1 && v.storeys !== 2) throw new InputError('Choose one or two storeys');
   if (v.exactRoofAreaM2 !== undefined && (typeof v.exactRoofAreaM2 !== 'number' || !Number.isFinite(v.exactRoofAreaM2) || v.exactRoofAreaM2 < 20 || v.exactRoofAreaM2 > 1200)) throw new InputError('Enter a roof area between 20 and 1200 m²');
   if (v.exactPitchDegrees !== undefined && (typeof v.exactPitchDegrees !== 'number' || !Number.isFinite(v.exactPitchDegrees) || v.exactPitchDegrees < 0 || v.exactPitchDegrees > 50)) throw new InputError('Enter a roof pitch between 0 and 50 degrees');
@@ -23,7 +25,8 @@ export function parseQuickInput(value: unknown): QuickEstimateInput {
     if (v.exactPitchDegrees !== undefined && v.exactPitchDegrees !== 0) throw new InputError('A flat roof uses a zero-degree pitch in this model');
     if (!(FLAT_COVERINGS as readonly unknown[]).includes(v.covering)) throw new InputError('Choose a flat-roof covering');
   } else {
-    if (!has(PITCH_BANDS, v.pitch)) throw new InputError('Choose a pitch band');
+    if (v.pitch != null && !has(PITCH_BANDS, v.pitch)) throw new InputError('Choose a valid pitch band');
+    if (v.pitch == null && v.exactPitchDegrees === undefined) throw new InputError('Choose a pitch band, or enter the actual pitch');
     if (!(PITCHED_COVERINGS as readonly unknown[]).includes(v.covering)) throw new InputError('Choose a pitched-roof covering');
     if (v.flatExtension !== null && !has(EXTENSION_BANDS, v.flatExtension)) throw new InputError('Choose a valid extension size');
     if (v.flatExtension && !(FLAT_COVERINGS as readonly unknown[]).includes(v.flatCovering)) throw new InputError('Choose a covering for the flat extension');

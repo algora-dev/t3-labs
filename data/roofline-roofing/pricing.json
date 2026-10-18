@@ -92,15 +92,15 @@
     },
     {
       "id": "reroof_everest_055",
-      "name": "Everest Tray secret-fix roof system 0.55g (ColorCote)",
+      "name": "Everest Tray hidden-fix roof system 0.55g (ColorCote)",
       "category": "reroofing",
       "unit": "m2",
       "rate": 200,
       "minimumCharge": 8500,
-      "description": "Premium secret-fix tray system in 0.55mm ColorCote steel, fixed with hidden clips rather than exposed screws, including underlay, clips, standard flashings and installation. Suits low pitches from 3 degrees and architecturally exposed roofs.",
+      "description": "Premium hidden-fix tray system in 0.55mm ColorCote steel, fixed with hidden clips rather than exposed screws, including underlay, clips, standard flashings and installation. Suits low pitches from 3 degrees and architecturally exposed roofs.",
       "includes": [
         "0.55g ColorCote Everest Tray",
-        "Everest tray clips",
+        "Everest Hidden Fix Clips",
         "Underlay",
         "Ridge and barge flashings",
         "Labour"

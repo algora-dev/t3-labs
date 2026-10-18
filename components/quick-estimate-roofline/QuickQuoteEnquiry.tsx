@@ -6,7 +6,7 @@ import { SIZE_BANDS, PITCH_BANDS } from '../../lib/quick-estimate/config';
 import { recordHelperSignal, setHelperSurface } from '../../lib/demo-helper/store';
 import { validateDemoContact, describeDemoFile, type DemoFile } from '../../lib/demo-helper/enquiry-preview';
 const money = (n: number) => `NZ$${new Intl.NumberFormat('en-NZ', { maximumFractionDigits: 0 }).format(n)}`;
-const materials: Record<string, string> = { tile: 'Concrete or clay tiles', slate: 'Slate', pressed_metal: 'Roofdeck 0.40g', longrun: 'Corrugate 0.40g', metal: '0.55g heavy-duty metal', everest_tray: 'Everest Tray 0.55g (secret fix)', membrane: 'Membrane', unknown: 'Not sure' };
+const materials: Record<string, string> = { tile: 'Concrete or clay tiles', slate: 'Slate', pressed_metal: 'Roofdeck 0.40g', longrun: 'Corrugate 0.40g', metal: '0.55g heavy-duty metal', everest_tray: 'Everest Tray 0.55g (hidden fix)', membrane: 'Membrane', unknown: 'Not sure' };
 export function makeQuickEnquirySummary(r: QuickResult) {
   const i = r.input;
   return [

@@ -56,7 +56,7 @@ test('Roofline-facing estimate and enquiry files contain no UK currency or visib
     'data/roofline-roofing/business.json',
   ];
   const joined = files.map(read).join('\n');
-  for (const forbidden of ['£', 'GBP', 'excluding VAT', 'LS1 1AA', 'Based on Apex', "Here's what Apex", 'Here’s what Apex', 'ask Apex']) {
+  for (const forbidden of ['£', 'GBP', 'excluding VAT', 'LS1 1AA', 'Based on Apex', "Here's what Apex", 'Here’s what Apex', 'ask Apex', 'secret fix', 'Secret-fix', 'Secret clips']) {
     assert.ok(!joined.includes(forbidden), `Roofline-facing source contains forbidden legacy copy: ${forbidden}`);
   }
   assert.match(joined, /NZD|en-NZ|Roofline/);
@@ -138,4 +138,17 @@ test('Everest Tray is wired across the trade catalogue, assistant pricing and pi
   assert.ok(ridgeEv && ridgeRd && ridgeEv.defaultLabourRate === ridgeRd.defaultLabourRate * 2, 'Everest ridge flashing labour should be double the through-fixed rate');
   const toolshell = read('app/supplier-pricing-tool/ToolShell.tsx');
   assert.match(toolshell, /hover\\\\:bg-blue-700:hover/, 'theme layer must emit CSS-valid escaped hover selectors');
+});
+
+test('Exact area and pitch alone unlock the estimate without band cards', async () => {
+  const result = await calculateRooflineQuickEstimate({
+    shape: 'gable', size: undefined, exactRoofAreaM2: 160,
+    pitch: null, exactPitchDegrees: 20, storeys: 1,
+    flatExtension: null, project: 'reroof', existingMaterial: 'metal',
+    covering: 'everest_tray', flatCovering: null,
+  });
+  assert.equal(result.price.status, 'priced');
+  assert.equal(result.price.presentation?.confidence, 'high');
+  assert.ok(Math.abs(result.measurements.low.totals.roofAreaM2 - 160) < 0.001);
+  assert.ok(Math.abs(result.measurements.high.totals.roofAreaM2 - 160) < 0.001);
 });

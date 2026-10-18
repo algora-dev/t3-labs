@@ -177,6 +177,9 @@ function QuoteBuilder() {
             <Link href={apex ? "/supplier-pricing-tool/apex-roofing" : backToTool} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">
               Back to tool
             </Link>
+            {roofline && <Link href="/demo/roofline-site" className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">
+              Roofline home
+            </Link>}
           </div>
         </div>
       </header>

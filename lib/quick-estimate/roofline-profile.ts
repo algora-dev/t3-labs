@@ -8,7 +8,7 @@ export function rooflinePricingProfile(_removal: { perM2: number; disposalPerJob
     version: 'roofline-nz-demo-1.1', currency: 'NZD', mode: 'components',
     systems: {
       longrun: { label: 'Corrugate 0.40g (ColorCote)', eavesRate: { material: 9, labour: 8 }, minPitch: 8, maxPitch: 60, areaProducts: ['rf-cg-040', 'rf-underlay-205', 'rf-screws-65'], components: edges('cg'), exclusions: [] },
-      everest_tray: { label: 'Everest Tray 0.55g (secret fix)', eavesRate: { material: 12, labour: 10 }, minPitch: 3, maxPitch: 60, areaProducts: ['rf-ev-055', 'rf-underlay-407', 'rf-ev-clips'], components: edges('ev'), exclusions: [] },
+      everest_tray: { label: 'Everest Tray 0.55g (hidden fix)', eavesRate: { material: 12, labour: 10 }, minPitch: 3, maxPitch: 60, areaProducts: ['rf-ev-055', 'rf-underlay-407', 'rf-ev-clips'], components: edges('ev'), exclusions: [] },
       pressed_metal: { label: 'Roofdeck 0.40g (ColorCote)', eavesRate: { material: 10, labour: 8 }, minPitch: 3, maxPitch: 60, areaProducts: ['rf-rd-040', 'rf-underlay-205', 'rf-screws-65'], components: edges('rd'), exclusions: [] },
       metal: { label: 'Corrugate or Roofdeck 0.55g (heavy duty)', eavesRate: { material: 10, labour: 8 }, minPitch: 8, maxPitch: 60, areaProducts: ['rf-cg-055', 'rf-underlay-407', 'rf-screws-65'], components: edges('cg'), exclusions: [] },
       epdm: { label: 'Low-pitch metal (Roofdeck 0.55g)', eavesRate: { material: 12, labour: 9 }, minPitch: 3, maxPitch: 15, areaProducts: ['rf-rd-055', 'rf-underlay-407', 'rf-screws-65'], components: edges('rd'), exclusions: [] },
