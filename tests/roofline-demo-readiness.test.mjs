@@ -93,3 +93,49 @@ test('Roofline website pricing links carry intent into the detailed tool', () =>
   assert.match(flow, /roofline\.supplier\.flow\.v1/);
   assert.ok(!flow.includes("if (config.slug !== 'apex-roofing') return;\n    const requested = new URLSearchParams(window.location.search).get('entry')"));
 });
+
+
+test('Everest Tray prices above the through-fixed profiles and tolerates low pitches', async () => {
+  const base = {
+    shape: 'gable', size: 'medium', exactRoofAreaM2: 160,
+    pitch: 'typical', exactPitchDegrees: 4, storeys: 1,
+    flatExtension: null, project: 'reroof', existingMaterial: 'metal',
+    flatCovering: null,
+  };
+  const everest = await calculateRooflineQuickEstimate({ ...base, covering: 'everest_tray' });
+  assert.equal(everest.price.currency, 'NZD');
+  assert.equal(everest.price.status, 'priced');
+  assert.ok(everest.price.presentation);
+  const deck = await calculateRooflineQuickEstimate({ ...base, covering: 'pressed_metal' });
+  assert.ok(everest.price.presentation.low > deck.price.presentation.low * 1.4, 'Everest should carry a clear premium over Roofdeck at the same measurements');
+});
+
+test('A mid-keystroke exact area value never resets the quick estimate flow', async () => {
+  const { readQuickDraft } = await import('../lib/quick-estimate/draft.ts');
+  const surviving = readQuickDraft(JSON.stringify({
+    step: 2,
+    answers: { shape: 'gable', size: 'medium', exactRoofAreaM2: 1, storeys: 1, project: 'reroof', existingMaterial: 'metal', covering: 'everest_tray', flatCovering: null },
+    demo: false,
+  }));
+  assert.equal(surviving.step, 2);
+  assert.equal(surviving.answers.exactRoofAreaM2, undefined);
+  assert.equal(surviving.answers.covering, 'everest_tray');
+});
+
+test('Everest Tray is wired across the trade catalogue, assistant pricing and pitch rules', async () => {
+  const { ROOFLINE_ROOFING } = await import('../app/supplier-pricing-tool/supplierDefs/roofline-roofing.ts');
+  const ids = ROOFLINE_ROOFING.products.map(p => p.id);
+  for (const id of ['rf-ev-055', 'rf-ev-clips', 'rf-ridge-ev', 'rf-hip-ev', 'rf-valley-ev', 'rf-barge-ev']) {
+    assert.ok(ids.includes(id), `missing trade product ${id}`);
+  }
+  const pricing = JSON.parse(read('data/roofline-roofing/pricing.json'));
+  const everest = pricing.items.find(i => i.id === 'reroof_everest_055');
+  assert.ok(everest && everest.rate === 200);
+  const rules = JSON.parse(read('data/roofline-roofing/estimate-rules.json'));
+  assert.equal(rules.materialPitchRules.reroof_everest_055.minPitchDegrees, 3);
+  const ridgeRd = ROOFLINE_ROOFING.products.find(p => p.id === 'rf-ridge-rd');
+  const ridgeEv = ROOFLINE_ROOFING.products.find(p => p.id === 'rf-ridge-ev');
+  assert.ok(ridgeEv && ridgeRd && ridgeEv.defaultLabourRate === ridgeRd.defaultLabourRate * 2, 'Everest ridge flashing labour should be double the through-fixed rate');
+  const toolshell = read('app/supplier-pricing-tool/ToolShell.tsx');
+  assert.match(toolshell, /hover\\\\:bg-blue-700:hover/, 'theme layer must emit CSS-valid escaped hover selectors');
+});

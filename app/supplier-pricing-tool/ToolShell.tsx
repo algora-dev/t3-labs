@@ -117,23 +117,33 @@ function ThemeStyle() {
       .spt-scope .hover\\:shadow-\\[0_0_12px_rgba\\(255\\,107\\,53\\,0\\.4\\)\\]:hover { box-shadow: 0 0 12px rgba(${hexToRgb(t.accent)}, 0.45); }
       /* enquiry/lead modals + action tiles: follow the supplier theme */
       .spt-scope .bg-blue-600 { background-color: ${t.accent}; }
-      .spt-scope .hover\:bg-blue-700:hover { background-color: ${t.accentHover}; }
-      .spt-scope .bg-blue-50\/50 { background-color: rgba(${hexToRgb(t.accent)}, 0.12); }
+      .spt-scope .hover\\:bg-blue-700:hover { background-color: ${t.accentHover}; }
+      .spt-scope .bg-blue-50\\/50 { background-color: rgba(${hexToRgb(t.accent)}, 0.12); }
       .spt-scope .bg-blue-50 { background-color: rgba(${hexToRgb(t.accent)}, ${wash}); }
       .spt-scope .ring-blue-100 { --tw-ring-color: ${t.border}; }
-      .spt-scope .ring-blue-500\/40 { --tw-ring-color: rgba(${hexToRgb(t.accent)}, 0.4); }
-      .spt-scope .ring-blue-400\/40 { --tw-ring-color: rgba(${hexToRgb(t.accent)}, 0.4); }
+      .spt-scope .ring-blue-500\\/40 { --tw-ring-color: rgba(${hexToRgb(t.accent)}, 0.4); }
+      .spt-scope .ring-blue-500\\/30 { --tw-ring-color: rgba(${hexToRgb(t.accent)}, 0.3); }
+      .spt-scope .ring-blue-400\\/40 { --tw-ring-color: rgba(${hexToRgb(t.accent)}, 0.4); }
       .spt-scope .ring-blue-400 { --tw-ring-color: ${t.border}; }
       .spt-scope .text-blue-400 { color: ${t.accent}; }
       .spt-scope .text-blue-300 { color: ${t.accent}; }
       .spt-scope .text-blue-700 { color: ${t.accent}; }
-      .spt-scope .bg-blue-500\/20 { background-color: rgba(${hexToRgb(t.accent)}, 0.2); }
-      .spt-scope .bg-blue-600\/20 { background-color: rgba(${hexToRgb(t.accent)}, 0.2); }
+      .spt-scope .bg-blue-500\\/20 { background-color: rgba(${hexToRgb(t.accent)}, 0.2); }
+      .spt-scope .bg-blue-600\\/20 { background-color: rgba(${hexToRgb(t.accent)}, 0.2); }
       .spt-scope .border-blue-300 { border-color: ${t.borderHover}; }
-      .spt-scope .hover\:border-blue-300:hover { border-color: ${t.borderHover}; }
+      .spt-scope .hover\\:border-blue-300:hover { border-color: ${t.borderHover}; }
       .spt-scope .border-blue-400 { border-color: ${t.accent}; }
-      .spt-scope .focus\:ring-blue-500:focus { --tw-ring-color: ${t.accent}; }
-      .spt-scope .hover\:shadow-\[0\,0\,16px_rgba\(37\,99\,235\,0\.5\)\]:hover { box-shadow: 0 0 16px rgba(${hexToRgb(t.accent)}, ${glow}); }
+      .spt-scope .focus\\:ring-blue-500:focus { --tw-ring-color: ${t.accent}; }
+      .spt-scope .hover\\:shadow-\\[0\\,0\\,16px_rgba\\(37\\,99\\,235\\,0\\.5\\)\\]:hover { box-shadow: 0 0 16px rgba(${hexToRgb(t.accent)}, ${glow}); }
+      /* Coverage for hover glows, native controls and gradients on shared flow surfaces. */
+      .spt-scope .hover\\:shadow-\\[0_0_8px_rgba\\(37\\,99\\,235\\,0\\.08\\)\\]:hover { box-shadow: 0 0 8px rgba(${hexToRgb(t.accent)}, 0.18); }
+      .spt-scope .hover\\:shadow-\\[0_0_24px_rgba\\(37\\,99\\,235\\,0\\.35\\)\\]:hover { box-shadow: 0 0 24px rgba(${hexToRgb(t.accent)}, 0.4); }
+      .spt-scope .accent-blue-500 { accent-color: ${t.accent}; }
+      .spt-scope .text-blue-500 { color: ${t.accent}; }
+      .spt-scope .hover\\:text-blue-500:hover { color: ${t.accentHover}; }
+      .spt-scope .text-blue-800 { color: ${t.accentHover}; }
+      .spt-scope .bg-blue-400 { background-color: ${t.accent}; }
+      .spt-scope .to-blue-950 { --tw-gradient-to: ${t.primary}; }
       .spt-scope .pill-shimmer::before {
         background: linear-gradient(90deg, transparent 0%, transparent 40%, ${t.accent} 50%, transparent 60%, transparent 100%);
         background-size: 200% 100%;

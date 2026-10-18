@@ -282,7 +282,93 @@ export function TakeoffWorkstation({
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<Canvas | null>(null);
+  const canvasScrollRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
+
+  // Viewport pan for the scroll-based canvas container: middle-mouse drag,
+  // Space + left-drag, or Alt + left-drag all grab and pan the plan (same
+  // interaction model as the QuoteCore+ takeoff). Wheel/scrollbars keep working.
+  useEffect(() => {
+    const scroller = canvasScrollRef.current;
+    if (!scroller) return;
+    let spaceHeld = false;
+    let panning = false;
+    let panPointerId: number | null = null;
+    let lastX = 0;
+    let lastY = 0;
+    const isEditableTarget = (t: EventTarget | null) => {
+      const el = t as HTMLElement | null;
+      if (!el || typeof el.tagName !== 'string') return false;
+      const tag = el.tagName.toLowerCase();
+      return tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button' || el.isContentEditable;
+    };
+    const updateCursor = () => {
+      scroller.style.cursor = panning ? 'grabbing' : spaceHeld ? 'grab' : '';
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space' && !e.repeat && !isEditableTarget(e.target)) {
+        e.preventDefault(); // stop the page scrolling while Space is held to pan
+        spaceHeld = true;
+        updateCursor();
+      }
+    };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        spaceHeld = false;
+        updateCursor();
+      }
+    };
+    const onBlur = () => {
+      spaceHeld = false;
+      panning = false;
+      updateCursor();
+    };
+    const onPointerDown = (e: PointerEvent) => {
+      const wantsPan = e.button === 1 || (e.button === 0 && (spaceHeld || e.altKey));
+      if (!wantsPan) return;
+      // Suppress the compatibility mouse event so Fabric tools never see it:
+      // no stray points/lines while panning, and no middle-click autoscroll.
+      e.preventDefault();
+      e.stopPropagation();
+      panning = true;
+      panPointerId = e.pointerId;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      try { scroller.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+      updateCursor();
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!panning) return;
+      scroller.scrollLeft -= e.clientX - lastX;
+      scroller.scrollTop -= e.clientY - lastY;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (!panning) return;
+      panning = false;
+      panPointerId = null;
+      try { scroller.releasePointerCapture(e.pointerId); } catch { /* already released */ }
+      updateCursor();
+    };
+    scroller.addEventListener('pointerdown', onPointerDown, true);
+    scroller.addEventListener('pointermove', onPointerMove);
+    scroller.addEventListener('pointerup', onPointerUp);
+    scroller.addEventListener('pointercancel', onPointerUp);
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    window.addEventListener('blur', onBlur);
+    return () => {
+      scroller.removeEventListener('pointerdown', onPointerDown, true);
+      scroller.removeEventListener('pointermove', onPointerMove);
+      scroller.removeEventListener('pointerup', onPointerUp);
+      scroller.removeEventListener('pointercancel', onPointerUp);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+      window.removeEventListener('blur', onBlur);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   // Calibration state
   const [calibrationMode, setCalibrationMode] = useState(false);
@@ -6191,14 +6277,14 @@ const handleApplyRoofAreaToComponent = (componentId: string, roofAreaId: string)
           })()}
 
           {/* Canvas */}
-          <div className="flex-1 flex flex-col items-start justify-start p-2 md:p-6 md:pt-4 overflow-auto min-h-0">
+          <div ref={canvasScrollRef} className="flex-1 flex flex-col items-start justify-start p-2 md:p-6 md:pt-4 overflow-auto min-h-0">
             <div className="border-2 border-gray-200 rounded-lg">
               <canvas ref={canvasRef} />
             </div>
             <p className="mt-2 text-center text-xs text-slate-400">
               {calibrationMode
                 ? `Click ${calibrationPoints.length === 0 ? 'first' : 'second'} point to calibrate`
-                : 'Hold Alt + Drag to pan'}
+                : 'Pan the plan: drag with the middle mouse button, or hold Space / Alt and drag'}
             </p>
           </div>
         </div>

@@ -29,6 +29,16 @@ The classic New Zealand corrugated profile: lightweight, economical and widely u
 ## Roofdeck (trapezoidal) profile
 A trapezoidal (flat-pan, ribbed) long-run profile with stronger spanning capability than corrugate and a clean, modern flat look. Suitable for lower pitches from about 3 degrees with sealed laps, and popular on both homes and commercial buildings.
 
+## Everest Tray (secret fix)
+Everest Tray is Roofline's premium secret-fix tray profile in 0.55mm ColorCote steel. Instead of exposed screws, each tray is held by hidden Everest tray clips, so the finished roof shows a clean tray line with no visible fixings.
+
+- Suitable for low pitches from about 3 degrees, subject to a confirmed clip and fixing specification for the site.
+- Slower to install than through-fixed corrugate or Roofdeck: install labour is significantly higher, and ridge, hip, valley and barge flashings take roughly double the labour of the screwed profiles.
+- Uses the same colour-matched flashings, folded to length in the Christchurch factory.
+- Clips are included in the roof system rate; they are also available separately for extensions and repairs.
+
+Final specification, clip layout and warranty terms are confirmed by the Roofline team.
+
 ## Coating and environmental exposure
 Profile, gauge and coating solve different problems. Roofline's published guidance describes ZinaCore as suitable for moderate environments, MagnaFlow for more demanding or coastal exposure, and AlumiGard for very severe marine, industrial or geothermal environments. The distance from the coast is only one clue: salt exposure, prevailing wind and the exact site still matter, so the team should confirm the final specification.
 

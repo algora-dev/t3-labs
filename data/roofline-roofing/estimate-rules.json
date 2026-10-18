@@ -116,6 +116,10 @@
       "minPitchDegrees": 3,
       "note": "Trapezoidal long-run profiles with sealed laps can be used on lower pitches from about 3 degrees."
     },
+    "reroof_everest_055": {
+      "minPitchDegrees": 3,
+      "note": "Secret-fix tray systems can be used on low pitches from about 3 degrees with a confirmed clip layout and fixing specification."
+    },
     "reroof_wall_cladding": {
       "minPitchDegrees": 0,
       "note": "Wall cladding is vertical and not governed by roof pitch minimums."

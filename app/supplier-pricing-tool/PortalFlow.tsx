@@ -264,7 +264,7 @@ function PortalFlowReady() {
       {step < 3 && (
         <StepProgress steps={steps} current={currentStep} />
       )}
-      <div className="mx-auto max-w-5xl px-4 py-6 pb-16">
+      <div className={config.slug === 'roofline-roofing' && step === 2 && entryMode === 'measure' && !samplePlan && planUrl ? 'mx-auto w-full max-w-[1800px] px-4 py-6 pb-16' : 'mx-auto max-w-5xl px-4 py-6 pb-16'}>
         {journey.active && config.slug === 'apex-roofing' && step >= 2 && !samplePlan && (
           <section className="ag-demo-work-note" aria-label="Demo estimate scope">
             <strong>{journey.current === 'trade' ? 'The same job, with example trade prices' : 'Your measurements and selected products, together'}</strong>
@@ -353,7 +353,7 @@ function PortalFlowReady() {
 
         {/* Step 2a: in-tool takeoff station (measure a plan) */}
         {step === 2 && entryMode === 'measure' && !samplePlan && planUrl && (
-          <TakeoffStation planUrl={planUrl} onFinish={handleTakeoffFinish} contained={config.slug === 'apex-roofing' && journey.active} />
+          <TakeoffStation planUrl={planUrl} onFinish={handleTakeoffFinish} contained={config.slug === 'roofline-roofing' || (config.slug === 'apex-roofing' && journey.active)} />
         )}
 
         {/* Step 2b: manual measurement entry (have measurements).

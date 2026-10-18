@@ -22,4 +22,4 @@ export const EXTENSION_BANDS: Record<ExtensionSizeId, { label: string; min: numb
 };
 export const REFERENCE_ACCESS_HEIGHT_M = { 1: 3, 2: 6 } as const;
 export const FLAT_COVERINGS = ['epdm', 'grp', 'felt'] as const;
-export const PITCHED_COVERINGS = ['tile', 'slate', 'shingle', 'pressed_metal', 'longrun'] as const;
+export const PITCHED_COVERINGS = ['tile', 'slate', 'shingle', 'pressed_metal', 'longrun', 'everest_tray'] as const;

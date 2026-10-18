@@ -47,6 +47,7 @@ export const ROOFLINE_ROOFING = {
     { id: 'rf-rd-055', name: 'Roofdeck 0.55g', code: 'RF-RD-055', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 28.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 48.0, priceEditable: true },
     { id: 'rf-cg-040', name: 'Corrugate 0.40g', code: 'RF-CG-040', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 22.5, packSize: null, defaultWastePct: 12, defaultLabourRate: 42.0, priceEditable: true, suggested: true },
     { id: 'rf-cg-055', name: 'Corrugate 0.55g', code: 'RF-CG-055', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 27.5, packSize: null, defaultWastePct: 12, defaultLabourRate: 46.0, priceEditable: true },
+    { id: 'rf-ev-055', name: 'Everest Tray 0.55g', code: 'RF-EV-055', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['everest'], family: 'Everest', unitPrice: 48.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 108.0, priceEditable: true, suggested: true },
 
     // ---- Underlays (area, all roofs) ----
     { id: 'rf-underlay-205', name: '205 Underlay', code: 'UND-RF-205', basis: 'area', groups: ['roofAreas'], component: 'underlay', roofTypes: ['all'], unitPrice: 5.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 5.0, priceEditable: true, suggested: true },
@@ -55,21 +56,26 @@ export const ROOFLINE_ROOFING = {
     // ---- Screws / fixings (area, no labour) ----
     { id: 'rf-screws-65', name: 'Screws (Fixings) - 65mm', code: 'FIX-RF-65', basis: 'area', groups: ['roofAreas'], component: 'fixing', roofTypes: ['all'], unitPrice: 2.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 0, priceEditable: true, suggested: true },
     { id: 'rf-screws-50', name: 'Screws (Fixings) - 50mm', code: 'FIX-RF-50', basis: 'area', groups: ['roofAreas'], component: 'fixing', roofTypes: ['all'], unitPrice: 1.7, packSize: null, defaultWastePct: 10, defaultLabourRate: 0, priceEditable: true },
+    { id: 'rf-ev-clips', name: 'Everest tray clips', code: 'FIX-RF-EV', basis: 'area', groups: ['roofAreas'], component: 'fixing', roofTypes: ['everest'], family: 'Everest', unitPrice: 11.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 0, priceEditable: true, suggested: true },
 
     // ---- Ridge (lineal, +0.25m per entry) ----
     { id: 'rf-ridge-rd', name: 'Ridge Flashing - Roofdeck', code: 'RDG-RF-RD', basis: 'lineal', groups: ['ridges'], component: 'ridge', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 18.5, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 22.0, priceEditable: true, suggested: true },
     { id: 'rf-ridge-cg', name: 'Ridge Flashing - Corrugate', code: 'RDG-RF-CG', basis: 'lineal', groups: ['ridges'], component: 'ridge', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 21.0, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 22.0, priceEditable: true, suggested: true },
+    { id: 'rf-ridge-ev', name: 'Ridge Flashing - Everest Tray', code: 'RDG-RF-EV', basis: 'lineal', groups: ['ridges'], component: 'ridge', roofTypes: ['everest'], family: 'Everest', unitPrice: 21.0, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 44.0, priceEditable: true, suggested: true },
 
     // ---- Hip (lineal, +0.25m per entry) ----
     { id: 'rf-hip-rd', name: 'Hip Flashing - Roofdeck', code: 'HIP-RF-RD', basis: 'lineal', groups: ['hips'], component: 'hip', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 18.5, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 24.0, priceEditable: true, suggested: true },
     { id: 'rf-hip-cg', name: 'Hip Flashing - Corrugate', code: 'HIP-RF-CG', basis: 'lineal', groups: ['hips'], component: 'hip', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 22.5, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 24.0, priceEditable: true, suggested: true },
+    { id: 'rf-hip-ev', name: 'Hip Flashing - Everest Tray', code: 'HIP-RF-EV', basis: 'lineal', groups: ['hips'], component: 'hip', roofTypes: ['everest'], family: 'Everest', unitPrice: 22.5, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 48.0, priceEditable: true, suggested: true },
 
     // ---- Valley (lineal, +0.25m per entry - one profile suits both systems) ----
     { id: 'rf-valley', name: 'Valley Flashing - Corrugate', code: 'VAL-RF-CG', basis: 'lineal', groups: ['valleys'], component: 'valley', roofTypes: ['roofdeck', 'corrugate'], unitPrice: 17.0, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 12.0, priceEditable: true, suggested: true },
+    { id: 'rf-valley-ev', name: 'Valley Flashing - Everest Tray', code: 'VAL-RF-EV', basis: 'lineal', groups: ['valleys'], component: 'valley', roofTypes: ['everest'], family: 'Everest', unitPrice: 17.0, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 24.0, priceEditable: true, suggested: true },
 
     // ---- Barge (lineal, +0.25m per entry) ----
     { id: 'rf-barge-rd', name: 'Barge Flashing - Roofdeck', code: 'BRG-RF-RD', basis: 'lineal', groups: ['barges'], component: 'barge', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 22.5, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 18.0, priceEditable: true, suggested: true },
     { id: 'rf-barge-cg', name: 'Barge Flashing - Corrugate', code: 'BRG-RF-CG', basis: 'lineal', groups: ['barges'], component: 'barge', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 22.5, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 18.0, priceEditable: true, suggested: true },
+    { id: 'rf-barge-ev', name: 'Barge Flashing - Everest Tray', code: 'BRG-RF-EV', basis: 'lineal', groups: ['barges'], component: 'barge', roofTypes: ['everest'], family: 'Everest', unitPrice: 22.5, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.25, defaultLabourRate: 36.0, priceEditable: true, suggested: true },
 
     // ---- Fascia + spouting (lineal, +0.2m per entry) ----
     { id: 'rf-fascia-185', name: '185 Fascia', code: 'FAS-RF-185', basis: 'lineal', groups: ['spouting'], component: 'gutter', roofTypes: ['all'], unitPrice: 22.0, packSize: null, defaultWastePct: 0, defaultWasteMode: 'flat', defaultWasteFlat: 0.2, defaultLabourRate: 18.0, priceEditable: true, suggested: true },

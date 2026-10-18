@@ -25,8 +25,10 @@ function fmtMoney(n: number, locale = 'en-GB'): string {
   return n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-/** Generic clean default accent - user picks their own brand colour in settings. */
+/** Generic clean default accent - user picks their own brand colour in settings.
+ *  Roofline deep-links carry ?supplier=roofline-roofing: default to brand red. */
 const DEFAULT_ACCENT = '#2563EB';
+const ROOFLINE_ACCENT = '#C8102E';
 
 function QuoteBuilder() {
   const params = useSearchParams();
@@ -42,7 +44,7 @@ function QuoteBuilder() {
   const [fromEmail, setFromEmail] = useState('');
   const [fromAddress, setFromAddress] = useState('');
   const [logo, setLogo] = useState<string | null>(null);
-  const [accent, setAccent] = useState(DEFAULT_ACCENT);
+  const [accent, setAccent] = useState(roofline ? ROOFLINE_ACCENT : DEFAULT_ACCENT);
   const [clientName, setClientName] = useState('');
   const [clientAddress, setClientAddress] = useState('');
   const [quoteDate, setQuoteDate] = useState(() => new Date().toISOString().slice(0, 10));
