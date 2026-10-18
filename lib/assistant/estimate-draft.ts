@@ -53,7 +53,7 @@ function validateComponents(value: unknown): { ok: true; components: EstimateDra
         }
       } else if (quantitySource !== 'heuristic') {
         // Heuristic quantities are only allowed after explicit user authorisation.
-        return { ok: false, error: `${item.name}: enter a quantity or explicitly ask Apex to estimate it for you.` };
+        return { ok: false, error: `${item.name}: enter a quantity or explicitly ask the assistant to estimate it for you.` };
       } else if (!(HEURISTIC_COMPONENT_IDS as readonly string[]).includes(item.id)) {
         return { ok: false, error: `${item.name} cannot be safely estimated - enter an approximate length or remove it.` };
       }
@@ -160,8 +160,9 @@ export function describePricedDraft(result: PricedDraft): string {
   }
   parts.push(estimate.project.materialLabel.toLowerCase());
 
-  const total =
-    result.mode === 'single'
+  const total = result.presentation
+    ? `${symbol}${result.presentation.low.toLocaleString()} - ${symbol}${result.presentation.high.toLocaleString()} ${currency}`
+    : result.mode === 'single'
       ? `${symbol}${estimate.total.toLocaleString()} ${currency}`
       : `${symbol}${result.low.total.toLocaleString()} - ${symbol}${result.high.total.toLocaleString()} ${currency}`;
 
@@ -170,8 +171,9 @@ export function describePricedDraft(result: PricedDraft): string {
       ? 'the roof covering only'
       : 'the roof covering plus the components you chose';
 
-  const prefix =
-    result.mode === 'range'
+  const prefix = result.presentation
+    ? `${result.presentation.label}. ${result.presentation.reasons.join(' ')}`
+    : result.mode === 'range'
       ? `Because you picked a size band rather than an exact measurement, I've shown a price range instead of a single figure.`
       : result.indicative
         ? `Some quantities below are estimated allowances, so treat the figures as indicative.`

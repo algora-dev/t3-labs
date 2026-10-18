@@ -127,8 +127,8 @@ export function TakeoffStation({ planUrl, onFinish, contained = false }: {
   return (
     <div className={contained ? 'w-full space-y-3' : 'w-[125%] -ml-[12.5%] space-y-3'}>
       <Workstation
-        backHref={config.slug === 'apex-roofing' ? '/demo/roofing-site/estimate' : undefined}
-        backLabel={config.slug === 'apex-roofing' ? 'Back to Apex roof tools' : undefined}
+        backHref={config.slug === 'apex-roofing' ? '/demo/roofing-site/estimate' : config.slug === 'roofline-roofing' ? '/demo/roofline-site/estimate' : undefined}
+        backLabel={config.slug === 'apex-roofing' ? 'Back to Apex roof tools' : config.slug === 'roofline-roofing' ? 'Back to Roofline roof tools' : undefined}
         workspaceSlug="supplier-demo"
         quote={{
           id: 'supplier-tool',

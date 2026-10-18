@@ -77,7 +77,7 @@ export function AdminTrade({ admin, setAdmin, cfg }: { admin: AdminData; setAdmi
         <div className="flex flex-wrap items-end gap-3">
           <div>
             <label className="block text-xs font-medium text-slate-600">Customer email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') addCustomer(); }} className={`${inputCls} w-64`} placeholder="buyer@business.co.uk" />
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') addCustomer(); }} className={`${inputCls} w-64`} placeholder={cfg.slug === 'roofline-roofing' ? 'buyer@business.co.nz' : 'buyer@business.co.uk'} />
           </div>
           <div>
             <label className="block text-xs font-medium text-slate-600">Tier</label>
@@ -115,7 +115,7 @@ export function AdminTrade({ admin, setAdmin, cfg }: { admin: AdminData; setAdmi
                     <td className="py-1.5 pr-2">
                       <span className="rounded-full px-2.5 py-1 text-xs font-medium bg-slate-100 text-slate-600">{c.status}</span>
                     </td>
-                    <td className="py-1.5 pr-2 text-xs text-slate-400">{new Date(c.addedAt).toLocaleDateString('en-GB')}</td>
+                    <td className="py-1.5 pr-2 text-xs text-slate-400">{new Date(c.addedAt).toLocaleDateString(cfg.slug === 'roofline-roofing' ? 'en-NZ' : 'en-GB')}</td>
                     <td className="py-1.5 text-right whitespace-nowrap">
                       <button onClick={() => resetPassword(c.email)} className="text-xs font-medium text-slate-500 hover:text-slate-800 transition">Preview password reset</button>
                       <button onClick={() => removeCustomer(c.email)} className="ml-3 text-slate-300 hover:text-red-500 transition" aria-label={`Remove ${c.email}`}>

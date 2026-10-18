@@ -147,9 +147,6 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
         <div className="site-shell flex min-h-[34px] items-center justify-between gap-4">
           <p className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/95">Canterbury roofing specialists</p>
           <div className="flex items-center gap-4">
-            <Link href="/supplier-pricing-tool/roofline-roofing/admin" className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/80 transition hover:text-white" title="Admin - open the admin dashboard">
-              Admin
-            </Link>
             <span aria-hidden="true" className="text-white/90">
               <SearchIcon />
             </span>
@@ -346,8 +343,8 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
   return <section id="estimate" className="section-pad bg-white"><div className="site-shell"><div className="rounded-[24px] border border-[#D6E5F8] bg-[#F5F9FF] p-6 sm:p-10 lg:p-12">
     <div className="grid items-center gap-9 lg:grid-cols-2">
       <div><p className="section-eyebrow">FREE ROOF TOOLS</p><h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-[#101828] sm:text-4xl">A starting price.<br />A clearer next step.</h2><p className="mt-5 max-w-xl text-base leading-8 text-[#667085]">Choose the route that fits what you know. Get a ballpark without measurements, or use more detail to build an itemised estimate.</p>
-        <ul className="mt-6 grid gap-3 text-sm text-[#344054]"><li className="flex gap-2"><CheckIcon/>No account needed to try the tools</li><li className="flex gap-2"><CheckIcon/>Based on ApexÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢s configured products and rates</li><li className="flex gap-2"><CheckIcon/>Carry your estimate into a quote enquiry</li></ul>
-        <div className="mt-7"><ButtonLink href={site.estimateTool.ctaHref}>Choose an estimate tool<ArrowIcon/></ButtonLink></div>
+        <ul className="mt-6 grid gap-3 text-sm text-[#344054]"><li className="flex gap-2"><CheckIcon/>No account needed to try the tools</li><li className="flex gap-2"><CheckIcon/>Uses Roofline products with illustrative demo pricing</li><li className="flex gap-2"><CheckIcon/>Carry your estimate into a quote enquiry</li></ul>
+        <div className="mt-7"><ButtonLink href={site.estimateTool.ctaHref}>See your pricing options<ArrowIcon/></ButtonLink></div>
       </div><RoofToolChoices compact />
     </div>
   </div></div></section>;
@@ -952,9 +949,6 @@ export function Footer({ site }: { site: ActRoofingSiteConfig }) {
               {social.label}
             </a>
           ))}
-          <Link className="text-sm font-semibold uppercase tracking-wide text-white/40 transition hover:text-[#8AB4F8]" href="/supplier-pricing-tool/roofline-roofing/admin">
-            Admin login
-          </Link>
         </div>
       </div>
       <div className="site-shell mt-12 border-t border-white/10 pt-6">

@@ -162,7 +162,7 @@ export function RooflineEnquiryPanel({ onClose, accentColor }: { onClose: () => 
   const attachedEstimates = (prefill?.latestEstimates?.length
     ? prefill.latestEstimates : prefill?.latestEstimate ? [prefill.latestEstimate] : [])
     .filter(e => Number.isFinite(e.total)).slice().sort((a, b) => a.total - b.total);
-  const money = (n: number) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 }).format(n);
+  const money = (n: number) => `NZ$${new Intl.NumberFormat('en-NZ', { maximumFractionDigits: 0 }).format(n)}`;
   const estimateLabel = attachedEstimates.length > 1
     ? `${money(attachedEstimates[0].total)} to ${money(attachedEstimates[attachedEstimates.length - 1].total)}`
     : attachedEstimates.length ? money(attachedEstimates[0].total) : '';
@@ -199,7 +199,7 @@ export function RooflineEnquiryPanel({ onClose, accentColor }: { onClose: () => 
   if (phase === 'success') {
     return <div className="flex h-full flex-col overflow-y-auto px-5 py-6" role="status">
       <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-xl text-emerald-700" aria-hidden="true">✓</div>
-      <h2 className="text-xl font-bold text-slate-900">Here’s what Apex would receive.</h2>
+      <h2 className="text-xl font-bold text-slate-900">Here’s what Roofline would receive.</h2>
       <p className="mt-2 text-sm leading-relaxed text-slate-600">
         The request and useful conversation details are already attached{estimateLabel ? ', including the indicative estimate' : ''}. <strong>This is a demo, so no email was sent.</strong> On a live site this would go straight to the business team.
       </p>
@@ -211,7 +211,7 @@ export function RooflineEnquiryPanel({ onClose, accentColor }: { onClose: () => 
         {roofSummary && <Row label="Roof" value={roofSummary} />}
         {material && <Row label="Covering" value={material} />}
         {location && <Row label="Location" value={location} />}
-        {estimateLabel && <Row label="Indicative estimate" value={`${estimateLabel} excl. VAT`} />}
+        {estimateLabel && <Row label="Indicative estimate" value={`${estimateLabel} indicative NZD`} />}
         {!contextSummary && notes && <Row label="Enquiry note" value={notes} />}
         {attachments.length > 0 && <Row label="Selected files" value={attachments.map(f => f.name).join(', ')} />}
       </div>
@@ -278,7 +278,7 @@ export function RooflineEnquiryPanel({ onClose, accentColor }: { onClose: () => 
                   <p className="text-xs font-semibold">Indicative estimate</p>
                   <p className="mt-0.5 text-[10px] text-slate-300">{attachedEstimates.length > 1 ? 'Both range scenarios included' : `Reference ${estimate.id}`}</p>
                 </div>
-                <div><p className="text-lg font-bold">{estimateLabel}</p><p className="text-[11px] text-slate-300">GBP, excluding VAT</p></div>
+                <div><p className="text-lg font-bold">{estimateLabel}</p><p className="text-[11px] text-slate-300">NZD, indicative demo pricing</p></div>
               </div>
               <details className="px-4 py-3"><summary className="cursor-pointer text-xs font-semibold text-slate-600">View priced scope and assumptions</summary>
                 {attachedEstimates.map((item, index) => <div key={item.id} className="py-2">
@@ -366,7 +366,7 @@ export function RooflineEnquiryPanel({ onClose, accentColor }: { onClose: () => 
             </div>
             <div className="col-span-2">
               <label className={labelCls}>Location (optional)</label>
-              <input className={inputCls} value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Town / postcode" />
+              <input className={inputCls} value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Suburb / postcode" />
             </div>
             <div className="col-span-2">
               <label className={labelCls}>Other requirements (optional)</label>
@@ -434,7 +434,7 @@ export function RooflineEnquiryPanel({ onClose, accentColor }: { onClose: () => 
 
         {estimate && (
           <div className="mt-3 rounded-xl bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
-            {attachedEstimates.length > 1 ? 'Both range scenarios' : 'Your estimate'} ({estimateLabel}, excluding VAT) will be attached.
+            {attachedEstimates.length > 1 ? 'Both range scenarios' : 'Your estimate'} ({estimateLabel}, indicative NZD) will be attached.
           </div>
         )}
         {error && <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">{error}</div>}
@@ -448,7 +448,7 @@ export function RooflineEnquiryPanel({ onClose, accentColor }: { onClose: () => 
           className="w-full rounded-full px-4 py-3 text-xs font-semibold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
           style={{ backgroundColor: accentColor }}
         >
-          {phase === 'submitting' ? 'Preparing enquiry...' : 'Preview what Apex receives'}
+          {phase === 'submitting' ? 'Preparing enquiry...' : 'Preview what Roofline receives'}
         </button>
       </div>
     </div>

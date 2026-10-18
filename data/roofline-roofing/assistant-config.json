@@ -15,11 +15,10 @@
   },
   "turnTimeoutMs": 30000,
   "starterPrompts": [
-    "I have a 180m2 corrugated roof in Christchurch. Roughly what would a re-roof cost?",
-    "What is the difference between Roofdeck and corrugated iron?",
-    "Can you price my plans for me?",
-    "Do you replace spouting and gutters too?",
-    "Can you prepare an enquiry for my project?"
+    "I'm building near the coast. Which Roofline roofing finish should I consider?",
+    "Can Roofdeck be used on a 4 degree roof?",
+    "I have a 160 m², 20° metal re-roof and I'm considering Roofdeck 0.40g. Can you give me an indicative price for the main roof system?",
+    "I'm a roofer with measurements. Can I price a job using Roofline products?"
   ],
   "tone": "a competent member of the Roofline Canterbury team: warm, concise, confident, professional - never fluffy, never salesy",
   "assistantLabel": "Ask Roofline",
@@ -28,7 +27,7 @@
   "launcherSubtitle": "Instant roofing advice and pricing",
   "teaserTitle": "This is a Smart Website",
   "teaserText": "Instead of searching through pages, ask the Smart Assistant. It can answer questions, price jobs, find the right page and help prepare an enquiry.",
-  "teaserExample": "I have a 180m2 corrugated roof. Roughly what would a re-roof cost?",
-  "openingIntro": "I know Roofline Canterbury's products, services, roofing information and pricing. Ask me like you would ask a member of the team.",
+  "teaserExample": "Can Roofdeck be used on a 4 degree roof?",
+  "openingIntro": "I know Roofline Canterbury's products, roofing guidance and indicative demo pricing. Ask a product question, check suitability, or get a ballpark project range.",
   "demoFooter": "Roofline Canterbury demonstration website - interactive demo by T3 Labs"
 }

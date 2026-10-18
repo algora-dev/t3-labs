@@ -1,18 +1,14 @@
 {
   "business": {
     "name": "Roofline Canterbury",
-    "demo": true,
+    "demo": false,
     "tagline": "Canterbury owned and operated roofing and cladding manufacturer and installation contractor",
     "description": "Roofline Canterbury is a 100% locally owned and operated roofing and cladding manufacturer and roofing installation contractor. Family owned and Canterbury based since 1977, we manufacture, supply and install long-run roofing and cladding metal from our own Christchurch factory for everything from small home renovations to large commercial developments.",
     "phone": "03 349 8439",
     "email": "enquiries@rooflinecanterbury.example",
     "serviceAreas": [
       "Christchurch",
-      "Canterbury",
-      "Selwyn",
-      "Waimakariri",
-      "Ashburton",
-      "Timaru"
+      "Canterbury"
     ],
     "hours": {
       "monday": "7:30am - 5:00pm",
@@ -23,12 +19,12 @@
       "saturday": "Closed",
       "sunday": "Closed"
     },
-    "emergencyProcess": "For urgent leaks or storm damage, call the team on 03 349 8439 during business hours. We prioritise make-safe work and can arrange temporary weather protection while a permanent repair is scheduled.",
-    "insuranceWork": "Yes. We work with homeowners, builders and insurers on re-roofing and repair work across Canterbury, including earthquake and storm-related replacements, and can supply the documentation your insurer needs.",
+    "emergencyProcess": "For urgent leaks or storm damage, contact the Roofline Canterbury team on 03 349 8439. Emergency availability and temporary make-safe options should be confirmed directly with the team.",
+    "insuranceWork": "Roofline's public information discusses re-roofing and earthquake-damaged roofs. Insurance claim handling, insurer documentation and any claim-specific process should be confirmed directly with the Roofline team.",
     "guarantees": [
-      "Manufacturer warranties on ColorCote and Zincalume coated steel products",
-      "Workmanship warranty on all installation work we complete",
-      "Warranty support handled by the same local team you dealt with from the start"
+      "5-year workmanship guarantee on Roofline installation work",
+      "Product warranties vary by the selected roofing product, coating and geographical environment",
+      "Final warranty suitability should be confirmed for the site location and selected coating system"
     ],
     "process": [
       "Tell us about your project by phone, form, or the free estimate tools on this website",
@@ -38,19 +34,50 @@
       "Our installation team fits it, or we supply for your own builder"
     ],
     "services": [
-      { "id": "new_roofing", "name": "New Roofing", "summary": "Complete new long-run steel roofs for new builds, manufactured in our Christchurch factory and installed by our own team." },
-      { "id": "reroofing", "name": "Re-Roofing", "summary": "Full roof replacements in corrugated or Roofdeck profiles, including underlay, flashings and spouting if needed." },
-      { "id": "commercial_roofing", "name": "Commercial Roofing", "summary": "Large-scale roofing and cladding supply and installation for commercial and agricultural buildings." },
-      { "id": "wall_cladding", "name": "Wall Cladding", "summary": "Roofline weatherboard and long-run wall cladding systems, manufactured and installed to suit your build." },
-      { "id": "spouting_guttering", "name": "Spouting and Guttering", "summary": "Fascia, quad spouting systems, gutters and downpipes in ColorCote finishes, made to length." },
-      { "id": "flashings", "name": "Flashings", "summary": "Colour-matched roof and wall cladding flashings folded to order with fast factory turnaround." },
-      { "id": "asbestos_removal", "name": "Asbestos Removal", "summary": "Safe removal and replacement of deprecated asbestos cement roofing as part of re-roofing work." },
-      { "id": "plan_pricing", "name": "Price Your Plans", "summary": "Send us your house plans and we will measure and price your roofing, cladding and spouting from the drawings." }
+      {
+        "id": "new_roofing",
+        "name": "New Roofing",
+        "summary": "Complete new long-run steel roofs for new builds, manufactured in our Christchurch factory and installed by our own team."
+      },
+      {
+        "id": "reroofing",
+        "name": "Re-Roofing",
+        "summary": "Full roof replacements in corrugated or Roofdeck profiles, including underlay, flashings and spouting if needed."
+      },
+      {
+        "id": "commercial_roofing",
+        "name": "Commercial Roofing",
+        "summary": "Large-scale roofing and cladding supply and installation for commercial and agricultural buildings."
+      },
+      {
+        "id": "wall_cladding",
+        "name": "Wall Cladding",
+        "summary": "Roofline weatherboard and long-run wall cladding systems, manufactured and installed to suit your build."
+      },
+      {
+        "id": "spouting_guttering",
+        "name": "Spouting and Guttering",
+        "summary": "Fascia, quad spouting systems, gutters and downpipes in ColorCote finishes, made to length."
+      },
+      {
+        "id": "flashings",
+        "name": "Flashings",
+        "summary": "Colour-matched roof and wall cladding flashings folded to order with fast factory turnaround."
+      },
+      {
+        "id": "asbestos_removal",
+        "name": "Asbestos Removal",
+        "summary": "Safe removal and replacement of deprecated asbestos cement roofing as part of re-roofing work."
+      },
+      {
+        "id": "plan_pricing",
+        "name": "Price Your Plans",
+        "summary": "Send us your house plans and we will measure and price your roofing, cladding and spouting from the drawings."
+      }
     ],
     "roofTypes": [
-      "Corrugated (corrugate) steel",
+      "Corrugated (Corrugate) long-run steel",
       "Roofdeck trapezoidal long-run steel",
-      "Long-run secret-fix steel",
       "Clear polycarbonate roof lighting"
     ],
     "materials": [
@@ -58,7 +85,7 @@
       "Zincalume coated steel",
       "0.40mm and 0.55mm gauges"
     ],
-    "handoffMessage": "I can pass your details to the Roofline Canterbury team. They will follow up with clear advice and pricing for your project, usually within one business day.",
+    "handoffMessage": "I can pass your details to the Roofline Canterbury team so they can confirm the site details, product suitability and final pricing for your project.",
     "trustSignals": [
       "Family owned and Canterbury based since 1977",
       "Our own Christchurch factory for fast turnaround",
@@ -68,8 +95,8 @@
     "showroom": {
       "available": true,
       "name": "Roofline Canterbury factory and office",
-      "address": "Christchurch, New Zealand",
-      "access": "Visit during business hours to view product samples and colour options.",
+      "address": "163 Shands Road, Hornby, Christchurch",
+      "access": "Contact Roofline or visit the public contact page before travelling if you want to confirm opening hours and sample availability.",
       "whatYouCanSee": [
         "Corrugate and Roofdeck profile samples",
         "ColorCote colour range",
@@ -87,13 +114,37 @@
     ]
   },
   "faqs": [
-    { "q": "Do you manufacture the roofing yourselves?", "a": "Yes. We manufacture long-run roofing, cladding, spouting and flashings in our own Christchurch factory, which is how we keep turnaround times fast and quality consistent." },
-    { "q": "Can I buy supply-only, or do you install as well?", "a": "Both. We manufacture and supply product for your own builder, and we have our own installation team for complete supply and install jobs." },
-    { "q": "Can you price from my house plans?", "a": "Yes, use the Price Your Plans service. Send your plans through the contact form and we measure and price your roofing, cladding and spouting from the drawings." },
-    { "q": "What is the difference between corrugate and Roofdeck?", "a": "Corrugate is the classic round-profile iron, through-fixed with screws, and works from about 8 degrees pitch. Roofdeck is a trapezoidal long-run profile with stronger spanning and a flatter look, working from lower pitches. Both come in ColorCote finishes." },
-    { "q": "What colours are available?", "a": "The ColorCote and Zincalume colour ranges cover the popular New Zealand roof colours. Visit the colour options page or ask us for a specific colour match." },
-    { "q": "Do you handle asbestos roofs?", "a": "Yes. If your existing roof is deprecated asbestos cement sheet, we manage safe removal as part of the re-roofing process and replace it with new long-run steel." },
-    { "q": "How long does a re-roof take?", "a": "Most residential re-roofs are completed in a few working days once product is manufactured and on site. Because we manufacture locally, lead times are typically shorter than importing." },
-    { "q": "Do you work outside Christchurch?", "a": "We cover greater Christchurch and Canterbury, including Selwyn, Waimakariri, Ashburton and further afield for larger projects." }
+    {
+      "q": "Do you manufacture the roofing yourselves?",
+      "a": "Yes. We manufacture long-run roofing, cladding, spouting and flashings in our own Christchurch factory, which is how we keep turnaround times fast and quality consistent."
+    },
+    {
+      "q": "Can I buy supply-only, or do you install as well?",
+      "a": "Both. We manufacture and supply product for your own builder, and we have our own installation team for complete supply and install jobs."
+    },
+    {
+      "q": "Can you price from my house plans?",
+      "a": "Yes, use the Price Your Plans service. Send your plans through the contact form and we measure and price your roofing, cladding and spouting from the drawings."
+    },
+    {
+      "q": "What is the difference between corrugate and Roofdeck?",
+      "a": "Corrugate is the classic round-profile iron, through-fixed with screws, and works from about 8 degrees pitch. Roofdeck is a trapezoidal long-run profile with stronger spanning and a flatter look, working from lower pitches. Both come in ColorCote finishes."
+    },
+    {
+      "q": "What colours are available?",
+      "a": "The ColorCote and Zincalume colour ranges cover the popular New Zealand roof colours. Visit the colour options page or ask us for a specific colour match."
+    },
+    {
+      "q": "Do you handle asbestos roofs?",
+      "a": "Roofline lists asbestos removal within its roofing solutions. Because asbestos work needs the right site controls and process, the team should confirm the approach for your particular roof before work is planned."
+    },
+    {
+      "q": "How long does a re-roof take?",
+      "a": "Roofline says a residential re-roof can typically be completed in a few working days, weather permitting. The actual programme depends on roof size, detailing, access, product preparation and site conditions."
+    },
+    {
+      "q": "Do you work outside Christchurch?",
+      "a": "Roofline is Christchurch and Canterbury based. For a project outside the immediate Christchurch area, confirm the site location with the team so they can advise whether they can supply, install or both."
+    }
   ]
 }

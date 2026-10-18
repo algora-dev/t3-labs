@@ -6,11 +6,12 @@
 
 import { useState } from 'react';
 import type { AdminData, TeamMember } from '../adminData';
+import type { SupplierConfig } from '../supplierConfig';
 import { SectionCard } from './AdminPanel';
 
 const ROLES: TeamMember['role'][] = ['Owner', 'Admin', 'Editor'];
 
-export function AdminTeam({ admin, setAdmin }: { admin: AdminData; setAdmin: (fn: (a: AdminData) => AdminData) => void }) {
+export function AdminTeam({ admin, setAdmin, cfg }: { admin: AdminData; setAdmin: (fn: (a: AdminData) => AdminData) => void; cfg: SupplierConfig }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<TeamMember['role']>('Editor');
@@ -44,7 +45,7 @@ export function AdminTeam({ admin, setAdmin }: { admin: AdminData; setAdmin: (fn
         </div>
         <div>
           <label className="block text-xs font-medium text-slate-600">Email</label>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') addMember(); }} className={`${inputCls} w-60`} placeholder="sam@supplier.co.uk" />
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') addMember(); }} className={`${inputCls} w-60`} placeholder={cfg.slug === 'roofline-roofing' ? 'team@roofline.example' : 'sam@supplier.co.uk'} />
         </div>
         <div>
           <label className="block text-xs font-medium text-slate-600">Role</label>

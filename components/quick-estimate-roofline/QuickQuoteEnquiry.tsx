@@ -5,20 +5,20 @@ import { ROOF_TEMPLATES } from '../../lib/quick-estimate/templates';
 import { SIZE_BANDS, PITCH_BANDS } from '../../lib/quick-estimate/config';
 import { recordHelperSignal, setHelperSurface } from '../../lib/demo-helper/store';
 import { validateDemoContact, describeDemoFile, type DemoFile } from '../../lib/demo-helper/enquiry-preview';
-const pounds = (n: number) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 }).format(n);
-const materials: Record<string, string> = { tile: 'Concrete tiles', slate: 'Natural slate', shingle: 'Asphalt shingles', pressed_metal: 'Pressed metal tiles', longrun: 'Long-run metal', metal: 'Metal', epdm: 'EPDM rubber membrane', grp: 'GRP fibreglass', felt: 'Felt', membrane: 'Membrane', unknown: 'Not sure' };
+const money = (n: number) => `NZ$${new Intl.NumberFormat('en-NZ', { maximumFractionDigits: 0 }).format(n)}`;
+const materials: Record<string, string> = { tile: 'Concrete or clay tiles', slate: 'Slate', pressed_metal: 'Roofdeck 0.40g', longrun: 'Corrugate 0.40g', metal: '0.55g heavy-duty metal', membrane: 'Membrane', unknown: 'Not sure' };
 export function makeQuickEnquirySummary(r: QuickResult) {
   const i = r.input;
   return [
     'Roofline Canterbury - indicative roof estimate (demo)',
     `Roof: ${ROOF_TEMPLATES[i.shape].label}`,
-    `Footprint: ${SIZE_BANDS[i.size].min}-${SIZE_BANDS[i.size].max} m²`,
-    `Pitch: ${i.shape === 'flat' ? 'Flat' : i.pitch ? `${PITCH_BANDS[i.pitch].min}-${PITCH_BANDS[i.pitch].max}°` : 'Not supplied'}`,
+    `Roof area: ${i.exactRoofAreaM2 !== undefined ? `${i.exactRoofAreaM2} m² supplied` : `${SIZE_BANDS[i.size].min}-${SIZE_BANDS[i.size].max} m² approximate band`}`,
+    `Pitch: ${i.exactPitchDegrees !== undefined ? `${i.exactPitchDegrees}° supplied` : i.shape === 'flat' ? 'Flat' : i.pitch ? `${PITCH_BANDS[i.pitch].min}-${PITCH_BANDS[i.pitch].max}° approximate band` : 'Not supplied'}`,
     `Storeys: ${i.storeys}`, `Project: ${i.project}`, `Existing covering: ${materials[i.existingMaterial ?? ''] ?? 'N/A'}`,
     `Preferred covering: ${materials[i.covering]}`,
     ...(i.flatExtension ? [`Flat extension: ${i.flatExtension}, ${materials[i.flatCovering!]}`] : []),
     `Roof area: ${r.measurements.low.totals.roofAreaM2.toFixed(1)}-${r.measurements.high.totals.roofAreaM2.toFixed(1)} m²`,
-    `Price: ${r.price.low && r.price.high ? `${pounds(Math.floor(r.price.low.total / 100) * 100)} to ${pounds(Math.ceil(r.price.high.total / 100) * 100)}` : 'Requires review'}`,
+    `Indicative price: ${r.price.presentation ? `${money(r.price.presentation.low)} to ${money(r.price.presentation.high)} (${r.price.presentation.confidence} confidence)` : 'Requires review'}`,
     r.price.taxNote, 'Not a formal quote. The actual price could be higher or lower.',
   ].join('\n');
 }
@@ -31,7 +31,7 @@ export function QuickQuoteEnquiry({ result, onClose, guided = false, open = true
   const heading = useRef<HTMLHeadingElement>(null);
   const i = result.input;
   const summary = makeQuickEnquirySummary(result);
-  const amount = result.price.low && result.price.high ? `${pounds(Math.floor(result.price.low.total / 100) * 100)} to ${pounds(Math.ceil(result.price.high.total / 100) * 100)}` : 'Requires professional review';
+  const amount = result.price.presentation ? `${money(result.price.presentation.low)} to ${money(result.price.presentation.high)}` : 'Requires professional review';
   useEffect(() => {
     if (!open) return;
     setHelperSurface('quick-enquiry', 'quick');
@@ -50,7 +50,7 @@ export function QuickQuoteEnquiry({ result, onClose, guided = false, open = true
   function exampleDetails() {
     // Explicit demo shortcut, using the same validation and current estimate.
     // Never read personal details from another form or from storage.
-    return { ...details, name: 'Sam Taylor', email: 'homeowner@example.com', phone: '', postcode: 'LS1 1AA', address: '', contactPreference: 'email' };
+    return { ...details, name: 'Sam Taylor', email: 'homeowner@example.com', phone: '', postcode: '8011', address: '', contactPreference: 'email' };
   }
   function fillExample() {
     const hasContact = [details.name, details.email, details.phone, details.address, details.postcode].some(value => value.trim());
@@ -61,9 +61,9 @@ export function QuickQuoteEnquiry({ result, onClose, guided = false, open = true
     e.preventDefault();
     preparePreview();
   }
-  const fields = [ ['Roof', ROOF_TEMPLATES[i.shape].label], ['Size', SIZE_BANDS[i.size].label], ['Project', i.project === 'reroof' ? 'Replace existing roof' : 'New roof'], ['Covering', materials[i.covering]], ['Indicative range', amount] ];
+  const fields = [ ['Roof', ROOF_TEMPLATES[i.shape].label], ['Roof area', i.exactRoofAreaM2 !== undefined ? `${i.exactRoofAreaM2} m²` : SIZE_BANDS[i.size].label], ['Project', i.project === 'reroof' ? 'Replace existing roof' : 'New roof'], ['Covering', materials[i.covering]], ['Indicative range', amount] ];
   return <section className="qr-enquiry" hidden={!open} aria-labelledby="quick-enquiry-heading">
-    <div className="qr-enquiry-head"><div><p className="qr-eyebrow">YOUR NEXT STEP · DEMO PREVIEW</p><h2 id="quick-enquiry-heading" ref={heading} tabIndex={-1}>{submitted ? 'Here’s what Apex would receive.' : 'Request a quote.'}</h2></div><button type="button" className="qr-text-button" onClick={onClose} aria-label="Close quote enquiry">Close ×</button></div>
+    <div className="qr-enquiry-head"><div><p className="qr-eyebrow">YOUR NEXT STEP · DEMO PREVIEW</p><h2 id="quick-enquiry-heading" ref={heading} tabIndex={-1}>{submitted ? 'Here’s what Roofline would receive.' : 'Request a quote.'}</h2></div><button type="button" className="qr-text-button" onClick={onClose} aria-label="Close quote enquiry">Close ×</button></div>
     {submitted ? <div className="qr-enquiry-confirm">
       <p role="status" className="qr-enquiry-attached"><strong>Enquiry preview ready. Nothing was sent.</strong><br />The business would receive your details and the complete estimate together.</p>
       <dl>{[['Name', details.name], ['Email', details.email], ['Preferred contact', details.contactPreference === 'call' ? 'Phone' : 'Email'], ...(details.phone ? [['Phone', details.phone]] : []), ...(details.address || details.postcode ? [['Property', [details.address, details.postcode].filter(Boolean).join(', ')]] : []), ...fields].map(([k,v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
@@ -82,7 +82,7 @@ export function QuickQuoteEnquiry({ result, onClose, guided = false, open = true
     }}>
       <div className="qr-enquiry-attached"><strong>✓ Your roof details and {amount.toLowerCase().startsWith('requires') ? 'selections' : amount} are attached.</strong><p>Tell us how to reach you. You won’t need to describe your roof again.</p></div>
       {!editDetails ? <div className="qr-enquiry-shortcut">
-        <p><strong>Try it without typing.</strong><br />Preview with Sam Taylor, homeowner@example.com and postcode LS1 1AA. These are fictional contact details; the estimate above is your actual result.</p>
+        <p><strong>Try it without typing.</strong><br />Preview with Sam Taylor, homeowner@example.com and Christchurch postcode 8011. These are fictional contact details; the estimate above is your actual result.</p>
         <button type="button" className="qr-button" onClick={() => preparePreview(exampleDetails())}>Preview with example details →</button>
         <button type="button" className="qr-text-button" onClick={() => setEditDetails(true)}>Edit details / add notes or files</button>
         <p className="qr-muted">Demo enquiry only. Nothing is sent or uploaded.</p>

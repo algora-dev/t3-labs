@@ -10,34 +10,33 @@ import { trackDemo } from '../../lib/demo-conversion/metrics';
 import { updateConversion } from '../../lib/demo-conversion/store';
 import type { ReactNode } from 'react';
 import type { SupplierProduct } from '../../app/supplier-pricing-tool/types';
-import { EXTENSION_BANDS, PITCH_BANDS, SIZE_BANDS } from '../../lib/quick-estimate/config';
+import { PITCH_BANDS, SIZE_BANDS } from '../../lib/quick-estimate/config';
 import { INITIAL_DRAFT as initial, readQuickDraft, type QuickDraft as Draft } from '../../lib/quick-estimate/draft';
 import { createHandoff, HANDOFF_KEY } from '../../lib/quick-estimate/handoff';
 import { createQuickResult, type PricingProfile, type QuickResult } from '../../lib/quick-estimate/pricing';
 import { PITCHED_SHAPES, ROOF_TEMPLATES } from '../../lib/quick-estimate/templates';
 import { parseQuickInput } from '../../lib/quick-estimate/validation';
-import type { CoveringId, ExistingMaterial, ExtensionSizeId, FlatComplexity, PitchId, Quantities, QuickEstimateInput, ShapeId, SizeId } from '../../lib/quick-estimate/types';
+import type { CoveringId, ExistingMaterial, PitchId, Quantities, QuickEstimateInput, ShapeId, SizeId } from '../../lib/quick-estimate/types';
 import { PitchIllustration, RoofIllustration } from './RoofIllustration';
 import { RoofPlanIllustration } from './RoofPlanIllustration';
-import { QUICK_DEMO_INPUT } from '../../lib/demo-journey/samples';
 import { DEMO_ACTION_EVENT, actionFromEvent, getJourney, recordDemoSignal, updateJourney } from '../../lib/demo-journey/store';
 
-const DRAFT_KEY = 'roofline.quick-roof.draft.v1';
+const DRAFT_KEY = 'roofline.quick-roof.draft.v2';
 let memorySnapshot: string | null = null;
 function snapshot() { try { return sessionStorage.getItem(DRAFT_KEY) ?? memorySnapshot; } catch { return memorySnapshot; } }
 function subscribe(fn: () => void) { window.addEventListener('quick-roof-draft', fn); window.addEventListener('storage', fn); return () => { window.removeEventListener('quick-roof-draft', fn); window.removeEventListener('storage', fn); }; }
 function writeDraft(draft: Draft) { memorySnapshot = JSON.stringify(draft); try { sessionStorage.setItem(DRAFT_KEY, memorySnapshot); } catch { /* In-memory mode still works when storage is disabled. */ } window.dispatchEvent(new Event('quick-roof-draft')); }
 const serverSnapshot = () => null;
-const sample: QuickEstimateInput = QUICK_DEMO_INPUT;
+const sample: QuickEstimateInput = {
+  shape: 'gable', size: 'medium', pitch: 'typical', storeys: 1, flatExtension: null,
+  exactRoofAreaM2: 160, exactPitchDegrees: 20, project: 'reroof', existingMaterial: 'metal',
+  covering: 'pressed_metal', flatCovering: null,
+};
 const coveringLabels: Record<CoveringId, string> = { tile: 'Concrete tiles', slate: 'Natural slate', metal: 'Corrugate or Roofdeck 0.55g', shingle: 'Asphalt shingles', pressed_metal: 'Roofdeck 0.40g (ColorCote)', longrun: 'Corrugate 0.40g (ColorCote)', epdm: 'Rubber membrane (EPDM)', grp: 'Fibreglass (GRP)', felt: 'Roofing felt' };
 const MATERIAL_PHOTOS: Partial<Record<CoveringId, { src: string; position?: string }>> = {
-  tile: { src: '/assets/apex-roof-materials/concrete-tile.webp' },
-  slate: { src: '/assets/apex-roof-materials/natural-slate.webp' },
-  shingle: { src: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Asphalt_Shingles_Texture_DTXR-ST-AP-1.jpg/960px-Asphalt_Shingles_Texture_DTXR-ST-AP-1.jpg' },
-  
-  longrun: { src: '/assets/apex-roof-materials/long-run-metal.webp' },
-  pressed_metal: { src: '/assets/apex-roof-materials/long-run-metal.webp' },
-  metal: { src: '/assets/apex-roof-materials/long-run-metal.webp' },
+  longrun: { src: '/assets/demo-roofline/roof-material-longrun.webp' },
+  pressed_metal: { src: '/assets/demo-roofline/roof-material-longrun.webp' },
+  metal: { src: '/assets/demo-roofline/roof-material-longrun.webp' },
 };
 function MaterialThumbnail({ id }: { id: CoveringId }) {
   const photo = MATERIAL_PHOTOS[id];
@@ -49,8 +48,8 @@ function MaterialThumbnail({ id }: { id: CoveringId }) {
   return <span className={`qr-material-swatch qr-swatch-${id}`} aria-hidden="true" />;
 }
 const existingLabels: Record<ExistingMaterial, string> = { tile: 'Concrete or clay tiles', slate: 'Slate', metal: 'Existing metal roof', membrane: 'Felt or membrane', unknown: 'Not sure' };
-const n = (v: number) => v.toLocaleString('en-GB', { maximumFractionDigits: 1 });
-const money = (v: number) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 }).format(v);
+const n = (v: number) => v.toLocaleString('en-NZ', { maximumFractionDigits: 1 });
+const money = (v: number) => `NZ$${new Intl.NumberFormat('en-NZ', { maximumFractionDigits: 0 }).format(v)}`;
 const range = (lo: number, hi: number) => `${n(lo)}-${n(hi)}`;
 
 function Choice({ name, value, selected, onSelect, children, className = '' }: { name: string; value: string; selected: boolean; onSelect: () => void; children: ReactNode; className?: string }) {
@@ -70,7 +69,7 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
   const [notice, setNotice] = useState('');
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [showExample, setShowExample] = useState(false);
-  const [sampleCovering, setSampleCovering] = useState<CoveringId>('tile');
+  const [sampleCovering, setSampleCovering] = useState<CoveringId>('pressed_metal');
   const helper = useDemoHelper();
   const exampleHeading = useRef<HTMLHeadingElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -113,7 +112,7 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
       if (action === 'quick-instant') {
         trackDemo('sample_selected', { task: 'quick-price' });
         setShowExample(false); setEnquiryOpen(false); setNotice('');
-        writeDraft({ step: 5, answers: { ...sample, covering: 'tile' }, demo: false, example: true });
+        writeDraft({ step: 5, answers: { ...sample, covering: 'pressed_metal' }, demo: false, example: true });
       }
       if (action === 'quick-example') {
         if (result?.price.low && result.price.high) recordHelperSignal('quick-result');
@@ -130,8 +129,8 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
     : current === 'Covering' ? !!a.covering && (!a.flatExtension || !!a.flatCovering) : false;
   const titles: Record<string, string> = { Roof: 'Which roof looks most like yours?', Size: 'How big is your roof?', Pitch: 'How steep is your roof?', Project: 'What are you planning?', Covering: 'What would you like on your roof?', Result: 'Your ballpark roof estimate' };
   const subtitles: Record<string, string> = {
-    Roof: 'No need to know its name. Just choose the closest shape.', Size: 'Picture your roof from above. Choose the closest size.',
-    Pitch: 'Choose the closest illustration. You do not need an exact angle.', Project: 'A replacement includes removing the old covering. A new roof does not.',
+    Roof: 'No need to know its name. Just choose the closest shape.', Size: 'Choose a size band, or enter the actual roof area if you know it.',
+    Pitch: 'Choose the closest illustration, or enter the actual pitch if you know it.', Project: 'A replacement includes removing the old covering. A new roof does not.',
     Covering: 'Choose the finish you prefer. We allow for the main supporting materials and fixings.', Result: 'An initial price range, based on your choices.',
   };
   function chooseShape(shape: ShapeId) {
@@ -174,8 +173,8 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
     <main className="qr-shell qr-main">
       {showExample && current !== 'Result' ? <section className="qr-demo-example" aria-labelledby="quick-demo-example">
         <p className="qr-eyebrow">FAST DEMO SHORTCUT</p>
-        <div className="qr-demo-example-body"><RoofPlanIllustration shape="gable" size="small" /><div><h1 id="quick-demo-example" ref={exampleHeading} tabIndex={-1}>Try a roof. See a real calculation.</h1><p>Small gable · 60–100 m² footprint · one storey · 15–30° pitch. Replacing concrete tiles; no flat extension.</p><p className="qr-muted">We&apos;ve pre-filled the roof shape, size, pitch and project details so you can see the result faster. You can still switch to the full step-by-step tool at any time.</p></div></div>
-        <Field label="Which covering would you choose?"><div className="qr-three-grid">{(['tile', 'slate', 'longrun'] as const).map(id => <Choice key={id} name="sample-covering" value={id} selected={sampleCovering === id} onSelect={() => setSampleCovering(id)}><MaterialThumbnail id={id} /><b>{coveringLabels[id]}</b></Choice>)}</div></Field>
+        <div className="qr-demo-example-body"><RoofPlanIllustration shape="gable" size="medium" /><div><h1 id="quick-demo-example" ref={exampleHeading} tabIndex={-1}>Try a roof. See a real calculation.</h1><p>160 m² gable roof · one storey · 20° pitch. Replacing an existing metal roof.</p><p className="qr-muted">We&apos;ve pre-filled the roof shape, size, pitch and project details so you can see the result faster. You can still switch to the full step-by-step tool at any time.</p></div></div>
+        <Field label="Which Roofline profile would you choose?"><div className="qr-three-grid">{(['longrun', 'pressed_metal', 'metal'] as const).map(id => <Choice key={id} name="sample-covering" value={id} selected={sampleCovering === id} onSelect={() => setSampleCovering(id)}><MaterialThumbnail id={id} /><b>{coveringLabels[id]}</b></Choice>)}</div></Field>
         <p className="qr-muted qr-demo-example-note">Roofline uses demo rates. A live version can use your exact prices, starting prices or ranges.</p>
         <div className="qr-example-actions"><button type="button" className="qr-button" onClick={calculateExample}>Calculate this example →</button><button type="button" className="qr-text-button" onClick={() => { setShowExample(false); requestAnimationFrame(() => heading.current?.focus({ preventScroll: true })); }}>Try the full tool instead</button></div>
       </section> : <>
@@ -184,21 +183,19 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
         <section className="qr-panel">
           {!(current === 'Result' && enquiryOpen) && <div className="qr-panel-heading">{current !== 'Result' && <p className="qr-eyebrow">{`STEP ${step + 1} OF ${steps.length - 1}`}</p>}<h1 ref={heading} tabIndex={-1}>{titles[current]}</h1><p>{subtitles[current]}</p></div>}
           {current === 'Roof' && <>
-            <Field label="Roof category"><div className="qr-segmented"><Choice name="category" value="pitched" selected={!flat} onSelect={() => chooseShape('gable')}><b>Pitched roof</b><small>Tiles, slate or metal</small></Choice><Choice name="category" value="flat" selected={flat} onSelect={() => chooseShape('flat')}><b>Flat membrane roof</b><small>Felt, rubber or fibreglass</small></Choice></div></Field>
-            {flat ? <div className="qr-flat-intro"><RoofIllustration shape="flat" /><div><h2>Nearly level, with a waterproof covering.</h2><p>For flat roofs with a waterproof covering, such as rubber or fibreglass.</p><p className="qr-muted">A single-slope tiled or metal roof? Choose Pitched roof, then Single slope.</p></div></div>
-              : <Field label="Choose the closest roof shape"><div className="qr-roof-grid">{PITCHED_SHAPES.map(t => <Choice key={t.id} name="shape" value={t.id} selected={a.shape === t.id} onSelect={() => chooseShape(t.id)} className="qr-roof-card"><RoofIllustration shape={t.id} /><b>{t.label}</b><small>{t.description}</small></Choice>)}</div></Field>}
-            <div className="qr-help-line"><span aria-hidden="true">ⓘ</span><p>Your roof does not have to match exactly. These are reference shapes, not measured plans. You can add a flat extension on the next step.</p></div>
+            <Field label="Choose the closest roof shape"><div className="qr-roof-grid">{PITCHED_SHAPES.map(t => <Choice key={t.id} name="shape" value={t.id} selected={a.shape === t.id} onSelect={() => chooseShape(t.id)} className="qr-roof-card"><RoofIllustration shape={t.id} /><b>{t.label}</b><small>{t.description}</small></Choice>)}</div></Field>
+            <div className="qr-help-line"><span aria-hidden="true">ⓘ</span><p>Your roof does not have to match exactly. Roofline&apos;s demo focuses on long-run metal roofing. Low-pitch projects can still be handled with a suitable Roofline profile.</p></div>
           </>}
           {current === 'Size' && <>
-            <Field label="Choose an approximate footprint"><div className="qr-size-grid">{Object.entries(SIZE_BANDS).map(([id, b]) => <Choice key={id} name="size" value={id} selected={a.size === id} onSelect={() => update({ size: id as SizeId })} className="qr-size-card"><RoofPlanIllustration shape={a.shape ?? 'gable'} size={id as SizeId} /><b>{b.label}</b><small>{b.min}-{b.max} m²</small></Choice>)}</div></Field>
-            <p className="qr-info">Include the roof overhangs, but don’t add upstairs floor area.</p>
+            <Field label="Choose an approximate roof size"><div className="qr-size-grid">{Object.entries(SIZE_BANDS).map(([id, b]) => <Choice key={id} name="size" value={id} selected={a.size === id} onSelect={() => update({ size: id as SizeId })} className="qr-size-card"><RoofPlanIllustration shape={a.shape ?? 'gable'} size={id as SizeId} /><b>{b.label}</b><small>{b.min}-{b.max} m²</small></Choice>)}</div></Field>
+            <label className="qr-exact-field"><span><b>Know the actual roof area?</b><small>Optional. Enter the sloped roof surface area to tighten the price range.</small></span><span className="qr-exact-input"><input type="number" inputMode="decimal" min="20" max="1200" step="1" value={a.exactRoofAreaM2 ?? ''} placeholder="e.g. 160" onChange={e => update({ exactRoofAreaM2: e.target.value ? Number(e.target.value) : undefined })} /><b>m²</b></span></label>
+            <p className="qr-info">If you only know the building footprint, use the size cards. If you know the roof surface area from plans or measurements, enter it above for a tighter estimate.</p>
             <Field label="How many storeys?"><div className="qr-two-grid">{([1, 2] as const).map(v => <Choice key={v} name="storeys" value={String(v)} selected={a.storeys === v} onSelect={() => update({ storeys: v })}><b>{v === 1 ? 'Single storey' : 'Two storeys'}</b><small>{v === 1 ? 'Ground floor only' : 'Ground floor and upstairs'}</small></Choice>)}</div></Field>
-            {!flat && <Field label="Also replacing a flat-roof extension?" hint="Only include the extra flat section, not any part of the main footprint above."><div className="qr-two-grid"><Choice name="extension" value="no" selected={!a.flatExtension} onSelect={() => update({ flatExtension: null, flatCovering: null, flatComplexity: undefined })}><b>No flat section</b></Choice><Choice name="extension" value="yes" selected={!!a.flatExtension} onSelect={() => update({ flatExtension: 'small', flatCovering: undefined, flatComplexity: a.flatComplexity ?? 'typical' })}><b>Yes, add a flat section</b></Choice></div>{a.flatExtension && <div className="qr-three-grid qr-gap-top">{Object.entries(EXTENSION_BANDS).map(([id, b]) => <Choice key={id} name="extension-size" value={id} selected={a.flatExtension === id} onSelect={() => update({ flatExtension: id as ExtensionSizeId })}><b>{b.label}</b><small>{b.min}-{b.max} m² extra</small></Choice>)}</div>}</Field>}
           </>}
-          {current === 'Size' && (flat || !!a.flatExtension) && <Field label="How complicated does the flat-roof section look?" hint="Choose what looks closest."><div className="qr-three-grid">{([['simple', 'Simple', 'Mostly rectangular, few obstacles'], ['typical', 'Typical', 'Some corners or roof features'], ['complex', 'Complex', 'Several corners, levels or obstacles']] as const).map(([id, label, description]) => <Choice key={id} name="flat-complexity" value={id} selected={(a.flatComplexity ?? 'typical') === id} onSelect={() => update({ flatComplexity: id as FlatComplexity })}><b>{label}</b><small>{description}</small></Choice>)}</div></Field>}
           {current === 'Pitch' && <>
             <Field label="Choose the closest slope"><div className="qr-three-grid">{Object.entries(PITCH_BANDS).map(([id, b]) => <Choice key={id} name="pitch" value={id} selected={a.pitch === id} onSelect={() => update({ pitch: id as PitchId })} className="qr-pitch-card"><PitchIllustration degrees={(b.min + b.max) / 2} /><b>{b.label}</b><small>{b.description}</small><span className="qr-tag">{b.min}-{b.max}°</span></Choice>)}</div></Field>
-            <p className="qr-info">A steeper roof needs more covering over the same footprint. We allow for this in your estimate.</p>
+            <label className="qr-exact-field"><span><b>Know the actual pitch?</b><small>Optional. An exact pitch helps narrow the estimate and confirm profile suitability.</small></span><span className="qr-exact-input"><input type="number" inputMode="decimal" min="3" max="50" step="0.5" value={a.exactPitchDegrees ?? ''} placeholder="e.g. 20" onChange={e => update({ exactPitchDegrees: e.target.value ? Number(e.target.value) : undefined })} /><b>°</b></span></label>
+            <p className="qr-info">A steeper roof needs more covering over the same footprint. Exact pitch and exact roof area materially tighten the indicative range.</p>
             <p className="qr-muted">Some coverings need a minimum pitch. We will flag this before showing a price. Do not climb onto your roof to check.</p>
           </>}
           {current === 'Project' && <>
@@ -206,8 +203,7 @@ export function QuickRoofEstimate({ catalog, profile }: { catalog: SupplierProdu
             {a.project === 'reroof' && <Field label="What is on the roof now?"><div className="qr-material-grid">{Object.entries(existingLabels).map(([id, label]) => <Choice key={id} name="existing" value={id} selected={a.existingMaterial === id} onSelect={() => update({ existingMaterial: id as ExistingMaterial })}><b>{label}</b></Choice>)}</div><p className="qr-muted">We allow for removing the existing covering. Unknown roof condition or hazardous materials need a professional assessment.</p></Field>}
           </>}
           {current === 'Covering' && <>
-            <Field label={flat ? 'Your flat-roof covering' : 'Your new roof covering'}><div className="qr-three-grid">{(flat ? ['pressed_metal', 'longrun'] as const : ['longrun', 'pressed_metal', 'metal'] as const).map(id => <Choice key={id} name="covering" value={id} selected={a.covering === id} onSelect={() => update({ covering: id })} className="qr-material-card"><MaterialThumbnail id={id} /><b>{coveringLabels[id]}</b>{!profile.systems[id] && <small>Measurements available; rates not loaded</small>}</Choice>)}</div></Field>
-            {a.flatExtension && <Field label="Covering for the flat extension"><div className="qr-three-grid">{(['pressed_metal', 'longrun'] as const).map(id => <Choice key={id} name="flat-covering" value={id} selected={a.flatCovering === id} onSelect={() => update({ flatCovering: id })}><b>{coveringLabels[id]}</b></Choice>)}</div></Field>}
+            <Field label="Your new Roofline profile"><div className="qr-three-grid">{(['longrun', 'pressed_metal', 'metal'] as const).map(id => <Choice key={id} name="covering" value={id} selected={a.covering === id} onSelect={() => update({ covering: id })} className="qr-material-card"><MaterialThumbnail id={id} /><b>{coveringLabels[id]}</b>{!profile.systems[id] && <small>Measurements available; rates not loaded</small>}</Choice>)}</div></Field>
             <div className="qr-help-line"><span aria-hidden="true">ⓘ</span><p>Roofline uses demo products and rates. A live version can use your products with exact prices, starting prices or ranges. No contact details needed.</p></div>
           </>}
           {current === 'Result' && !enquiryOpen && (result ? <Results result={result} example={draft.example === true} onRefine={refine} onDownload={download} onEdit={() => go(0)} onEnquire={() => setEnquiryOpen(true)} /> : <div role="alert" className="qr-info">Some selections are missing or invalid. <button type="button" onClick={() => go(0)}>Review your roof</button></div>)}
@@ -226,8 +222,8 @@ function Results({ result: r, example = false, onRefine, onDownload, onEdit, onE
   const { price: p, measurements: m, input } = r;
   const labels = [
     ['Roof style', ROOF_TEMPLATES[input.shape].label],
-    ['Approximate footprint', SIZE_BANDS[input.size]?.label ?? input.size],
-    ['Roof pitch', input.shape === 'flat' ? 'Flat roof' : (input.pitch ? PITCH_BANDS[input.pitch]?.label : undefined) ?? String(input.pitch)],
+    ['Roof area', input.exactRoofAreaM2 !== undefined ? `${n(input.exactRoofAreaM2)} m² supplied` : `${SIZE_BANDS[input.size]?.label ?? input.size} (approx.)`],
+    ['Roof pitch', input.exactPitchDegrees !== undefined ? `${n(input.exactPitchDegrees)}° supplied` : input.shape === 'flat' ? 'Flat roof' : `${(input.pitch ? PITCH_BANDS[input.pitch]?.label : undefined) ?? String(input.pitch)} (approx.)`],
     ['Property height', `${input.storeys} storey${input.storeys === 1 ? '' : 's'}`],
     ['Project', input.project === 'reroof' ? 'Replace existing roof' : 'New roof'],
     ['Preferred covering', coveringLabels[input.covering]],
@@ -236,13 +232,13 @@ function Results({ result: r, example = false, onRefine, onDownload, onEdit, onE
   return <div className="qr-results qr-simple-results">
     {example && <div className="qr-example-result"><p><strong>Pre-filled demo roof.</strong> Shape, size, pitch and project were selected for this example, not your home.</p><button type="button" className="qr-text-button" onClick={onEdit}>Review every roof choice →</button></div>}
     <div className="qr-price-card" aria-label="Estimated price range">
-      {p.low && p.high ? <><div className="qr-price-value">{money(Math.floor(p.low.total / 100) * 100)}<span> to </span>{money(Math.ceil(p.high.total / 100) * 100)}</div><p>Estimated materials, fitting and applicable basic access/removal allowances, based on your choices. {p.taxNote}</p></>
+      {p.low && p.high && p.presentation ? <><p className="qr-eyebrow">{p.presentation.label.toUpperCase()}</p><div className="qr-price-value">{money(p.presentation.low)}<span> to </span>{money(p.presentation.high)}</div><p>Estimated materials, installation and applicable basic access/removal allowances, based on your choices. {p.taxNote}</p>{p.presentation.reasons.length > 0 && <div className="qr-range-note"><strong>Why this is a range</strong><span>{p.presentation.reasons.join('; ')}. Add more exact information to narrow it further.</span></div>}</>
         : <><h2>{p.status === 'incompatible' ? 'This covering needs a different roof pitch.' : 'We need to check your roof before pricing it.'}</h2><p>We have your choices and can include them in a quote request. We won&rsquo;t invent a price.</p></>}
     </div>
     <div className="qr-result-enquire"><button className="qr-button" type="button" onClick={onEnquire}>Request a quote →</button><p>Your roof details and estimate carry through.<br /><span>Demo only: preview the enquiry, without sending it.</span></p></div>
     <section className="qr-home-summary"><h2>Your roof at a glance</h2><dl>{labels.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl></section>
-    <section className="qr-home-disclaimer"><strong>A starting point, not a formal quote.</strong><p>Your actual price could be higher or lower. Exact measurements, roof condition, access and additional work need a professional assessment.</p></section>
-    <details className="qr-details"><summary>What’s included & technical details (optional)</summary><p className="qr-muted">Typical roofing materials, supporting components, fixings, fitting and configured basic access/removal allowances. Structural repairs, insulation, specialist drainage and unusual site conditions need separate assessment. GST is not included in these demonstration rates.</p><p className="qr-muted">For anyone who wants to inspect the estimated quantities, the lower and upper roof surface areas are {range(m.low.totals.roofAreaM2, m.high.totals.roofAreaM2)} m².</p><p className="qr-muted">{p.missing.length ? `Site-specific or unpriced items: ${p.missing.join('; ')}.` : 'No additional catalogue items flagged.'}</p><div className="qr-result-actions"><button className="qr-text-button" type="button" onClick={() => onRefine('high')}>Open detailed estimator →</button><button className="qr-text-button" type="button" onClick={onDownload}>Download calculation data</button></div></details>
+    <section className="qr-home-disclaimer"><strong>A useful starting point, not a formal quote.</strong><p>The range tightens as the information becomes more exact. Site access, substrate condition, flashings, penetrations and final scope can still move the completed quote below or above this indication.</p></section>
+    <details className="qr-details"><summary>What’s included & technical details (optional)</summary><p className="qr-muted">Typical roofing materials, supporting components, fixings, fitting and configured basic access/removal allowances. Structural repairs, insulation, specialist drainage and unusual site conditions need separate assessment. These are illustrative NZD demonstration rates; final GST treatment and commercial pricing can be configured by Roofline.</p><p className="qr-muted">For anyone who wants to inspect the estimated quantities, the lower and upper roof surface areas are {range(m.low.totals.roofAreaM2, m.high.totals.roofAreaM2)} m².</p><p className="qr-muted">{p.missing.length ? `Site-specific or unpriced items: ${p.missing.join('; ')}.` : 'No additional catalogue items flagged.'}</p><div className="qr-result-actions"><button className="qr-text-button" type="button" onClick={() => onRefine('high')}>Open detailed estimator →</button><button className="qr-text-button" type="button" onClick={onDownload}>Download calculation data</button></div></details>
     <div className="qr-result-actions"><button className="qr-text-button" type="button" onClick={onEdit}>← Change my roof</button><button className="qr-text-button" type="button" onClick={() => window.print()}>Print summary</button></div>
   </div>;
 }

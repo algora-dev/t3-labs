@@ -10,6 +10,7 @@ import { FreeToolsAuthProvider, useFreeToolsAuth } from '../_components/FreeTool
 import { SupplierConfigProvider, useSupplierConfig } from './supplierConfig';
 import Link from 'next/link';
 import { ApexToolHeader } from '@/components/demo-helper/ApexToolHeader';
+import { RooflineToolHeader } from '@/components/demo-helper/RooflineToolHeader';
 function Header() {
   const { config, basePath } = useSupplierConfig();
   const { user, openAuthModal, signOut } = useFreeToolsAuth();
@@ -18,6 +19,10 @@ function Header() {
     {config.features.login && <button type="button" className="at-trade-button" onClick={() => user ? void signOut() : openAuthModal('signin')}>{user ? 'Log out of trade' : 'Trade pricing'}</button>}
     <Link href={`${basePath}/admin`}>Admin</Link>
   </ApexToolHeader>;
+
+  if (config.slug === 'roofline-roofing') return <RooflineToolHeader title="Trade job pricing & plan measurement">
+    {config.features.login && <button type="button" className="at-trade-button" onClick={() => user ? void signOut() : openAuthModal('signin')}>{user ? 'Log out of trade' : 'Log in for trade pricing'}</button>}
+  </RooflineToolHeader>;
 
   return (
     <header className="border-b border-black/20" style={{ backgroundColor: config.headerColor ?? config.brandColor }}>

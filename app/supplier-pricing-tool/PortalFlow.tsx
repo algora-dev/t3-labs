@@ -62,7 +62,7 @@ function readPersisted(key = FLOW_KEY): PersistedFlow | null {
 function PortalFlowReady() {
   const { config, basePath } = useSupplierConfig();
   // Keep Apex training jobs out of other suppliers' saved demo flows.
-  const storageKey = config.slug === 'apex-roofing' ? 'apex.supplier.flow.v1' : FLOW_KEY;
+  const storageKey = config.slug === 'apex-roofing' ? 'apex.supplier.flow.v1' : config.slug === 'roofline-roofing' ? 'roofline.supplier.flow.v1' : FLOW_KEY;
   const restored = readPersisted(storageKey) ?? (config.slug === 'apex-roofing' ? readPersisted() : null);
   const journey = useDemoJourney();
   const [samplePlan, setSamplePlan] = useState(restored?.guidedSamplePlan ?? false);
@@ -90,14 +90,18 @@ function PortalFlowReady() {
   const [restartOpen, setRestartOpen] = useState(false);
 
   useEffect(() => {
-    if (config.slug !== 'apex-roofing') return;
     const requested = new URLSearchParams(window.location.search).get('entry');
+    if (requested !== 'plan' && requested !== 'measurements') return;
     const hasSavedWork = restored && (restored.step > 1 || Object.values(restored.measureSet.groups).some(g => g.entries.length > 0));
     if (hasSavedWork) return; // Never discard measurements when following an exploration link.
     // Location search is unreadable during SSR; the one-time URL intent is applied after hydration.
+    // Roofline uses these intents to make website CTAs feel like one continuous experience.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (requested === 'plan') { setEntryMode('measure'); setHaveSubMode(null); }
-    if (requested === 'measurements') { setEntryMode('have'); setHaveSubMode(null); }
+    if (requested === 'measurements') {
+      setEntryMode('have');
+      setHaveSubMode(config.slug === 'roofline-roofing' ? 'actual' : null);
+    }
   // Initial route intent only. Later selections belong to the visitor.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

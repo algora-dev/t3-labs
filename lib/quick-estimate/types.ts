@@ -22,6 +22,10 @@ export interface RoofTemplate {
 export interface MeasurementInput {
   shape: ShapeId; size: SizeId; pitch: PitchId | null; storeys: 1 | 2;
   flatExtension: ExtensionSizeId | null;
+  /** Optional measured sloped roof area. When supplied it replaces the size band for pricing geometry. */
+  exactRoofAreaM2?: number;
+  /** Optional measured roof pitch. When supplied it replaces the pitch band. */
+  exactPitchDegrees?: number;
 }
 export interface QuickEstimateInput extends MeasurementInput {
   project: 'reroof' | 'new_roof'; existingMaterial: ExistingMaterial | null;

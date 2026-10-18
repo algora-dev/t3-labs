@@ -33,10 +33,28 @@ export function measureRoof(input: MeasurementInput): MeasurementRange {
   if (input.shape === 'flat' && (input.pitch !== null || input.flatExtension !== null)) throw new Error('A flat roof has no pitched band or separate flat extension');
   if (input.flatExtension !== null && !Object.hasOwn(EXTENSION_BANDS, input.flatExtension)) throw new Error('Choose a valid extension size');
   const size = SIZE_BANDS[input.size];
-  const pitch = input.shape === 'flat' ? { min: 0, max: 0 } : PITCH_BANDS[input.pitch!];
+  const exactRoofArea = input.exactRoofAreaM2;
+  if (exactRoofArea !== undefined && (!Number.isFinite(exactRoofArea) || exactRoofArea < 20 || exactRoofArea > 1200)) throw new Error('Exact roof area is outside this model');
+  const exactPitch = input.exactPitchDegrees;
+  if (exactPitch !== undefined && (!Number.isFinite(exactPitch) || exactPitch < 0 || exactPitch > 50)) throw new Error('Exact pitch is outside this model');
+  if (input.shape === 'flat' && exactPitch !== undefined && exactPitch !== 0) throw new Error('Flat roofs use a zero-degree pitch in this model');
+  const pitch = input.shape === 'flat'
+    ? { min: 0, max: 0 }
+    : exactPitch !== undefined ? { min: exactPitch, max: exactPitch } : PITCH_BANDS[input.pitch!];
   const scenario = (endpoint: 'low' | 'high'): MeasurementScenario => {
     const key = endpoint === 'low' ? 'min' : 'max';
-    const sections = [measureSection(input.shape, size[key], pitch[key])];
+    const pitchDegrees = pitch[key];
+    // When the visitor knows the actual sloped roof area, scale the selected
+    // roof template so its modelled surface area equals that supplied area.
+    // Using the template's own area ratio keeps this exact for hips/valleys and
+    // other geometry rather than assuming every face has a simple cosine ratio.
+    const roofAreaPerFootprint = exactRoofArea !== undefined && input.shape !== 'flat'
+      ? measureSection(input.shape, 1, pitchDegrees).quantities.roofAreaM2
+      : 1;
+    const footprint = exactRoofArea !== undefined
+      ? exactRoofArea / roofAreaPerFootprint
+      : size[key];
+    const sections = [measureSection(input.shape, footprint, pitchDegrees)];
     if (input.flatExtension) sections.push(measureSection('flat', EXTENSION_BANDS[input.flatExtension][key], 0, 'extension'));
     const totals = emptyQuantities();
     for (const section of sections) for (const k of quantityKeys) totals[k] += section.quantities[k];
@@ -47,7 +65,12 @@ export function measureRoof(input: MeasurementInput): MeasurementRange {
     low: scenario('low'), high: scenario('high'),
     assumptions: [
       'Size means horizontal roof footprint, including overhangs, not combined upstairs and downstairs floor area.',
-      'Each endpoint is a complete roof: minimum footprint and pitch, or maximum footprint and pitch, at a fixed template aspect ratio.',
+      exactRoofArea !== undefined
+        ? `The main roof uses the supplied ${exactRoofArea} m² sloped roof area rather than the selected size band.`
+        : 'Each endpoint is a complete roof: minimum footprint and pitch, or maximum footprint and pitch, at a fixed template aspect ratio.',
+      exactPitch !== undefined
+        ? `The main roof uses the supplied ${exactPitch}° pitch rather than the selected pitch band.`
+        : 'The selected pitch band is used to model the lower and upper scenarios.',
       'Roof slope is applied exactly once. Lengths scale with dimensions, not in direct proportion to area.',
       'These are representative modelled quantities, not measured survey dimensions or statistically guaranteed bounds.',
       'The same selected pitch is used on all pitched faces, including representative dormers.',

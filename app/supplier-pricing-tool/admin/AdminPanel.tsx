@@ -83,7 +83,7 @@ function AdminLogin({ slug, brand, logo, name, onLogin }: { slug: string; brand:
               {name.slice(0, 1)}
             </span>
           )}
-          <h1 className="mt-4 text-lg font-bold text-slate-900">Supplier Admin</h1>
+          <h1 className="mt-4 text-lg font-bold text-slate-900">{slug === 'roofline-roofing' ? 'Roofline business dashboard' : 'Supplier Admin'}</h1>
           <p className="mt-1 text-xs text-slate-500">Sign in to manage {name}</p>
         </div>
         <form onSubmit={submit} className="mt-6 space-y-3">
@@ -241,7 +241,7 @@ function AdminHome({ slug, onLogout }: { slug: string; onLogout: () => void }) {
           {section === 'dashboard' && <Dashboard cfg={cfg} admin={admin} slug={slug} />}
           {section === 'products' && <AdminProducts cfg={cfg} setCfg={setCfg} admin={admin} setAdmin={setAdmin} />}
           {section === 'trade' && <AdminTrade admin={admin} setAdmin={setAdmin} cfg={cfg} />}
-          {section === 'team' && <AdminTeam admin={admin} setAdmin={setAdmin} />}
+          {section === 'team' && <AdminTeam admin={admin} setAdmin={setAdmin} cfg={cfg} />}
           {section === 'tracking' && <AdminTracking cfg={cfg} slug={slug} admin={admin} />}
           {section === 'cta' && <AdminCta admin={admin} setAdmin={setAdmin} />}
           {section === 'settings' && <Settings slug={slug} cfg={cfg} setCfg={setCfg} admin={admin} setAdmin={setAdmin} onReset={flashSaved} />}

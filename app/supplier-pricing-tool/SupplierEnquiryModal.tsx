@@ -85,7 +85,7 @@ export function SupplierEnquiryModal({
   const urls = toolUrls(supplierCfg);
   // This fictional demo must not upload files or contact the external enquiry service.
   // Do not make this depend on an editable admin setting.
-  const demoPreview = supplierSlug === 'apex-roofing';
+  const demoPreview = supplierSlug === 'apex-roofing' || supplierCfg.demo === true;
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const emailValid = emailRegex.test(email);
@@ -196,14 +196,14 @@ export function SupplierEnquiryModal({
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-slate-900">{demoPreview ? 'Here is what Apex would receive.' : 'Enquiry sent!'}</h3>
+          <h3 className="text-lg font-semibold text-slate-900">{demoPreview ? `Here is what ${supplierName} would receive.` : 'Enquiry sent!'}</h3>
           <p className="mt-2 text-sm text-slate-500">
             {demoPreview ? 'Demo preview only. No email was sent, and no files or contact details were uploaded or saved.' : <>Your message has been sent to {supplierName}. They&apos;ll reply directly to your email at {email}.</>}
           </p>
           {demoPreview && <div className="mt-4 space-y-2 rounded-xl bg-slate-50 p-4 text-left text-sm text-slate-700">
             <p><strong>{name}</strong><br />{email}{phone && ` · ${phone}`}</p>
             <p>{intentOptions.find(item => item.value === intent)?.label}</p>
-            {includePricing && <p>Estimate attached: <strong>{cur}{fmt(output.material + output.labour)}</strong>, excluding VAT.</p>}
+            {includePricing && <p>Indicative estimate attached: <strong>{cur}{fmt(output.material + output.labour)}</strong>. Tax treatment and final supplier pricing are confirmed on the formal quote.</p>}
             {includeQuantities && <p>Selected roof quantities and {output.lines.length} priced product lines included.</p>}
             {message && <p className="whitespace-pre-wrap break-words">{message}</p>}
             {files.length > 0 && <p className="break-words">Files represented by name only: {files.map(f => f.name).join(', ')}</p>}
@@ -278,7 +278,7 @@ export function SupplierEnquiryModal({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-              placeholder={demoPreview ? '07700 900123' : '+64 21 123 456'}
+              placeholder={supplierSlug === 'roofline-roofing' ? '+64 21 123 456' : demoPreview ? '07700 900123' : '+64 21 123 456'}
             />
           </div>
 

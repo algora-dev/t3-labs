@@ -4,10 +4,11 @@ import { getOrCreateSession, checkGuards, saveSession } from '@/lib/assistant/se
 import { runAssistantTurn, TurnError } from '@/lib/assistant/orchestrator';
 import { checkIpRateLimit, clientIpFromHeaders } from '@/lib/assistant/rate-limit';
 import { describePricedDraft, validateEstimateDraftInput } from '@/lib/assistant/estimate-draft';
-import { priceDraft, HEURISTIC_COMPONENT_IDS, type EstimateDraft } from '@/lib/pricing/estimate-engine';
+import { priceDraft, withIndicativePricePresentation, HEURISTIC_COMPONENT_IDS, type EstimateDraft } from '@/lib/pricing/estimate-engine';
 import { getActiveItems, getCatalog } from '@/lib/pricing/catalog';
 import { getEstimateRules, getV4Rules } from '@/lib/pricing/rules';
 import type { ChatStreamEvent, AssistantTurn } from '@/lib/assistant/types';
+import { currentBusinessSlug } from '@/lib/assistant/business-context';
 
 /** Hard guarantee: no em dashes ever reach the visitor, prompt rules aside. */
 function stripEmDashes(text: string): string {
@@ -92,7 +93,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: validated.error }, { status: 400 });
     }
     const draft: EstimateDraft = validated.draft;
-    const result = priceDraft(draft);
+    const priced = priceDraft(draft);
+    const result = currentBusinessSlug() === 'roofline-roofing'
+      ? withIndicativePricePresentation(priced)
+      : priced;
 
     session.draft = draft;
     session.facts.projectType = draft.projectType;

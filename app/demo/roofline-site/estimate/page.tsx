@@ -6,9 +6,9 @@ export const metadata = { title: 'Free roof estimate tools | Roofline Canterbury
 
 export default function EstimateChoicePage() {
   return <><RooflineToolHeader title="Free roof estimate tools" section="chooser" /><main className="at-choice-page"><div className="at-choice-inner">
-    <div className="at-choice-intro"><p>THREE WAYS TO GET STARTED</p><h1>Let&apos;s find the easiest way<br />to price your roof.</h1><p>No measurements? Start with a quick estimate. Have more detail? Choose a tool that can use it. You can explore all three without signing up.</p></div>
+    <div className="at-choice-intro"><p>START WITH WHAT YOU KNOW</p><h1>Get a useful roof price<br />without leaving Roofline.</h1><p>Homeowners can get an indicative range with simple inputs. Roofers and builders can use measured quantities and Roofline products to price a job in more detail.</p></div>
     <RoofToolChoices />
-    <p className="at-choice-note"><b>The same idea, at the right level of detail.</b> The advanced tools are straightforward for people familiar with roofing. Contractors or your own team can prepare itemised estimates and customer quote outputs using configured product prices. Public ranges, baseline rates and private trade prices can be tailored to the business. Final measurements and scope need checking.</p>
+    <p className="at-choice-note"><b>One pricing system, different levels of detail.</b> Public visitors can see a useful indicative range without exposing private trade rates. Logged-in trade customers can use configured pricing, while measured jobs and plans can carry more detail into the final estimate. Final measurements, scope and supplier pricing still need confirmation.</p>
     <Link href="/demo/roofline-site" className="at-back-link">&larr; Back to Roofline Canterbury</Link>
   </div></main></>;
 }

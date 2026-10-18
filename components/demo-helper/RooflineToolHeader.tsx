@@ -11,7 +11,7 @@ export function RooflineToolHeader({ title, children, section = 'tool' }: { titl
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/assets/demo-roofline/branding.png" alt="Roofline Canterbury" className="max-h-9 w-auto object-contain" />
     </Link>
-      <nav aria-label="Roofline roof tools"><Link href="/demo/roofline-site">Roofline home</Link><Link href="/demo/roofline-site/estimate">All roof tools</Link>{children}</nav>
+      <nav aria-label="Roofline pricing navigation"><Link href="/demo/roofline-site">Roofline home</Link><Link href="/demo/roofline-site/estimate">Roof pricing</Link>{children}</nav>
     </div><RooflineBreadcrumbs items={section === 'chooser' ? [{ label: 'Roof tools' }] : section === 'admin' ? [{ label: 'Business controls' }] : [{ label: 'Roof tools', href: '/demo/roofline-site/estimate' }, { label: title }]} />
   </header>;
 }

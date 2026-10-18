@@ -335,9 +335,63 @@ export interface EstimateDraft {
   components: EstimateDraftComponent[];
 }
 
+export interface IndicativePricePresentation {
+  low: number;
+  high: number;
+  confidence: 'high' | 'medium' | 'early';
+  label: string;
+  reasons: string[];
+}
+
 export type PricedDraft =
-  | { mode: 'single'; estimate: Estimate; indicative: boolean }
-  | { mode: 'range'; low: Estimate; high: Estimate; indicative: true; band: SizeBandId };
+  | { mode: 'single'; estimate: Estimate; indicative: boolean; presentation?: IndicativePricePresentation }
+  | { mode: 'range'; low: Estimate; high: Estimate; indicative: true; band: SizeBandId; presentation?: IndicativePricePresentation };
+
+function roundToNearestHundred(value: number): number {
+  return Math.max(0, Math.round(value / 100) * 100);
+}
+
+/**
+ * Add a customer-facing public range without changing the deterministic estimate used
+ * for audit, line items or trade/internal pricing. Exact measurements produce a tight
+ * range; configured size bands retain their honest min/max span.
+ */
+export function withIndicativePricePresentation(result: PricedDraft): PricedDraft {
+  if (result.mode === 'range') {
+    return {
+      ...result,
+      presentation: {
+        low: result.low.total,
+        high: result.high.total,
+        confidence: 'early',
+        label: 'Early indicative range',
+        reasons: ['A size band was supplied instead of an exact roof area, so the range reflects both ends of that band.'],
+      },
+    };
+  }
+
+  const total = result.estimate.total;
+  const hasEstimatedComponents = result.estimate.lineItems.some((line) => line.quantitySource === 'heuristic');
+  const lowPct = hasEstimatedComponents ? 0.92 : 0.95;
+  const highPct = hasEstimatedComponents ? 1.12 : 1.08;
+  const low = roundToNearestHundred(total * lowPct);
+  let high = roundToNearestHundred(total * highPct);
+  if (high - low < 500) high = low + 500;
+
+  return {
+    ...result,
+    indicative: true,
+    presentation: {
+      low,
+      high,
+      confidence: hasEstimatedComponents ? 'medium' : 'high',
+      label: hasEstimatedComponents ? 'Indicative range' : 'High-confidence indicative range',
+      reasons: hasEstimatedComponents
+        ? ['The roof area and pitch are known, but one or more component quantities are estimated allowances.']
+        : ['The roof area and pitch are known, so the public range can stay relatively tight.'],
+    },
+  };
+}
 
 export function resolvePitchDegrees(pitch: EstimateDraftPitch): number | undefined {
   if (typeof pitch.degrees === 'number' && Number.isFinite(pitch.degrees)) return pitch.degrees;

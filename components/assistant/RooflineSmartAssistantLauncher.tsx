@@ -674,7 +674,7 @@ function SmartAssistantCompanion() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- see Web Speech API note above
     const buildRec = (): any => {
       const rec = new SR();
-      rec.lang = 'en-GB';
+      rec.lang = 'en-NZ';
       rec.interimResults = true;
       rec.continuous = true;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- SpeechRecognitionEvent shape

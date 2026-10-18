@@ -1,3 +1,4 @@
+import { currentBusinessSlug } from './business-context';
 import { getAssistantConfig, getBusiness, resolveSiteTopic } from './data';
 import { buildSystemPrompt } from './prompts';
 import type { AssistantSession, HandoffCategory } from './session';
@@ -6,6 +7,7 @@ import type { AssistantAction, AssistantCard, AssistantTurn } from './types';
 import {
   createEstimate,
   priceDraft,
+  withIndicativePricePresentation,
   type AreaType,
   type EstimateComponentSelection,
   type EstimateDraft,
@@ -449,7 +451,10 @@ const handlers: Record<string, ToolHandler> = {
         materialId: materialItem.id,
         components: requestedScope === 'covering_only' ? [] : draftComponents,
       };
-      const result: PricedDraft = priceDraft(draft);
+      const priced: PricedDraft = priceDraft(draft);
+      const result: PricedDraft = currentBusinessSlug() === 'roofline-roofing'
+        ? withIndicativePricePresentation(priced)
+        : priced;
       session.draft = draft;
       session.facts.material = materialItem.id;
       session.facts.projectType = projectType;
@@ -627,9 +632,20 @@ const handlers: Record<string, ToolHandler> = {
 
     session.estimateFlow = { active: false, clarificationCount: session.estimateFlow.clarificationCount, latestEstimateId: estimate.id };
     session.estimates[estimate.id] = estimate;
-    turn.cards.push({ type: 'estimate', estimate });
     turn.latestEstimateId = estimate.id;
     turn.factsUpdated = true;
+
+    if (currentBusinessSlug() === 'roofline-roofing') {
+      const result = withIndicativePricePresentation({ mode: 'single', estimate, indicative: true });
+      turn.cards.push({ type: 'estimate_result', result });
+      turn.latestEstimateIds = [estimate.id];
+      return {
+        result,
+        message: 'Summarise the public indicative price range and scope in one or two short sentences. The UI shows the calculation basis. Never restate the deterministic internal total as a customer-facing quote.',
+      };
+    }
+
+    turn.cards.push({ type: 'estimate', estimate });
     return {
       estimate,
       message: 'Summarise the indicative total and scope in one or two short sentences. The UI shows the full breakdown.',
@@ -714,7 +730,7 @@ const handlers: Record<string, ToolHandler> = {
       { type: 'OPEN_INQUIRY', label: 'Prepare an enquiry' },
       { type: 'SHOW_CONTACT_OPTIONS', label: 'Call the team', contacts }
     );
-    turn.cards.push({ type: 'handoff', summary: 'I can carry what you have already told me into the enquiry, or you can call the right Apex team directly.' });
+    turn.cards.push({ type: 'handoff', summary: `I can carry what you have already told me into the enquiry, or you can contact the ${getBusiness().business.name} team directly.` });
     return { ok: true, category, contacts: contacts.map((contact) => ({ id: contact.id, label: contact.label, phone: contact.phone })) };
   },
 
@@ -806,7 +822,7 @@ async function streamCompletion(apiKey: string, messages: ChatMessage[], onToken
   }
 }
 
-const MEASURING_TOOL_URL = '/supplier-pricing-tool/apex-roofing?guide=1';
+const measuringToolUrl = () => `/supplier-pricing-tool/${currentBusinessSlug()}?guide=1`;
 
 /** Deterministic cross-sell fork: the FIRST whole-job price request with no
  *  estimate underway offers two clickable paths - chat-assisted estimating
@@ -842,7 +858,7 @@ export async function runAssistantTurn(session: AssistantSession, userMessage: s
       message: 'Great, I can help you with that. Two quick options:\n\nI can ask you a few questions and give you a range estimate right here, or you can use our interactive measuring tool - upload plans or enter your measurements and apply products directly to them for an accurate cost. Which would you prefer?',
       actions: [
         { type: 'START_GUIDED_ESTIMATE', label: 'Ask me a few questions' },
-        { type: 'NAVIGATE_INTERNAL', label: 'Use the interactive measuring tool', url: MEASURING_TOOL_URL, external: true },
+        { type: 'NAVIGATE_INTERNAL', label: 'Use the interactive measuring tool', url: measuringToolUrl(), external: true },
       ],
     };
   }

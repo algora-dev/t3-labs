@@ -13,6 +13,8 @@ export function readQuickDraft(raw: string | null): QuickDraft {
     const a = d.answers;
     const optional = (v: unknown, values: readonly unknown[]) => v === undefined || values.includes(v);
     if (!optional(a.shape, Object.keys(ROOF_TEMPLATES)) || !optional(a.size, Object.keys(SIZE_BANDS)) || !optional(a.pitch, [null, ...Object.keys(PITCH_BANDS)]) || !optional(a.storeys, [1, 2]) || !optional(a.flatExtension, [null, ...Object.keys(EXTENSION_BANDS)]) || !optional(a.project, ['new_roof', 'reroof']) || !optional(a.existingMaterial, [null, 'tile', 'slate', 'metal', 'membrane', 'unknown']) || !optional(a.covering, ['tile', 'slate', 'metal', 'shingle', 'pressed_metal', 'longrun', 'epdm', 'grp', 'felt']) || !optional(a.flatCovering, [null, 'epdm', 'grp', 'felt']) || !optional(a.flatComplexity, ['simple', 'typical', 'complex'])) return INITIAL_DRAFT;
+    if (a.exactRoofAreaM2 !== undefined && (typeof a.exactRoofAreaM2 !== 'number' || !Number.isFinite(a.exactRoofAreaM2) || a.exactRoofAreaM2 < 20 || a.exactRoofAreaM2 > 1200)) return INITIAL_DRAFT;
+    if (a.exactPitchDegrees !== undefined && (typeof a.exactPitchDegrees !== 'number' || !Number.isFinite(a.exactPitchDegrees) || a.exactPitchDegrees < 0 || a.exactPitchDegrees > 50)) return INITIAL_DRAFT;
     return { step: d.step, answers: { ...INITIAL_DRAFT.answers, ...a }, demo: d.demo === true, ...(d.example === true ? { example: true } : {}) };
   } catch { return INITIAL_DRAFT; }
 }

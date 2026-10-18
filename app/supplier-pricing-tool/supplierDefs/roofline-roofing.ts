@@ -43,10 +43,10 @@ export const ROOFLINE_ROOFING = {
   },
   products: [
     // ---- Roof coverings (area) - profile families set compatibility ----
-    { id: 'rf-rd-040', name: 'Roofdeck 0.40g', code: 'RF-RD-040', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 23.5, packSize: null, defaultWastePct: 10, defaultLabourRate: 7.0, priceEditable: true, suggested: true },
-    { id: 'rf-rd-055', name: 'Roofdeck 0.55g', code: 'RF-RD-055', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 28.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 8.0, priceEditable: true },
-    { id: 'rf-cg-040', name: 'Corrugate 0.40g', code: 'RF-CG-040', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 22.5, packSize: null, defaultWastePct: 12, defaultLabourRate: 6.5, priceEditable: true, suggested: true },
-    { id: 'rf-cg-055', name: 'Corrugate 0.55g', code: 'RF-CG-055', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 27.5, packSize: null, defaultWastePct: 12, defaultLabourRate: 7.5, priceEditable: true },
+    { id: 'rf-rd-040', name: 'Roofdeck 0.40g', code: 'RF-RD-040', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 23.5, packSize: null, defaultWastePct: 10, defaultLabourRate: 44.0, priceEditable: true, suggested: true },
+    { id: 'rf-rd-055', name: 'Roofdeck 0.55g', code: 'RF-RD-055', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['roofdeck'], family: 'Roofdeck', unitPrice: 28.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 48.0, priceEditable: true },
+    { id: 'rf-cg-040', name: 'Corrugate 0.40g', code: 'RF-CG-040', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 22.5, packSize: null, defaultWastePct: 12, defaultLabourRate: 42.0, priceEditable: true, suggested: true },
+    { id: 'rf-cg-055', name: 'Corrugate 0.55g', code: 'RF-CG-055', basis: 'area', groups: ['roofAreas'], component: 'covering', roofTypes: ['corrugate'], family: 'Corrugate', unitPrice: 27.5, packSize: null, defaultWastePct: 12, defaultLabourRate: 46.0, priceEditable: true },
 
     // ---- Underlays (area, all roofs) ----
     { id: 'rf-underlay-205', name: '205 Underlay', code: 'UND-RF-205', basis: 'area', groups: ['roofAreas'], component: 'underlay', roofTypes: ['all'], unitPrice: 5.0, packSize: null, defaultWastePct: 10, defaultLabourRate: 5.0, priceEditable: true, suggested: true },

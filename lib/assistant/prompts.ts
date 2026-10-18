@@ -1,4 +1,5 @@
 import { getAssistantConfig, getBusiness, getRoofingKnowledge, getSiteMap, getWebsitePages } from './data';
+import { currentBusinessSlug } from './business-context';
 import type { AssistantSession } from './session';
 import { getActiveItems } from '../pricing/catalog';
 
@@ -72,6 +73,7 @@ RED: unsupported facts, structural judgement, legal matters, exact site-specific
 # HARD PRICING RULES
 - NEVER invent or calculate a price in prose.
 - Direct rates must come from retrieve_price.
+- If a pricing tool result includes a customer-facing presentation range, quote that range to the visitor. Do not expose the deterministic internal midpoint/total as though it were a formal public quote.
 - Job estimates must come from create_estimate.
 - Whole-roof estimates must establish new_roof vs reroof via projectType. If it is missing, ask using ask_clarification(kind="project_type"). Re-roofs automatically add the configured strip and disposal allowances (the server adds them - never quote them yourself beyond reading the tool result).
 - If the customer gives a size band (Small/Medium/Large) instead of an exact area, call create_estimate with areaBand so the server returns a price RANGE. Never turn a band into a single figure.
@@ -116,13 +118,13 @@ Use these ids when calling create_estimate. Do not invent component ids.
 8. update_facts(...) whenever the user supplies useful project details or explicitly chooses estimate scope/components.
 
 # MEASURING TOOL (interactive pricing tool)
-Apex also has an interactive measuring tool at /supplier-pricing-tool/apex-roofing?guide=1 (opens in a new tab; ?guide=1 starts the guided walkthrough). It lets a visitor upload plans or enter measurements and apply products directly to their measurements for an accurate cost.
-Guided flow steps, in order: 1. Choose supply only or supply and install. 2. Upload a plan image or start entering measurements manually. 3. If a plan was uploaded, calibrate the scale against a known length. 4. Draw areas for surfaces and lines for ridges, hips, valleys and edges; click back on the first point to close a shape. 5. Assign products to each measurement. 6. Review the itemised output - totals, per-product breakdown, waste applied automatically. 7. Send an enquiry to Apex with the takeoff attached.
+${biz.business.name} also has an interactive measuring tool at /supplier-pricing-tool/${currentBusinessSlug()}?guide=1 (opens in a new tab; ?guide=1 starts the guided walkthrough). It lets a visitor upload plans or enter measurements and apply products directly to their measurements for an accurate cost.
+Guided flow steps, in order: 1. Choose supply only or supply and install. 2. Upload a plan image or start entering measurements manually. 3. If a plan was uploaded, calibrate the scale against a known length. 4. Draw areas for surfaces and lines for ridges, hips, valleys and edges; click back on the first point to close a shape. 5. Assign products to each measurement. 6. Review the itemised output - totals, per-product breakdown, waste applied automatically. 7. Send an enquiry to ${biz.business.name} with the takeoff attached.
 When a visitor says they are stuck in the tool, or asks "I'm at X, what do I do next?", answer concisely using the step list above. Do not invent features not listed here.
 When a visitor asks for a price, cost, quote or figure and no estimate is underway, offer the choice of paths: you can help them here by asking a few questions, or they can use the measuring tool. The UI normally shows both buttons for you - mention both options briefly.
 
 # ESTIMATE REPLIES
-After create_estimate returns, give the total and describe the scope in one or two sentences. The UI shows the breakdown. Mention assumptions only if they matter to interpretation.
+After create_estimate returns, describe the customer-facing range or total and the scope in one or two sentences. If the result includes a presentation range, use that range rather than the internal deterministic calculation. The UI shows the breakdown. Mention assumptions only if they matter to interpretation.
 
 # NAVIGATION
 If an approved website page is relevant, answer the visitor's question first and call navigate in the SAME turn so they also get a useful View <page> button.
@@ -164,7 +166,7 @@ ${factsSummary}
 ${JSON.stringify(biz, null, 1)}
 
 # WEBSITE CONTENT
-The following is the same approved content rendered on the Apex website. Use it when answering questions about pages, services and information. If a matching site-map destination exists, you may also offer the navigate tool.
+The following is the same approved content rendered on the ${biz.business.name} website. Use it when answering questions about pages, services and information. If a matching site-map destination exists, you may also offer the navigate tool.
 ${JSON.stringify(websitePages, null, 1)}
 
 # ROOFING KNOWLEDGE

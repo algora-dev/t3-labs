@@ -73,9 +73,11 @@ export function EstimateResultCard({ result, accentColor }: { result: PricedDraf
   const range = low && high ? { low, high } : null;
   const single = result.mode === 'single' ? result.estimate : null;
   const primary = single ?? high!;
-  const totalLabel = range
-    ? `${range.low.symbol}${range.low.total.toLocaleString()} - ${range.high.symbol}${range.high.total.toLocaleString()}`
-    : `${single!.symbol}${single!.total.toLocaleString()}`;
+  const totalLabel = result.presentation
+    ? `${primary.symbol}${result.presentation.low.toLocaleString()} - ${primary.symbol}${result.presentation.high.toLocaleString()}`
+    : range
+      ? `${range.low.symbol}${range.low.total.toLocaleString()} - ${range.high.symbol}${range.high.total.toLocaleString()}`
+      : `${single!.symbol}${single!.total.toLocaleString()}`;
   const areaLabel = range
     ? `${range.low.project.roofArea.toLocaleString()}-${range.high.project.roofArea.toLocaleString()} m²`
     : `${single!.project.roofArea.toLocaleString()} m²`;
@@ -112,7 +114,7 @@ export function EstimateResultCard({ result, accentColor }: { result: PricedDraf
 
         <div className="mt-3 flex items-end justify-between border-t-2 border-slate-900 pt-3">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Ballpark total</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{result.presentation?.label ?? 'Ballpark total'}</p>
             <p className="mt-0.5 text-[10px] text-slate-400">Ref {primary.id}</p>
           </div>
           <span className="text-xl font-black" style={{ color: accentColor }}>
@@ -121,8 +123,13 @@ export function EstimateResultCard({ result, accentColor }: { result: PricedDraf
           </span>
         </div>
 
-        <p className="mt-3 rounded-xl bg-slate-50 px-3 py-2 text-[10px] italic leading-relaxed text-slate-500">
-          This is an indicative ballpark estimate based on the information provided. It is not a formal quotation and may change following inspection and confirmation of measurements.
+        {result.presentation?.reasons?.length ? (
+          <div className="mt-3 rounded-xl bg-slate-50 px-3 py-2 text-[10px] leading-relaxed text-slate-500">
+            {result.presentation.reasons.map((reason, i) => <p key={i}>{reason}</p>)}
+          </div>
+        ) : null}
+        <p className="mt-2 text-[10px] italic leading-relaxed text-slate-500">
+          This is an indicative ballpark estimate based on the information provided. It is not a formal quotation and may move lower or higher after measurements, access, detailing and site conditions are confirmed.
         </p>
       </div>
     </section>

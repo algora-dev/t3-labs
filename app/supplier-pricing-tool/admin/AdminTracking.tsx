@@ -71,11 +71,14 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
   const anonymousQuotes = quotes.filter(q => !q.email);
 
   const orderedQuotes = quotes.length ? quotes.filter(q => q.email && customers.get(q.email)?.orders) .length : 0;
-  // "Left on the table": total quoted value minus the value from customers who ordered.
   const totalQuoteValue = quotes.reduce((s, q) => s + q.total, 0);
-  const orderedValue = [...customers.values()].filter(s => s.orders > 0).reduce((sum, s) => sum + s.totalValue, 0);
-  const onTheTable = Math.max(0, totalQuoteValue - orderedValue);
   const avgQuote = quotes.length ? totalQuoteValue / quotes.length : 0;
+  const outsideHours = quotes.filter((q) => {
+    const d = new Date(q.createdAt);
+    const day = d.getDay();
+    const hour = d.getHours();
+    return day === 0 || day === 6 || hour < 8 || hour >= 17;
+  }).length;
 
   const opportunities = known
     .filter(s => s.orders === 0 && s.quotes >= 3)
@@ -103,8 +106,9 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
 
   const sortedQuotes = useMemo(() => [...quotes].sort((a, b) => b.createdAt.localeCompare(a.createdAt)), [quotes]);
 
-  const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('en-GB');
-  const fmtDateTime = (iso: string) => new Date(iso).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' });
+  const locale = cfg.slug === 'roofline-roofing' ? 'en-NZ' : 'en-GB';
+  const fmtDate = (iso: string) => new Date(iso).toLocaleDateString(locale);
+  const fmtDateTime = (iso: string) => new Date(iso).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'short' });
 
   return (
     <div className="space-y-4">
@@ -115,7 +119,7 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
             { label: 'Quotes created', value: String(quotes.length) },
             { label: 'Became orders', value: quotes.length ? `${Math.round((orderedQuotes / quotes.length) * 100)}%` : '-' },
             { label: 'Average quote', value: `${cfg.currency}${avgQuote.toFixed(0)}` },
-            { label: "Left on the table", value: `${cfg.currency}${Math.round(onTheTable).toLocaleString()}` },
+            { label: 'Outside business hours', value: `${outsideHours} quotes` },
             { label: 'Anonymous usage', value: `${anonymousQuotes.length} quotes` },
           ].map(s => (
             <div key={s.label} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -127,7 +131,7 @@ export function AdminTracking({ cfg, slug, admin }: { cfg: SupplierConfig; slug:
       </SectionCard>
 
       {/* Opportunities - the reach-out hook */}
-      <SectionCard title={`Opportunities (${opportunities.length})`} desc={`${opportunities.length} known contacts with 3+ quotes and no orders - ${cfg.currency}${opportunities.reduce((s, o) => s + o.totalValue, 0).toLocaleString(undefined, { maximumFractionDigits: 0 })} of reachable quoted value waiting for a call.`}>
+      <SectionCard title={`Opportunities (${opportunities.length})`} desc={`${opportunities.length} known contacts with 3+ quotes and no recorded orders - useful follow-up signals rather than proof of lost work.`}>
         {opportunities.length === 0 ? (
           <p className="text-sm text-slate-400 text-center py-3">No open opportunities right now.</p>
         ) : (

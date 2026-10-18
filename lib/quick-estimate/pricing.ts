@@ -40,12 +40,21 @@ export interface PricedEndpoint {
   materials: number; labour: number; removal: number; access: number; total: number;
   supplierOutput: OutputTotals | null;
 }
+export interface PublicPriceRange {
+  low: number; high: number;
+  confidence: 'high' | 'medium' | 'early';
+  label: string;
+  reasons: string[];
+}
 export interface QuickPrice {
   status: 'priced' | 'partial' | 'unavailable' | 'incompatible';
   currency: string; mode: PricingProfile['mode']; profileVersion: string;
   low: PricedEndpoint | null; high: PricedEndpoint | null;
+  /** Customer-facing range centred on the configured estimate, with uncertainty based on input precision. */
+  presentation: PublicPriceRange | null;
   missing: string[]; notes: string[]; taxNote: string;
 }
+
 export interface QuickResult { input: QuickEstimateInput; measurements: MeasurementRange; price: QuickPrice }
 const round = (n: number) => Math.round(n * 100) / 100;
 export const DEFAULT_FLAT_COMPLEXITY = { simple: { low: 1, high: 1.1 }, typical: { low: 1.08, high: 1.25 }, complex: { low: 1.2, high: 1.55 } } as const;
@@ -58,7 +67,7 @@ export function createQuickResult(input: QuickEstimateInput, catalog: SupplierPr
 
 export function priceQuickRange(input: QuickEstimateInput, measurements: MeasurementRange, catalog: SupplierProduct[], profile: PricingProfile): QuickPrice {
   const missing = new Set<string>();
-  const notes = new Set<string>(['Apex is a fictional demo business. Public catalogue rates are used, not authenticated trade pricing.', 'This is an indicative range for the listed work, not a formal or all-inclusive quote.']);
+  const notes = new Set<string>(['Public demonstration rates are used, not authenticated customer or trade pricing.', 'This is an indicative range for the listed work, not a formal or all-inclusive quote.']);
   let incompatible = false, unavailable = false;
   const products = new Map(catalog.map(p => [p.id, p]));
   const coveringFor = (section: RoofSection) => section.id === 'extension' ? input.flatCovering! : input.covering;
@@ -95,7 +104,7 @@ export function priceQuickRange(input: QuickEstimateInput, measurements: Measure
   if (profile.access[input.storeys] === null) missing.add(`${input.storeys === 2 ? 'Two-storey' : 'Single-storey'} scaffolding and site access`);
   if (input.flatExtension) missing.add('Shared extension junction, upstands and drainage specification');
   const base = { currency: profile.currency, mode: profile.mode, profileVersion: profile.version, notes: [...notes], taxNote: profile.taxNote };
-  if (incompatible || unavailable) return { ...base, status: incompatible ? 'incompatible' : 'unavailable', low: null, high: null, missing: [...missing] };
+  if (incompatible || unavailable) return { ...base, status: incompatible ? 'incompatible' : 'unavailable', low: null, high: null, presentation: null, missing: [...missing] };
 
   const flatLevel = input.flatComplexity ?? 'typical';
   const flatFactors = profile.flatComplexity ?? DEFAULT_FLAT_COMPLEXITY;
@@ -170,7 +179,50 @@ export function priceQuickRange(input: QuickEstimateInput, measurements: Measure
     return { endpoint: original.endpoint, sections, materials: round(materialTotal), labour: round(labourTotal), removal: round(removalCost), access, total: round(materialTotal + labourTotal + removalCost + access), supplierOutput };
   };
   const low = endpoint(measurements.low), high = endpoint(measurements.high);
-  return { ...base, notes: [...notes], status: missing.size ? 'partial' : 'priced', low, high, missing: [...missing] };
+  const presentation = buildPublicRange(input, low.total, high.total, missing.size > 0);
+  return { ...base, notes: [...notes], status: missing.size ? 'partial' : 'priced', low, high, presentation, missing: [...missing] };
+}
+
+
+function buildPublicRange(input: QuickEstimateInput, lowTotal: number, highTotal: number, hasMissingScope: boolean): PublicPriceRange {
+  // The deterministic endpoints remain available for handoff and audit. Public
+  // visitors see a useful indicative range centred on those calculations rather
+  // than an artificially huge min/max created by broad size and pitch bands.
+  const midpoint = (lowTotal + highTotal) / 2;
+  const exactArea = input.exactRoofAreaM2 !== undefined;
+  const exactPitch = input.shape === 'flat' || input.exactPitchDegrees !== undefined;
+  const complexity = ROOF_TEMPLATES[input.shape].complexity;
+  const unknownRemoval = input.project === 'reroof' && input.existingMaterial === 'unknown';
+
+  let lowerPct: number; let upperPct: number; let confidence: PublicPriceRange['confidence'];
+  if (exactArea && exactPitch) { lowerPct = 0.05; upperPct = 0.08; confidence = 'high'; }
+  else if (exactArea || exactPitch) { lowerPct = 0.08; upperPct = 0.12; confidence = 'medium'; }
+  else { lowerPct = 0.12; upperPct = 0.16; confidence = 'early'; }
+
+  if (complexity === 'moderate') { lowerPct += 0.02; upperPct += 0.04; }
+  if (complexity === 'complex') { lowerPct += 0.05; upperPct += 0.09; }
+  if (unknownRemoval) upperPct += 0.05;
+  if (input.storeys === 2) upperPct += 0.02;
+  if (hasMissingScope) { lowerPct += 0.02; upperPct += 0.06; confidence = confidence === 'high' ? 'medium' : 'early'; }
+
+  // Keep the public range meaningful. Even an early complex estimate should not
+  // casually imply a 2x spread; genuinely unresolved projects are explained in UI.
+  lowerPct = Math.min(lowerPct, 0.25);
+  upperPct = Math.min(upperPct, 0.35);
+  const round100 = (value: number) => Math.max(0, Math.round(value / 100) * 100);
+  const low = round100(midpoint * (1 - lowerPct));
+  const high = Math.max(low + 500, round100(midpoint * (1 + upperPct)));
+  const reasons: string[] = [];
+  if (!exactArea) reasons.push('roof area is approximate');
+  if (!exactPitch && input.shape !== 'flat') reasons.push('roof pitch is approximate');
+  if (complexity !== 'simple') reasons.push(`${complexity} roof geometry can change labour and flashing requirements`);
+  if (unknownRemoval) reasons.push('the existing roof covering is not confirmed');
+  if (hasMissingScope) reasons.push('some site-specific items still need confirmation');
+  return {
+    low, high, confidence,
+    label: confidence === 'high' ? 'High-confidence indicative range' : confidence === 'medium' ? 'Indicative range' : 'Early indicative range',
+    reasons,
+  };
 }
 
 /** Validate business-supplied rate configuration, not just homeowner input. */

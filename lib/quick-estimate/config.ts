@@ -1,6 +1,6 @@
 import type { ExtensionSizeId, PitchId, SizeId } from './types';
 
-export const MODEL_VERSION = 'apex-quick-roof-1.0';
+export const MODEL_VERSION = 'quick-roof-1.1';
 /** Agreed horizontal roof footprint, including overhangs, NOT total internal floor area. */
 export const SIZE_BANDS: Record<SizeId, { label: string; min: number; max: number }> = {
   small: { label: 'Small', min: 60, max: 100 },

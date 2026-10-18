@@ -21,17 +21,21 @@ interface QuoteLine {
   markupPct?: number;
 }
 
-function fmtMoney(n: number): string {
-  return n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function fmtMoney(n: number, locale = 'en-GB'): string {
+  return n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 /** Generic clean default accent - user picks their own brand colour in settings. */
 const DEFAULT_ACCENT = '#2563EB';
-const CURRENCY = '\u00A3'; // GBP default (matches the supplier tool demos)
 
 function QuoteBuilder() {
   const params = useSearchParams();
-  const apex = params.get('supplier') === 'apex-roofing';
+  const supplierSlug = params.get('supplier') || 'apex-roofing';
+  const apex = supplierSlug === 'apex-roofing';
+  const roofline = supplierSlug === 'roofline-roofing';
+  const currencySymbol = roofline ? '$' : '£';
+  const numberLocale = roofline ? 'en-NZ' : 'en-GB';
+  const backToTool = `/supplier-pricing-tool/${supplierSlug}`;
   const [ready, setReady] = useState(false);
   const [fromName, setFromName] = useState('');
   const [fromPhone, setFromPhone] = useState('');
@@ -50,8 +54,8 @@ function QuoteBuilder() {
   const [globalMode, setGlobalMode] = useState<'markup' | 'margin'>('markup');
   const [globalPct, setGlobalPct] = useState('0');
   const [taxEnabled, setTaxEnabled] = useState(true);
-  const [taxRate, setTaxRate] = useState(20);
-  const [taxName, setTaxName] = useState('VAT');
+  const [taxRate, setTaxRate] = useState(roofline ? 15 : 20);
+  const [taxName, setTaxName] = useState(roofline ? 'GST' : 'VAT');
   const [showSettings, setShowSettings] = useState(true);
 
   // Column visibility - untick for a clean customer copy, tick for the
@@ -118,7 +122,7 @@ function QuoteBuilder() {
         validDays,
         notes,
         logo,
-        currency: CURRENCY,
+        currency: currencySymbol,
         taxRate: taxEnabled ? taxRate : 0,
         taxName,
         lines: lines.map(l => ({
@@ -168,7 +172,7 @@ function QuoteBuilder() {
             <button onClick={() => setShowSettings(s => !s)} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">
               {showSettings ? 'Hide settings' : 'Show settings'}
             </button>
-            <Link href={apex ? "/supplier-pricing-tool/apex-roofing" : "/supplier-pricing-tool"} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">
+            <Link href={apex ? "/supplier-pricing-tool/apex-roofing" : backToTool} className="rounded-full border border-slate-300 px-4 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-400 transition">
               Back to tool
             </Link>
           </div>
@@ -194,7 +198,7 @@ function QuoteBuilder() {
               </div>
               <div>
                 <label className="text-xs font-medium text-slate-600">Your address</label>
-                <input type="text" value={fromAddress} onChange={e => setFromAddress(e.target.value)} className={inputCls} placeholder="12 Main Street, Auckland" />
+                <input type="text" value={fromAddress} onChange={e => setFromAddress(e.target.value)} className={inputCls} placeholder={roofline ? '12 Main Street, Christchurch' : '12 Main Street, Auckland'} />
               </div>
               <div>
                 <label className="text-xs font-medium text-slate-600">Client name</label>
@@ -202,7 +206,7 @@ function QuoteBuilder() {
               </div>
               <div>
                 <label className="text-xs font-medium text-slate-600">Quote address</label>
-                <input type="text" value={clientAddress} onChange={e => setClientAddress(e.target.value)} className={inputCls} placeholder="34 Hill Road, Wellington" />
+                <input type="text" value={clientAddress} onChange={e => setClientAddress(e.target.value)} className={inputCls} placeholder={roofline ? '34 Hill Road, Christchurch' : '34 Hill Road, Wellington'} />
               </div>
               <div>
                 <label className="text-xs font-medium text-slate-600">Quote number</label>
@@ -372,7 +376,7 @@ function QuoteBuilder() {
                   )}
                   {showRate && (
                     <td className="py-2.5 pr-2 text-right text-slate-600 whitespace-nowrap">
-                      {CURRENCY}<input
+                      {currencySymbol}<input
                         type="number" min="0" step="0.01" value={l.rate}
                         onChange={e => updateLine(i, { rate: parseFloat(e.target.value) || 0 })}
                         className="w-20 bg-transparent border-none outline-none text-right focus:bg-slate-50 rounded px-1"
@@ -391,7 +395,7 @@ function QuoteBuilder() {
                     </td>
                   )}
                   {showLinePrice && (
-                    <td className="py-2.5 text-right font-semibold text-slate-900">{CURRENCY}{fmtMoney(lineAmount(l))}</td>
+                    <td className="py-2.5 text-right font-semibold text-slate-900">{currencySymbol}{fmtMoney(lineAmount(l), numberLocale)}</td>
                   )}
                 </tr>
               ))}
@@ -416,27 +420,27 @@ function QuoteBuilder() {
           <div className="mt-5 ml-auto max-w-xs space-y-1.5 text-sm">
             {showLinePrice && (
               <div className="flex justify-between text-slate-600">
-                <span>Subtotal</span><span>{CURRENCY}{fmtMoney(subtotal)}</span>
+                <span>Subtotal</span><span>{currencySymbol}{fmtMoney(subtotal, numberLocale)}</span>
               </div>
             )}
             {!showLinePrice && lines.length > 0 && (
               <div className="flex justify-between text-slate-600">
-                <span>Subtotal ({lines.length} items)</span><span>{CURRENCY}{fmtMoney(subtotal)}</span>
+                <span>Subtotal ({lines.length} items)</span><span>{currencySymbol}{fmtMoney(subtotal, numberLocale)}</span>
               </div>
             )}
             {showGlobal && gp > 0 && (
               <div className="flex justify-between text-slate-600">
                 <span>{globalMode === 'markup' ? `Markup ${gp}%` : `Margin ${gp}%`}</span>
-                <span>{CURRENCY}{fmtMoney(globalAdjusted - subtotal)}</span>
+                <span>{currencySymbol}{fmtMoney(globalAdjusted - subtotal, numberLocale)}</span>
               </div>
             )}
             {taxEnabled && (
               <div className="flex justify-between text-slate-600">
-                <span>{taxName} ({taxRate}%)</span><span>{CURRENCY}{fmtMoney(tax)}</span>
+                <span>{taxName} ({taxRate}%)</span><span>{currencySymbol}{fmtMoney(tax, numberLocale)}</span>
               </div>
             )}
             <div className="flex justify-between pt-2 border-t-2 font-bold text-base" style={{ borderTopColor: accent }}>
-              <span>Total</span><span style={{ color: accent }}>{CURRENCY}{fmtMoney(total)}</span>
+              <span>Total</span><span style={{ color: accent }}>{currencySymbol}{fmtMoney(total, numberLocale)}</span>
             </div>
           </div>
 

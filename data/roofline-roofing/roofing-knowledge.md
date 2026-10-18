@@ -21,44 +21,45 @@ A roof where all sides slope down to the walls, with no gables. The diagonal edg
 A valley is the internal angle where two roof planes meet sloping downward toward each other. Valleys channel a lot of water, so they are lined with folded valley flashings. Valleys are a common leak point when poorly built or aged, and add cost per linear metre.
 
 ## Long-run steel roofing (the Roofline core product)
-Long-run means the roofing sheets are rolled to length in continuous runs from eave to ridge, minimising end laps. Roofline manufactures long-run corrugate and Roofdeck profiles in ColorCote and Zincalume coated steel, in 0.40mm and 0.55mm gauges. 0.40g suits most sheltered residential roofs; 0.55g is for exposed sites, longer spans and heavier traffic areas.
+Long-run means the roofing sheets are rolled to the required lengths, reducing unnecessary end laps. Roofline manufactures long-run Corrugate and Roofdeck profiles and publishes 0.40mm and 0.55mm gauge options. The correct gauge depends on the design, spans, site conditions and specification, so the assistant should not present gauge alone as a durability or coastal-exposure decision.
 
 ## Corrugate profile
-The classic New Zealand corrugated iron profile: round curves, through-fixed with colour-matched screws through the crest. Economical, proven and widely used. Generally used from about 8 degrees of pitch with correct laps.
+The classic New Zealand corrugated profile: lightweight, economical and widely used for residential and commercial roofing and cladding. The public Roofline product page does not state a minimum pitch in its main copy, so any exact minimum-pitch requirement for Corrugate should be confirmed from the current profile/specification rather than guessed by the assistant.
 
 ## Roofdeck (trapezoidal) profile
 A trapezoidal (flat-pan, ribbed) long-run profile with stronger spanning capability than corrugate and a clean, modern flat look. Suitable for lower pitches from about 3 degrees with sealed laps, and popular on both homes and commercial buildings.
 
-## ColorCote and Zincalume
-ColorCote is New Zealand's leading pre-painted steel roofing brand (including the Altrim range); Zincalume is zinc-aluminium coated steel for a plain silver finish. Both offer long manufacturer warranties. Colour-matched flashings, spouting and downpipes keep the whole roof system consistent.
+## Coating and environmental exposure
+Profile, gauge and coating solve different problems. Roofline's published guidance describes ZinaCore as suitable for moderate environments, MagnaFlow for more demanding or coastal exposure, and AlumiGard for very severe marine, industrial or geothermal environments. The distance from the coast is only one clue: salt exposure, prevailing wind and the exact site still matter, so the team should confirm the final specification.
+
+Roofline also states that coloured flashings and ridging are manufactured from MagnaFlow. For a visitor near the coast, first explain that the coating/environmental specification matters, then ask enough about location/exposure to give general guidance. Do not promise a warranty or final coating specification without Roofline confirmation.
+
+## ColorCote, Zincalume and finishes
+Roofline's range includes pre-painted and metallic-coated steel options. Colour-matched flashings, spouting and downpipes can keep the roof system visually consistent. When a customer asks which finish is best, prioritise Roofline's published environmental suitability guidance rather than treating gauge alone as a corrosion rating.
 
 ## Underlay
-A water-shedding layer installed under the roof sheets, directly over the rafters or purlins. Roofline uses roofing underlay as standard in its configured roof systems; heavier-grade upgrades are available for exposed sites.
+A water-shedding layer installed under the roof sheets, directly over the rafters or purlins. Underlay requirements depend on the roof system and specification. The demo pricing catalogue can include underlay as a configured component, but the assistant should not claim a specific Roofline underlay is mandatory unless the current project specification confirms it.
 
 ## Flashings
-Folded metal transitions that weatherproof edges and intersections: ridge (along the top), barge (along the gable edge), hip (along hip lines), valley (internal intersections), and wall cladding flashings. Roofline manufactures colour-matched flashings to order in its own factory with fast turnaround, which is why builders keep coming back for flashings that fit like a glove.
+Folded metal transitions that weatherproof edges and intersections: ridge (along the top), barge (along the gable edge), hip (along hip lines), valley (internal intersections), and wall cladding flashings. Roofline custom-manufactures flashings to project requirements and promotes fast turnaround from its Christchurch manufacturing operation.
 
 ## Spouting, fascia and guttering
-Roofline manufactures and installs continuous quad spouting, combined fascia and quad spouting systems, gutters and 80mm round downpipes in ColorCote finishes, made to length with colour-matched brackets. Re-roofs are a natural time to replace old spouting.
+Roofline manufactures and supplies a range of fascia, residential and commercial gutter profiles and downpipes, with installation available through its roofing services. A re-roof can be a practical time to discuss whether the existing rainwater system also needs work.
 
 ## Natural roof lighting
 Clear polycarbonate sheets profile-matched to the roofing, installed in the same plane to bring daylight into garages, sleepouts and commercial spaces.
 
 ## Wall cladding
-Roofline weatherboard and long-run wall cladding systems in ColorCote finishes, manufactured to length with matching corners, sills, joiners and flashings, measured per wall. Supply-only or supply and install.
+Roofline offers roofing profiles for wall cladding applications and manufactures associated wall-cladding flashings. Product and installation scope should be confirmed for the particular project.
 
 ## Asbestos cement roofs
-Older New Zealand homes may have deprecated asbestos cement roofing. Roofline manages safe removal as part of the re-roofing process and replaces it with new long-run steel. Never disturb suspected asbestos sheeting yourself.
+Older New Zealand buildings may have asbestos-containing roofing. Roofline lists asbestos removal among its roofing solutions. Suspected asbestos should not be disturbed by a homeowner; the correct assessment and removal process must be confirmed by suitably qualified people for the project.
 
 ## Re-roofing process (typical)
-1. Confirm the scope: profile, gauge, colour, spouting and any clear lighting.
-2. Strip the existing roof and dispose of it (asbestos removed safely if present).
-3. Check and repair the roof structure if needed, quoted transparently.
-4. Install underlay, then the new long-run roofing, flashings and spouting.
-5. Site left clean; warranties explained by the same team you dealt with throughout.
+A typical re-roof conversation starts by confirming the existing roof, chosen profile/finish, dimensions, access and any rainwater-system work. Removal, substrate condition, underlay, flashings and installation details are then confirmed for the site. Roofline says residential re-roofs can often be completed in a few working days, weather permitting, but the actual programme depends on the job.
 
 ## Price Your Plans
 Roofline can measure and price roofing, cladding and spouting directly from house plans. Send the plans through the contact form (PDF, images or ZIP) and the team comes back with pricing. The free tools on this website give an instant indicative ballpark before that conversation.
 
 ## Choosing a gauge
-0.40mm ColorCote suits most residential roofs in normal wind zones. 0.55mm suits exposed coastal or high-country sites, longer spans between purlins, and areas where people walk on the roof. The Roofline team confirms the right gauge during pricing.
+Roofline manufactures 0.40mm and 0.55mm options. Gauge selection is a design/specification decision, while corrosion resistance also depends on the coating system and environmental exposure. The assistant can explain the distinction, but Roofline should confirm the final gauge and finish for the project.

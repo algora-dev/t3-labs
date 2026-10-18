@@ -105,7 +105,7 @@ export function OutputView({ measureSet, catalog, baselineCatalog, showTrade, tr
         <div className="flex items-start justify-between gap-4 border-b-2 pb-5" style={{ borderColor: brand }}>
           <div className="min-w-0">
             <h1 className="text-xl font-bold text-black">MATERIALS PRICING{supplierCfg.demo ? ' (DEMO)' : ''}</h1>
-            <p className="mt-1 text-sm text-black">Generated {today} - {supplierName}</p>
+            <p className="mt-1 text-sm text-black">Generated {today} - {supplierName}{supplierCfg.slug === 'roofline-roofing' ? ' - NZD' : ''}</p>
             <p className="mt-1 text-xs text-black/60">{measureNote}{tradeLabel ? ` - ${tradeLabel}` : ''}</p>
             {pricingMode && <div className="mt-2"><PricingModeChip mode={pricingMode} /></div>}
           </div>

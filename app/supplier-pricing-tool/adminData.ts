@@ -134,8 +134,11 @@ export const DEFAULT_CTA: CtaSettings = {
   buttonLabel: 'Send my {pct}% saving code',
 };
 
-function defaultTeam(supplierName: string): TeamMember[] {
-  return [{ id: 'tm-1', name: 'Owner', email: `owner@${supplierName.toLowerCase().replace(/[^a-z]+/g, '')}.co.uk`, role: 'Owner', status: 'active' }];
+function defaultTeam(cfg: SupplierConfig): TeamMember[] {
+  if (cfg.slug === 'roofline-roofing') {
+    return [{ id: 'tm-1', name: 'Roofline Demo Admin', email: 'admin@roofline-demo.example', role: 'Owner', status: 'active' }];
+  }
+  return [{ id: 'tm-1', name: 'Owner', email: `owner@${cfg.name.toLowerCase().replace(/[^a-z]+/g, '')}.co.uk`, role: 'Owner', status: 'active' }];
 }
 
 /** Prebuilt libraries derived from product categories so the Products page
@@ -167,9 +170,17 @@ function defaultLibraries(cfg: SupplierConfig): ProductLibrary[] {
 
 /** Sample trade customers so the tracking story shows known, logged-in
  *  accounts. Fake addresses - collision risk with real users is nil. */
-function defaultTradeCustomers(): TradeCustomer[] {
+function defaultTradeCustomers(cfg: SupplierConfig): TradeCustomer[] {
   const day = 86400000;
   const now = Date.now();
+  if (cfg.slug === 'roofline-roofing') {
+    return [
+      { email: 'estimating@canterburyroofing.example', tierId: 't2', status: 'active', addedAt: new Date(now - 62 * day).toISOString(), lastLoginAt: new Date(now - 1 * day).toISOString() },
+      { email: 'quotes@southernbuild.example', tierId: 't1', status: 'active', addedAt: new Date(now - 48 * day).toISOString(), lastLoginAt: new Date(now - 2 * day).toISOString() },
+      { email: 'office@mainlandroofing.example', tierId: 't2', status: 'active', addedAt: new Date(now - 31 * day).toISOString(), lastLoginAt: new Date(now - 3 * day).toISOString() },
+      { email: 'pricing@selwynconstruction.example', tierId: 't1', status: 'active', addedAt: new Date(now - 24 * day).toISOString(), lastLoginAt: new Date(now - 4 * day).toISOString() },
+    ];
+  }
   return [
     { email: 'mike@harwoodroofing.co.uk', tierId: 't1', status: 'active', addedAt: new Date(now - 42 * day).toISOString(), lastLoginAt: new Date(now - 1 * day).toISOString() },
     { email: 'sarah.j@premierjones.co.uk', tierId: 't2', status: 'active', addedAt: new Date(now - 60 * day).toISOString(), lastLoginAt: new Date(now - 2 * day).toISOString() },
@@ -181,19 +192,21 @@ function defaultTradeCustomers(): TradeCustomer[] {
 export function defaultAdminData(cfg: SupplierConfig): AdminData {
   return {
     tiers: [
-      { id: 't1', name: 'Trade Tier 1', discountPct: 5 },
-      { id: 't2', name: 'Trade Tier 2', discountPct: Math.max(cfg.discountPct, 10) },
+      { id: 't1', name: cfg.slug === 'roofline-roofing' ? 'Trade Standard' : 'Trade Tier 1', discountPct: cfg.slug === 'roofline-roofing' ? 8 : 5 },
+      { id: 't2', name: cfg.slug === 'roofline-roofing' ? 'Trade Partner' : 'Trade Tier 2', discountPct: Math.max(cfg.discountPct, cfg.slug === 'roofline-roofing' ? 12 : 10) },
     ],
-    customers: defaultTradeCustomers(),
-    team: defaultTeam(cfg.name),
+    customers: defaultTradeCustomers(cfg),
+    team: defaultTeam(cfg),
     cta: { ...DEFAULT_CTA },
     features: { products: true, tradePricing: true, team: true, tracking: true, cta: true },
     libraries: defaultLibraries(cfg),
   };
 }
 
-const key = (slug: string) => `qc-spt-${slug}-admin-v2`;
-const eventsKey = (slug: string) => `qc-spt-${slug}-events-v1`;
+// Roofline's seed data was rebuilt for the NZ demo; use a new browser-local
+// namespace so old UK/Apex sample records cannot survive from earlier builds.
+const key = (slug: string) => `qc-spt-${slug}-${slug === 'roofline-roofing' ? 'admin-v3' : 'admin-v2'}`;
+const eventsKey = (slug: string) => `qc-spt-${slug}-${slug === 'roofline-roofing' ? 'events-v2' : 'events-v1'}`;
 export const adminAuthKey = (slug: string) => `qc-spt-${slug}-admin-auth`;
 
 export function readAdminData(slug: string, cfg: SupplierConfig): AdminData {
@@ -293,15 +306,27 @@ export function withDemoEvents(real: TrackingEvent[], cfg: SupplierConfig): Trac
   const weights = products.map((p, i) => (p.component === 'covering' ? 10 : 3) - Math.min(i, 5) * 0.4);
   const totalW = weights.reduce((s, w) => s + Math.max(w, 0.5), 0);
 
-  const TRADE_EMAILS = ['mike@harwoodroofing.co.uk', 'sarah.j@premierjones.co.uk', 'dan@dtfdevelopments.co.uk', 'amy@vaultconstructions.co.uk'];
-  const KNOWN_EMAILS = ['enquiries@barkerandson.co.uk', 'keith@nwrooflines.co.uk', 'paul.odonnell@podbuilders.co.uk', 'info@summitroofingltd.co.uk', 'tom@kestrelandco.co.uk', 'helen@qubebuild.co.uk', 'chris@apexhomeimprovements.co.uk', 'sam@riverstoneprop.co.uk'];
-  // Known customers who quote a lot but never order - the "opportunities".
-  const OPPORTUNITY_EMAILS = new Set(['enquiries@barkerandson.co.uk', 'keith@nwrooflines.co.uk', 'helen@qubebuild.co.uk']);
+  const isRoofline = cfg.slug === 'roofline-roofing';
+  const TRADE_EMAILS = isRoofline
+    ? ['estimating@canterburyroofing.example', 'quotes@southernbuild.example', 'office@mainlandroofing.example', 'pricing@selwynconstruction.example']
+    : ['mike@harwoodroofing.co.uk', 'sarah.j@premierjones.co.uk', 'dan@dtfdevelopments.co.uk', 'amy@vaultconstructions.co.uk'];
+  const KNOWN_EMAILS = isRoofline
+    ? ['sam@hornbyrenovations.example', 'quotes@waimakariribuilders.example', 'office@porthillsroofing.example', 'jane@rollestonhomes.example', 'estimating@rangiorabuild.example', 'hello@cashmererenovations.example', 'projects@riccartonbuilding.example', 'contact@linwoodhomes.example']
+    : ['enquiries@barkerandson.co.uk', 'keith@nwrooflines.co.uk', 'paul.odonnell@podbuilders.co.uk', 'info@summitroofingltd.co.uk', 'tom@kestrelandco.co.uk', 'helen@qubebuild.co.uk', 'chris@apexhomeimprovements.co.uk', 'sam@riverstoneprop.co.uk'];
+  // Known customers who quote a lot but never order - deliberately seeded
+  // opportunities so the owner can see where a sales follow-up may help.
+  const OPPORTUNITY_EMAILS = new Set(isRoofline
+    ? ['sam@hornbyrenovations.example', 'quotes@waimakariribuilders.example', 'office@porthillsroofing.example']
+    : ['enquiries@barkerandson.co.uk', 'keith@nwrooflines.co.uk', 'helen@qubebuild.co.uk']);
   const orderRate: Record<string, number> = {};
-  for (const e of TRADE_EMAILS) orderRate[e] = 0.35;
-  for (const e of KNOWN_EMAILS) orderRate[e] = OPPORTUNITY_EMAILS.has(e) ? 0 : 0.18;
-  // Guaranteed minimum quote counts so the story always shows.
-  const minQuotes: Record<string, number> = {
+  for (const e of TRADE_EMAILS) orderRate[e] = isRoofline ? 0.42 : 0.35;
+  for (const e of KNOWN_EMAILS) orderRate[e] = OPPORTUNITY_EMAILS.has(e) ? 0 : (isRoofline ? 0.20 : 0.18);
+  // Guaranteed minimum quote counts so the sales-opportunity story is stable.
+  const minQuotes: Record<string, number> = isRoofline ? {
+    'sam@hornbyrenovations.example': 8,
+    'quotes@waimakariribuilders.example': 6,
+    'office@porthillsroofing.example': 5,
+  } : {
     'enquiries@barkerandson.co.uk': 8,
     'keith@nwrooflines.co.uk': 6,
     'helen@qubebuild.co.uk': 5,
@@ -313,10 +338,30 @@ export function withDemoEvents(real: TrackingEvent[], cfg: SupplierConfig): Trac
 
   function makeQuote(email: string | null) {
     const daysAgo = Math.floor(rand() * 30);
-    const createdAt = new Date(now - daysAgo * 86400000 - Math.floor(rand() * 86400000)).toISOString();
-    // Most quotes are small repairs; a few are big re-roofs.
-    const big = rand() < 0.18;
-    const total = big ? 6000 + rand() * 12000 : 300 + rand() * 2800;
+    let createdDate = new Date(now - daysAgo * 86400000);
+    if (isRoofline) {
+      // Keep the sample believable: most activity is during weekday business
+      // hours, with a meaningful minority showing the 24/7 self-service value.
+      const outsideBusinessHours = rand() < 0.28;
+      if (!outsideBusinessHours) {
+        const day = createdDate.getDay();
+        if (day === 0) createdDate = new Date(createdDate.getTime() - 2 * 86400000);
+        else if (day === 6) createdDate = new Date(createdDate.getTime() - 86400000);
+        createdDate.setHours(8 + Math.floor(rand() * 9), Math.floor(rand() * 60), 0, 0);
+      } else {
+        const evening = rand() < 0.8;
+        createdDate.setHours(evening ? 18 + Math.floor(rand() * 4) : 6 + Math.floor(rand() * 2), Math.floor(rand() * 60), 0, 0);
+      }
+    } else {
+      createdDate = new Date(now - daysAgo * 86400000 - Math.floor(rand() * 86400000));
+    }
+    const createdAt = createdDate.toISOString();
+    // Roofline's demo represents roof/material jobs rather than tiny repairs.
+    // Other suppliers keep the original small-job distribution.
+    const big = rand() < (isRoofline ? 0.28 : 0.18);
+    const total = isRoofline
+      ? (big ? 16000 + rand() * 18000 : 3500 + rand() * 12000)
+      : (big ? 6000 + rand() * 12000 : 300 + rand() * 2800);
     const productCounts: Record<string, number> = {};
     const items = 1 + Math.floor(rand() * 4);
     for (let j = 0; j < items; j++) {
@@ -353,7 +398,9 @@ export function withDemoEvents(real: TrackingEvent[], cfg: SupplierConfig): Trac
   // Anonymous usage: quotes with no email, no trackable outcome.
   for (let i = 0; i < 22; i++) makeQuote(null);
 
-  const names = ['Mike Harwood', 'Sarah Jones', 'Dan Fletcher', 'Alex Barker', 'Keith Noble', 'Amy Chu', 'Paul O\u2019Donnell', 'Tom Kestrel'];
+  const names = isRoofline
+    ? ['Sam Taylor', 'Mia Clarke', 'Ben Wilson', 'Aroha Martin', 'Liam Chen', 'Sophie Reid', 'Jack Thompson', 'Ella Brown']
+    : ['Mike Harwood', 'Sarah Jones', 'Dan Fletcher', 'Alex Barker', 'Keith Noble', 'Amy Chu', 'Paul O\u2019Donnell', 'Tom Kestrel'];
   for (let i = 0; i < 22; i++) {
     const email = KNOWN_EMAILS[Math.floor(rand() * KNOWN_EMAILS.length)];
     events.push({ type: 'signup', createdAt: new Date(now - Math.floor(rand() * 30) * 86400000).toISOString(), email, name: names[Math.floor(rand() * names.length)] });
