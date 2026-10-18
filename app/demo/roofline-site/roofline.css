@@ -194,3 +194,13 @@
 #roofline-demo-root #contact .form-field{width:100%;min-width:0}
 #roofline-demo-root #contact a[href^="mailto:"]{overflow-wrap:anywhere}
 @media(max-width:1023px){#roofline-demo-root #contact > .site-shell{grid-template-columns:minmax(0,1fr)}#roofline-demo-root #contact form,#roofline-demo-root #contact form > div,#roofline-demo-root #contact label{min-width:0}}
+
+/* Smart Assistant launcher button: helper.css equivalents, scoped + red shadow.
+   Without these the button renders unstyled (in-flow) because the Apex demo
+   shell that imports helper.css never mounts on roofline pages. */
+#roofline-demo-root .sa-apex-launcher{position:fixed;z-index:55;right:20px;bottom:20px;display:flex;align-items:center;gap:11px;padding:13px 18px;border:0;border-radius:14px;color:white;font:inherit;box-shadow:0 6px 24px #c8102e30;cursor:pointer;text-align:left;min-height:55px}
+#roofline-demo-root .sa-apex-launcher b{font-size:13px;display:block}
+#roofline-demo-root .sa-apex-launcher small{font-size:10px;display:block;opacity:.85}
+#roofline-demo-root .sa-apex-launcher:focus-visible{outline:3px solid #101828;outline-offset:4px}
+@media(max-width:759px){#roofline-demo-root .sa-apex-launcher{right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));padding:12px;min-height:48px;gap:6px}#roofline-demo-root .sa-apex-launcher small{display:none}#roofline-demo-root .sa-apex-launcher b{font-size:11px}}
+@media print{#roofline-demo-root .sa-apex-launcher{display:none!important}}
