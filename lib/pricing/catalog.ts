@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { BUSINESS_SLUG } from '../assistant/data';
+import { currentBusinessSlug } from '../assistant/business-context';
 
 /** Server-side pricing catalogue loader (pricing.json is the only price source). */
 
@@ -26,15 +26,18 @@ export interface PricingCatalog {
   items: CatalogItem[];
 }
 
-let cached: PricingCatalog | null = null;
+const cache = new Map<string, PricingCatalog>();
 
 export function getCatalog(): PricingCatalog {
+  const slug = currentBusinessSlug();
+  let cached = cache.get(slug);
   if (!cached) {
     const raw = fs.readFileSync(
-      path.join(process.cwd(), 'data', BUSINESS_SLUG, 'pricing.json'),
+      path.join(process.cwd(), 'data', slug, 'pricing.json'),
       'utf-8'
     );
     cached = JSON.parse(raw) as PricingCatalog;
+    cache.set(slug, cached);
   }
   return cached;
 }

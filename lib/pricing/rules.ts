@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { BUSINESS_SLUG } from '../assistant/data';
+import { currentBusinessSlug } from '../assistant/business-context';
 
 /** Server-side loader for estimate-rules.json (deterministic estimate rules). */
 
@@ -72,15 +72,18 @@ export function getV4Rules(): V4Rules {
   return rules.v4;
 }
 
-let cached: EstimateRules | null = null;
+const ruleCache = new Map<string, EstimateRules>();
 
 export function getEstimateRules(): EstimateRules {
+  const slug = currentBusinessSlug();
+  let cached = ruleCache.get(slug);
   if (!cached) {
     const raw = fs.readFileSync(
-      path.join(process.cwd(), 'data', BUSINESS_SLUG, 'estimate-rules.json'),
+      path.join(process.cwd(), 'data', slug, 'estimate-rules.json'),
       'utf-8'
     );
     cached = JSON.parse(raw) as EstimateRules;
+    ruleCache.set(slug, cached);
   }
   return cached;
 }

@@ -1,0 +1,211 @@
+{
+  "catalogVersion": "2026-10-roofline-demo-1",
+  "currency": "NZD",
+  "symbol": "$",
+  "taxLabel": null,
+  "note": "Indicative demonstration pricing for the Roofline Canterbury demo. Rates are supply and installed in NZD unless stated. Base roof-system rates exclude removal and disposal of an existing roof; re-roof removal allowances are added separately by the deterministic estimate engine.",
+  "items": [
+    {
+      "id": "reroof_corrugate_040",
+      "name": "Corrugated steel roof system 0.40g (ColorCote)",
+      "category": "reroofing",
+      "unit": "m2",
+      "rate": 68,
+      "minimumCharge": 5200,
+      "description": "Classic corrugated long-run steel roof system in 0.40mm ColorCote pre-finished steel, including underlay, fixings, ridge and barge flashings and installation.",
+      "includes": [
+        "0.40g ColorCote corrugate",
+        "Underlay",
+        "Screws and fixings",
+        "Ridge and barge flashings",
+        "Labour"
+      ],
+      "excludes": [
+        "Removal and disposal of the existing roof",
+        "Spouting and guttering",
+        "Scaffolding beyond standard single-storey access"
+      ],
+      "active": true
+    },
+    {
+      "id": "reroof_corrugate_055",
+      "name": "Corrugated steel roof system 0.55g (ColorCote)",
+      "category": "reroofing",
+      "unit": "m2",
+      "rate": 78,
+      "minimumCharge": 5800,
+      "description": "Heavier 0.55mm corrugated steel roof system in ColorCote finish for exposed sites and longer spans, including underlay, fixings, flashings and installation.",
+      "includes": [
+        "0.55g ColorCote corrugate",
+        "Underlay",
+        "Screws and fixings",
+        "Ridge and barge flashings",
+        "Labour"
+      ],
+      "excludes": [
+        "Removal and disposal of the existing roof",
+        "Spouting and guttering"
+      ],
+      "active": true
+    },
+    {
+      "id": "reroof_roofdeck_040",
+      "name": "Roofdeck trapezoidal roof system 0.40g (ColorCote)",
+      "category": "reroofing",
+      "unit": "m2",
+      "rate": 72,
+      "minimumCharge": 5500,
+      "description": "Roofdeck trapezoidal long-run steel roof system in 0.40mm ColorCote, with stronger spanning and a clean flat look, including underlay, fixings, flashings and installation.",
+      "includes": [
+        "0.40g ColorCote Roofdeck",
+        "Underlay",
+        "Screws and fixings",
+        "Ridge, hip and barge flashings",
+        "Labour"
+      ],
+      "excludes": [
+        "Removal and disposal of the existing roof",
+        "Spouting and guttering"
+      ],
+      "active": true
+    },
+    {
+      "id": "reroof_roofdeck_055",
+      "name": "Roofdeck trapezoidal roof system 0.55g (ColorCote)",
+      "category": "reroofing",
+      "unit": "m2",
+      "rate": 82,
+      "minimumCharge": 6200,
+      "description": "Heavy-duty 0.55mm Roofdeck trapezoidal steel roof system for exposed locations and commercial spans, including underlay, fixings, flashings and installation.",
+      "includes": [
+        "0.55g ColorCote Roofdeck",
+        "Underlay",
+        "Screws and fixings",
+        "Ridge, hip and barge flashings",
+        "Labour"
+      ],
+      "excludes": [
+        "Removal and disposal of the existing roof",
+        "Spouting and guttering"
+      ],
+      "active": true
+    },
+    {
+      "id": "reroof_wall_cladding",
+      "name": "Wall cladding system (Roofline weatherboard or long-run)",
+      "category": "reroofing",
+      "unit": "m2",
+      "rate": 88,
+      "minimumCharge": 3500,
+      "description": "Metal wall cladding in Roofline weatherboard or long-run profile, ColorCote finish, including fixings, flashings and installation.",
+      "includes": [
+        "ColorCote cladding profile",
+        "Building underlay",
+        "Fixings",
+        "Corners, sills and flashings",
+        "Labour"
+      ],
+      "excludes": [
+        "Removal of existing wall cladding",
+        "Framing or substrate repairs"
+      ],
+      "active": true
+    },
+    {
+      "id": "underlay_upgrade",
+      "name": "Roofing underlay upgrade",
+      "category": "component",
+      "unit": "m2",
+      "rate": 6,
+      "minimumCharge": 0,
+      "description": "Upgrade from standard underlay to a heavier-grade breathable roofing underlay.",
+      "includes": ["Material and install"],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "ridge_flashing",
+      "name": "Ridge flashing (colour-matched)",
+      "category": "component",
+      "unit": "lm",
+      "rate": 45,
+      "minimumCharge": 0,
+      "description": "Colour-matched folded ridge flashing manufactured to length in our factory and installed.",
+      "includes": ["Manufacture and install"],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "hip_flashing",
+      "name": "Hip flashing (colour-matched)",
+      "category": "component",
+      "unit": "lm",
+      "rate": 48,
+      "minimumCharge": 0,
+      "description": "Colour-matched hip flashing for hipped roofs, folded to length and installed.",
+      "includes": ["Manufacture and install"],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "valley_flashing",
+      "name": "Valley flashing",
+      "category": "component",
+      "unit": "lm",
+      "rate": 55,
+      "minimumCharge": 0,
+      "description": "Folded valley flashing to channel water at internal roof intersections, colour-matched and installed.",
+      "includes": ["Manufacture and install"],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "spouting_quad",
+      "name": "Quad spouting replacement",
+      "category": "component",
+      "unit": "lm",
+      "rate": 58,
+      "minimumCharge": 0,
+      "description": "ColorCote quad spouting, made to length and installed, including brackets.",
+      "includes": ["Manufacture, brackets and install"],
+      "excludes": ["Downpipes"],
+      "active": true
+    },
+    {
+      "id": "fascia_gutter_system",
+      "name": "Fascia and quad spouting system",
+      "category": "component",
+      "unit": "lm",
+      "rate": 75,
+      "minimumCharge": 0,
+      "description": "Combined fascia and quad spouting system, ColorCote finish, manufactured and installed in continuous lengths.",
+      "includes": ["Fascia, spouting and install"],
+      "excludes": ["Downpipes"],
+      "active": true
+    },
+    {
+      "id": "downpipe_round",
+      "name": "Downpipe replacement 80mm round",
+      "category": "component",
+      "unit": "lm",
+      "rate": 48,
+      "minimumCharge": 0,
+      "description": "Colour-matched 80mm round downpipes replacing old downpipes, including offsets and brackets.",
+      "includes": ["Manufacture and install"],
+      "excludes": [],
+      "active": true
+    },
+    {
+      "id": "clear_roof_lighting",
+      "name": "Natural roof lighting (clear polycarbonate)",
+      "category": "component",
+      "unit": "m2",
+      "rate": 95,
+      "minimumCharge": 0,
+      "description": "Clear polycarbonate roof lighting sheets profile-matched to your roofing, installed in the same plane.",
+      "includes": ["Material and install"],
+      "excludes": [],
+      "active": true
+    }
+  ]
+}

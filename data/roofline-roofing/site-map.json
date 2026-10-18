@@ -1,0 +1,58 @@
+[
+  {
+    "id": "home",
+    "title": "Roofline Canterbury Home",
+    "path": "/demo/roofline-site",
+    "keywords": ["home", "roofline", "start", "overview"],
+    "description": "Roofline Canterbury home page."
+  },
+  {
+    "id": "estimate-tools",
+    "title": "Free Roof Estimate Tools",
+    "path": "/demo/roofline-site/estimate",
+    "keywords": ["estimate", "price", "tools", "quote", "cost", "calculator"],
+    "description": "Three ways to price your roof: quick estimate without measurements, detailed estimator with measurements, or measure from a plan."
+  },
+  {
+    "id": "quick-estimate",
+    "title": "Quick Roof Estimate",
+    "path": "/demo/roofline-site/quick-estimate",
+    "keywords": ["quick", "estimate", "ballpark", "no measurements", "easy"],
+    "description": "Free instant roof estimate without measurements."
+  },
+  {
+    "id": "products",
+    "title": "Product Price List",
+    "path": "/demo/roofline-site/price-list",
+    "keywords": ["products", "price list", "corrugate", "roofdeck", "spouting", "flashings", "cladding"],
+    "description": "Roofline product range with indicative pricing."
+  },
+  {
+    "id": "services",
+    "title": "Our Services",
+    "path": "/demo/roofline-site#services",
+    "keywords": ["services", "what do you do", "new roof", "reroof", "re-roof", "commercial", "cladding", "asbestos"],
+    "description": "New roofing, re-roofing, commercial roofing, wall cladding, spouting, flashings, asbestos removal and plan pricing."
+  },
+  {
+    "id": "plan-pricing",
+    "title": "Price Your Plans",
+    "path": "/demo/roofline-site#contact",
+    "keywords": ["plans", "price my plans", "drawings", "builder", "measure from plans"],
+    "description": "Send your house plans and Roofline measures and prices your roofing, cladding and spouting from the drawings."
+  },
+  {
+    "id": "contact",
+    "title": "Contact Us",
+    "path": "/demo/roofline-site#contact",
+    "keywords": ["contact", "phone", "call", "email", "enquiry", "quote", "form"],
+    "description": "Call 03 349 8439 or send an enquiry, including plan uploads for pricing."
+  },
+  {
+    "id": "factory",
+    "title": "Our Factory",
+    "path": "/demo/roofline-site#about",
+    "keywords": ["factory", "manufacture", "about", "history", "1977", "team"],
+    "description": "Roofline manufactures long-run roofing and cladding in its own Christchurch factory, family owned since 1977."
+  }
+]

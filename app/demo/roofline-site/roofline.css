@@ -1,0 +1,196 @@
+/* Apex Roofing demo site styles - scoped to /demo/roofing-site routes.
+   Tailwind is already compiled at the t3-labs root; the @source directives from
+   the standalone app are not needed here (the compiled vendor package ships
+   pre-built class names, and this site's own classes are defined below). */
+
+#roofline-demo-root {
+  /* Apex Roofing design tokens - re-themable per client */
+  --ink: #101828;
+  --muted: #667085;
+  --line: #e5e7eb;
+  --paper: #f7f8fa;
+  --clay: #c8102e;
+  --brand-ink: #101828;
+  --brand-paper: #f7f8fa;
+  --brand-accent: #c8102e;
+}
+
+#roofline-demo-root * {
+  box-sizing: border-box;
+}
+
+#roofline-demo-root .contractor-site {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-manrope), "Segoe UI", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  letter-spacing: -0.005em;
+  text-rendering: optimizeLegibility;
+}
+
+#roofline-demo-root .contractor-site::selection {
+  background: #a50d26;
+  color: #ffffff;
+}
+
+#roofline-demo-root a,
+#roofline-demo-root button,
+#roofline-demo-root input,
+#roofline-demo-root select,
+#roofline-demo-root textarea {
+  outline-offset: 4px;
+}
+
+#roofline-demo-root button,
+#roofline-demo-root a[href] {
+  cursor: pointer;
+}
+
+#roofline-demo-root :focus-visible {
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 3px;
+}
+
+#roofline-demo-root .site-shell {
+  width: min(1240px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+@media (max-width: 640px) {
+  #roofline-demo-root .site-shell {
+    width: min(1240px, calc(100% - 32px));
+  }
+}
+
+#roofline-demo-root .section-pad {
+  padding-block: clamp(3.5rem, 8vw, 8rem);
+}
+
+#roofline-demo-root .section-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand-accent);
+}
+
+#roofline-demo-root .image-shade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(16, 24, 40, 0.9) 0%, rgba(16, 24, 40, 0.62) 36%, rgba(16, 24, 40, 0.14) 72%, rgba(16, 24, 40, 0.04) 100%),
+    linear-gradient(0deg, rgba(16, 24, 40, 0.18), rgba(16, 24, 40, 0.04));
+}
+
+#roofline-demo-root .button-base {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid transparent;
+  padding: 13px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+  border-radius: 10px;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+#roofline-demo-root .button-base:hover {
+  transform: translateY(-1px);
+}
+
+#roofline-demo-root .form-field {
+  min-height: 48px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  padding-inline: 1rem;
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#roofline-demo-root .form-field:focus {
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 4px rgba(23, 105, 224, 0.12);
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #roofline-demo-root .button-base:hover {
+    transform: none;
+  }
+}
+
+/* Brand overrides (driven by CSS custom properties from the site config) */
+#roofline-demo-root .contractor-site [class*="text-[#a95537]"] {
+  color: var(--brand-accent);
+}
+
+#roofline-demo-root .contractor-site [class*="bg-[#223036]"],
+#roofline-demo-root .contractor-site [class*="bg-[#1d2529]"],
+#roofline-demo-root .contractor-site [class*="bg-[#182226]"] {
+  background-color: var(--brand-ink);
+}
+
+#roofline-demo-root .contractor-site [class*="bg-[#f7f5ef]"] {
+  background-color: var(--brand-paper);
+}
+
+#roofline-demo-root .contractor-site [class*="text-[#1d2529]"] {
+  color: var(--brand-ink);
+}
+
+#roofline-demo-root .contractor-site [class*="hover:bg-[#a95537]"]:hover {
+  border-color: var(--brand-accent);
+  background-color: var(--brand-accent);
+  color: #ffffff;
+}
+
+#roofline-demo-root .contractor-site .header-quote-button:hover {
+  border-color: var(--brand-accent);
+  background-color: var(--brand-accent);
+  color: #ffffff;
+}
+
+#roofline-demo-root .contractor-site [class*="bg-[#eee9df]"] {
+  background-color: #f0f4fa;
+}
+
+#roofline-demo-root .contractor-site [class*="text-[#f1c59f]"] {
+  color: #8ab4f8;
+}
+
+#roofline-demo-root .contractor-site input[type="checkbox"],
+#roofline-demo-root .contractor-site input[type="radio"] {
+  accent-color: var(--brand-accent);
+}
+
+/* Consistent contact icons; keep the estimate CTA as the primary header action. */
+#roofline-demo-root .apex-contact-icon{display:grid;place-items:center;width:44px;height:44px;flex-shrink:0;border:1px solid transparent;border-radius:10px;color:#475467;background:transparent;transition:background .15s,color .15s}
+#roofline-demo-root .apex-contact-icon:hover{background:#fdf2f4;color:#c8102e}
+#roofline-demo-root .apex-contact-icon:focus-visible{outline:3px solid #c8102e;outline-offset:3px}
+#roofline-demo-root .apex-contact-icon svg{width:17px;height:17px}
+#roofline-demo-root .apex-header-actions{gap:4px}
+#roofline-demo-root .apex-header-actions .header-quote-button{margin-left:10px;white-space:nowrap}
+#roofline-demo-root .apex-main-nav{gap:clamp(12px,1.7vw,26px)}
+@media(min-width:1024px) and (max-width:1279px){#roofline-demo-root .apex-main-nav{font-size:12px;gap:12px}#roofline-demo-root .apex-header-actions .header-quote-button{font-size:12px;padding-inline:12px;margin-left:4px}}
+
+/* Let the contact columns shrink on small screens instead of overflowing at 320px. */
+#roofline-demo-root #contact > .site-shell > div{min-width:0}
+#roofline-demo-root #contact .form-field{width:100%;min-width:0}
+#roofline-demo-root #contact a[href^="mailto:"]{overflow-wrap:anywhere}
+@media(max-width:1023px){#roofline-demo-root #contact > .site-shell{grid-template-columns:minmax(0,1fr)}#roofline-demo-root #contact form,#roofline-demo-root #contact form > div,#roofline-demo-root #contact label{min-width:0}}

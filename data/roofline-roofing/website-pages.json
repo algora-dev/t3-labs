@@ -1,0 +1,94 @@
+[
+  {
+    "slug": "products/roofing-and-cladding",
+    "group": "services",
+    "title": "Roofing and Cladding Products",
+    "metaDescription": "Long run steel, corrugate, Roofdeck, weatherboard, clear roof lighting, spouting and flashings manufactured in Christchurch by Roofline Canterbury.",
+    "intro": "Roofline manufactures one of the largest product ranges of any roofing manufacturer in New Zealand, using well-known suppliers such as ColorCote and Zincalume. Everything is rolled or folded to length in our own Christchurch factory.",
+    "sections": [
+      {
+        "heading": "Roofing",
+        "bullets": [
+          "Long Run Steel in corrugate and Roofdeck profiles",
+          "Corrugate: the classic profile, through-fixed, from about 8 degrees pitch",
+          "Roofdeck: trapezoidal long-run with stronger spanning, from about 3 degrees",
+          "0.40mm and 0.55mm gauges in ColorCote finishes and Zincalume",
+          "Natural Roof Lighting: clear polycarbonate sheets matched to your profile"
+        ]
+      },
+      {
+        "heading": "Spouting and guttering",
+        "bullets": [
+          "New Fascia and Quad Spouting System in continuous lengths",
+          "Gutters, fascias and 80mm round downpipes in ColorCote finishes",
+          "Colour-matched brackets and fittings"
+        ]
+      },
+      {
+        "heading": "Flashings",
+        "bullets": [
+          "Roof flashings: ridge, barge, hip and valley, folded to order",
+          "Wall cladding flashings: corners, sills, joiners and trims",
+          "Fast factory turnaround, colour-matched to your roofing"
+        ]
+      },
+      {
+        "heading": "Colours and warranty",
+        "body": [
+          "The ColorCote colour range covers the popular New Zealand roof colours, with manufacturer warranties on coated steel products. Our team can help you match an existing roof or a colour scheme."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "services/overview",
+    "group": "services",
+    "title": "Our Services",
+    "metaDescription": "New roofing, re-roofing, commercial roofing, wall cladding, spouting, flashings, asbestos removal and free measure and quote from Roofline Canterbury.",
+    "intro": "From asbestos removal to roofing supplies, no matter how big or small your project, our service stays the same. You deal with the same person and receive the same care, attention and prompt service every time.",
+    "sections": [
+      {
+        "heading": "What we do",
+        "bullets": [
+          "New Roofing for new builds and renovations",
+          "ReRoofing, including safe asbestos cement removal where needed",
+          "Commercial Roofing for large projects",
+          "Wall Cladding supply and installation",
+          "New Spouting and guttering systems",
+          "Free measure and quote",
+          "Price your plans: send drawings and we measure and price from them"
+        ]
+      },
+      {
+        "heading": "Supply only or supply and install",
+        "body": [
+          "Buy manufactured product supply-only for your own builder, or use our own installation team for a complete supply and install job. Either way the product is made in our Christchurch factory with fast turnaround."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "information/faq",
+    "group": "information",
+    "title": "Common Questions",
+    "metaDescription": "Answers to common questions about Roofline Canterbury products, services, plan pricing and re-roofing.",
+    "intro": "Quick answers to the questions customers ask most. The Smart Assistant can answer these and price your project in conversation.",
+    "sections": [
+      {
+        "heading": "Products and ordering",
+        "bullets": [
+          "We manufacture ourselves in Christchurch, so turnaround is fast",
+          "Supply-only for builders, or full supply and install",
+          "Flashings folded to order and colour-matched",
+          "ColorCote and Zincalume ranges, 0.40g and 0.55g gauges"
+        ]
+      },
+      {
+        "heading": "Pricing your project",
+        "body": [
+          "Use the free tools on this website for an instant indicative estimate, send your plans through the contact form for full plan pricing, or ask the Smart Assistant for a conversational estimate."
+        ]
+      }
+    ]
+  }
+]

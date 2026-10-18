@@ -1,26 +1,30 @@
 import fs from 'fs';
 import path from 'path';
+import { currentBusinessSlug } from './business-context';
 
 /** Server-side loaders for the active Smart Assistant business data layer. */
 
 export const BUSINESS_SLUG = process.env.T3_ASSISTANT_BUSINESS_SLUG || 'apex-roofing';
-export const DATA_DIR = path.join(process.cwd(), 'data', BUSINESS_SLUG);
 
 type Cache = { [k: string]: unknown };
 const cache: Cache = {};
 
+function dataDir(): string {
+  return path.join(process.cwd(), 'data', currentBusinessSlug());
+}
+
 function loadJson<T>(file: string): T {
-  const key = `${BUSINESS_SLUG}:${file}`;
+  const key = `${currentBusinessSlug()}:${file}`;
   if (!cache[key]) {
-    const raw = fs.readFileSync(path.join(DATA_DIR, file), 'utf-8');
+    const raw = fs.readFileSync(path.join(dataDir(), file), 'utf-8');
     cache[key] = JSON.parse(raw);
   }
   return cache[key] as T;
 }
 
 function loadText(file: string): string {
-  const key = `${BUSINESS_SLUG}:${file}`;
-  if (!cache[key]) cache[key] = fs.readFileSync(path.join(DATA_DIR, file), 'utf-8');
+  const key = `${currentBusinessSlug()}:${file}`;
+  if (!cache[key]) cache[key] = fs.readFileSync(path.join(dataDir(), file), 'utf-8');
   return cache[key] as string;
 }
 

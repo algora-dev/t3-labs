@@ -1,0 +1,133 @@
+{
+  "version": "2026-10-roofline-demo-1",
+  "slopeFactorsComment": "actualSlopeArea = planArea * (1 / cos(pitchRadians)). Used when the user gives a PLAN/footprint area; skipped when they give the actual roof surface area.",
+  "defaultPitchDegrees": 22,
+  "pitchPresets": {
+    "10": 1.015,
+    "15": 1.035,
+    "20": 1.064,
+    "25": 1.103,
+    "30": 1.155,
+    "35": 1.221
+  },
+  "wasteFactorPct": 7.5,
+  "perimeterHeuristics": {
+    "comment": "Geometry allowances are used only when the customer explicitly asks the assistant to estimate roof-component lengths. They are never added automatically.",
+    "gable": {
+      "ridgeLmPerSqm": 0.1,
+      "valleyLmPerSqm": 0.0,
+      "hipLmPerSqm": 0.0,
+      "gutterLmPerSqm": 0.45
+    },
+    "hip": {
+      "ridgeLmPerSqm": 0.05,
+      "valleyLmPerSqm": 0.0,
+      "hipLmPerSqm": 0.22,
+      "gutterLmPerSqm": 0.55
+    },
+    "valley_complex": {
+      "ridgeLmPerSqm": 0.06,
+      "valleyLmPerSqm": 0.1,
+      "hipLmPerSqm": 0.1,
+      "gutterLmPerSqm": 0.55
+    },
+    "flat": {
+      "ridgeLmPerSqm": 0.0,
+      "valleyLmPerSqm": 0.0,
+      "hipLmPerSqm": 0.0,
+      "gutterLmPerSqm": 0.45
+    }
+  },
+  "defaultDownpipesPerGutterLm": 0.08,
+  "defaultMaterial": "reroof_corrugate_040",
+  "rounding": {
+    "rule": "Round each line subtotal and the total UP to the nearest 10 dollars (commercial conservative rounding). Quantities rounded up to the nearest 0.5 m2 / lm.",
+    "perLine": 10,
+    "quantityStepArea": 0.5,
+    "quantityStepLinear": 0.5
+  },
+  "v4": {
+    "comment": "V4 guided-estimator configuration. These commercial values must never be hardcoded in components - always read them from here.",
+    "reroofAllowances": {
+      "stripRatePerM2": 22,
+      "stripLabel": "Strip existing roof",
+      "disposalAllowancePerJob": 650,
+      "disposalLabel": "Removal / disposal allowance",
+      "assumptionNote": "Strip and disposal are indicative allowances for existing steel or tile roofs. Asbestos cement removal is quoted separately. Site conditions, difficult access, structural work or unusual disposal requirements are not included."
+    },
+    "sizeBands": {
+      "small": {
+        "label": "Small",
+        "minM2": 50,
+        "maxM2": 100
+      },
+      "medium": {
+        "label": "Medium",
+        "minM2": 100,
+        "maxM2": 200
+      },
+      "large": {
+        "label": "Large",
+        "minM2": 200,
+        "maxM2": 300
+      }
+    },
+    "pitchBands": {
+      "flat": {
+        "label": "Flat / Low",
+        "minDegrees": 0,
+        "maxDegrees": 12,
+        "representativeDegrees": 8
+      },
+      "medium": {
+        "label": "Medium",
+        "minDegrees": 13,
+        "maxDegrees": 30,
+        "representativeDegrees": 22
+      },
+      "steep": {
+        "label": "Steep",
+        "minDegrees": 31,
+        "maxDegrees": 60,
+        "representativeDegrees": 40
+      }
+    }
+  },
+  "disclaimer": "Indicative estimate only - not a formal quote. Subject to site inspection, confirmed measurements, access, roof structure and final product selection. Roofline Canterbury manufactures locally, so lead times and final pricing are confirmed by the team.",
+  "standardAssumptions": [
+    "Waste allowance of 7.5% included on the main roof covering quantity",
+    "No scaffolding beyond standard single-storey access",
+    "Existing roof structure assumed sound - timber repairs priced separately if needed"
+  ],
+  "materialPitchRules": {
+    "reroof_corrugate_040": {
+      "minPitchDegrees": 8,
+      "note": "Corrugated through-fixed profiles are generally used from 8 degrees with correct laps and sealing."
+    },
+    "reroof_corrugate_055": {
+      "minPitchDegrees": 8,
+      "note": "Corrugated through-fixed profiles are generally used from 8 degrees with correct laps and sealing."
+    },
+    "reroof_roofdeck_040": {
+      "minPitchDegrees": 3,
+      "note": "Trapezoidal long-run profiles with sealed laps can be used on lower pitches from about 3 degrees."
+    },
+    "reroof_roofdeck_055": {
+      "minPitchDegrees": 3,
+      "note": "Trapezoidal long-run profiles with sealed laps can be used on lower pitches from about 3 degrees."
+    },
+    "reroof_wall_cladding": {
+      "minPitchDegrees": 0,
+      "note": "Wall cladding is vertical and not governed by roof pitch minimums."
+    }
+  },
+  "reroofBundles": {
+    "comment": "Base roof-system rates include underlay, fixings and standard flashings. Existing-roof strip and disposal are separate configurable re-roof allowances.",
+    "includesByDefault": [
+      "underlay",
+      "fixings",
+      "standard flashings",
+      "labour"
+    ]
+  }
+}
