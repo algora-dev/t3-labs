@@ -30,6 +30,13 @@ function EmailIcon() {
   return <ApexIcon name="mail" className="h-4 w-4" />;
 }
 
+function SearchIcon() {
+  return <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="square">
+    <circle cx="9" cy="9" r="5.5" />
+    <path d="m13.5 13.5 3 3" />
+  </svg>;
+}
+
 function StarIcon({ filled = true }: { filled?: boolean }) {
   return (
     <svg aria-hidden="true" className={`h-4 w-4 ${filled ? "text-[#F59E0B]" : "text-[#D0D5DD]"}`} viewBox="0 0 20 20" fill="currentColor">
@@ -134,86 +141,84 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
-      <div className="site-shell flex min-h-[72px] items-center justify-between gap-5">
-        <a className="flex items-center gap-3" href="#top" aria-label={`${site.companyName} home`}>
-          <span className="relative block h-12 w-12 shrink-0 sm:h-14 sm:w-14">
-            <Image src={site.brand.logoMark.src} alt={site.brand.logoMark.alt} fill sizes="56px" className="object-contain" priority />
-          </span>
-          <span className="text-xl font-bold tracking-[-0.01em] text-[#101828] sm:text-[1.35rem]">
-            Roofline<span className="text-[#C8102E]"> Canterbury</span>
-          </span>
-        </a>
-        <nav className="apex-main-nav hidden items-center gap-8 text-[0.95rem] font-medium text-[#475467] lg:flex" aria-label="Main navigation">
-          {site.navigation.map(({ label, href }) => (
+    <header id="top" className="relative z-50">
+      {/* Tier 1: red utility strip, mirroring roofline.co.nz */}
+      <div className="bg-[#C8102E] text-white">
+        <div className="site-shell flex min-h-[34px] items-center justify-between gap-4">
+          <p className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/95">Canterbury roofing specialists</p>
+          <div className="flex items-center gap-4">
+            <Link href="/supplier-pricing-tool/roofline-roofing/admin" className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/80 transition hover:text-white" title="Staff - open the admin dashboard">
+              Staff
+            </Link>
+            <span aria-hidden="true" className="text-white/90">
+              <SearchIcon />
+            </span>
+          </div>
+        </div>
+      </div>
+      {/* Tier 2: white contact row - logo, call us, free quote */}
+      <div className="border-b border-[#E9ECEF] bg-white">
+        <div className="site-shell flex min-h-[84px] items-center justify-between gap-5 py-3">
+          <a href="#top" aria-label={`${site.companyName} home`} className="relative flex h-14 w-[128px] shrink-0 items-center sm:h-16 sm:w-[150px]">
+            <Image src={site.brand.logoMark.src} alt={site.brand.logoMark.alt} fill sizes="150px" className="object-contain object-left" priority />
+          </a>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <a
+              href={site.contact.telephoneHref}
+              aria-label={`Call ${site.companyName} on ${site.contact.telephone}`}
+              className="hidden items-center gap-3 text-[#111111] transition hover:text-[#C8102E] sm:flex"
+            >
+              <span className="grid h-11 w-11 place-items-center rounded-full border border-[#E9ECEF] text-[#C8102E]">
+                <PhoneIcon />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-[0.62rem] font-semibold tracking-[0.18em] uppercase text-[#667085]">Call us</span>
+                <span className="block text-[1.05rem] font-bold tracking-[-0.01em]">{site.contact.telephone}</span>
+              </span>
+            </a>
+            <button type="button" onClick={openQuoteRequest} className="button-base bg-[#C8102E] text-white shadow-[0_1px_2px_rgba(16,24,40,0.1)] hover:bg-[#A50D26]">
+              Free Quote
+            </button>
+            <button
+              className="grid h-11 w-11 place-items-center rounded-[10px] border border-[#D0D5DD] bg-white text-[#101828] transition hover:border-[#101828] lg:hidden"
+              type="button"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((value) => !value)}
+            >
+              <span className="sr-only">{open ? "Close navigation" : "Open navigation"}</span>
+              <MenuIcon open={open} />
+            </button>
+          </div>
+        </div>
+      </div>
+      {/* Tier 3: black uppercase nav bar */}
+      <nav aria-label="Main navigation" className="hidden bg-[#111111] lg:block">
+        <div className="site-shell flex items-center gap-1">
+          {site.navigation.map(({ label, href }, index) => (
             <a
               key={label}
-              className="inline-block transition-colors hover:text-[#C8102E]"
               href={href}
+              className={`inline-block px-4 py-[15px] text-[0.8rem] font-semibold tracking-[0.08em] uppercase transition-colors ${
+                index === 0 ? "text-[#C8102E]" : "text-white/90 hover:text-[#C8102E]"
+              }`}
             >
               {label}
             </a>
           ))}
-          <Link
-            className="inline-block text-[0.85rem] font-semibold uppercase tracking-wide text-[#98A2B3] transition duration-200 ease-out hover:text-[#C8102E]"
-            href="/supplier-pricing-tool/roofline-roofing/admin"
-            title="Staff - open the admin dashboard"
-          >
-            Admin
-          </Link>
-        </nav>
-        <div className="apex-header-actions hidden items-center gap-3 lg:flex">
-          <a
-            href={site.contact.telephoneHref}
-            aria-label={`Call ${site.companyName} on ${site.contact.telephone}`}
-            title={site.contact.telephone}
-            className="apex-contact-icon"
-          >
-            <PhoneIcon />
-          </a>
-          <a
-            href={`mailto:${site.contact.email}`}
-            aria-label={`Email ${site.companyName} at ${site.contact.email}`}
-            title={site.contact.email}
-            className="apex-contact-icon"
-          >
-            <EmailIcon />
-          </a>
-          <ButtonLink href={site.estimateTool.ctaHref} className="header-quote-button !min-h-[44px]">
-            {site.callsToAction.estimate}
-          </ButtonLink>
         </div>
-        <button
-          className="grid h-11 w-11 place-items-center rounded-[10px] border border-[#D0D5DD] bg-white text-[#101828] transition hover:border-[#101828] lg:!hidden"
-          type="button"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((value) => !value)}
-        >
-          <span className="sr-only">{open ? "Close navigation" : "Open navigation"}</span>
-          <MenuIcon open={open} />
-        </button>
-      </div>
+      </nav>
       {open ? (
-        <div id="mobile-menu" className="border-t border-[#E5E7EB] bg-white lg:hidden">
+        <div id="mobile-menu" className="border-b border-[#E5E7EB] bg-white lg:hidden">
           <nav className="site-shell grid gap-1 py-4 text-base font-medium" aria-label="Mobile navigation">
             {site.mobileNavigation.map(({ label, href }) => (
-              <a key={label} className="rounded-[10px] px-4 py-3 text-[#344054] transition hover:bg-[#F7F8FA] hover:text-[#101828]" href={href} onClick={() => setOpen(false)}>
+              <a key={label} className="rounded-[10px] px-4 py-3 text-[#344054] transition hover:bg-[#F7F7F8] hover:text-[#111111]" href={href} onClick={() => setOpen(false)}>
                 {label}
               </a>
             ))}
-            <Link
-              className="rounded-[10px] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#98A2B3] transition hover:bg-[#F7F8FA] hover:text-[#C8102E]"
-              href="/supplier-pricing-tool/roofline-roofing/admin"
-              onClick={() => setOpen(false)}
-            >
-              Admin login
-            </Link>
-            <div className="mt-3 px-1">
-              <ButtonLink href={site.estimateTool.ctaHref} className="w-full" onClick={() => setOpen(false)}>
-                {site.callsToAction.estimate}
-              </ButtonLink>
-            </div>
+            <a href={site.contact.telephoneHref} className="rounded-[10px] px-4 py-3 font-bold text-[#C8102E]" onClick={() => setOpen(false)}>
+              Call {site.contact.telephone}
+            </a>
           </nav>
         </div>
       ) : null}
@@ -222,74 +227,23 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
 }
 
 export function Hero({ site }: { site: ActRoofingSiteConfig }) {
+  // Mirrors roofline.co.nz: the supplied aerial frame carries the headline
+  // baked into the artwork, so the hero renders image-only.
   return (
-    <section id="top" className="relative isolate overflow-hidden bg-[#101828] text-white">
-      <Image
-        src={site.hero.image.src}
-        alt={site.hero.image.alt}
-        fill
-        sizes="100vw"
-        className="object-cover object-center"
-        priority
-        loading="eager"
-      />
-      <div
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,24,40,0.88)_0%,rgba(16,24,40,0.66)_38%,rgba(16,24,40,0.22)_72%,rgba(16,24,40,0.1)_100%),linear-gradient(0deg,rgba(16,24,40,0.55)_0%,rgba(16,24,40,0.08)_55%)]"
-        aria-hidden="true"
-      />
-      <div className="site-shell relative z-10 flex min-h-[600px] items-center py-20 sm:min-h-[660px] lg:min-h-[720px]">
-        <div className="max-w-2xl">
-          <p className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[0.8rem] font-medium tracking-wide text-white/90 backdrop-blur-sm">
-            {site.hero.eyebrow}
-          </p>
-          <h1 className="mt-6 text-[2.5rem] font-bold leading-[1.08] tracking-[-0.025em] sm:text-5xl lg:text-[4.25rem]">
-            {site.hero.title}
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-white/85 sm:text-xl sm:leading-9">
-            {site.hero.description}
-          </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={site.estimateTool.ctaHref} className="!bg-[#C8102E] !text-white hover:!bg-[#A50D26]">
-              {site.callsToAction.estimate}
-              <ArrowIcon />
-            </ButtonLink>
-            {site.hero.secondaryCta ? (
-              <ButtonLink href={site.hero.secondaryCta.href} variant="ghostDark">
-                {site.hero.secondaryCta.label}
-              </ButtonLink>
-            ) : null}
-          </div>
-          {/* Featured Google review */}
-          {site.featuredReview ? (
-            <HeroReviewCard review={site.featuredReview} />
-          ) : null}
-        </div>
+    <section aria-label="Introduction" className="relative isolate w-full overflow-hidden bg-[#111111]">
+      <div className="relative mx-auto h-[52vw] min-h-[260px] w-full sm:min-h-[320px] lg:max-h-[78vh]">
+        <Image
+          src={site.hero.image.src}
+          alt={site.hero.image.alt}
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+          priority
+          loading="eager"
+        />
       </div>
+      <h1 className="sr-only">{site.hero.title}</h1>
     </section>
-  );
-}
-
-function HeroReviewCard({ review }: { review: { summary: string; source: string; rating: number } }) {
-  return (
-    <figure className="mt-10 max-w-md rounded-[14px] border border-white/15 bg-white/95 p-5 shadow-[0_8px_24px_rgba(16,24,40,0.25)] backdrop-blur">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex gap-1" aria-label={`${review.rating} out of 5 stars`}>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <StarIcon key={i} filled={i < review.rating} />
-          ))}
-        </div>
-        <span className="flex items-center gap-1.5 text-xs font-medium text-[#667085]">
-          <GoogleGlyph />
-          Google Review
-        </span>
-      </div>
-      <blockquote className="mt-3 text-[0.98rem] leading-7 text-[#344054]">
-        &ldquo;{review.summary}&rdquo;
-      </blockquote>
-      <figcaption className="mt-3 text-sm font-semibold text-[#101828]">
-        {review.source}
-      </figcaption>
-    </figure>
   );
 }
 
@@ -392,7 +346,7 @@ export function EstimateToolSection({ site }: { site: ActRoofingSiteConfig }) {
   return <section id="estimate" className="section-pad bg-white"><div className="site-shell"><div className="rounded-[24px] border border-[#D6E5F8] bg-[#F5F9FF] p-6 sm:p-10 lg:p-12">
     <div className="grid items-center gap-9 lg:grid-cols-2">
       <div><p className="section-eyebrow">FREE ROOF TOOLS</p><h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-[#101828] sm:text-4xl">A starting price.<br />A clearer next step.</h2><p className="mt-5 max-w-xl text-base leading-8 text-[#667085]">Choose the route that fits what you know. Get a ballpark without measurements, or use more detail to build an itemised estimate.</p>
-        <ul className="mt-6 grid gap-3 text-sm text-[#344054]"><li className="flex gap-2"><CheckIcon/>No account needed to try the tools</li><li className="flex gap-2"><CheckIcon/>Based on Apexâ€™s configured products and rates</li><li className="flex gap-2"><CheckIcon/>Carry your estimate into a quote enquiry</li></ul>
+        <ul className="mt-6 grid gap-3 text-sm text-[#344054]"><li className="flex gap-2"><CheckIcon/>No account needed to try the tools</li><li className="flex gap-2"><CheckIcon/>Based on ApexÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢s configured products and rates</li><li className="flex gap-2"><CheckIcon/>Carry your estimate into a quote enquiry</li></ul>
         <div className="mt-7"><ButtonLink href={site.estimateTool.ctaHref}>Choose an estimate tool<ArrowIcon/></ButtonLink></div>
       </div><RoofToolChoices compact />
     </div>
@@ -469,7 +423,7 @@ export function Feedback({ site }: { site: ActRoofingSiteConfig }) {
                         <StarIcon key={i} filled={i < review.rating} />
                       ))}
                     </div>
-                    <span className="text-xs text-[#667085]">Â·</span>
+                    <span className="text-xs text-[#667085]">ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â·</span>
                     <GoogleGlyph />
                   </div>
                 </div>
@@ -592,7 +546,7 @@ export function Contact({ site }: { site: ActRoofingSiteConfig }) {
     projectTypes: ["New roof", "Roof repair", "Flat roofing", "Slate & tiling", "Leadwork & chimneys", "Inspection & maintenance"],
   };
   const beforeQuoteOptions = quoteRequest.beforeQuoteOptions ?? ["Request call before quote", "Request email before quote"];
-  const preferredTimeframes = quoteRequest.preferredTimeframes ?? ["As soon as practical", "Within 1â€“3 months", "Within 3â€“6 months", "More than 6 months away", "Just researching"];
+  const preferredTimeframes = quoteRequest.preferredTimeframes ?? ["As soon as practical", "Within 1ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ3 months", "Within 3ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ6 months", "More than 6 months away", "Just researching"];
   const preferredContactMethods = quoteRequest.preferredContactMethods ?? ["Phone", "Email"];
 
   useEffect(() => {
@@ -1006,7 +960,7 @@ export function Footer({ site }: { site: ActRoofingSiteConfig }) {
       <div className="site-shell mt-12 border-t border-white/10 pt-6">
         <p className="text-sm leading-6 text-white/40">{site.demoDisclaimer}</p>
         <p className="mt-2 text-sm text-white/40">
-          Â© {new Date().getFullYear()} {site.companyName}. All rights reserved.
+          ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© {new Date().getFullYear()} {site.companyName}. All rights reserved.
         </p>
       </div>
     </footer>

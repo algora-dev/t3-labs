@@ -39,19 +39,21 @@ export const rooflineSite = {
   },
   navigation: [
     { label: "Home", href: "#top" },
-    { label: "Services", href: "#services" },
+    { label: "Our Products", href: "/demo/roofline-site/price-list" },
+    { label: "Our Services", href: "#services" },
     { label: "Our Work", href: "#projects" },
-    { label: "Free roof tools", href: "#estimate" },
+    { label: "Free Roof Tools", href: "#estimate" },
     { label: "About", href: "#about" },
-    { label: "Products", href: "/demo/roofline-site/price-list" },
+    { label: "Contact Us", href: "#contact" },
   ],
   mobileNavigation: [
     { label: "Home", href: "#top" },
-    { label: "Services", href: "#services" },
+    { label: "Our Products", href: "/demo/roofline-site/price-list" },
+    { label: "Our Services", href: "#services" },
     { label: "Our Work", href: "#projects" },
-    { label: "Free roof tools", href: "#estimate" },
-    { label: "Products", href: "/demo/roofline-site/price-list" },
-    { label: "Contact", href: "#contact" },
+    { label: "Free Roof Tools", href: "#estimate" },
+    { label: "About", href: "#about" },
+    { label: "Contact Us", href: "#contact" },
   ],
   featuredReview: {
     summary:
@@ -65,8 +67,8 @@ export const rooflineSite = {
     description:
       "100% locally owned roofing and cladding manufacturer and installation contractor. We manufacture, supply and install long-run roofing and cladding from our own Christchurch factory, from small home renovations to large commercial developments.",
     image: {
-      src: asset("hero-aerial.jpg"),
-      alt: "Aerial view of a long-run metal roof on a Canterbury building",
+      src: asset("hero-aerial-original.jpg"),
+      alt: "Canterbury owned and operated roofing manufacturer and roofing installation contractor",
     },
     secondaryCta: {
       label: "View Products",
