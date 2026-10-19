@@ -32,10 +32,11 @@ A trapezoidal (flat-pan, ribbed) long-run profile with stronger spanning capabil
 ## Everest Tray (hidden fix)
 Everest Tray is Roofline's premium hidden-fix tray profile in 0.55mm ColorCote steel. Instead of exposed screws, each tray is held by Everest Hidden Fix Clips, so the finished roof shows a clean tray line with no visible fixings.
 
-- Suitable for low pitches from about 3 degrees, subject to a confirmed clip and fixing specification for the site.
+- Suitable for low pitches from about 3 degrees, subject to a confirmed clip and fixing specification for the site. Roofdeck is also treated as suitable from about 3 degrees, while Corrugate is treated as requiring about 8 degrees in this demo configuration. Below 3 degrees, guide the visitor toward a membrane or low-slope roof system rather than presenting these sheet profiles as suitable.
 - Slower to install than through-fixed corrugate or Roofdeck: install labour is significantly higher, and ridge, hip, valley and barge flashings take roughly double the labour of the screwed profiles.
 - Uses the same colour-matched flashings, folded to length in the Christchurch factory.
 - Clips are included in the roof system rate; they are also available separately for extensions and repairs.
+- 0.55mm is the standard gauge, and the coating still follows the environmental guidance: MagnaFlow for demanding or coastal exposure, AlumiGard for very severe marine environments. For a site around 150 metres from the sea, treat it as demanding coastal exposure and consider MagnaFlow as the starting point, with AlumiGard where the site is classed as very severe marine or highly salt-exposed. Gauge and coating do different jobs: the gauge is the material thickness, the coating addresses corrosion exposure.
 
 Final specification, clip layout and warranty terms are confirmed by the Roofline team.
 

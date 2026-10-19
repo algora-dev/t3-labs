@@ -78,6 +78,7 @@
     "roofTypes": [
       "Corrugated (Corrugate) long-run steel",
       "Roofdeck trapezoidal long-run steel",
+      "Everest Tray hidden-fix tray roofing 0.55g",
       "Clear polycarbonate roof lighting"
     ],
     "materials": [
@@ -129,6 +130,14 @@
     {
       "q": "What is the difference between corrugate and Roofdeck?",
       "a": "Corrugate is the classic round-profile iron, through-fixed with screws, and works from about 8 degrees pitch. Roofdeck is a trapezoidal long-run profile with stronger spanning and a flatter look, working from lower pitches. Both come in ColorCote finishes."
+    },
+    {
+      "q": "My roof is 4 degrees. Which Roofline profiles can I use?",
+      "a": "Roofdeck and Everest Tray are the two Roofline profile options to consider at 4 degrees: both are treated as suitable from about 3 degrees when correctly designed and installed. Corrugate is treated as requiring about 8 degrees. Below 3 degrees, a membrane or low-slope roof system is the option to consider rather than these sheet profiles. Have the Roofline team confirm the final specification for the site."
+    },
+    {
+      "q": "The house is about 150 metres from the sea. Does that change the product or coating?",
+      "a": "Yes. A site around 150 metres from the sea should be treated as demanding coastal exposure. MagnaFlow is the starting coating to consider, and AlumiGard may be more appropriate where the site is classed as very severe marine or is highly salt-exposed. Gauge and coating do different jobs: gauge is the material thickness, while the coating addresses corrosion exposure. Confirm the final coating and warranty specification for the exact site with the Roofline team."
     },
     {
       "q": "What colours are available?",
