@@ -147,6 +147,9 @@ export function Header({ site }: { site: ActRoofingSiteConfig }) {
         <div className="site-shell flex min-h-[34px] items-center justify-between gap-4">
           <p className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/95">Canterbury roofing specialists</p>
           <div className="flex items-center gap-4">
+            <Link href="/supplier-pricing-tool/roofline-roofing/admin" className="text-[0.68rem] font-semibold tracking-[0.16em] uppercase text-white/80 transition hover:text-white" title="Admin - open the admin dashboard">
+              Admin
+            </Link>
             <span aria-hidden="true" className="text-white/90">
               <SearchIcon />
             </span>
@@ -949,6 +952,9 @@ export function Footer({ site }: { site: ActRoofingSiteConfig }) {
               {social.label}
             </a>
           ))}
+          <Link className="text-sm font-semibold uppercase tracking-wide text-white/40 transition hover:text-[#8AB4F8]" href="/supplier-pricing-tool/roofline-roofing/admin">
+            Admin login
+          </Link>
         </div>
       </div>
       <div className="site-shell mt-12 border-t border-white/10 pt-6">
