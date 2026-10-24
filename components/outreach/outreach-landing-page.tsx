@@ -222,7 +222,7 @@ function FitCheckCard({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="group flex min-h-[220px] w-full flex-col rounded-[18px] border border-[#263142] bg-[radial-gradient(circle_at_90%_10%,rgba(215,255,0,.13),transparent_45%),#101722] p-6 text-left text-white shadow-[0_16px_40px_rgba(10,11,16,.12)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(215,255,0,.65)] hover:shadow-[0_20px_50px_rgba(10,11,16,.18)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a0b10]"
+      className="group flex min-h-[220px] w-full flex-col rounded-[18px] border border-[#263142] bg-[#101722] [background-image:radial-gradient(circle_at_90%_10%,rgba(215,255,0,.13),transparent_45%)] p-6 text-left text-white shadow-[0_16px_40px_rgba(10,11,16,.12)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(215,255,0,.65)] hover:shadow-[0_20px_50px_rgba(10,11,16,.18)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a0b10]"
     >
       <p className="m-0 text-[11px] font-bold uppercase tracking-[0.16em] text-[#d7ff00]">30-second fit check</p>
       <h3 className="mb-3 mt-3 text-[1.35rem] font-semibold leading-[1.15] tracking-[-0.02em]">Could we actually help your business?</h3>
@@ -440,7 +440,7 @@ function DemoRequestModal({
               <button
                 type="button"
                 onClick={() => setStage("request")}
-                className="group flex min-h-[185px] flex-col rounded-[18px] border border-[#263142] bg-[radial-gradient(circle_at_90%_10%,rgba(215,255,0,.17),transparent_44%),#101722] p-5 text-left text-white shadow-[0_16px_40px_rgba(10,11,16,.12)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(215,255,0,.82)] hover:shadow-[0_22px_50px_rgba(10,11,16,.2)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d7ff00] sm:p-6"
+                className="group flex min-h-[185px] flex-col rounded-[18px] border border-[#263142] bg-[#101722] [background-image:radial-gradient(circle_at_90%_10%,rgba(215,255,0,.17),transparent_44%)] p-5 text-left text-white shadow-[0_16px_40px_rgba(10,11,16,.12)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(215,255,0,.82)] hover:shadow-[0_22px_50px_rgba(10,11,16,.2)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d7ff00] sm:p-6"
               >
                 <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d7ff00]">Free, no obligation</span>
                 <span className="mt-3 text-[1.35rem] font-semibold leading-[1.12] tracking-[-0.025em]">Get My Free Demo</span>
@@ -595,7 +595,7 @@ export function OutreachLandingPage({ page }: { page: OutreachPageConfig }) {
           <button
             type="button"
             onClick={() => setDemoOpen(true)}
-            className="group flex min-h-[190px] flex-col rounded-[18px] border border-[#253044] bg-[radial-gradient(circle_at_90%_15%,rgba(215,255,0,.17),transparent_42%),#101722] p-5 text-left text-white shadow-[0_14px_34px_rgba(10,11,16,.11)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(215,255,0,.82)] hover:shadow-[0_20px_44px_rgba(10,11,16,.17)] sm:min-h-[210px] sm:p-6"
+            className="group flex min-h-[190px] flex-col rounded-[18px] border border-[#253044] bg-[#101722] [background-image:radial-gradient(circle_at_90%_15%,rgba(215,255,0,.17),transparent_42%)] p-5 text-left text-white shadow-[0_14px_34px_rgba(10,11,16,.11)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(215,255,0,.82)] hover:shadow-[0_20px_44px_rgba(10,11,16,.17)] sm:min-h-[210px] sm:p-6"
           >
             <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d7ff00]">Free working demo</span>
             <span className="mt-3 text-[1.45rem] font-semibold leading-[1.12] tracking-[-0.025em]">Build me a quick demo based on my own website</span>
