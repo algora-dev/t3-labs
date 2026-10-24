@@ -12,6 +12,7 @@ This private repository is the source for `t3labs.tech`. It hosts the T3 Labs ho
 - `components/templates/` and `app/components.tsx` are shared proposal presentation code. Change shared proposal code cautiously because it affects every proposal.
 - T3 Labs homepage assets live in `public/assets/`.
 - Proposal image references should use `/proposal-assets/<slug>/<filename>`, backed by files in `public/assets/<slug>/`.
+- Private outreach landing pages live at `/hello/<slug>`. Their registry is `lib/outreach/config.ts` and the shared renderer is `components/outreach/outreach-landing-page.tsx`. Do not clone React pages per prospect. See `docs/OUTREACH_LANDING_PAGES.md`.
 
 ## Add a proposal safely
 
