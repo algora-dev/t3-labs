@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 const BOOKING_URL = "https://calendly.com/insights-t3labs/20-minute-meeting";
-const STORAGE_KEY = "t3-custom-proposal-draft-v1";
+const STORAGE_KEY = "t3-cus…t-v1";
 
 const IMPROVEMENT_OPTIONS = [
   { id: "more-inquiries", label: "Get more leads / inquiries" },
@@ -77,7 +77,7 @@ function ArrowIcon() {
 
 function CloseIcon() {
   return (
-    <svg viewBox="0 0 20 20" aria-hidden="true" className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" fill="none">
+    <svg viewBox="0 0 20 20" aria-hidden="true" className="h-4 w-4" fill="none">
       <path d="m5 5 10 10M15 5 5 15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
@@ -89,16 +89,16 @@ function ChoiceButton({ selected, children, onClick }: { selected: boolean; chil
       type="button"
       aria-pressed={selected}
       onClick={onClick}
-      className={`group flex min-h-[50px] w-full items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5 text-left text-[13px] font-semibold leading-[1.3] transition duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a0b10] ${
+      className={`group flex min-h-[50px] w-full items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5 text-left text-[13px] font-semibold leading-[1.3] transition duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d7ff00] ${
         selected
-          ? "border-[#d7ff00] bg-[#515763] text-white shadow-none"
-          : "border-[#e7e9ef] bg-white text-[#20232c] hover:border-[#cdd2dc] hover:bg-[#f9fafc]"
+          ? "border-[#d7ff00] bg-[#1f2b40] text-white shadow-none"
+          : "border-[#2a3347] bg-[#171f2f] text-[#e5e8ef] hover:border-[#3d4a63] hover:bg-[#1b2436]"
       }`}
     >
       <span>{children}</span>
       <span
         className={`grid h-5 w-5 shrink-0 place-items-center rounded-[5px] border transition ${
-          selected ? "border-[#d7ff00] bg-[#d7ff00] text-[#0a0b10]" : "border-[#cfd4dd] bg-white text-transparent"
+          selected ? "border-[#d7ff00] bg-[#d7ff00] text-[#0a0b10]" : "border-[#3d4a63] bg-[#171f2f] text-transparent"
         }`}
       >
         <CheckIcon />
@@ -114,12 +114,12 @@ function RadioChoice({ selected, children, onClick }: { selected: boolean; child
       aria-pressed={selected}
       onClick={onClick}
       className={`flex min-h-[50px] w-full items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5 text-left text-[13px] font-semibold transition duration-150 ${
-        selected ? "border-[#d7ff00] bg-[#515763] text-white" : "border-[#e7e9ef] bg-white text-[#20232c] hover:border-[#cdd2dc]"
+        selected ? "border-[#d7ff00] bg-[#1f2b40] text-white" : "border-[#2a3347] bg-[#171f2f] text-[#e5e8ef] hover:border-[#3d4a63]"
       }`}
     >
       <span>{children}</span>
-      <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${selected ? "border-[#d7ff00] bg-[#d7ff00]" : "border-[#cfd4dd] bg-white"}`}>
-        {selected ? <span className="h-2.5 w-2.5 rounded-full bg-[#515763]" /> : null}
+      <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${selected ? "border-[#d7ff00] bg-[#d7ff00]" : "border-[#3d4a63] bg-[#171f2f]"}`}>
+        {selected ? <span className="h-2.5 w-2.5 rounded-full bg-[#101722]" /> : null}
       </span>
     </button>
   );
@@ -244,27 +244,27 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
         role="dialog"
         aria-modal="true"
         aria-labelledby="proposal-modal-title"
-        className="relative flex max-h-[96svh] w-full max-w-[700px] flex-col overflow-hidden rounded-t-[20px] border border-[#e7e9ef] bg-[#fbfcff] shadow-[0_30px_100px_rgba(10,11,16,.28)] sm:max-h-[88svh] sm:rounded-[20px]"
+        className="relative flex max-h-[96svh] w-full max-w-[700px] flex-col overflow-hidden rounded-t-[20px] border border-[#2a3347] bg-[#101722] shadow-[0_30px_100px_rgba(10,11,16,.5)] sm:max-h-[88svh] sm:rounded-[20px]"
       >
-        <header className="shrink-0 border-b border-[#e7e9ef] bg-white/95 px-5 pb-3.5 pt-[18px] backdrop-blur sm:px-6 sm:pt-5">
+        <header className="shrink-0 border-b border-[#2a3347] bg-[#101722]/95 px-5 pb-3.5 pt-[18px] backdrop-blur sm:px-6 sm:pt-5">
           <div className="flex items-start justify-between gap-5">
             <div>
-              <p className="m-0 text-[11px] font-bold uppercase tracking-[0.17em] text-[#5f7000]">Custom proposal and price</p>
-              <h2 id="proposal-modal-title" className="mb-0 mt-1.5 text-[1.12rem] font-semibold leading-[1.16] tracking-[-0.025em] text-[#0a0b10] sm:text-[1.3rem]">
+              <p className="m-0 text-[11px] font-bold uppercase tracking-[0.17em] text-[#d7ff00]">Custom proposal and price</p>
+              <h2 id="proposal-modal-title" className="mb-0 mt-1.5 text-[1.12rem] font-semibold leading-[1.16] tracking-[-0.025em] text-white sm:text-[1.3rem]">
                 {submitted ? "Thanks, Shaun's got it." : "Tell Shaun a little about your business."}
               </h2>
             </div>
-            <button type="button" onClick={onClose} aria-label="Close" className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-[#e7e9ef] bg-white text-[#0a0b10] transition hover:bg-[#f6f8fc]">
+            <button type="button" onClick={onClose} aria-label="Close" className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-[#2a3347] bg-[#171f2f] text-white transition hover:bg-[#1b2436]">
               <CloseIcon />
             </button>
           </div>
           {!submitted ? (
             <div className="mt-3.5">
-              <div className="mb-2 flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.12em] text-[#737887]">
+              <div className="mb-2 flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.12em] text-[#8a93a6]">
                 <span>About 60 seconds</span>
                 <span>Step {step} of {totalSteps}</span>
               </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-[#edf0f4]">
+              <div className="h-1.5 overflow-hidden rounded-full bg-[#2a3347]">
                 <div className="h-full rounded-full bg-[#d7ff00] transition-[width] duration-250" style={{ width: `${progress}%` }} />
               </div>
             </div>
@@ -274,18 +274,18 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
         <style>{`
           .t3-proposal-scroll {
             scrollbar-width: thin;
-            scrollbar-color: #8a909c transparent;
+            scrollbar-color: #3d4a63 transparent;
           }
           .t3-proposal-scroll::-webkit-scrollbar { width: 7px; }
           .t3-proposal-scroll::-webkit-scrollbar-track { background: transparent; }
           .t3-proposal-scroll::-webkit-scrollbar-thumb {
-            background: #8a909c;
+            background: #3d4a63;
             border-radius: 999px;
             border: 2px solid transparent;
             background-clip: padding-box;
           }
           .t3-proposal-scroll::-webkit-scrollbar-thumb:hover {
-            background: #676e7b;
+            background: #57637e;
             background-clip: padding-box;
           }
           .t3-proposal-scroll::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
@@ -294,20 +294,20 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
           {submitted ? (
             <div className="mx-auto max-w-[620px] py-4 sm:py-7">
               <span className="grid h-12 w-12 place-items-center rounded-lg bg-[#d7ff00] text-[#0a0b10]"><CheckIcon /></span>
-              <h3 className="mb-2.5 mt-4 text-[clamp(1.45rem,3.5vw,1.95rem)] font-semibold leading-[1.06] tracking-[-0.04em] text-[#0a0b10]">Your request has been received.</h3>
-              <p className="m-0 text-sm leading-6 text-[#606575]">
+              <h3 className="mb-2.5 mt-4 text-[clamp(1.45rem,3.5vw,1.95rem)] font-semibold leading-[1.06] tracking-[-0.04em] text-white">Your request has been received.</h3>
+              <p className="m-0 text-sm leading-6 text-[#a7aeba]">
                 Shaun will personally review your website, your answers and how your business currently operates. He'll come back with a tailored recommendation and price, including what he'd improve, what he'd suggest putting in place and why.
               </p>
-              <div className="mt-4 rounded-xl border border-[#e3e8bc] bg-[#fbfff0] p-3.5 text-[13px] leading-5 text-[#404617]">
+              <div className="mt-4 rounded-xl border border-[#3a4520] bg-[#161d0e] p-3.5 text-[13px] leading-5 text-[#cfe08a]">
                 The $1,000 setup you've seen advertised may be exactly what makes sense for you. If something different would suit your business better, Shaun will explain what he'd recommend and why before you decide anything.
               </div>
-              <div className="mt-3 rounded-xl border border-[#e7e9ef] bg-white p-3.5 text-[13px] leading-5 text-[#252933]">
-                <strong className="font-bold text-[#0a0b10]">+ his #1 tip</strong> for winning more jobs from 20 years in roofing.
+              <div className="mt-3 rounded-xl border border-[#2a3347] bg-[#171f2f] p-3.5 text-[13px] leading-5 text-[#e5e8ef]">
+                <strong className="font-bold text-white">+ his #1 tip</strong> for winning more jobs from 20 years in roofing.
               </div>
-              <p className="mt-4 text-[13px] font-semibold text-[#0a0b10]">You'll hear back within 48 hours. No call required.</p>
-              <div className="mt-5 border-t border-[#e7e9ef] pt-5">
-                <p className="mb-3 text-sm text-[#606575]">Prefer to talk it through?</p>
-                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#111318] px-4 py-2.5 text-[13px] font-semibold text-white no-underline shadow-[0_12px_24px_rgba(10,11,16,.14)] transition duration-150 hover:-translate-y-0.5 hover:bg-[#252933] hover:shadow-[0_16px_30px_rgba(10,11,16,.2)] active:translate-y-0">
+              <p className="mt-4 text-[13px] font-semibold text-white">You'll hear back within 48 hours. No call required.</p>
+              <div className="mt-5 border-t border-[#2a3347] pt-5">
+                <p className="mb-3 text-sm text-[#a7aeba]">Prefer to talk it through?</p>
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#d7ff00] px-4 py-2.5 text-[13px] font-semibold text-[#0a0b10] no-underline shadow-[0_12px_24px_rgba(10,11,16,.3)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_16px_30px_rgba(10,11,16,.4)] active:translate-y-0">
                   Book a 20-minute call with Shaun <ArrowIcon />
                 </a>
               </div>
@@ -316,9 +316,9 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
             <form onSubmit={(event) => { event.preventDefault(); void submit(); }}>
               {step === 1 ? (
                 <div>
-                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#737887]">What matters most</p>
-                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0b10] sm:text-[1.48rem]">What would you most like to improve?</h3>
-                  <p className="mb-4 text-[13px] text-[#606575]">Select anything that applies.</p>
+                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#8a93a6]">What matters most</p>
+                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-white sm:text-[1.48rem]">What would you most like to improve?</h3>
+                  <p className="mb-4 text-[13px] text-[#a7aeba]">Select anything that applies.</p>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {IMPROVEMENT_OPTIONS.map((option) => (
                       <ChoiceButton key={option.id} selected={draft.improvements.includes(option.id)} onClick={() => toggleImprovement(option.id)}>{option.label}</ChoiceButton>
@@ -332,9 +332,9 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
 
               {step === 2 ? (
                 <div>
-                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#737887]">Current marketing</p>
-                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0b10] sm:text-[1.48rem]">How do you currently get most of your leads / inquiries?</h3>
-                  <p className="mb-4 text-[13px] text-[#606575]">Select anything that applies.</p>
+                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#8a93a6]">Current marketing</p>
+                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-white sm:text-[1.48rem]">How do you currently get most of your leads / inquiries?</h3>
+                  <p className="mb-4 text-[13px] text-[#a7aeba]">Select anything that applies.</p>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {MARKETING_OPTIONS.map((option) => <ChoiceButton key={option} selected={draft.marketing.includes(option)} onClick={() => toggleMarketing(option)}>{option}</ChoiceButton>)}
                   </div>
@@ -343,9 +343,9 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
 
               {step === 3 ? (
                 <div>
-                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#737887]">Your operation</p>
-                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0b10] sm:text-[1.48rem]">Roughly how big is your team?</h3>
-                  <p className="mb-4 text-[13px] text-[#606575]">Choose one.</p>
+                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#8a93a6]">Your operation</p>
+                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-white sm:text-[1.48rem]">Roughly how big is your team?</h3>
+                  <p className="mb-4 text-[13px] text-[#a7aeba]">Choose one.</p>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {TEAM_OPTIONS.map((option) => <RadioChoice key={option} selected={draft.teamSize === option} onClick={() => setDraft((current) => ({ ...current, teamSize: option }))}>{option}</RadioChoice>)}
                   </div>
@@ -354,9 +354,9 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
 
               {needsQuoteQuestion && step === quoteStep ? (
                 <div>
-                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#737887]">Your current process</p>
-                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0b10] sm:text-[1.48rem]">How do you currently measure / quote jobs?</h3>
-                  <p className="mb-4 text-[13px] text-[#606575]">Choose the closest answer.</p>
+                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#8a93a6]">Your current process</p>
+                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-white sm:text-[1.48rem]">How do you currently measure / quote jobs?</h3>
+                  <p className="mb-4 text-[13px] text-[#a7aeba]">Choose the closest answer.</p>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {QUOTE_OPTIONS.map((option) => <RadioChoice key={option} selected={draft.quoteProcess === option} onClick={() => setDraft((current) => ({ ...current, quoteProcess: option }))}>{option}</RadioChoice>)}
                   </div>
@@ -365,9 +365,9 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
 
               {step === urgencyStep ? (
                 <div>
-                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#737887]">Timing</p>
-                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0b10] sm:text-[1.48rem]">How soon would you like to improve things?</h3>
-                  <p className="mb-4 text-[13px] text-[#606575]">Choose one.</p>
+                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#8a93a6]">Timing</p>
+                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-white sm:text-[1.48rem]">How soon would you like to improve things?</h3>
+                  <p className="mb-4 text-[13px] text-[#a7aeba]">Choose one.</p>
                   <div className="grid gap-2">
                     {URGENCY_OPTIONS.map((option) => <RadioChoice key={option} selected={draft.urgency === option} onClick={() => setDraft((current) => ({ ...current, urgency: option }))}>{option}</RadioChoice>)}
                   </div>
@@ -376,28 +376,28 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
 
               {step === contactStep ? (
                 <div>
-                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#737887]">Last step</p>
-                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-[#0a0b10] sm:text-[1.48rem]">Where should Shaun send your proposal?</h3>
-                  <p className="mb-4 text-[13px] leading-5 text-[#606575]">Shaun will personally review your website and answers, then send you a tailored recommendation and price, <strong className="font-bold text-[#0a0b10]">+ his #1 tip</strong> for winning more jobs from 20 years in roofing.</p>
+                  <p className="m-0 text-[11px] font-bold uppercase tracking-[0.15em] text-[#8a93a6]">Last step</p>
+                  <h3 className="mb-1.5 mt-1.5 text-[1.38rem] font-semibold leading-[1.1] tracking-[-0.035em] text-white sm:text-[1.48rem]">Where should Shaun send your proposal?</h3>
+                  <p className="mb-4 text-[13px] leading-5 text-[#a7aeba]">Shaun will personally review your website and answers, then send you a tailored recommendation and price, <strong className="font-bold text-white">+ his #1 tip</strong> for winning more jobs from 20 years in roofing.</p>
                   <div className="grid gap-4">
-                    <label className="grid gap-1.5 text-sm font-semibold text-[#252933]">
+                    <label className="grid gap-1.5 text-sm font-semibold text-[#e5e8ef]">
                       Website
-                      <input value={draft.website} onChange={(e) => setDraft((current) => ({ ...current, website: e.target.value }))} required inputMode="url" placeholder="yourwebsite.com" className="h-11 rounded-lg border border-[#dfe3ea] bg-white px-3.5 text-sm font-normal text-[#0a0b10] shadow-[0_4px_14px_rgba(24,31,51,.025)] placeholder:text-[12px] placeholder:font-normal placeholder:text-[#a7abb3] placeholder:opacity-100 focus:border-[#0a0b10] focus:outline-none" />
+                      <input value={draft.website} onChange={(e) => setDraft((current) => ({ ...current, website: e.target.value }))} required inputMode="url" placeholder="yourwebsite.com" className="h-11 rounded-lg border border-[#2a3347] bg-[#171f2f] px-3.5 text-sm font-normal text-white placeholder:text-[12px] placeholder:font-normal placeholder:text-[#5f6a80] placeholder:opacity-100 focus:border-[#d7ff00] focus:outline-none" />
                     </label>
-                    <label className="grid gap-1.5 text-sm font-semibold text-[#252933]">
+                    <label className="grid gap-1.5 text-sm font-semibold text-[#e5e8ef]">
                       Email
-                      <input value={draft.email} onChange={(e) => setDraft((current) => ({ ...current, email: e.target.value }))} required type="email" placeholder="you@company.com" className="h-11 rounded-lg border border-[#dfe3ea] bg-white px-3.5 text-sm font-normal text-[#0a0b10] shadow-[0_4px_14px_rgba(24,31,51,.025)] placeholder:text-[12px] placeholder:font-normal placeholder:text-[#a7abb3] placeholder:opacity-100 focus:border-[#0a0b10] focus:outline-none" />
+                      <input value={draft.email} onChange={(e) => setDraft((current) => ({ ...current, email: e.target.value }))} required type="email" placeholder="you@company.com" className="h-11 rounded-lg border border-[#2a3347] bg-[#171f2f] px-3.5 text-sm font-normal text-white placeholder:text-[12px] placeholder:font-normal placeholder:text-[#5f6a80] placeholder:opacity-100 focus:border-[#d7ff00] focus:outline-none" />
                     </label>
-                    <label className="grid gap-1.5 text-sm font-semibold text-[#252933]">
-                      Anything else you'd like Shaun to know? <span className="font-normal text-[#858b97]">Optional</span>
-                      <textarea value={draft.notes} onChange={(e) => setDraft((current) => ({ ...current, notes: e.target.value }))} maxLength={1500} rows={4} placeholder="Anything useful about your business, current process or what you'd like to change." className="resize-none rounded-lg border border-[#dfe3ea] bg-white px-3.5 py-2.5 text-sm font-normal leading-5 text-[#0a0b10] shadow-[0_4px_14px_rgba(24,31,51,.025)] placeholder:text-[12px] placeholder:font-normal placeholder:text-[#a7abb3] placeholder:opacity-100 focus:border-[#0a0b10] focus:outline-none" />
+                    <label className="grid gap-1.5 text-sm font-semibold text-[#e5e8ef]">
+                      Anything else you'd like Shaun to know? <span className="font-normal text-[#727d92]">Optional</span>
+                      <textarea value={draft.notes} onChange={(e) => setDraft((current) => ({ ...current, notes: e.target.value }))} maxLength={1500} rows={4} placeholder="Anything useful about your business, current process or what you'd like to change." className="resize-none rounded-lg border border-[#2a3347] bg-[#171f2f] px-3.5 py-2.5 text-sm font-normal leading-5 text-white placeholder:text-[12px] placeholder:font-normal placeholder:text-[#5f6a80] placeholder:opacity-100 focus:border-[#d7ff00] focus:outline-none" />
                     </label>
                     <input name="company" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
                   </div>
-                  <div className="mt-4 rounded-lg border border-[#e3e8bc] bg-[#fbfff0] px-3.5 py-3 text-[13px] leading-5 text-[#4b511d]">
+                  <div className="mt-4 rounded-lg border border-[#3a4520] bg-[#161d0e] px-3.5 py-3 text-[13px] leading-5 text-[#cfe08a]">
                     The advertised $1,000 setup may be exactly what suits your business. If something different makes more sense, Shaun will explain what and why in the proposal.
                   </div>
-                  {error ? <p role="alert" className="mt-4 text-sm font-semibold text-[#b42318]">{error}</p> : null}
+                  {error ? <p role="alert" className="mt-4 text-sm font-semibold text-[#f97066]">{error}</p> : null}
                 </div>
               ) : null}
             </form>
@@ -405,17 +405,17 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
         </div>
 
         {!submitted ? (
-          <footer className="shrink-0 border-t border-[#e7e9ef] bg-white px-5 py-3.5 sm:px-6">
+          <footer className="shrink-0 border-t border-[#2a3347] bg-[#101722] px-5 py-3.5 sm:px-6">
             <div className="flex items-center justify-between gap-3">
-              <button type="button" onClick={() => step === 1 ? onClose() : setStep((current) => current - 1)} className="min-h-10 rounded-lg px-3 text-[13px] font-semibold text-[#606575] transition duration-150 hover:-translate-y-0.5 hover:bg-[#eef1f6] hover:text-[#0a0b10] active:translate-y-0">
+              <button type="button" onClick={() => step === 1 ? onClose() : setStep((current) => current - 1)} className="min-h-10 rounded-lg px-3 text-[13px] font-semibold text-[#a7aeba] transition duration-150 hover:-translate-y-0.5 hover:bg-[#1b2436] hover:text-white active:translate-y-0">
                 {step === 1 ? "Cancel" : "Back"}
               </button>
               {step < contactStep ? (
-                <button type="button" disabled={!canContinue} onClick={() => canContinue && setStep((current) => current + 1)} className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#d7ff00] px-[18px] py-2.5 text-[13px] font-bold text-[#0a0b10] shadow-[0_10px_22px_rgba(10,11,16,.11)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(10,11,16,.18)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40">
+                <button type="button" disabled={!canContinue} onClick={() => canContinue && setStep((current) => current + 1)} className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#d7ff00] px-[18px] py-2.5 text-[13px] font-bold text-[#0a0b10] shadow-[0_10px_22px_rgba(10,11,16,.3)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(10,11,16,.4)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40">
                   Continue <ArrowIcon />
                 </button>
               ) : (
-                <button type="button" disabled={submitting} onClick={() => void submit()} className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#d7ff00] px-[18px] py-2.5 text-[13px] font-bold text-[#0a0b10] shadow-[0_10px_22px_rgba(10,11,16,.11)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(10,11,16,.18)] active:translate-y-0 disabled:opacity-60">
+                <button type="button" disabled={submitting} onClick={() => void submit()} className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#d7ff00] px-[18px] py-2.5 text-[13px] font-bold text-[#0a0b10] shadow-[0_10px_22px_rgba(10,11,16,.3)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(10,11,16,.4)] active:translate-y-0 disabled:opacity-60">
                   {submitting ? "Sending..." : "Get my custom proposal"} {!submitting ? <ArrowIcon /> : null}
                 </button>
               )}

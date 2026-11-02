@@ -27,17 +27,16 @@ export default function CustomProposalPage() {
           <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#747a86]">Tailored proposal and price</span>
         </header>
 
-        <section className="mx-auto max-w-[820px] py-10 text-center sm:py-14">
-          <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.17em] text-[#5f7000]">What we help with</p>
-          <h1 className="mx-auto max-w-[740px] text-[clamp(2.4rem,5.5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.045em]">
-            More leads. More jobs. Faster from measure to close.
-          </h1>
-          <p className="mx-auto mt-6 max-w-[560px] text-[1.05rem] leading-7 text-[#606575]">
-            However you&apos;re winning work today, here&apos;s how to get more from it. Watch the short video, then pick the next step that suits you.
-          </p>
-        </section>
-
-        <section aria-label="How it works video" className="mx-auto max-w-[860px]">
+        <section className="grid items-center gap-8 py-10 sm:py-12 lg:grid-cols-2 lg:gap-12">
+          <div>
+            <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.17em] text-[#5f7000]">What we help with</p>
+            <h1 className="max-w-[560px] text-[clamp(2.1rem,4.5vw,3.4rem)] font-semibold leading-[1.04] tracking-[-0.04em]">
+              More leads. More jobs. Faster from measure to close.
+            </h1>
+            <p className="mt-6 max-w-[480px] text-[1.02rem] leading-7 text-[#606575]">
+              However you&apos;re winning work today, here&apos;s how to get more from it. Watch the short video, then pick the next step that suits you.
+            </p>
+          </div>
           <div className="overflow-hidden rounded-2xl border border-[#e7e9ef] bg-[#0a0b10] shadow-[0_30px_90px_rgba(10,11,16,.22)]">
             <video controls preload="metadata" poster="/assets/custom-proposal/call-video-poster.jpg" className="block aspect-video w-full">
               <source src="/assets/custom-proposal/call-video.mp4" type="video/mp4" />
@@ -45,12 +44,12 @@ export default function CustomProposalPage() {
           </div>
         </section>
 
-        <section aria-label="Choose your next step" className="mx-auto mt-10 grid max-w-[820px] gap-3 sm:grid-cols-2">
+        <section aria-label="Choose your next step" className="mt-10 grid gap-3 sm:grid-cols-2">
           <a
             href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex min-h-[150px] flex-col justify-between gap-5 rounded-xl bg-[#101722] p-5 text-left no-underline shadow-[0_14px_36px_rgba(16,23,34,.18)] transition duration-150 hover:-translate-y-0.5 hover:bg-[#151d2b] sm:p-6"
+            className="group flex min-h-[118px] flex-col justify-between gap-5 rounded-xl bg-[#101722] p-5 text-left no-underline shadow-[0_14px_36px_rgba(16,23,34,.18)] transition duration-150 hover:-translate-y-0.5 hover:bg-[#151d2b] sm:p-6"
           >
             <div>
               <p className="m-0 text-[11px] font-bold uppercase tracking-[0.17em] text-[#d7ff00]">Talk it through</p>
@@ -68,7 +67,7 @@ export default function CustomProposalPage() {
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="group flex min-h-[150px] flex-col justify-between gap-5 rounded-xl bg-[#101722] p-5 text-left shadow-[0_14px_36px_rgba(16,23,34,.18)] transition duration-150 hover:-translate-y-0.5 hover:bg-[#151d2b] sm:p-6"
+            className="group flex min-h-[118px] flex-col justify-between gap-5 rounded-xl bg-[#101722] p-5 text-left shadow-[0_14px_36px_rgba(16,23,34,.18)] transition duration-150 hover:-translate-y-0.5 hover:bg-[#151d2b] sm:p-6"
           >
             <div>
               <p className="m-0 text-[11px] font-bold uppercase tracking-[0.17em] text-[#d7ff00]">No call needed</p>
