@@ -45,6 +45,43 @@ function rows(items: Array<[string, string | string[]]>) {
     .join("");
 }
 
+async function sendResendEmail(payload: {
+  to: string;
+  replyTo: string;
+  subject: string;
+  html: string;
+}): Promise<{ ok: boolean; reason: string }> {
+  try {
+    const resendResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: FROM_EMAIL,
+        to: [payload.to],
+        reply_to: payload.replyTo,
+        subject: payload.subject,
+        html: payload.html,
+      }),
+    });
+    if (!resendResponse.ok) {
+      const detail = await resendResponse.text();
+      console.error("Custom proposal Resend error:", detail);
+      let reason = "";
+      try {
+        const parsed = JSON.parse(detail) as { message?: string };
+        if (parsed?.message) reason = parsed.message;
+      } catch {
+        reason = detail;
+      }
+      return { ok: false, reason: reason.slice(0, 180) };
+    }
+    return { ok: true, reason: "" };
+  } catch (error) {
+    console.error("Custom proposal Resend request failed:", error);
+    return { ok: false, reason: "network error" };
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -117,6 +154,51 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Proposal requests are temporarily unavailable. Please try again shortly." }, { status: 503 });
     }
 
+    const customerHtml = `<!doctype html>
+<html lang="en">
+<body style="margin:0;padding:0;background:#f5f6f8;font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;color:#111318;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:32px 18px;background:#f5f6f8;">
+    <tr><td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;background:#ffffff;border:1px solid #e7e9ef;border-radius:18px;overflow:hidden;">
+        <tr><td style="height:7px;background:#d7ff00;"></td></tr>
+        <tr><td style="padding:32px;">
+          <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#5f7000;">T3 Labs</p>
+          <h1 style="margin:0 0 10px;font-size:28px;line-height:1.12;letter-spacing:-.03em;color:#0a0b10;">We received your inquiry</h1>
+          <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#606575;">Thanks for getting in touch. We are reviewing ${escapeHtml(hostname)} now and Shaun will send you a custom recommendation and price within 48 hours. Here is a copy of what you told us, so you have it on record.</p>
+          <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;line-height:1.55;border-top:1px solid #e7e9ef;border-bottom:1px solid #e7e9ef;padding:12px 0;">
+            ${rows([
+              ["Website", website],
+              ["Email", email],
+              ["Wants to improve", improvementLabels],
+              ["Lead / inquiry sources", marketing],
+              ["Team size", teamSize],
+              ["Measure / quote process", quoteProcess],
+              ["Timing", urgency],
+            ])}
+          </table>
+          ${notes ? `<div style="margin-top:22px;border-radius:12px;background:#f6f8fc;border:1px solid #e7e9ef;padding:17px 18px;"><p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#737887;">Additional notes</p><p style="margin:0;font-size:14px;line-height:1.65;color:#20232c;white-space:pre-wrap;">${escapeHtml(notes)}</p></div>` : ""}
+          <div style="margin-top:22px;border-radius:12px;background:#f6f8fc;border:1px solid #e7e9ef;padding:17px 18px;">
+            <p style="margin:0;font-size:14px;line-height:1.65;color:#20232c;">Need to add anything or correct a detail? Just reply to this email and it will reach us.</p>
+          </div>
+          <p style="margin:22px 0 0;font-size:12px;line-height:1.7;color:#858b97;">You received this email because you submitted the inquiry form at t3labs.tech/custom-proposal.</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+    const confirmation = await sendResendEmail({
+      to: email,
+      replyTo: NOTIFY_EMAIL,
+      subject: "We received your T3 Labs inquiry",
+      html: customerHtml,
+    });
+
+    const confirmationStrip = confirmation.ok
+      ? `<div style="margin-top:22px;border-radius:12px;background:#f2fbf3;border:1px solid #bfe5c6;padding:15px 18px;"><p style="margin:0;font-size:13px;line-height:1.6;color:#1d5f2a;"><strong>Customer confirmation email:</strong> sent to ${escapeHtml(email)} (copy of their answers with a 48-hour reply promise).</p></div>`
+      : `<div style="margin-top:22px;border-radius:12px;background:#fdf2f2;border:1px solid #eec4c4;padding:15px 18px;"><p style="margin:0;font-size:13px;line-height:1.6;color:#7a2424;"><strong>Customer confirmation email:</strong> FAILED to send to ${escapeHtml(email)}. Resend rejected the address${confirmation.reason ? ` (${escapeHtml(confirmation.reason)})` : ""}. It may be invalid, so consider verifying before relying on it.</p></div>`;
+
     const html = `<!doctype html>
 <html lang="en">
 <body style="margin:0;padding:0;background:#f5f6f8;font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;color:#111318;">
@@ -140,6 +222,7 @@ export async function POST(req: NextRequest) {
             ])}
           </table>
           ${notes ? `<div style="margin-top:22px;border-radius:12px;background:#f6f8fc;border:1px solid #e7e9ef;padding:17px 18px;"><p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#737887;">Additional notes</p><p style="margin:0;font-size:14px;line-height:1.65;color:#20232c;white-space:pre-wrap;">${escapeHtml(notes)}</p></div>` : ""}
+          ${confirmationStrip}
           <div style="margin-top:22px;border-radius:12px;background:#fbfff0;border:1px solid #e3e8bc;padding:17px 18px;">
             <p style="margin:0;font-size:14px;line-height:1.65;color:#404617;"><strong>Price context:</strong> The visitor has been told that the advertised $1,000 setup may be exactly what suits them. If a different scope makes more sense, explain what and why.</p>
           </div>
@@ -151,24 +234,18 @@ export async function POST(req: NextRequest) {
 </body>
 </html>`;
 
-    const resendResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: FROM_EMAIL,
-        to: [NOTIFY_EMAIL],
-        reply_to: email,
-        subject: `Custom proposal request - ${hostname}`,
-        html,
-      }),
+    const teamSend = await sendResendEmail({
+      to: NOTIFY_EMAIL,
+      replyTo: email,
+      subject: `Custom proposal request - ${hostname}`,
+      html,
     });
 
-    if (!resendResponse.ok) {
-      console.error("Custom proposal Resend error:", await resendResponse.text());
+    if (!teamSend.ok) {
       return NextResponse.json({ error: "We could not send your request. Please try again." }, { status: 502 });
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, confirmationSent: confirmation.ok });
   } catch (error) {
     console.error("Custom proposal request error:", error);
     return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
