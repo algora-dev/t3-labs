@@ -308,7 +308,7 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
               <div className="mt-5 border-t border-[#e7e9ef] pt-5">
                 <p className="mb-3 text-sm text-[#606575]">Prefer to talk it through?</p>
                 <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#111318] px-4 py-2.5 text-[13px] font-semibold text-white no-underline shadow-[0_12px_24px_rgba(10,11,16,.14)] transition duration-150 hover:-translate-y-0.5 hover:bg-[#252933] hover:shadow-[0_16px_30px_rgba(10,11,16,.2)] active:translate-y-0">
-                  Book a 25-minute call with Shaun <ArrowIcon />
+                  Book a 20-minute call with Shaun <ArrowIcon />
                 </a>
               </div>
             </div>
