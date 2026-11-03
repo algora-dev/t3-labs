@@ -126,7 +126,8 @@ export async function recordLanding(opts: {
   await insertVisitEvent({ visit_id: visitId, event: "landing", client_ts: null, payload });
 }
 
-/** Minimal stats/timeline reader for the token-protected GET endpoint. */
+/** Minimal stats/timeline reader for the token-protected GET endpoint.
+ * Default response: landing counts + behavioural aggregates (CTA clicks, video plays) last 24h. */
 export async function queryVisitData(params: { visitId?: string }): Promise<Record<string, unknown>> {
   if (!SUPABASE_SERVICE_ROLE_KEY) return { error: "service key not configured" };
 
@@ -144,15 +145,30 @@ export async function queryVisitData(params: { visitId?: string }): Promise<Reco
     return { visit_id: params.visitId, events: rows };
   }
 
-  const [totalRes, dayRes, recentRes] = await Promise.all([
+  const [totalRes, dayRes, recentRes, behaviourRes, ctaRes] = await Promise.all([
     fetch(`${base}?select=id&event=eq.landing`, { headers: serviceHeaders({ Prefer: "count=exact", Range: "0-0" }) }),
     fetch(`${base}?select=id&event=eq.landing&created_at=gte.${since24h}`, { headers: serviceHeaders({ Prefer: "count=exact", Range: "0-0" }) }),
     fetch(`${base}?${select}&event=eq.landing&order=id.desc&limit=50`, { headers: serviceHeaders() }),
+    // Behavioural event counts (last 24h): cta_visible/cta_clicked, video_interaction, engagement timers, etc.
+    fetch(`${base}?select=event&event=neq.landing&created_at=gte.${since24h}&order=id.asc&limit=5000`, { headers: serviceHeaders() }),
+    // Latest CTA clicks + video interactions with full detail.
+    fetch(`${base}?${select}&event=in.(cta_clicked,video_interaction)&order=id.desc&limit=50`, { headers: serviceHeaders() }),
   ]);
 
   const total = parseInt((totalRes.headers.get("content-range") || "0-0/0").split("/")[1] || "0", 10);
   const last24h = parseInt((dayRes.headers.get("content-range") || "0-0/0").split("/")[1] || "0", 10);
   const recent = recentRes.ok ? await recentRes.json() : [];
 
-  return { total_landings: total, landings_last_24h: last24h, recent_landings: recent };
+  const behaviourRows: Array<{ event: string }> = behaviourRes.ok ? await behaviourRes.json() : [];
+  const events_24h: Record<string, number> = {};
+  for (const row of behaviourRows) events_24h[row.event] = (events_24h[row.event] || 0) + 1;
+  const recent_cta_video = ctaRes.ok ? await ctaRes.json() : [];
+
+  return {
+    total_landings: total,
+    landings_last_24h: last24h,
+    events_24h,
+    recent_cta_video,
+    recent_landings: recent,
+  };
 }
