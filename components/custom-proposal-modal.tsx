@@ -415,7 +415,7 @@ export function CustomProposalModal({ open, onClose }: { open: boolean; onClose:
                   Continue <ArrowIcon />
                 </button>
               ) : (
-                <button type="button" disabled={submitting} onClick={() => void submit()} className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#d7ff00] px-[18px] py-2.5 text-[13px] font-bold text-[#0a0b10] shadow-[0_10px_22px_rgba(10,11,16,.3)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(10,11,16,.4)] active:translate-y-0 disabled:opacity-60">
+                <button type="button" data-visit-cta="submit" disabled={submitting} onClick={() => void submit()} className="group inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#d7ff00] px-[18px] py-2.5 text-[13px] font-bold text-[#0a0b10] shadow-[0_10px_22px_rgba(10,11,16,.3)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(10,11,16,.4)] active:translate-y-0 disabled:opacity-60">
                   {submitting ? "Sending..." : "Get my custom proposal"} {!submitting ? <ArrowIcon /> : null}
                 </button>
               )}
