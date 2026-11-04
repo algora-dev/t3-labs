@@ -13,6 +13,7 @@ export type VisitEventRow = {
 };
 
 export const BROWSER_EVENT_WHITELIST = new Set([
+  "landing", // tracker landing beacon for static campaign pages; server-enriched in the route
   "page_loaded",
   "page_visible",
   "visible_3_seconds",
@@ -24,6 +25,8 @@ export const BROWSER_EVENT_WHITELIST = new Set([
   "scroll_depth",
   "cta_visible",
   "cta_clicked",
+  "form_opened", // questionnaire overlay opened (10-day-business-upgrade)
+  "form_success", // questionnaire completed successfully
   "video_interaction",
   "page_hidden",
   "page_visible_again",
@@ -126,6 +129,36 @@ export async function recordLanding(opts: {
   await insertVisitEvent({ visit_id: visitId, event: "landing", client_ts: null, payload });
 }
 
+/** Server-side request context attached to tracker landing beacons (static pages with no server render).
+ * Mirrors the /custom-proposal recordLanding capture: IP, UA, client hints, sec-fetch, geo, Vercel request id. */
+export function serverTrackerContext(headers: Headers): Record<string, unknown> {
+  const h = headers;
+  const firstIp = (v: string | null) => (v ? v.split(",")[0].trim() : null);
+  return {
+    ip: firstIp(h.get("x-forwarded-for")) || h.get("x-real-ip"),
+    user_agent: h.get("user-agent"),
+    accept_language: h.get("accept-language"),
+    client_hints: {
+      "sec-ch-ua": h.get("sec-ch-ua"),
+      "sec-ch-ua-mobile": h.get("sec-ch-ua-mobile"),
+      "sec-ch-ua-platform": h.get("sec-ch-ua-platform"),
+    },
+    sec_fetch: {
+      site: h.get("sec-fetch-site"),
+      mode: h.get("sec-fetch-mode"),
+      dest: h.get("sec-fetch-dest"),
+      user: h.get("sec-fetch-user"),
+    },
+    geo: {
+      country: h.get("x-vercel-ip-country"),
+      region: h.get("x-vercel-ip-country-region"),
+      city: h.get("x-vercel-ip-city"),
+    },
+    cdn: { request_id: h.get("x-vercel-id") },
+    server_ts: new Date().toISOString(),
+  };
+}
+
 /** Minimal stats/timeline reader for the token-protected GET endpoint.
  * Default response: landing counts + behavioural aggregates (CTA clicks, video plays) last 24h. */
 export async function queryVisitData(params: { visitId?: string }): Promise<Record<string, unknown>> {
@@ -145,7 +178,7 @@ export async function queryVisitData(params: { visitId?: string }): Promise<Reco
     return { visit_id: params.visitId, events: rows };
   }
 
-  const [totalRes, dayRes, recentRes, behaviourRes, ctaRes] = await Promise.all([
+  const [totalRes, dayRes, recentRes, behaviourRes, ctaRes, pageRes] = await Promise.all([
     fetch(`${base}?select=id&event=eq.landing`, { headers: serviceHeaders({ Prefer: "count=exact", Range: "0-0" }) }),
     fetch(`${base}?select=id&event=eq.landing&created_at=gte.${since24h}`, { headers: serviceHeaders({ Prefer: "count=exact", Range: "0-0" }) }),
     fetch(`${base}?${select}&event=eq.landing&order=id.desc&limit=50`, { headers: serviceHeaders() }),
@@ -153,6 +186,8 @@ export async function queryVisitData(params: { visitId?: string }): Promise<Reco
     fetch(`${base}?select=event&event=neq.landing&created_at=gte.${since24h}&order=id.asc&limit=5000`, { headers: serviceHeaders() }),
     // Latest CTA clicks + video interactions with full detail.
     fetch(`${base}?${select}&event=in.(cta_clicked,video_interaction)&order=id.desc&limit=50`, { headers: serviceHeaders() }),
+    // Landing payloads (last 24h) for the per-page breakdown.
+    fetch(`${base}?select=payload&event=eq.landing&created_at=gte.${since24h}&order=id.desc&limit=2000`, { headers: serviceHeaders() }),
   ]);
 
   const total = parseInt((totalRes.headers.get("content-range") || "0-0/0").split("/")[1] || "0", 10);
@@ -164,9 +199,24 @@ export async function queryVisitData(params: { visitId?: string }): Promise<Reco
   for (const row of behaviourRows) events_24h[row.event] = (events_24h[row.event] || 0) + 1;
   const recent_cta_video = ctaRes.ok ? await ctaRes.json() : [];
 
+  // Per-page landing breakdown (last 24h): tracker pages set payload.page
+  // (e.g. "10-day-business-upgrade"); legacy /custom-proposal rows are matched by payload.url.
+  const pageRows: Array<{ payload?: Record<string, unknown> }> = pageRes.ok ? await pageRes.json() : [];
+  const landings_by_page_24h: Record<string, number> = {};
+  for (const row of pageRows) {
+    const p = row.payload || {};
+    const env = p.env && typeof p.env === "object" ? (p.env as Record<string, unknown>) : {};
+    let page = "other";
+    if (typeof p.page === "string") page = p.page;
+    else if (typeof env.page === "string") page = env.page;
+    else if (typeof p.url === "string" && (p.url as string).includes("/custom-proposal")) page = "custom-proposal";
+    landings_by_page_24h[page] = (landings_by_page_24h[page] || 0) + 1;
+  }
+
   return {
     total_landings: total,
     landings_last_24h: last24h,
+    landings_by_page_24h,
     events_24h,
     recent_cta_video,
     recent_landings: recent,

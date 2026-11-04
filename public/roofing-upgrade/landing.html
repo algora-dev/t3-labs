@@ -557,21 +557,21 @@ body{background:radial-gradient(circle at 10% 3%,rgba(215,255,0,.08),transparent
 <div class="compare-price" id="compareEssential"><s>$999</s><span>next cohort</span></div><div class="price" id="priceEssential">$499</div>
 <ul class="included"><li><span class="ck">✓</span><span>10 short videos + 10 one-page guides to keep</span></li><li><span class="ck">✓</span><span>A practical business audit and clear improvement plan</span></li><li><span class="ck">✓</span><span>Up to 1 hour with Shaun, or a personal video review</span></li></ul>
 <div class="support"><span>✦</span><span><strong>90-day support</strong> via message or email</span></div>
-<div class="plan-actions"><button class="btn btn-dark select-plan" data-plan="essential" type="button">Request Essential</button><button class="details see-more" data-plan="essential" type="button">See more details ↗</button></div>
+<div class="plan-actions"><button class="btn btn-dark select-plan" data-plan="essential" type="button" data-visit-cta="request_essential">Request Essential</button><button class="details see-more" data-plan="essential" type="button" data-visit-cta="details_essential">See more details ↗</button></div>
 </article>
 <article class="plan featured" data-plan="growth" id="growthCard">
 <div class="plan-label">02 / Hands-on implementation</div><h3 class="plan-title">Growth</h3><p class="plan-kicker">We help put the right tools in place.</p>
 <div class="compare-price" id="compareGrowth"><s>$2,999</s><span>next cohort</span></div><div class="price" id="priceGrowth">$1,500</div>
 <ul class="included"><li><span class="ck">✓</span><span>Everything in Essential</span></li><li><span class="ck">✓</span><span>One website conversion tool, set up for you</span></li><li><span class="ck">✓</span><span>QuoteCore+ tailored to your workflow, 3 months included</span></li></ul>
 <div class="support"><span>✦</span><span><strong>90-day support</strong> plus a 30-minute call or personal recording each month</span></div>
-<div class="plan-actions"><button class="btn btn-lime select-plan" data-plan="growth" type="button">Request Growth →</button><button class="details see-more" data-plan="growth" type="button">See more details ↗</button></div>
+<div class="plan-actions"><button class="btn btn-lime select-plan" data-plan="growth" type="button" data-visit-cta="request_growth">Request Growth →</button><button class="details see-more" data-plan="growth" type="button" data-visit-cta="details_growth">See more details ↗</button></div>
 </article>
 <article class="plan complete-tier" data-plan="complete" id="completeCard">
 <div class="plan-label">03 / More complete upgrade</div><h3 class="plan-title">Complete</h3><p class="plan-kicker">A more complete website and workflow upgrade.</p>
 <div class="compare-price" id="compareComplete"><s>From $5,999</s><span>next cohort</span></div><div class="price" id="priceComplete"><small>From </small>$3,000</div>
 <ul class="included"><li><span class="ck">✓</span><span>Everything in Growth, plus both website tools</span></li><li><span class="ck">✓</span><span>Agreed improvements to your website pages</span></li><li><span class="ck">✓</span><span>Mobile usability and basic SEO improvements</span></li></ul>
 <div class="support"><span>✦</span><span><strong>90-day support</strong> plus a weekly check-in or recorded update</span></div>
-<div class="plan-actions"><button class="btn btn-dark select-plan" data-plan="complete" type="button">Request Complete</button><button class="details see-more" data-plan="complete" type="button">See more details ↗</button></div>
+<div class="plan-actions"><button class="btn btn-dark select-plan" data-plan="complete" type="button" data-visit-cta="request_complete">Request Complete</button><button class="details see-more" data-plan="complete" type="button" data-visit-cta="details_complete">See more details ↗</button></div>
 </article>
 </div>
 
@@ -620,8 +620,8 @@ body{background:radial-gradient(circle at 10% 3%,rgba(215,255,0,.08),transparent
 <section class="final-cta" aria-label="Get started">
   <div class="container">
     <div class="cta-trio">
-      <button class="btn btn-lime" id="footerReserve" type="button">Request My Spot <span aria-hidden="true">→</span></button>
-      <a class="btn btn-outline" href="https://calendly.com/insights-t3labs/20-minute-meeting" rel="noopener noreferrer" target="_blank">Book a 20-minute Call <span aria-hidden="true">↗</span></a>
+      <button class="btn btn-lime" id="footerReserve" type="button" data-visit-cta="footer_request_spot">Request My Spot <span aria-hidden="true">→</span></button>
+      <a class="btn btn-outline" href="https://calendly.com/insights-t3labs/20-minute-meeting" data-visit-cta="footer_book_call" rel="noopener noreferrer" target="_blank">Book a 20-minute Call <span aria-hidden="true">↗</span></a>
       <div class="cta-availability" role="status" aria-live="polite" aria-label="Places remaining in the first cohort">
         <span class="cta-availability-dot" aria-hidden="true"></span>
         <span><strong data-spots-remaining>…</strong> of <strong data-spots-capacity>…</strong> spots available</span>
@@ -636,7 +636,7 @@ body{background:radial-gradient(circle at 10% 3%,rgba(215,255,0,.08),transparent
 <section aria-labelledby="detailTitle" aria-modal="true" class="dialog" role="dialog">
 <header class="dialog-header"><div class="dialog-heading" id="detailEyebrow">Package details</div><button aria-label="Close package details" class="icon-close" data-close="planOverlay" type="button">×</button></header>
 <div class="dialog-body" id="detailBody"></div>
-<footer class="modal-foot plan-detail-foot"><span class="modal-foot-note">No payment at this step</span><div class="modal-action-with-slots"><span class="slot-indicator slot-indicator--modal" role="status" aria-live="polite"><span class="slot-pulse" aria-hidden="true"></span><span><strong data-spots-remaining>…</strong> of <strong data-spots-capacity>…</strong> spots available</span></span><button class="btn btn-dark" id="detailSelect" type="button">Request this plan →</button></div></footer>
+<footer class="modal-foot plan-detail-foot"><span class="modal-foot-note">No payment at this step</span><div class="modal-action-with-slots"><span class="slot-indicator slot-indicator--modal" role="status" aria-live="polite"><span class="slot-pulse" aria-hidden="true"></span><span><strong data-spots-remaining>…</strong> of <strong data-spots-capacity>…</strong> spots available</span></span><button class="btn btn-dark" id="detailSelect" type="button" data-visit-cta="modal_request_this_plan">Request this plan →</button></div></footer>
 </section>
 </div>
 <!-- Context modal: client story draft and founder story. -->
@@ -644,7 +644,7 @@ body{background:radial-gradient(circle at 10% 3%,rgba(215,255,0,.08),transparent
 <section class="dialog info-dialog" aria-labelledby="infoTitle" aria-modal="true" role="dialog">
   <header class="dialog-header"><div class="dialog-heading" id="infoEyebrow">More details</div><button aria-label="Close details" class="icon-close" data-close="infoOverlay" type="button">×</button></header>
   <div class="dialog-body" id="infoBody"></div>
-  <footer class="modal-foot info-modal-footer"><button class="btn btn-dark" id="infoBack" type="button" data-close="infoOverlay">Back to the page</button><a class="btn btn-lime" id="founderCallLink" href="https://calendly.com/insights-t3labs/20-minute-meeting" target="_blank" rel="noopener noreferrer" hidden>Book a call with Shaun ↗</a></footer>
+  <footer class="modal-foot info-modal-footer"><button class="btn btn-dark" id="infoBack" type="button" data-close="infoOverlay">Back to the page</button><a class="btn btn-lime" id="founderCallLink" href="https://calendly.com/insights-t3labs/20-minute-meeting" data-visit-cta="info_book_call" target="_blank" rel="noopener noreferrer" hidden>Book a call with Shaun ↗</a></footer>
 </section>
 </div>
 <!-- Reservation form dialog -->
@@ -973,4 +973,4 @@ body{background:radial-gradient(circle at 10% 3%,rgba(215,255,0,.08),transparent
   setInterval(refreshAvailability,120000);
 })();
 </script>
-</body></html>
+<script src="/roofing-upgrade/tracker.js" defer></script></body></html>

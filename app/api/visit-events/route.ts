@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { BROWSER_EVENT_WHITELIST, insertVisitEvent, queryVisitData } from "@/lib/visit-store";
+import { BROWSER_EVENT_WHITELIST, insertVisitEvent, queryVisitData, serverTrackerContext } from "@/lib/visit-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       return new NextResponse(null, { status: 204 });
     }
 
-    const payload: Record<string, unknown> = { source: "browser" };
+    const payload: Record<string, unknown> = { source: event === "landing" ? "tracker" : "browser" };
     const clientTs = typeof body.clientTs === "string" ? body.clientTs.slice(0, 40) : null;
     if (body.stats && typeof body.stats === "object") payload.stats = body.stats;
     if (body.env && typeof body.env === "object") payload.env = body.env;
@@ -35,6 +35,14 @@ export async function POST(req: NextRequest) {
     if (typeof body.isTrusted === "boolean") payload.isTrusted = body.isTrusted;
     if (typeof body.type === "string") payload.type = body.type.slice(0, 20);
     if (typeof body.currentTime === "number") payload.currentTime = body.currentTime;
+
+    // Landing beacons from static campaign pages (e.g. /10-day-business-upgrade) carry client
+    // context in env; the server adds IP/UA/geo/sec-fetch from the request itself.
+    if (event === "landing") {
+      const env = body.env && typeof body.env === "object" ? (body.env as Record<string, unknown>) : {};
+      if (typeof env.page === "string") payload.page = env.page.slice(0, 80);
+      payload.server = serverTrackerContext(req.headers);
+    }
 
     await insertVisitEvent({ visit_id: visitId, event, client_ts: clientTs, payload });
   } catch {
