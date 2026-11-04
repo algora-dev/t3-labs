@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   async rewrites() {
     return [
+      // 10-Day Roofing Business Upgrade campaign (V13 external handoff): standalone
+      // pixel-identical HTML, no app chrome. Availability via /api/roofing-upgrade/availability.
+      {
+        source: "/10-day-business-upgrade",
+        destination: "/roofing-upgrade/landing.html",
+      },
       {
         source: "/proposal-assets/:path*",
         destination: "/assets/:path*",
@@ -17,6 +23,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Handoff-era alias for the 10-day upgrade page; canonical path is /10-day-business-upgrade.
+      {
+        source: "/roofing-business-upgrade",
+        destination: "/10-day-business-upgrade",
+        permanent: true,
+      },
       {
         source: "/demo-sites/act-roofing-ltd",
         destination: "/demo/roofing-site",
