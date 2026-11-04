@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { T3AssistantLauncher } from "@/components/assistant-t3/T3AssistantLauncher";
+import GaConsentSync from "@/components/ga/GaConsentSync";
 import "./globals.css";
 
 /* eslint-disable @next/next/no-page-custom-font -- This is the existing T3 Labs Inter source. */
@@ -170,11 +172,25 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
         />
+        {/* Google Consent Mode v2 defaults. Must run before the Google tag loads.
+            Analytics follows the site's existing cookie consent choice (see GaConsentSync
+            and the business-audit CookieBanner). Marketing signals stay denied by default
+            until a site-wide consent UI exists. */}
+        <Script
+          id="ga4-consent-default"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'granted',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});`,
+          }}
+        />
       </head>
       <body>
         {children}
         <Analytics />
         <T3AssistantLauncher />
+        {/* GA4 web data stream for t3labs.tech (Enhanced Measurement on, SPA page views handled) */}
+        <GoogleAnalytics gaId="G-0QKZ301HPQ" />
+        <GaConsentSync />
         <Script
           id="ms-clarity"
           strategy="afterInteractive"

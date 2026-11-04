@@ -17,12 +17,32 @@ export default function CookieBanner() {
 
   function accept() {
     localStorage.setItem("cookie_consent", "all");
+    pushGaConsent(true);
     setVisible(false);
   }
 
   function reject() {
     localStorage.setItem("cookie_consent", "essential");
+    pushGaConsent(false);
     setVisible(false);
+  }
+
+  // Mirror the banner choice into Google Consent Mode so GA4/marketing cookies
+  // respect this consent decision (GaConsentSync covers returning visitors).
+  function pushGaConsent(all: boolean) {
+    const map = {
+      analytics_storage: all ? "granted" : "denied",
+      ad_storage: all ? "granted" : "denied",
+      ad_user_data: all ? "granted" : "denied",
+      ad_personalization: all ? "granted" : "denied",
+    };
+    const w = window as typeof window & { gtag?: (...args: unknown[]) => void; dataLayer?: unknown[][] };
+    const args: unknown[] = ["consent", "update", map];
+    if (typeof w.gtag === "function") w.gtag(...args);
+    else {
+      w.dataLayer = w.dataLayer || [];
+      w.dataLayer.push(args);
+    }
   }
 
   if (!visible) return null;
