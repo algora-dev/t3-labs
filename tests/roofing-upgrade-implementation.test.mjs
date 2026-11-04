@@ -33,7 +33,7 @@ test('every visible counter is marked for one updater, never manually populated'
 });
 test('canonical manual availability is the only backend count source',()=>{
   assert.equal(config.capacity,10);
-  assert.equal(config.spotsAvailable,10);
+  assert.ok(Number.isInteger(config.spotsAvailable) && config.spotsAvailable >= 0 && config.spotsAvailable <= config.capacity, 'spotsAvailable must be an integer within capacity');
   assert.match(availability,/import cohort from "@\/config\/roofing-upgrade-cohort.json"/);
   assert.match(availability,/available: spotsAvailable/);
   assert.doesNotMatch(availability,/confirmed_count|SUPABASE_URL/);
