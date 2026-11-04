@@ -13,7 +13,9 @@ const nextConfig: NextConfig = {
       // pixel-identical HTML, no app chrome. Availability via /api/roofing-upgrade/availability.
       {
         source: "/10-day-business-upgrade",
-        destination: "/roofing-upgrade/landing.html",
+        // Destination must use the clean URL (no .html): vercel.json cleanUrls:true
+        // registers public statics at extensionless paths, a .html destination 404s.
+        destination: "/roofing-upgrade/landing",
       },
       {
         source: "/proposal-assets/:path*",

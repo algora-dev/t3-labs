@@ -10,7 +10,7 @@ const config=JSON.parse(readFileSync(`${root}/config/roofing-upgrade-cohort.json
 
 test('public campaign route is a standalone HTML rewrite',()=>{
   assert.match(conf,/source: "\/10-day-business-upgrade"/);
-  assert.match(conf,/destination: "\/roofing-upgrade\/landing.html"/);
+  assert.match(conf,/destination: "\/roofing-upgrade\/landing"/);
 });
 test('V12 bottom section is exactly two CTAs and one equal-size availability element',()=>{
   const footer=html.match(/<section class="final-cta"[\s\S]*?<\/section>/)?.[0];
