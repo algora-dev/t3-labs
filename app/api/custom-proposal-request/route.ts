@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const NOTIFY_EMAIL = process.env.CONTACT_EMAIL || "insights@t3labs.tech";
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "T3 Labs <insights@t3labs.co.uk>";
-const SUPABASE_URL = process.env.SUPABASE_URL || "https://aaavvfttkesdzblttmby.supabase.co";
+const SUPABASE_URL = process.env.SUPABASE_URL || "https://bcqrrrvbzlfmfgvotzqw.supabase.co";
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 function clean(value: unknown, max: number): string {
