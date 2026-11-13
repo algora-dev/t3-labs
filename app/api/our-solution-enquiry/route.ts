@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const NOTIFY_EMAIL = process.env.CONTACT_EMAIL || "insights@t3labs.co.uk";
+const NOTIFY_EMAIL = process.env.CONTACT_EMAIL || "insights@t3labs.tech";
 
 export async function POST(req: NextRequest) {
   try {

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const SUPABASE_URL = process.env.SUPABASE_URL || "https://bcqrrrvbzlfmfgvotzqw.supabase.co";
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const NOTIFY_EMAIL = process.env.CONTACT_EMAIL || "insights@t3labs.co.uk";
+const NOTIFY_EMAIL = process.env.CONTACT_EMAIL || "insights@t3labs.tech";
 
 export async function POST(req: NextRequest) {
   try {

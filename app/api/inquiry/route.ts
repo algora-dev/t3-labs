@@ -6,7 +6,7 @@ import { buildInquiryPayload, validateInquirySubmission, type InquirySubmission 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const NOTIFY_EMAIL = process.env.DEMO_ENQUIRY_EMAIL || 'insights@t3labs.co.uk';
+const NOTIFY_EMAIL = process.env.DEMO_ENQUIRY_EMAIL || 'insights@t3labs.tech';
 
 function escapeHtml(s: unknown): string {
   return String(s ?? '')

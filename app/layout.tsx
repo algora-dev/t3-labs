@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { T3AssistantLauncher } from "@/components/assistant-t3/T3AssistantLauncher";
+import { LegacyAssistantGate } from "@/components/t3-rebuild/LegacyAssistantGate";
 import GaConsentSync from "@/components/ga/GaConsentSync";
 import "./globals.css";
 
@@ -187,7 +187,7 @@ export default function RootLayout({
       <body>
         {children}
         <Analytics />
-        <T3AssistantLauncher />
+        <LegacyAssistantGate />
         {/* GA4 web data stream for t3labs.tech (Enhanced Measurement on, SPA page views handled) */}
         <GoogleAnalytics gaId="G-0QKZ301HPQ" />
         <GaConsentSync />

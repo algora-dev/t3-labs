@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Apex Roofing Demo - website contact form + quote request form endpoint.
-// Sends the enquiry to the T3 Play inbox (insights@t3labs.co.uk) via Resend.
+// Sends the enquiry to the T3 Play inbox (insights@t3labs.tech) via Resend.
 // Falls back to demo mode (no send) if RESEND_API_KEY is absent.
 
 export const runtime = 'nodejs';
 
-const NOTIFY_EMAIL = process.env.DEMO_ENQUIRY_EMAIL || 'insights@t3labs.co.uk';
+const NOTIFY_EMAIL = process.env.DEMO_ENQUIRY_EMAIL || 'insights@t3labs.tech';
 
 interface SiteEnquiryRequest {
   formType?: string; // 'contact' | 'quote'

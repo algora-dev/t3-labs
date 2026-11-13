@@ -12,7 +12,7 @@ const config: ThemeConfig = {
   currencySymbol: '\u00A3',
   defaultUnits: 'metric',
   supplierName: 'Apex Roofing',
-  supplierEmail: 'insights@t3labs.co.uk',
+  supplierEmail: 'insights@t3labs.tech',
   features: {
     sendToSupplier: true,
     convertToQuote: false,

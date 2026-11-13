@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Apex Roofing Demo - takeoff enquiry endpoint.
-// Sends the completed roof takeoff result to the T3 Play inbox (insights@t3labs.co.uk)
+// Sends the completed roof takeoff result to the T3 Play inbox (insights@t3labs.tech)
 // via Resend. Falls back to demo mode (no send) if RESEND_API_KEY is absent.
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-const NOTIFY_EMAIL = process.env.DEMO_ENQUIRY_EMAIL || "insights@t3labs.co.uk";
+const NOTIFY_EMAIL = process.env.DEMO_ENQUIRY_EMAIL || "insights@t3labs.tech";
 
 interface TakeoffSection {
   label: string;
