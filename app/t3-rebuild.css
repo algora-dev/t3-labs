@@ -2555,3 +2555,13 @@
 :where(.t3-rebuild) .hero-video-visual{min-height:0;background:#0d1c2b}
 :where(.t3-rebuild) .hero-video-player{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;object-position:50% 50%}
 
+
+/* Owner review 2026-11-14: branded play button over the video poster */
+:where(.t3-rebuild) .hero-video-play{position:absolute;inset:0;display:grid;place-items:center;background:rgba(13,26,40,.16);border:0;padding:0;cursor:pointer;z-index:3;transition:background .18s ease}
+:where(.t3-rebuild) .hero-video-play:hover{background:rgba(13,26,40,.30)}
+:where(.t3-rebuild) .hero-video-play:focus-visible{outline:3px solid #d7ff00;outline-offset:3px}
+:where(.t3-rebuild) .hero-video-play-circle{width:74px;height:74px;border-radius:50%;background:#d7ff00;display:grid;place-items:center;box-shadow:0 16px 38px rgba(9,17,28,.45),inset 0 -3px 0 rgba(9,17,28,.18)}
+:where(.t3-rebuild) .hero-video-play-circle svg{width:30px;height:30px;color:#10131a;margin-left:4px;transition:transform .18s ease}
+:where(.t3-rebuild) .hero-video-play:hover .hero-video-play-circle svg{transform:scale(1.1)}
+@media (prefers-reduced-motion:reduce){:where(.t3-rebuild) .hero-video-play-circle svg{transition:none}}
+
