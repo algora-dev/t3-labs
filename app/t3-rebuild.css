@@ -2543,3 +2543,7 @@
 /* Integration fix 2026-11-13: standalone /free-review route must render. Prototype carried #review-page display:none (hidden until JS route switch) but the Next.js split never reveals it. Later same-specificity rule wins. */
 :where(.t3-rebuild) #review-page{display:block}
 
+
+/* Hero team video (2026-11-14): real clip replaces static portrait. Poster keeps instant paint; muted autoplay loops. */
+:where(.t3-rebuild) video.hero-video-portrait{display:block}
+
