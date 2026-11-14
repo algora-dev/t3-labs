@@ -1,19 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ROOFING_SOLUTIONS } from "./solutions";
 
-const links = [
-  { href: "/#solutions", label: "What we solve" },
+const primaryLinks = [
+  { href: "/solutions", label: "Solutions" },
   { href: "/#who-we-are", label: "Who we are" },
   { href: "/#packages", label: "Packages" },
+];
+const siteLinks = [
+  { href: "/", label: "Home" },
+  { href: "/#solutions", label: "What we solve" },
+  { href: "/#examples", label: "Tools & examples" },
+  { href: "/#packages", label: "Packages" },
+  { href: "/#who-we-are", label: "Who we are" },
+  { href: "/case-studies/quotecore", label: "QuoteCore+ case study" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    // The About destination is a native, accessible disclosure, not a separate page.
+    // The About destination is an accessible homepage disclosure.
     const revealAbout = () => {
       if (window.location.hash === "#who-we-are") {
         const details = document.getElementById("who-we-are") as HTMLDetailsElement | null;
@@ -26,7 +40,26 @@ export function Header() {
     revealAbout();
     window.addEventListener("hashchange", revealAbout);
     return () => window.removeEventListener("hashchange", revealAbout);
-  }, []);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        document.getElementById("site-menu-toggle")?.focus();
+      }
+    };
+    const closeOutside = (event: PointerEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    document.addEventListener("pointerdown", closeOutside);
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener("pointerdown", closeOutside);
+    };
+  }, [menuOpen]);
 
   const navClick = (href: string) => {
     setMenuOpen(false);
@@ -37,43 +70,49 @@ export function Header() {
   };
 
   return (
-    <header className="header">
+    <header className="header" ref={headerRef}>
       <div className="header-inner">
-        <Link href="/" aria-label="T3Labs homepage" className="brand">
-          {/* Existing brand identity in the approved preview */}
+        <Link href="/" aria-label="T3Labs homepage" className="brand" onClick={() => setMenuOpen(false)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img alt="T3Labs" src="/assets/t3-rebuild/v18-ca36a8dffccf.png" />
         </Link>
         <nav aria-label="Main navigation" className="nav">
-          {links.map((link) => (
-            <Link href={link.href} key={link.label} onClick={() => navClick(link.href)}>
+          {primaryLinks.map((link) => (
+            <Link href={link.href} key={link.label} aria-current={pathname === link.href ? "page" : undefined} onClick={() => navClick(link.href)}>
               {link.label}
             </Link>
           ))}
         </nav>
-        <Link className="btn btn-dark head-cta" href="/free-review">
+        <Link className="btn btn-dark head-cta" href="/free-review" onClick={() => setMenuOpen(false)}>
           Get a free review <span aria-hidden="true">↗</span>
         </Link>
         <button
           type="button"
-          className="mobile-toggle"
-          id="menu-toggle"
+          className="site-menu-toggle"
+          id="site-menu-toggle"
+          aria-label={menuOpen ? "Close site menu" : "Open site menu"}
           aria-expanded={menuOpen}
-          aria-controls="mobile-panel"
+          aria-controls="site-menu-panel"
           onClick={() => setMenuOpen((open) => !open)}
         >
-          Menu ☰
+          <span aria-hidden="true">{menuOpen ? "✕" : "☰"}</span><span>{menuOpen ? "Close" : "Menu"}</span>
         </button>
       </div>
-      <nav className={`mobile-panel${menuOpen ? " open" : ""}`} id="mobile-panel" aria-label="Mobile navigation">
-        {links.map((link) => (
-          <Link href={link.href} key={link.label} onClick={() => navClick(link.href)}>
-            {link.label}
-          </Link>
-        ))}
-        <Link className="t11-mobile-review" href="/free-review" onClick={() => setMenuOpen(false)}>
-          Get a free review ↗
-        </Link>
+      <nav className={`mobile-panel t3-site-menu${menuOpen ? " open" : ""}`} id="site-menu-panel" aria-label="Expanded site navigation" aria-hidden={!menuOpen}>
+        {menuOpen && (
+          <>
+            <div className="t3-site-menu-group">
+              <strong>Explore T3Labs</strong>
+              {siteLinks.map((link) => <Link key={link.href} href={link.href} aria-current={pathname === link.href ? "page" : undefined} onClick={() => navClick(link.href)}>{link.label}</Link>)}
+            </div>
+            <div className="t3-site-menu-group">
+              <strong>Roofing solutions</strong>
+              <Link href="/solutions" onClick={() => navClick("/solutions")}>All solutions</Link>
+              {ROOFING_SOLUTIONS.map((solution) => <Link key={solution.slug} href={`/${solution.slug}`} aria-current={pathname === `/${solution.slug}` ? "page" : undefined} onClick={() => navClick(`/${solution.slug}`)}>{solution.title}</Link>)}
+            </div>
+            <Link className="t11-mobile-review t3-site-menu-review" href="/free-review" onClick={() => navClick("/free-review")}>Get a free review ↗</Link>
+          </>
+        )}
       </nav>
     </header>
   );

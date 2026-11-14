@@ -5,106 +5,125 @@ import { AI_SERVICE_SLUGS } from "@/lib/ai-services";
 const BASE_URL = "https://www.t3labs.tech";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
+  // Keep lastmod only where the underlying content has a trustworthy publication/update date.
+  // An always-current timestamp for static pages would inaccurately signal daily changes.
   const posts = getAllPosts();
 
   const staticRoutes = [
     {
       url: `${BASE_URL}/`,
-      lastModified,
       changeFrequency: "weekly" as const,
       priority: 1.0,
     },
     {
+      url: `${BASE_URL}/solutions`,
+      changeFrequency: "monthly" as const,
+      priority: 0.95,
+    },
+    {
+      url: `${BASE_URL}/custom-roofing-software`,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/contact`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+    {
       url: `${BASE_URL}/free-review`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/blog`,
-      lastModified,
       changeFrequency: "weekly" as const,
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/custom-software`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/qcp-careers`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     },
     {
       url: `${BASE_URL}/case-studies/quotecore`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
     {
       url: `${BASE_URL}/business-audit`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
     {
+      url: `${BASE_URL}/roofing-business-tools`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+    {
       url: `${BASE_URL}/roofing-solutions`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
     {
       url: `${BASE_URL}/pricing-calculator`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
     {
       url: `${BASE_URL}/privacy`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.3,
     },
     {
       url: `${BASE_URL}/cookies`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.3,
     },
     {
       url: `${BASE_URL}/terms`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.3,
     },
     {
       url: `${BASE_URL}/service-terms`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.2,
     },
     {
       url: `${BASE_URL}/website-package-terms`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.2,
     },
   ];
 
+  // Existing six answer-first roofing service pages. Custom roofing software is a separate new route.
+  const roofingAcquisitionRoutes = [
+    "roofing-website-design",
+    "roofing-seo",
+    "roofing-website-estimators",
+    "roofing-quoting-software",
+    "roofing-ai-website-assistants",
+    "roofing-business-automation",
+  ].map((slug) => ({
+    url: `${BASE_URL}/${slug}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.9,
+  }));
+
   const serviceRoutes = [
     ...AI_SERVICE_SLUGS.map((slug) => ({
       url: `${BASE_URL}/${slug}`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.9,
     })),
     {
       url: `${BASE_URL}/ai-help`,
-      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
@@ -117,5 +136,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...serviceRoutes, ...postRoutes];
+  return [...staticRoutes, ...roofingAcquisitionRoutes, ...serviceRoutes, ...postRoutes];
 }

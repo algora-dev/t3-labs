@@ -2507,5 +2507,39 @@
 :where(.t3-rebuild) .t3-review-privacy a { text-decoration:underline; }
 :where(.t3-rebuild) .r15-submit:disabled { cursor:wait; opacity:.68; }
 
+/* Shared menu: discoverable solution links without changing the V18 homepage layout. */
+:where(.t3-rebuild) .header .nav a{display:inline-flex;align-items:center;padding:11px 12px;border-radius:8px;font-size:.86rem;font-weight:710;color:#172131;text-decoration:none}
+:where(.t3-rebuild) .header .nav a:hover{background:rgba(215,255,0,.18)}
+:where(.t3-rebuild) .site-menu-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:#fff;color:#172131;border:1px solid #d9e0e8;min-height:44px;padding:9px 12px;border-radius:8px;font-size:.84rem;font-weight:750;cursor:pointer;white-space:nowrap}
+:where(.t3-rebuild) .site-menu-toggle:hover{background:#f5f9e9}
+:where(.t3-rebuild) .site-menu-toggle:focus-visible,:where(.t3-rebuild) .header a:focus-visible{outline:3px solid #5f7000;outline-offset:3px}
+:where(.t3-rebuild) .mobile-panel.t3-site-menu{pointer-events:auto;top:calc(100% - 1px);right:max(20px,calc((100% - 1180px)/2));width:min(630px,calc(100vw - 40px));max-height:calc(100dvh - 110px);overflow-y:auto;grid-template-columns:1fr 1fr;gap:18px;padding:18px;scrollbar-width:thin}
+:where(.t3-rebuild) .mobile-panel.t3-site-menu.open{display:grid}
+:where(.t3-rebuild) .t3-site-menu-group{display:flex;flex-direction:column;min-width:0;gap:2px}
+:where(.t3-rebuild) .t3-site-menu-group strong{color:#5f7000;font-size:.69rem;text-transform:uppercase;letter-spacing:.11em;padding:8px 11px 4px}
+:where(.t3-rebuild) .t3-site-menu-group a{line-height:1.3;padding:10px 11px;font-size:.84rem}
+:where(.t3-rebuild) .mobile-panel.t3-site-menu .t3-site-menu-review{grid-column:1/-1;margin:0;padding:13px;background:#172131;color:#d7ff00;font-size:.88rem}
+:where(.t3-rebuild) .mobile-panel.t3-site-menu .t3-site-menu-review:hover{background:#26394d;color:#d7ff00}
+@media(max-width:950px){:where(.t3-rebuild) .header .nav a{padding:10px 7px;font-size:.8rem}}
+@media(max-width:760px){:where(.t3-rebuild) .mobile-panel.t3-site-menu{right:12px;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 95px);grid-template-columns:1fr;gap:10px}}
+@media(max-width:420px){:where(.t3-rebuild) .mobile-panel.t3-site-menu{padding:12px}.t3-rebuild .site-menu-toggle{min-height:43px}}
+
+/* Focused homepage bridge between the existing four service areas and the seven SEO pages. */
+:where(.t3-rebuild) .t3-home-solutions-bridge{margin-top:24px;background:#f1f6e0;border:1px solid #cbdc9a;border-radius:8px;padding:23px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px 28px}
+:where(.t3-rebuild) .t3-home-solutions-bridge h3{font-size:1.22rem;line-height:1.2;color:#111318;margin:0 0 7px}
+:where(.t3-rebuild) .t3-home-solutions-bridge p{font-size:.9rem;line-height:1.55;color:#4e5a63;margin:0;max-width:720px}
+:where(.t3-rebuild) .t3-home-solutions-bridge .btn{white-space:nowrap;flex:none}
+:where(.t3-rebuild) .t3-home-service-more{display:block;margin-top:10px;color:#425b00;font-size:.82rem;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+:where(.t3-rebuild) .t3-home-custom-link{margin:10px 0 0;font-size:.85rem}
+:where(.t3-rebuild) .t3-home-custom-link a{color:#455f00;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:760px){:where(.t3-rebuild) .t3-home-solutions-bridge{align-items:flex-start;flex-direction:column;padding:20px}.t3-rebuild .t3-home-solutions-bridge .btn{width:100%;white-space:normal}}
+
+:where(.t3-rebuild) .t3-home-tool-more{display:inline-block;color:#455f00;font-size:.79rem;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+/* Current-location cue in the shared, keyboard-accessible solutions navigation. */
+:where(.t3-rebuild) .header .nav a[aria-current="page"] { background:rgba(215,255,0,.15); }
+:where(.t3-rebuild) .t3-site-menu-group a[aria-current="page"] { background:#f1f6df; color:#344800; }
+
 /* Integration fix 2026-11-13: standalone /free-review route must render. Prototype carried #review-page display:none (hidden until JS route switch) but the Next.js split never reveals it. Later same-specificity rule wins. */
 :where(.t3-rebuild) #review-page{display:block}
+

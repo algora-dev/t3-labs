@@ -40,9 +40,6 @@ export const metadata: Metadata = {
   authors: [{ name: "T3 Labs" }],
   creator: "T3 Labs",
   publisher: "T3 Labs",
-  alternates: {
-    canonical: BASE_URL,
-  },
   openGraph: {
     type: "website",
     locale: "en_GB",
