@@ -2547,3 +2547,11 @@
 /* Hero team video (2026-11-14): real clip replaces static portrait. Poster keeps instant paint; muted autoplay loops. */
 :where(.t3-rebuild) video.hero-video-portrait{display:block}
 
+
+/* Owner review 2026-11-14: header CTA groups right with the Menu button */
+:where(.t3-rebuild) .head-cta{margin-left:auto}
+
+/* Owner review 2026-11-14: hero video rebuilt as a clean in-frame player: native controls, no autoplay, 16:9, shorter card */
+:where(.t3-rebuild) .hero-video-visual{min-height:0;background:#0d1c2b}
+:where(.t3-rebuild) .hero-video-player{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;object-position:50% 50%}
+
