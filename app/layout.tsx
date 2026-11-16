@@ -13,29 +13,22 @@ const BASE_URL = "https://www.t3labs.tech";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "T3 Labs | Custom Software, AI & Growth Solutions",
+    default: "T3 Labs | Better Roofing Leads, Faster Quotes & Less Admin",
     template: "%s | T3 Labs",
   },
   description:
-    "Technology built around your business. T3 Labs creates custom software, practical AI integrations, and growth solutions for real business problems.",
+    "T3 Labs helps roofing businesses get better enquiries, convert more website visitors, quote faster and reduce admin with practical websites, estimating tools and automation.",
   keywords: [
     "T3 Labs",
-    "product studio",
-    "custom software development",
-    "software development",
-    "automation",
-    "AI",
-    "custom software",
-    "business solutions",
-    "lead generation software",
-    "workflow automation",
-    "internal tools",
-    "CRM systems",
-    "API integration",
-    "SEO tools",
+    "roofing websites",
+    "roofing SEO",
+    "roofing lead generation",
+    "roofing website estimators",
+    "roofing quoting software",
+    "roofing business automation",
+    "custom roofing software",
+    "roofing website assistants",
     "QuoteCore+",
-    "business audit",
-    "T3 Play",
   ],
   authors: [{ name: "T3 Labs" }],
   creator: "T3 Labs",
@@ -45,24 +38,24 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: BASE_URL,
     siteName: "T3 Labs",
-    title: "T3 Labs | Custom Software, AI & Growth Solutions",
+    title: "T3 Labs | Better Roofing Leads, Faster Quotes & Less Admin",
     description:
-      "Technology built around your business. Custom software, practical AI integrations, and growth solutions designed around real business problems.",
+      "Practical websites, roofing estimators, quoting tools and automation to attract better enquiries and win more of the right jobs.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-roofing.png",
         width: 1200,
         height: 630,
-        alt: "T3 Labs - Product Studio",
+        alt: "T3 Labs - Roofing websites, quoting and automation",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "T3 Labs | Custom Software, AI & Growth Solutions",
+    title: "T3 Labs | Better Roofing Leads, Faster Quotes & Less Admin",
     description:
-      "Technology built around your business. Custom software, practical AI integrations, and growth solutions designed around real business problems.",
-    images: ["/og-image.png"],
+      "Practical websites, roofing estimators, quoting tools and automation to attract better enquiries and win more of the right jobs.",
+    images: ["/og-roofing.png"],
   },
   icons: {
     icon: [
@@ -90,7 +83,7 @@ const organizationJsonLd = {
   name: "T3 Labs",
   url: BASE_URL,
   description:
-    "T3 Labs builds custom software, practical AI integrations, and growth solutions around real business problems.",
+    "T3 Labs helps roofing and construction businesses attract relevant leads, improve website enquiries, quote jobs and reduce repetitive administration with practical software and digital tools.",
   foundingDate: "2025",
   address: {
     "@type": "PostalAddress",
@@ -102,14 +95,13 @@ const organizationJsonLd = {
     name: "T3 Play Limited",
   },
   knowsAbout: [
-    "Software Development",
-    "Automation",
-    "Artificial Intelligence",
-    "Business Growth Solutions",
-    "Game Technology",
-    "Product Systems",
-  ],
-};
+    "Roofing website design",
+    "Roofing SEO and qualified enquiries",
+    "Roofing website estimators",
+    "Roofing measurement and quoting software",
+    "Roofing business workflow automation",
+    "Custom roofing software",
+  ],};
 
 const websiteJsonLd = {
   "@context": "https://schema.org",
@@ -117,29 +109,10 @@ const websiteJsonLd = {
   name: "T3 Labs",
   url: BASE_URL,
   description:
-    "Technology built around your business through custom software, AI integrations, and growth solutions.",
+    "Websites, estimating tools, roofing quoting software and automation to help roofing businesses attract better enquiries and spend less time on admin.",
   publisher: {
     "@type": "Organization",
     name: "T3 Labs",
-  },
-};
-
-const serviceJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Custom Software Solutions",
-  serviceType: "Custom Software Development",
-  provider: {
-    "@type": "Organization",
-    name: "T3 Labs",
-    url: BASE_URL,
-  },
-  description:
-    "T3 Labs builds tailored software solutions including lead generation tools, workflow automation, internal tools, CRM systems, dashboards, API integrations, and SEO platforms.",
-  areaServed: "Worldwide",
-  offers: {
-    "@type": "Offer",
-    description: "Custom software development - contact for pricing",
   },
 };
 
@@ -164,10 +137,6 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
         />
         {/* Google Consent Mode v2 defaults. Must run before the Google tag loads.
             Analytics follows the site's existing cookie consent choice (see GaConsentSync

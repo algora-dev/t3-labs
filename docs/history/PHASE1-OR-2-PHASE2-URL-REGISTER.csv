@@ -1,0 +1,50 @@
+path,group,in_curated_sitemap,index_directives_modified,route_action,notes
+/,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/solutions,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/roofing-website-design,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/roofing-seo,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/roofing-website-estimators,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/roofing-quoting-software,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/roofing-ai-website-assistants,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/roofing-business-automation,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/custom-roofing-software,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/case-studies/quotecore,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/blog,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/free-review,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/contact,Core public roofing,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Improved or retained as public SEO priority
+/blog/custom-roofing-software,Featured roofing article,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Blog content maintained; two articles strengthened
+/blog/building-quotecore-roofing-trade-software,Featured roofing article,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Blog content maintained; two articles strengthened
+/blog/ai-roofing-estimation-what-ai-can-do,Featured roofing article,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Blog content maintained; two articles strengthened
+/blog/can-ai-write-my-quotes,Featured roofing article,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Blog content maintained; two articles strengthened
+/blog/branded-calculators-lead-generation-tools,Featured roofing article,yes,UNCHANGED,Keep live; no deletion/redirect/noindex change,Blog content maintained; two articles strengthened
+/ai-help,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/ai-consultancy,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/ai-automation,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/ai-implementation,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/ai-training,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/custom-software,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/our-solution,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/roofing-solutions,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/roofing-business-tools,Legacy marketing,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Retire or consolidate in separately approved later phase
+/pricing-calculator,Campaign and support,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Route/asset availability must be confirmed in full project
+/business-audit,Campaign and support,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Route/asset availability must be confirmed in full project
+/qcp-careers,Campaign and support,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Route/asset availability must be confirmed in full project
+/sales-hub,Campaign and support,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Route/asset availability must be confirmed in full project
+/sales-resources,Campaign and support,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Route/asset availability must be confirmed in full project
+/careers,Campaign and support,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Route/asset availability must be confirmed in full project
+/10-day-business-upgrade,Campaign and support,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Route/asset availability must be confirmed in full project
+/our-solution/referred,Referral / link-specific,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Keep functioning; review privacy/access controls in full repo
+/roofing-solutions/referred,Referral / link-specific,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Keep functioning; review privacy/access controls in full repo
+/roofing-business-tools/referred,Referral / link-specific,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Keep functioning; review privacy/access controls in full repo
+/pricing-calculator/referred,Referral / link-specific,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Keep functioning; review privacy/access controls in full repo
+/hello/[slug],Referral / link-specific,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Keep functioning; review privacy/access controls in full repo
+/custom-proposal,Referral / link-specific,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Keep functioning; review privacy/access controls in full repo
+/proposal/*,Referral / link-specific,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Keep functioning; review privacy/access controls in full repo
+/blog/ai-consultancy-cost-uk,Noncore blog archive,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Still publicly accessible and potentially indexable; archived on blog index
+/blog/ai-consultancy-training-automation-or-build,Noncore blog archive,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Still publicly accessible and potentially indexable; archived on blog index
+/blog/chatgpt-says-this-can-be-automated,Noncore blog archive,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Still publicly accessible and potentially indexable; archived on blog index
+/blog/what-can-ai-actually-do-for-a-small-business,Noncore blog archive,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Still publicly accessible and potentially indexable; archived on blog index
+/blog/i-have-an-ai-idea-but-cant-code,Noncore blog archive,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Still publicly accessible and potentially indexable; archived on blog index
+/blog/does-ai-make-software-development-cheaper,Noncore blog archive,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Still publicly accessible and potentially indexable; archived on blog index
+/blog/human-in-the-loop-ai-when-should-a-person-check,Noncore blog archive,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Still publicly accessible and potentially indexable; archived on blog index
+/blog/custom-software-development-cost-uk,Noncore blog archive,no,UNCHANGED,Keep live; no deletion/redirect/noindex change,Still publicly accessible and potentially indexable; archived on blog index

@@ -4,8 +4,8 @@ import { resolveTopics } from "@/components/t3-rebuild/review-topics";
 import "../t3-rebuild.css";
 
 export const metadata: Metadata = {
-  title: "Free Business Review for Roofing & Construction | T3Labs",
-  description: "Tell T3Labs what you want to improve. Send a quick enquiry or book a 20-minute call with our team.",
+  title: "Free Roofing Business Review: Leads, Quotes & Admin | T3Labs",
+  description: "Get a practical review of your roofing website, enquiry process, quoting or admin workflow. Tell us what is slowing you down or book a 20-minute call.",
   alternates: { canonical: "/free-review" },
 };
 

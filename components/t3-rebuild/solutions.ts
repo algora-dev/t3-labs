@@ -43,3 +43,44 @@ export const ROOFING_SOLUTIONS = [
     outcome: "Build exactly what you need",
   },
 ] as const;
+
+
+/** Visitor-centred pathways. The seven canonical service URLs remain unchanged. */
+export const ROOFING_OUTCOMES = [
+  {
+    id: "better-leads",
+    step: "01",
+    label: "GET FOUND",
+    title: "Get found by better-fit customers.",
+    description: "Be visible for the roofing jobs and areas you actually serve, then make the next step obvious.",
+    check: "Can a customer tell what roofing work you do, where you work and why they should trust you?",
+    slugs: ["roofing-website-design", "roofing-seo"],
+  },
+  {
+    id: "better-enquiries",
+    step: "02",
+    label: "CONVERT VISITORS",
+    title: "Turn more visits into useful enquiries.",
+    description: "Answer common questions, give sensible price guidance and gather the details you need to respond well.",
+    check: "Can a visitor get useful answers and tell you about their job without starting from scratch?",
+    slugs: ["roofing-website-estimators", "roofing-ai-website-assistants"],
+  },
+  {
+    id: "faster-quotes",
+    step: "03",
+    label: "QUOTE & FOLLOW UP",
+    title: "Measure, price and quote with less friction.",
+    description: "Carry information through from measurement to pricing and professional quotations without retyping it.",
+    check: "Where does your team repeat work between enquiry, measurement, price and quote?",
+    slugs: ["roofing-quoting-software"],
+  },
+  {
+    id: "less-admin",
+    step: "04",
+    label: "SAVE ADMIN TIME",
+    title: "Keep the work moving after the enquiry.",
+    description: "Connect repetitive steps, reduce missed follow-ups and build only the tools your team actually needs.",
+    check: "Which follow-ups, updates or transfers still depend on someone remembering them?",
+    slugs: ["roofing-business-automation", "custom-roofing-software"],
+  },
+] as const;

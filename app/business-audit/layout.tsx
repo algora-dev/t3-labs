@@ -4,6 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Business Audit - Find your biggest business bottleneck",
   description: "Answer a few quick questions and get a clear, specific insight into what may be holding your business back. Free in about 3 minutes.",
+  robots: { index: false, follow: false },
 };
 
 export default function BusinessAuditLayout({

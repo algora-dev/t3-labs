@@ -9,8 +9,8 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
-  alternates: { canonical: `${BASE_URL}/our-solution` },
-  robots: { index: true, follow: true },
+
+  robots: { index: false, follow: false },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/t3-rebuild/Header";
@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description: "Custom roofing software, calculators, estimating tools and connected workflows. Replace unused features and disconnected apps with tools built around your process. See QuoteCore+.",
   alternates: { canonical: `${BASE_URL}/custom-roofing-software` },
   openGraph: {
+    images: [{ url: "/og-roofing.png", width: 1200, height: 630, alt: "T3 Labs – better roofing leads, faster quotes, less admin" }],
     title: "Custom Roofing Software & Apps Built for Your Business | T3Labs",
     description: "From one useful calculator to a platform like QuoteCore+. Get roofing software shaped around the way your business actually works.",
     url: `${BASE_URL}/custom-roofing-software`,
@@ -71,7 +72,7 @@ export default function CustomRoofingSoftwarePage() {
             <span className="t3s-eyebrow">CUSTOM SOFTWARE FOR ROOFING BUSINESSES</span>
             <h1>Custom roofing software. <em>Only the features you actually need.</em></h1>
             <p>Paying for several apps but only using one or two features in each? Struggling to move job details, measurements and prices between them? We can build a focused roofing tool that brings the pieces you actually need together, without the extra complexity.</p>
-            <div className="t3s-actions"><Link href={REVIEW_URL} className="t3s-button">Talk about a custom build â†—</Link><Link href="/solutions" className="t3s-text-link t3s-text-link-light">See our ready-made options â†—</Link></div>
+            <div className="t3s-actions"><Link href={REVIEW_URL} className="t3s-button">Talk about a custom build ↗</Link><Link href="/solutions" className="t3s-text-link t3s-text-link-light">See our ready-made options ↗</Link></div>
           </div>
         </section>
         <section className="t3s-section t3s-section-soft" aria-label="QuoteCore+ proof and future walkthrough">
@@ -91,7 +92,7 @@ export default function CustomRoofingSoftwarePage() {
               <h2>We built QuoteCore+. We can build something just for you.</h2>
               <p>QuoteCore+ shows what our team can build for the roofing trade, including takeoff, pricing and quoting workflows. But your business might only need one calculation, a few connected steps or a straightforward internal app.</p>
               <p>We start with the problem, not a long feature list. A bigger system is an option, not the starting requirement.</p>
-              <div className="t3s-proof-links"><Link href="/case-studies/quotecore">Read the QuoteCore+ case study â†—</Link><a href="https://quote-core.com/" target="_blank" rel="noopener noreferrer">Explore the working platform â†—</a></div>
+              <div className="t3s-proof-links"><Link href="/case-studies/quotecore">Read the QuoteCore+ case study ↗</Link><a href="https://quote-core.com/" target="_blank" rel="noopener noreferrer">Explore the working platform ↗</a></div>
             </div>
           </div>
         </section>
@@ -106,7 +107,18 @@ export default function CustomRoofingSoftwarePage() {
         <section className="t3s-choice-band">
           <div className="t3s-shell t3s-choice-layout">
             <div><span className="t3s-eyebrow">READY-MADE OR MADE FOR YOU</span><h2>You don&apos;t have to buy another complicated app.</h2><p>If an existing <Link href="/roofing-quoting-software">quoting tool</Link> or <Link href="/roofing-business-automation">automation</Link> solves the problem, we&apos;ll show you. If the missing piece is unique to your business, we can build that instead.</p></div>
-            <Link href="/solutions" className="t3s-button">Explore the ready-made solutions â†—</Link>
+            <Link href="/solutions" className="t3s-button">Explore the ready-made solutions ↗</Link>
+          </div>
+        </section>
+        <section className="t3s-section" aria-labelledby="roofing-workflow-heading">
+          <div className="t3s-shell">
+            <span className="t3s-eyebrow t3s-eyebrow-ink">ONE CONNECTED ROOFING WORKFLOW</span>
+            <h2 id="roofing-workflow-heading">From job details to a quote your team can follow up.</h2>
+            <p className="t3s-section-intro">For example, a contractor may receive measurements by email, re-enter them in a pricing spreadsheet and then build a quote in another app. The right tool can connect those steps, with review and approval kept where they are needed.</p>
+            <div className="t3s-cards t3s-cards-two">
+              <article className="t3s-card"><span className="t3s-card-count">FIRST / CAPTURE THE RIGHT DETAILS</span><h3>Keep the information together.</h3><p>Collect the roof dimensions, product choices, customer details and site notes needed for an informed quote.</p><Link href="/roofing-website-estimators" className="t3s-card-link">See website estimators ↗</Link></article>
+              <article className="t3s-card"><span className="t3s-card-count">NEXT / REDUCE RE-ENTRY</span><h3>Use the same data through the job.</h3><p>Apply agreed pricing rules, create documents and support follow-up. The exact integrations depend on your existing systems.</p><Link href="/roofing-quoting-software" className="t3s-card-link">See roofing quoting tools ↗</Link></article>
+            </div>
           </div>
         </section>
         <section className="t3s-section t3s-section-soft">
@@ -127,8 +139,8 @@ export default function CustomRoofingSoftwarePage() {
             <div className="t3s-faq">{faq.map((item) => <details key={item.q}><summary>{item.q}<span aria-hidden="true">+</span></summary><p>{item.a}</p></details>)}</div>
           </div>
         </section>
-        <section className="t3s-final"><div className="t3s-shell t3s-choice-layout"><div><span className="t3s-eyebrow">LET&apos;S FIND THE RIGHT FIT</span><h2>Tell us the two or three features you actually need.</h2><p>We&apos;ll help you decide whether an existing tool, a small custom app or a larger build makes sense for your roofing business.</p></div><div className="t3s-final-actions"><Link href={REVIEW_URL} className="t3s-button">Get a free business review â†—</Link><Link href="/contact" className="t3s-text-link t3s-text-link-light">Other ways to contact us â†—</Link></div></div></section>
-        <aside className="t3s-related"><div className="t3s-shell"><strong>RELATED SOLUTIONS</strong><div><Link href="/solutions">All roofing solutions â†—</Link><Link href="/roofing-quoting-software">Roofing quoting software â†—</Link><Link href="/roofing-business-automation">Business automation â†—</Link><Link href="/roofing-website-estimators">Website estimators â†—</Link><Link href="/custom-software">Custom software for other industries â†—</Link></div></div></aside>
+        <section className="t3s-final"><div className="t3s-shell t3s-choice-layout"><div><span className="t3s-eyebrow">LET&apos;S FIND THE RIGHT FIT</span><h2>Tell us the two or three features you actually need.</h2><p>We&apos;ll help you decide whether an existing tool, a small custom app or a larger build makes sense for your roofing business.</p></div><div className="t3s-final-actions"><Link href={REVIEW_URL} className="t3s-button">Get a free business review ↗</Link><Link href="/contact" className="t3s-text-link t3s-text-link-light">Other ways to contact us ↗</Link></div></div></section>
+        <aside className="t3s-related"><div className="t3s-shell"><strong>RELATED SOLUTIONS</strong><div><Link href="/solutions">All roofing solutions ↗</Link><Link href="/roofing-quoting-software">Roofing quoting software ↗</Link><Link href="/roofing-business-automation">Business automation ↗</Link><Link href="/roofing-website-estimators">Website estimators ↗</Link><Link href="/case-studies/quotecore">How we built QuoteCore+ ↗</Link></div></div></aside>
       </main>
       <MarketingFooter />
     </div>

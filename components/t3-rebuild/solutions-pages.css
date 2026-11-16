@@ -99,3 +99,47 @@
  .t3-rebuild .t3s-choice-band,.t3-rebuild .t3s-final{padding:50px 0}
  .t3-rebuild .t3s-footer-grid{gap:30px}
 }
+
+/* Roofing outcome pathways, built on the approved V18 homepage / 10-day palette. */
+.t3-rebuild .t3s-outcome-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:30px}
+.t3-rebuild .t3s-outcome{display:flex;flex-direction:column;align-items:flex-start;border:1px solid #e1e6ee;background:#fff;border-radius:12px;padding:28px;min-width:0;box-shadow:0 8px 24px rgba(10,11,16,.035)}
+.t3-rebuild .t3s-outcome h3{font-size:clamp(1.3rem,2vw,1.8rem);margin:15px 0 0}
+.t3-rebuild .t3s-outcome>p{color:#566273;font-size:.95rem;margin:13px 0 0}
+.t3-rebuild .t3s-outcome .t3s-outcome-check{padding:14px 0;margin:17px 0;border-top:1px solid #e1e6ee;color:#293447;font-size:.86rem}
+.t3-rebuild .t3s-outcome .t3s-card-link{margin-top:auto}
+.t3-rebuild .t3s-outcome-group{padding:28px 0 36px;scroll-margin-top:120px;border-bottom:1px solid #e1e6ee}
+.t3-rebuild .t3s-outcome-group:last-child{border:0;padding-bottom:0}
+.t3-rebuild .t3s-outcome-group-heading h3{font-size:clamp(1.35rem,2.4vw,2rem);margin-top:9px}
+.t3-rebuild .t3s-outcome-group .t3s-cards{margin-top:19px}
+.t3-rebuild .t3s-feature-copy .t3s-video-note{font-size:.78rem;color:#738093;margin-top:15px}
+@media(max-width:680px){.t3-rebuild .t3s-outcome-grid{grid-template-columns:1fr}.t3-rebuild .t3s-outcome{padding:23px}.t3-rebuild .t3s-outcome-group{padding:25px 0 30px}}
+
+/* Reused roof business-tools module logic, recast as a simple outcome journey. */
+.t3-rebuild .t3s-workflow-steps{list-style:none;padding:0;margin:30px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.t3-rebuild .t3s-workflow-steps li{background:#f6f8fc;border:1px solid #e1e6ee;border-radius:9px;padding:23px;display:flex;flex-direction:column;min-width:0}
+.t3-rebuild .t3s-workflow-steps h3{font-size:1.23rem;margin-top:18px}
+.t3-rebuild .t3s-workflow-steps p{font-size:.87rem;line-height:1.6;color:#556173;margin:12px 0 19px;flex:1}
+.t3-rebuild .t3s-workflow-steps a{font-size:.84rem;font-weight:800;color:#465d00;text-decoration:underline;text-underline-offset:3px}
+.t3-rebuild .t3s-workflow-note{font-size:.83rem;color:#697587;margin:18px 0 0;line-height:1.6}
+@media(max-width:950px){.t3-rebuild .t3s-workflow-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.t3-rebuild .t3s-workflow-steps{grid-template-columns:1fr}}
+
+/* Click-to-play gate avoids requesting a third-party iframe before a visitor chooses to watch. */
+.t3-rebuild .t3s-video-gate{width:100%;height:100%;min-height:345px;background:radial-gradient(ellipse at 20% 80%,rgba(215,255,0,.13),transparent 65%),#0a0b10;border:0;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:35px 24px;text-align:center}
+.t3-rebuild .t3s-video-gate:hover .t3s-video-play{transform:scale(1.07);background:#e8ff69}
+.t3-rebuild .t3s-video-gate:focus-visible{outline:3px solid #d7ff00;outline-offset:-6px}
+.t3-rebuild .t3s-video-play{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:#d7ff00;color:#0a0b10;font-size:1.55rem;padding-left:5px;transition:transform .18s ease,background .18s ease}
+.t3-rebuild .t3s-video-gate-title{font-size:1.45rem;font-weight:800;letter-spacing:-.025em}
+.t3-rebuild .t3s-video-gate-help{font-size:.82rem;color:#bdc7d7}
+@media(max-width:850px){.t3-rebuild .t3s-video-gate{min-height:290px}}
+@media(prefers-reduced-motion:reduce){.t3-rebuild .t3s-video-play{transition:none}}
+
+/* Archive remains available while the public editorial focus is on roofing guidance. */
+.t3-rebuild .t3s-archive{border:1px solid #e1e6ee;border-radius:9px;background:#fff;padding:22px 25px}
+.t3-rebuild .t3s-archive summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:20px;list-style:none}
+.t3-rebuild .t3s-archive summary::-webkit-details-marker{display:none}
+.t3-rebuild .t3s-archive summary strong{font-size:1.3rem;display:block;line-height:1.3}
+.t3-rebuild .t3s-archive summary small{color:#596579;font-size:.88rem;display:block;margin-top:7px}
+.t3-rebuild .t3s-archive summary>span:last-child{font-size:2rem;color:#637a0c}
+.t3-rebuild .t3s-archive[open] summary>span:last-child{transform:rotate(45deg)}
+.t3-rebuild .t3s-archive .t3s-cards{margin-top:28px}

@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import ServiceIntakeCTA from "@/components/ai-services/service-intake-cta";
 import IntakeModalMount from "@/components/intake/intake-modal-mount";
+import { Header } from "@/components/t3-rebuild/Header";
+import { MarketingFooter } from "@/components/t3-rebuild/MarketingFooter";
+import "../../t3-rebuild.css";
+import "@/components/t3-rebuild/solutions-pages.css";
 
 const BASE_URL = "https://www.t3labs.tech";
 
@@ -18,6 +23,7 @@ export const metadata: Metadata = {
     "Case study: how T3 Labs turned a fragmented roofing estimating workflow into QuoteCore+ - digital takeoff, AI-assisted scanning, reusable pricing components, quoting, ordering, invoicing and supplier workflows.",
   alternates: { canonical: `${BASE_URL}/case-studies/quotecore` },
   openGraph: {
+    images: [{ url: "/og-roofing.png", width: 1200, height: 630, alt: "T3 Labs – better roofing leads, faster quotes, less admin" }],
     title: "How We Built QuoteCore+: Roofing Workflow to SaaS Platform | T3 Labs",
     description:
       "How T3 Labs turned a fragmented roofing estimating workflow into a working SaaS platform.",
@@ -76,6 +82,7 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <IntakeModalMount />
+      <div className="t3-rebuild"><Header /></div>
       <main className="min-h-screen bg-[#0a0b10] text-white">
         {/* Hero */}
         <section className="border-b border-[#303d51]">
@@ -162,6 +169,24 @@ export default function Page() {
             </p>
           </section>
 
+          {/* Actual screenshots already bundled with this codebase: no invented results. */}
+          <section className="mb-12" aria-labelledby="quotecore-real-screens">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#d7ff00]">SEE THE WORKING PRODUCT DESIGN</p>
+            <h2 id="quotecore-real-screens" className="text-2xl font-semibold tracking-tight sm:text-3xl">How the measurement and pricing rules connect.</h2>
+            <p className="mt-4 text-base leading-8 text-[#aab4c6]">These are existing T3 Labs roofing-software demonstration assets. They illustrate how measurements and reusable pricing rules can be represented in software, not a claim about improved quoting time or accepted-job results.</p>
+            <div className="mt-6 grid gap-5 sm:grid-cols-2">
+              <figure className="overflow-hidden rounded-xl border border-[#303d51] bg-[#101722]">
+                <Image src="/assets/t3-phase3/takeoff-2.jpg" alt="Digital roofing plan takeoff showing classified hips, valleys, barges and their measured line lengths" width={1600} height={1200} sizes="(max-width:640px) 100vw, 420px" className="h-auto w-full object-contain" />
+                <figcaption className="p-5 text-sm leading-6 text-[#c0cad8]"><strong className="text-white">Measure.</strong> Classify plan edges and inspect the lengths before calculation or quoting.</figcaption>
+              </figure>
+              <figure className="overflow-hidden rounded-xl border border-[#303d51] bg-[#101722]">
+                <Image src="/assets/t3-phase3/quotecore-components.png" alt="QuoteCore+ components interface with area and lineal component types and reusable material labour and waste settings" width={1311} height={902} sizes="(max-width:640px) 100vw, 420px" className="h-auto w-full object-contain" />
+                <figcaption className="p-5 text-sm leading-6 text-[#c0cad8]"><strong className="text-white">Price.</strong> Reusable components connect measurements to material, labour and waste rules.</figcaption>
+              </figure>
+            </div>
+            <p className="mt-5 text-sm leading-7 text-[#aab4c6]">These illustrative interface screens may differ from the current live QuoteCore+ product. Review the live tool before relying on a specific capability.</p>
+          </section>
+
           {/* The deeper lesson */}
           <section className="mb-12">
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -180,7 +205,7 @@ export default function Page() {
               labour and quote calculations apply to fabrication pricing,
               supplier portals, manufacturing estimates, service quotes and other
               rule-heavy workflows. If your business has that shape, this case
-              study is about you - roofing is just where it was proven.
+              study demonstrates a roofing-specific foundation that can also inform other rule-heavy projects.
             </p>
           </section>
 
@@ -190,12 +215,10 @@ export default function Page() {
             className="mb-16 rounded-2xl border border-[#d7ff00]/25 bg-[#101722] p-8 text-center sm:p-12"
           >
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              Have a workflow off-the-shelf software can't handle?
+              Need a roofing workflow your current tools can't handle?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-[#aab4c6]">
-              Tell us the problem - your spreadsheet, screenshots, process notes
-              or a short video all work. We'll come back with a plain-English
-              view of whether it needs configuration, integration or a custom build.
+              Tell us where your measurements, pricing, quoting or follow-up is getting stuck. A spreadsheet, screenshots or short video of your current process are enough to start. We can help you compare the options before committing to a build.
             </p>
             <div className="mt-7">
               <ServiceIntakeCTA
@@ -213,10 +236,10 @@ export default function Page() {
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <Link
-                href="/custom-software"
+                href="/custom-roofing-software"
                 className="t3-interactive-card rounded-xl border border-[#303d51] bg-[#101722] p-5 text-base font-medium text-white"
               >
-                Custom Software Development <span aria-hidden="true">&rarr;</span>
+                Custom Roofing Software <span aria-hidden="true">&rarr;</span>
               </Link>
               <Link
                 href="/blog/custom-roofing-software"
@@ -228,6 +251,7 @@ export default function Page() {
           </section>
         </div>
       </main>
+      <div className="t3-rebuild"><MarketingFooter /></div>
     </>
   );
 }

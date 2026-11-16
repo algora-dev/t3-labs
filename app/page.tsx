@@ -8,7 +8,8 @@ export const metadata: Metadata = {
   description: "Better enquiries, faster quotes and more jobs won. Roofing and construction specialists building websites, SEO, smart assistants and quoting systems.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "T3Labs | Technology for Roofing & Construction",
+    images: [{ url: "/og-roofing.png", width: 1200, height: 630, alt: "T3 Labs – better roofing leads, faster quotes, less admin" }],
+    title: "T3Labs | Better Roofing Enquiries, Faster Quotes & More Jobs Won",
     description: "Get found, quote faster and win more work with practical tech built by people who know your industry.",
     url: "/",
   },

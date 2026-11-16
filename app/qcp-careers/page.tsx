@@ -15,6 +15,7 @@ const QC = {
 };
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "QuoteCore+ Sales Guide | T3 Labs",
   description:
     "T3 Labs sales guide for QuoteCore+: who to target, how to sell the Smart Assistant and simpler workflow, when to lead with Done-For-You, and how rep commissions work.",

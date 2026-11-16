@@ -1,0 +1,56 @@
+Path,Phase,Action,Potential destination,Reason,Before change
+/,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/solutions,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/roofing-website-design,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/roofing-seo,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/roofing-website-estimators,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/roofing-quoting-software,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/roofing-ai-website-assistants,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/roofing-business-automation,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/custom-roofing-software,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/case-studies/quotecore,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/free-review,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/contact,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/blog,1: updated or retained,Keep public and index-eligible,,"Primary roofing outcomes, evidence or conversion",
+/blog/custom-roofing-software,2: content depth,Keep and enhance,,Direct topical relevance; some are GSC not indexed,"Validate facts, demonstrations and Search Console queries"
+/blog/building-quotecore-roofing-trade-software,2: content depth,Keep and enhance,,Direct topical relevance; some are GSC not indexed,"Validate facts, demonstrations and Search Console queries"
+/blog/ai-roofing-estimation-what-ai-can-do,2: content depth,Keep and enhance,,Direct topical relevance; some are GSC not indexed,"Validate facts, demonstrations and Search Console queries"
+/blog/can-ai-write-my-quotes,2: content depth,Keep and enhance,,Direct topical relevance; some are GSC not indexed,"Validate facts, demonstrations and Search Console queries"
+/blog/branded-calculators-lead-generation-tools,2: content depth,Keep and enhance,,Direct topical relevance; some are GSC not indexed,"Validate facts, demonstrations and Search Console queries"
+/ai-help,3: retirement,Keep unchanged NOW; candidate for later 301 to genuinely matching replacement or 410,,Generic AI positioning dilutes roof-first journey,"Check GSC indexed list, impressions, conversions, referring links and existing referrals"
+/ai-consultancy,3: retirement,Keep unchanged NOW; candidate for later 301 to genuinely matching replacement or 410,,Generic AI positioning dilutes roof-first journey,"Check GSC indexed list, impressions, conversions, referring links and existing referrals"
+/ai-automation,3: retirement,Keep unchanged NOW; candidate for later 301 to genuinely matching replacement or 410,,Generic AI positioning dilutes roof-first journey,"Check GSC indexed list, impressions, conversions, referring links and existing referrals"
+/ai-implementation,3: retirement,Keep unchanged NOW; candidate for later 301 to genuinely matching replacement or 410,,Generic AI positioning dilutes roof-first journey,"Check GSC indexed list, impressions, conversions, referring links and existing referrals"
+/ai-training,3: retirement,Keep unchanged NOW; candidate for later 301 to genuinely matching replacement or 410,,Generic AI positioning dilutes roof-first journey,"Check GSC indexed list, impressions, conversions, referring links and existing referrals"
+/custom-software,3: retirement,Keep unchanged NOW; later 301 after content consolidation,/custom-roofing-software,Duplicate/general custom software positioning,Verify business/traffic audience and replacement material
+/our-solution,3: retirement,Keep unchanged NOW; later 301 after demo and content transfer,/solutions,Overlapping public sales journeys,"Verify all videos, modules and referred variants retain working links"
+/roofing-business-tools,3: retirement,Keep unchanged NOW; later 301 after demo and content transfer,/solutions,Overlapping public sales journeys,"Verify all videos, modules and referred variants retain working links"
+/roofing-solutions,3: retirement,Keep unchanged NOW; later 301 after demo and content transfer,/solutions,Overlapping public sales journeys,"Verify all videos, modules and referred variants retain working links"
+/pricing-calculator,3: visibility,"Keep unchanged NOW; later noindex if still direct-link tool, otherwise retire",,Campaign/product pricing tool does not match core search landing goals,"Confirm sales usage, backlinks and whether root route must stay"
+/business-audit,3: visibility,Keep unchanged NOW; later noindex or isolate,,Standalone audit app with independent lead flow,Owner confirms product remains live
+/our-solution/referred,3: visibility,"Keep functioning, noindex where appropriate; secure private content",,"Link-specific, referral and personalised sales routes",Verify full repo and access controls; prevent sensitive URL leaks; never rely on noindex for privacy
+/roofing-business-tools/referred,3: visibility,"Keep functioning, noindex where appropriate; secure private content",,"Link-specific, referral and personalised sales routes",Verify full repo and access controls; prevent sensitive URL leaks; never rely on noindex for privacy
+/roofing-solutions/referred,3: visibility,"Keep functioning, noindex where appropriate; secure private content",,"Link-specific, referral and personalised sales routes",Verify full repo and access controls; prevent sensitive URL leaks; never rely on noindex for privacy
+/pricing-calculator/referred,3: visibility,"Keep functioning, noindex where appropriate; secure private content",,"Link-specific, referral and personalised sales routes",Verify full repo and access controls; prevent sensitive URL leaks; never rely on noindex for privacy
+/hello/[slug],3: visibility,"Keep functioning, noindex where appropriate; secure private content",,"Link-specific, referral and personalised sales routes",Verify full repo and access controls; prevent sensitive URL leaks; never rely on noindex for privacy
+/custom-proposal,3: visibility,"Keep functioning, noindex where appropriate; secure private content",,"Link-specific, referral and personalised sales routes",Verify full repo and access controls; prevent sensitive URL leaks; never rely on noindex for privacy
+/proposal/*,3: visibility,"Keep functioning, noindex where appropriate; secure private content",,"Link-specific, referral and personalised sales routes",Verify full repo and access controls; prevent sensitive URL leaks; never rely on noindex for privacy
+/sales-hub,3: visibility,Preserve route; decide index/noindex by actual use,,"Internal, recruiting, campaign or transactional pages","Confirm live links, indexing rules and conversion function"
+/sales-resources,3: visibility,Preserve route; decide index/noindex by actual use,,"Internal, recruiting, campaign or transactional pages","Confirm live links, indexing rules and conversion function"
+/qcp-careers,3: visibility,Preserve route; decide index/noindex by actual use,,"Internal, recruiting, campaign or transactional pages","Confirm live links, indexing rules and conversion function"
+/careers,3: visibility,Preserve route; decide index/noindex by actual use,,"Internal, recruiting, campaign or transactional pages","Confirm live links, indexing rules and conversion function"
+/10-day-business-upgrade,3: visibility,Preserve route; decide index/noindex by actual use,,"Internal, recruiting, campaign or transactional pages","Confirm live links, indexing rules and conversion function"
+/business-audit/success,3: visibility,Preserve route; decide index/noindex by actual use,,"Internal, recruiting, campaign or transactional pages","Confirm live links, indexing rules and conversion function"
+/privacy,3: maintenance,Keep accessible and legally accurate; no automatic deletion,,Required legal and policy references,Review legal requirements; do not redirect unrelated policies
+/terms,3: maintenance,Keep accessible and legally accurate; no automatic deletion,,Required legal and policy references,Review legal requirements; do not redirect unrelated policies
+/cookies,3: maintenance,Keep accessible and legally accurate; no automatic deletion,,Required legal and policy references,Review legal requirements; do not redirect unrelated policies
+/service-terms,3: maintenance,Keep accessible and legally accurate; no automatic deletion,,Required legal and policy references,Review legal requirements; do not redirect unrelated policies
+/website-package-terms,3: maintenance,Keep accessible and legally accurate; no automatic deletion,,Required legal and policy references,Review legal requirements; do not redirect unrelated policies
+/blog/ai-consultancy-cost-uk,3: blog consolidation,"Keep live NOW; later rewrite for roof use case, merge, or retire",,Generic content in older archive,"Search queries, clicks, links, topic relevance and original evidence"
+/blog/ai-consultancy-training-automation-or-build,3: blog consolidation,"Keep live NOW; later rewrite for roof use case, merge, or retire",,Generic content in older archive,"Search queries, clicks, links, topic relevance and original evidence"
+/blog/chatgpt-says-this-can-be-automated,3: blog consolidation,"Keep live NOW; later rewrite for roof use case, merge, or retire",,Generic content in older archive,"Search queries, clicks, links, topic relevance and original evidence"
+/blog/what-can-ai-actually-do-for-a-small-business,3: blog consolidation,"Keep live NOW; later rewrite for roof use case, merge, or retire",,Generic content in older archive,"Search queries, clicks, links, topic relevance and original evidence"
+/blog/i-have-an-ai-idea-but-cant-code,3: blog consolidation,"Keep live NOW; later rewrite for roof use case, merge, or retire",,Generic content in older archive,"Search queries, clicks, links, topic relevance and original evidence"
+/blog/does-ai-make-software-development-cheaper,3: blog consolidation,"Keep live NOW; later rewrite for roof use case, merge, or retire",,Generic content in older archive,"Search queries, clicks, links, topic relevance and original evidence"
+/blog/human-in-the-loop-ai-when-should-a-person-check,3: blog consolidation,"Keep live NOW; later rewrite for roof use case, merge, or retire",,Generic content in older archive,"Search queries, clicks, links, topic relevance and original evidence"
+/blog/custom-software-development-cost-uk,3: blog consolidation,"Keep live NOW; later rewrite for roof use case, merge, or retire",,Generic content in older archive,"Search queries, clicks, links, topic relevance and original evidence"

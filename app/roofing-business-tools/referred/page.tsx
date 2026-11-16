@@ -382,7 +382,7 @@ export function RoofingBusinessToolsPage({ variant = "referred" }: { variant?: P
 
       <header className="rb-header">
         <div className="rb-shell rb-header-inner">
-          <a href="/roofing-solutions" className="rb-brand" aria-label="T3 Labs roofing solutions">
+          <a href="/roofing-solutions/referred" className="rb-brand" aria-label="T3 Labs roofing solutions">
             <span><img src="/assets/t3-logo-white.png" alt="T3 Labs" /></span>
             <b>T3 Labs</b>
           </a>

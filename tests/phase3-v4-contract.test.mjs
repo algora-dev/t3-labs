@@ -30,9 +30,11 @@ test('each has an answer, decision, DIY action, actual example, limitation and g
  }
 });
 test('SEO metadata and T3Labs route target correspond',()=>{
+ const seoLib=fs.readFileSync(path.join(root,'lib/roofing-service-seo.ts'),'utf8');
+ assert.ok(seoLib.includes('https://www.t3labs.tech'),'canonical origin lib');
  for(const [slug,p] of Object.entries(pages)){
   const source=fs.readFileSync(path.join(root,`app/${slug}/page.tsx`),'utf8');
-  assert.ok(source.includes(`https://www.t3labs.tech/${slug}`));
+  assert.ok(source.includes(`roofingServiceMetadata("${slug}")`),slug);
   assert.ok(source.includes('ProblemLanding'));
   assert.ok(!p.answer.includes('—'),slug);
  }

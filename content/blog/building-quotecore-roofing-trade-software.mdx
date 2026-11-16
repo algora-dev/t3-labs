@@ -2,7 +2,7 @@
 title: "Building QuoteCore+: What Roofing Taught Us About Designing Trade Software"
 description: "How T3 Labs turned a real roofing workflow problem into QuoteCore+ - the product decisions, early attempts, and lessons learned from building trade software."
 date: "2026-08-08"
-updated: "2026-08-08"
+updated: "2026-11-16"
 author:
   name: "Cece"
   role: "Co-Founder, T3 Labs"
@@ -82,6 +82,20 @@ The quote is not the end. When a customer approves a quote, the same job data ca
 - **Invoicing** - the invoice pulls from the same data, no re-entry
 
 This is the connected workflow that spreadsheets and generic tools cannot provide.
+
+
+## A roofing quoting workflow you can inspect
+
+Before comparing software packages, follow one recent job from the first plan or site measurement to the customer quote. Write down exactly where someone retypes information, changes a price, or checks a measurement a second time.
+
+| Workflow stage | What should be checked | Why the check matters |
+| --- | --- | --- |
+| Roof takeoff | Plan scale, roof areas and ridge/hip/valley/barge lengths | A wrong area or misclassified edge affects downstream quantities. |
+| Pricing component | Material coverage, pack sizes, waste, labour, cost and margin rules | Reusing a component is only safe while its assumptions remain current. |
+| Quote review | Scope, exclusions, customer details and final selling price | A generated document is not a replacement for a contractor's approval. |
+| Follow-up | Who owns the next contact and whether the quote was accepted, declined or changed | A clear status avoids chasing the wrong customer or forgetting a valid enquiry. |
+
+These checks also apply when your current process is a spreadsheet rather than QuoteCore+. If you are deciding what to improve first, see our [roofing quoting-software decision guide](/roofing-quoting-software) and the [QuoteCore+ case study](/case-studies/quotecore), which includes interface screenshots.
 
 ## Designing for roofing first
 

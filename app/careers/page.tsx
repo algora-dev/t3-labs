@@ -1,10 +1,11 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import IntakeModalMount from "@/components/intake/intake-modal-mount";
 
 const BASE_URL = "https://www.t3labs.tech";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Commission-Only Sales Roles - Find Business Problems, Earn When We Solve Them | T3 Labs",
   description:
     "Commission-based sales opportunity with T3 Labs. Find businesses stuck with slow, manual, outdated or disconnected ways of working - we scope, pitch and build the solution. Also sell QuoteCore+ subscriptions for recurring commission.",

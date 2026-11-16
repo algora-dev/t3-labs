@@ -1,6 +1,7 @@
 import path from "node:path";
 import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
+import { NOINDEX_HEADER_ROUTES, RETIRED_PERMANENT_REDIRECTS } from "./config/seo-url-policy";
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -23,8 +24,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async headers() {
+    return NOINDEX_HEADER_ROUTES.map((source) => ({
+      source,
+      headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }],
+    }));
+  },
   async redirects() {
     return [
+      // Roofing-first URL consolidation. Intentionally exact-path only:
+      // do NOT catch /our-solution/referred or other direct-link experiences.
+      ...RETIRED_PERMANENT_REDIRECTS,
       // Handoff-era alias for the 10-day upgrade page; canonical path is /10-day-business-upgrade.
       {
         source: "/roofing-business-upgrade",

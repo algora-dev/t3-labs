@@ -65,3 +65,40 @@
 /* Breadcrumbs connect every specialist landing page to the new central hub. */
 .t3-rebuild .rwd-v5-breadcrumb{display:flex;align-items:center;gap:11px;flex-wrap:wrap;color:#c4c9d3;font-size:.75rem;margin:-14px 0 33px}
 .t3-rebuild .rwd-v5-breadcrumb a{color:#f0f1f5;text-decoration:underline;text-underline-offset:3px}
+
+/* Outcome-oriented evidence and self-checks, consistent with V18 typography and lime accents. */
+.t3-rebuild .rwd-v5-proof{font-size:.81rem!important;color:#506218!important;border-left:3px solid #b6cb66;padding:6px 0 6px 13px;margin-top:0!important}
+.t3-rebuild .rwd-v5-try{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 25px;margin-top:24px;background:#f6f9e9;border:1px solid #dce8ba;border-radius:8px}
+.t3-rebuild .rwd-v5-try .rwd-eyebrow{font-size:.7rem;margin-bottom:8px}
+.t3-rebuild .rwd-v5-try p{margin:0;max-width:760px;color:#394354;line-height:1.6;font-size:.93rem}
+.t3-rebuild .rwd-v5-try a{flex:0 0 auto;color:#394e00;text-decoration:underline;text-underline-offset:3px;font-weight:800;font-size:.88rem}
+.t3-rebuild .rwd-v5-example{background:#111318;color:#fff;padding:64px 0}
+.t3-rebuild .rwd-v5-example h2{color:#fff;max-width:830px;font-size:clamp(2rem,3vw,3.1rem)}
+.t3-rebuild .rwd-v5-example-intro{color:#c4ccd7;margin:14px 0 0;line-height:1.65}
+.t3-rebuild .rwd-v5-example-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-top:28px}
+.t3-rebuild .rwd-v5-example-grid>div{background:#1c2431;border:1px solid #38465a;border-radius:8px;padding:24px;min-width:0}
+.t3-rebuild .rwd-v5-example-grid span{display:block;font-size:.69rem;color:#d7ff00;font-weight:800;letter-spacing:.11em}
+.t3-rebuild .rwd-v5-example-grid p{color:#ecf0f5;margin:15px 0 0;line-height:1.65;font-size:.94rem}
+@media(max-width:720px){.t3-rebuild .rwd-v5-try{align-items:flex-start;flex-direction:column;padding:20px}.t3-rebuild .rwd-v5-example{padding:48px 0}.t3-rebuild .rwd-v5-example-grid{grid-template-columns:1fr;gap:12px}.t3-rebuild .rwd-v5-example-grid>div{padding:19px}}
+
+/* Phase 2: distinctive practical content, using the existing V18 ink/lime language. */
+.t3-rebuild .rwd-v5-guide{padding:70px 0;background:#f6f8fc;color:#111318}
+.t3-rebuild .rwd-v5-guide h2{font-size:clamp(1.95rem,3vw,3.05rem);line-height:1.16;max-width:850px;color:#0a0b10;margin:12px 0}
+.t3-rebuild .rwd-v5-guide-intro{font-size:1rem;line-height:1.78;max-width:780px;color:#4b5669;margin:0 0 28px}
+.t3-rebuild .rwd-v5-guide-columns{display:grid;grid-template-columns:1fr 1.25fr;gap:18px}
+.t3-rebuild .rwd-v5-guide-checklist,.t3-rebuild .rwd-v5-guide-steps{border:1px solid #e1e5ed;border-radius:9px;background:#fff;padding:26px;min-width:0}
+.t3-rebuild .rwd-v5-guide h3{font-size:1.2rem;color:#0a0b10;margin:0 0 18px;line-height:1.35}
+.t3-rebuild .rwd-v5-guide-checklist ul{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.t3-rebuild .rwd-v5-guide-checklist li{position:relative;padding:0 0 0 23px;color:#4b5669;line-height:1.65;font-size:.91rem}
+.t3-rebuild .rwd-v5-guide-checklist li:before{content:'✓';position:absolute;top:0;left:0;color:#677c00;font-weight:800}
+.t3-rebuild .rwd-v5-guide-steps ol{list-style:none;display:grid;gap:18px;margin:0;padding:0}
+.t3-rebuild .rwd-v5-guide-steps li{display:grid;grid-template-columns:33px minmax(0,1fr);gap:11px}
+.t3-rebuild .rwd-v5-guide-steps li>span{font-size:.77rem;color:#697b09;font-weight:800;padding-top:2px}
+.t3-rebuild .rwd-v5-guide-steps strong{color:#121722;font-size:.96rem}
+.t3-rebuild .rwd-v5-guide-steps p{color:#4b5669;font-size:.9rem;line-height:1.65;margin:6px 0 0}
+.t3-rebuild .rwd-v5-guide-bottom{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.t3-rebuild .rwd-v5-guide-bottom>div{border-left:3px solid #a5c600;padding:13px 18px;background:#fff;border-radius:0 8px 8px 0}
+.t3-rebuild .rwd-v5-guide-bottom strong{font-size:.82rem;color:#0a0b10}
+.t3-rebuild .rwd-v5-guide-bottom p{font-size:.87rem;line-height:1.65;color:#4b5669;margin:6px 0 0}
+.t3-rebuild .rwd-v5-guide-reading{display:inline-block;margin-top:20px;color:#445f00!important;font-size:.91rem;font-weight:700;text-underline-offset:3px}
+@media(max-width:760px){.t3-rebuild .rwd-v5-guide{padding:52px 0}.t3-rebuild .rwd-v5-guide-columns,.t3-rebuild .rwd-v5-guide-bottom{grid-template-columns:1fr}.t3-rebuild .rwd-v5-guide-checklist,.t3-rebuild .rwd-v5-guide-steps{padding:21px}}

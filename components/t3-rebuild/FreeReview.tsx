@@ -3,6 +3,7 @@
 import { FormEvent, useRef, useState } from "react";
 import Link from "next/link";
 import { BOOK_CALL_URL, REVIEW_TOPICS } from "./review-topics";
+import { trackMarketingEvent } from "@/lib/marketing-analytics";
 
 type FormState = "idle" | "sending" | "sent";
 
@@ -52,6 +53,7 @@ export function FreeReview({ initialTopics, packageInterest }: {
         const data = await result.json().catch(() => null);
         throw new Error(data?.error || "We couldn't send that. Please try again.");
       }
+      trackMarketingEvent("review_form_submit_success", "free-review");
       setStatus("sent");
       document.getElementById("r15-main-card")?.scrollIntoView({ block: "start", behavior: "smooth" });
     } catch (err) {
@@ -68,8 +70,8 @@ export function FreeReview({ initialTopics, packageInterest }: {
           <div className="r15-hero-grid">
             <div className="r15-hero-copy">
               <div className="r15-eyebrow"><span className="r15-spark" />FREE BUSINESS REVIEW</div>
-              <h1>Tell us what you <span>want to improve.</span></h1>
-              <p>A few details is all we need to get started.</p>
+              <h1>Tell us where roofing work <span>slows you down.</span></h1>
+              <p>Tell us about the enquiries, quoting or admin you want to improve. We will suggest a practical next step, whether that means adjusting what you already use or building something new.</p>
             </div>
           </div>
         </div>
@@ -82,7 +84,7 @@ export function FreeReview({ initialTopics, packageInterest }: {
               <span className="r15-route-text"><strong>Send a quick enquiry</strong><small>A personal reply within 48 hours.</small></span>
               <span className="r17-route-arrow" aria-hidden="true">↓</span>
             </a>
-            <a className="r15-route" id="r15-route-call" href={BOOK_CALL_URL} target="_blank" rel="noopener noreferrer">
+            <a className="r15-route" id="r15-route-call" href={BOOK_CALL_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackMarketingEvent("book_call_click", "free-review")}>
               <span className="r15-route-icon" aria-hidden="true">▦</span>
               <span className="r15-route-text"><strong>Book a 20-minute call</strong><small>Speak directly with our team.</small></span>
               <span className="r17-route-arrow" aria-hidden="true">↗</span>
@@ -95,7 +97,7 @@ export function FreeReview({ initialTopics, packageInterest }: {
                 <h2>Thanks. We&apos;ve got it.</h2>
                 <p>Our team will reply within 48 hours.</p>
                 <div className="r17-result-actions">
-                  <a href={BOOK_CALL_URL} target="_blank" rel="noopener noreferrer" className="r15-submit">Book a call too <span aria-hidden="true">↗</span></a>
+                  <a href={BOOK_CALL_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackMarketingEvent("book_call_click", "free-review")} className="r15-submit">Book a call too <span aria-hidden="true">↗</span></a>
                   <Link href="/" className="r17-secondary-link">Back to homepage</Link>
                 </div>
               </div>

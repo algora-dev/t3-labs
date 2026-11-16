@@ -2,8 +2,8 @@
   "roofing-website-design": {
     "key": "website",
     "eyebrow": "ROOFING WEBSITE DESIGN",
-    "metaTitle": "Roofing Website Not Getting Enquiries? Fix or Rebuild | T3Labs",
-    "metaDescription": "A roofing website should attract the right jobs. Learn what to fix before rebuilding, see a real example and explore roofing website design from US$299, subject to scope.",
+    "metaTitle": "Roofing Website Design for Better Enquiries | T3 Labs",
+    "metaDescription": "Roofing website design for contractors: make services, coverage areas, project proof and enquiry steps clearer. See an example and what to fix before rebuilding.",
     "h1": [
       "Roofing website not getting",
       "good enquiries?"
@@ -90,13 +90,18 @@
       "roofing-seo",
       "roofing-website-estimators"
     ],
-    "faqTitle": "Roofing website questions"
+    "faqTitle": "Roofing website questions",
+    "example": {
+      "scenario": "A homeowner opens your site on a phone, looking for a roof repair in their area.",
+      "improvement": "Put the relevant service, service area, real project evidence and a short enquiry route on a page they can understand immediately.",
+      "signal": "Measure relevant enquiry form starts and completed enquiries, not simply page views."
+    }
   },
   "roofing-seo": {
     "key": "seo",
     "eyebrow": "ROOFING SEO & LEAD QUALITY",
-    "metaTitle": "How to Get Better Roofing Leads, Not Just More | T3Labs",
-    "metaDescription": "Getting poor roofing enquiries or buying bad leads? Diagnose visibility, lead targeting and enquiry friction. Find the right roofing SEO and lead-quality fixes.",
+    "metaTitle": "Roofing SEO Services for Better Qualified Leads | T3 Labs",
+    "metaDescription": "Roofing SEO for contractors who want suitable local jobs, not just more clicks. Diagnose service targeting, search visibility and visitor-to-enquiry conversion.",
     "h1": [
       "Get better roofing leads,",
       "not just more leads."
@@ -183,13 +188,18 @@
       "roofing-website-design",
       "roofing-ai-website-assistants"
     ],
-    "faqTitle": "Lead quality questions"
+    "faqTitle": "Lead quality questions",
+    "example": {
+      "scenario": "Your website attracts enquiries for cheap repairs, but you want more qualified replacement or commercial jobs.",
+      "improvement": "Make target services, eligibility and genuine service areas explicit. Connect those searches to a page that explains fit and the next step.",
+      "signal": "Track relevant search enquiries by job type and service area, not only clicks or impressions."
+    }
   },
   "roofing-website-estimators": {
     "key": "estimator",
     "eyebrow": "WEBSITE PRICE ESTIMATORS",
-    "metaTitle": "Roofing Price Estimator for Websites Without Fixed Rates | T3Labs",
-    "metaDescription": "Give homeowners indicative roof pricing without publishing a binding price list. See a real visual roofing estimator and how it passes answers into an enquiry.",
+    "metaTitle": "Website Price Estimators for Roofing Contractors | T3 Labs",
+    "metaDescription": "Give homeowners indicative roof price guidance and collect more useful job details. Explore a roofing website estimator and learn how to qualify enquiries without fixed quotes.",
     "h1": [
       "Give a ballpark roof price",
       "without publishing your rates."
@@ -276,13 +286,18 @@
       "roofing-ai-website-assistants",
       "roofing-quoting-software"
     ],
-    "faqTitle": "Estimator questions"
+    "faqTitle": "Estimator questions",
+    "example": {
+      "scenario": "A homeowner wants a ballpark roof price before talking to a contractor.",
+      "improvement": "Offer a short visual questionnaire using your own pricing boundaries, clearly label the range as indicative, and pass answers into a prefilled enquiry.",
+      "signal": "Review how many estimates become enquiries with enough project detail to respond usefully."
+    }
   },
   "roofing-quoting-software": {
     "key": "quoting",
     "eyebrow": "QUOTING & ESTIMATING SOFTWARE",
-    "metaTitle": "Custom Roofing Quoting Software Without a Full CRM | T3Labs",
-    "metaDescription": "Speed up roofing takeoffs, pricing, estimates, proposals and follow-ups with ready-made tools or a smaller custom quoting system matched to your workflow.",
+    "metaTitle": "Roofing Quoting Software and Estimating Tools | T3 Labs",
+    "metaDescription": "See how roofing contractors can handle measurements, materials, pricing rules, review and follow-up with QuoteCore+ or a smaller quoting workflow.",
     "h1": [
       "Quote roofing jobs faster",
       "with tools that fit."
@@ -369,13 +384,18 @@
       "roofing-business-automation",
       "roofing-website-estimators"
     ],
-    "faqTitle": "Quoting software questions"
+    "faqTitle": "Quoting software questions",
+    "example": {
+      "scenario": "Your team measures a roof, copies numbers into a spreadsheet, rewrites a quote, then manually follows up.",
+      "improvement": "Connect measurements, prices and reusable components to the quote documents. Set a clear owner and reminder for follow-up.",
+      "signal": "Record time from usable measurement to sent quote, then track whether the customer receives timely follow-up."
+    }
   },
   "roofing-ai-website-assistants": {
     "key": "assistant",
     "eyebrow": "ROOFING WEBSITE SMART ASSISTANTS",
-    "metaTitle": "AI Website Assistant for Roofing Companies | T3Labs",
-    "metaDescription": "Help roofing visitors get approved answers on services, materials, areas and pricing 24/7. See how a website assistant hands uncertain questions to your team.",
+    "metaTitle": "AI Website Assistants for Roofing Businesses | T3 Labs",
+    "metaDescription": "Answer approved roofing customer questions, gather useful details and hand over complex enquiries. See how to design a reliable roofing website assistant.",
     "h1": [
       "Answer roofing questions",
       "while you are on the job."
@@ -462,13 +482,18 @@
       "roofing-website-estimators",
       "roofing-seo"
     ],
-    "faqTitle": "Website assistant questions"
+    "faqTitle": "Website assistant questions",
+    "example": {
+      "scenario": "A visitor wants to know if a particular product or service is suitable after office hours.",
+      "improvement": "Provide clear answers grounded in approved business information and hand off uncertainty or project-specific advice to a person.",
+      "signal": "Count enquiries with relevant context passed to the team; also review incorrect or unanswerable queries."
+    }
   },
   "roofing-business-automation": {
     "key": "automation",
     "eyebrow": "ROOFING BUSINESS AUTOMATION",
-    "metaTitle": "Roofing Admin Automation Without Replacing Your Systems | T3Labs",
-    "metaDescription": "Stop retyping roofing job details and chasing the same tasks. Learn where to start with quote follow-ups, integrations and small custom workflows.",
+    "metaTitle": "Roofing Business Automation and Quote Follow-Up | T3 Labs",
+    "metaDescription": "Reduce repeated admin in your roofing business. See practical ways to connect enquiries, quotes, status updates and human-approved follow-ups.",
     "h1": [
       "Stop copying roofing job details",
       "between systems."
@@ -555,6 +580,11 @@
       "roofing-quoting-software",
       "roofing-seo"
     ],
-    "faqTitle": "Automation questions"
+    "faqTitle": "Automation questions",
+    "example": {
+      "scenario": "A quote is sent, but the next follow-up relies on someone remembering to chase it.",
+      "improvement": "Connect quote status to an agreed reminder or follow-up step, while keeping exceptions and customer preferences under human control.",
+      "signal": "Track quotes awaiting a response, follow-ups completed and time spent manually updating systems."
+    }
   }
 }

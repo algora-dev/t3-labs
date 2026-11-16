@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getPostBySlug, getAllPosts } from "@/lib/blog";
+import { FEATURED_ROOFING_GUIDES } from "@/lib/roofing-content";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 import remarkGfm from "remark-gfm";
 import IntakeModalMount from "@/components/intake/intake-modal-mount";
 import ContextualIntakeCTA from "@/components/contextual-intake-cta";
+import { Header } from "@/components/t3-rebuild/Header";
+import { MarketingFooter } from "@/components/t3-rebuild/MarketingFooter";
+import "../../t3-rebuild.css";
+import "@/components/t3-rebuild/solutions-pages.css";
 
 const BASE_URL = "https://www.t3labs.tech";
 
@@ -27,6 +32,9 @@ export async function generateMetadata({
   return {
     title: post.seoTitle ?? post.title,
     description: post.description,
+    // Keep earlier generic AI/software articles accessible by direct link,
+    // but reserve search indexing for the five roofing-focused guides.
+    robots: { index: (FEATURED_ROOFING_GUIDES as readonly string[]).includes(slug), follow: true },
     alternates: { canonical: `${BASE_URL}/blog/${post.slug}` },
     openGraph: {
       title: post.seoTitle ?? post.title,
@@ -112,7 +120,11 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound();
 
   const allPosts = getAllPosts();
-  const otherPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 2);
+  const relatedRoofingSlugs = ["custom-roofing-software", "building-quotecore-roofing-trade-software", "ai-roofing-estimation-what-ai-can-do", "can-ai-write-my-quotes", "branded-calculators-lead-generation-tools"];
+  const otherPosts = allPosts
+    .filter((p) => p.slug !== post.slug)
+    .sort((a, b) => Number(relatedRoofingSlugs.includes(b.slug)) - Number(relatedRoofingSlugs.includes(a.slug)))
+    .slice(0, 2);
 
   const blogPostingSchema = {
     "@context": "https://schema.org",
@@ -158,26 +170,11 @@ export default async function BlogPostPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
+      <div className="t3-rebuild"><Header /></div>
       <main className="min-h-screen bg-[#0a0b10] text-white">
         {/* Site-wide intake modal mount - lets article CTAs + #intake deep links open it */}
         <IntakeModalMount />
-        {/* Header */}
-        <header className="border-b border-[#303d51]">
-          <nav className="mx-auto flex w-[min(var(--t3-shell),calc(100%-40px))] items-center justify-between py-5">
-            <Link href="/" className="text-lg font-bold tracking-tight">
-              T3 Labs
-            </Link>
-            <div className="flex items-center gap-6 text-sm text-[#aab4c6]">
-              <Link href="/" className="hover:text-white">
-                Home
-              </Link>
-              <Link href="/blog" className="text-[#d7ff00]">
-                Blog
-              </Link>
-            </div>
-          </nav>
-        </header>
-
+        {/* Consistent site navigation is outside the dark article shell. */}
         {/* Article */}
         <article className="mx-auto w-[min(896px,calc(100%-40px))] py-16">
           {/* Breadcrumb */}
@@ -266,13 +263,18 @@ export default async function BlogPostPage({ params }: PageProps) {
           </section>
         )}
 
-        {/* Footer */}
-        <footer className="border-t border-[#303d51]">
-          <div className="mx-auto w-[min(var(--t3-shell),calc(100%-40px))] py-8 text-sm text-[#aab4c6]">
-            <p>T3 Labs - Product Studio</p>
+        <section className="mx-auto w-[min(896px,calc(100%-40px))] pb-20" aria-label="Explore roofing solutions">
+          <div className="rounded-xl border border-[#3c4b5b] bg-[#172131] p-7 sm:p-9">
+            <h2 className="text-xl font-semibold">Want to apply this to your roofing business?</h2>
+            <p className="mt-3 text-base leading-8 text-[#c6cfdc]">See our roofing-specific options for getting better enquiries, quoting faster and reducing admin, or tell us where your current process is stuck.</p>
+            <div className="mt-6 flex flex-wrap gap-5 text-sm font-semibold">
+              <Link href="/solutions" className="text-[#d7ff00] underline underline-offset-4">Explore roofing solutions ↗</Link>
+              <Link href="/free-review" className="text-white underline underline-offset-4">Get a free business review ↗</Link>
+            </div>
           </div>
-        </footer>
+        </section>
       </main>
+      <div className="t3-rebuild"><MarketingFooter /></div>
     </>
   );
 }

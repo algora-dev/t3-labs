@@ -62,13 +62,18 @@ test("contact uses established working enquiry and booking paths", () => {
 
 test("sitemap includes new routes and avoids inherited homepage canonical", () => {
   const sitemap = read("app/sitemap.ts");
+  const seoLib = read("lib/roofing-service-seo.ts");
   const layout = read("app/layout.tsx");
   const hub = read("app/solutions/page.tsx");
   const custom = read("app/custom-roofing-software/page.tsx");
   const contact = read("app/contact/page.tsx");
-  for (const slug of ["solutions", "custom-roofing-software", "contact", "roofing-business-tools"]) {
-    assert.ok(sitemap.includes('`${BASE_URL}/' + slug + '`'), slug);
+  // Final URL policy (2026-11-16): curated primaryPaths sitemap with CANONICAL_ORIGIN from the SEO lib.
+  assert.ok(seoLib.includes("https://www.t3labs.tech"), "canonical origin lib");
+  for (const slug of ["solutions", "custom-roofing-software", "contact"]) {
+    assert.ok(sitemap.includes('"' + slug + '"'), slug);
   }
+  // Retired routes must not be listed: roofing-business-tools is now a permanent 308 to /solutions.
+  assert.ok(!sitemap.includes('"roofing-business-tools"'), "retired slug must not be in sitemap");
   assert.ok(!/alternates:\s*\{\s*canonical:\s*BASE_URL/.test(layout));
   for (const page of [hub, custom, contact]) assert.match(page, /alternates:\s*\{\s*canonical:/);
 });

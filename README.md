@@ -1,3 +1,5 @@
+> **FINAL RELEASE:** This is historical/background documentation. For approved live/retired/noindex URL decisions and agent instructions, see [`FINAL-SEO-RELEASE.md`](FINAL-SEO-RELEASE.md).
+
 # T3 Labs Apex Roofing Demo (lean handoff package)
 
 Source: t3-labs repo, main tip, commit 8e921255d92da45d880cd205dee1603d1ba7eec5 (packaged 2026-10-11). This is the Apex Roofing demo exactly as integrated, including the T3 Demo Helper and guided tasks. This zip is the handoff base for the next round of external changes. The commit SHA above is the 3-way merge base for the return handoff.
