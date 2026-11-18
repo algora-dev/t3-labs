@@ -756,6 +756,7 @@ export default function Page() {
     return (
       <>
         <div className="app-shell">
+          <div className="back-home-row"><Link className="back-home" href="/">← T3 Labs home</Link></div>
           <div className="container hero-grid">
             <div>
               <div className="eyebrow">Business Audit</div>
@@ -1213,6 +1214,9 @@ function Styles() {
 
       .app-shell { min-height: 100vh; background: radial-gradient(circle at 76% 6%, rgba(16, 23, 34, 0.05), transparent 24rem), radial-gradient(circle at 14% 36%, rgba(48, 61, 81, 0.06), transparent 20rem), #f5f6f8; }
 
+      .back-home-row { max-width: 1160px; margin: 0 auto; padding: 24px 20px 0; }
+      .back-home { font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+      .back-home:hover { color: var(--ink); }
       .container {
         width: 100%; max-width: 1160px; margin: 0 auto; padding: 32px 20px;
       }

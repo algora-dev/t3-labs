@@ -36,6 +36,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .hero{padding:56px 0 62px}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.16fr) minmax(320px,.84fr);align-items:center;gap:52px}
 .eyebrow{font-size:11px;letter-spacing:.17em;font-weight:860;color:var(--limeInk);text-transform:uppercase}
+.site-back{padding-top:20px}.site-back-link{display:inline-block;font-size:13px;font-weight:600;color:var(--ink);opacity:.7;text-decoration:none;transition:opacity .15s ease}.site-back-link:hover{opacity:1}
 .hero h1{font-size:clamp(43px,5.3vw,70px);font-weight:840;line-height:1.055;letter-spacing:-.065em;margin:15px 0 18px;max-width:740px}
 .hero h1 mark{color:var(--ink);background:linear-gradient(transparent 66%,rgba(215,255,0,.64) 66%);padding:0 3px 0 0}
 .hero-sub{font-size:19px;line-height:1.55;color:#4c5260;max-width:630px;margin:0 0 25px;font-weight:470}
@@ -539,6 +540,7 @@ body{background:radial-gradient(circle at 10% 3%,rgba(215,255,0,.08),transparent
 <body>
 
 <main id="top">
+<nav class="site-back" aria-label="Back to T3 Labs"><div class="container"><a class="site-back-link" href="/">← T3 Labs home</a></div></nav>
 <section class="hero">
 <div class="container hero-grid hero-focus">
 <div>

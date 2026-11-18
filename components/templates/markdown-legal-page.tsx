@@ -184,7 +184,7 @@ export function MarkdownLegalPage({ fileName }: { fileName: string }) {
   return (
     <main className="min-h-screen bg-[#fbfcff] px-5 py-8 text-[#0a0b10]">
       <div className="mx-auto grid w-full max-w-4xl gap-6">
-        <Link href="/" className="text-xs font-semibold uppercase tracking-[0.16em] text-[#515763]">T3 Labs</Link>
+        <Link href="/" className="text-xs font-semibold uppercase tracking-[0.16em] text-[#515763] hover:text-[#0a0b10]">← Back to homepage</Link>
         <article className="grid gap-4 rounded-xl border border-[#e7e9ef] bg-white p-6 text-sm leading-7 text-[#424657] shadow-[0_10px_32px_rgba(24,31,51,0.05)] sm:p-8">
           {renderedContent[0]}
           {tocNav}
