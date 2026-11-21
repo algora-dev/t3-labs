@@ -28,11 +28,12 @@ test("seven solutions have real discoverable routes and hub links", () => {
 
 test("homepage, navigation, all six existing landing pages and footer bridge back to hub", () => {
   const home = read("components/t3-rebuild/HomepageContent.tsx");
+  const outcomes = read("components/t3-rebuild/GrowthJourney.tsx");
   const header = read("components/t3-rebuild/Header.tsx");
   const landing = read("components/t3-phase3/ProblemLanding.tsx");
   const footer = read("components/t3-rebuild/MarketingFooter.tsx");
-  for (const content of [home, header, landing, footer]) assert.match(content, /\/solutions/);
-  assert.match(home, /Explore all seven solutions/);
+  for (const content of [home, outcomes, header, landing, footer]) assert.match(content, /\/solutions/);
+  assert.match(outcomes, /Explore all roofing solutions/);
   assert.match(home, /\/custom-roofing-software/);
   assert.match(header, /site-menu-toggle/);
   assert.match(header, /aria-expanded=\{menuOpen\}/);

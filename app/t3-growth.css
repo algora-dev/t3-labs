@@ -1,0 +1,263 @@
+/* Homepage growth journey: scoped to the existing T3Labs design system. */
+.t3-rebuild .t3-growth-outcomes{background:radial-gradient(circle at 82% 4%,rgba(215,255,0,.07),transparent 36%),#0a0b10;color:#fbfcff;padding:clamp(64px,7vw,100px) 0}
+.t3-growth-intro{margin:0 0 29px;max-width:860px}
+.t3-growth-intro .eyebrow{color:#d7ff00;font-size:.72rem;letter-spacing:.13em}
+.t3-growth-intro h2{font-size:clamp(2.2rem,4.7vw,4.5rem);letter-spacing:-.055em;line-height:1.07;margin:14px 0 17px;color:#fff}
+.t3-growth-highlight{background:linear-gradient(100deg,#a9d700 0%,#d7ff00 58%,#8baa00 100%);color:transparent;-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text}
+.t3-growth-intro p{color:#b7bfcd;max-width:660px;font-size:1rem;line-height:1.7}
+.t3-outcomes-list{border-top:1px solid #343840}
+.t3-outcome{border-bottom:1px solid #343840}
+.t3-outcome summary{list-style:none;display:flex;align-items:center;gap:24px;min-height:118px;padding:19px 16px;cursor:pointer;transition:background .2s}
+.t3-outcome summary::-webkit-details-marker{display:none}
+.t3-outcome summary:hover,.t3-outcome[open] summary{background:#15171d}
+.t3-outcome summary:focus-visible{outline:3px solid #d7ff00;outline-offset:-3px}
+.t3-outcome-number{font-size:.77rem;letter-spacing:.1em;color:#d7ff00;font-weight:900;width:36px;flex:none}
+.t3-outcome-label{display:grid;gap:6px;flex:1}
+.t3-outcome-label strong{color:#fff;font-size:clamp(1.45rem,2.5vw,2.2rem);letter-spacing:-.05em;line-height:1.1}
+.t3-outcome-label>span{color:#b6c0cc;font-size:.94rem}
+.t3-outcome-action{display:flex;align-items:center;gap:20px}
+.t3-outcome-see{font-size:.73rem;letter-spacing:.12em;color:#d7ff00;text-transform:uppercase;font-weight:800;white-space:nowrap}
+.t3-outcome-plus{display:grid;place-items:center;width:46px;height:46px;border-radius:9px;background:linear-gradient(135deg,#d7ff00,#98bb00);color:#0a0b10;font-size:1.75rem;line-height:1;transition:transform .22s,box-shadow .22s}
+.t3-outcome summary:hover .t3-outcome-plus{box-shadow:0 0 22px rgba(215,255,0,.28)}
+.t3-outcome[open] .t3-outcome-plus{transform:rotate(45deg)}
+.t3-outcome-expanded{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.7fr);gap:42px;padding:0 25px 32px 76px;color:#d0d5df}
+.t3-outcome-expanded p{margin:7px 0 20px;line-height:1.75;font-size:.96rem;max-width:660px}
+.t3-outcome-eyebrow{color:#d7ff00;font-size:.69rem;letter-spacing:.14em;font-weight:900}
+.t3-outcome-expanded-side{padding:22px;background:#181b21;border:1px solid #32363c;border-radius:10px}
+.t3-outcome-expanded-side strong{color:#fff}
+.t3-outcome-expanded-side ul{padding-left:18px;margin:13px 0 20px;line-height:1.8;font-size:.86rem}
+.t3-outcome-expanded-side li::marker{color:#d7ff00}
+.t3-outcome-expanded-side a,.t3-outcomes-end a{font-size:.85rem;font-weight:800;color:#d7ff00}
+.t3-outcomes-end{display:flex;align-items:center;justify-content:space-between;gap:25px;padding:22px 16px 0;font-size:.82rem;color:#aeb6bf}
+.t3-rebuild .t3-growth-calculator{padding:clamp(62px,7vw,90px) 0;background:#fbfcff;color:#0a0b10}
+.t3-calc-intro{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:35px;align-items:end;margin:0 0 27px}
+.t3-calc-intro .eyebrow{color:#556b00}
+.t3-calc-intro h2{font-size:clamp(2.2rem,4vw,3.75rem);letter-spacing:-.055em;line-height:1.13;margin:13px 0 10px;max-width:770px}
+.t3-calc-intro h2 .gradient-accent{display:inline;background-image:linear-gradient(100deg,#526c00,#91b700 50%,#d7ff00)}
+.t3-calc-intro p{font-size:.96rem;line-height:1.65;color:#4f5c69;margin:0;max-width:700px}
+.t3-calc-intro .t3-calc-disclaimer{font-size:.77rem;background:#f1f5e9;border:1px solid #e0e8d3;padding:14px 16px;border-radius:8px}
+.t3-calc-shell{background:#fff;border:1px solid #e0e4e9;border-radius:12px;max-width:1000px;margin:auto;overflow:hidden;box-shadow:0 24px 65px rgba(10,11,16,.065)}
+.t3-calc-top{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:18px 26px 13px}
+.t3-calc-top>div{display:grid;gap:5px}
+.t3-calc-top strong{font-size:1.05rem;letter-spacing:-.025em}
+.t3-calc-kicker,.t3-calc-count{font-size:.65rem;color:#5f7900;font-weight:850;letter-spacing:.14em}
+.t3-calc-reset{background:transparent;border:1px solid #d8e0e6;border-radius:8px;padding:9px 12px;font-size:.76rem;font-weight:800;color:#354356;white-space:nowrap}
+.t3-calc-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding:0 26px 13px}
+.t3-calc-steps button{display:flex;align-items:center;gap:9px;min-width:0;text-align:left;color:#647080;border:1px solid #e5e9ed;background:#f7f8fa;border-radius:7px;padding:9px;font-weight:800;font-size:.71rem}
+.t3-calc-steps button:disabled{opacity:.67;cursor:default}
+.t3-calc-steps button.active{background:#eef6dc;color:#28380e;border-color:#a4cf38}
+.t3-calc-steps button>span{display:grid;place-items:center;flex:none;width:26px;height:26px;border-radius:5px;background:#e8eaee}
+.t3-calc-steps button.active>span{background:linear-gradient(135deg,#a8d200,#d7ff00);color:#0a0b10}
+.t3-calc-steps button em{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-style:normal}
+.t3-calc-progress{height:4px;background:#e8ecef;margin:0 26px}
+.t3-calc-progress span{height:100%;display:block;background:linear-gradient(90deg,#8fac00,#d7ff00);transition:width .25s}
+.t3-calc-content{min-height:290px;padding:23px 26px 17px}
+.t3-calc-content h3{font-size:clamp(1.4rem,2.35vw,1.9rem);letter-spacing:-.045em;line-height:1.17;margin:8px 0 7px}
+.t3-calc-description{font-size:.86rem;color:#657080;margin:0 0 18px}
+.t3-calc-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 23px;max-width:835px}
+.t3-calc-field{display:grid;gap:7px;min-width:0}
+.t3-calc-field-label{font-size:.81rem;color:#27333f;font-weight:750}
+.t3-calc-help{display:inline-grid;place-items:center;font-size:.68rem;font-weight:800;border:1px solid #b3c49a;border-radius:50%;width:17px;height:17px;cursor:help;color:#476500}
+.t3-calc-input-wrap{display:flex;align-items:center;border:1px solid #d9e0e5;border-radius:8px;background:#fbfcff;min-width:0}
+.t3-calc-input-wrap:focus-within{outline:2px solid #9fc600}
+.t3-calc-input-wrap input,.t3-calc-input-wrap select{background:transparent;color:#111318;border:0;font-size:.94rem;font-weight:700;width:100%;min-width:0;padding:10px 12px;height:45px;outline:0}
+.t3-calc-input-wrap>span{font-size:.76rem;padding-right:13px;color:#5a6673;font-weight:750}
+.t3-calc-note{margin:19px 0 0;color:#4c5a64;background:#f4f7ec;border-left:3px solid #afda00;padding:12px 15px;font-size:.82rem;line-height:1.6}
+.t3-calc-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.t3-calc-results>div{display:grid;gap:9px;background:#111318;color:#e7eaec;border:1px solid #25292d;border-radius:8px;padding:15px 18px}
+.t3-calc-results>div span{font-size:.79rem}
+.t3-calc-results>div strong{color:#d7ff00;font-size:clamp(1.25rem,2.6vw,2rem);letter-spacing:-.04em}
+.t3-calc-cta{margin-top:15px}
+.t3-calc-footer{display:flex;align-items:center;gap:14px;justify-content:space-between;border-top:1px solid #e8ecef;padding:14px 26px}
+.t3-calc-footer>span{font-size:.73rem;color:#687485;font-weight:800}
+.t3-calc-footer button{border-radius:7px;padding:11px 20px;font-size:.84rem;font-weight:800}
+.t3-calc-back{border:1px solid #d7dfe5;background:#fff;color:#26313d}
+.t3-calc-back:disabled{opacity:.36;cursor:default}
+.t3-calc-next{border:1px solid #111318;background:#111318;color:white}
+.t3-calc-next:hover{background:#252a32}
+@media(max-width:800px){.t3-calc-intro{grid-template-columns:1fr;gap:16px}.t3-outcome-expanded{grid-template-columns:1fr;gap:15px}.t3-outcomes-end{align-items:flex-start;flex-direction:column}.t3-calc-steps button em{display:none}.t3-calc-steps button{justify-content:center}.t3-calc-steps button>span{width:30px;height:30px}}
+@media(max-width:560px){.t3-outcome summary{gap:10px;padding:16px 8px;min-height:95px}.t3-outcome-number{width:25px;font-size:.68rem}.t3-outcome-label strong{font-size:1.45rem}.t3-outcome-label>span{font-size:.75rem;line-height:1.45}.t3-outcome-see{font-size:.58rem}.t3-outcome-action{gap:9px}.t3-outcome-plus{width:34px;height:36px;font-size:1.4rem}.t3-outcome-expanded{padding:2px 12px 25px 40px}.t3-outcomes-end{padding-left:8px}.t3-calc-top{padding:17px 16px 12px}.t3-calc-top strong{font-size:.91rem}.t3-calc-reset{font-size:.68rem;padding:8px}.t3-calc-steps{padding:0 13px 11px;gap:4px}.t3-calc-steps button{padding:7px 2px}.t3-calc-steps button>span{width:25px;height:27px;font-size:.72rem}.t3-calc-progress{margin:0 16px}.t3-calc-content{padding:20px 16px 16px;min-height:0}.t3-calc-fields{grid-template-columns:1fr;gap:13px}.t3-calc-footer{padding:12px 16px}.t3-calc-footer button{padding:10px 12px;font-size:.77rem}.t3-calc-results{gap:7px}.t3-calc-results>div{padding:12px}.t3-calc-results>div strong{font-size:1.25rem}}
+
+/* Approved logo lockups: no duplicate wordmark. */
+.t3-rebuild .brand img{width:165px;height:auto;max-height:66px;object-fit:contain;object-position:left center}
+.t3-rebuild .t3-footer-brand{display:block;max-width:210px;margin-bottom:8px}
+.t3-rebuild .t3-footer-brand img{width:100%;height:auto;display:block}
+.t3-rebuild .hero .gradient-accent{background:linear-gradient(105deg,#526a00 0%,#779d00 35%,#acd900 68%,#d7ff00 100%)!important;background-clip:text!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important}
+
+/* Homepage evolution: real-source hero, intentional paper / ink rhythm. */
+.t3-rebuild .t3-hero-reimagined {
+  padding: clamp(146px, 12vw, 183px) 0 clamp(74px, 7vw, 104px);
+  margin-top: -100px;
+  background:
+    radial-gradient(ellipse at 8% 12%, rgba(215,255,0,.085), transparent 34%),
+    radial-gradient(ellipse at 95% 70%, rgba(17,19,24,.025), transparent 42%),
+    #fbfcff;
+}
+.t3-rebuild .t3-hero-eyebrow { margin-bottom: 20px; }
+.t3-rebuild .t3-hero-headline {
+  font-size: clamp(4rem, 6.55vw, 6.45rem);
+  line-height: 1.025;
+  letter-spacing: -.075em;
+  font-weight: 850;
+  max-width: 1160px;
+  margin: 0;
+  text-wrap: balance;
+}
+.t3-rebuild .t3-hero-headline > span { display: block; }
+.t3-rebuild .t3-hero-headline .gradient-accent {
+  display: inline-block;
+  background: linear-gradient(100deg, #4d6700 0%, #659000 30%, #90c000 59%, #c9f900 84%, #d7ff00 100%) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 1px 0 rgba(36,68,0,.055));
+}
+.t3-rebuild .t3-hero-lower {
+  display: grid;
+  grid-template-columns: minmax(0, 1.07fr) minmax(0, .93fr);
+  gap: clamp(34px, 5vw, 75px);
+  align-items: center;
+  margin-top: clamp(24px, 3vw, 43px);
+}
+.t3-rebuild .t3-hero-copy { min-width: 0; }
+.t3-rebuild .t3-hero-copy .hero-lead { font-size: clamp(1.03rem, 1.45vw, 1.19rem); line-height: 1.68; max-width: 640px; }
+.t3-rebuild .t3-hero-copy .secondary { max-width: 610px; margin-top: 14px; }
+.t3-rebuild .t3-hero-copy .actions { margin-top: 24px; gap: 11px; }
+.t3-rebuild .t3-hero-proofline { margin-top: 21px; font-size: .8rem; color: #626b76; line-height: 1.6; }
+.t3-rebuild .t3-hero-proofline span { color: #526c00; font-weight: 900; padding-right: 5px; }
+.t3-rebuild .t3-hero-video { width: 100%; max-width: 560px; justify-self: end; border-radius: 11px; border-color: #2f353e; box-shadow: 0 18px 45px rgba(10,11,16,.14); }
+.t3-rebuild .t3-hero-video .hero-video-foot { background: #111318; border-top-color: #2f333b; }
+.t3-rebuild .t3-hero-video .hero-video-foot-line { font-size: .76rem; color: #e5e8ed; }
+
+/* Dark panels are an ink surface, not blue-slate hero stand-ins. */
+.t3-rebuild .t3-growth-outcomes { background: radial-gradient(ellipse at 90% 4%,rgba(215,255,0,.075),transparent 38%), #0a0b10; }
+.t3-rebuild .t3-growth-intro { max-width: 900px; margin-bottom: 34px; }
+.t3-rebuild .t3-growth-intro h2 { font-size: clamp(2.4rem,4.3vw,4.25rem); letter-spacing: -.058em; }
+.t3-rebuild .t3-growth-highlight { background: linear-gradient(95deg,#b5e600,#d7ff00); background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+.t3-rebuild .t3-outcome { border-bottom-color: #303237; }
+.t3-rebuild .t3-outcome summary { min-height: 106px; padding: 17px 22px; border-radius: 8px; }
+.t3-rebuild .t3-outcome summary:hover, .t3-rebuild .t3-outcome[open] summary { background: #181a1f; }
+.t3-rebuild .t3-outcome-plus { border-radius: 8px; background: linear-gradient(145deg,#d7ff00,#a3cd00); }
+.t3-rebuild .t3-outcome-expanded { padding: 2px 26px 30px 83px; }
+.t3-rebuild .t3-outcome-expanded-side { border-color: #33363e; background: #15171c; }
+.t3-rebuild .t3-outcomes-end { padding-top: 25px; }
+
+/* Compact calculator: one step, a clear result, less vertical noise. */
+.t3-rebuild .t3-growth-calculator { padding: clamp(67px,6vw,88px) 0; }
+.t3-rebuild .t3-calc-intro { align-items: center; margin-bottom: 22px; }
+.t3-rebuild .t3-calc-intro h2 { font-size: clamp(2rem,3.7vw,3.45rem); }
+.t3-rebuild .t3-calc-intro h2 .gradient-accent {
+  background-image: linear-gradient(95deg,#526800 0%,#83ae00 52%,#d7ff00 100%) !important;
+  -webkit-text-fill-color: transparent;
+}
+.t3-rebuild .t3-calc-shell { max-width: 990px; box-shadow: 0 12px 40px rgba(10,11,16,.07); }
+.t3-rebuild .t3-calc-content { min-height: 270px; padding-top: 19px; padding-bottom: 16px; }
+.t3-rebuild .t3-calc-content h3 { font-size: clamp(1.3rem,2vw,1.65rem); margin-top: 7px; }
+.t3-rebuild .t3-calc-description { margin-bottom: 15px; }
+.t3-rebuild .t3-calc-fields { gap: 13px 21px; }
+.t3-rebuild .t3-calc-input-wrap input, .t3-rebuild .t3-calc-input-wrap select { height: 43px; }
+.t3-rebuild .t3-calc-note { margin-top: 15px; padding: 10px 13px; }
+
+/* Reuse original human team, but tie the surrounding section into the ink palette. */
+.t3-rebuild #trust.trust { background: radial-gradient(ellipse at 90% 4%,rgba(215,255,0,.065),transparent 42%),linear-gradient(145deg,#111318,#0a0b10); }
+.t3-rebuild #trust .trust-proof { background:linear-gradient(150deg,#181b22,#111318);border-color:#383b42; }
+.t3-rebuild #trust .t7-team { background:linear-gradient(135deg,#191c22,#111318);border-color:#393d43; }
+.t3-rebuild #trust .t7-team[open] { border-color: #98bc28; }
+.t3-rebuild #trust .t7-member { background: #1a1e24; }
+
+@media(max-width: 900px){
+ .t3-rebuild .t3-hero-headline { font-size: clamp(3.45rem,7.6vw,5rem); }
+ .t3-rebuild .t3-hero-lower { grid-template-columns: 1fr; gap: 25px; }
+ .t3-rebuild .t3-hero-video { max-width: 650px; justify-self: start; }
+}
+@media(max-width: 600px){
+ .t3-rebuild .t3-hero-reimagined { padding: 135px 0 55px; }
+ .t3-rebuild .t3-hero-headline { font-size: clamp(2.75rem, 10vw, 4rem); letter-spacing: -.065em; line-height: 1.07; }
+ .t3-rebuild .t3-hero-headline > span { white-space: nowrap; }
+ .t3-rebuild .t3-hero-lower { margin-top: 24px; }
+ .t3-rebuild .t3-hero-copy .hero-lead { font-size: 1rem; }
+ .t3-rebuild .t3-hero-proofline { font-size: .73rem; }
+ .t3-rebuild .t3-outcome summary { padding: 15px 10px; }
+ .t3-rebuild .t3-outcome-expanded { padding: 0 10px 23px 36px; }
+ .t3-rebuild .t3-calc-content { min-height: 0; }
+}
+@media(max-width:360px){
+ .t3-rebuild .t3-hero-headline { font-size: clamp(2.29rem, 10.4vw, 2.5rem); }
+ .t3-rebuild .t3-hero-reimagined .actions .btn { font-size: .84rem; }
+}
+
+/* Quoting and profit assumptions explained by a tap-friendly help control. */
+.t3-rebuild .t3-calc-help { position:relative; background:#f4f8ec; padding:0; vertical-align:middle; margin-left:4px; cursor:help; }
+.t3-rebuild .t3-calc-help:hover, .t3-rebuild .t3-calc-help:focus-visible { background:#d7ff00; color:#101318; border-color:#a5c700; }
+.t3-rebuild .t3-calc-help:hover::after, .t3-rebuild .t3-calc-help:focus-visible::after {
+  content:attr(data-tip);
+  position:absolute; z-index:100; left:0; bottom:calc(100% + 9px);
+  min-width:210px; width:min(265px,72vw); box-sizing:border-box;
+  background:#111318; border:1px solid #34383e; border-radius:7px;
+  box-shadow:0 12px 30px rgba(10,11,16,.24); padding:11px 12px;
+  color:#fbfcff; font-size:.74rem; font-weight:500; line-height:1.5; text-align:left;
+  white-space:normal; letter-spacing:0;
+}
+
+
+/* Outcome-led homepage polish - November 2026 */
+/* SVG plus stays truly centred throughout the 45-degree open animation. */
+.t3-rebuild .t3-outcome-plus { display:grid;place-items:center;line-height:0;flex:none; }
+.t3-rebuild .t3-outcome-plus svg { display:block;width:21px;height:21px;flex:none;margin:auto;transform-origin:50% 50%; }
+.t3-rebuild .t3-outcome-expanded { grid-template-rows:auto auto;row-gap:21px; }
+.t3-rebuild .t3-outcome-explanation { min-width:0; }
+.t3-rebuild .t3-outcome-expanded-side { align-self:start; }
+.t3-rebuild .t3-outcome-gain { grid-column:1/-1;display:flex;align-items:center;gap:22px;min-height:74px;padding:17px 20px;border:1px solid #55661c;border-left:4px solid #d7ff00;border-radius:8px;background:linear-gradient(100deg,rgba(215,255,0,.115),rgba(215,255,0,.022)); }
+.t3-rebuild .t3-outcome-gain-label { color:#d7ff00;font-size:.68rem;font-weight:900;letter-spacing:.12em;white-space:nowrap; }
+.t3-rebuild .t3-outcome-gain strong { font-size:.96rem;font-weight:700;line-height:1.5;color:#f3f5ef; }
+.t3-rebuild .t3-outcomes-end { flex-wrap:wrap;justify-content:flex-start;column-gap:24px;row-gap:10px; }
+.t3-rebuild .t3-outcomes-end span { flex:1 1 500px; }
+.t3-rebuild .t3-outcomes-end a { white-space:nowrap; }
+
+/* Reduce hero's overall height; align the video with the copy rather than the proofline. */
+.t3-rebuild .t3-hero-reimagined { padding-top:clamp(110px,9vw,128px);padding-bottom:clamp(28px,3.2vw,42px); }
+.t3-rebuild .t3-hero-eyebrow { margin-bottom:14px; }
+.t3-rebuild .t3-hero-headline { font-size:clamp(3.55rem,5.6vw,5.35rem);line-height:1.025; }
+.t3-rebuild .t3-hero-lower { gap:clamp(27px,3.3vw,50px);margin-top:clamp(14px,1.75vw,24px);grid-template-columns:minmax(0,1.17fr) minmax(0,.83fr);align-items:center; }
+.t3-rebuild .t3-hero-copy .hero-lead { line-height:1.54; }
+.t3-rebuild .t3-hero-copy .secondary { margin-top:10px; }
+.t3-rebuild .t3-hero-copy .actions { margin-top:20px; }
+.t3-rebuild .t3-hero-proofline { margin-top:16px; }
+.t3-rebuild .t3-hero-video { max-width:400px;align-self:center; }
+.t3-rebuild .t3-hero-video .hero-video-foot { padding-top:9px;padding-bottom:9px; }
+.t3-rebuild .t3-hero-video .hero-video-foot-line { margin:0; }
+.t3-rebuild .t3-growth-outcomes { padding-top:clamp(49px,5vw,68px); }
+
+/* Page ends in one clear light-theme action rather than another catalog section. */
+.t3-rebuild .t3-final-review { background:#fbfcff;padding:clamp(56px,6vw,78px) 0; }
+.t3-rebuild .t3-final-review-inner { display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:35px; }
+.t3-rebuild .t3-final-review-inner h2 { font-size:clamp(2rem,3.35vw,3.15rem);line-height:1.14;max-width:840px;margin:0 0 15px; }
+.t3-rebuild .t3-final-review-inner h2 .gradient-accent { background:linear-gradient(95deg,#526800,#91b700 55%,#d7ff00);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+.t3-rebuild .t3-final-review-inner p { color:#4f5a67;font-size:.98rem;max-width:750px;line-height:1.68; }
+.t3-rebuild .t3-final-review-inner .btn { white-space:nowrap; }
+@media(max-width:900px) {
+ .t3-rebuild .t3-hero-lower {grid-template-columns:1fr;gap:19px;}
+ .t3-rebuild .t3-hero-video { max-width:480px;justify-self:start; }
+ .t3-rebuild .t3-final-review-inner { grid-template-columns:1fr;gap:24px; }
+}
+@media(max-width:800px) {
+ .t3-rebuild .t3-outcome-expanded {grid-template-columns:1fr;row-gap:14px;}
+ .t3-rebuild .t3-outcome-gain {grid-column:1;}
+}
+@media(max-width:600px) {
+ .t3-rebuild .t3-hero-reimagined {padding-top:118px;padding-bottom:33px;}
+ .t3-rebuild .t3-hero-headline {font-size:clamp(2.75rem,10vw,4rem);}
+ .t3-rebuild .t3-hero-lower {margin-top:19px;}
+ .t3-rebuild .t3-hero-video {max-width:min(100%,340px);}
+ .t3-rebuild .t3-outcome-gain {display:block;padding:14px 15px;min-height:auto;}
+ .t3-rebuild .t3-outcome-gain-label {display:block;margin-bottom:7px;}
+ .t3-rebuild .t3-outcome-gain strong {font-size:.85rem;}
+ .t3-rebuild .t3-outcome-plus svg {width:18px;height:18px;}
+ .t3-rebuild .t3-outcomes-end a {white-space:normal;}
+ .t3-rebuild .t3-final-review-inner .btn {width:100%;white-space:normal;}
+}
+
+@media(max-width:360px) {
+  .t3-rebuild .t3-hero-headline {font-size:2.04rem;letter-spacing:-.065em;}
+}

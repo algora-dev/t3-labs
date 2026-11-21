@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/t3-rebuild/Header";
 import { HomepageContent } from "@/components/t3-rebuild/HomepageContent";
 import "./t3-rebuild.css";
+import "./t3-growth.css";
 
 export const metadata: Metadata = {
   title: "T3Labs | Websites, Estimating Tools & Automation for Roofing Businesses",

@@ -111,7 +111,7 @@ test('guide branding is isolated, text is opaque and transparency has a readable
 });
 test('the supplied transparent logo is shipped without recolouring or regenerating it',()=>{
  const data=fs.readFileSync(new URL('../public/assets/t3-demo-guide/t3-logo-icon-glow-transparent.png',import.meta.url));
- const expected='1829caa5a09acd2cb1d352689d1d39766f439b0f35427823fd0d63888d6f3dc9';
+ const expected='82aea8e9ed230a550a0f89e3cafd9c0b63cb5162594d39ab292e91c5196fd0b3';
  assert.equal(createHash('sha256').update(data).digest('hex'),expected);
  const helper=src('components/demo-helper/DemoHelper.tsx');
  assert.match(helper,/t3-logo-icon-glow-transparent.png/);

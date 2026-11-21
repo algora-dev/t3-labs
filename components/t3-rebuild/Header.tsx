@@ -12,7 +12,7 @@ const primaryLinks = [
 ];
 const siteLinks = [
   { href: "/", label: "Home" },
-  { href: "/#solutions", label: "What we solve" },
+  { href: "/#outcomes", label: "Four outcomes" },
   { href: "/#examples", label: "Tools & examples" },
   { href: "/#packages", label: "Packages" },
   { href: "/#who-we-are", label: "Who we are" },
@@ -74,7 +74,7 @@ export function Header() {
       <div className="header-inner">
         <Link href="/" aria-label="T3Labs homepage" className="brand" onClick={() => setMenuOpen(false)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img alt="T3 Labs" src="/assets/t3-logo/lockup-dark.webp" width={420} height={240} />
+          <img alt="T3 Labs" src="/assets/t3-logo/T3LabsLong.png" width={420} height={240} />
         </Link>
         <nav aria-label="Main navigation" className="nav">
           {primaryLinks.map((link) => (
